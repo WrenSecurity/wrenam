@@ -542,7 +542,7 @@ public class OpenSSOApplicationPrivilegeManager extends
                 OpenSSOIndexStore db = new OpenSSOIndexStore(dsameUserSubject,
                             getHiddenRealmDN());
                 Iterator<IPrivilege> results = db.search("/", rIndex,
-                    Collections.EMPTY_SET, true, false);
+                    Collections.EMPTY_SET, true);
 
                 while (results.hasNext()) {
                     Privilege p = (Privilege) results.next();
@@ -569,7 +569,7 @@ public class OpenSSOApplicationPrivilegeManager extends
         OpenSSOIndexStore db = new OpenSSOIndexStore(dsameUserSubject,
             getHiddenRealmDN());
         Iterator<IPrivilege> results = db.search("/", rIndex, subjectIndex,
-            true, false);
+            true);
 
         while (results.hasNext()) {
             Privilege p = (Privilege) results.next();
@@ -826,7 +826,7 @@ public class OpenSSOApplicationPrivilegeManager extends
 
         OpenSSOIndexStore db = new OpenSSOIndexStore(dsameUserSubject,
             getHiddenRealmDN());
-        return db.search("/", rIndex, subjectIndex, true, false);
+        return db.search("/", rIndex, subjectIndex, true);
     }
 
     static void removeAllPrivileges(
