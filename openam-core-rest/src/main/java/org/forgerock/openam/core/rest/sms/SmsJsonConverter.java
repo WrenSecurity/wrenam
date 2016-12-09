@@ -393,8 +393,8 @@ public class SmsJsonConverter {
 
     private boolean shouldBeIgnored(String attributeName) {
         final AttributeSchema attributeSchema = schema.getAttributeSchema(attributeName);
-        return (attributeSchema != null && StringUtils.isBlank(attributeSchema.getI18NKey())) || attributeName.equals
-                ("_type") || hiddenAttributeNames.contains(attributeName);
+        return (attributeSchema != null && StringUtils.isBlank(attributeSchema.getI18NKey()))
+                || attributeName.equals("_type") || hiddenAttributeNames.contains(attributeName) || attributeName.equals("AgentType");
     }
 
     private boolean shouldNotBeUpdated(String attributeName) {
