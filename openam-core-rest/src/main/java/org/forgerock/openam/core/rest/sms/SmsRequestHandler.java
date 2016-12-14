@@ -16,6 +16,15 @@
 
 package org.forgerock.openam.core.rest.sms;
 
+import static com.sun.identity.common.configuration.AgentConfiguration.*;
+import static java.util.Arrays.asList;
+import static org.forgerock.guava.common.collect.Sets.newHashSet;
+import static org.forgerock.http.routing.RoutingMode.EQUALS;
+import static org.forgerock.http.routing.RoutingMode.STARTS_WITH;
+import static org.forgerock.json.resource.Requests.newApiRequest;
+import static org.forgerock.json.resource.Resources.*;
+import static org.forgerock.json.resource.RouteMatchers.requestUriMatcher;
+import static org.forgerock.openam.core.rest.sms.SmsRealmProvider.REALMS_PATH;
 import static org.forgerock.openam.core.rest.sms.tree.SmsRouteTreeBuilder.*;
 import static org.forgerock.openam.utils.CollectionUtils.asSet;
 
@@ -282,7 +291,7 @@ public class SmsRequestHandler implements RequestHandler, SMSObjectListener, Ser
     //routes under global-config/realms/{realms} route
     private void addRealmHandler() {
         if (SchemaType.GLOBAL.equals(schemaType)) {
-            routeTree.addRoute(RoutingMode.STARTS_WITH, REALMS_PATH,
+            routeTree.addRoute(STARTS_WITH, REALMS_PATH,
                     newHandler(new SmsRealmProvider(sessionCache, coreWrapper, realmNormaliser)));
         }
     }
