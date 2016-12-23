@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright © 2011-2012 ForgeRock AS. All rights reserved.
+ * Copyright 2011-2016 ForgeRock AS. All rights reserved.
  *
  * The contents of this file are subject to the terms
  * of the Common Development and Distribution License
@@ -26,14 +26,24 @@
 package org.forgerock.openam.authentication.modules.oauth2;
 
 import com.iplanet.sso.SSOToken;
+
 import java.util.Map;
+
+import com.sun.identity.authentication.service.AuthD;
 import com.sun.identity.authentication.spi.AMPostAuthProcessInterface;
 import com.sun.identity.authentication.spi.AuthenticationException;
+
 import java.net.URLEncoder;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.forgerock.openam.utils.StringUtils;
+
 import com.iplanet.am.util.SystemProperties;
+import com.iplanet.dpro.session.service.InternalSession;
 import com.sun.identity.shared.Constants;
+
 import static org.forgerock.openam.authentication.modules.oauth2.OAuthParam.*;
 
 /**
@@ -101,8 +111,10 @@ public class OAuth2PostAuthnPlugin implements AMPostAuthProcessInterface {
             String accessToken = ssoToken.getProperty(SESSION_OAUTH_TOKEN);
 
             OAuthUtil.debugMessage("OAuth2PostAuthnPlugin: OAUTH2 Token is: " + accessToken);
-            String logoutBehaviour = ssoToken.getProperty(SESSION_LOGOUT_BEHAVIOUR);
-            if (logoutBehaviour.equalsIgnoreCase("donotlogout")) {
+            InternalSession is = AuthD.getSession(ssoToken.getTokenID().toString());
+            String logoutBehaviour = is.getProperty(SESSION_LOGOUT_BEHAVIOUR);
+            logoutBehaviour = StringUtils.isEmpty(logoutBehaviour) ? "prompt" : logoutBehaviour;
+            if ("donotlogout".equalsIgnoreCase(logoutBehaviour)) {
                 return;
             }
             
