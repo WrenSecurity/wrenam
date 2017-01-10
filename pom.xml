@@ -113,8 +113,8 @@
         <checkstyleUnitTestSuppressionsLocation>checkstyle/suppressions.xml</checkstyleUnitTestSuppressionsLocation>
 
         <forgerock.bloomfilter.version>1.0.1</forgerock.bloomfilter.version>
-        <forgerock.ui.version>15.2.6</forgerock.ui.version>
-        <forgerock.guice.version>1.1.0</forgerock.guice.version>
+        <forgerock.ui.version>16.0.4</forgerock.ui.version>
+        <forgerock.guice.version>2.0.2</forgerock.guice.version>
 
         <javadoc-utils.version>1.0.0</javadoc-utils.version>
         <ant.contrib.version>1.0b3</ant.contrib.version>
