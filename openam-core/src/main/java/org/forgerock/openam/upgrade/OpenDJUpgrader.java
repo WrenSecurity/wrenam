@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright 2011-2016 ForgeRock AS.
+ * Copyright 2011-2017 ForgeRock AS.
  *
  * The contents of this file are subject to the terms
  * of the Common Development and Distribution License
@@ -24,6 +24,7 @@
 
 package org.forgerock.openam.upgrade;
 
+import static com.sun.identity.setup.EmbeddedOpenDS.copyJeJarsIfRequired;
 import static java.nio.file.Files.copy;
 
 import javax.annotation.Nonnull;
@@ -37,6 +38,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -441,7 +443,7 @@ public class OpenDJUpgrader {
         return OpenDJVersion.UNKNOWN;
     }
 
-    private void unpackZipFile(boolean oldStructure) throws IOException {
+    private void unpackZipFile(boolean oldStructure) throws IOException, URISyntaxException {
         message("Unzipping " + ZIP_FILE + "...");
 
         try (ZipInputStream zis = new ZipInputStream(AMSetupUtils.getResourceAsStream(servletCtx, ZIP_FILE))) {
@@ -473,9 +475,11 @@ public class OpenDJUpgrader {
 
                 zis.closeEntry();
             }
-      
+
+            copyJeJarsIfRequired(servletCtx, installRoot);
+
             message("done");
-        } catch (final IOException ioe) {
+        } catch (final IOException | URISyntaxException ioe) {
             error("failed: ", ioe);
             throw ioe;
         }

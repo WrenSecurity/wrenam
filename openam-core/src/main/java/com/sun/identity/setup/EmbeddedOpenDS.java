@@ -24,14 +24,18 @@
  *
  * $Id: EmbeddedOpenDS.java,v 1.27 2010/01/15 01:22:39 goodearth Exp $
  *
- * Portions Copyrighted 2010-2016 ForgeRock AS.
+ * Portions Copyrighted 2010-2017 ForgeRock AS.
  */
 
 package com.sun.identity.setup;
 
+import static com.sun.identity.setup.SetupConstants.DJ_BACKEND_TYPE_CONFIG_NAME;
+import static com.sun.identity.setup.SetupConstants.DJ_BACKEND_TYPE_DEFAULT;
+import static com.sun.identity.setup.SetupConstants.JE_DJ_BACKEND_TYPE;
 import static org.forgerock.opendj.ldap.LDAPConnectionFactory.AUTHN_BIND_REQUEST;
 import static org.forgerock.opendj.ldap.LDAPConnectionFactory.CONNECT_TIMEOUT;
 
+import javax.servlet.ServletContext;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -43,11 +47,16 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.StringReader;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -64,8 +73,11 @@ import java.util.zip.ZipFile;
 
 import javax.crypto.Cipher;
 import javax.crypto.NoSuchPaddingException;
-import javax.servlet.ServletContext;
-
+import com.iplanet.am.util.SystemProperties;
+import com.sun.identity.common.ShutdownManager;
+import com.sun.identity.shared.Constants;
+import com.sun.identity.shared.debug.Debug;
+import com.sun.identity.sm.SMSEntry;
 import org.forgerock.guava.common.io.ByteStreams;
 import org.forgerock.i18n.LocalizableMessage;
 import org.forgerock.openam.ldap.LDAPRequests;
@@ -96,12 +108,6 @@ import org.opends.server.types.DirectoryEnvironmentConfig;
 import org.opends.server.util.EmbeddedUtils;
 import org.opends.server.util.ServerConstants;
 import org.opends.server.util.TimeThread;
-
-import com.iplanet.am.util.SystemProperties;
-import com.sun.identity.common.ShutdownManager;
-import com.sun.identity.shared.Constants;
-import com.sun.identity.shared.debug.Debug;
-import com.sun.identity.sm.SMSEntry;
 
 // OpenDS, now OpenDJ, does not have APIs to install and setup replication yet
 
@@ -161,6 +167,9 @@ public class EmbeddedOpenDS {
         new File(basedir).mkdir();
         new File(odsRoot).mkdir();
 
+        boolean isJeBackend = isJeBackend(servletCtx);
+        map.put(DJ_BACKEND_TYPE_CONFIG_NAME, isJeBackend ? JE_DJ_BACKEND_TYPE : DJ_BACKEND_TYPE_DEFAULT);
+
         SetupProgress.reportStart("emb.opends.start", null);
         String zipFileName = "/WEB-INF/template/opendj/opendj.zip";
         BufferedInputStream bin = new BufferedInputStream(
@@ -211,6 +220,8 @@ public class EmbeddedOpenDS {
                 f.setExecutable(true);
             }
         } // End of File Elements from Zip for OpenDJ.
+
+        copyJeJarsIfRequired(servletCtx, odsRoot);
 
         // create tag swapped files
         String[] tagSwapFiles = {
@@ -281,6 +292,40 @@ public class EmbeddedOpenDS {
             }
 
         } // End of single / first server check.
+    }
+
+    private static boolean isJeBackend(ServletContext servletContext) throws MalformedURLException, URISyntaxException {
+        File[] jeJars = getJeJars(servletContext);
+        return jeJars != null && jeJars.length > 0;
+    }
+
+    public static void copyJeJarsIfRequired(ServletContext servletContext, String openDjInstallDirectory)
+            throws IOException, URISyntaxException {
+        // If using je backend, copy je jars from WEB-INF/lib to opendj install lib directory
+        if (isJeBackend(servletContext)) {
+            copyJeJarsToInstallDirectory(servletContext, openDjInstallDirectory);
+        }
+    }
+
+    private static void copyJeJarsToInstallDirectory(ServletContext servletContext, String openDjInstallDirectory)
+            throws IOException, URISyntaxException {
+        File[] jeJars = getJeJars(servletContext);
+        if (jeJars == null || jeJars.length == 0) {
+            throw new ConfiguratorException("missing.je.jars");
+        }
+        for (File file : jeJars) {
+            Files.copy(file.toPath(), Paths.get(openDjInstallDirectory, "lib", file.getName()));
+        }
+    }
+
+    private static File[] getJeJars(ServletContext servletContext) throws MalformedURLException, URISyntaxException {
+        File libDirectory = new File(AMSetupUtils.getResource(servletContext, "/WEB-INF/lib").toURI());
+        return libDirectory.listFiles(new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String name) {
+                return name.startsWith("je-");
+            }
+        });
     }
 
     /**
@@ -422,8 +467,7 @@ public class EmbeddedOpenDS {
         setupCmd[8] = (String) map.get(SetupConstants.CONFIG_VAR_DIRECTORY_SERVER_PORT);
         setupCmd[13] = (String) map.get(SetupConstants.CONFIG_VAR_DIRECTORY_JMX_SERVER_PORT);
         setupCmd[17] = getOpenDJHostName(map);
-        setupCmd[20] = SystemProperties.get(SetupConstants.DJ_BACKEND_TYPE_CONFIG_NAME,
-                SetupConstants.DJ_BACKEND_TYPE_DEFAULT);
+        setupCmd[20] = (String) map.get(SetupConstants.DJ_BACKEND_TYPE_CONFIG_NAME);
 
         Object[] params = {concat(setupCmd)};
         SetupProgress.reportStart("emb.setupcommand", params);
