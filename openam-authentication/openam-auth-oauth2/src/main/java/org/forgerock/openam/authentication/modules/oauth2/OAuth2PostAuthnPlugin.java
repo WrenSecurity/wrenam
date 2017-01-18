@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright 2011-2016 ForgeRock AS. All rights reserved.
+ * Copyright 2011-2017 ForgeRock AS. All rights reserved.
  *
  * The contents of this file are subject to the terms
  * of the Common Development and Distribution License
@@ -43,6 +43,7 @@ import org.forgerock.openam.utils.StringUtils;
 import com.iplanet.am.util.SystemProperties;
 import com.iplanet.dpro.session.service.InternalSession;
 import com.sun.identity.shared.Constants;
+import com.sun.identity.sm.DNMapper;
 
 import static org.forgerock.openam.authentication.modules.oauth2.OAuthParam.*;
 
@@ -154,7 +155,10 @@ public class OAuth2PostAuthnPlugin implements AMPostAuthProcessInterface {
                     logoutURL = logoutURL + "&" + PARAM_GOTO + "=" + 
                             URLEncoder.encode(gotoParam, "UTF-8");
                 } 
-                
+
+                String realm = DNMapper.orgNameToRealmName(ssoToken.getProperty("Organization"));
+                logoutURL = logoutURL + "&" + PARAM_LOGOUT_REALM + "=" + URLEncoder.encode(realm, "UTF-8");
+
                 OAuthUtil.debugMessage("OAuth2PostAuthnPlugin: redirecting to: "
                         + logoutURL);
 
