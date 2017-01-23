@@ -11,3 +11,5 @@ uninstall
 uninstall.bat
 upgrade
 upgrade.bat
+lib/je.jar
+lib/je-*.jar

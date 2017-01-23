@@ -24,7 +24,7 @@
  *
  * $Id: EmbeddedOpenDS.java,v 1.27 2010/01/15 01:22:39 goodearth Exp $
  *
- * Portions Copyrighted 2010-2016 ForgeRock AS.
+ * Portions Copyrighted 2010-2017 ForgeRock AS.
  */
 
 package com.sun.identity.setup;
@@ -32,6 +32,7 @@ package com.sun.identity.setup;
 import static org.forgerock.opendj.ldap.LDAPConnectionFactory.AUTHN_BIND_REQUEST;
 import static org.forgerock.opendj.ldap.LDAPConnectionFactory.CONNECT_TIMEOUT;
 
+import javax.servlet.ServletContext;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -64,8 +65,11 @@ import java.util.zip.ZipFile;
 
 import javax.crypto.Cipher;
 import javax.crypto.NoSuchPaddingException;
-import javax.servlet.ServletContext;
-
+import com.iplanet.am.util.SystemProperties;
+import com.sun.identity.common.ShutdownManager;
+import com.sun.identity.shared.Constants;
+import com.sun.identity.shared.debug.Debug;
+import com.sun.identity.sm.SMSEntry;
 import org.forgerock.guava.common.io.ByteStreams;
 import org.forgerock.i18n.LocalizableMessage;
 import org.forgerock.openam.ldap.LDAPRequests;
@@ -96,12 +100,6 @@ import org.opends.server.types.DirectoryEnvironmentConfig;
 import org.opends.server.util.EmbeddedUtils;
 import org.opends.server.util.ServerConstants;
 import org.opends.server.util.TimeThread;
-
-import com.iplanet.am.util.SystemProperties;
-import com.sun.identity.common.ShutdownManager;
-import com.sun.identity.shared.Constants;
-import com.sun.identity.shared.debug.Debug;
-import com.sun.identity.sm.SMSEntry;
 
 // OpenDS, now OpenDJ, does not have APIs to install and setup replication yet
 
@@ -413,7 +411,7 @@ public class EmbeddedOpenDS {
                 "hostname",                     // 17
                 "--noPropertiesFile",           // 18
                 "--backendType",                // 19
-                "je"                            // 20
+                "pdb"                           // 20
         };
 
         setupCmd[2] = (String) map.get(SetupConstants.CONFIG_VAR_DIRECTORY_ADMIN_SERVER_PORT);
@@ -422,8 +420,7 @@ public class EmbeddedOpenDS {
         setupCmd[8] = (String) map.get(SetupConstants.CONFIG_VAR_DIRECTORY_SERVER_PORT);
         setupCmd[13] = (String) map.get(SetupConstants.CONFIG_VAR_DIRECTORY_JMX_SERVER_PORT);
         setupCmd[17] = getOpenDJHostName(map);
-        setupCmd[20] = SystemProperties.get(SetupConstants.DJ_BACKEND_TYPE_CONFIG_NAME,
-                SetupConstants.DJ_BACKEND_TYPE_DEFAULT);
+        setupCmd[20] = SetupConstants.DJ_BACKEND_TYPE_DEFAULT;
 
         Object[] params = {concat(setupCmd)};
         SetupProgress.reportStart("emb.setupcommand", params);

@@ -24,7 +24,7 @@
  *
  * $Id: SetupConstants.java,v 1.46 2009/12/23 00:21:38 goodearth Exp $
  *
- * Portions Copyrighted 2010-2016 ForgeRock AS.
+ * Portions Copyrighted 2010-2017 ForgeRock AS.
  */
 
 package com.sun.identity.setup;
@@ -741,7 +741,7 @@ public interface SetupConstants {
     /**
      * The Default value for the backing database to be used by OpenDJ.
      */
-    String DJ_BACKEND_TYPE_DEFAULT = "je";
+    String DJ_BACKEND_TYPE_DEFAULT = "pdb";
 
     /** The user's home directory. */
     String USER_HOME = "USER_HOME";
