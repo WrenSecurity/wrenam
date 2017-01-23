@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2015-2017 ForgeRock AS.
+ * Copyright 2015 ForgeRock AS.
  */
 
 package com.sun.identity.setup;
@@ -34,7 +34,6 @@ import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
@@ -277,24 +276,6 @@ public final class AMSetupUtils {
             return Thread.currentThread().getContextClassLoader().getResourceAsStream(file);
         } else {
             return servletContext.getResourceAsStream(file);
-        }
-    }
-
-    /**
-     * Gets the file location as a {@code URL}.
-     *
-     * @param servletContext The {@code ServletContext} to use to find the file.
-     * @param file The {@code File} to retrieve.
-     * @return A {@code URL} of the files location.
-     */
-    public static URL getResource(ServletContext servletContext, String file) throws MalformedURLException {
-        if (servletContext == null) {
-            if (file.startsWith("/")) {
-                file = file.substring(1);
-            }
-            return Thread.currentThread().getContextClassLoader().getResource(file);
-        } else {
-            return servletContext.getResource(file);
         }
     }
 }
