@@ -7,18 +7,6 @@ Apache Software License, Version 2.0
 Version: asciidoctorj-1.5.4.jar
 Copyright: Copyright 2012-2016 Dan Allen, Ryan Waldron and the Asciidoctor Project
 
-Version: aws-java-sdk-core-1.10.72.jar
-Copyright: Copyright © 2016, Amazon Web Services, Inc. or its affiliates. All rights reserved.
-
-Version: aws-java-sdk-sns-1.10.72.jar
-Copyright: Copyright © 2016, Amazon Web Services, Inc. or its affiliates. All rights reserved.
-
-Version: aws-java-sdk-sqs-1.10.72.jar
-Copyright: Copyright © 2016, Amazon Web Services, Inc. or its affiliates. All rights reserved.
-
-Version: jackson-dataformat-cbor-2.5.3.jar
-Copyright: Copyright ©2009-2011 FasterXML, LLC. All rights reserved unless otherwise indicated.
-
 Version: bootstrap-tabdrop-1.0.js
 Copyright: Copyright 2012 Stefan Petre
 
@@ -960,9 +948,6 @@ Copyright: Copyright 2004-2013 QOS.ch
 Version: slf4j-jdk14-1.7.5.jar
 Copyright: Copyright 2004-2007 QOS.ch
 
-Version: jcl-over-slf4j-1.7.21.jar
-Copyright:  Copyright 2001-2004 The Apache Software Foundation.
-
 Version: text.js
 Copyright: Copyright (c) 2010-2014, The Dojo Foundation
 
@@ -1159,46 +1144,6 @@ This Source Code Form is “Incompatible With Secondary Licenses”, as defined 
 
 
 ***************************************************************************
-The Sleepycat License (Sleepycat)
-***************************************************************************
-
-Version: je-5.0.104.jar
-Copyright: Copyright (c) 2002, 2014 Oracle and/or its affiliates.  All rights reserved.,
-           Copyright (c) 2000-2005 INRIA, France Telecom
-
-==================
-Full license text:
-==================
-
-Copyright (c) 1990-1999 Sleepycat Software. All rights reserved.
-
-Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-
-Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-Redistributions in any form must be accompanied by information on how to obtain complete source code for the DB software and any accompanying software that uses the DB software. The source code must either be included in the distribution or be available for no more than the cost of distribution plus a nominal fee, and must be freely redistributable under reasonable conditions. For an executable file, complete source code means the source code for all modules it contains. It does not include source code for modules or files that typically accompany the major components of the operating system on which the executable file runs.
-THIS SOFTWARE IS PROVIDED BY SLEEPYCAT SOFTWARE ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT, ARE DISCLAIMED. IN NO EVENT SHALL SLEEPYCAT SOFTWARE BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-Copyright (c) 1990, 1993, 1994, 1995 The Regents of the University of California. All rights reserved.
-
-Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-
-Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-Neither the name of the University nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-Copyright (c) 1995, 1996 The President and Fellows of Harvard University. All rights reserved.
-
-Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-
-Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-Neither the name of the University nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-THIS SOFTWARE IS PROVIDED BY HARVARD AND ITS CONTRIBUTORS ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL HARVARD OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-
-***************************************************************************
 COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0
 ***************************************************************************
 
@@ -1264,9 +1209,6 @@ Copyright: Copyright (c) 2007-2015 Oracle and/or its affiliates. All rights rese
 
 Version: grizzly-http-servlet-2.3.23.jar
 Copyright: Copyright (c) 2007-2015 Oracle and/or its affiliates. All rights reserved.
-
-Version: javax.jms:javax.jms-api:2.0.1.jar
-Copyright: Copyright (c) 2012-2015 Oracle and/or its affiliates. All rights reserved.
 
 Version: jaxb-impl-1.0.6.jar
 Copyright: Copyright (c) 2006 Sun Microsystems Inc. All Rights Reserved
