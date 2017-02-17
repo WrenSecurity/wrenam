@@ -733,16 +733,6 @@ public interface SetupConstants {
      */
     static final String LDAP_CONNECTION_MODE_LDAPS = "LDAPS";
 
-    /**
-     * The type of backing database to be used by OpenDJ.
-     */
-    String DJ_BACKEND_TYPE_CONFIG_NAME = "com.forgerock.openam.dj.backendType";
-
-    /**
-     * The Default value for the backing database to be used by OpenDJ.
-     */
-    String DJ_BACKEND_TYPE_DEFAULT = "pdb";
-
     /** The user's home directory. */
     String USER_HOME = "USER_HOME";
 }

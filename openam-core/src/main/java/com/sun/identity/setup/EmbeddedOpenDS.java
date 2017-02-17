@@ -411,7 +411,7 @@ public class EmbeddedOpenDS {
                 "hostname",                     // 17
                 "--noPropertiesFile",           // 18
                 "--backendType",                // 19
-                "pdb"                           // 20
+                "je"                            // 20
         };
 
         setupCmd[2] = (String) map.get(SetupConstants.CONFIG_VAR_DIRECTORY_ADMIN_SERVER_PORT);
@@ -420,7 +420,6 @@ public class EmbeddedOpenDS {
         setupCmd[8] = (String) map.get(SetupConstants.CONFIG_VAR_DIRECTORY_SERVER_PORT);
         setupCmd[13] = (String) map.get(SetupConstants.CONFIG_VAR_DIRECTORY_JMX_SERVER_PORT);
         setupCmd[17] = getOpenDJHostName(map);
-        setupCmd[20] = SetupConstants.DJ_BACKEND_TYPE_DEFAULT;
 
         Object[] params = {concat(setupCmd)};
         SetupProgress.reportStart("emb.setupcommand", params);
