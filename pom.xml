@@ -506,6 +506,16 @@
             </snapshots>
         </repository>
 
+        <!-- This is required to pull in the 13.5.0-1 clientsdk -->
+        <repository>
+            <id>forgerock-private-releases</id>
+            <name>ForgeRock Private Release Repository</name>
+            <url>http://maven.forgerock.org/repo/private-releases</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+
         <repository>
             <id>forgerock-snapshots-repository</id>
             <name>ForgeRock Snapshot Repository</name>
