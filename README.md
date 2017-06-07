@@ -1,3 +1,5 @@
+Original readme file below. See the `wrenam-dev-notes` folder for more information. This file will be updated in due time.
+
 # OpenAM
 
 OpenAM is an "all-in-one" access management solution that provides the following features in a single unified project:
