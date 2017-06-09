@@ -5,7 +5,7 @@ The last version in the master branch of the original source part of the 13.5.X 
 RC11:
 
 * [OPENAM-9322] When Trying to set User Self Service I get "Data Validation Failed for Attribute SelfServiceSecretKey Attribute" error
-* [OPENAM-9147] After ugrade, there is added Error record in debug log file on realm deletion
+* ~~[OPENAM-9147] After ugrade, there is added Error record in debug log file on realm deletion~~
 
 RC12:
 

@@ -599,6 +599,8 @@ public class OrganizationConfigManager {
         Set subRlmSet =
             subRlmConfigMgr.getSubOrganizationNames("*", true);
 
+        boolean isCopyOrgEnabled = isCopyOrgEnabled();
+        
         if (realmEnabled) {
             try {
                 CachedSMSEntry cEntry = CachedSMSEntry.getInstance(token,
@@ -635,7 +637,7 @@ public class OrganizationConfigManager {
 
         // If in legacy mode or (realm mode and copy org enabled)
         // delete the corresponding organization.
-        if ((coexistMode) || (realmEnabled && isCopyOrgEnabled())) {
+        if ((coexistMode) || (realmEnabled && isCopyOrgEnabled)) {
             String amsdkName = DNMapper.realmNameToAMSDKName(subOrgDN);
             if (!SMSEntry.getRootSuffix().equalsIgnoreCase(
                 SMSEntry.getAMSdkBaseDN())) {
