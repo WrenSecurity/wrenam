@@ -7,6 +7,7 @@ The last version in the master branch of the original source part of the 13.5.X 
 * [Issue #201608-01: Open Redirect](https://backstage.forgerock.com/knowledge/kb/article/a25759331)
   * OPENAM-9360 Not available in public issue tracker. 
     * `master` branch: `cc56c55b6a9d836dbd7f22e9f1a0ac6e77cc5067`
+    * `sustaining/13.5` branch: a28fa5b06daf9e4661ecd6b44b3e1da5be91da7f
   * OPENAM-9519 Not available in public issue tracker. 
     * `master` branch: `85b062588cae666bae050ac1e524acb35bf05d7d`
 
