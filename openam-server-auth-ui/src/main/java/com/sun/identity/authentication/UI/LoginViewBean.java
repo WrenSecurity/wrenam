@@ -26,6 +26,7 @@
  *
  * Portions Copyrighted 2010-2016 ForgeRock AS.
  * Portions Copyrighted 2012 Nomura Research Institute, Ltd
+ * Portions Copyrighted 2017 Wren Security
  */
 package com.sun.identity.authentication.UI;
 
