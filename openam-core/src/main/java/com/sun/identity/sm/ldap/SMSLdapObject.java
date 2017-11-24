@@ -25,6 +25,7 @@
  * $Id: SMSLdapObject.java,v 1.27 2009/11/20 23:52:56 ww203982 Exp $
  *
  * Portions Copyrighted 2011-2016 ForgeRock AS.
+ * Portions Copyrighted 2017 Wren Security
  */
 
 package com.sun.identity.sm.ldap;
@@ -622,6 +623,7 @@ public class SMSLdapObject extends SMSObjectDB implements SMSObjectListener {
 
                 if (!retryErrorCodes.contains(errorCode) || retry >= connNumRetry) {
                     debug.warning("SMSLdapObject.search(): LDAP exception in search for filter match: {}", filter, e);
+                    conn.close(); // Be a good citizen and release the connection
                     throw new SMSException(e, "sms-error-in-searching");
                 }
                 retry++;
