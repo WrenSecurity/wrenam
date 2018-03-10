@@ -30,12 +30,13 @@
             }
         },
         paths: {
+            chai: "/base/node_modules/chai/chai",
+            handlebars: "/base/target/dependencies/libs/handlebars-4.0.5",
             jquery: "/base/target/dependencies/libs/jquery-2.1.1-min",
             lodash: "/base/target/dependencies/libs/lodash-3.10.1-min",
             sinon: "/base/target/test-classes/libs/sinon-1.15.4",
-            squire: "/base/target/test-classes/libs/squire-0.2.0",
-            chai: "/base/node_modules/chai/chai",
-            "sinon-chai": "/base/node_modules/sinon-chai/lib/sinon-chai"
+            "sinon-chai": "/base/node_modules/sinon-chai/lib/sinon-chai",
+            squire: "/base/target/test-classes/libs/squire-0.2.0"
         },
         shim: {
             "lodash": {
@@ -46,6 +47,7 @@
 
     require(["chai", "sinon-chai"].concat(allTestFiles), function (chai, chaiSinon) {
         chai.use(chaiSinon);
+
         window.expect = chai.expect;
         window.__karma__.start();
     });

@@ -25,7 +25,7 @@ import java.util.Map;
  *
  * @supported.all.api
  */
-public interface AccessToken extends IntrospectableToken, Token {
+public interface AccessToken extends IntrospectableToken {
 
     /**
      * Gets the token's nonce.
@@ -82,11 +82,4 @@ public interface AccessToken extends IntrospectableToken, Token {
      * @return The token's audit tracking id.
      */
     String getAuditTrackingId();
-
-    /**
-     * Gets the {@link JsonValue} representation of the token.
-     *
-     * @return The {@link JsonValue} representation of the token.
-     */
-    JsonValue toJsonValue();
 }

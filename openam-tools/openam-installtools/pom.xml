@@ -29,7 +29,7 @@
     <parent>
         <groupId>org.forgerock.openam</groupId>
         <artifactId>openam-tools</artifactId>
-        <version>13.5.0-RC11</version>
+        <version>13.5.0</version>
     </parent>
 
     <!-- Component Definition -->
@@ -128,6 +128,11 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-nop</artifactId>
             <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

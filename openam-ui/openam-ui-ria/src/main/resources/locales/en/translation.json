@@ -148,7 +148,15 @@
                 "problemLoggingQuestion" : "Having trouble logging in?",
                 "socialAuthentication" : "Or login with:",
                 "resetPassword" : "Forgot Password?",
-                "forgotUsername" : "Forgot Username?"
+                "forgotUsername" : "Forgot Username?",
+                "onMobileDevice": "On a mobile device?",
+                "waitingForResponse": "Waiting for response...",
+                "havingTrouble": "Having trouble?",
+                "getTheAppFromThe": "Get the app from the",
+                "orOn": "or on",
+                "appStore": "App Store",
+                "googlePlay": "Google Play",
+                "useRecoveryCode": "Use recovery code"
             },
             "404" : {
                 "pageNotFound" : "Page not found",
@@ -330,6 +338,7 @@
             "addName": "Add a name",
             "addValue": "Add a value",
             "validation" : {
+                "errorsNotSaved" : "Validation errors exist in form. Changes not saved.",
                 "VALID_PHONE_FORMAT": "Contains invalid characters",
                 "VALID_NAME_FORMAT": "Contains invalid characters",
                 "VALID_EMAIL_ADDRESS_FORMAT": "Not a valid email address",
@@ -544,7 +553,7 @@
             },
             "unavailable": "Unable to login to OpenAM"
         },
-        "deviceManagement": {
+        "authDevices": {
             "header": "Authentication Devices",
             "noneFound": "You have not registered any devices",
             "menu": {
@@ -560,8 +569,7 @@
             "deviceDetailsDialog": {
                 "recoveryCodes": "Recovery codes",
                 "deviceName": "Device name",
-                "skip": "Skip if appropriate",
-                "help": "If checked, you will not be challenged for 2nd factor authentication unless the administrator has enforced its requirement."
+                "copyRecoveryCodes": "Keep a copy of these codes in a safe place. You will need to use one of your recovery codes to authenticate to OpenAM if you lose your device."
             }
         }
     },
@@ -732,7 +740,7 @@
             "confirmDeleteSelected": "Are you sure that you want to delete these items?",
             "configuration": "Configuration",
             "secondaryConfigurations": "Secondary Configurations",
-            "globalAttributes": "Global Attributes"
+            "global": "Global"
         },
         "sites" : {
             "common" : {

@@ -61,12 +61,10 @@ define([
                 this.values = values;
                 this.defaultValues = defaultValues;
 
-                const clonedValues = _.cloneDeep(values.raw);
-
                 this.parentRender(() => {
                     if (this.sectionId === ServersService.servers.ADVANCED_SECTION) {
                         this.subview = new PanelComponent({
-                            createBody: () => new InlineEditTable({ values: clonedValues }),
+                            createBody: () => new InlineEditTable({ values: _.cloneDeep(this.values.raw) }),
                             createFooter: () => new PartialBasedView({ partial: "form/_JSONSchemaFooter" })
                         });
                     } else {
@@ -76,13 +74,13 @@ define([
                             createBody: (id) => {
                                 if (schema.raw.properties[id].type === "array") {
                                     return new InlineEditTable({
-                                        values: clonedValues[id],
+                                        values: _.cloneDeep(this.values.raw)[id],
                                         rowSchema: schema.raw.properties[id].items
                                     });
                                 } else {
                                     return new FlatJSONSchemaView({
                                         schema: new JSONSchema(schema.raw.properties[id]),
-                                        values: new JSONValues(clonedValues[id])
+                                        values: new JSONValues(_.cloneDeep(this.values.raw)[id])
                                     });
                                 }
                             },
@@ -118,17 +116,21 @@ define([
                 : this.subview.getTabId();
         },
         updateData () {
-            const section = this.getSection();
-
             this.values = this.values.extend({
-                [section]: this.getJSONSchemaView().getData()
+                [this.getSection()]: this.getJSONSchemaView().getData()
             });
         },
         onSave () {
+            if (!this.getJSONSchemaView().isValid()) {
+                Messages.addMessage({
+                    message: $.t("common.form.validation.errorsNotSaved"),
+                    type: Messages.TYPE_DANGER
+                });
+                return;
+            }
             this.updateData();
             ServersService.servers.update(this.sectionId, this.values.raw, this.serverId)
             .then(() => {
-                this.getJSONSchemaView().setData(_.cloneDeep(this.values.raw[this.getSection()]));
                 EventManager.sendEvent(Constants.EVENT_DISPLAY_MESSAGE_REQUEST, "changesSaved");
             }, (response) => {
                 Messages.addMessage({

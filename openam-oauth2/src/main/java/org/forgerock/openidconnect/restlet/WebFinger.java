@@ -11,27 +11,21 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2013-2015 ForgeRock AS.
+ * Copyright 2013-2016 ForgeRock AS.
  */
 
 package org.forgerock.openidconnect.restlet;
 
-import static org.forgerock.openam.audit.AuditConstants.OAUTH2_AUDIT_CONTEXT_PROVIDERS;
 import static org.forgerock.openam.rest.audit.RestletBodyAuditor.noBodyAuditor;
 
-import com.google.inject.Key;
-import com.google.inject.TypeLiteral;
-import com.google.inject.name.Names;
 import org.forgerock.guice.core.InjectorHolder;
-import org.forgerock.json.JsonValue;
+import org.forgerock.oauth2.core.OAuth2RequestFactory;
 import org.forgerock.oauth2.restlet.GuicedRestlet;
 import org.forgerock.oauth2.restlet.OAuth2StatusService;
 import org.forgerock.openam.audit.AuditEventFactory;
 import org.forgerock.openam.audit.AuditEventPublisher;
 import org.forgerock.openam.core.CoreWrapper;
-import org.forgerock.openam.cts.adapters.TokenAdapter;
 import org.forgerock.openam.rest.audit.OAuth2AccessAuditFilter;
-import org.forgerock.openam.rest.audit.OAuth2AuditContextProvider;
 import org.forgerock.openam.rest.router.RestRealmValidator;
 import org.forgerock.openam.rest.service.RestletRealmRouter;
 import org.restlet.Application;
@@ -39,8 +33,6 @@ import org.restlet.Restlet;
 import org.restlet.data.MediaType;
 import org.restlet.routing.Filter;
 import org.restlet.routing.Router;
-
-import java.util.Set;
 
 /**
  * Sets up the OpenId Connect web finger endpoints and their handlers.
@@ -53,7 +45,7 @@ public class WebFinger extends Application {
     private final CoreWrapper coreWrapper;
     private final AuditEventPublisher eventPublisher;
     private final AuditEventFactory eventFactory;
-    private final Set<OAuth2AuditContextProvider> contextProviders;
+    private final OAuth2RequestFactory requestFactory;
 
     /**
      * Constructs a new WebFinger.
@@ -66,8 +58,7 @@ public class WebFinger extends Application {
         coreWrapper = InjectorHolder.getInstance(CoreWrapper.class);
         eventPublisher = InjectorHolder.getInstance(AuditEventPublisher.class);
         eventFactory = InjectorHolder.getInstance(AuditEventFactory.class);
-        contextProviders = InjectorHolder.getInstance(Key.get(new TypeLiteral<Set<OAuth2AuditContextProvider>>() {},
-                Names.named(OAUTH2_AUDIT_CONTEXT_PROVIDERS)));
+        requestFactory = InjectorHolder.getInstance(OAuth2RequestFactory.class);
 
         getMetadataService().setEnabled(true);
         getMetadataService().setDefaultMediaType(MediaType.APPLICATION_JSON);
@@ -93,7 +84,7 @@ public class WebFinger extends Application {
     }
 
     private Filter auditWithOAuthFilter(Restlet restlet) {
-        return new OAuth2AccessAuditFilter(restlet, eventPublisher, eventFactory, contextProviders, noBodyAuditor(),
+        return new OAuth2AccessAuditFilter(restlet, eventPublisher, eventFactory, requestFactory, noBodyAuditor(),
                 noBodyAuditor());
     }
 }

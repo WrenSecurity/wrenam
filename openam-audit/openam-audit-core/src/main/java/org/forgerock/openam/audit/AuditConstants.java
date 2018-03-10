@@ -116,7 +116,9 @@ public final class AuditConstants {
         /** Jato audit event component. */
         JATO("jato"),
         /** SAML2 audit event component. */
-        SAML2("SAML2");
+        SAML2("SAML2"),
+        /** Self Service audit event component. */
+        SELF_SERVICE("Self Service");
 
         private final String name;
 
@@ -167,6 +169,8 @@ public final class AuditConstants {
         OAUTH2_ACCESS,
         /** Tracking ID for Session used during authentication. */
         AUTH,
+        /** Tracking ID for an OpenID Connect ID Token. */
+        OIDC_ID_TOKEN,
         /** Radius Access Request. */
         RADIUS_ACCESS_REQUEST
     }

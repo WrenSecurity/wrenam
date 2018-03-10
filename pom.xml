@@ -57,7 +57,7 @@
     <name>OpenAM Project</name>
     <groupId>org.forgerock.openam</groupId>
     <artifactId>openam</artifactId>
-    <version>13.5.0-RC11</version>
+    <version>13.5.0</version>
     <packaging>pom</packaging>
 
     <description>OpenAM</description>
@@ -113,15 +113,16 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- Version Properties -->
-        <opendj.server.version>3.0.0</opendj.server.version>
-        <opendj.sdk.version>3.0.0</opendj.sdk.version>
-        <opendj.server.legacy>3.0.0</opendj.server.legacy>
+        <opendj.version>3.5.0</opendj.version>
+        <opendj.server.version>${opendj.version}</opendj.server.version>
+        <opendj.sdk.version>${opendj.version}</opendj.sdk.version>
+        <opendj.server.legacy>${opendj.version}</opendj.server.legacy>
 
         <!-- Supress checkstyle errors on legacy com.iplanet and com.sun.identity packages -->
         <checkstyleUnitTestSuppressionsLocation>checkstyle/suppressions.xml</checkstyleUnitTestSuppressionsLocation>
 
         <forgerock.bloomfilter.version>1.0.1</forgerock.bloomfilter.version>
-        <forgerock.ui.version>13.0.3</forgerock.ui.version>
+        <forgerock.ui.version>13.0.4</forgerock.ui.version>
         <forgerock.guice.version>1.1.0</forgerock.guice.version>
 
         <javadoc-utils.version>1.0.0</javadoc-utils.version>
@@ -172,14 +173,15 @@
         <jdmk.version>2007-01-10</jdmk.version>
         <jsr173_api.version>2004-30-01</jsr173_api.version>
         <javax.security.auth.message.version>3.1</javax.security.auth.message.version>
-        <jquery-amd.version>1.7.1-alpha-1</jquery-amd.version>
         <freemarker.version>2.3.19</freemarker.version>
         <java-ipv6.version>0.14</java-ipv6.version>
         <json.version>20090211</json.version>
         <hikaricp.version>2.4.1</hikaricp.version>
         <h2database.version>1.4.188</h2database.version>
+        <activemq.version>5.13.3</activemq.version>
         <javax.inject.version>1_2</javax.inject.version>
         <fastinfoset.version>1.2.13</fastinfoset.version>
+        <jetty.jspc.version>9.4.0.M0</jetty.jspc.version>
 
         <openam.version>OpenAM ${project.version}</openam.version>
         <!--  Project web site -->
@@ -335,6 +337,21 @@
                     </plugin>
                 </plugins>
             </build>
+        </profile>
+        <profile>
+            <id>forgerock-dev</id>
+            <modules>
+                <module>openam-time-travel</module>
+            </modules>
+            <dependencyManagement>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.forgerock.openam</groupId>
+                        <artifactId>openam-time-travel</artifactId>
+                        <version>${project.version}</version>
+                    </dependency>
+                </dependencies>
+            </dependencyManagement>
         </profile>
     </profiles>
 
@@ -512,19 +529,28 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
+
+        <repository>
+            <id>forgerock-private-releases</id>
+            <name>maven.forgerock.org-releases</name>
+            <url>http://maven.forgerock.org/repo/private-releases</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
     </repositories>
 
     <!-- For Deployment to ForgeRock Maven Repository -->
     <distributionManagement>
         <repository>
-            <id>maven.forgerock.org</id>
+            <id>forgerock-private-releases</id>
             <name>maven.forgerock.org-releases</name>
-            <url>http://maven.forgerock.org/repo/releases</url>
+            <url>http://maven.forgerock.org/repo/private-releases</url>
         </repository>
         <snapshotRepository>
-            <id>maven.forgerock.org</id>
+            <id>forgerock-private-snapshots</id>
             <name>maven.forgerock.org-snapshots</name>
-            <url>http://maven.forgerock.org/repo/snapshots</url>
+            <url>http://maven.forgerock.org/repo/private-snapshots</url>
         </snapshotRepository>
         <site>
             <id>forgerock.org</id>
@@ -535,10 +561,10 @@
 
     <!-- Source Control -->
     <scm>
-        <connection>scm:git:ssh://git@stash.forgerock.org:7999/openam/openam.git</connection>
-        <developerConnection>scm:git:ssh://git@stash.forgerock.org:7999/openam/openam.git</developerConnection>
-        <url>https://stash.forgerock.org/projects/OPENAM/repos/openam/browse</url>
-      <tag>13.5.0-RC11</tag>
+        <connection>scm:git:ssh://git@stash.forgerock.org:7999/openam/openam-sustaining.git</connection>
+        <developerConnection>scm:git:ssh://git@stash.forgerock.org:7999/openam/openam-sustaining.git</developerConnection>
+        <url>https://stash.forgerock.org/projects/OPENAM/repos/openam-sustaining/browse</url>
+    <tag>13.5.0</tag>
   </scm>
 
     <!-- Dependency Management -->
@@ -547,7 +573,7 @@
             <dependency>
                 <groupId>org.forgerock.commons</groupId>
                 <artifactId>commons-bom</artifactId>
-                <version>20.0.0-alpha-5</version>
+                <version>20.1.0</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
@@ -646,18 +672,6 @@
                 <groupId>org.forgerock.openam</groupId>
                 <artifactId>openam-auth-common</artifactId>
                 <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-auth-deviceprint-module</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-auth-deviceprint-scripts</artifactId>
-                <version>${project.version}</version>
-                <type>js</type>
-                <classifier>min</classifier>
             </dependency>
             <dependency>
                 <groupId>org.forgerock.openam</groupId>
@@ -1723,13 +1737,6 @@
 
             <!-- DevicePrint -->
             <dependency>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>jquery-amd</artifactId>
-                <version>${jquery-amd.version}</version>
-                <type>js</type>
-            </dependency>
-
-            <dependency>
                 <groupId>org.freemarker</groupId>
                 <artifactId>freemarker</artifactId>
                 <version>${freemarker.version}</version>
@@ -1942,6 +1949,12 @@
                 <scope>test</scope>
             </dependency>
             <dependency>
+                <groupId>org.apache.activemq</groupId>
+                <artifactId>activemq-client</artifactId>
+                <version>${activemq.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
                 <!-- License: legal/CC-Public-Domain.txt -->
                 <groupId>org.hdrhistogram</groupId>
                 <artifactId>HdrHistogram</artifactId>
@@ -2007,6 +2020,7 @@
                 <configuration>
                     <autoVersionSubmodules>true</autoVersionSubmodules>
                     <updateBranchVersions>true</updateBranchVersions>
+                    <goals>install javadoc:aggregate-jar deploy</goals>
                 </configuration>
             </plugin>
 

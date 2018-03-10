@@ -16,12 +16,12 @@
 
 package org.forgerock.openam.core.rest.sms;
 
-import static org.forgerock.json.JsonValue.field;
 import static org.forgerock.json.JsonValue.json;
 import static org.forgerock.json.JsonValue.object;
 
 import java.util.LinkedHashMap;
 import javax.inject.Inject;
+import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathConstants;
@@ -44,6 +44,7 @@ import java.util.Set;
 import com.sun.identity.common.configuration.MapValueParser;
 import com.sun.identity.shared.debug.Debug;
 import com.sun.identity.shared.encode.Base64;
+import com.sun.identity.shared.xml.XMLUtils;
 import com.sun.identity.sm.AttributeSchema;
 import com.sun.identity.sm.InvalidAttributeValueException;
 import com.sun.identity.sm.SMSException;
@@ -51,7 +52,6 @@ import com.sun.identity.sm.ServiceSchema;
 import org.apache.commons.lang.StringUtils;
 import org.forgerock.guava.common.collect.BiMap;
 import org.forgerock.guava.common.collect.HashBiMap;
-import org.forgerock.json.JsonValueException;
 import org.forgerock.json.resource.BadRequestException;
 import org.forgerock.json.JsonException;
 import org.forgerock.json.JsonPointer;
@@ -146,10 +146,40 @@ public class SmsJsonConverter {
      * corresponding JSON representation
      *
      * @param attributeValuePairs The schema attribute values.
+     * @param validate Should the attributes be validated.
+     * @param parentJson The {@link JsonValue} to which the attributes should be added.
+     * @return Json representation of attributeValuePairs
+     */
+    public JsonValue toJson(Map<String, Set<String>> attributeValuePairs, boolean validate, JsonValue parentJson) {
+        return toJson(null, attributeValuePairs, validate, parentJson);
+    }
+
+    /**
+     * Will validate the Map representation of the service configuration against the serviceSchema and return a
+     * corresponding JSON representation
+     *
      * @param realm The realm, or null if global.
+     * @param attributeValuePairs The schema attribute values.
+     * @param validate Should the attributes be validated.
      * @return Json representation of attributeValuePairs
      */
     public JsonValue toJson(String realm, Map<String, Set<String>> attributeValuePairs, boolean validate) {
+        return toJson(realm, attributeValuePairs, validate, json(object()));
+    }
+
+    /**
+     * Will validate the Map representation of the service configuration against the serviceSchema and return a
+     * corresponding JSON representation
+     *
+     * @param realm The realm, or null if global.
+     * @param attributeValuePairs The schema attribute values.
+     * @param validate Should the attributes be validated.
+     * @param parentJson The {@link JsonValue} to which the attributes should be added.
+     * @return Json representation of attributeValuePairs
+     */
+    public JsonValue toJson(String realm, Map<String, Set<String>> attributeValuePairs, boolean validate,
+            JsonValue parentJson) {
+
         if (!initialised) {
             init();
         }
@@ -163,14 +193,11 @@ public class SmsJsonConverter {
                     validAttributes = schema.validateAttributes(attributeValuePairs, realm);
                 }
             } catch (SMSException e) {
-                debug.error(
-                        "schema validation threw an exception while validating the attributes: realm=" + realm + " attributes: " + attributeValuePairs,
-                        e);
+                debug.error("schema validation threw an exception while validating the attributes: realm=" + realm +
+                        " attributes: " + attributeValuePairs, e);
                 throw new JsonException("Unable to validate attributes", e);
             }
         }
-
-        JsonValue parentJson = json(object());
 
         if (validAttributes) {
             for (String attributeName : attributeValuePairs.keySet()) {
@@ -338,10 +365,13 @@ public class SmsJsonConverter {
                 for (Object val : attributeArray) {
                     value.add(convertJsonToString(attributeName, val));
                 }
-            } else {
+            } else if (attributeValue != null) {
                 value.add(convertJsonToString(attributeName, attributeValue));
             }
-            result.put(attributeName, value);
+
+            if (!value.isEmpty() || !isPassword(schema.getAttributeSchema(attributeName).getSyntax())) {
+                result.put(attributeName, value);
+            }
         }
 
         try {
@@ -411,8 +441,10 @@ public class SmsJsonConverter {
 
         try {
             InputStream resource = getClass().getClassLoader().getResourceAsStream("amConsoleConfig.xml");
-            Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(resource);
-            NodeList nodes = (NodeList) XPathFactory.newInstance().newXPath().evaluate("//consoleconfig/servicesconfig/consoleservice/@realmEnableHideAttrName", doc, XPathConstants.NODESET);
+            Document doc = XMLUtils.getSafeDocumentBuilder(false).parse(resource);
+            NodeList nodes = (NodeList) XPathFactory.newInstance().newXPath().evaluate(
+                    "//consoleconfig/servicesconfig/consoleservice/@realmEnableHideAttrName", doc,
+                    XPathConstants.NODESET);
             String rawList = nodes.item(0).getNodeValue();
             hiddenAttributeNames = new ArrayList<>(Arrays.asList(rawList.split(",")));
         } catch (SAXException e) {

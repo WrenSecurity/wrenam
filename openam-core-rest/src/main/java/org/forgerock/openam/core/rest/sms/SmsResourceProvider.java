@@ -154,26 +154,43 @@ public abstract class SmsResourceProvider {
      * @return The ServiceConfig that was found.
      * @throws SMSException From downstream service manager layer.
      * @throws SSOException From downstream service manager layer.
+     * @throws NotFoundException When some configuration in the parent path does not exist.
      */
     protected ServiceConfig parentSubConfigFor(Context context, ServiceConfigManager scm)
-            throws SMSException, SSOException {
-        String name = null;
+            throws SMSException, SSOException, NotFoundException {
+
         Map<String, String> uriTemplateVariables = context.asContext(UriRouterContext.class).getUriTemplateVariables();
-        if (hasInstanceName) {
-            name = uriTemplateVariables.get("name");
+
+        ServiceConfig config;
+        if (type == SchemaType.GLOBAL) {
+            config = scm.getGlobalConfig(hasInstanceName ? uriTemplateVariables.get("name") : null);
+        } else {
+            config = scm.getOrganizationConfig(realmFor(context), null);
+            if (!SmsRequestHandler.USE_PARENT_PATH.equals(schema.getResourceName()) && !config.exists()) {
+                throw new NotFoundException("Parent service does not exist.");
+            }
         }
-        ServiceConfig config = type == SchemaType.GLOBAL ?
-                scm.getGlobalConfig(name) : scm.getOrganizationConfig(realmFor(context), null);
+
         for (int i = 0; i < subSchemaPath.size() - 1; i++) {
             ServiceSchema schema = subSchemaPath.get(i);
-            String pathFragment = schema.getResourceName();
-            if (pathFragment == null || SmsRequestHandler.USE_PARENT_PATH.equals(pathFragment)) {
-                pathFragment = schema.getName();
+            String subConfigName = schema.getResourceName();
+
+            boolean configNeedsToExist = true;
+            if (subConfigName == null || SmsRequestHandler.USE_PARENT_PATH.equals(subConfigName)) {
+                subConfigName = schema.getName();
+                configNeedsToExist = false;
             }
-            if (uriPath.contains("{" + pathFragment + "}")) {
-                pathFragment = uriTemplateVariables.get(pathFragment);
+
+            if (uriPath.contains("{" + subConfigName + "}")) {
+                subConfigName = uriTemplateVariables.get(subConfigName);
+                configNeedsToExist = true;
             }
-            config = config.getSubConfig(pathFragment);
+
+            config = config.getSubConfig(subConfigName);
+
+            if (configNeedsToExist && !config.exists()) {
+                throw new NotFoundException("Parent subconfig of type " + subConfigName + " does not exist.");
+            }
         }
         return config;
     }
@@ -232,8 +249,21 @@ public abstract class SmsResourceProvider {
 
     @Action
     public Promise<ActionResponse, ResourceException> template() {
-        //when retrieving the template we don't want to validate the attributes
-        return newActionResponse(converter.toJson(schema.getAttributeDefaults(), false)).asPromise();
+        return newActionResponse(createTemplate()).asPromise();
+    }
+
+    /**
+     * Creates json response with attribute defaults when the service has global or default/realm schema.
+     *
+     * @return json response data; empty json if the service has only dynamic schema
+     */
+    protected JsonValue createTemplate() {
+        if (serviceHasDefaultOrGlobalSchema()) {
+            //when retrieving the template we don't want to validate the attributes
+            return converter.toJson(schema.getAttributeDefaults(), false);
+        }
+        // Dynamic attributes default values will be added to the JSON response in the child class SmsSingletonProvider
+        return json(object());
     }
 
     @Action
@@ -273,20 +303,94 @@ public abstract class SmsResourceProvider {
         return i18nName;
     }
 
-    protected JsonValue createSchema(Context context) {
+    private JsonValue createSchema(Context context) {
         JsonValue result = json(object(field("type", "object")));
-        if (serviceHasDefaultOrGlobalSchema()) {
+        addGlobalSchema(context, result);
+        addOrganisationSchema(context, result);
+        addDynamicSchema(context, result);
+        return result;
+    }
+
+    /**
+     * Add the global attribute schema to the given {@link JsonValue} result.
+     *
+     * @param context The request context.
+     * @param result The response body {@link JsonValue}.
+     */
+    protected void addGlobalSchema(Context context, JsonValue result) {
+        if (schema.getServiceType().equals(SchemaType.GLOBAL)) {
             addAttributeSchema(result, "/" + PROPERTIES + "/", schema, context);
         }
-        // Dynamic attributes will be added to the JSON response in the child class SmsSingletonProvider
-        return result;
+    }
+
+    /**
+     * Add the organisation attribute schema to the given {@link JsonValue} result. The organisation attribute schema
+     * will be added at the root of the JSON response if the request is for realm based schema, but should be added
+     * under "defaults" when the request is for global schema, see {@link SmsGlobalSingletonProvider}.
+     *
+     * @param context The request context.
+     * @param result The response body {@link JsonValue}.
+     */
+    protected void addOrganisationSchema(Context context, JsonValue result) {
+        if (schema.getServiceType().equals(SchemaType.ORGANIZATION)) {
+            addAttributeSchema(result, "/" + PROPERTIES + "/", schema, context);
+        }
+    }
+
+    /**
+     * Add the dynamic attribute schema to the given {@link JsonValue} result.
+     *
+     * @param context The request context.
+     * @param result The response body {@link JsonValue}.
+     */
+    protected void addDynamicSchema(Context context, JsonValue result) {
+        // Dynamic schema will be added in SmsSingletonProvider
+    }
+
+    /**
+     * Add the global attributes to the given {@link JsonValue} result.
+     *
+     * @param config The SMS config from which to read the attributes.
+     * @param result The response body {@link JsonValue}.
+     */
+    @SuppressWarnings("unchecked")
+    protected void addGlobalAttributes(ServiceConfig config, JsonValue result) {
+        if (schema.getServiceType().equals(SchemaType.GLOBAL) && config != null) {
+            converter.toJson(config.getAttributes(), false, result);
+        }
+    }
+
+    /**
+     * Add the organisation attributes to the given {@link JsonValue} result. The organisation attributes will be
+     * added at the root of the JSON response if the request is for realm based attributes, but should be added
+     * under "defaults" when the request is for global attributes, see {@link SmsGlobalSingletonProvider}.
+     *
+     * @param realm The realm/organisation where the attributes are stored.
+     * @param config The SMS config from which to read the attributes.
+     * @param result The response body {@link JsonValue}.
+     */
+    @SuppressWarnings("unchecked")
+    protected void addOrganisationAttributes(String realm, ServiceConfig config, JsonValue result) {
+        if (schema.getServiceType().equals(SchemaType.ORGANIZATION) && config != null) {
+            converter.toJson(realm, config.getAttributes(), false, result);
+        }
+    }
+
+    /**
+     * Add the dynamic attributes to the given {@link JsonValue} result.
+     *
+     * @param realm The realm/organisation where the attributes are stored.
+     * @param result The response body {@link JsonValue}.
+     */
+    protected void addDynamicAttributes(String realm, JsonValue result) {
+        // Dynamic attributes will be added in SmsSingletonProvider
     }
 
     /**
      * Returns the JsonValue representation of the ServiceConfig using the {@link #converter}. Adds a {@code _id}
      * property for the name of the config.
      */
-    protected JsonValue getJsonValue(String realm, ServiceConfig config, Context context) throws
+    protected final JsonValue getJsonValue(String realm, ServiceConfig config, Context context) throws
             InternalServerErrorException {
         return getJsonValue(realm, config, context, null, false);
     }
@@ -295,16 +399,13 @@ public abstract class SmsResourceProvider {
      * Returns the JsonValue representation of the ServiceConfig using the {@link #converter}. Adds a {@code _id}
      * property for the name of the config.
      */
-    protected JsonValue getJsonValue(String realm, ServiceConfig config, Context context,
+    protected final JsonValue getJsonValue(String realm, ServiceConfig config, Context context,
             String authModuleResourceName, boolean autoCreatedAuthModule) throws InternalServerErrorException {
         JsonValue value = json(object());
 
-        if (serviceHasDefaultOrGlobalSchema()) {
-            if (config == null) {
-                return value;
-            }
-            value = converter.toJson(realm, config.getAttributes(), true);
-        }
+        addGlobalAttributes(config, value);
+        addOrganisationAttributes(realm, config, value);
+        addDynamicAttributes(realm, value);
 
         String id = (null != config) ? config.getName() : "";
         if (autoCreatedAuthModule && StringUtils.isEmpty(id)) {

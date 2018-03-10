@@ -16,31 +16,43 @@
 
 package org.forgerock.openidconnect.restlet;
 
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Locale;
 import java.util.Set;
-import javax.inject.Inject;
+import java.util.concurrent.ConcurrentMap;
 
+import com.sun.identity.authentication.util.ISAuthConstants;
 import org.forgerock.http.protocol.Status;
 import org.forgerock.json.JsonValue;
 import org.forgerock.json.jose.exceptions.InvalidJwtException;
+import org.forgerock.json.jose.jws.JwsAlgorithm;
+import org.forgerock.json.jose.jws.JwsAlgorithmType;
 import org.forgerock.json.jose.jws.SigningManager;
 import org.forgerock.json.jose.jwt.JwtClaimsSet;
-import org.forgerock.openam.oauth2.OAuth2Constants;
+import org.forgerock.oauth2.core.ClientAuthenticator;
 import org.forgerock.oauth2.core.OAuth2Jwt;
+import org.forgerock.oauth2.core.OAuth2ProviderSettingsFactory;
 import org.forgerock.oauth2.core.OAuth2Request;
 import org.forgerock.oauth2.core.OAuth2RequestFactory;
+import org.forgerock.oauth2.core.OAuth2UrisFactory;
 import org.forgerock.oauth2.core.exceptions.BadRequestException;
 import org.forgerock.oauth2.core.exceptions.InvalidClientException;
 import org.forgerock.oauth2.core.exceptions.OAuth2Exception;
 import org.forgerock.oauth2.restlet.ExceptionHandler;
 import org.forgerock.oauth2.restlet.OAuth2RestletException;
+import org.forgerock.openam.core.RealmInfo;
+import org.forgerock.openam.oauth2.OAuth2Constants;
+import org.forgerock.openam.rest.service.RestletRealmRouter;
 import org.forgerock.openam.utils.CollectionUtils;
 import org.forgerock.openam.utils.StringUtils;
 import org.forgerock.openidconnect.OpenIdConnectClientRegistration;
 import org.forgerock.openidconnect.OpenIdConnectClientRegistrationStore;
+import org.forgerock.openidconnect.OpenIdConnectToken;
 import org.forgerock.util.annotations.VisibleForTesting;
 import org.restlet.Request;
 import org.restlet.ext.json.JsonRepresentation;
+import org.restlet.ext.servlet.ServletUtils;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
@@ -59,9 +71,13 @@ import org.restlet.resource.ServerResource;
  */
 public class IdTokenInfo extends ServerResource {
     private final OpenIdConnectClientRegistrationStore clientRegistrationStore;
-    private final OAuth2RequestFactory<?, Request> requestFactory;
+    private final OAuth2RequestFactory requestFactory;
     private final ExceptionHandler exceptionHandler;
     private final SigningManager signingManager = new SigningManager();
+    private final OAuth2UrisFactory urisFactory;
+    private final ClientAuthenticator clientAuthenticator;
+    private final OAuth2ProviderSettingsFactory providerSettingsFactory;
+
 
     /**
      * Constructs the idtokeninfo endpoint with the given client registration store
@@ -72,11 +88,15 @@ public class IdTokenInfo extends ServerResource {
      */
     @Inject
     public IdTokenInfo(final OpenIdConnectClientRegistrationStore clientRegistrationStore,
-            final OAuth2RequestFactory<?, Request> requestFactory,
-            final ExceptionHandler exceptionHandler) {
+            final OAuth2RequestFactory requestFactory,
+            final ExceptionHandler exceptionHandler, final ClientAuthenticator clientAuthenticator,
+            final OAuth2UrisFactory urisFactory, OAuth2ProviderSettingsFactory providerSettingsFactory) {
         this.clientRegistrationStore = clientRegistrationStore;
         this.requestFactory = requestFactory;
         this.exceptionHandler = exceptionHandler;
+        this.clientAuthenticator = clientAuthenticator;
+        this.urisFactory = urisFactory;
+        this.providerSettingsFactory = providerSettingsFactory;
     }
 
     /**
@@ -122,12 +142,24 @@ public class IdTokenInfo extends ServerResource {
             throw new BadRequestException("invalid id_token: " + e.getMessage());
         }
 
+        request.setToken(OpenIdConnectToken.class, new OpenIdConnectToken(idToken.getSignedJwt().getClaimsSet()));
+
         final String clientId = CollectionUtils.getFirstItem(idToken.getSignedJwt().getClaimsSet().getAudience());
         final String realm = idToken.getSignedJwt().getClaimsSet().get(OAuth2Constants.JWTTokenParams.REALM)
                                     .defaultTo("/")
                                     .asString();
+
+        setRealmOnRequest(request, realm);
+
         final OpenIdConnectClientRegistration clientRegistration = clientRegistrationStore.get(clientId,
                 new ValidateIdTokenRequest(request, realm));
+        JwsAlgorithm algorithm = JwsAlgorithm.valueOf(clientRegistration.getIDTokenSignedResponseAlgorithm());
+        boolean requiresClientAuthentication =
+                providerSettingsFactory.get(request).isIdTokenInfoClientAuthenticationEnabled();
+
+        if (requiresClientAuthentication && algorithm.getAlgorithmType().equals(JwsAlgorithmType.HMAC)) {
+            clientAuthenticator.authenticate(request, urisFactory.get(request).getTokenEndpoint());
+        }
 
         if (idToken.isExpired()) {
             throw new BadRequestException("id_token has expired");
@@ -138,6 +170,20 @@ public class IdTokenInfo extends ServerResource {
         }
 
         return idToken;
+    }
+
+    /**
+     * This method satisfies parts of the code which can only read realm information from the request.
+     *
+     * @param request the request.
+     * @param realm the realm taken from the token.
+     */
+    private void setRealmOnRequest(OAuth2Request request, String realm) {
+        ConcurrentMap<String, Object> attributes = request.<Request>getRequest().getAttributes();
+        attributes.put(OAuth2Constants.Custom.REALM, realm);
+        attributes.put(RestletRealmRouter.REALM_INFO, new RealmInfo(realm));
+        HttpServletRequest httpRequest = ServletUtils.getRequest(request.<Request>getRequest());
+        httpRequest.setAttribute(ISAuthConstants.REALM_PARAM, realm);
     }
 
     /**
@@ -183,12 +229,13 @@ public class IdTokenInfo extends ServerResource {
         private final String realm;
 
         ValidateIdTokenRequest(final OAuth2Request delegate, final String realm) {
+            super(null, null);
             this.delegate = delegate;
             this.realm = realm;
         }
 
         @Override
-        public <T> T getRequest() {
+        public Request getRequest() {
             return delegate.getRequest();
         }
 

@@ -22,6 +22,7 @@ import static org.forgerock.util.promise.Promises.*;
 
 import com.sun.identity.shared.debug.Debug;
 import java.util.Map;
+import javax.inject.Inject;
 import javax.inject.Named;
 import org.forgerock.json.JsonValue;
 import org.forgerock.json.jose.common.JwtReconstruction;
@@ -39,6 +40,7 @@ import org.forgerock.openam.cts.exceptions.CoreTokenException;
 import org.forgerock.openam.cts.utils.JSONSerialisation;
 import org.forgerock.openam.rest.RealmContext;
 import org.forgerock.openam.rest.RestUtils;
+import org.forgerock.openam.services.push.PushNotificationService;
 import org.forgerock.openam.services.push.dispatch.MessageDispatcher;
 import org.forgerock.openam.services.push.dispatch.Predicate;
 import org.forgerock.openam.services.push.dispatch.PredicateNotMetException;
@@ -69,26 +71,34 @@ import org.forgerock.util.promise.Promise;
 @RequestHandler
 public class SnsMessageResource {
 
-    private final MessageDispatcher messageDispatcher;
+    private static final String AUTHENTICATE = "authenticate";
+    private static final String REGISTER = "register";
+
+    private final PushNotificationService pushNotificationService;
     private final Debug debug;
     private final CTSPersistentStore coreTokenService;
     private final JSONSerialisation jsonSerialisation;
+    private final JwtReconstruction jwtReconstruction;
 
     /**
      * Generate a new SnsMessageResource using the provided MessageDispatcher.
      * @param coreTokenService A copy of the core token services - messages are dropped on to this for use in clustered
      *                         environments.
-     * @param messageDispatcher Used to deliver messages received at this endpoint to their appropriate locations
-     *                          within OpenAM.
+     * @param pushNotificationService Used to get the message dispatcher, usde to deliver messages received at this
+     *                         endpoint to their appropriate locations within OpenAM.
      * @param jsonSerialisation Used to perform the serialisation necessary for inserting tokens into the CTS.
      * @param debug For writing out debug messages.
+     * @param jwtReconstruction For recreating JWTs.
      */
-    public SnsMessageResource(CTSPersistentStore coreTokenService, MessageDispatcher messageDispatcher,
-                              JSONSerialisation jsonSerialisation, @Named("frPush") Debug debug) {
-        this.messageDispatcher = messageDispatcher;
+    @Inject
+    public SnsMessageResource(CTSPersistentStore coreTokenService, PushNotificationService pushNotificationService,
+                              JSONSerialisation jsonSerialisation, @Named("frPush") Debug debug,
+                              JwtReconstruction jwtReconstruction) {
+        this.pushNotificationService = pushNotificationService;
         this.jsonSerialisation = jsonSerialisation;
         this.debug = debug;
         this.coreTokenService = coreTokenService;
+        this.jwtReconstruction = jwtReconstruction;
     }
 
     /**
@@ -123,9 +133,15 @@ public class SnsMessageResource {
     private Promise<ActionResponse, ResourceException> handle(Context context, ActionRequest actionRequest) {
         Reject.ifFalse(context.containsContext(RealmContext.class));
 
+        String realm = context.asContext(RealmContext.class).getResolvedRealm();
+
+        if (!actionRequest.getAction().equals(AUTHENTICATE) && !actionRequest.getAction().equals(REGISTER)) {
+            debug.warning("Received message in realm {} with invalid messageId.", realm);
+            return RestUtils.generateBadRequestException();
+        }
+
         final JsonValue actionContent = actionRequest.getContent();
 
-        String realm = context.asContext(RealmContext.class).getResolvedRealm();
         JsonValue messageIdLoc = actionContent.get(MESSAGE_ID_JSON_POINTER);
         String messageId;
 
@@ -137,21 +153,25 @@ public class SnsMessageResource {
         }
 
         try {
-            messageDispatcher.handle(messageId, actionContent);
-        } catch (NotFoundException e) {
-            debug.warning("Unable to deliver message with messageId {} in realm {}.", messageId, realm, e);
+            MessageDispatcher messageDispatcher = pushNotificationService.getMessageDispatcher(realm);
             try {
-                attemptFromCTS(messageId, actionContent);
-            } catch (IllegalAccessException | InstantiationException | ClassNotFoundException
-                    | CoreTokenException | NotFoundException ex) {
-                debug.warning("Nothing in the CTS with messageId {}.", messageId, ex);
+                messageDispatcher.handle(messageId, actionContent);
+            } catch (NotFoundException e) {
+                debug.warning("Unable to deliver message with messageId {} in realm {}.", messageId, realm, e);
+                try {
+                    attemptFromCTS(messageId, actionContent, actionRequest.getAction().equals(REGISTER));
+                } catch (IllegalAccessException | InstantiationException | ClassNotFoundException
+                        | CoreTokenException | NotFoundException ex) {
+                    debug.warning("Nothing in the CTS with messageId {}.", messageId, ex);
+                    return RestUtils.generateBadRequestException();
+                }
+            } catch (PredicateNotMetException e) {
+                debug.warning("Unable to deliver message with messageId {} in realm {} as predicate not met.",
+                        messageId, realm, e);
                 return RestUtils.generateBadRequestException();
             }
-            return RestUtils.generateBadRequestException();
-        } catch (PredicateNotMetException e) {
-            debug.warning("Unable to deliver message with messageId {} in realm {} as predicate not met.",
-                    messageId, realm, e);
-            return RestUtils.generateBadRequestException();
+        } catch (NotFoundException e) {
+            return e.asPromise();
         }
 
         return newResultPromise(newActionResponse(json(object())));
@@ -160,7 +180,7 @@ public class SnsMessageResource {
     /**
      * For the in-memory equivalent, {@link MessageDispatcher#handle(String, JsonValue)}.
      */
-    private boolean attemptFromCTS(String messageId, JsonValue actionContent)
+    private boolean attemptFromCTS(String messageId, JsonValue actionContent, boolean register)
             throws CoreTokenException, ClassNotFoundException, IllegalAccessException, InstantiationException,
             NotFoundException {
         Token coreToken = coreTokenService.read(messageId);
@@ -184,19 +204,30 @@ public class SnsMessageResource {
             }
         }
 
-        addDeny(coreToken, actionContent);
+        if (register) {
+            addRegistrationInfo(coreToken, actionContent);
+        } else {
+            addDeny(coreToken, actionContent);
+        }
 
         coreTokenService.update(coreToken);
 
         return true;
     }
 
+    private void addRegistrationInfo(Token coreToken, JsonValue actionContent) {
+        coreToken.setBlob(jsonSerialisation.serialise(actionContent.getObject()).getBytes());
+        coreToken.setAttribute(CoreTokenField.INTEGER_ONE, ACCEPT_VALUE);
+    }
+
     private void addDeny(Token coreToken, JsonValue actionContent) {
 
-        Jwt possibleDeny = new JwtReconstruction().reconstructJwt(actionContent.get(JWT).asString(), SignedJwt.class);
+        Jwt possibleDeny = jwtReconstruction.reconstructJwt(actionContent.get(JWT).asString(), SignedJwt.class);
 
         if (possibleDeny.getClaimsSet().getClaim(DENY_LOCATION) != null) {
             coreToken.setAttribute(CoreTokenField.INTEGER_ONE, DENY_VALUE);
+        } else {
+            coreToken.setAttribute(CoreTokenField.INTEGER_ONE, ACCEPT_VALUE);
         }
 
     }

@@ -22,15 +22,19 @@ import static org.forgerock.openam.services.push.PushNotificationConstants.*;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.iplanet.dpro.session.SessionException;
+import com.iplanet.services.naming.ServerEntryNotFoundException;
 import com.iplanet.services.naming.WebtopNaming;
 import com.sun.identity.authentication.spi.AuthLoginException;
 import com.sun.identity.authentication.util.ISAuthConstants;
 import com.sun.identity.idm.AMIdentity;
 import com.sun.identity.idm.IdUtils;
+import com.sun.identity.shared.configuration.SystemPropertiesManager;
 import com.sun.identity.shared.datastruct.CollectionHelper;
 import com.sun.identity.shared.debug.Debug;
 import com.sun.identity.sm.DNMapper;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.security.Principal;
 import java.util.HashSet;
 import java.util.Map;
@@ -40,9 +44,11 @@ import java.util.concurrent.ExecutionException;
 import javax.security.auth.Subject;
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.ConfirmationCallback;
+import javax.security.auth.callback.TextOutputCallback;
 import javax.security.auth.login.LoginException;
 import javax.servlet.http.HttpServletRequest;
 import org.forgerock.json.JsonValue;
+import org.forgerock.json.resource.NotFoundException;
 import org.forgerock.openam.authentication.callbacks.PollingWaitCallback;
 import org.forgerock.openam.authentication.callbacks.helpers.PollingWaitAssistant;
 import org.forgerock.openam.authentication.callbacks.helpers.QRCallbackBuilder;
@@ -64,7 +70,8 @@ import org.forgerock.util.time.TimeService;
  * The Authenticator Push Registration Module is a registration module that does not authenticate a user but
  * allows a user already authenticated earlier in the chain to register their mobile device.
  *
- * A registering device will need to supply the following information to this module during its await state:
+ * A registering device will need to supply the following information to this module during its await state
+ * via either the MessageDispatcher (local) or the CTS (cross-cluster).
  *
  * Format: JSON
  *
@@ -98,10 +105,16 @@ public class AuthenticatorPushRegistration extends AbstractPushModule {
     private String issuer;
     private long timeout;
 
+    private String messageId;
+
     private String bgColour;
     private String imgUrl;
 
+    private String appleLink;
+    private String googleLink;
+
     private String lbCookieValue;
+    private String realm;
 
     @Override
     public void init(final Subject subject, final Map sharedState, final Map options) {
@@ -121,6 +134,8 @@ public class AuthenticatorPushRegistration extends AbstractPushModule {
         this.issuer = CollectionHelper.getMapAttr(options, ISSUER_OPTION_KEY);
         this.imgUrl = CollectionHelper.getMapAttr(options, IMG_URL);
         this.bgColour = CollectionHelper.getMapAttr(options, BGCOLOUR);
+        this.appleLink = CollectionHelper.getMapAttr(options, APPLE_LINK);
+        this.googleLink = CollectionHelper.getMapAttr(options, GOOGLE_LINK);
 
         if (bgColour != null && bgColour.startsWith("#")) {
             bgColour = bgColour.substring(1);
@@ -136,8 +151,10 @@ public class AuthenticatorPushRegistration extends AbstractPushModule {
         amIdentityPrincipal = establishPreauthenticatedUser(sharedState);
         pollingWaitAssistant = setUpPollingWaitCallbackAssistant(timeout);
 
+        this.realm = DNMapper.orgNameToRealmName(getRequestOrg());
+
         try {
-            pushService.init(amIdentityPrincipal.getRealm());
+            pushService.init(realm);
         } catch (PushNotificationException e) {
             DEBUG.error("{} :: init() : Unable to initialiseService Push system.",
                     AM_AUTH_AUTHENTICATOR_PUSH_REGISTRATION, e);
@@ -146,7 +163,11 @@ public class AuthenticatorPushRegistration extends AbstractPushModule {
     }
 
     private PollingWaitAssistant setUpPollingWaitCallbackAssistant(long timeout) {
-        return new PollingWaitAssistant(timeout, 10000, 10000, 10000);
+        if (Boolean.parseBoolean(SystemPropertiesManager.get(nearInstantProperty))) {
+            return new PollingWaitAssistant(timeout, 1000, 1000, 1000);
+        }
+
+        return new PollingWaitAssistant(timeout);
     }
 
     private AMIdentity establishPreauthenticatedUser(final Map sharedState) {
@@ -166,7 +187,7 @@ public class AuthenticatorPushRegistration extends AbstractPushModule {
 
         try {
             if (!userPushDeviceProfileManager.getDeviceProfiles(amIdentityPrincipal.getName(),
-                    amIdentityPrincipal.getRealm()).isEmpty()) {
+                    realm).isEmpty()) {
                 return ISAuthConstants.LOGIN_SUCCEED;
             }
         } catch (IOException e) {
@@ -200,6 +221,7 @@ public class AuthenticatorPushRegistration extends AbstractPushModule {
         case START_REGISTRATION_OPTION:
             return startRegistration();
         case GET_THE_APP_OPTION:
+            setAppLinkCallbacks();
             return STATE_GET_THE_APP;
         default:
             throw new AuthLoginException(AM_AUTH_AUTHENTICATOR_PUSH_REGISTRATION, "authFailed", null);
@@ -210,10 +232,10 @@ public class AuthenticatorPushRegistration extends AbstractPushModule {
 
         newDeviceRegistrationProfile = userPushDeviceProfileManager.createDeviceProfile();
 
-        String registrationConversationId = UUID.randomUUID().toString() + TimeService.SYSTEM.now();
+        messageId = UUID.randomUUID().toString() + TimeService.SYSTEM.now();
         String challenge = userPushDeviceProfileManager.createRandomBytes(SECRET_BYTE_LENGTH);
 
-        paintRegisterDeviceCallback(amIdentityPrincipal, registrationConversationId, challenge);
+        paintRegisterDeviceCallback(amIdentityPrincipal, messageId, challenge);
 
         byte[] secret = Base64.decode(newDeviceRegistrationProfile.getSharedSecret());
 
@@ -223,18 +245,18 @@ public class AuthenticatorPushRegistration extends AbstractPushModule {
         servicePredicates.add(new PushMessageChallengeResponsePredicate(secret, challenge, JWT));
         try {
             servicePredicates.addAll(pushService.getRegistrationMessagePredicatesFor(
-                    amIdentityPrincipal.getRealm()));
-        } catch (PushNotificationException e) {
+                    realm));
+            this.deviceResponsePromise = pushService.getMessageDispatcher(realm)
+                    .expect(messageId, servicePredicates).getPromise();
+        } catch (NotFoundException | PushNotificationException e) {
             DEBUG.error("Unable to read service addresses for Push Notification Service.");
             throw failedAsLoginException();
         }
 
-        this.deviceResponsePromise = messageDispatcher.expect(registrationConversationId,
-                servicePredicates).getPromise();
         pollingWaitAssistant.start(deviceResponsePromise);
 
         try {
-            storeInCTS(registrationConversationId, servicePredicates, timeout);
+            storeInCTS(messageId, servicePredicates, timeout);
         } catch (JsonProcessingException | CoreTokenException e) {
             DEBUG.warning("Unable to persist token in core token service.", e);
         }
@@ -249,12 +271,9 @@ public class AuthenticatorPushRegistration extends AbstractPushModule {
             return STATE_WAIT_FOR_RESPONSE_FROM_QR_SCAN;
         case NOT_STARTED:
         case WAITING:
-            setPollbackTimePeriod(pollingWaitAssistant.getWaitPeriod());
-            pollingWaitAssistant.resetWait();
-            return STATE_WAIT_FOR_RESPONSE_FROM_QR_SCAN;
+            return waitingChecks();
         case COMPLETE:
-            saveDeviceDetailsUnderUserAccount();
-            return STATE_CONFIRMATION;
+            return completeChecks();
         case TIMEOUT:
             DEBUG.warning("{} :: timeout value exceeded while waiting for response.",
                     AM_AUTH_AUTHENTICATOR_PUSH_REGISTRATION);
@@ -268,33 +287,68 @@ public class AuthenticatorPushRegistration extends AbstractPushModule {
         }
     }
 
-    private void saveDeviceDetailsUnderUserAccount() throws AuthLoginException {
-
+    private int completeChecks() throws AuthLoginException {
         try {
-            JsonValue deviceResponse = deviceResponsePromise.get();
+            coreTokenService.deleteAsync(messageId);
+        } catch (CoreTokenException e) {
+            DEBUG.warning("Removing token from CTS failed.", e);
+        }
+        try {
+            return finaliseSuccess(deviceResponsePromise.get());
+        } catch (ExecutionException | InterruptedException e) {
+            DEBUG.error("{} :: Failed to save device settings.", AM_AUTH_AUTHENTICATOR_PUSH_REGISTRATION, e);
+            throw new AuthLoginException(AM_AUTH_AUTHENTICATOR_PUSH_REGISTRATION, "authFailed", null);
+        }
+    }
 
-            newDeviceRegistrationProfile.setDeviceName("Push Device");
+    private int finaliseSuccess(JsonValue deviceResponse) throws AuthLoginException {
+        storeUsername(amIdentityPrincipal.getName());
+        saveDeviceDetailsUnderUserAccount(deviceResponse);
+        return STATE_CONFIRMATION;
+    }
+
+    private int waitingChecks() throws AuthLoginException {
+        try {
+            JsonValue ctsValue = checkCTSRegistration(messageId);
+            if (ctsValue != null) {
+                pushService.getMessageDispatcher(realm).forget(messageId);
+                coreTokenService.deleteAsync(messageId);
+                return finaliseSuccess(ctsValue);
+            }
+        } catch (CoreTokenException e) {
+            DEBUG.warning("CTS threw exception, falling back to local MessageDispatcher.", e);
+        } catch (NotFoundException e) {
+            DEBUG.error("Could not find local MessageDispatcher for realm.", e);
+            throw failedAsLoginException();
+        }
+
+        setPollbackTimePeriod(pollingWaitAssistant.getWaitPeriod());
+        pollingWaitAssistant.resetWait();
+        return STATE_WAIT_FOR_RESPONSE_FROM_QR_SCAN;
+    }
+
+    private void saveDeviceDetailsUnderUserAccount(JsonValue deviceResponse) throws AuthLoginException {
+        newDeviceRegistrationProfile.setDeviceName("Push Device");
+        try {
             newDeviceRegistrationProfile.setCommunicationId(deviceResponse.get(COMMUNICATION_ID).asString());
             newDeviceRegistrationProfile.setDeviceMechanismUID(deviceResponse.get(MECHANISM_UID).asString());
             newDeviceRegistrationProfile.setCommunicationType(deviceResponse.get(COMMUNICATION_TYPE).asString());
             newDeviceRegistrationProfile.setDeviceType(deviceResponse.get(DEVICE_TYPE).asString());
             newDeviceRegistrationProfile.setDeviceId(deviceResponse.get(DEVICE_ID).asString());
-            newDeviceRegistrationProfile.setRecoveryCodes(DeviceSettings.generateRecoveryCodes(NUM_RECOVERY_CODES));
-            newDeviceRegistrationProfile.setIssuer(issuer);
-
-            userPushDeviceProfileManager.saveDeviceProfile(
-                    amIdentityPrincipal.getName(), amIdentityPrincipal.getRealm(), newDeviceRegistrationProfile);
-
-        } catch (InterruptedException | ExecutionException e) {
-            DEBUG.error("{} :: Failed to save device settings.", AM_AUTH_AUTHENTICATOR_PUSH_REGISTRATION, e);
-            throw new AuthLoginException(AM_AUTH_AUTHENTICATOR_PUSH_REGISTRATION, "authFailed", null);
+        } catch (NullPointerException npe) {
+            DEBUG.error("Blank value for necessary data from device response, {}", deviceResponse);
+            throw failedAsLoginException();
         }
 
+        newDeviceRegistrationProfile.setRecoveryCodes(DeviceSettings.generateRecoveryCodes(NUM_RECOVERY_CODES));
+        newDeviceRegistrationProfile.setIssuer(issuer);
+
+        userPushDeviceProfileManager.saveDeviceProfile(
+                amIdentityPrincipal.getName(), realm, newDeviceRegistrationProfile);
     }
 
     private void paintRegisterDeviceCallback(AMIdentity id, String messageId, String challenge)
             throws AuthLoginException {
-
         replaceCallback(
                 STATE_WAIT_FOR_RESPONSE_FROM_QR_SCAN,
                 SCRIPT_OUTPUT_CALLBACK_INDEX,
@@ -319,9 +373,9 @@ public class AuthenticatorPushRegistration extends AbstractPushModule {
                     .addUriQueryComponent(BGCOLOUR_QR_CODE_KEY, bgColour)
                     .addUriQueryComponent(CHALLENGE_QR_CODE_KEY, Base64url.encode(Base64.decode(challenge)))
                     .addUriQueryComponent(REG_QR_CODE_KEY,
-                            getMessageResponseUrl(pushService.getRegServiceAddress(id.getRealm())))
+                            getMessageResponseUrl(pushService.getRegServiceAddress(realm)))
                     .addUriQueryComponent(AUTH_QR_CODE_KEY,
-                            getMessageResponseUrl(pushService.getAuthServiceAddress(id.getRealm())));
+                            getMessageResponseUrl(pushService.getAuthServiceAddress(realm)));
 
             if (imgUrl != null) {
                 builder.addUriQueryComponent(IMG_QR_CODE_KEY, Base64url.encode(imgUrl.getBytes()));
@@ -331,11 +385,22 @@ public class AuthenticatorPushRegistration extends AbstractPushModule {
         } catch (PushNotificationException e) {
             DEBUG.error("Unable to read service addresses for Push Notification Service.");
             throw failedAsLoginException();
+        } catch (ServerEntryNotFoundException e) {
+            DEBUG.error("Unable to read site address for Push Notification Service.");
+            throw failedAsLoginException();
         }
     }
 
-    private String getMessageResponseUrl(String component) {
-        String localServerURL = WebtopNaming.getLocalServer() + "/json/";
+    private String getMessageResponseUrl(String component) throws ServerEntryNotFoundException {
+        URL url;
+        try {
+            String serverId = WebtopNaming.getAMServerID();
+            String serverOrSiteID = WebtopNaming.getSiteID(serverId);
+            url = new URL(WebtopNaming.getServerFromID(serverOrSiteID));
+        } catch (MalformedURLException e) {
+            throw new ServerEntryNotFoundException(e);
+        }
+        String localServerURL = url.toString() + "/json";
         return Base64url.encode((localServerURL + component).getBytes());
     }
 
@@ -358,5 +423,13 @@ public class AuthenticatorPushRegistration extends AbstractPushModule {
                 .build();
         replaceCallback(STATE_WAIT_FOR_RESPONSE_FROM_QR_SCAN,
                 POLLING_TIME_OUTPUT_CALLBACK_INDEX, newPollingWaitCallback);
+    }
+
+    private void setAppLinkCallbacks() throws AuthLoginException {
+        TextOutputCallback appleOutput = new TextOutputCallback(TextOutputCallback.INFORMATION, appleLink);
+        TextOutputCallback googleOutput = new TextOutputCallback(TextOutputCallback.INFORMATION, googleLink);
+
+        replaceCallback(STATE_GET_THE_APP, APPLE_LINK_CALLBACK_INDEX, appleOutput);
+        replaceCallback(STATE_GET_THE_APP, GOOGLE_LINK_CALLBACK_INDEX, googleOutput);
     }
 }

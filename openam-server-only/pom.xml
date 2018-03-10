@@ -30,7 +30,7 @@
     <parent>
         <groupId>org.forgerock.openam</groupId>
         <artifactId>openam</artifactId>
-        <version>13.5.0-RC11</version>
+        <version>13.5.0</version>
     </parent>
 
     <!-- Component Definition -->
@@ -107,15 +107,6 @@
                                     <overWrite>false</overWrite>
                                     <outputDirectory>${project.build.directory}/XUI</outputDirectory>
                                     <includes>**/*</includes>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.forgerock.openam</groupId>
-                                    <artifactId>openam-auth-deviceprint-scripts</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>zip</type>
-                                    <overWrite>false</overWrite>
-                                    <outputDirectory>${project.build.directory}/openam_TEMP</outputDirectory>
-                                    <includes>**/*.js</includes>
                                 </artifactItem>
                             </artifactItems>
                         </configuration>
@@ -603,6 +594,41 @@
                 </plugins>
             </build>
         </profile>
+        <profile>
+            <id>precompile-jsps</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.eclipse.jetty</groupId>
+                        <artifactId>jetty-jspc-maven-plugin</artifactId>
+                        <version>${jetty.jspc.version}</version>
+                        <executions>
+                            <execution>
+                                <id>jspc</id>
+                                <goals>
+                                    <goal>jspc</goal>
+                                </goals>
+                                <configuration>
+                                    <!-- Exclude JSPs with known compilation issues: -->
+                                    <excludes>**/ButtonFrame.jsp,**/Masthead.jsp,**/Version.jsp,
+                                        **/userconsole.jsp</excludes>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>forgerock-dev</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.forgerock.openam</groupId>
+                    <artifactId>openam-time-travel</artifactId>
+                </dependency>
+            </dependencies>
+        </profile>
     </profiles>
 
     <dependencies>
@@ -788,11 +814,6 @@
         <dependency>
             <groupId>org.forgerock.openam</groupId>
             <artifactId>openam-auth-persistentcookie</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.forgerock.openam</groupId>
-            <artifactId>openam-auth-deviceprint-module</artifactId>
         </dependency>
 
         <dependency>

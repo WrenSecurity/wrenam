@@ -30,7 +30,7 @@
     <parent>
         <groupId>org.forgerock.openam</groupId>
         <artifactId>openam</artifactId>
-        <version>13.5.0-RC11</version>
+        <version>13.5.0</version>
     </parent>
 
     <artifactId>openam-oauth2</artifactId>
@@ -50,6 +50,10 @@
         <dependency>
             <groupId>org.forgerock.openam</groupId>
             <artifactId>openam-scripting</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.forgerock.http</groupId>
+            <artifactId>chf-http-core</artifactId>
         </dependency>
 
         <dependency>
@@ -153,6 +157,11 @@
         <dependency>
             <groupId>org.forgerock.openam</groupId>
             <artifactId>openam-slf4j</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.forgerock.commons</groupId>
+            <artifactId>forgerock-test-utils</artifactId>
             <scope>test</scope>
         </dependency>
 

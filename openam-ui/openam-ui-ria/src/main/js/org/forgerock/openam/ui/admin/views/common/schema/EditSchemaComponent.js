@@ -188,18 +188,26 @@ define([
             return this;
         },
 
-        getCurrentValues () {
+        updateValues () {
             if (this.data.schema.isCollection()) {
-                return this.data.values.extend({
+                this.data.values = this.data.values.extend({
                     [this.subview.getTabId()]: this.getJSONSchemaView().getData()
-                }).raw;
+                });
             } else {
-                return this.getJSONSchemaView().getData();
+                this.data.values = this.data.values.extend(this.getJSONSchemaView().getData());
             }
         },
 
         onSave () {
-            this.updateInstance(this.getCurrentValues()).then(() => {
+            if (!this.getJSONSchemaView().isValid()) {
+                Messages.addMessage({
+                    message: $.t("common.form.validation.errorsNotSaved"),
+                    type: Messages.TYPE_DANGER
+                });
+                return;
+            }
+            this.updateValues();
+            this.updateInstance(this.data.values.raw).then(() => {
                 EventManager.sendEvent(Constants.EVENT_DISPLAY_MESSAGE_REQUEST, "changesSaved");
             }, (response) => {
                 Messages.addMessage({ response, type: Messages.TYPE_DANGER });

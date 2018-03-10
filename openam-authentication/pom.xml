@@ -30,7 +30,7 @@
     <parent>
         <groupId>org.forgerock.openam</groupId>
         <artifactId>openam</artifactId>
-        <version>13.5.0-RC11</version>
+        <version>13.5.0</version>
     </parent>
 
     <!-- Component Definition -->
@@ -62,7 +62,6 @@
         <module>openam-auth-push</module>
         <module>openam-auth-windowsdesktopsso</module>
         <module>openam-auth-persistentcookie</module>
-        <module>deviceprint</module>
         <module>openam-auth-oidc</module>
         <module>openam-auth-scripted</module>
         <module>openam-auth-device-id</module>

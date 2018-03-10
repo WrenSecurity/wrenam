@@ -32,12 +32,12 @@ import org.forgerock.openam.cts.exceptions.CoreTokenException;
 import org.forgerock.openam.cts.utils.JSONSerialisation;
 import org.forgerock.openam.services.push.PushNotificationConstants;
 import org.forgerock.openam.services.push.PushNotificationService;
-import org.forgerock.openam.services.push.dispatch.MessageDispatcher;
 import org.forgerock.openam.services.push.dispatch.Predicate;
 import org.forgerock.openam.session.SessionCookies;
 import org.forgerock.openam.tokens.CoreTokenField;
 import org.forgerock.openam.tokens.TokenType;
 import org.forgerock.openam.utils.CollectionUtils;
+import org.forgerock.openam.utils.JsonValueBuilder;
 import org.forgerock.openam.utils.Time;
 
 /**
@@ -46,15 +46,15 @@ import org.forgerock.openam.utils.Time;
  */
 public abstract class AbstractPushModule extends AMLoginModule {
 
+    /** Used to make the polling occur every second. Not recommended to be set in production. **/
+    protected final String nearInstantProperty = "com.forgerock.openam.authentication.push.nearinstant";
+
     /** Used to store tokens which may be updated by other machines in the cluster. **/
     protected final CTSPersistentStore coreTokenService = InjectorHolder.getInstance(CTSPersistentStore.class);
 
     /** Necessary to read data from the appropriate user's attribute. **/
     protected final UserPushDeviceProfileManager userPushDeviceProfileManager =
             InjectorHolder.getInstance(UserPushDeviceProfileManager.class);
-
-    /** Used to communicate messages back into OpenAM from the Push Delegate's response service/endpoint. */
-    protected final MessageDispatcher messageDispatcher = InjectorHolder.getInstance(MessageDispatcher.class);
 
     /** Used to communicate messages out from OpenAM through a configurable Push delegate. */
     protected final PushNotificationService pushService
@@ -90,9 +90,9 @@ public abstract class AbstractPushModule extends AMLoginModule {
 
         Calendar calendar = Time.getCalendarInstance();
         calendar.add(Calendar.SECOND, (int) (timeout / 1000));
-
         ctsToken.setExpiryTimestamp(calendar);
-        coreTokenService.createAsync(ctsToken);
+
+        coreTokenService.create(ctsToken);
     }
 
     /**
@@ -128,7 +128,7 @@ public abstract class AbstractPushModule extends AMLoginModule {
      * denied, null if the CTS has no message.
      * @throws CoreTokenException if there were issues reading from the CTS.
      */
-    protected Boolean checkCTS(String tokenId) throws CoreTokenException {
+    protected Boolean checkCTSAuth(String tokenId) throws CoreTokenException {
         Token coreToken = coreTokenService.read(tokenId);
 
         if (coreToken == null) {
@@ -146,6 +146,35 @@ public abstract class AbstractPushModule extends AMLoginModule {
         }
 
         return Boolean.TRUE;
+    }
+
+    /**
+     * Checks the CTS for the existence of a token with the expected name, and ensures that the necessary fields
+     * are correctly populated.
+     *
+     * @param tokenId The token's Id.
+     * @return jsonValue containing the necessary data for registration as defined at the top of
+     * AuthenticatorPushRegistration.
+     * @throws CoreTokenException if there were issues reading from the CTS.
+     */
+    protected JsonValue checkCTSRegistration(String tokenId) throws CoreTokenException {
+        Token coreToken = coreTokenService.read(tokenId);
+
+        if (coreToken == null) {
+            return null;
+        }
+
+        Integer accept = coreToken.getValue(CoreTokenField.INTEGER_ONE);
+
+        if (accept == null) {
+            return null;
+        }
+
+        if (accept == PushNotificationConstants.ACCEPT_VALUE) {
+            return JsonValueBuilder.toJsonValue(new String(coreToken.getBlob()));
+        }
+
+        return null;
     }
 
 }

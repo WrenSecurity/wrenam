@@ -42,6 +42,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
+
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -238,7 +240,7 @@ class ServiceSchemaImpl {
     /**
      * Get a map of all the attribute and their default values in this schema
      */
-    Map getAttributeDefaults() {
+    Map<String, Set<String>> getAttributeDefaults() {
         return (SMSUtils.copyAttributes(attrDefaults));
     }
 
@@ -285,7 +287,7 @@ class ServiceSchemaImpl {
      * though the set checking each element to see if there is a validator that
      * needs to execute.
      */
-    boolean validateAttributes(Map attributeSet, boolean encodePassword)
+    boolean validateAttributes(Map<String, Set<String>> attributeSet, boolean encodePassword)
             throws SMSException {
         return (validateAttributes(attributeSet, encodePassword, null));
     }
@@ -296,7 +298,7 @@ class ServiceSchemaImpl {
      * the validation. Iterates though the set checking each element to see if
      * there is a validator that needs to execute.
      */
-    boolean validateAttributes(Map attributeSet, boolean encodePassword, 
+    boolean validateAttributes(Map<String, Set<String>> attributeSet, boolean encodePassword,
         String orgName) throws SMSException {
         return (validateAttributes(null, attributeSet, encodePassword, orgName));
     }
@@ -307,34 +309,55 @@ class ServiceSchemaImpl {
      * be passed to the validation. Iterates though the set checking each element 
      * to see if there is a validator that needs to execute.
      */
-    boolean validateAttributes(SSOToken ssoToken, Map attributeSet, boolean 
-        encodePassword, String orgName) throws SMSException {
+    boolean validateAttributes(SSOToken ssoToken, Map<String, Set<String>> attributeSet, boolean
+            encodePassword, String orgName) throws SMSException {
+        return validateAttributes(ssoToken, attributeSet, encodePassword, orgName, false);
+    }
+
+    /**
+     * Determines whether each attribute in the attribute set is valid. This
+     * method additionally takes the organization name and SSOToken that would
+     * be passed to the validation. Iterates though the set checking each element
+     * to see if there is a validator that needs to execute. Empty sets are permitted if the {@code permitEmpty}
+     * parameter is {@code true}.
+     */
+    boolean validateAttributes(SSOToken ssoToken, Map<String, Set<String>> attributeSet, boolean
+        encodePassword, String orgName, boolean permitEmpty) throws SMSException {
         if (validate != null && validate.equalsIgnoreCase("no")) {
             // Do not validate attributes in this subschema
             return (true);
         }
 
         // to check for duplicates (case insensitive)
-        CaseInsensitiveHashSet asNames = new CaseInsensitiveHashSet();
+        Set<String> asNames = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
         // For each attribute, validate its values
-        for (Iterator items = attributeSet.keySet().iterator(); 
-                                                    items.hasNext();) 
-        {
-            String attrName = (String) items.next();
+        for (String attrName : attributeSet.keySet()) {
             if (asNames.contains(attrName)) {
-                Object[] args = { attrName };
+                Object[] args = {attrName};
                 throw new SMSException(IUMSConstants.UMS_BUNDLE_NAME,
                         "sms-attributeschema-duplicates", args);
             } else {
                 asNames.add(attrName);
             }
             if (!attrName.equalsIgnoreCase(SMSUtils.COSPRIORITY)) {
-                Set vals = (Set) attributeSet.get(attrName);
-                validateAttrValues(ssoToken, attrName, vals, 
-                    encodePassword, orgName);
+                Set<String> vals = attributeSet.get(attrName);
+                if (!permitEmpty || !vals.isEmpty()) {
+                    validateAttrValues(ssoToken, attrName, vals,
+                            encodePassword, orgName);
+                }
             }
         }
         return (true);
+    }
+
+    /**
+     * Validate default values - permits an empty Set of values.
+     * @param attributeSet The attributes to validate.
+     * @return {@code true} if valid.
+     * @throws SMSException If invalid.
+     */
+    boolean validateDefaults(Map<String, Set<String>> attributeSet) throws SMSException {
+        return validateAttributes(null, attributeSet, false, null, true);
     }
 
     public String toString() {
@@ -471,7 +494,7 @@ class ServiceSchemaImpl {
         subSchemas = newSubSchemas;
         valid = true;
     }
-    
+
     synchronized void clear() {
         // org attr-schema
         if (orgAttrSchema != null) {
@@ -588,11 +611,9 @@ class ServiceSchemaImpl {
      *         registered to the attribute; false otherwise
      * @throws SMSException
      *             error during instantiating the Java class
-     * @throws InvalidAttributeNameException
-     *             the attribute does not appear in the schema
      */
     boolean validatePlugin(SSOToken token, String attrName, Set values
-    ) throws SMSException, InvalidAttributeNameException {
+    ) throws SMSException {
 
         AttributeSchemaImpl as = getAttributeSchema(attrName);
         if (as == null) {
@@ -608,22 +629,31 @@ class ServiceSchemaImpl {
             return true;
         }
 
-        AttributeSchemaImpl validatorAttrSchema = 
-           getAttributeSchema(validatorName);
-        if (validatorAttrSchema != null) {
-            boolean isServerMode = SystemProperties.isServerMode();
-            Set javaClasses = validatorAttrSchema.getDefaultValues();
-            for (Iterator it = javaClasses.iterator(); it.hasNext();) {
-                String javaClass = (String) it.next();
-                try {
-                    serverEndAttrValidation(as, attrName, values, javaClass);
-                } catch (SMSException e) {
-                    if (!isServerMode) {
-                        clientEndAttrValidation(
-                            token, as, attrName, values, javaClass);
+        //if we are a pointer to the empty set and required, and we have an example value rather than a default one
+        //use that example value for now. Once submitted that empty set should be a new empty set not equal to the
+        //EMPTY_SET - see ServiceConfig#getAttributes
+        if (values == Collections.EMPTY_SET && !as.getExampleValues().isEmpty()) {
+            values = as.getExampleValues();
+        }
 
-                    } else {
-                        throw e;
+        String[] validators = validatorName.split(" ");
+        for (String validator : validators) {
+
+            AttributeSchemaImpl validatorAttrSchema = getAttributeSchema(validator);
+            if (validatorAttrSchema != null) {
+                boolean isServerMode = SystemProperties.isServerMode();
+                Set javaClasses = validatorAttrSchema.getDefaultValues();
+
+                for (Object jClass : javaClasses) {
+                    String javaClass = (String) jClass;
+                    try {
+                        serverEndAttrValidation(as, attrName, values, javaClass);
+                    } catch (SMSException e) {
+                        if (!isServerMode) {
+                            clientEndAttrValidation(token, as, attrName, values, javaClass);
+                        } else {
+                            throw e;
+                        }
                     }
                 }
             }

@@ -24,13 +24,29 @@
  *
  * $Id: SessionRequestHandler.java,v 1.9 2009/04/02 04:11:44 ericow Exp $
  *
- * Portions Copyrighted 2011-2015 ForgeRock AS.
+ * Portions Copyrighted 2011-2016 ForgeRock AS.
  */
-
 package com.iplanet.dpro.session.service;
 
-import static org.forgerock.openam.audit.AuditConstants.Component.*;
-import static org.forgerock.openam.session.SessionConstants.*;
+import static org.forgerock.openam.audit.AuditConstants.Component.SESSION;
+import static org.forgerock.openam.session.SessionConstants.SESSION_DEBUG;
+import static org.forgerock.openam.session.SessionConstants.TOKEN_RESTRICTION_PROP;
+
+import java.net.URL;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.forgerock.guice.core.InjectorHolder;
+import org.forgerock.openam.session.SessionCache;
+import org.forgerock.openam.session.SessionCookies;
+import org.forgerock.openam.session.SessionPLLSender;
+import org.forgerock.openam.session.SessionServiceURLService;
+import org.forgerock.openam.sso.providers.stateless.StatelessSessionFactory;
+
 import com.google.inject.Key;
 import com.google.inject.name.Names;
 import com.iplanet.am.util.SystemProperties;
@@ -46,6 +62,7 @@ import com.iplanet.services.comm.server.RequestHandler;
 import com.iplanet.services.comm.share.Request;
 import com.iplanet.services.comm.share.Response;
 import com.iplanet.services.comm.share.ResponseSet;
+import com.iplanet.sso.SSOException;
 import com.iplanet.sso.SSOToken;
 import com.iplanet.sso.SSOTokenManager;
 import com.sun.identity.session.util.RestrictedTokenAction;
@@ -53,18 +70,6 @@ import com.sun.identity.session.util.RestrictedTokenContext;
 import com.sun.identity.session.util.SessionUtils;
 import com.sun.identity.shared.Constants;
 import com.sun.identity.shared.debug.Debug;
-import org.forgerock.guice.core.InjectorHolder;
-import org.forgerock.openam.session.SessionCache;
-import org.forgerock.openam.session.SessionCookies;
-import org.forgerock.openam.session.SessionPLLSender;
-import org.forgerock.openam.session.SessionServiceURLService;
-
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.net.URL;
-import java.util.List;
-import java.util.Map;
 
 public class SessionRequestHandler implements RequestHandler {
 
@@ -72,6 +77,7 @@ public class SessionRequestHandler implements RequestHandler {
     private final Debug sessionDebug;
     private final SessionServerConfig serverConfig;
     private final SessionServiceConfig serviceConfig;
+    private final StatelessSessionFactory statelessSessionFactory;
 
     /*
      * Added this property to block registration of the global notification
@@ -91,6 +97,27 @@ public class SessionRequestHandler implements RequestHandler {
         sessionDebug =  InjectorHolder.getInstance(Key.get(Debug.class, Names.named(SESSION_DEBUG)));
         serverConfig = InjectorHolder.getInstance(SessionServerConfig.class);
         serviceConfig = InjectorHolder.getInstance(SessionServiceConfig.class);
+        statelessSessionFactory = InjectorHolder.getInstance(StatelessSessionFactory.class);
+    }
+
+    /**
+     * Understands how to resolve a Token based on its SessionID.
+     *
+     * Stateless Sessions by their very nature do not need to be stored in memory, and so
+     * can be resolved in a different way to Stateful Sessions.
+     *
+     * @param sessionID Non null Session ID.
+     *
+     * @return Null if no matching Session could be found, otherwise a non null
+     * Session instance.
+     *
+     * @throws SessionException If there was an error resolving the Session.
+     */
+    private Session resolveSession(SessionID sessionID) throws SessionException {
+        if (statelessSessionFactory.containsJwt(sessionID)) {
+            return statelessSessionFactory.generate(sessionID);
+        }
+        return sessionCache.getSession(sessionID);
     }
 
     public ResponseSet process(PLLAuditor auditor,
@@ -211,7 +238,7 @@ public class SessionRequestHandler implements RequestHandler {
                      * authentication of the caller (which can also be used as a
                      * filter for the operation scope!)
                      */
-                    requesterSession = sessionCache.getSession(sid);
+                    requesterSession = resolveSession(sid);
                     auditAccessAttempt(auditor, requesterSession);
                     /*
                      * also check that sid is not a restricted token
@@ -235,7 +262,7 @@ public class SessionRequestHandler implements RequestHandler {
                 case SessionRequest.SetProperty:
                 case SessionRequest.DestroySession:
                     if (req.getMethodID() == SessionRequest.DestroySession) {
-                        requesterSession = sessionCache.getSession(sid);
+                        requesterSession = resolveSession(sid);
                         auditAccessAttempt(auditor, requesterSession);
                         /*
                          * also check that sid is not a restricted token
@@ -247,7 +274,7 @@ public class SessionRequestHandler implements RequestHandler {
                         sid = new SessionID(req.getDestroySessionID());
                     } else {
                         try {
-                            auditAccessAttempt(auditor, sessionCache.getSession(sid));
+                            auditAccessAttempt(auditor, resolveSession(sid));
                         } catch (SessionException ignored) {
                             // ignore, we'll log the access attempt without session properties
                             auditor.auditAccessAttempt();
@@ -383,7 +410,21 @@ public class SessionRequestHandler implements RequestHandler {
              */
             switch (req.getMethodID()) {
                 case SessionRequest.GetSession:
-                    res.addSessionInfo(sessionService.getSessionInfo(sid, req.getResetFlag()));
+                    try {
+                        if (statelessSessionFactory.containsJwt(sid)) {
+                            // We need to validate the session before creating the sessioninfo to ensure that the
+                            // stateless session hasn't timed out yet, and hasn't  been blacklisted either.
+                            SSOTokenManager tokenManager = SSOTokenManager.getInstance();
+                            final SSOToken statelessToken = tokenManager.createSSOToken(req.getSessionID());
+                            if (!tokenManager.isValidToken(statelessToken)) {
+                                throw new SessionException(SessionBundle.getString("invalidSessionID")
+                                        + req.getSessionID());
+                            }
+                        }
+                        res.addSessionInfo(sessionService.getSessionInfo(sid, req.getResetFlag()));
+                    } catch (SSOException ssoe) {
+                        res.setException(SessionBundle.getString("invalidSessionID") + req.getSessionID());
+                    }
                     break;
 
                 case SessionRequest.GetValidSessions:

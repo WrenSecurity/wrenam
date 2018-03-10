@@ -34,9 +34,9 @@ define([
     "org/forgerock/commons/ui/common/main/SessionManager",
     "org/forgerock/commons/ui/common/util/UIUtils",
     "org/forgerock/commons/ui/common/util/URIUtils"
-], function ($, _, AbstractView, AuthNService, BootstrapDialog, Configuration, Constants, CookieHelper, EventManager,
+], ($, _, AbstractView, AuthNService, BootstrapDialog, Configuration, Constants, CookieHelper, EventManager,
             Form2js, Handlebars, i18nManager, Messages, RESTLoginHelper, RealmHelper, Router, SessionManager, UIUtils,
-            URIUtils) {
+            URIUtils) => {
 
     function populateTemplate () {
         var self = this,
@@ -95,6 +95,24 @@ define([
         });
     }
 
+    /**
+     * Checks if the "PollingWaitCallback" is present on the current stage.
+     * @param {Object} requirements Information about current stage
+     * @returns {Boolean} if the "PollingWaitCallback" is present on the current stage
+     */
+    function hasPollingCallback (requirements) {
+        return _.some(requirements.callbacks, "type", "PollingWaitCallback");
+    }
+
+    /**
+     * Checks if the "ConfirmationCallback" is present on the current stage.
+     * @param {Object} requirements Information about current stage
+     * @returns {Boolean} if the "ConfirmationCallback" is present on the current stage
+     */
+    function hasConfirmationCallback (requirements) {
+        return _.some(requirements.callbacks, "type", "ConfirmationCallback");
+    }
+
     var LoginView = AbstractView.extend({
         template: "templates/openam/RESTLoginTemplate.html",
         genericTemplate: "templates/openam/RESTLoginTemplate.html",
@@ -103,6 +121,50 @@ define([
         data: {},
         events: {
             "click input[type=submit]": "formSubmit"
+        },
+
+        handleExistingSession (requirements) {
+
+            const auth = Configuration.globalData.auth;
+            // Set a variable for the realm passed into the browser so there can be a
+            // check to make sure it is the same as the current user's realm
+            auth.passedInRealm = RealmHelper.getRealm();
+            // If we have a token, let's see who we are logged in as....
+            SessionManager.getLoggedUser((user) => {
+
+                if (String(auth.passedInRealm).toLowerCase() === auth.subRealm.toLowerCase()) {
+                    Configuration.setProperty("loggedUser", user);
+                    delete auth.passedInRealm;
+
+                    RESTLoginHelper.setSuccessURL(requirements.tokenId, requirements.successUrl).then(() => {
+
+                        if (auth.urlParams && auth.urlParams.goto) {
+                            window.location.href = auth.urlParams.goto;
+                            $("body").empty();
+                            return false;
+                        }
+                        EventManager.sendEvent(Constants.EVENT_AUTHENTICATION_DATA_CHANGED, {
+                            anonymousMode: false
+                        });
+
+                        // Copied from EVENT_LOGIN_REQUEST handler
+                        if (Configuration.gotoURL &&
+                            _.indexOf(["#", "", "#/", "/#"], Configuration.gotoURL) === -1) {
+                            console.log(`Auto redirect to ${Configuration.gotoURL}`);
+                            Router.navigate(Configuration.gotoURL, { trigger: true });
+                            delete Configuration.gotoURL;
+                        } else {
+                            Router.navigate("", { trigger: true });
+                        }
+                    });
+                } else {
+                    location.href = "#confirmLogin/";
+                }
+            }, () => {
+                // There is a tokenId but it is invalid so kill it
+                RESTLoginHelper.removeSession();
+                Configuration.setProperty("loggedUser", null);
+            });
         },
 
         autoLogin () {
@@ -138,8 +200,6 @@ define([
         formSubmit (e) {
             var submitContent,
                 expire;
-
-            clearTimeout(this.timeout);
 
             e.preventDefault();
             // disabled button before login
@@ -182,8 +242,8 @@ define([
         },
 
         render (args) {
-            var urlParams = {}, // Deserialized querystring params
-                auth = Configuration.globalData.auth;
+            let urlParams = {}; // Deserialized querystring params
+            const auth = Configuration.globalData.auth;
 
             if (args && args.length) {
                 auth.additional = args[1]; // May be "undefined"
@@ -200,7 +260,6 @@ define([
             }
 
             AuthNService.getRequirements().then(_.bind(function (reqs) {
-                var auth = Configuration.globalData.auth;
 
                 // Clear out existing session if instructed
                 if (reqs.hasOwnProperty("tokenId") && urlParams.arg === "newsession") {
@@ -209,50 +268,12 @@ define([
                 }
 
                 // If simply by asking for the requirements, we end up with a token,
-                // then we must have auto-logged-in somehow
+                // then we must have already had a session
                 if (reqs.hasOwnProperty("tokenId")) {
-                    // Set a variable for the realm passed into the browser so there can be a
-                    // check to make sure it is the same as the current user's realm
-                    auth.passedInRealm = RealmHelper.getRealm();
-                    // If we have a token, let's see who we are logged in as....
-                    SessionManager.getLoggedUser(function (user) {
-
-                        if (String(auth.passedInRealm).toLowerCase() === auth.subRealm.toLowerCase()) {
-                            Configuration.setProperty("loggedUser", user);
-                            delete auth.passedInRealm;
-
-                            RESTLoginHelper.setSuccessURL(reqs.tokenId, reqs.successUrl).then(function () {
-
-                                if (auth.urlParams && auth.urlParams.goto) {
-                                    window.location.href = auth.urlParams.goto;
-                                    $("body").empty();
-                                    return false;
-                                }
-                                EventManager.sendEvent(Constants.EVENT_AUTHENTICATION_DATA_CHANGED, {
-                                    anonymousMode: false
-                                });
-
-                                // Copied from EVENT_LOGIN_REQUEST handler
-                                if (Configuration.gotoURL &&
-                                    _.indexOf(["#", "", "#/", "/#"], Configuration.gotoURL) === -1) {
-                                    console.log(`Auto redirect to ${Configuration.gotoURL}`);
-                                    Router.navigate(Configuration.gotoURL, { trigger: true });
-                                    delete Configuration.gotoURL;
-                                } else {
-                                    Router.navigate("", { trigger: true });
-                                }
-                            });
-                        } else {
-                            location.href = "#confirmLogin/";
-                        }
-                    }, function () {
-                        // There is a tokenId but it is invalid so kill it
-                        RESTLoginHelper.removeSession();
-                        Configuration.setProperty("loggedUser", null);
-                    });
-
+                    this.handleExistingSession(reqs);
                 } else { // We aren't logged in yet, so render a form...
                     this.renderForm(reqs, urlParams);
+
                     if (CookieHelper.getCookie("invalidRealm")) {
                         CookieHelper.deleteCookie("invalidRealm");
                         EventManager.sendEvent(Constants.EVENT_DISPLAY_MESSAGE_REQUEST, "invalidRealm");
@@ -284,7 +305,6 @@ define([
             }, this));
         },
 
-
         renderForm (reqs, urlParams) {
             var requirements = _.clone(reqs),
                 promise = $.Deferred(),
@@ -295,37 +315,37 @@ define([
             this.userNamePasswordStage = _.contains(usernamePasswordStages, reqs.stage);
 
             requirements.callbacks = [];
-            _.each(reqs.callbacks, function (element) {
 
-                var redirectForm,
-                    redirectCallback,
-                    waitTime;
+            _.each(reqs.callbacks, (element) => {
+                let redirectForm;
+                let redirectCallback;
 
                 if (element.type === "RedirectCallback") {
-
-                    redirectCallback = _.object(_.map(element.output, function (o) {
+                    redirectCallback = _.object(_.map(element.output, (o) => {
                         return [o.name, o.value];
                     }));
 
                     redirectForm = $(`<form action='${redirectCallback.redirectUrl}' method='POST'></form>`);
 
                     if (redirectCallback.redirectMethod === "POST") {
-
-                        _.each(redirectCallback.redirectData, function (v, k) {
+                        _.each(redirectCallback.redirectData, (v, k) => {
                             redirectForm.append(
                                 `<input type='hidden' name='${k}' value='${v}' aria-hidden='true' />`);
                         });
-
                         redirectForm.appendTo("body").submit();
                     } else {
                         window.location.replace(redirectCallback.redirectUrl);
                     }
                 } else if (element.type === "PollingWaitCallback") {
-                    waitTime = _.find(element.output, { object: { name: "waitTime" } }).object.value;
+                    const pollingWaitTimeoutMs = _.get(element.output[0], "object.value");
 
-                    self.timeout = window.setTimeout(function () {
-                        EventManager.sendEvent(Constants.EVENT_LOGIN_REQUEST, { suppressSpinner: true });
-                    }, waitTime);
+                    _.delay(() => {
+                        this.pollingInProgress = true;
+
+                        if (hasPollingCallback(this.reqs)) {
+                            EventManager.sendEvent(Constants.EVENT_LOGIN_REQUEST, { suppressSpinner: true });
+                        }
+                    }, pollingWaitTimeoutMs);
                 }
 
                 requirements.callbacks.push({
@@ -339,11 +359,7 @@ define([
                 });
             });
 
-            const confirmationRequired = _.find(reqs.callbacks, (callback) =>
-                callback.type === "ConfirmationCallback" || callback.type === "PollingWaitCallback"
-            );
-
-            if (confirmationRequired === undefined) {
+            if (!hasConfirmationCallback(reqs) && !hasPollingCallback(reqs)) {
                 requirements.callbacks.push({
                     "input": {
                         index: requirements.callbacks.length,
@@ -361,11 +377,13 @@ define([
             this.reqs = reqs;
             this.data.reqs = requirements;
 
+            const pollingInProgress = this.pollingInProgress && hasPollingCallback(reqs);
+
             // Is there an attempt at autologin happening?
             // if yes then don't render the form until it fails one time
             if (urlParams.IDToken1 && Configuration.globalData.auth.autoLoginAttempts === 1) {
                 Configuration.globalData.auth.autoLoginAttempts++;
-            } else {
+            } else if (!pollingInProgress) {
                 // Attempt to load a stage-specific template to render this form.  If not found, use the generic one.
                 template = `templates/openam/authn/${reqs.stage}.html`;
                 UIUtils.compileTemplate(template, _.extend({}, Configuration.globalData, this.data))
@@ -447,7 +465,7 @@ define([
         };
 
         function renderPartial (name, context) {
-            return _.find(Handlebars.partials, function (code, templateName) {
+            return _.find(Handlebars.partials, (code, templateName) => {
                 return templateName.indexOf(`login/_${name}`) !== -1;
             })(_.merge(renderContext, context));
         }

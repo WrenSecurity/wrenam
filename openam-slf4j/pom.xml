@@ -19,7 +19,7 @@
     <parent>
         <groupId>org.forgerock.openam</groupId>
         <artifactId>openam</artifactId>
-        <version>13.5.0-RC11</version>
+        <version>13.5.0</version>
     </parent>
 
     <artifactId>openam-slf4j</artifactId>
@@ -39,6 +39,10 @@
         <dependency>
             <groupId>org.forgerock.commons.guava</groupId>
             <artifactId>forgerock-guava-cache</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.forgerock.opendj</groupId>
+            <artifactId>opendj-server-legacy</artifactId>
         </dependency>
     </dependencies>
 </project>

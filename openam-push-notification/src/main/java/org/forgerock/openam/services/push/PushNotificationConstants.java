@@ -63,7 +63,9 @@ public final class PushNotificationConstants {
     /** General alg. */
     public static final String HMACSHA256 = "HmacSHA256";
     /** Deny value. */
-    public static final int DENY_VALUE = 1;
+    public static final int DENY_VALUE = 0;
+    /** Accept value. */
+    public static final int ACCEPT_VALUE = 1;
 
 
     /**
@@ -82,6 +84,13 @@ public final class PushNotificationConstants {
     static final String DELEGATE_FACTORY_CLASS = "delegateFactory";
     /** Key to the service configuration region field. */
     static final String DELEGATE_REGION = "region";
+    /** Key to the service configuration region field. */
+    static final String MESSAGE_DISPATCHER_CACHE_SIZE = "mdCacheSize";
+    /** Key to the service configuration region field. */
+    static final String MESSAGE_DISPATCHER_DURATION = "mdDuration";
+    /** Key to the service configuration region field. */
+    static final String MESSAGE_DISPATCHER_CONCURRENCY = "mdConcurrency";
+
 
     /**
      * DEFAULTS.
@@ -104,7 +113,7 @@ public final class PushNotificationConstants {
      */
 
     /** Name of the PushNotificationService. */
-    public static final String SERVICE_NAME = "iPlanetAMPushNotificationService";
+    public static final String SERVICE_NAME = "PushNotificationService";
     /** Version of the PushNotificationService. */
     public static final String SERVICE_VERSION = "1.0";
 

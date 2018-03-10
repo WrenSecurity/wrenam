@@ -14,30 +14,134 @@
  * Copyright 2016 ForgeRock AS.
  */
 
- /**
- * Refer to the following naming convention, when adding new functions to this class:
+/**
+ * Represents a JSON Schema.
  * <p/>
- * For <strong>query</strong> methods, which do not return new instance of <code>JSONSchema</code> class, use
- * <code>get*</code>
- * For <strong>transformation</strong> methods, which do not loose data, use <code>to*</code>\/<code>from*</code>
- * For <strong>modification</strong> methods, which loose the data, use <code>add*</code>\/<code>remove*</code>
- * For methods, which <strong>check the presense</strong>, use <code>has*</code>\/<code>is*</code>
- * For <strong>utility</strong> methods use simple verbs, e.g. <code>omit</code>, <code>pick</code>, etc.
- * @module org/forgerock/openam/ui/common/models/JSONSchema
+ * <h2>Function naming conventions</h2>
+ * Refer to the following naming convention, when adding new functions to this class:
+ * <ul>
+ *   <li>For <strong>query</strong> functions, which do not return a new instance of <code>JSONSchema</code>, use <code>#get*</code></li>
+ *   <li>For <strong>transform</strong> functions, which do not loose data, use <code>#to*</code> and <code>#from*</code></li>
+ *   <li>For <strong>modification</strong> functions, which loose the data, use <code>add*</code> and <code>#remove*</code></li>
+ *   <li>For functions, which <strong>check for presense</strong>, use <code>#has*</code> and <code>#is*</code></li>
+ *   <li>For <strong>utility</strong> functions use simple verbs, e.g. <code>#omit</code>, <code>#pick</code>, etc.</li>
+ * </ul>
+ * @module
+ * @example
+ * // The structure of JSON Schema documents emitted from OpenAM is expected to be the following:
+ * {
+ *   properties: {
+ *     globalProperty: true, // Global properties (OpenAM wide) are listed at the top-level
+ *     default: { ... }, // Default properties are organisation (Realm) level properties and are nested under "default"
+ *     dynamic: { ... } // Dynamic properties are user level properties (OpenAM wide) and are nested under "dynamic"
+ *   },
+ *   type: "object"
+ * }
  */
 define([
+    "i18next",
     "lodash",
-    "org/forgerock/openam/ui/common/models/cleanJSONSchema"
-], (_, cleanJSONSchema) => {
+    "org/forgerock/openam/ui/common/models/schemaTransforms/transformBooleanTypeToCheckboxFormat",
+    "org/forgerock/openam/ui/common/models/schemaTransforms/transformEnumTypeToString",
+    "org/forgerock/openam/ui/common/models/schemaTransforms/transformPropertyOrderAttributeToInt",
+    "org/forgerock/openam/ui/common/models/schemaTransforms/warnOnInferredPasswordWithoutFormat"
+], (i18next, _, transformBooleanTypeToCheckboxFormat, transformEnumTypeToString, transformPropertyOrderAttributeToInt,
+    warnOnInferredPasswordWithoutFormat) => {
+    function groupTopLevelProperties (raw) {
+        if (_.isEmpty(_.omit(raw.properties, "defaults", "dynamic"))) {
+            return raw;
+        }
+
+        const schema = _.cloneDeep(raw);
+
+        schema.properties = {
+            global: {
+                properties: _.omit(raw.properties, "defaults", "dynamic"),
+                propertyOrder: -10,
+                title: i18next.t("console.common.global"),
+                type: "object"
+            }
+        };
+        if (raw.properties.defaults) {
+            schema.properties.defaults = raw.properties.defaults;
+        }
+        if (raw.properties.dynamic) {
+            schema.properties.dynamic = raw.properties.dynamic;
+        }
+
+        return schema;
+    }
+
     function throwOnNoSchemaRootType (schema) {
         if (!schema.type) {
             throw new Error("[JSONSchema] No \"type\" attribute found on schema root object.");
         }
     }
 
+    function ungroupProperty (raw, propertyKey) {
+        const schema = _.cloneDeep(raw);
+
+        schema.properties = _.merge(schema.properties, schema.properties[propertyKey]);
+        delete schema.properties[propertyKey];
+
+        return schema;
+    }
+
+    /**
+     * Determines whether the specified object is of type <code>object</code>
+     * @param   {Object}  object Object to determine the type of
+     * @returns {Boolean}        Whether the object is of type <code>object</code>
+     */
+    function isObjectType (object) {
+        return object.type === "object";
+    }
+
+    /**
+     * Recursively invokes the specified functions over each object's properties
+     * @param {Object} object   Object with properties
+     * @param {Array} callbacks Array of functions
+     */
+    function eachProperty (object, callbacks) {
+        if (isObjectType(object)) {
+            _.forEach(object.properties, (property, key) => {
+                _.forEach(callbacks, (callback) => {
+                    callback(property, key);
+                });
+
+                if (isObjectType(property)) {
+                    eachProperty(property, callbacks);
+                }
+            });
+        }
+    }
+
+    /**
+     * Iterates over a scheam, transforming adding appropriate warnings.
+     * @param {Object} schema the schema to be transformed
+     * @returns {Object} the transformed schema
+     */
+    function cleanJSONSchema (schema) {
+        eachProperty(schema, [transformPropertyOrderAttributeToInt,
+                              transformBooleanTypeToCheckboxFormat,
+                              transformEnumTypeToString,
+                              warnOnInferredPasswordWithoutFormat]);
+
+        return schema;
+    }
+
     return class JSONSchema {
         constructor (schema) {
             throwOnNoSchemaRootType(schema);
+
+            const hasDefaults = _.has(schema, "properties.defaults");
+            const hasDynamic = _.has(schema, "properties.dynamic");
+
+            if (hasDefaults || hasDynamic) {
+                schema = groupTopLevelProperties(schema);
+
+                if (hasDefaults) { schema = ungroupProperty(schema, "defaults"); }
+                if (hasDynamic) { schema = ungroupProperty(schema, "dynamic"); }
+            }
 
             schema = cleanJSONSchema(schema);
 
@@ -46,33 +150,6 @@ define([
         addDefaultProperties (keys) {
             const schema = _.cloneDeep(this.raw);
             schema.defaultProperties = keys;
-            return new JSONSchema(schema);
-        }
-        /**
-         * Creates a new JSONSchema object converting from a Global and Organisation properties structure to a flatten
-         * properties structure that can be rendered.
-         *
-         *  The following transformations applied:
-         * * Top-level properties are wrapped into a group (using the title, key and property order specified)
-         * * The "defaults" property is flatten and it's properties applied to the top-level
-         * @param   {string} title                Title for wrapped top-level properties group
-         * @param   {string} key                  Key to use for wrapped top-level properties group
-         * @param   {number|string} propertyOrder Property order for wrapped top-level properties group
-         * @returns {JSONSchema}                  JSONSchema object with transforms applied
-         */
-        fromGlobalAndOrganisation (title, key, propertyOrder) {
-            const schema = _.cloneDeep(this.raw);
-            const group = {
-                properties: _.omit(schema.properties, "defaults"),
-                propertyOrder,
-                title,
-                type: "object"
-            };
-
-            schema.properties = _.merge({
-                [key]: group
-            }, schema.properties.defaults);
-
             return new JSONSchema(schema);
         }
         getEnableKey () {
@@ -134,6 +211,13 @@ define([
             schema.properties = _.omit(this.raw.properties, predicate);
 
             return new JSONSchema(schema);
+        }
+        /**
+         * Returns a new JSONSchema with all non-required properties removed.
+         * @returns {JSONSchema} JSONSchema object with non-required properties removed.
+         */
+        removeUnrequiredProperties () {
+            return this.omit((property) => property.required === false);
         }
         /**
          * Flattens schema properties to enable schema to be renderable. Adds inheritance metadata to each property of

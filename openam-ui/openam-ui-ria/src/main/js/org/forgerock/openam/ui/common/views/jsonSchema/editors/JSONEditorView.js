@@ -128,6 +128,9 @@ define([
 
             return this;
         },
+        isValid () {
+            return this.jsonEditor.validate().length === 0;
+        },
         getData () {
             const passwordKeys = this.options.schema.getPasswordKeys();
             const values = new JSONValues(this.jsonEditor.getValue());
@@ -141,6 +144,7 @@ define([
                 valuesWithoutEmptyPasswords = valuesWithoutEmptyPasswords.addInheritance(this.options.values.raw);
             }
 
+            this.options.values = valuesWithoutEmptyPasswords;
             return valuesWithoutEmptyPasswords.raw;
         },
         setData (data) {

@@ -24,7 +24,6 @@ import com.iplanet.sso.SSOException;
 import com.iplanet.sso.SSOToken;
 import com.sun.identity.authentication.client.AuthClientUtils;
 import com.sun.identity.authentication.service.AuthUtils;
-import com.sun.identity.common.FQDNUtils;
 import com.sun.identity.common.ISLocaleContext;
 import com.sun.identity.common.configuration.MapValueParser;
 import com.sun.identity.security.AdminTokenAction;
@@ -62,7 +61,7 @@ import org.forgerock.util.promise.Promise;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.net.URI;
+
 import java.security.AccessController;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -156,7 +155,7 @@ public class ServerInfoResource extends RealmAwareResource {
             result.put("kbaEnabled", String.valueOf(selfServiceInfo.isKbaEnabled()));
             result.put("selfRegistration", String.valueOf(selfServiceInfo.isUserRegistrationEnabled()));
             result.put("lang", getJsLocale(localeContext.getLocale()));
-            result.put("successfulUserRegistrationDestination", "default");
+            result.put("successfulUserRegistrationDestination", selfServiceInfo.getUserRegistrationDestination());
             result.put("socialImplementations", getSocialAuthnImplementations(realm));
             result.put("referralsEnabled", Boolean.FALSE.toString());
             result.put("zeroPageLogin", AuthUtils.getZeroPageLoginConfig(realm));

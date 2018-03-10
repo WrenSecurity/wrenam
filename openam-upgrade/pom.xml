@@ -21,7 +21,7 @@
     <parent>
         <artifactId>openam</artifactId>
         <groupId>org.forgerock.openam</groupId>
-        <version>13.5.0-RC11</version>
+        <version>13.5.0</version>
     </parent>
 
     <name>OpenAM Upgrade</name>
@@ -61,6 +61,10 @@
         <dependency>
             <groupId>org.forgerock.openam</groupId>
             <artifactId>openam-entitlements</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.forgerock.openam</groupId>
+            <artifactId>openam-uma</artifactId>
         </dependency>
 
         <dependency>

@@ -15,46 +15,80 @@
  */
 
 define([
-    "org/forgerock/openam/ui/common/models/JSONSchema",
+    "sinon",
+    "squire",
     "org/forgerock/openam/ui/common/models/JSONValues"
-], (JSONSchema, JSONValues) => {
+], (sinon, Squire, JSONValues) => {
+    let i18next;
+    let JSONSchema;
     describe("org/forgerock/openam/ui/common/models/JSONSchema", () => {
-        describe("#fromGlobalAndOrganisation", () => {
-            const jsonSchema = new JSONSchema({
-                "type": "object",
-                "properties": {
-                    "topLevelProperty": {},
-                    "defaults": {
-                        "defaultsProperty1": {},
-                        "defaultsProperty2": {}
-                    }
-                }
-            });
-            const groupTitle = "Default Group Title";
-            const groupKey = "defaultGroupKey";
-            const groupPropertyOrder = 1;
+        beforeEach((done) => {
+            const injector = new Squire();
 
+            i18next = {
+                t: sinon.stub().withArgs("console.common.global").returns("Global")
+            };
+
+            injector.mock("i18next", i18next)
+                .require(["org/forgerock/openam/ui/common/models/JSONSchema"], (subject) => {
+                    JSONSchema = subject;
+                    done();
+                });
+        });
+
+        describe("#constructor", () => {
             let schema;
 
             beforeEach(() => {
-                schema = jsonSchema.fromGlobalAndOrganisation(groupTitle, groupKey, groupPropertyOrder);
+                schema = new JSONSchema({
+                    "properties": {
+                        "globalProperty": {},
+                        "defaults": {
+                            "defaultsProperty": {}
+                        },
+                        "dynamic": {
+                            "dynamicProperty": {}
+                        }
+                    },
+                    "type": "object"
+                });
             });
 
-            it("groups the top-level properties under the specified group key", () => {
-                expect(schema.raw.properties).to.contain.keys(groupKey);
-                expect(schema.raw.properties[groupKey].properties).to.have.keys("topLevelProperty");
+            it("groups the top-level properties under a \"global\" property", () => {
+                expect(schema.raw.properties).to.contain.keys("global");
+                expect(schema.raw.properties.global.properties).to.have.keys("globalProperty");
+            });
+
+            it("groups the top-level properties with title", () => {
+                expect(i18next.t).to.be.calledWith("console.common.global");
+                expect(schema.raw.properties.global.title).eq("Global");
+            });
+
+            it("groups the top-level properties with property order", () => {
+                expect(schema.raw.properties.global.propertyOrder).eq(-10);
             });
 
             it("flatten properties in \"defaults\" onto the top-level properties", () => {
-                expect(schema.raw.properties).to.contain.keys("defaultsProperty1", "defaultsProperty2");
+                expect(schema.raw.properties).to.contain.keys("defaultsProperty");
             });
 
-            it("groups the top-level properties with the specified title", () => {
-                expect(schema.raw.properties[groupKey].title).eq(groupTitle);
+            it("flatten properties in \"dynamic\" onto the top-level properties", () => {
+                expect(schema.raw.properties).to.contain.keys("dynamicProperty");
             });
 
-            it("groups the top-level properties with the specified property order", () => {
-                expect(schema.raw.properties[groupKey].propertyOrder).eq(groupPropertyOrder);
+            context("when there is no \"defaults\" or \"dynamic\" properties", () => {
+                beforeEach(() => {
+                    schema = new JSONSchema({
+                        "properties": {
+                            "globalProperty": {}
+                        },
+                        "type": "object"
+                    });
+                });
+
+                it("does not group the top-level properties under a \"global\" property", () => {
+                    expect(schema.raw.properties).to.have.keys("globalProperty");
+                });
             });
         });
         describe("#hasInheritance", () => {
@@ -92,41 +126,29 @@ define([
                 expect(jsonSchema.hasInheritance()).to.be.false;
             });
         });
-        describe("#toFlatWithInheritanceMeta", () => {
-            const jsonSchema = new JSONSchema({
-                "type": "object",
-                "properties": {
-                    "propertyKey": {
-                        type: "object",
-                        title: "Title",
-                        properties: {
-                            value: {
-                                type: "string",
-                                required: true
-                            },
-                            inherited: {
-                                type: "boolean",
-                                required: true
-                            }
-                        }
-                    },
-                    "anotherPropertyKey": {
-                        type: "object",
-                        title: "Title",
-                        properties: {
-                            value: {
-                                type: "string",
-                                required: true
-                            },
-                            inherited: {
-                                type: "boolean",
-                                required: true
-                            }
+        describe("#removeUnrequiredProperties", () => {
+            let schema;
+
+            beforeEach(() => {
+                const jsonSchema = new JSONSchema({
+                    "type": "object",
+                    "properties": {
+                        "propertyKeyRequired": {
+                            required: true
+                        },
+                        "propertyKeyUnRequired": {
+                            required: false
                         }
                     }
-                }
+                });
+                schema = jsonSchema.removeUnrequiredProperties();
             });
 
+            it("removes properties where \"required\" is \"false\"", () => {
+                expect(schema.raw.properties).to.have.keys("propertyKeyRequired");
+            });
+        });
+        describe("#toFlatWithInheritanceMeta", () => {
             const jsonValues = new JSONValues({
                 "propertyKey": {
                     "value": "someValue",
@@ -141,6 +163,39 @@ define([
             let schema;
 
             beforeEach(() => {
+                const jsonSchema = new JSONSchema({
+                    "type": "object",
+                    "properties": {
+                        "propertyKey": {
+                            type: "object",
+                            title: "Title",
+                            properties: {
+                                value: {
+                                    type: "string",
+                                    required: true
+                                },
+                                inherited: {
+                                    type: "boolean",
+                                    required: true
+                                }
+                            }
+                        },
+                        "anotherPropertyKey": {
+                            type: "object",
+                            title: "Title",
+                            properties: {
+                                value: {
+                                    type: "string",
+                                    required: true
+                                },
+                                inherited: {
+                                    type: "boolean",
+                                    required: true
+                                }
+                            }
+                        }
+                    }
+                });
                 schema = jsonSchema.toFlatWithInheritanceMeta(jsonValues);
             });
 

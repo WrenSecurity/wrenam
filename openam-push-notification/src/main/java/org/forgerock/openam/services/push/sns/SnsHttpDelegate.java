@@ -15,22 +15,18 @@
 */
 package org.forgerock.openam.services.push.sns;
 
-import static org.forgerock.http.routing.RoutingMode.*;
-import static org.forgerock.json.resource.Resources.*;
-import static org.forgerock.json.resource.Router.*;
-
 import com.amazonaws.services.sns.AmazonSNSClient;
 import com.amazonaws.services.sns.model.PublishRequest;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Set;
-import org.forgerock.json.resource.Router;
+
 import org.forgerock.openam.services.push.PushMessage;
 import org.forgerock.openam.services.push.PushNotificationDelegate;
 import org.forgerock.openam.services.push.PushNotificationException;
 import org.forgerock.openam.services.push.PushNotificationServiceConfig;
+import org.forgerock.openam.services.push.dispatch.MessageDispatcher;
 import org.forgerock.openam.services.push.dispatch.Predicate;
-import org.forgerock.services.routing.RouteMatcher;
 
 /**
  * Delegate for communicating with SNS over HTTP.
@@ -38,37 +34,33 @@ import org.forgerock.services.routing.RouteMatcher;
 public class SnsHttpDelegate implements PushNotificationDelegate {
 
     private final static String ROUTE = "push/sns/message";
-
-    private RouteMatcher<org.forgerock.json.resource.Request> routeMatcher;
+    private final static String AUTHENTICATE_ACTION = "authenticate";
+    private final static String REGISTER_ACTION = "register";
 
     private final AmazonSNSClient client;
-    private final Router router;
-    private final SnsMessageResource messageEndpoint;
     private final SnsPushMessageConverter pushMessageConverter;
     private final String realm;
+    private final MessageDispatcher messageDispatcher;
 
     private PushNotificationServiceConfig config;
 
     /**
      * Generates a new SNS HTTP Delegate, used to communicate over the Internet with
      * the SNS service.
-     *
      * @param client AmazonSnsClient - used to put messages on the wire.
      * @param config Necessary to configure this delegate.
-     * @param router to attach a newly generate GcmMessageEndpoint upon this delegate's initialization.
-     * @param messageEndpoint the endpoint to attach to the router upon initialisation.
      * @param pushMessageConverter a message converter, to ensure the message sent is of the correct format.
      * @param realm the realm in which this delegate exists.
+     * @param messageDispatcher the MessageDispatcher used to redirect incoming messages to their caller.
      */
-    public SnsHttpDelegate(AmazonSNSClient client, PushNotificationServiceConfig config, Router router,
-                           SnsMessageResource messageEndpoint, SnsPushMessageConverter pushMessageConverter,
-                           String realm) {
+    public SnsHttpDelegate(AmazonSNSClient client, PushNotificationServiceConfig config,
+                           SnsPushMessageConverter pushMessageConverter, String realm,
+                           MessageDispatcher messageDispatcher) {
         this.client = client;
         this.config = config;
-        this.router = router;
-        this.messageEndpoint = messageEndpoint;
         this.pushMessageConverter = pushMessageConverter;
         this.realm = realm;
+        this.messageDispatcher = messageDispatcher;
     }
 
     @Override
@@ -89,7 +81,7 @@ public class SnsHttpDelegate implements PushNotificationDelegate {
 
     @Override
     public String getAuthServiceLocation() {
-        return ROUTE + "?_action=authenticate";
+        return (realm.endsWith("/") ? realm : realm + "/") + ROUTE + "?_action=" + AUTHENTICATE_ACTION;
     }
 
     @Override
@@ -105,17 +97,22 @@ public class SnsHttpDelegate implements PushNotificationDelegate {
 
     @Override
     public String getRegServiceLocation() {
-        return ROUTE + "?_action=register";
+        return (realm.endsWith("/") ? realm : realm + "/") + ROUTE + "?_action=" + REGISTER_ACTION;
     }
 
     @Override
     public void startServices() throws PushNotificationException {
-        routeMatcher = router.addRoute(EQUALS, uriTemplate(ROUTE), newAnnotatedRequestHandler(messageEndpoint));
+        //This section intentionally left blank.
+    }
+
+    @Override
+    public MessageDispatcher getMessageDispatcher() {
+        return messageDispatcher;
     }
 
     @Override
     public void close() throws IOException {
-        router.removeRoute(routeMatcher);
+        //This section intentionally left blank.
     }
 
     private PublishRequest convertToSns(PushMessage message) {

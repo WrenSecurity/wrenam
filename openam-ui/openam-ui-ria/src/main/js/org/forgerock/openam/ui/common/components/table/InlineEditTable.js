@@ -58,6 +58,7 @@ define([
         },
 
         render () {
+            this.$el.empty();
             UIUtils.compileTemplate(this.template, this.getRenderData()).then((template) => {
                 this.$el.html(template);
 
@@ -129,9 +130,14 @@ define([
             return _.map(this.rows, (row) => row.getData());
         },
 
+        isValid () {
+            return true;
+        },
+
         setData (data) {
             this.values = data;
             this.rows = [];
+            this.render();
         }
     });
 });

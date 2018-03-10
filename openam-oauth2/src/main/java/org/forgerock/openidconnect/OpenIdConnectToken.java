@@ -17,6 +17,8 @@
 package org.forgerock.openidconnect;
 
 import static org.forgerock.oauth2.core.Utils.isEmpty;
+import static org.forgerock.openam.oauth2.OAuth2Constants.CoreTokenParams.AUDIT_TRACKING_ID;
+import static org.forgerock.openam.oauth2.OAuth2Constants.JWTTokenParams.*;
 
 import java.security.KeyPair;
 import java.security.PublicKey;
@@ -40,8 +42,10 @@ import org.forgerock.json.jose.jwt.Jwt;
 import org.forgerock.json.jose.jwt.JwtClaimsSet;
 import org.forgerock.oauth2.core.Token;
 import org.forgerock.oauth2.core.exceptions.ServerException;
+import org.forgerock.openam.audit.AuditConstants;
 import org.forgerock.openam.oauth2.OAuth2Constants;
 import org.forgerock.openam.oauth2.OAuthProblemException;
+import org.forgerock.openam.utils.CollectionUtils;
 import org.restlet.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,11 +94,14 @@ public class OpenIdConnectToken extends JsonValue implements Token {
      * @param cHash The c_hash.
      * @param acr The acr.
      * @param amr The amr.
+     * @param auditTrackingId The audit tracking ID.
+     * @param realm The realm.
      */
     public OpenIdConnectToken(String signingKeyId, String encryptionKeyId, byte[] clientSecret, KeyPair signingKeyPair,
             PublicKey encryptionPublicKey, String signingAlgorithm, String encryptionAlgorithm, String encryptionMethod,
             boolean isIDTokenEncryptionEnabled, String iss, String sub, String aud, String azp, long exp, long iat,
-            long authTime, String nonce, String ops, String atHash, String cHash, String acr, List<String> amr) {
+            long authTime, String nonce, String ops, String atHash, String cHash, String acr, List<String> amr,
+            String auditTrackingId, String realm) {
         super(new HashMap<String, Object>());
         this.clientSecret = clientSecret;
         this.signingAlgorithm = signingAlgorithm;
@@ -120,9 +127,45 @@ public class OpenIdConnectToken extends JsonValue implements Token {
         setAmr(amr);
         setTokenType(OAuth2Constants.JWTTokenParams.JWT_TOKEN);
         setTokenName(OAuth2Constants.JWTTokenParams.ID_TOKEN);
+        set(AUDIT_TRACKING_ID, auditTrackingId);
+        setRealm(realm);
     }
 
+    public OpenIdConnectToken(JwtClaimsSet claims) {
+        super(new HashMap<String, Object>());
+        this.clientSecret = null;
+        this.signingAlgorithm = null;
+        this.isIDTokenEncryptionEnabled = false;
+        this.encryptionAlgorithm = null;
+        this.encryptionMethod = null;
+        this.signingKeyPair = null;
+        this.encryptionPublicKey = null;
+        this.signingKeyId = null;
+        this.encryptionKeyId = null;
+        setClaims(claims, ISS, SUB, AZP, NONCE, OPS, AT_HASH, C_HASH, ACR, AUDIT_TRACKING_ID, AUTH_TIME, AMR, REALM);
+        setAud(CollectionUtils.getFirstItem(claims.getAudience()));
+        setTokenType(OAuth2Constants.JWTTokenParams.JWT_TOKEN);
+        setTokenName(OAuth2Constants.JWTTokenParams.ID_TOKEN);
+    }
 
+    protected void setClaims(JwtClaimsSet claims, String... keys) {
+        for (String key : keys) {
+            if (claims.isDefined(key)) {
+                this.put(key, claims.get(key).getObject());
+            }
+        }
+    }
+
+    /**
+     * Sets the realm.
+     *
+     * @param realm The realm.
+     */
+    private void setRealm(final String realm) {
+        if (!isEmpty(realm)) {
+            put(OAuth2Constants.CoreTokenParams.REALM, realm);
+        }
+    }
 
     /**
      * Sets a value on the OpenId Connect token if the value is not null or an empty String.
@@ -169,7 +212,7 @@ public class OpenIdConnectToken extends JsonValue implements Token {
      * @param azp The authorized party.
      */
     private void setAzp(String azp) {
-        set(OAuth2Constants.JWTTokenParams.AZP, azp);
+        set(AZP, azp);
     }
 
     /**
@@ -312,6 +355,23 @@ public class OpenIdConnectToken extends JsonValue implements Token {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public JsonValue toJsonValue() {
+        return this;
+    }
+
+    @Override
+    public String getAuditTrackingId() {
+        return get(AUDIT_TRACKING_ID).asString();
+    }
+
+    @Override
+    public AuditConstants.TrackingIdKey getAuditTrackingIdKey() {
+        return AuditConstants.TrackingIdKey.OIDC_ID_TOKEN;
+    }
+
+    /**
      * Signs the OpenId Connect token.
      *
      * @return A SignedJwt
@@ -351,18 +411,19 @@ public class OpenIdConnectToken extends JsonValue implements Token {
     }
 
     private Jwt createEncryptedJwt(SigningHandler signingHandler, JwsAlgorithm jwsAlgorithm, JwtClaimsSet claimsSet) {
-        JweHeaderBuilder builder = jwtBuilderFactory.jwe(encryptionPublicKey).headers()
+        // As per http://openid.net/specs/openid-connect-core-1_0.html#SigningOrder, JWT should be signed first and
+        // then encrypted.
+        Jwt signedJwt = createSignedJwt(signingHandler, jwsAlgorithm, claimsSet);
+
+        JweHeaderBuilder builder = jwtBuilderFactory.jwe(encryptionPublicKey)
+                .headers()
                 .alg(JweAlgorithm.parseAlgorithm(encryptionAlgorithm))
-                .enc(EncryptionMethod.parseMethod(encryptionMethod));
+                .enc(EncryptionMethod.parseMethod(encryptionMethod))
+                .cty("JWT");
         if (encryptionKeyId != null) {
             builder.kid(encryptionKeyId);
         }
-        return builder.done().claims(claimsSet)
-                .sign(signingHandler, jwsAlgorithm)
-                .headers()
-                .kid(signingKeyId)
-                .done()
-                .asJwt();
+        return builder.done().claims(new SignedJwtClaimsSet(signedJwt.build())).asJwt();
     }
 
     private Jwt createSignedJwt(SigningHandler signingHandler, JwsAlgorithm jwsAlgorithm, JwtClaimsSet claimsSet) {
@@ -371,5 +432,18 @@ public class OpenIdConnectToken extends JsonValue implements Token {
             builder.kid(signingKeyId);
         }
         return builder.done().claims(claimsSet).asJwt();
+    }
+
+    private static class SignedJwtClaimsSet extends JwtClaimsSet {
+        private final String signedPayload;
+
+        SignedJwtClaimsSet(final String signedPayload) {
+            this.signedPayload = signedPayload;
+        }
+
+        @Override
+        public String build() {
+            return signedPayload;
+        }
     }
 }

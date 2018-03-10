@@ -41,7 +41,9 @@ module.exports = {
             "VariableDeclarator": 1
         }],
         "keyword-spacing": 2,
-        "max-len": [2, 120, 4],
+        "max-len": [2, 120, 4, {
+            "ignoreComments": true
+        }],
         "new-cap": [2, {
             "capIsNew": false
         }],
@@ -78,7 +80,6 @@ module.exports = {
         "object-curly-spacing": [2, "always"],
         "object-shorthand": 2,
         "operator-linebreak": 2,
-        "sort-imports": 2,
         "prefer-const": 2,
         "prefer-template": 2,
         "quotes": [2, "double", "avoid-escape"],
@@ -123,6 +124,8 @@ module.exports = {
          * Disabled rules
          */
         "arrow-body-style": 0,
+        "sort-imports": 0,
+
         /**
          * Disabled because these rules aren't available in ESLint 2.0.
          * TODO: Remove them from eslint-config-forgerock

@@ -1177,12 +1177,16 @@ public class ServiceManager {
                 SMSUtils.DYNAMIC_SCHEMA, SMSUtils.USER_SCHEMA,
                 SMSUtils.POLICY_SCHEMA, SMSUtils.GROUP_SCHEMA,
                 SMSUtils.DOMAIN_SCHEMA };
-        for (int i = 0; i < schemaNames.length; i++) {
-            Node childNode = XMLUtils.getChildNode(schemaRoot, schemaNames[i]);
+        for (String schemaName : schemaNames) {
+            Node childNode = XMLUtils.getChildNode(schemaRoot, schemaName);
             if (childNode != null) {
                 ServiceSchemaImpl ssi = new ServiceSchemaImpl(null, childNode);
-                Map attrs = ssi.getAttributeDefaults();
-                ssi.validateAttributes(attrs, false);
+                Map<String, Set<String>> attrs = ssi.getAttributeDefaults();
+                if (schemaName.equals(SMSUtils.GLOBAL_SCHEMA)) {
+                    ssi.validateAttributes(attrs, false);
+                } else {
+                    ssi.validateDefaults(attrs);
+                }
             }
         }
         return (true);
