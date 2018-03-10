@@ -113,7 +113,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- Version Properties -->
-        <opendj.version>3.5.0</opendj.version>
+        <opendj.version>3.5.1</opendj.version>
         <opendj.server.version>${opendj.version}</opendj.server.version>
         <opendj.sdk.version>${opendj.version}</opendj.sdk.version>
         <opendj.server.legacy>${opendj.version}</opendj.server.legacy>
@@ -474,51 +474,19 @@
 
     <!-- Maven Repositories -->
     <repositories>
-        <!-- ForgeRock Common Internal Project Repositories -->
+        <!-- Needed to retrieve parent POM -->
         <repository>
-            <id>forgerock-staging-repository</id>
-            <name>ForgeRock Release Repository</name>
-            <url>http://maven.forgerock.org/repo/releases</url>
+            <id>wrensecurity-releases</id>
+            <name>Wren Security Release Repository</name>
+            <url>https://wrensecurity.jfrog.io/wrensecurity/releases</url>
+
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
-        </repository>
 
-        <repository>
-            <id>forgerock-snapshots-repository</id>
-            <name>ForgeRock Snapshot Repository</name>
-            <url>http://maven.forgerock.org/repo/snapshots</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-
-        <!-- ForgeRock Internal Project Repository -->
-        <repository>
-            <id>maven.forgerock.org</id>
-            <name>maven.forgerock.org-openam-dependencies</name>
-            <url>http://maven.forgerock.org/repo/openam-dependencies</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-
-        <repository>
-            <id>restlet-cache</id>
-            <name>Restlet Cache Repository</name>
-            <url>http://maven.forgerock.org/repo/maven.restlet.org</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
         </repository>
 
         <repository>
@@ -529,35 +497,7 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
-
-        <repository>
-            <id>forgerock-private-releases</id>
-            <name>maven.forgerock.org-releases</name>
-            <url>http://maven.forgerock.org/repo/private-releases</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
     </repositories>
-
-    <!-- For Deployment to ForgeRock Maven Repository -->
-    <distributionManagement>
-        <repository>
-            <id>forgerock-private-releases</id>
-            <name>maven.forgerock.org-releases</name>
-            <url>http://maven.forgerock.org/repo/private-releases</url>
-        </repository>
-        <snapshotRepository>
-            <id>forgerock-private-snapshots</id>
-            <name>maven.forgerock.org-snapshots</name>
-            <url>http://maven.forgerock.org/repo/private-snapshots</url>
-        </snapshotRepository>
-        <site>
-            <id>forgerock.org</id>
-            <name>OpenAM Project</name>
-            <url>${siteDistributionURL}</url>
-        </site>
-    </distributionManagement>
 
     <!-- Source Control -->
     <scm>
