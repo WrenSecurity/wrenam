@@ -1,6 +1,9 @@
 target/
 dependency-reduced-pom.xml
 
+# Versions maven plugin 
+*.versionsBackup
+
 # Editor generated files
 *.iml
 .idea/
