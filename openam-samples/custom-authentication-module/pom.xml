@@ -34,18 +34,7 @@
         <openam.version>13.5.0-SNAPSHOT</openam.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
-     <repositories>
-        <repository>
-            <id>forgerock-releases</id>
-            <url>http://maven.forgerock.org/repo/releases</url>
-        </repository>
-        <repository>
-            <id>forgerock-snapshots</id>
-            <url>http://maven.forgerock.org/repo/snapshots</url>
-        </repository>
-    </repositories>
-
+    
     <dependencies>
         <dependency>
             <groupId>org.forgerock.openam</groupId>

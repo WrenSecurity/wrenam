@@ -48,26 +48,7 @@ Copyright 2014-2015 ForgeRock AS.
         <connection>scm:svn:https://svn.forgerock.org/commons/forgerock-http-client/trunk</connection>
         <developerConnection>scm:svn:https://svn.forgerock.org/commons/forgerock-http-client/trunk</developerConnection>
       <tag>13.5.0</tag>
-  </scm>
-
-    <repositories>
-        <repository>
-            <id>forgerock-staging-repository</id>
-            <name>ForgeRock Release Repository</name>
-            <url>http://maven.forgerock.org/repo/releases</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>forgerock-snapshots-repository</id>
-            <name>ForgeRock Snapshot Repository</name>
-            <url>http://maven.forgerock.org/repo/snapshots</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-        </repository>
-    </repositories>
+    </scm>
 
     <dependencies>
         <dependency>
