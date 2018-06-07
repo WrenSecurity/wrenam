@@ -285,8 +285,8 @@
                         <configuration>
                             <nodeVersion>v4.4.5</nodeVersion>
                             <npmVersion>3.9.3</npmVersion>
-                            <downloadRoot>http://maven.forgerock.org/repo/forgerock-third-party-virtual/</downloadRoot>
-                            <npmDownloadRoot>http://maven.forgerock.org/repo/api/npm/npm-virtual/npm/-/</npmDownloadRoot>
+                            <downloadRoot>https://nodejs.org/dist/</downloadRoot>
+                            <npmDownloadRoot>https://wrensecurity.jfrog.io/wrensecurity/api/npm/npm-virtual/npm/-/</npmDownloadRoot>
                         </configuration>
                     </execution>
                     <execution>
@@ -298,7 +298,7 @@
                         <configuration>
                             <arguments>install</arguments>
                             <environmentVariables>
-                                <PHANTOMJS_CDNURL>http://maven.forgerock.org/repo/forgerock-third-party-virtual</PHANTOMJS_CDNURL>
+                                <PHANTOMJS_CDNURL>https://nodejs.org/dist</PHANTOMJS_CDNURL>
                             </environmentVariables>
                         </configuration>
                     </execution>
