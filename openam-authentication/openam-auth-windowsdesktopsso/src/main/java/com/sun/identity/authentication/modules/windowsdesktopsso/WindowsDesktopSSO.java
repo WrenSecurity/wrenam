@@ -25,6 +25,7 @@
  * $Id: WindowsDesktopSSO.java,v 1.7 2009/07/28 19:40:45 beomsuk Exp $
  *
  * Portions Copyrighted 2011-2016 ForgeRock AS.
+ * Portions Copyrighted 2023 Wren Security
  */
 
 package com.sun.identity.authentication.modules.windowsdesktopsso;
@@ -62,6 +63,7 @@ import javax.security.auth.callback.Callback;
 import javax.security.auth.login.Configuration;
 import javax.security.auth.login.LoginContext;
 import javax.servlet.http.HttpServletRequest;
+
 import org.ietf.jgss.GSSContext;
 import org.ietf.jgss.GSSCredential;
 import org.ietf.jgss.GSSException;
@@ -69,7 +71,7 @@ import org.ietf.jgss.GSSManager;
 import org.ietf.jgss.GSSName;
 
 public class WindowsDesktopSSO extends AMLoginModule {
-    private static final String amAuthWindowsDesktopSSO = 
+    private static final String amAuthWindowsDesktopSSO =
         "amAuthWindowsDesktopSSO";
 
     private static final String[] configAttributes = {
@@ -90,10 +92,10 @@ public class WindowsDesktopSSO extends AMLoginModule {
     private static final int LOOKUPUSER = 5;
     private static final int AUTHLEVEL = 6;
     private static final int SUBJECT   = 7;
-    
-    private static final String ACCEPTED_REALMS_ATTR = ISAuthConstants.AUTH_ATTR_PREFIX 
+
+    private static final String ACCEPTED_REALMS_ATTR = ISAuthConstants.AUTH_ATTR_PREFIX
             + "windowsdesktopsso-kerberos-realms-trusted";
-        
+
     private static Hashtable configTable = new Hashtable();
     private Principal userPrincipal = null;
     private Subject serviceSubject = null;
@@ -106,11 +108,11 @@ public class WindowsDesktopSSO extends AMLoginModule {
     private Map    options    = null;
     private String confIndex  = null;
     private boolean lookupUserInRealm = false;
-    
+
     private Debug debug = Debug.getInstance(amAuthWindowsDesktopSSO);
-    
+
     private Set<String> trustedKerberosRealms = Collections.EMPTY_SET;
-    
+
     private static final String REALM_SEPARATOR = "@";
 
     /**
@@ -120,7 +122,7 @@ public class WindowsDesktopSSO extends AMLoginModule {
     }
 
     /**
-     * Initialize parameters. 
+     * Initialize parameters.
      *
      * @param subject
      * @param sharedState
@@ -147,7 +149,7 @@ public class WindowsDesktopSSO extends AMLoginModule {
      * @return  -1 as succeeded; 0 as failed.
      * @exception AuthLoginException upon any failure.
      */
-    public int process(Callback[] callbacks, int state) 
+    public int process(Callback[] callbacks, int state)
             throws AuthLoginException {
         int result = ISAuthConstants.LOGIN_IGNORE;
 
@@ -173,7 +175,7 @@ public class WindowsDesktopSSO extends AMLoginModule {
         }
 
         if (debug.messageEnabled()) {
-            debug.message("SPNEGO token: \n" + 
+            debug.message("SPNEGO token: \n" +
                 DerValue.printByteArray(spnegoToken, 0, spnegoToken.length));
         }
         // parse the spnego token and extract the kerberos mech token from it
@@ -183,7 +185,7 @@ public class WindowsDesktopSSO extends AMLoginModule {
             throw new AuthLoginException(amAuthWindowsDesktopSSO, "token",null);
         }
         if (debug.messageEnabled()) {
-            debug.message("Kerberos token retrieved from SPNEGO token: \n" + 
+            debug.message("Kerberos token retrieved from SPNEGO token: \n" +
                 DerValue.printByteArray(kerberosToken,0,kerberosToken.length));
         }
 
@@ -193,31 +195,31 @@ public class WindowsDesktopSSO extends AMLoginModule {
             if (debug.messageEnabled()){
                 debug.message("WindowsDesktopSSO kerberos authentication passed succesfully.");
             }
-            result = ISAuthConstants.LOGIN_SUCCEED; 
+            result = ISAuthConstants.LOGIN_SUCCEED;
          } catch (PrivilegedActionException pe) {
-             Exception e = extractException(pe);	 
-             if( e instanceof GSSException) {	 
-                 int major = ((GSSException)e).getMajor();	 
-                 if (major == GSSException.CREDENTIALS_EXPIRED) {	 
-                         debug.message("Credential expired. Re-establish credential...");	 
-                 serviceLogin();	 
-                 try {   
-                     authenticateToken(kerberosToken, trustedKerberosRealms);  
+             Exception e = extractException(pe);
+             if( e instanceof GSSException) {
+                 int major = ((GSSException)e).getMajor();
+                 if (major == GSSException.CREDENTIALS_EXPIRED) {
+                         debug.message("Credential expired. Re-establish credential...");
+                 serviceLogin();
+                 try {
+                     authenticateToken(kerberosToken, trustedKerberosRealms);
                      if (debug.messageEnabled()){
-                       debug.message("Authentication succeeded with new cred.");    
+                       debug.message("Authentication succeeded with new cred.");
                            result = ISAuthConstants.LOGIN_SUCCEED;
                      }
-                 } catch (Exception ee) {   
-                       debug.error("Authentication failed with new cred.Stack Trace", ee); 
-                       throw new AuthLoginException(amAuthWindowsDesktopSSO,    
-                                "auth", null, ee);  
-                }   
-              } else {  
-                     debug.error("Authentication failed with PrivilegedActionException wrapped GSSException. Stack Trace", e);  
-                     throw new AuthLoginException(amAuthWindowsDesktopSSO, "auth",  
+                 } catch (Exception ee) {
+                       debug.error("Authentication failed with new cred.Stack Trace", ee);
+                       throw new AuthLoginException(amAuthWindowsDesktopSSO,
+                                "auth", null, ee);
+                }
+              } else {
+                     debug.error("Authentication failed with PrivilegedActionException wrapped GSSException. Stack Trace", e);
+                     throw new AuthLoginException(amAuthWindowsDesktopSSO, "auth",
                               null, e);
-              }     
-            }   
+              }
+            }
        } catch (GSSException e1 ){
            int major = e1.getMajor();
            if (major == GSSException.CREDENTIALS_EXPIRED) {
@@ -227,16 +229,16 @@ public class WindowsDesktopSSO extends AMLoginModule {
                    authenticateToken(kerberosToken, trustedKerberosRealms);
                    if (debug.messageEnabled()){
                        debug.message("Authentication succeeded with new cred.");
-                           result = ISAuthConstants.LOGIN_SUCCEED; 
+                           result = ISAuthConstants.LOGIN_SUCCEED;
                    }
                } catch (Exception ee) {
                        debug.error("Authentication failed with new cred. Stack Trace", ee);
-                       throw new AuthLoginException(amAuthWindowsDesktopSSO, 
+                       throw new AuthLoginException(amAuthWindowsDesktopSSO,
                        "auth", null, ee);
                }
            } else {
                debug.error("Authentication failed with GSSException. Stack Trace", e1);
-               throw new AuthLoginException(amAuthWindowsDesktopSSO, "auth", 
+               throw new AuthLoginException(amAuthWindowsDesktopSSO, "auth",
                    null, e1);
            }
        } catch (AuthLoginException e2) {
@@ -244,13 +246,13 @@ public class WindowsDesktopSSO extends AMLoginModule {
            throw e2;
        } catch (Exception e3) {
            debug.error("Authentication failed with generic exception. Stack Trace", e3);
-           throw new AuthLoginException(amAuthWindowsDesktopSSO, "auth", 
+           throw new AuthLoginException(amAuthWindowsDesktopSSO, "auth",
                null, e3);
        }
         return result;
     }
 
-    private void authenticateToken(final byte[] kerberosToken, final Set<String> trustedRealms) 
+    private void authenticateToken(final byte[] kerberosToken, final Set<String> trustedRealms)
             throws AuthLoginException, GSSException, Exception {
 
         debug.message("In authenticationToken ...");
@@ -299,8 +301,8 @@ public class WindowsDesktopSSO extends AMLoginModule {
                             throw new AuthLoginException(amAuthWindowsDesktopSSO, "untrustedToken", data);
                         }
                     }
-                    
-                    // Check if the user account from the Kerberos ticket exists 
+
+                    // Check if the user account from the Kerberos ticket exists
                     // in the realm. The "Alias Search Attribute Names" will be used to
                     // perform the search.
                     if (lookupUserInRealm) {
@@ -317,7 +319,7 @@ public class WindowsDesktopSSO extends AMLoginModule {
                                     "notfound", data);
                         }
                     }
-                    
+
                     if (debug.messageEnabled()){
                         debug.message("WindowsDesktopSSO.authenticateToken:"
                                 + "User authenticated: " + user.toString());
@@ -332,15 +334,15 @@ public class WindowsDesktopSSO extends AMLoginModule {
         });
     }
 
-     /**	 
-      * Iterate until we extract the real exception	 
-      * from PrivilegedActionException(s).	 
-      */	 
-     private static Exception extractException(Exception e) {	 
-         while (e instanceof PrivilegedActionException) {	 
-             e = ((PrivilegedActionException)e).getException();	 
-         }	 
-         return e;	 
+     /**
+      * Iterate until we extract the real exception
+      * from PrivilegedActionException(s).
+      */
+     private static Exception extractException(Exception e) {
+         while (e instanceof PrivilegedActionException) {
+             e = ((PrivilegedActionException)e).getException();
+         }
+         return e;
      }
 
     /**
@@ -379,7 +381,7 @@ public class WindowsDesktopSSO extends AMLoginModule {
         }
         return userName;
     }
-    
+
     private static byte[] spnegoOID = {
             (byte)0x06, (byte)0x06, (byte)0x2b, (byte)0x06, (byte)0x01,
             (byte)0x05, (byte)0x05, (byte)0x02 };
@@ -401,7 +403,8 @@ public class WindowsDesktopSSO extends AMLoginModule {
      * @return If the attribute is present and set to true true is returned otherwise false is returned.
      */
     private boolean hasWDSSOFailed(HttpServletRequest request) {
-        return Boolean.valueOf((String) request.getAttribute("http-auth-failed"));
+        Object failed = request.getAttribute("http-auth-failed");
+        return failed != null ? (Boolean) failed : false;
     }
 
     private byte[] getSPNEGOTokenFromHTTPRequest(HttpServletRequest req) {
@@ -463,7 +466,7 @@ public class WindowsDesktopSSO extends AMLoginModule {
             }
             tmpToken = new DerValue(tmpInput);
 
-            // 0xa0 indicates an init token(NegTokenInit); 0xa1 indicates an 
+            // 0xa0 indicates an init token(NegTokenInit); 0xa1 indicates an
             // response arg token(NegTokenTarg). no arg token is needed for us.
 
             if (tmpToken.getTag() == (byte)0xa0) {
@@ -527,21 +530,21 @@ public class WindowsDesktopSSO extends AMLoginModule {
         kdcRealm = getMapAttr(options, REALM);
         kdcServer = getMapAttr(options, KDC);
         authLevel = getMapAttr(options, AUTHLEVEL);
-        returnRealm = 
+        returnRealm =
             Boolean.valueOf(getMapAttr(options,RETURNREALM)).booleanValue();
-        lookupUserInRealm = 
+        lookupUserInRealm =
             Boolean.valueOf(getMapAttr(options,LOOKUPUSER)).booleanValue();
         trustedKerberosRealms = getAcceptedKerberosRealms(options);
 
         if (debug.messageEnabled()){
-            debug.message("WindowsDesktopSSO params: \n" + 
+            debug.message("WindowsDesktopSSO params: \n" +
                 "principal: " + servicePrincipalName +
                      "\nkeytab file: " + keyTabFile +
                 "\nrealm : " + kdcRealm +
                 "\nkdc server: " + kdcServer +
                 "\ndomain principal: " + returnRealm +
                 "\nLookup user in realm:" + lookupUserInRealm +
-                "\nAccepted Kerberos realms: " + trustedKerberosRealms +    
+                "\nAccepted Kerberos realms: " + trustedKerberosRealms +
                 "\nauth level: " + authLevel);
         }
 
@@ -551,15 +554,15 @@ public class WindowsDesktopSSO extends AMLoginModule {
         if (configMap == null) {
             return false;
         }
-        
 
-        String principalName = 
+
+        String principalName =
             (String)configMap.get(configAttributes[PRINCIPAL]);
         String tabFile = (String)configMap.get(configAttributes[KEYTAB]);
         String realm = (String)configMap.get(configAttributes[REALM]);
         String kdc = (String)configMap.get(configAttributes[KDC]);
 
-        if (principalName == null || tabFile == null || 
+        if (principalName == null || tabFile == null ||
             realm == null || kdc == null ||
             ! servicePrincipalName.equalsIgnoreCase(principalName) ||
             ! keyTabFile.equals(tabFile) ||
@@ -578,9 +581,9 @@ public class WindowsDesktopSSO extends AMLoginModule {
         return true;
     }
 
-    private void initWindowsDesktopSSOAuth(Map options) 
+    private void initWindowsDesktopSSOAuth(Map options)
         throws AuthLoginException{
-        
+
         if (debug.messageEnabled()){
             debug.message("Init WindowsDesktopSSO. This should not happen often.");
         }
@@ -608,7 +611,7 @@ public class WindowsDesktopSSO extends AMLoginModule {
             debug.message("New Service Login ...");
         }
         System.setProperty("java.security.krb5.realm", kdcRealm);
-        System.setProperty("java.security.krb5.kdc", kdcServer); 
+        System.setProperty("java.security.krb5.kdc", kdcServer);
         System.setProperty("java.security.auth.login.config", "/dev/null");
 
         try {
@@ -638,10 +641,10 @@ public class WindowsDesktopSSO extends AMLoginModule {
             if (debug.messageEnabled()) {
                 debug.message("Stack trace: ", e);
             }
-            throw new AuthLoginException(amAuthWindowsDesktopSSO, 
+            throw new AuthLoginException(amAuthWindowsDesktopSSO,
                 "serviceAuth", null, e);
         }
-    }        
+    }
 
     private String getMapAttr(Map options, int index) {
         return CollectionHelper.getMapAttr(options, configAttributes[index]);
@@ -649,15 +652,15 @@ public class WindowsDesktopSSO extends AMLoginModule {
 
     private void verifyAttributes() throws AuthLoginException {
         if (servicePrincipalName == null || servicePrincipalName.length() == 0){
-            throw new AuthLoginException(amAuthWindowsDesktopSSO, 
+            throw new AuthLoginException(amAuthWindowsDesktopSSO,
                 "nullprincipal", null);
         }
         if (keyTabFile == null || keyTabFile.length() == 0){
-            throw new AuthLoginException(amAuthWindowsDesktopSSO, 
+            throw new AuthLoginException(amAuthWindowsDesktopSSO,
                 "nullkeytab", null);
         }
         if (kdcRealm == null || kdcRealm.length() == 0){
-            throw new AuthLoginException(amAuthWindowsDesktopSSO, 
+            throw new AuthLoginException(amAuthWindowsDesktopSSO,
                 "nullrealm", null);
         }
         if (kdcServer == null || kdcServer.length() == 0){
@@ -665,22 +668,22 @@ public class WindowsDesktopSSO extends AMLoginModule {
                 "nullkdc", null);
         }
         if (authLevel == null || authLevel.length() == 0){
-            throw new AuthLoginException(amAuthWindowsDesktopSSO, 
+            throw new AuthLoginException(amAuthWindowsDesktopSSO,
                 "nullauthlevel", null);
         }
 
         if (!(new File(keyTabFile)).exists()) {
             // ibm jdk needs to skip "file://" part in parameter
             if (!(new File(keyTabFile.substring(7))).exists()) {
-                throw new AuthLoginException(amAuthWindowsDesktopSSO, 
+                throw new AuthLoginException(amAuthWindowsDesktopSSO,
                 "nokeytab", null);
             }
         }
-        
+
         try {
             setAuthLevel(Integer.parseInt(authLevel));
         } catch (Exception e) {
-            throw new AuthLoginException(amAuthWindowsDesktopSSO, 
+            throw new AuthLoginException(amAuthWindowsDesktopSSO,
                 "authlevel", null, e);
         }
     }
@@ -695,7 +698,7 @@ public class WindowsDesktopSSO extends AMLoginModule {
      * @return the attribute value for the identity searched. Empty string if not found or
      *  null if an error occurs
      */
-    private String searchUserAccount(String attributeValue, String organization) 
+    private String searchUserAccount(String attributeValue, String organization)
             throws AuthLoginException {
 
         String classMethod = "WindowsDesktopSSO.searchUserAccount: ";
@@ -703,7 +706,7 @@ public class WindowsDesktopSSO extends AMLoginModule {
         if (organization.isEmpty()) {
             organization = "/";
         }
-        
+
         if (debug.messageEnabled()) {
             debug.message(classMethod + " searching for user " + attributeValue
                     + " in the organization =" + organization);
@@ -740,11 +743,11 @@ public class WindowsDesktopSSO extends AMLoginModule {
             }
         } catch (IdRepoException idrepoex) {
             String data[] = {attributeValue, organization};
-            throw new AuthLoginException(amAuthWindowsDesktopSSO, 
+            throw new AuthLoginException(amAuthWindowsDesktopSSO,
                 "idRepoSearch", data, idrepoex);
         } catch (SSOException ssoe) {
             String data[] = {attributeValue, organization};
-            throw new AuthLoginException(amAuthWindowsDesktopSSO, 
+            throw new AuthLoginException(amAuthWindowsDesktopSSO,
                 "ssoSearch", data, ssoe);
         }
         if (debug.messageEnabled()) {
@@ -754,7 +757,7 @@ public class WindowsDesktopSSO extends AMLoginModule {
     }
 
     private Map<String, Set<String>> buildSearchControl(String value)
-            throws AuthLoginException {     
+            throws AuthLoginException {
         Map<String, Set<String>> attr = new HashMap<String, Set<String>>();
         Set<String> userAttrs = getUserAliasList();
         for (String userAttr : userAttrs) {
@@ -767,7 +770,7 @@ public class WindowsDesktopSSO extends AMLoginModule {
         set.add(attribute);
         return set;
     }
-    
+
     private static Set<String> getAcceptedKerberosRealms(Map options) {
         Set<String> result = Collections.EMPTY_SET;
         final Object tmp = options.get(ACCEPTED_REALMS_ATTR);
@@ -775,8 +778,8 @@ public class WindowsDesktopSSO extends AMLoginModule {
             result = Collections.unmodifiableSet((Set<String>)tmp);
         }
         return result;
-    }    
-    
+    }
+
     private static boolean isTokenTrusted(final String UPN, final String realm) {
         boolean trusted = false;
         if (UPN != null ) {
