@@ -279,8 +279,8 @@
                         <configuration>
                             <nodeVersion>v4.2.3</nodeVersion>
                             <npmVersion>3.5.2</npmVersion>
-                            <nodeDownloadRoot>https://nodejs.org/dist/</nodeDownloadRoot>
-                            <npmDownloadRoot>http://maven.forgerock.org/repo/api/npm/npm-virtual/npm/-/</npmDownloadRoot>
+                            <downloadRoot>https://nodejs.org/dist/</downloadRoot>
+                            <npmDownloadRoot>https://wrensecurity.jfrog.io/wrensecurity/api/npm/npm-virtual/npm/-/</npmDownloadRoot>
                         </configuration>
                     </execution>
                     <execution>
