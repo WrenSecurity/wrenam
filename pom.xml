@@ -187,6 +187,8 @@
         <forgerock.license.artifactId>cddl-license</forgerock.license.artifactId>
         <forgerock.license.version>1.0.0</forgerock.license.version>
         <checkstyleFailOnError>false</checkstyleFailOnError>
+
+        <pgpWhitelistArtifact>org.wrensecurity:wrensec-pgp-whitelist:1.1.0</pgpWhitelistArtifact>
     </properties>
 
     <!-- Profiles -->
