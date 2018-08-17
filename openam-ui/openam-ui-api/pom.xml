@@ -59,10 +59,10 @@
                         </goals>
                         <phase>initialize</phase>
                         <configuration>
-                            <nodeVersion>v4.5.0</nodeVersion>
-                            <npmVersion>3.10.6</npmVersion>
-                            <downloadRoot>http://maven.forgerock.org/repo/forgerock-third-party-virtual/</downloadRoot>
-                            <npmDownloadRoot>http://maven.forgerock.org/repo/api/npm/npm-virtual/npm/-/</npmDownloadRoot>
+                            <nodeVersion>v4.6.2</nodeVersion>
+                            <npmVersion>3.10.9</npmVersion>
+                            <downloadRoot>https://nodejs.org/dist/</downloadRoot>
+                            <npmDownloadRoot>https://wrensecurity.jfrog.io/wrensecurity/api/npm/npm-virtual/npm/-/</npmDownloadRoot>
                         </configuration>
                     </execution>
                     <execution>
