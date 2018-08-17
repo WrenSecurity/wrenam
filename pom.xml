@@ -21,7 +21,7 @@
 
     <!-- Build Notes:
 
-         To Build all of OpenAM use the following Maven Command:
+         To Build all of Wren:AM use the following Maven Command:
          cd to openam top directory.
          mvn clean install
 
@@ -47,36 +47,44 @@
     </parent>
 
     <!-- Component Definition -->
-    <name>OpenAM Project</name>
     <groupId>org.forgerock.openam</groupId>
     <artifactId>openam</artifactId>
     <version>14.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <description>OpenAM</description>
-    <inceptionYear>2010</inceptionYear>
+    <name>Wren:AM - Parent</name>
+    <description>
+        Wren:AM is an access management solution that includes Authentication, SSO, Authorization,
+        Federation, Entitlements and Web Services Security.
+    </description>
+
+    <inceptionYear>2017</inceptionYear>
+    <url>https://github.com/WrenSecurity/WrenAM</url>
 
     <organization>
-        <name>ForgeRock</name>
-        <url>http://www.forgerock.org</url>
+        <name>Wren Security</name>
+        <url>https://www.wrensecurity.org</url>
     </organization>
-    <url>http://www.forgerock.org</url>
 
     <issueManagement>
-        <system>Jira</system>
-        <url>https://bugster.forgerock.org/jira/browse/OPENAM</url>
+        <system>GitHub Issues</system>
+        <url>https://github.com/WrenSecurity/WrenAM/issues</url>
     </issueManagement>
 
     <licenses>
         <license>
             <name>CDDL-1.0</name>
-            <url>http://www.opensource.org/licenses/CDDL-1.0</url>
-            <comments>Common Development and Distribution License (CDDL) 1.0.
-                This license applies to OpenAM source code as indicated in the
-                sources themselves.
+            <url>http://www.opensource.org/licenses/cddl1.php</url>
+
+            <comments>
+                Common Development and Distribution License (CDDL) 1.0.
+                This license applies to Wren:AM source code as indicated in the
+                source code.
             </comments>
+
             <distribution>repo</distribution>
         </license>
+
         <license>
             <name>CC BY-NC-ND 3.0</name>
             <url>http://creativecommons.org/licenses/by-nc-nd/3.0/</url>
@@ -84,6 +92,7 @@
                 Unported. This license applies to the site content, and to the
                 documentation as indicated in the documentation source code.
             </comments>
+
             <distribution>repo</distribution>
         </license>
     </licenses>
@@ -197,7 +206,7 @@
         <jakarta.xml.soap-api.version>1.4.2</jakarta.xml.soap-api.version>
         <jakarta.xml.ws-api.version>2.3.3</jakarta.xml.ws-api.version>
 
-        <openam.version>OpenAM ${project.version}</openam.version>
+        <openam.version>Wren:AM ${project.version}</openam.version>
         <!--  Project web site -->
         <siteDistributionURL>scp://community.internal.forgerock.com/var/www/vhosts/openam.forgerock.org/httpdocs</siteDistributionURL>
         <!-- Latest policy agent community versions -->
@@ -292,7 +301,7 @@
                             <singleCloverDatabase>true</singleCloverDatabase>
                             <generateHistorical>false</generateHistorical>
                             <generateHtml>true</generateHtml>
-                            <title>OpenAM ${project.version} Coverage Report</title>
+                            <title>Wren:AM ${project.version} Coverage Report</title>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -344,7 +353,7 @@
                                 <artifactId>javadoc-utils</artifactId>
                                 <version>${javadoc-utils.version}</version>
                             </tagletArtifact>
-                            <doctitle>OpenAM ${project.version} Public API Javadoc</doctitle>
+                            <doctitle>Wren:AM ${project.version} Public API Javadoc</doctitle>
                             <outputDirectory>${project.build.directory}/site/apidocs</outputDirectory>
                             <finalName>openam-${project.version}-public</finalName>
                             <subpackages>
@@ -393,7 +402,7 @@
         </profile>
     </profiles>
 
-    <!-- OpenAM Child Modules -->
+    <!-- Wren:AM Child Modules -->
     <!-- Build order will be determined by the Maven Reactor. -->
     <modules>
         <module>openam-http</module>
@@ -401,25 +410,25 @@
         <module>openam-ldap-utils</module>
         <module>openam-datastore</module>
 
-        <!-- OpenAM Shared - Common Module -->
+        <!-- Wren:AM Shared - Common Module -->
         <module>openam-shared</module>
 
-        <!-- OpenAM Scripting -->
+        <!-- Wren:AM Scripting -->
         <module>openam-scripting</module>
 
-        <!-- OpenAM Entitlement Module (XACML 3)-->
+        <!-- Wren:AM Entitlement Module (XACML 3)-->
         <module>openam-entitlements</module>
 
-        <!-- OpenAM Authentication Modules -->
+        <!-- Wren:AM Authentication Modules -->
         <module>openam-authentication</module>
 
-        <!-- OpenAM Schema Modules -->
+        <!-- Wren:AM Schema Modules -->
         <module>openam-schema</module>
 
-        <!-- OpenAM CoreToken Module -->
+        <!-- Wren:AM CoreToken Module -->
         <module>openam-coretoken</module>
 
-        <!-- OpenAM REST - CORE Module -->
+        <!-- Wren:AM REST - CORE Module -->
         <module>openam-rest</module>
         <module>openam-restlet</module>
 
@@ -427,17 +436,17 @@
 
         <module>openam-console</module>
 
-        <!-- OpenAM Core Module -->
+        <!-- Wren:AM Core Module -->
         <module>openam-core</module>
         <module>openam-core-rest</module>
 
-        <!-- OpenAM CLI Module -->
+        <!-- Wren:AM CLI Module -->
         <module>openam-cli</module>
 
-        <!-- OpenAM Federation Modules -->
+        <!-- Wren:AM Federation Modules -->
         <module>openam-federation</module>
 
-        <!-- OpenAM OAuth2 Token Service -->
+        <!-- Wren:AM OAuth2 Token Service -->
         <module>openam-oauth2</module>
         <module>openam-uma</module>
 
@@ -449,7 +458,7 @@
 
         <module>openam-server-only</module>
 
-        <!-- OpenAM Server -->
+        <!-- Wren:AM Server -->
         <module>openam-server</module>
 
         <!-- Tools Artifacts -->
@@ -495,25 +504,11 @@
     <!-- Mailing Lists -->
     <mailingLists>
         <mailingList>
-            <name>OpenAM Users List</name>
-            <subscribe>https://lists.forgerock.org/mailman/listinfo/openam/</subscribe>
-            <unsubscribe>https://lists.forgerock.org/mailman/listinfo/openam/</unsubscribe>
-            <post>openam@forgerock.org</post>
-            <archive>http://lists.forgerock.org/pipermail/openam/</archive>
-        </mailingList>
-        <mailingList>
-            <name>OpenAM Developers List</name>
-            <subscribe>https://lists.forgerock.org/mailman/listinfo/openam-dev/</subscribe>
-            <unsubscribe>https://lists.forgerock.org/mailman/listinfo/openam-dev/</unsubscribe>
-            <post>openam-dev@forgerock.org</post>
-            <archive>http://lists.forgerock.org/pipermail/openam-dev/</archive>
-        </mailingList>
-        <mailingList>
-            <name>OpenAM Commit Notifications</name>
-            <subscribe>https://lists.forgerock.org/mailman/listinfo/commitopenam/</subscribe>
-            <unsubscribe>https://lists.forgerock.org/mailman/listinfo/commitopenam/</unsubscribe>
-            <post>commitopenam@forgerock.org</post>
-            <archive>http://lists.forgerock.org/pipermail/commitopenam/</archive>
+            <name>Wren Security Mailing List</name>
+            <archive>https://groups.google.com/forum/#!forum/wren-security</archive>
+            <subscribe>https://groups.google.com/forum/#!forum/wren-security</subscribe>
+            <unsubscribe>https://groups.google.com/forum/#!forum/wren-security</unsubscribe>
+            <post>wren-security@googlegroups.com</post>
         </mailingList>
     </mailingLists>
 
@@ -551,11 +546,12 @@
 
     <!-- Source Control -->
     <scm>
-        <connection>scm:git:ssh://git@stash.forgerock.org:7999/openam/openam.git</connection>
-        <developerConnection>scm:git:ssh://git@stash.forgerock.org:7999/openam/openam.git</developerConnection>
-        <url>https://stash.forgerock.org/projects/OPENAM/repos/openam/browse</url>
-        <tag>release/13.0.0</tag>
+        <url>https://github.com/WrenSecurity/WrenAM</url>
+        <connection>scm:git:git://github.com/WrenSecurity/WrenAM.git</connection>
+        <developerConnection>scm:git:git@github.com:WrenSecurity/WrenAM.git</developerConnection>
+        <tag>HEAD</tag>
     </scm>
+
 
     <!-- Dependency Management -->
     <dependencyManagement>
@@ -575,7 +571,7 @@
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
-            <!-- OpenAM project dependencies -->
+            <!-- Wren:AM project dependencies -->
             <dependency>
                 <groupId>org.forgerock.openam</groupId>
                 <artifactId>openam-audit-context</artifactId>
@@ -914,7 +910,7 @@
             </dependency>
 
 
-            <!-- OpenAM schema projects -->
+            <!-- Wren:AM schema projects -->
             <dependency>
                 <groupId>org.forgerock.openam</groupId>
                 <artifactId>openam-dtd-schema</artifactId>
@@ -1606,7 +1602,7 @@
                 </exclusions>
             </dependency>
 
-            <!-- Legacy External Libraries for OpenAM -->
+            <!-- Legacy External Libraries for Wren:AM -->
             <!-- We need to eventually ween off of these -->
 
             <!-- Dependencies for the Build Helper Maven Plugin -->
@@ -2153,7 +2149,7 @@
                         <manifestEntries>
                             <Specification-Title>${project.name}</Specification-Title>
                             <Specification-Version>${project.version} - ${maven.build.timestamp}</Specification-Version>
-                            <Specification-Vendor>ForgeRock</Specification-Vendor>
+                            <Specification-Vendor>Wren Security</Specification-Vendor>
                             <Implementation-Title>${project.name}</Implementation-Title>
                             <Implementation-Version>${project.version} - ${maven.build.timestamp}</Implementation-Version>
                             <Implementation-Vendor>ForgeRock</Implementation-Vendor>

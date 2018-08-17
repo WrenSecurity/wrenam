@@ -13,7 +13,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2011-2016 ForgeRock AS.
- * Portions copyright 2022 Wren Security
+ * Portions Copyright 2018-2022 Wren Security
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
@@ -26,8 +26,8 @@
     </parent>
 
     <!-- Component Definition -->
-    <name>OpenAM Server Only</name>
-    <description>OpenAM Server Only Component</description>
+    <name>Wren:AM - Server Only</name>
+    <description>Wren:AM Server Only Component</description>
     <artifactId>openam-server-only</artifactId>
     <packaging>war</packaging>
 
@@ -48,7 +48,7 @@
 
     <!-- Build -->
     <build>
-        <finalName>OpenAM-ServerOnly-${project.version}</finalName>
+        <finalName>Wren:AM-ServerOnly-${project.version}</finalName>
         <plugins>
             <!-- Wren:DS 4.0: Pre-Pre-Packaging Step to download required Pre-Packaging Resources-->
             <plugin>
@@ -204,10 +204,10 @@
                     </packagingExcludes>
                     <archive>
                         <manifestEntries>
-                            <Specification-Title>OpenAM Server</Specification-Title>
+                            <Specification-Title>Wren:AM Server</Specification-Title>
                             <Specification-Version>${project.version} - ${maven.build.timestamp}</Specification-Version>
-                            <Specification-Vendor>ForgeRock</Specification-Vendor>
-                            <Implementation-Title>OpenAM Server</Implementation-Title>
+                            <Specification-Vendor>Wren Security</Specification-Vendor>
+                            <Implementation-Title>Wren:AM Server</Implementation-Title>
                             <Implementation-Version>${project.version} - ${maven.build.timestamp}
                             </Implementation-Version>
                             <Implementation-Vendor>ForgeRock</Implementation-Vendor>
