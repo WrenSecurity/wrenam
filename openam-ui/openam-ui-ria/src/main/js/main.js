@@ -35,11 +35,11 @@ require.config({
         "autosizeInput": "libs/jquery.autosize.input.min",
 
         "backbone"           : "libs/backbone-1.1.2-min",
-        "backbone.paginator" : "libs/backbone.paginator.min-2.0.2-min",
+        "backbone.paginator" : "libs/backbone.paginator-2.0.2-min",
         "backbone-relational": "libs/backbone-relational-0.9.0-min",
 
-        "backgrid"          : "libs/backgrid.min-0.3.5-min",
-        "backgrid-filter"   : "libs/backgrid-filter.min-0.3.5-min",
+        "backgrid"          : "libs/backgrid-0.3.5-min",
+        "backgrid-filter"   : "libs/backgrid-filter-0.3.7-min",
         "backgrid.paginator": "libs/backgrid-paginator-0.3.5-custom.min",
         "backgrid-selectall": "libs/backgrid-select-all-0.3.5-min",
 
@@ -59,10 +59,10 @@ require.config({
         "lodash"      : "libs/lodash-3.10.1-min",
         "moment"      : "libs/moment-2.8.1-min",
         "qrcode"      : "libs/qrcode-1.0.0-min",
-        "sortable"    : "libs/jquery-nestingSortable-0.9.12",
+        "sortable"    : "libs/jquery.nesting-sortable-0.9.12",
         "spin"        : "libs/spin-2.0.1-min",
         "xdate"       : "libs/xdate-0.8-min",
-        "selectize"   : "libs/selectize-non-standalone-0.12.1-min",
+        "selectize"   : "libs/selectize-0.12.1-min",
         "sifter"      : "libs/sifter-0.4.1-min",
         "microplugin" : "libs/microplugin-0.0.3",
         "popoverclickaway" : "libs/popover-clickaway",
