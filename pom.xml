@@ -150,8 +150,8 @@
         <jaxb.version>1.0.6</jaxb.version>
         <jaxb1.version>2.0.2</jaxb1.version>
         <jaxrpc-api.version>1.1</jaxrpc-api.version>
-        <jaxrpc-impl.version>1.1.3_01-20160905</jaxrpc-impl.version>
-        <jaxrpc-spi.version>1.1.3_01</jaxrpc-spi.version>
+        <jaxrpc-impl.version>1.1.4_01-wren1</jaxrpc-impl.version>
+        <jaxrpc-spi.version>1.1.4_01-wren1</jaxrpc-spi.version>
         <jdom.version>2.0.1</jdom.version>
         <jersey-bundle.version>1.1.1-ea</jersey-bundle.version>
         <jato.version>2005-05-04</jato.version>
@@ -1304,7 +1304,7 @@
             </dependency>
 
             <dependency>
-                <groupId>external</groupId>
+                <groupId>com.sun.xml.rpc</groupId>
                 <artifactId>jaxrpc-impl</artifactId>
                 <version>${jaxrpc-impl.version}</version>
             </dependency>
