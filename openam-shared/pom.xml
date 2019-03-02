@@ -3,6 +3,7 @@
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
  * Copyright 2011-2016 ForgeRock AS.
+ * Portions Copyright 2018-2019 Wren Security.
  *
  * The contents of this file are subject to the terms
  * of the Common Development and Distribution License
@@ -75,6 +76,15 @@
                     </archive>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
@@ -90,6 +100,7 @@
             <artifactId>guice</artifactId>
             <classifier>no_aop</classifier>
         </dependency>
+
         <dependency>
             <groupId>com.google.inject.extensions</groupId>
             <artifactId>guice-multibindings</artifactId>
@@ -146,6 +157,11 @@
             <artifactId>forgerock-util</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.forgerock.commons.guava</groupId>
+            <artifactId>forgerock-guava-base</artifactId>
+        </dependency>
+
         <!-- IPv6 -->
         <dependency>
             <groupId>com.googlecode.java-ipv6</groupId>
@@ -161,6 +177,5 @@
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
         </dependency>
-
     </dependencies>
 </project>

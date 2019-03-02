@@ -25,7 +25,7 @@
  * $Id: Debug.java,v 1.6 2009/08/19 05:41:17 veiming Exp $
  *
  * Portions Copyrighted 2013-2016 ForgeRock AS.
- *
+ * Portions Copyright 2019 Wren Security.
  */
 
 package com.sun.identity.shared.debug;
@@ -33,6 +33,7 @@ package com.sun.identity.shared.debug;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import org.slf4j.helpers.MessageFormatter;
@@ -40,7 +41,8 @@ import org.slf4j.helpers.MessageFormatter;
 import com.sun.identity.shared.configuration.SystemPropertiesManager;
 import com.sun.identity.shared.debug.file.impl.StdDebugFile;
 import com.sun.identity.shared.debug.impl.DebugProviderImpl;
-
+import com.sun.identity.shared.locale.Locale;
+import org.forgerock.guava.common.base.Strings;
 
 // NOTE: Since JVM specs guarantee atomic access/updates to int variables
 // (actually all variables except double and long), the design consciously
@@ -259,38 +261,45 @@ public class Debug {
      */
     private static synchronized void initialize() {
         if (!serviceInitialized) {
-            String providerName = SystemPropertiesManager.get(DebugConstants.CONFIG_DEBUG_PROVIDER);
+            final String providerName;
             IDebugProvider provider = null;
             boolean providerLoadFailed = false;
-            Exception exceptionCatched = null;
-            if (providerName != null && providerName.trim().length() > 0) {
+            Exception exceptionCaught = null;
+
+            providerName =
+                Optional.ofNullable(
+                    SystemPropertiesManager.get(DebugConstants.CONFIG_DEBUG_PROVIDER)
+                ).map(String::trim)
+                .orElse(null);
+
+            if (!Strings.isNullOrEmpty(providerName)) {
                 try {
-                    provider = (IDebugProvider) Class.forName(providerName).newInstance();
-                } catch (ClassNotFoundException cnex) {
+                    provider = (IDebugProvider)Class.forName(providerName).newInstance();
+                } catch (ClassNotFoundException
+                        | InstantiationException
+                        | IllegalAccessException
+                        | ClassCastException ex) {
                     providerLoadFailed = true;
-                    exceptionCatched = cnex;
-                } catch (InstantiationException iex) {
-                    providerLoadFailed = true;
-                    exceptionCatched = iex;
-                } catch (IllegalAccessException iaex) {
-                    providerLoadFailed = true;
-                    exceptionCatched = iaex;
-                } catch (ClassCastException ccex) {
-                    providerLoadFailed = true;
-                    exceptionCatched = ccex;
+                    exceptionCaught = ex;
                 }
             }
-            if (provider == null) {
-                if (providerLoadFailed) {
-                    ResourceBundle bundle = com.sun.identity.shared.locale.Locale.getInstallResourceBundle
-                            ("amUtilMsgs");
-                    StdDebugFile.printError(Debug.class.getSimpleName(), bundle.getString("com.iplanet" + ".services" +
-                            ".debug.invalidprovider"), exceptionCatched);
 
-                }
+            if (provider == null) {
                 provider = new DebugProviderImpl();
             }
+
             setDebugProvider(provider);
+
+            if (providerLoadFailed) {
+                final ResourceBundle bundle = Locale.getInstallResourceBundle("amUtilMsgs");
+
+                StdDebugFile.printError(
+                    Debug.class.getSimpleName(),
+                    bundle.getString("com.iplanet.services.debug.invalidprovider"),
+                    exceptionCaught
+                );
+            }
+
             serviceInitialized = true;
         }
     }
