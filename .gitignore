@@ -1,4 +1,5 @@
 target/
+bin/
 dependency-reduced-pom.xml
 
 # Versions maven plugin 
@@ -7,3 +8,8 @@ dependency-reduced-pom.xml
 # Editor generated files
 *.iml
 .idea/
+
+# Eclipse IDE files
+.project
+.classpath
+.settings
