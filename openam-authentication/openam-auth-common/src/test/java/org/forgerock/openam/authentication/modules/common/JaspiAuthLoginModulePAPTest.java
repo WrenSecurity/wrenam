@@ -12,24 +12,26 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2013-2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 
 package org.forgerock.openam.authentication.modules.common;
 
-import static org.mockito.BDDMockito.doThrow;
-import static org.mockito.BDDMockito.*;
-import static org.mockito.Mockito.eq;
-import static org.mockito.Mockito.isNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isNull;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
-import static org.testng.AssertJUnit.*;
+import static org.testng.AssertJUnit.assertEquals;
+import static org.testng.AssertJUnit.assertTrue;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.message.AuthException;
 import javax.security.auth.message.AuthStatus;
 import javax.security.auth.message.MessageInfo;
@@ -37,7 +39,6 @@ import javax.security.auth.message.module.ServerAuthModule;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.mockito.Matchers;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -92,7 +93,7 @@ public class JaspiAuthLoginModulePAPTest {
         HttpServletResponse response = mock(HttpServletResponse.class);
         SSOToken ssoToken = mock(SSOToken.class);
 
-        doThrow(AuthException.class).when(jaspiAuthWrapper).initialize((CallbackHandler) isNull(), eq(config));
+        doThrow(AuthException.class).when(jaspiAuthWrapper).initialize(isNull(), eq(config));
 
         //When
         boolean exceptionCaught = false;
@@ -105,8 +106,8 @@ public class JaspiAuthLoginModulePAPTest {
         }
 
         //Then
-        verify(jaspiAuthWrapper).initialize(any(CallbackHandler.class), eq(config));
-        verify(jaspiAuthWrapper, never()).secureResponse(Matchers.<MessageInfo>anyObject());
+        verify(jaspiAuthWrapper).initialize(any(), eq(config));
+        verify(jaspiAuthWrapper, never()).secureResponse(any());
         assertTrue(exceptionCaught);
         assertEquals(exception.getErrorCode(), "authFailed");
     }
@@ -120,16 +121,16 @@ public class JaspiAuthLoginModulePAPTest {
         HttpServletResponse response = mock(HttpServletResponse.class);
         SSOToken ssoToken = mock(SSOToken.class);
 
-        given(jaspiAuthWrapper.secureResponse(Matchers.<MessageInfo>anyObject()))
+        given(jaspiAuthWrapper.secureResponse(any()))
                 .willReturn(AuthStatus.SEND_SUCCESS);
 
         //When
         jaspiPostAuthPlugin.onLoginSuccess(requestParamsMap, request, response, ssoToken);
 
         //Then
-        verify(jaspiAuthWrapper).initialize(any(CallbackHandler.class), eq(config));
+        verify(jaspiAuthWrapper).initialize(any(), eq(config));
         assertTrue(onLoginSuccessMethodCalled);
-        verify(jaspiAuthWrapper).secureResponse(Matchers.<MessageInfo>anyObject());
+        verify(jaspiAuthWrapper).secureResponse(any());
     }
 
     @Test
@@ -142,7 +143,7 @@ public class JaspiAuthLoginModulePAPTest {
         HttpServletResponse response = mock(HttpServletResponse.class);
         SSOToken ssoToken = mock(SSOToken.class);
 
-        given(jaspiAuthWrapper.secureResponse(Matchers.<MessageInfo>anyObject()))
+        given(jaspiAuthWrapper.secureResponse(any()))
                 .willReturn(AuthStatus.SEND_FAILURE);
 
         //When
@@ -156,9 +157,9 @@ public class JaspiAuthLoginModulePAPTest {
         }
 
         //Then
-        verify(jaspiAuthWrapper).initialize(any(CallbackHandler.class), eq(config));
+        verify(jaspiAuthWrapper).initialize(any(), eq(config));
         assertTrue(onLoginSuccessMethodCalled);
-        verify(jaspiAuthWrapper).secureResponse(Matchers.<MessageInfo>anyObject());
+        verify(jaspiAuthWrapper).secureResponse(any());
         assertTrue(exceptionCaught);
         assertEquals(exception.getErrorCode(), "authFailed");
     }
@@ -173,7 +174,7 @@ public class JaspiAuthLoginModulePAPTest {
         HttpServletResponse response = mock(HttpServletResponse.class);
         SSOToken ssoToken = mock(SSOToken.class);
 
-        given(jaspiAuthWrapper.secureResponse(Matchers.<MessageInfo>anyObject()))
+        given(jaspiAuthWrapper.secureResponse(any()))
                 .willReturn(AuthStatus.SEND_CONTINUE);
 
         //When
@@ -187,9 +188,9 @@ public class JaspiAuthLoginModulePAPTest {
         }
 
         //Then
-        verify(jaspiAuthWrapper).initialize(any(CallbackHandler.class), eq(config));
+        verify(jaspiAuthWrapper).initialize(any(), eq(config));
         assertTrue(onLoginSuccessMethodCalled);
-        verify(jaspiAuthWrapper).secureResponse(Matchers.<MessageInfo>anyObject());
+        verify(jaspiAuthWrapper).secureResponse(any());
         assertTrue(exceptionCaught);
         assertEquals(exception.getErrorCode(), "authFailed");
     }
@@ -203,7 +204,7 @@ public class JaspiAuthLoginModulePAPTest {
         HttpServletResponse response = mock(HttpServletResponse.class);
         SSOToken ssoToken = mock(SSOToken.class);
 
-        given(jaspiAuthWrapper.secureResponse(Matchers.<MessageInfo>anyObject()))
+        given(jaspiAuthWrapper.secureResponse(any()))
                 .willReturn(AuthStatus.SUCCESS);
 
         //When
@@ -217,9 +218,9 @@ public class JaspiAuthLoginModulePAPTest {
         }
 
         //Then
-        verify(jaspiAuthWrapper).initialize(any(CallbackHandler.class), eq(config));
+        verify(jaspiAuthWrapper).initialize(any(), eq(config));
         assertTrue(onLoginSuccessMethodCalled);
-        verify(jaspiAuthWrapper).secureResponse(Matchers.<MessageInfo>anyObject());
+        verify(jaspiAuthWrapper).secureResponse(any());
         assertTrue(exceptionCaught);
         assertEquals(exception.getErrorCode(), "authFailed");
     }

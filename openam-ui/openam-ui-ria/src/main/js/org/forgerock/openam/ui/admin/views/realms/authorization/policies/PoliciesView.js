@@ -14,7 +14,6 @@
  * Portions copyright 2014-2016 ForgeRock AS.
  */
 
-
 define([
     "jquery",
     "lodash",
@@ -164,7 +163,6 @@ define([
 
             this.data.items.fetch({ reset: true }).done(function () {
                 self.parentRender(function () {
-
                     if (self.data.items.length) {
                         self.renderToolbar();
                         self.$el.find(".table-container").append(grid.render().el);

@@ -12,12 +12,19 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2013 ForgeRock Inc.
+ * Portions Copyright 2021 Wren Security.
  */
 package com.sun.identity.authentication.jaas;
 
-import com.sun.identity.authentication.spi.InvalidPasswordException;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.same;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.security.auth.Subject;
 import javax.security.auth.callback.CallbackHandler;
@@ -25,16 +32,12 @@ import javax.security.auth.login.AppConfigurationEntry;
 import javax.security.auth.login.AppConfigurationEntry.LoginModuleControlFlag;
 import javax.security.auth.login.LoginException;
 import javax.security.auth.spi.LoginModule;
-import java.util.HashMap;
-import java.util.Map;
 
-import static org.mockito.Matchers.anyMap;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Matchers.same;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
+import org.mockito.ArgumentMatchers;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+import com.sun.identity.authentication.spi.InvalidPasswordException;
 
 /**
  * Exercises the login context.
@@ -363,7 +366,7 @@ public class LoginContextTest {
     private void verifyInitialize(LoginModule... modules) {
         for (LoginModule module : modules) {
             // Options use eq() as opposed to same() because the map is wrapped by the authn framework.
-            verify(module).initialize(same(subject), same(handler), anyMap(), eq(optionCache.get(module)));
+            verify(module).initialize(same(subject), same(handler), ArgumentMatchers.<String, Object>anyMap(), eq(optionCache.get(module)));
         }
     }
 

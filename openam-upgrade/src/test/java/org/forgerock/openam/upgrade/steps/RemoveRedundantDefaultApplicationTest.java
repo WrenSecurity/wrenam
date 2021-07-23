@@ -12,37 +12,41 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 package org.forgerock.openam.upgrade.steps;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.forgerock.openam.utils.CollectionUtils.asSet;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.MockitoAnnotations.initMocks;
 
-import com.iplanet.sso.SSOToken;
-import com.sun.identity.entitlement.EntitlementException;
-import com.sun.identity.shared.Constants;
+import java.security.PrivilegedAction;
+
+import javax.security.auth.Subject;
+
 import org.forgerock.openam.entitlement.service.ApplicationService;
 import org.forgerock.openam.entitlement.service.ApplicationServiceFactory;
 import org.forgerock.openam.sm.datalayer.api.ConnectionFactory;
 import org.mockito.Mock;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import org.wrensecurity.wrenam.test.AbstractMockBasedTest;
 
-import javax.security.auth.Subject;
-import java.security.PrivilegedAction;
+import com.iplanet.sso.SSOToken;
+import com.sun.identity.entitlement.EntitlementException;
+import com.sun.identity.shared.Constants;
 
 /**
  * Unit test for {@link RemoveRedundantDefaultApplication}.
  *
  * @since 13.0.0
  */
-public final class RemoveRedundantDefaultApplicationTest {
+public final class RemoveRedundantDefaultApplicationTest extends AbstractMockBasedTest {
 
     @Mock
     private ApplicationServiceFactory applicationServiceFactory;
@@ -57,7 +61,6 @@ public final class RemoveRedundantDefaultApplicationTest {
 
     @BeforeMethod
     public void setUp() throws Exception {
-        initMocks(this);
         System.setProperty("com.iplanet.am.version", "12.0.0");
 
         SSOToken token = mock(SSOToken.class);
@@ -101,7 +104,7 @@ public final class RemoveRedundantDefaultApplicationTest {
         assertThat(isApplicable).isTrue();
         verify(applicationService).deleteApplication(eq("app1"));
         verify(applicationService).deleteApplication(eq("app2"));
-        assertThat(report).containsSequence("successfully removed", "app1", "failed to be removed", "app2");
+        assertThat(report).containsSubsequence("successfully removed", "app1", "failed to be removed", "app2");
     }
 
 }

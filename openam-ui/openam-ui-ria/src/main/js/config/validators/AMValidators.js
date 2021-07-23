@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 
 define([
@@ -22,7 +23,7 @@ define([
             "name": "Valid Phone Number",
             "dependencies": [],
             "validator": (el, input, callback) => {
-                var phonePattern = /^\+?([0-9\- \(\)])*$/,
+                var phonePattern = /^\+?([0-9\- ()])*$/,
                     value = input.val();
 
                 if (typeof value === "string" && value.length && !phonePattern.test(value)) {
@@ -36,7 +37,7 @@ define([
             "name": "Valid Email Address",
             "dependencies": [],
             "validator": (el, input, callback) => {
-                var emailPattern = /^([A-Za-z0-9_\-\.])+@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/,
+                var emailPattern = /^([A-Za-z0-9_\-.])+@([A-Za-z0-9_\-.])+\.([A-Za-z]{2,4})$/,
                     value = input.val();
 
                 if (typeof value === "string" && value.length && !emailPattern.test(value)) {

@@ -14,7 +14,6 @@
  * Copyright 2015-2016 ForgeRock AS.
  */
 
-
 define([
     "jquery",
     "lodash",
@@ -55,7 +54,6 @@ define([
                     response: errorRealm ? errorRealm : errorTasks
                 });
             });
-
         }
     });
 });

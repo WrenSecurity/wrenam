@@ -12,12 +12,15 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 
 package org.forgerock.openam.session.service.access.persistence;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
 
 import org.forgerock.json.JsonPointer;
 import org.forgerock.json.resource.QueryFilters;
@@ -28,13 +31,13 @@ import org.forgerock.openam.identity.idm.IdentityUtils;
 import org.forgerock.openam.tokens.CoreTokenField;
 import org.forgerock.util.query.QueryFilter;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import org.wrensecurity.wrenam.test.AbstractMockBasedTest;
 
 import com.sun.identity.idm.IdType;
 
-public class SessionQueryFilterVisitorTest {
+public class SessionQueryFilterVisitorTest extends AbstractMockBasedTest {
 
     private static final String MOCK_UUID = "id=demo,ou=people,dc=openam,dc=forgerock,dc=org";
     @Mock
@@ -43,7 +46,6 @@ public class SessionQueryFilterVisitorTest {
 
     @BeforeMethod
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
         visitor = new SessionQueryFilterVisitor(identityUtils);
     }
 

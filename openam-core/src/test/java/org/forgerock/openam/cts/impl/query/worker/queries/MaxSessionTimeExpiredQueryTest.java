@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014-2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 package org.forgerock.openam.cts.impl.query.worker.queries;
 
@@ -21,6 +22,7 @@ import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.verify;
 
 import java.util.Calendar;
+import java.util.List;
 
 import org.forgerock.openam.cts.CoreTokenConfig;
 import org.forgerock.openam.cts.api.fields.SessionTokenField;
@@ -30,6 +32,7 @@ import org.forgerock.openam.sm.datalayer.api.query.QueryFactory;
 import org.forgerock.openam.tokens.CoreTokenField;
 import org.forgerock.opendj.ldap.Connection;
 import org.forgerock.opendj.ldap.Filter;
+import org.forgerock.util.query.QueryFilter;
 import org.forgerock.util.query.QueryFilterVisitor;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -54,14 +57,8 @@ public class MaxSessionTimeExpiredQueryTest {
                 .willReturn(mockBuilder);
 
         mockQueryFilterConverter = mock(QueryFilterVisitor.class);
-        given(mockQueryFilterConverter.visitLessThanFilter(
-                (Void)isNull(), eq(SessionTokenField.MAX_SESSION_EXPIRATION_TIME.getField()), any(Calendar.class)))
-                .willReturn(Filter.alwaysTrue());
-        given(mockQueryFilterConverter.visitEqualsFilter(
-                (Void)isNull(), eq(SessionTokenField.SESSION_STATE.getField()), any(String.class)))
-                .willReturn(Filter.alwaysTrue());
-        given(mockQueryFilterConverter.visitEqualsFilter(
-                (Void)isNull(), eq(CoreTokenField.TOKEN_TYPE), any(String.class)))
+        // FIXME Implement proper unit test that is not testing QueryFilter internals.
+        given(mockQueryFilterConverter.visitAndFilter(isNull(), anyList()))
                 .willReturn(Filter.alwaysTrue());
 
         mockFactory = mock(QueryFactory.class);

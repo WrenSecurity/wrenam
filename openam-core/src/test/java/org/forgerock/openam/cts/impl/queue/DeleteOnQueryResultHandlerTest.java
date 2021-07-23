@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014-2015 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 package org.forgerock.openam.cts.impl.queue;
 
@@ -55,7 +56,7 @@ public class DeleteOnQueryResultHandlerTest {
         handler.processResults(hits);
         for (PartialToken hit : hits) {
             verify(mockTaskDispatcher).delete(eq(hit.<String>getValue(CoreTokenField.TOKEN_ID)),
-                    any(ResultHandler.class));
+                    any());
         }
     }
 
@@ -68,7 +69,7 @@ public class DeleteOnQueryResultHandlerTest {
                 .delete(anyString(), any(ResultHandler.class));
         for (PartialToken hit : hits) {
             verify(mockTaskDispatcher).delete(eq(hit.<String>getValue(CoreTokenField.TOKEN_ID)),
-                    any(ResultHandler.class));
+                    any());
         }
     }
 

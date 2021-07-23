@@ -25,7 +25,6 @@
 define([
     "org/forgerock/commons/ui/common/util/Constants"
 ], function (Constants) {
-
     var path = location.pathname.replace(new RegExp("^/|/$", "g"), "").split("/");
     path.splice(-1);
 

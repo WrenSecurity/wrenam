@@ -39,7 +39,6 @@ define([
     "selectize"
 ], function ($, _, BootstrapDialog, CodeMirror, ChangesPending, Messages, AbstractView, EventManager, Router, Base64,
              Constants, UIUtils, Script, RealmScriptsService, GlobalScriptsService, FormHelper, Promise) {
-
     return AbstractView.extend({
         initialize () {
             AbstractView.prototype.initialize.call(this);
@@ -112,21 +111,20 @@ define([
             this.data.entity = _.pick(this.model.attributes,
                 "uuid", "name", "description", "language", "context", "script");
 
-            if (!this.data.contexts) {
+            if (this.data.contexts) {
+                self.languageSchemaPromise.done(function (langSchema) {
+                    self.langSchema = langSchema;
+                    self.renderScript();
+                });
+            } else {
                 Promise.all([self.contextsPromise, self.defaultContextPromise, self.contextSchemaPromise,
-                        self.languageSchemaPromise]).done(
-                    function (results) {
+                    self.languageSchemaPromise]).done(function (results) {
                         self.data.contexts = results[0][0].result;
                         self.data.defaultContext = results[1][0].defaultContext;
                         self.addContextNames(self.data.contexts, results[2][0]);
                         self.langSchema = results[3][0];
                         self.renderScript();
                     });
-            } else {
-                self.languageSchemaPromise.done(function (langSchema) {
-                    self.langSchema = langSchema;
-                    self.renderScript();
-                });
             }
         },
 
@@ -303,13 +301,13 @@ define([
         openDialog () {
             var self = this;
 
-            if (!this.data.defaultContext) {
+            if (this.data.defaultContext) {
+                self.renderDialog();
+            } else {
                 this.defaultContextPromise.done(function (context) {
                     self.data.defaultContext = context.defaultContext;
                     self.renderDialog();
                 });
-            } else {
-                self.renderDialog();
             }
         },
 

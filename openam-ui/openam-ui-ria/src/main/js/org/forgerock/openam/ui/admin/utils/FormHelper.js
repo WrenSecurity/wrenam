@@ -24,7 +24,6 @@ define([
     "org/forgerock/openam/ui/admin/utils/form/setActiveTab",
     "org/forgerock/openam/ui/admin/utils/deprecatedWarning"
 ], (bindSavePromiseToElement, showConfirmationBeforeAction, setActiveTab, deprecatedWarning) => {
-
     const obj = {};
 
     showConfirmationBeforeAction = showConfirmationBeforeAction.default;

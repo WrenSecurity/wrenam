@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 
 package org.forgerock.openam.core.realms;
@@ -26,8 +27,9 @@ import org.mockito.MockitoAnnotations;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import org.wrensecurity.wrenam.test.AbstractMockBasedTest;
 
-public class RealmTest {
+public class RealmTest extends AbstractMockBasedTest {
 
     @Mock
     private RealmLookup realmLookup;
@@ -37,7 +39,6 @@ public class RealmTest {
 
     @BeforeMethod
     public void setup() throws Exception {
-        MockitoAnnotations.initMocks(this);
         realmTestHelper = new RealmTestHelper(realmLookup, coreWrapper);
         realmTestHelper.setupRealmClass();
     }

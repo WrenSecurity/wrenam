@@ -69,6 +69,13 @@
         <dependency>
             <groupId>org.forgerock.commons</groupId>
             <artifactId>json-resource-http</artifactId>
+            <exclusions>
+                <!-- FIXME This is to prevent duplicate JAXB dependency. -->
+                <exclusion>
+                    <groupId>com.sun.xml.bind</groupId>
+                    <artifactId>jaxb-osgi</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>

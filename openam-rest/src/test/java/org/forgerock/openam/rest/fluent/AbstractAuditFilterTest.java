@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 package org.forgerock.openam.rest.fluent;
 
@@ -104,7 +105,7 @@ public abstract class AbstractAuditFilterTest {
 
         // Then
         verify(auditor).auditAccessAttempt();
-        verify(auditor).auditAccessSuccess(any(JsonValue.class));
+        verify(auditor).auditAccessSuccess(any());
     }
 
     @Test(dataProvider = "auditedCrudpaqOperations")

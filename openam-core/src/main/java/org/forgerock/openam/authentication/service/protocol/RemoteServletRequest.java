@@ -1,28 +1,19 @@
-/**
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+/*
+ * The contents of this file are subject to the terms of the Common Development and
+ * Distribution License (the License). You may not use this file except in compliance with the
+ * License.
+ *
+ * You can obtain a copy of the License at legal/CDDLv1.1.txt. See the License for the
+ * specific language governing permission and limitations under the License.
+ *
+ * When distributing Covered Software, include this CDDL Header Notice in each file and include
+ * the License file at legal/CDDLv1.1.txt. If applicable, add the following below the CDDL
+ * Header, with the fields enclosed by brackets [] replaced by your own identifying
+ * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2010-2015 ForgeRock AS.
- *
- * The contents of this file are subject to the terms
- * of the Common Development and Distribution License
- * (the License). You may not use this file except in
- * compliance with the License.
- *
- * You can obtain a copy of the License at
- * http://forgerock.org/license/CDDLv1.0.html
- * See the License for the specific language governing
- * permission and limitations under the License.
- *
- * When distributing Covered Code, include this CDDL
- * Header Notice in each file and include the License file
- * at http://forgerock.org/license/CDDLv1.0.html
- * If applicable, add the following below the CDDL Header,
- * with the fields enclosed by brackets [] replaced by
- * your own identifying information:
- * "Portions Copyrighted [year] [name of copyright owner]"
- *
+ * Portions Copyright 2021 Wren Security.
  */
-
 package org.forgerock.openam.authentication.service.protocol;
 
 import com.sun.identity.shared.debug.Debug;
@@ -49,7 +40,7 @@ import javax.servlet.ServletResponse;
  */
 public class RemoteServletRequest implements ServletRequest, Serializable {
     public static final long serialVersionUID = 42L;
-        
+
     /* The request whos state is to be serialized
      */
     protected transient ServletRequest request = null;
@@ -252,6 +243,11 @@ public class RemoteServletRequest implements ServletRequest, Serializable {
      */
     public int getContentLength() {
 	    return request != null ? this.request.getContentLength() : contentLength;
+    }
+
+    @Override
+    public long getContentLengthLong() {
+        return request != null ? this.request.getContentLengthLong() : contentLength;
     }
 
     /**

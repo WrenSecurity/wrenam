@@ -27,7 +27,6 @@ define([
     "store/index"
 ], (_, EventManager, Router, URIUtils, AnonymousProcessView, AnonymousProcessDelegate, fetchUrl, Constants, query,
     store) => {
-
     function getFragmentParamString () {
         const params = URIUtils.getCurrentFragmentQueryString();
         return _.isEmpty(params) ? "" : `&${params}`;

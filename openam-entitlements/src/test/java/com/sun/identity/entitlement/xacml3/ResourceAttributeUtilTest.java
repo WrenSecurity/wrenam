@@ -12,26 +12,31 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014-2015 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 package com.sun.identity.entitlement.xacml3;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.identity.entitlement.EntitlementException;
-import com.sun.identity.entitlement.ResourceAttribute;
-import org.fest.util.Collections;
-import org.testng.annotations.Test;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
+import static org.testng.AssertJUnit.fail;
 
-import javax.security.auth.Subject;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.mock;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.testng.AssertJUnit.fail;
+import javax.security.auth.Subject;
+
+import org.fest.util.Collections;
+import org.testng.annotations.Test;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sun.identity.entitlement.EntitlementException;
+import com.sun.identity.entitlement.ResourceAttribute;
 
 public class ResourceAttributeUtilTest {
 
@@ -54,7 +59,7 @@ public class ResourceAttributeUtilTest {
     public void shouldCatchFailureIfDeserialisationFails() throws IOException {
         // Given
         ObjectMapper mockMapper = mock(ObjectMapper.class);
-        given(mockMapper.readValue(anyString(), any(Class.class))).willThrow(new IOException());
+        given(mockMapper.readValue(anyString(), any(Class.class))).willThrow(new JsonMappingException(null, ""));
         util = new ResourceAttributeUtil(mockMapper);
 
         // When / Then

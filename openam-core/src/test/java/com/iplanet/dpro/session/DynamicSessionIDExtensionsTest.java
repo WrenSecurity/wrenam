@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 package com.iplanet.dpro.session;
 
@@ -42,13 +43,13 @@ public class DynamicSessionIDExtensionsTest {
     @Test
     public void shouldUseSessionIDCorrectorForPrimaryID() {
         dynamic.getPrimaryID();
-        verify(mockCorrector).translatePrimaryID(anyString(), anyString());
+        verify(mockCorrector).translatePrimaryID(any(), any());
     }
 
     @Test
     public void shouldUseSessionIDCorrectorForSiteID() {
         dynamic.getSiteID();
-        verify(mockCorrector).translateSiteID(anyString(), anyString());
+        verify(mockCorrector).translateSiteID(any(), any());
     }
 
     @Test

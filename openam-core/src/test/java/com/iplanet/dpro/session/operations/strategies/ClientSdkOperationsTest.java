@@ -12,13 +12,14 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2013-2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 package com.iplanet.dpro.session.operations.strategies;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -28,9 +29,9 @@ import java.util.Arrays;
 import org.forgerock.openam.session.SessionServiceURLService;
 import org.forgerock.openam.session.service.ServicesClusterMonitorHandler;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import org.wrensecurity.wrenam.test.AbstractMockBasedTest;
 
 import com.iplanet.dpro.session.ClientSdkSessionRequests;
 import com.iplanet.dpro.session.Session;
@@ -42,7 +43,7 @@ import com.iplanet.dpro.session.share.SessionRequest;
 import com.iplanet.dpro.session.share.SessionResponse;
 import com.sun.identity.shared.debug.Debug;
 
-public class ClientSdkOperationsTest {
+public class ClientSdkOperationsTest extends AbstractMockBasedTest {
 
     private ClientSdkOperations clientSdkOperations;
 
@@ -67,11 +68,10 @@ public class ClientSdkOperationsTest {
 
     @BeforeMethod
     public void setup() throws SessionException {
-        MockitoAnnotations.initMocks(this);
         given(mockRequester.getID()).willReturn(mockRequesterId);
         given(mockSession.getID()).willReturn(mockSessionId);
         given(mockClientSdkSessionRequests.sendRequest(
-                any(URL.class),
+                any(),
                 any(SessionRequest.class),
                 any(Session.class))).willReturn(mockResponse);
 
@@ -130,7 +130,7 @@ public class ClientSdkOperationsTest {
         clientSdkOperations.logout(mockSession);
 
         // Then
-        verify(mockClientSdkSessionRequests).sendRequest(any(URL.class), any(SessionRequest.class), eq(mockSession));
+        verify(mockClientSdkSessionRequests).sendRequest(any(), any(SessionRequest.class), eq(mockSession));
     }
 
     @Test
@@ -141,7 +141,7 @@ public class ClientSdkOperationsTest {
         clientSdkOperations.destroy(mockRequester, mockSession);
 
         // Then
-        verify(mockClientSdkSessionRequests).sendRequest(any(URL.class), any(SessionRequest.class), eq(mockSession));
+        verify(mockClientSdkSessionRequests).sendRequest(any(), any(SessionRequest.class), eq(mockSession));
     }
 
     @Test
@@ -153,6 +153,6 @@ public class ClientSdkOperationsTest {
         clientSdkOperations.setProperty(mockSession, name, value);
 
         // Then
-        verify(mockClientSdkSessionRequests).sendRequest(any(URL.class), any(SessionRequest.class), eq(mockSession));
+        verify(mockClientSdkSessionRequests).sendRequest(any(), any(SessionRequest.class), eq(mockSession));
     }
 }

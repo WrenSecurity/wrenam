@@ -18,7 +18,6 @@ define([
     "jquery",
     "qrcode"
 ], function ($, QRCodeReader) {
-
     var obj = {},
         getCode = function (options) {
             var qr = new QRCodeReader(options.version || 4, options.code || "M");

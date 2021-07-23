@@ -35,7 +35,11 @@
         <param-name>jato:enforceStrictSessionTimeout1</param-name>
         <param-value>true</param-value>
     </context-param>
-
+    <!-- XXX We need DEVELOPMENT stage to have service lazy loading -->
+    <context-param>
+        <param-name>com.google.inject.Stage</param-name>
+        <param-value>DEVELOPMENT</param-value>
+    </context-param>
 
     <!-- context param -->
 

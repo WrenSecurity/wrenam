@@ -12,26 +12,30 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 package com.sun.identity.authentication.audit;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.*;
-import static org.forgerock.openam.audit.AuditConstants.EventName;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-import com.iplanet.sso.SSOToken;
-import com.sun.identity.authentication.service.LoginState;
 import org.forgerock.audit.events.AuditEvent;
 import org.forgerock.openam.audit.AuditConstants;
+import org.forgerock.openam.audit.AuditConstants.EventName;
 import org.forgerock.openam.audit.AuditEventFactory;
 import org.forgerock.openam.audit.AuditEventPublisher;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import org.wrensecurity.wrenam.test.AbstractMockBasedTest;
 
-public class AuthenticationProcessEventAuditorTest {
+import com.iplanet.sso.SSOToken;
+import com.sun.identity.authentication.service.LoginState;
+
+public class AuthenticationProcessEventAuditorTest extends AbstractMockBasedTest {
 
     private AuthenticationProcessEventAuditor auditor;
 
@@ -49,10 +53,8 @@ public class AuthenticationProcessEventAuditorTest {
 
     @BeforeMethod
     public void setupMocks() {
-        MockitoAnnotations.initMocks(this);
-
-        when(eventPublisher.isAuditing(anyString(), anyString(), any(EventName.class))).thenReturn(true);
-        when(eventFactory.authenticationEvent(anyString())).thenCallRealMethod();
+        when(eventPublisher.isAuditing(any(), anyString(), any(EventName.class))).thenReturn(true);
+        when(eventFactory.authenticationEvent(any())).thenCallRealMethod();
         auditor = new AuthenticationProcessEventAuditor(eventPublisher, eventFactory);
     }
 

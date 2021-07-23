@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2013-2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 package org.forgerock.openam.cts.worker.process;
 
@@ -45,7 +46,7 @@ public class TokenDeletionTest {
     @Test
     public void shouldQueueEachTokenProvided() throws CoreTokenException {
         deletion.deleteBatch(tokens);
-        verify(mockQueue, times(3)).delete(anyString(), any(ResultHandler.class));
+        verify(mockQueue, times(3)).delete(any(), any(ResultHandler.class));
     }
 
     @Test

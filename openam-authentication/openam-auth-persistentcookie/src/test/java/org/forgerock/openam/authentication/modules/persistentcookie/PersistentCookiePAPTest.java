@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 
 package org.forgerock.openam.authentication.modules.persistentcookie;
@@ -58,7 +59,7 @@ public class PersistentCookiePAPTest {
                 ServiceConfig serviceConfig = mock(ServiceConfig.class);
                 given(serviceConfig.getAttributes()).willReturn(Collections.singletonMap("iplanet-am-auth-key-alias",
                         (Set<String>) Sets.newHashSet("str")));
-                given(serviceConfigManager.getOrganizationConfig(anyString(), anyString())).willReturn(serviceConfig);
+                given(serviceConfigManager.getOrganizationConfig(any(), any())).willReturn(serviceConfig);
                 return serviceConfigManager;
             }
         };

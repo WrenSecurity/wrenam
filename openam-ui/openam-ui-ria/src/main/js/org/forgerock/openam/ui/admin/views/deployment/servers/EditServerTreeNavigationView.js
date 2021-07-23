@@ -21,7 +21,6 @@ define([
     "org/forgerock/commons/ui/common/main/Router",
     "org/forgerock/openam/ui/admin/services/global/ServersService"
 ], (TreeNavigation, createBreadcrumbs, createTreeNavigation, Router, ServersService) => {
-
     const navData = [{
         title: "console.common.navigation.general",
         icon: "fa-cog",

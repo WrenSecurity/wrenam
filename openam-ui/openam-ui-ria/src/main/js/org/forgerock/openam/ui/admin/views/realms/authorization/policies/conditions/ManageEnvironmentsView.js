@@ -14,7 +14,6 @@
  * Portions copyright 2014-2016 ForgeRock AS.
  */
 
-
 define([
     "jquery",
     "lodash",
@@ -67,7 +66,6 @@ define([
             var self = this;
 
             _.each(this.data.options.availableEnvironments, function (item) {
-
                 if (item.logical === true) {
                     self.data.operators.push(item);
                 } else {

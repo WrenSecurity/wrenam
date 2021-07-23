@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 package org.forgerock.openam.cts.impl.query.worker.queries;
 
@@ -20,6 +21,7 @@ import static org.forgerock.openam.utils.Time.getCalendarInstance;
 import static org.forgerock.util.query.QueryFilter.equalTo;
 import static org.forgerock.util.query.QueryFilter.lessThanOrEqualTo;
 
+import java.io.Closeable;
 import java.util.Calendar;
 
 import javax.inject.Inject;
@@ -27,12 +29,12 @@ import javax.inject.Inject;
 import org.forgerock.openam.cts.CoreTokenConfig;
 import org.forgerock.openam.cts.api.fields.SessionTokenField;
 import org.forgerock.openam.sm.datalayer.api.ConnectionFactory;
-import org.forgerock.openam.sm.datalayer.api.ConnectionType;
 import org.forgerock.openam.sm.datalayer.api.DataLayer;
 import org.forgerock.openam.sm.datalayer.api.query.QueryBuilder;
 import org.forgerock.openam.sm.datalayer.api.query.QueryFactory;
 import org.forgerock.openam.tokens.CoreTokenField;
 import org.forgerock.openam.tokens.TokenType;
+import org.forgerock.opendj.ldap.Filter;
 import org.forgerock.util.Reject;
 import org.forgerock.util.query.QueryFilter;
 
@@ -43,14 +45,16 @@ import com.iplanet.dpro.session.service.SessionState;
  *
  * @param <C> The type of connection queries are made for.
  */
-public class SessionIdleTimeExpiredQuery<C> extends CTSWorkerBaseQuery {
+public class SessionIdleTimeExpiredQuery<C extends Closeable> extends CTSWorkerBaseQuery<C> {
 
-    private final QueryFactory<C, CoreTokenField> queryFactory;
+    private final QueryFactory<C, Filter> queryFactory;
     private final int pageSize;
 
     @Inject
-    public SessionIdleTimeExpiredQuery(@DataLayer(CTS_SESSION_IDLE_TIMEOUT_WORKER) ConnectionFactory factory,
-            @DataLayer(CTS_SESSION_IDLE_TIMEOUT_WORKER) QueryFactory queryFactory, CoreTokenConfig config) {
+    public SessionIdleTimeExpiredQuery(
+            @DataLayer(CTS_SESSION_IDLE_TIMEOUT_WORKER) ConnectionFactory factory,
+            @DataLayer(CTS_SESSION_IDLE_TIMEOUT_WORKER) QueryFactory queryFactory,
+            CoreTokenConfig config) {
         super(factory);
         Reject.ifTrue(config.getCleanupPageSize() <= 0);
         this.queryFactory = queryFactory;
@@ -58,7 +62,7 @@ public class SessionIdleTimeExpiredQuery<C> extends CTSWorkerBaseQuery {
     }
 
     @Override
-    public QueryBuilder getQuery() {
+    public QueryBuilder<C, Filter> getQuery() {
         Calendar now = getCalendarInstance();
 
         QueryFilter<CoreTokenField> filter =

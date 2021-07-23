@@ -16,13 +16,25 @@
 
 package org.forgerock.openam.authentication.modules.oidc;
 
-import com.sun.identity.authentication.spi.AuthLoginException;
-import com.sun.identity.shared.debug.Debug;
+import static org.forgerock.openam.authentication.modules.oidc.JwtHandlerConfig.CRYPTO_CONTEXT_TYPE_CLIENT_SECRET;
+import static org.forgerock.openam.authentication.modules.oidc.OpenIdConnectConfig.BUNDLE_KEY_AUTHORIZED_PARTY_NOT_IN_AUDIENCE;
+import static org.forgerock.openam.authentication.modules.oidc.OpenIdConnectConfig.BUNDLE_KEY_ISSUER_MISMATCH;
+import static org.forgerock.openam.authentication.modules.oidc.OpenIdConnectConfig.BUNDLE_KEY_JWK_NOT_LOADED;
+import static org.forgerock.openam.authentication.modules.oidc.OpenIdConnectConfig.BUNDLE_KEY_JWS_SIGNING_EXCEPTION;
+import static org.forgerock.openam.authentication.modules.oidc.OpenIdConnectConfig.BUNDLE_KEY_JWT_PARSE_ERROR;
+import static org.forgerock.openam.authentication.modules.oidc.OpenIdConnectConfig.BUNDLE_KEY_NO_AUDIENCE_CLAIM;
+import static org.forgerock.openam.authentication.modules.oidc.OpenIdConnectConfig.BUNDLE_KEY_TOKEN_ISSUER_MISMATCH;
+import static org.forgerock.openam.authentication.modules.oidc.OpenIdConnectConfig.BUNDLE_KEY_VERIFICATION_FAILED;
+import static org.forgerock.openam.authentication.modules.oidc.OpenIdConnectConfig.RESOURCE_BUNDLE_NAME;
+
+import java.util.List;
+import java.util.Set;
+
 import org.forgerock.guice.core.InjectorHolder;
-import org.forgerock.jaspi.modules.openid.exceptions.FailedToLoadJWKException;
 import org.forgerock.jaspi.modules.openid.exceptions.OpenIdConnectVerificationException;
 import org.forgerock.jaspi.modules.openid.resolvers.OpenIdResolver;
 import org.forgerock.json.jose.common.JwtReconstruction;
+import org.forgerock.json.jose.exceptions.FailedToLoadJWKException;
 import org.forgerock.json.jose.exceptions.InvalidJwtException;
 import org.forgerock.json.jose.exceptions.JwsSigningException;
 import org.forgerock.json.jose.exceptions.JwtReconstructionException;
@@ -31,10 +43,8 @@ import org.forgerock.json.jose.jwt.JwtClaimsSet;
 import org.forgerock.openam.utils.StringUtils;
 import org.forgerock.util.Reject;
 
-import java.util.List;
-import java.util.Set;
-
-import static org.forgerock.openam.authentication.modules.oidc.OpenIdConnectConfig.*;
+import com.sun.identity.authentication.spi.AuthLoginException;
+import com.sun.identity.shared.debug.Debug;
 
 /**
  * The logic required to validate the integrity of an OIDC ID token JWT.

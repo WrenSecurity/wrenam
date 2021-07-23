@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014-2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 package org.forgerock.openam.cts.worker;
 
@@ -50,7 +51,7 @@ public class CTSWorkerManagerTest {
         mockExecutorServiceFactory = mock(AMExecutorServiceFactory.class);
         CTSWorkerTaskProvider mockTaskProvider = mock(CTSWorkerTaskProvider.class);
         given(mockTaskProvider.getTasks()).willReturn(Collections.singletonList(mock(CTSWorkerTask.class)));
-        given(mockExecutorServiceFactory.createScheduledService(anyInt(), anyString()))
+        given(mockExecutorServiceFactory.createScheduledService(anyInt(), any()))
                 .willReturn(mock(ScheduledExecutorService.class));
         given(mockCoreTokenConfig.getRunPeriod()).willReturn(RUN_PERIOD);
 
@@ -66,7 +67,7 @@ public class CTSWorkerManagerTest {
     public void shouldUseMonitorToStartReaper() {
         ctsWorkerManager.startTasks();
         verify(mockMonitor).watchScheduledThread(
-                any(ScheduledExecutorService.class),
+                any(),
                 any(Runnable.class),
                 anyLong(),
                 anyLong(),
@@ -91,7 +92,7 @@ public class CTSWorkerManagerTest {
         ctsWorkerManager.startTasks();
 
         verify(mockMonitor, times(2)).watchScheduledThread(
-                any(ScheduledExecutorService.class),
+                any(),
                 any(Runnable.class),
                 anyLong(),
                 anyLong(),

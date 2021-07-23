@@ -12,24 +12,27 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 package org.forgerock.openam.selfservice;
 
+import java.security.KeyPair;
+
+import javax.crypto.SecretKey;
+import javax.inject.Inject;
+
+import org.forgerock.guava.common.base.Optional;
 import org.forgerock.json.jose.jwe.EncryptionMethod;
 import org.forgerock.json.jose.jwe.JweAlgorithm;
 import org.forgerock.json.jose.jws.JwsAlgorithm;
 import org.forgerock.json.jose.jws.SigningManager;
 import org.forgerock.json.jose.jws.handlers.SigningHandler;
+import org.forgerock.json.jose.tokenhandler.JwtTokenHandler;
 import org.forgerock.openam.utils.AMKeyProvider;
 import org.forgerock.selfservice.core.config.StageConfigException;
 import org.forgerock.selfservice.core.snapshot.SnapshotTokenConfig;
-import org.forgerock.selfservice.core.snapshot.SnapshotTokenHandler;
 import org.forgerock.selfservice.core.snapshot.SnapshotTokenHandlerFactory;
-import org.forgerock.selfservice.stages.tokenhandlers.JwtTokenHandler;
-
-import javax.crypto.SecretKey;
-import javax.inject.Inject;
-import java.security.KeyPair;
+import org.forgerock.tokenhandler.TokenHandler;
 
 /**
  * Factory for providing snapshot token handlers.
@@ -50,7 +53,7 @@ final class JwtSnapshotTokenHandlerFactory implements SnapshotTokenHandlerFactor
     }
 
     @Override
-    public SnapshotTokenHandler get(SnapshotTokenConfig config) {
+    public TokenHandler get(SnapshotTokenConfig config) {
         if (config.getType().equals(KeyStoreJwtTokenConfig.TYPE)) {
             return configureJwtTokenHandler((KeyStoreJwtTokenConfig) config);
         }
@@ -58,7 +61,7 @@ final class JwtSnapshotTokenHandlerFactory implements SnapshotTokenHandlerFactor
         throw new StageConfigException("Unknown token type " + config.getType());
     }
 
-    private SnapshotTokenHandler configureJwtTokenHandler(KeyStoreJwtTokenConfig config) {
+    private TokenHandler configureJwtTokenHandler(KeyStoreJwtTokenConfig config) {
         KeyPair encryptionKeyPair = keyProvider.getKeyPair(config.getEncryptionKeyPairAlias());
 
         if (encryptionKeyPair == null) {
@@ -82,7 +85,7 @@ final class JwtSnapshotTokenHandlerFactory implements SnapshotTokenHandlerFactor
                 encryptionKeyPair,
                 DEFAULT_SIGNING_ALGORITHM,
                 signingHandler,
-                config.getTokenLifeTimeInSeconds());
+                Optional.of(config.getTokenLifeTimeInSeconds()));
     }
 
 }

@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 
 package org.forgerock.openam.blacklist;
@@ -39,8 +40,10 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import org.wrensecurity.wrenam.test.AbstractMockBasedTest;
 
-public class CTSBlacklistTest {
+public class CTSBlacklistTest extends AbstractMockBasedTest {
+
     private static final String SID = "session123";
     private static final long PURGE_DELAY = 1000L;
     private static final long POLL_INTERVAL = 1000L;
@@ -67,7 +70,6 @@ public class CTSBlacklistTest {
 
     @BeforeMethod
     public void setup() throws Exception {
-        MockitoAnnotations.initMocks(this);
         given(mockServerConfig.getAMServerID()).willReturn("testServer1");
         testBlacklist = new CTSBlacklist<>(mockCts, TokenType.SESSION_BLACKLIST, mockScheduler, mockThreadMonitor,
                 mockServerConfig, PURGE_DELAY, POLL_INTERVAL);

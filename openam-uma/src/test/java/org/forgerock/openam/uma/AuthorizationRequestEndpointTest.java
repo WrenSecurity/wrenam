@@ -12,23 +12,29 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 
 package org.forgerock.openam.uma;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.forgerock.json.JsonValue.*;
+import static org.forgerock.json.JsonValue.field;
+import static org.forgerock.json.JsonValue.json;
+import static org.forgerock.json.JsonValue.object;
 import static org.forgerock.json.test.assertj.AssertJJsonValueAssert.assertThat;
 import static org.forgerock.openam.utils.Time.currentTimeMillis;
-import static org.mockito.BDDMockito.*;
-import static org.mockito.BDDMockito.eq;
-import static org.mockito.Matchers.anyBoolean;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.ArgumentMatchers.anyMap;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 
-import javax.security.auth.Subject;
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -37,10 +43,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.identity.entitlement.Entitlement;
-import com.sun.identity.entitlement.Evaluator;
-import com.sun.identity.idm.AMIdentity;
+import javax.security.auth.Subject;
+import javax.servlet.http.HttpServletRequest;
+
 import org.forgerock.json.JsonValue;
 import org.forgerock.oauth2.core.AccessToken;
 import org.forgerock.oauth2.core.OAuth2ProviderSettings;
@@ -71,6 +76,11 @@ import org.restlet.Response;
 import org.restlet.ext.json.JsonRepresentation;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sun.identity.entitlement.Entitlement;
+import com.sun.identity.entitlement.Evaluator;
+import com.sun.identity.idm.AMIdentity;
 
 public class AuthorizationRequestEndpointTest {
 
@@ -145,7 +155,7 @@ public class AuthorizationRequestEndpointTest {
         accessToken = mock(AccessToken.class);
 
         oauth2TokenStore = mock(TokenStore.class);
-        given(oauth2TokenStore.readAccessToken(Matchers.<OAuth2Request>anyObject(), anyString())).willReturn(accessToken);
+        given(oauth2TokenStore.readAccessToken(any(), any())).willReturn(accessToken);
         given(accessToken.getClientId()).willReturn(RS_CLIENT_ID);
         given(accessToken.getResourceOwnerId()).willReturn(REQUESTING_PARTY_ID);
 
@@ -159,8 +169,8 @@ public class AuthorizationRequestEndpointTest {
         given(permissionTicket.getResourceSetId()).willReturn(RS_ID);
         given(permissionTicket.getResourceServerClientId()).willReturn(RS_CLIENT_ID);
         given(permissionTicket.getRealm()).willReturn("REALM");
-        given(umaTokenStore.readPermissionTicket(anyString())).willReturn(permissionTicket);
-        given(umaTokenStore.createRPT(Matchers.<PermissionTicket>anyObject())).willReturn(rpt);
+        given(umaTokenStore.readPermissionTicket(any())).willReturn(permissionTicket);
+        given(umaTokenStore.createRPT(any())).willReturn(rpt);
 
         resourceSetStore = mock(ResourceSetStore.class);
         ResourceSetDescription resourceSet = new ResourceSetDescription();
@@ -175,7 +185,7 @@ public class AuthorizationRequestEndpointTest {
         given(umaProviderSettings.getUmaTokenStore()).willReturn(umaTokenStore);
 
         umaProviderSettingsFactory = mock(UmaProviderSettingsFactory.class);
-        given(umaProviderSettingsFactory.get(Matchers.<Request>anyObject())).willReturn(umaProviderSettings);
+        given(umaProviderSettingsFactory.get(any(Request.class))).willReturn(umaProviderSettings);
         given(umaProviderSettings.getUmaTokenStore()).willReturn(umaTokenStore);
 
         OAuth2ProviderSettingsFactory oauth2ProviderSettingsFactory = mock(OAuth2ProviderSettingsFactory.class);
@@ -224,8 +234,8 @@ public class AuthorizationRequestEndpointTest {
         ArrayList<Entitlement> entitlements = new ArrayList<Entitlement>();
         entitlements.add(createEntitlement("Read"));
 
-        given(policyEvaluator.evaluate(anyString(), Matchers.<Subject>anyObject(), eq(RESOURCE_NAME), Matchers.<Map<String,
-                Set<String>>>anyObject(), anyBoolean())).willReturn(entitlements);
+        given(policyEvaluator.evaluate(any(), any(), eq(RESOURCE_NAME), any(), anyBoolean()))
+                .willReturn(entitlements);
 
         Set<String> requestedScopes = new HashSet<String>();
         requestedScopes.add("Read");
@@ -239,7 +249,7 @@ public class AuthorizationRequestEndpointTest {
             InOrder inOrder = inOrder(requestAuthorizationFilter, policyEvaluator, requestAuthorizationFilter);
             inOrder.verify(requestAuthorizationFilter).beforeAuthorization(eq(permissionTicket), any(Subject.class),
                     any(Subject.class));
-            inOrder.verify(policyEvaluator).evaluate(anyString(), any(Subject.class), anyString(), anyMap(), eq(false));
+            inOrder.verify(policyEvaluator).evaluate(any(), any(Subject.class), any(), any(), eq(false));
             inOrder.verify(requestAuthorizationFilter).afterFailedAuthorization(eq(permissionTicket),
                     any(Subject.class), any(Subject.class));
             assertThat(e.getStatusCode()).isEqualTo(403);
@@ -254,8 +264,8 @@ public class AuthorizationRequestEndpointTest {
         ArrayList<Entitlement> entitlements = new ArrayList<Entitlement>();
         entitlements.add(createEntitlement("Read"));
 
-        given(policyEvaluator.evaluate(anyString(), Matchers.<Subject>anyObject(), eq(RESOURCE_NAME), Matchers.<Map<String,
-                Set<String>>>anyObject(), anyBoolean())).willReturn(entitlements);
+        given(policyEvaluator.evaluate(anyString(), any(), eq(RESOURCE_NAME), any(), anyBoolean()))
+				.willReturn(entitlements);
 
         Set<String> requestedScopes = new HashSet<String>();
         requestedScopes.add("Write");
@@ -268,7 +278,7 @@ public class AuthorizationRequestEndpointTest {
             InOrder inOrder = inOrder(requestAuthorizationFilter, policyEvaluator, requestAuthorizationFilter);
             inOrder.verify(requestAuthorizationFilter).beforeAuthorization(eq(permissionTicket), any(Subject.class),
                     any(Subject.class));
-            inOrder.verify(policyEvaluator).evaluate(anyString(), any(Subject.class), anyString(), anyMap(), eq(false));
+            inOrder.verify(policyEvaluator).evaluate(any(), any(Subject.class), any(), any(), eq(false));
             inOrder.verify(requestAuthorizationFilter).afterFailedAuthorization(eq(permissionTicket),
                     any(Subject.class), any(Subject.class));
             assertThat(e.getStatusCode()).isEqualTo(403);
@@ -283,8 +293,8 @@ public class AuthorizationRequestEndpointTest {
         ArrayList<Entitlement> entitlements = new ArrayList<Entitlement>();
         entitlements.add(createEntitlement("Read"));
 
-        given(policyEvaluator.evaluate(anyString(), Matchers.<Subject>anyObject(), eq(RESOURCE_NAME), Matchers.<Map<String,
-                Set<String>>>anyObject(), anyBoolean())).willReturn(entitlements);
+        given(policyEvaluator.evaluate(anyString(), any(), eq(RESOURCE_NAME), any(), anyBoolean()))
+				.willReturn(entitlements);
 
         Set<String> requestedScopes = new HashSet<String>();
         requestedScopes.add("Read");
@@ -295,7 +305,7 @@ public class AuthorizationRequestEndpointTest {
         InOrder inOrder = inOrder(requestAuthorizationFilter, policyEvaluator, requestAuthorizationFilter);
         inOrder.verify(requestAuthorizationFilter).beforeAuthorization(eq(permissionTicket), any(Subject.class),
                 any(Subject.class));
-        inOrder.verify(policyEvaluator).evaluate(anyString(), any(Subject.class), anyString(), anyMap(), eq(false));
+        inOrder.verify(policyEvaluator).evaluate(any(), any(Subject.class), any(), any(), eq(false));
         inOrder.verify(requestAuthorizationFilter).afterSuccessfulAuthorization(eq(permissionTicket),
                 any(Subject.class), any(Subject.class));
     }
@@ -307,8 +317,8 @@ public class AuthorizationRequestEndpointTest {
         entitlements.add(createEntitlement("Read"));
         entitlements.add(createEntitlement("Create"));
 
-        given(policyEvaluator.evaluate(anyString(), Matchers.<Subject>anyObject(), eq(RESOURCE_NAME), Matchers.<Map<String,
-                Set<String>>>anyObject(), anyBoolean())).willReturn(entitlements);
+        given(policyEvaluator.evaluate(any(), any(), eq(RESOURCE_NAME), any(), anyBoolean()))
+				.willReturn(entitlements);
 
         Set<String> requestedScopes = new HashSet<String>();
         requestedScopes.add("Read");
@@ -319,7 +329,7 @@ public class AuthorizationRequestEndpointTest {
         InOrder inOrder = inOrder(requestAuthorizationFilter, policyEvaluator, requestAuthorizationFilter);
         inOrder.verify(requestAuthorizationFilter).beforeAuthorization(eq(permissionTicket), any(Subject.class),
                 any(Subject.class));
-        inOrder.verify(policyEvaluator).evaluate(anyString(), any(Subject.class), anyString(), anyMap(), eq(false));
+        inOrder.verify(policyEvaluator).evaluate(any(), any(Subject.class), any(), any(), eq(false));
         inOrder.verify(requestAuthorizationFilter).afterSuccessfulAuthorization(eq(permissionTicket),
                 any(Subject.class), any(Subject.class));
     }
@@ -358,8 +368,8 @@ public class AuthorizationRequestEndpointTest {
         ArrayList<Entitlement> entitlements = new ArrayList<>();
         entitlements.add(createEntitlement("Read"));
 
-        given(policyEvaluator.evaluate(anyString(), Matchers.<Subject>anyObject(), eq(RESOURCE_NAME),
-                Matchers.<Map<String, Set<String>>>anyObject(), anyBoolean())).willReturn(entitlements);
+        given(policyEvaluator.evaluate(anyString(), any(), eq(RESOURCE_NAME), any(), anyBoolean()))
+				.willReturn(entitlements);
 
         Set<String> requestedScopes = new HashSet<>();
         requestedScopes.add("Read");
@@ -386,8 +396,8 @@ public class AuthorizationRequestEndpointTest {
         ArrayList<Entitlement> entitlements = new ArrayList<>();
         entitlements.add(createEntitlement("Read"));
 
-        given(policyEvaluator.evaluate(anyString(), Matchers.<Subject>anyObject(), eq(RESOURCE_NAME),
-                Matchers.<Map<String, Set<String>>>anyObject(), anyBoolean())).willReturn(entitlements);
+        given(policyEvaluator.evaluate(anyString(), any(), eq(RESOURCE_NAME), any(), anyBoolean()))
+				.willReturn(entitlements);
 
         Set<String> requestedScopes = new HashSet<>();
         requestedScopes.add("Read");
@@ -434,8 +444,8 @@ public class AuthorizationRequestEndpointTest {
         //Given
         ArrayList<Entitlement> entitlements = new ArrayList<>();
 
-        given(policyEvaluator.evaluate(anyString(), Matchers.<Subject>anyObject(), eq(RESOURCE_NAME), Matchers.<Map<String,
-                Set<String>>>anyObject(), anyBoolean())).willReturn(entitlements);
+        given(policyEvaluator.evaluate(any(), any(), eq(RESOURCE_NAME), any(), anyBoolean()))
+        		.willReturn(entitlements);
 
         Set<String> requestedScopes = new HashSet<>();
         requestedScopes.add("Read");
@@ -451,10 +461,10 @@ public class AuthorizationRequestEndpointTest {
         try {
             endpoint.requestAuthorization(entity);
         } catch (UmaException e) {
-            verify(pendingRequestsService).createPendingRequest(any(HttpServletRequest.class), eq("RESOURCE_SET_ID"),
-                    anyString(), anyString(), anyString(), eq("REALM"), eq(requestedScopes));
+            verify(pendingRequestsService).createPendingRequest(any(), eq("RESOURCE_SET_ID"),
+                    any(), any(), any(), eq("REALM"), eq(requestedScopes));
             verify(umaAuditLogger).log(eq("RESOURCE_SET_ID"), any(AMIdentity.class), eq(UmaAuditType.REQUEST_SUBMITTED),
-                    any(Request.class), anyString());
+                    any(Request.class), any());
             assertThat(e.getStatusCode()).isEqualTo(403);
             assertThat(e.getError()).isEqualTo("request_submitted");
             throw e;
@@ -466,8 +476,8 @@ public class AuthorizationRequestEndpointTest {
         //Given
         ArrayList<Entitlement> entitlements = new ArrayList<>();
 
-        given(policyEvaluator.evaluate(anyString(), Matchers.<Subject>anyObject(), eq(RESOURCE_NAME), Matchers.<Map<String,
-                Set<String>>>anyObject(), anyBoolean())).willReturn(entitlements);
+        given(policyEvaluator.evaluate(any(), any(), eq(RESOURCE_NAME), any(), anyBoolean()))
+				.willReturn(entitlements);
 
         Set<String> requestedScopes = new HashSet<>();
         requestedScopes.add("Read");
@@ -483,10 +493,10 @@ public class AuthorizationRequestEndpointTest {
         try {
             endpoint.requestAuthorization(entity);
         } catch (UmaException e) {
-            verify(pendingRequestsService).createPendingRequest(any(HttpServletRequest.class), eq("RESOURCE_SET_ID"),
-                    anyString(), anyString(), anyString(), eq("REALM"), eq(requestedScopes));
+            verify(pendingRequestsService).createPendingRequest(any(), eq("RESOURCE_SET_ID"),
+                    any(), any(), any(), eq("REALM"), eq(requestedScopes));
             verify(umaAuditLogger).log(eq("RESOURCE_SET_ID"), any(AMIdentity.class), eq(UmaAuditType.REQUEST_SUBMITTED),
-                    any(Request.class), anyString());
+                    any(Request.class), any());
             assertThat(e.getStatusCode()).isEqualTo(403);
             assertThat(e.getError()).isEqualTo("request_submitted");
             throw e;
@@ -498,8 +508,8 @@ public class AuthorizationRequestEndpointTest {
         //Given
         ArrayList<Entitlement> entitlements = new ArrayList<>();
 
-        given(policyEvaluator.evaluate(anyString(), Matchers.<Subject>anyObject(), eq(RESOURCE_NAME), Matchers.<Map<String,
-                Set<String>>>anyObject(), anyBoolean())).willReturn(entitlements);
+        given(policyEvaluator.evaluate(anyString(), any(), eq(RESOURCE_NAME), any(), anyBoolean()))
+				.willReturn(entitlements);
 
         Set<String> requestedScopes = new HashSet<>();
         requestedScopes.add("Read");

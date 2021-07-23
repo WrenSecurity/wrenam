@@ -12,12 +12,21 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014-2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 
 package org.forgerock.openam.upgrade.steps;
 
-import static org.fest.assertions.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.atMost;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.security.PrivilegedAction;
 import java.util.Arrays;
@@ -30,7 +39,6 @@ import java.util.Set;
 
 import javax.security.auth.Subject;
 
-import com.sun.identity.entitlement.EntitlementCombiner;
 import org.forgerock.openam.entitlement.configuration.ResourceTypeConfiguration;
 import org.forgerock.openam.entitlement.service.ApplicationService;
 import org.forgerock.openam.entitlement.service.ApplicationServiceFactory;
@@ -45,6 +53,7 @@ import com.iplanet.sso.SSOToken;
 import com.sun.identity.entitlement.Application;
 import com.sun.identity.entitlement.ApplicationType;
 import com.sun.identity.entitlement.DenyOverride;
+import com.sun.identity.entitlement.EntitlementCombiner;
 import com.sun.identity.entitlement.EntitlementConfiguration;
 import com.sun.identity.entitlement.EntitlementException;
 import com.sun.identity.entitlement.ResourceMatch;
@@ -111,7 +120,7 @@ public class UpgradeEntitlementSubConfigsStepTest {
         resourceTypeConfiguration = mock(ResourceTypeConfiguration.class);
         applicationServiceFactory = mock(ApplicationServiceFactory.class);
         applicationService = mock(ApplicationService.class);
-        when(applicationServiceFactory.create(any(Subject.class), anyString())).thenReturn(applicationService);
+        when(applicationServiceFactory.create(any(), any())).thenReturn(applicationService);
         upgradeStep = new SafeUpgradeEntitlementSubConfigsStep(entitlementService, resourceTypeConfiguration,
                 adminTokenAction, connectionFactory, applicationServiceFactory);
 
@@ -271,10 +280,10 @@ public class UpgradeEntitlementSubConfigsStepTest {
     }
 
     // Used to match the application as defined in the test xml.
-    private static final class ApplicationMatch extends ArgumentMatcher<Application> {
+    private static final class ApplicationMatch implements ArgumentMatcher<Application> {
 
         @Override
-        public boolean matches(Object argument) {
+        public boolean matches(Application argument) {
             boolean matches = true;
             final Application application = (Application)argument;
             matches &= "application4".equals(application.getName());
@@ -290,10 +299,10 @@ public class UpgradeEntitlementSubConfigsStepTest {
     }
 
     // Used to match an application type as defined in the test xml.
-    private static final class TypeMatch extends ArgumentMatcher<ApplicationType> {
+    private static final class TypeMatch implements ArgumentMatcher<ApplicationType> {
 
         @Override
-        public boolean matches(Object argument) {
+        public boolean matches(ApplicationType argument) {
             boolean matches = true;
             final ApplicationType type = (ApplicationType)argument;
             matches &= "type4".equals(type.getName());

@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 
 package org.forgerock.openam.session.service.access.persistence.caching;
@@ -42,13 +43,15 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import org.wrensecurity.wrenam.test.AbstractMockBasedTest;
 
 import com.iplanet.dpro.session.SessionID;
 import com.iplanet.dpro.session.service.InternalSession;
 import com.iplanet.dpro.session.service.SessionServiceConfig;
 import com.sun.identity.shared.debug.Debug;
 
-public class InMemoryInternalSessionCacheStepTest {
+public class InMemoryInternalSessionCacheStepTest extends AbstractMockBasedTest {
+
     private static final int MAX_SESSIONS = 42;
     private static final SessionID SESSION_ID = new SessionID("test");
 
@@ -72,7 +75,6 @@ public class InMemoryInternalSessionCacheStepTest {
 
     @BeforeMethod
     public void createTestCache() throws Exception {
-        MockitoAnnotations.initMocks(this);
         given(mockSessionConfig.getMaxSessionCacheSize()).willReturn(MAX_SESSIONS);
         given(mockSession.getID()).willReturn(SESSION_ID);
 

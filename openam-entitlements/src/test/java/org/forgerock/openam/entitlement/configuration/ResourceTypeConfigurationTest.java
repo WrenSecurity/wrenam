@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 
 package org.forgerock.openam.entitlement.configuration;
@@ -79,7 +80,7 @@ public class ResourceTypeConfigurationTest {
         Map<String, Set<String>> attributes = new HashMap<>();
         attributes.put("name", names);
         when(subSubServiceConfig.getAttributes()).thenReturn(attributes);
-        when(resourceTypeServiceConfig.getOrgConfig(any(Subject.class), anyString())).thenReturn(serviceConfig);
+        when(resourceTypeServiceConfig.getOrgConfig(any(), anyString())).thenReturn(serviceConfig);
     }
 
 }

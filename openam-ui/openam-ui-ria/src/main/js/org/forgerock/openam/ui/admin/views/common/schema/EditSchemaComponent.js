@@ -42,7 +42,6 @@ define([
 ], ($, _, Backbone, Messages, AbstractView, EventManager, ReactAdapterView, Router, Constants, UIUtils, FormHelper,
     TabSearch, SubSchemaListComponent, ScriptsList, PanelComponent, PartialBasedView, TabComponent, JSONSchema,
     JSONValues, Promise, FlatJSONSchemaView) => {
-
     ScriptsList = ScriptsList.default;
 
     const PSEUDO_TAB = { id: _.uniqueId("pseudo_tab_"), title: $.t("console.common.configuration") };
@@ -251,5 +250,4 @@ define([
             });
         }
     });
-
 });

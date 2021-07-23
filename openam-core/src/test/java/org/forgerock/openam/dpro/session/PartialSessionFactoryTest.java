@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 
 package org.forgerock.openam.dpro.session;
@@ -30,10 +31,11 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import org.wrensecurity.wrenam.test.AbstractMockBasedTest;
 
 import com.sun.identity.shared.debug.Debug;
 
-public class PartialSessionFactoryTest {
+public class PartialSessionFactoryTest extends AbstractMockBasedTest {
 
     private static final String UNIVERSAL_ID = "id=demo,ou=user,dc=openam,dc=forgerock,dc=org";
     private static final String USERNAME = "demo";
@@ -51,7 +53,6 @@ public class PartialSessionFactoryTest {
 
     @BeforeMethod
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
         factory = new PartialSessionFactory(debug, identityUtils, dnWrapper);
     }
 

@@ -34,11 +34,10 @@ define([
     "selectize"
 ], function ($, _, AbstractView, Backgrid, BackgridUtils, BootstrapDialog, Constants, EventManager, ShareCounter,
              UMAPolicy, UMAPolicyPermission, UMAPolicyPermissionScope, UMAResourceSetWithPolicy, RealmHelper) {
-
     var CommonShare,
         realmRegex = /[?&]realm=/,
-        resourcesetsRegex = /\/json\/users\/[^\/]+\/uma\/policies/,
-        policyRegex = /\/json\/users\/[^\/]+\/oauth2\/resourcesets/;
+        resourcesetsRegex = /\/json\/users\/[^/]+\/uma\/policies/,
+        policyRegex = /\/json\/users\/[^/]+\/oauth2\/resourcesets/;
 
     $.ajaxPrefilter(function (options) {
         if ((resourcesetsRegex.test(options.url) || policyRegex.test(options.url)) && !realmRegex.test(options.url) &&

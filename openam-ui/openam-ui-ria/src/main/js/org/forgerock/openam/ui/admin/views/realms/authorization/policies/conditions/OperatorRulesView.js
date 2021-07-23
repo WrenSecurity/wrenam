@@ -14,7 +14,6 @@
  * Portions copyright 2014-2016 ForgeRock AS.
  */
 
-
 define([
     "jquery",
     "lodash",
@@ -109,7 +108,6 @@ define([
                     var isDisabled = !!(obj.config.properties.condition || obj.config.properties.subject);
                     option.prop("disabled", isDisabled);
                 });
-
             } else {
                 select.children().prop("disabled", false);
             }

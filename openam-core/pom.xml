@@ -28,7 +28,6 @@
     <name>OpenAM Core</name>
     <description>OpenAM Core Components</description>
     <artifactId>openam-core</artifactId>
-    <packaging>jar</packaging>
 
     <!-- Build -->
     <build>
@@ -276,7 +275,7 @@
         </dependency>
 
         <dependency>
-            <groupId>external</groupId>
+            <groupId>com.sun.xml.rpc</groupId>
             <artifactId>jaxrpc-impl</artifactId>
         </dependency>
 
@@ -358,7 +357,7 @@
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
+            <artifactId>mockito-core</artifactId>
         </dependency>
         <dependency>
              <groupId>org.easytesting</groupId>
@@ -366,7 +365,7 @@
          </dependency>
         <dependency>
             <groupId>org.powermock</groupId>
-            <artifactId>powermock-api-mockito</artifactId>
+            <artifactId>powermock-api-mockito2</artifactId>
         </dependency>
         <dependency>
             <groupId>org.powermock</groupId>
@@ -395,7 +394,6 @@
         <dependency>
             <groupId>org.forgerock.openam</groupId>
             <artifactId>openam-i18n</artifactId>
-            <version>14.0.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>

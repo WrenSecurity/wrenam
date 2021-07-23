@@ -13,6 +13,7 @@
  *
  * Copyright 2014-2016 ForgeRock AS.
  * Portions Copyrighted 2015 Nomura Research Institute, Ltd.
+ * Portions Copyright 2021 Wren Security.
  */
 
 package org.forgerock.openam.oauth2;
@@ -20,13 +21,16 @@ package org.forgerock.openam.oauth2;
 import static java.util.Collections.singleton;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.entry;
-import static org.forgerock.openam.oauth2.OAuth2Constants.OAuth2Client.*;
+import static org.forgerock.openam.oauth2.OAuth2Constants.OAuth2Client.DEFAULT_SCOPES;
+import static org.forgerock.openam.oauth2.OAuth2Constants.OAuth2Client.DESCRIPTION;
+import static org.forgerock.openam.oauth2.OAuth2Constants.OAuth2Client.NAME;
 import static org.forgerock.openam.utils.CollectionUtils.asList;
 import static org.forgerock.openam.utils.CollectionUtils.asSet;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.lang.annotation.Annotation;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
@@ -43,24 +47,27 @@ import java.util.Set;
 
 import javax.crypto.spec.SecretKeySpec;
 
+import org.forgerock.guice.core.GuiceModuleLoader;
+import org.forgerock.guice.core.InjectorConfiguration;
 import org.forgerock.jaspi.modules.openid.resolvers.service.OpenIdResolverService;
 import org.forgerock.json.jose.jwe.JweAlgorithm;
 import org.forgerock.oauth2.core.OAuth2ProviderSettings;
 import org.forgerock.oauth2.core.PEMDecoder;
 import org.forgerock.oauth2.core.exceptions.ClientAuthenticationFailureFactory;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import org.wrensecurity.wrenam.test.AbstractMockBasedTest;
 
+import com.google.inject.Module;
 import com.iplanet.sso.SSOException;
 import com.sun.identity.idm.AMIdentity;
 import com.sun.identity.idm.IdRepoException;
 import com.sun.identity.shared.encode.Base64;
 
-public class OpenAMClientRegistrationTest {
+public class OpenAMClientRegistrationTest extends AbstractMockBasedTest {
 
     private static final String REDIRECT_URI = "http://redirection.uri";
     private static final String POST_LOGOUT_URI = "http://post.logout.uri";
@@ -84,9 +91,21 @@ public class OpenAMClientRegistrationTest {
         publicEncryptionKey = keyPairGenerator.generateKeyPair().getPublic();
     }
 
+    // Make sure Guice is not eagerly loading everything on class-path when InjectionHolder
+    // is called from OAuthProblemException's instance initializer.
+    // XXX This should be in the parent class or maybe the guice test should be done in a different way?
+    @BeforeClass
+    public static void setupGuice() throws Exception {
+        InjectorConfiguration.setGuiceModuleLoader(new GuiceModuleLoader() {
+            @Override
+            public Set<Class<? extends Module>> getGuiceModules(Class<? extends Annotation> clazz) {
+                return new HashSet<>();
+            }
+        });
+    }
+
     @BeforeMethod
     public void setup() throws Exception {
-        MockitoAnnotations.initMocks(this);
         ClientAuthenticationFailureFactory failureFactory = mock(ClientAuthenticationFailureFactory.class);
         clientRegistration = new OpenAMClientRegistration(amIdentity, new PEMDecoder(), resolver, providerSettings,
                 failureFactory);

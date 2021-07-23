@@ -21,7 +21,6 @@ define([
     "org/forgerock/commons/ui/common/main/EventManager",
     "org/forgerock/commons/ui/common/util/Constants"
 ], function ($, _, Messages, EventManager, Constants) {
-
     /**
      * @exports org/forgerock/openam/ui/admin/utils/ModelUtils
      */

@@ -64,7 +64,6 @@ require([
     "ThemeManager",
     "Router"
 ], function ($, _, HandleBars, OAuth2ConsentPageHelper, Configuration, Constants, i18nManager, ThemeManager, Router) {
-
     // Helpers for the code that hasn't been properly migrated to require these as explicit dependencies:
     window.$ = $;
     window._ = _;
@@ -128,7 +127,6 @@ require([
         };
 
         ThemeManager.getTheme().always(function (theme) {
-
             // add prefix to templates for custom theme when path is defined
             var themePath = Configuration.globalData.theme.path;
             templatePaths = _.map(templatePaths, function (templatePath) {

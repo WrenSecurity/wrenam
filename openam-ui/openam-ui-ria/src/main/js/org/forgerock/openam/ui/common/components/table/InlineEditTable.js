@@ -21,7 +21,6 @@ define([
     "org/forgerock/commons/ui/common/util/UIUtils",
     "org/forgerock/openam/ui/common/components/table/InlineEditRow"
 ], ($, _, Backbone, UIUtils, EditRow) => {
-
     const defaultKeyValueSchema = {
         required: ["key"],
         properties: {

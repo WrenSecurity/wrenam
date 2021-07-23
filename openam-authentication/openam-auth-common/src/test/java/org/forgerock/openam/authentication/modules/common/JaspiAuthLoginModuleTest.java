@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2013-2016 ForgeRock AS.
+ * Portions Copyright 2017-2021 Wren Security.
  */
 
 package org.forgerock.openam.authentication.modules.common;
@@ -77,6 +78,7 @@ public class JaspiAuthLoginModuleTest {
         };
 
         AMLoginModuleBinder amLoginModuleBinder = mock(AMLoginModuleBinder.class);
+        when(amLoginModuleBinder.getCallbackHandler()).thenReturn(mock(CallbackHandler.class));
 
         jaspiAuthLoginModule.setAMLoginModule(amLoginModuleBinder);
 

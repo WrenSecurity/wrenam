@@ -14,7 +14,6 @@
  * Copyright 2015-2016 ForgeRock AS.
  */
 
-
 define([
     "jquery",
     "lodash",
@@ -38,9 +37,9 @@ define([
                         id: application._id,
                         name: application.name,
                         scopes: _.values(application.scopes).join(", "),
-                        expiryDateTime: (!application.expiryDateTime)
-                            ? $.t("openam.oAuth2.tokens.neverExpires")
-                            : new Date(application.expiryDateTime).toLocaleString()
+                        expiryDateTime: application.expiryDateTime
+                            ? new Date(application.expiryDateTime).toLocaleString()
+                            : $.t("openam.oAuth2.tokens.neverExpires")
                     };
                 });
                 self.parentRender(function () {

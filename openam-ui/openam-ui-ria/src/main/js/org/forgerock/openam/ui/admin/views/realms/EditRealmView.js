@@ -39,7 +39,6 @@ define([
 ], ($, _, Handlebars, Messages, AbstractView, EventManager, Router, Constants, RealmsService,
     GlobalAuthenticationService, RealmAuthenticationService, FormHelper, Backlink, JSONSchema, JSONValues,
     FlatJSONSchemaView, Promise) => {
-
     function setAutofocus () {
         $("input[type=\"text\"]:not(:disabled):first").prop("autofocus", true);
     }
@@ -215,7 +214,6 @@ define([
                     } else {
                         EventManager.sendEvent(Constants.EVENT_DISPLAY_MESSAGE_REQUEST, "changesSaved");
                     }
-
                 }, failCallback);
             }, failCallback).always(() => {
                 this.toggleSubmitButton(true);
@@ -245,7 +243,7 @@ define([
         },
 
         canRealmBeDeleted (realmPath) {
-            return realmPath === "/" ? false : true;
+            return realmPath !== "/";
         },
 
         toggleSubmitButton (flag) {

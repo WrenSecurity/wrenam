@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 
 package org.forgerock.openam.session.service.access;
@@ -22,6 +23,14 @@ import static org.mockito.BDDMockito.given;
 
 import java.util.Arrays;
 
+import org.forgerock.openam.cts.exceptions.CoreTokenException;
+import org.forgerock.openam.session.authorisation.SessionChangeAuthorizer;
+import org.forgerock.openam.session.service.access.persistence.SessionPersistenceStore;
+import org.mockito.Mock;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+import org.wrensecurity.wrenam.test.AbstractMockBasedTest;
+
 import com.iplanet.dpro.session.Session;
 import com.iplanet.dpro.session.SessionException;
 import com.iplanet.dpro.session.SessionID;
@@ -31,15 +40,8 @@ import com.iplanet.dpro.session.share.SessionInfo;
 import com.iplanet.sso.SSOException;
 import com.sun.identity.common.SearchResults;
 import com.sun.identity.shared.debug.Debug;
-import org.forgerock.openam.cts.exceptions.CoreTokenException;
-import org.forgerock.openam.session.authorisation.SessionChangeAuthorizer;
-import org.forgerock.openam.session.service.access.persistence.SessionPersistenceStore;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 
-public class SessionQueryManagerTest {
+public class SessionQueryManagerTest extends AbstractMockBasedTest {
 
     @Mock
     private Debug debug;
@@ -61,7 +63,6 @@ public class SessionQueryManagerTest {
 
     @BeforeMethod
     public void setup() throws SessionException {
-        MockitoAnnotations.initMocks(this);
         given(actingSession.getState(false)).willReturn(VALID);
         sessionQueryManager = new SessionQueryManager(debug, sessionPersistenceStore,
                 sessionChangeAuthorizer, serviceConfig);

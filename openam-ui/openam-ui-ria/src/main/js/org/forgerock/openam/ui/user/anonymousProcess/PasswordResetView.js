@@ -20,7 +20,6 @@ define([
     "org/forgerock/openam/ui/user/anonymousProcess/AnonymousProcessView",
     "org/forgerock/commons/ui/user/anonymousProcess/PasswordResetView"
 ], function (_, Constants, AnonymousProcessView, PasswordResetView) {
-
     function AMPasswordResetView () { }
 
     AMPasswordResetView.prototype = PasswordResetView;

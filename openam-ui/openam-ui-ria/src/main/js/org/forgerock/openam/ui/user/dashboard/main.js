@@ -14,7 +14,6 @@
  * Copyright 2011-2016 ForgeRock AS.
  */
 
-
 define("org/forgerock/openam/ui/user/dashboard/main", [
     "./services/DeviceManagementService",
     "./services/MyApplicationsService",

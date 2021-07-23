@@ -1,7 +1,11 @@
 target/
 dependency-reduced-pom.xml
 openam-ui/openam-ui-ria/npm-debug.log.*
+test-output/
 
 # Editor generated files
 *.iml
 .idea/
+.project
+.settings
+.classpath

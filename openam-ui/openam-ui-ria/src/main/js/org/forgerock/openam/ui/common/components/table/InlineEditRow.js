@@ -23,7 +23,6 @@ define([
     "org/forgerock/commons/ui/common/util/Constants",
     "org/forgerock/commons/ui/common/util/UIUtils"
 ], ($, _, Backbone, EventManager, ValidatorsManager, Constants, UIUtils) => {
-
     const READ_ONLY_TEMPLATE = "templates/common/components/table/ReadOnlyRow.html";
     const EDIT_ROW_TEMPLATE = "templates/common/components/table/EditRow.html";
     const NEW_ROW_TEMPLATE = "templates/common/components/table/NewRow.html";

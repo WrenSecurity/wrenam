@@ -32,9 +32,11 @@
 
     <!-- Build -->
     <build>
+        <sourceDirectory>target/generated-sources/mib</sourceDirectory>
         <plugins>
             <!-- Generate MIB Source Files to prepare for Compilation -->
             <plugin>
+                <?m2e execute onConfiguration?>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <executions>
@@ -50,7 +52,6 @@
                                     <arg line="-X:use-display-hint -d &quot;${project.build.directory}/generated-sources/mib/com/sun/identity/monitoring&quot; -mc -desc -tp com.sun.identity.monitoring &quot;${basedir}/src/main/resources/mib/SUN-OPENSSO-SERVER.mib&quot; &quot;${basedir}/src/main/resources/mib/mib_core.txt&quot;" />
                                 </java>
                             </target>
-                            <sourceRoot>${project.build.directory}/generated-sources/mib</sourceRoot>
                         </configuration>
                         <goals>
                             <goal>run</goal>
@@ -69,7 +70,6 @@
                                     <arg line="-X:use-display-hint -d &quot;${project.build.directory}/generated-sources/mib/org/forgerock/openam/monitoring/cts&quot; -mc -desc -tp org.forgerock.openam.monitoring.cts &quot;${basedir}/src/main/resources/mib/FORGEROCK-OPENAM-CTS.mib&quot; &quot;${basedir}/src/main/resources/mib/mib_core.txt&quot;" />
                                 </java>
                             </target>
-                            <sourceRoot>${project.build.directory}/generated-sources/mib</sourceRoot>
                         </configuration>
                         <goals>
                             <goal>run</goal>
@@ -88,7 +88,6 @@
                                     <arg line="-X:use-display-hint -d &quot;${project.build.directory}/generated-sources/mib/org/forgerock/openam/monitoring/session&quot; -mc -desc -tp org.forgerock.openam.monitoring.session &quot;${basedir}/src/main/resources/mib/FORGEROCK-OPENAM-SESSION.mib&quot; &quot;${basedir}/src/main/resources/mib/mib_core.txt&quot;" />
                                 </java>
                             </target>
-                            <sourceRoot>${project.build.directory}/generated-sources/mib</sourceRoot>
                         </configuration>
                         <goals>
                             <goal>run</goal>
@@ -107,7 +106,6 @@
                                     <arg line="-X:use-display-hint -d &quot;${project.build.directory}/generated-sources/mib/org/forgerock/openam/monitoring/policy&quot; -mc -desc -tp org.forgerock.openam.monitoring.policy &quot;${basedir}/src/main/resources/mib/FORGEROCK-OPENAM-POLICY.mib&quot; &quot;${basedir}/src/main/resources/mib/mib_core.txt&quot;" />
                                 </java>
                             </target>
-                            <sourceRoot>${project.build.directory}/generated-sources/mib</sourceRoot>
                         </configuration>
                         <goals>
                             <goal>run</goal>
@@ -131,9 +129,7 @@
                     <skip>true</skip>
                 </configuration>
             </plugin>
-
         </plugins>
-
     </build>
 
     <dependencies>

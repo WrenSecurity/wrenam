@@ -34,13 +34,11 @@ define([
      * @param {Function} errorCallback Error callback function
      */
     obj.getAllTokens = function (successCallback, errorCallback) {
-
         obj.serviceCall({ url: "/?_queryid=*", success (data) {
             if (successCallback) {
                 successCallback(data.result);
             }
         }, error: errorCallback });
-
     };
 
     /**

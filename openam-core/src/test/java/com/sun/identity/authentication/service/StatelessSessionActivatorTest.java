@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 
 package com.sun.identity.authentication.service;
@@ -26,12 +27,13 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import org.wrensecurity.wrenam.test.AbstractMockBasedTest;
 
 import com.iplanet.dpro.session.SessionID;
 import com.iplanet.dpro.session.service.InternalSession;
 import com.iplanet.dpro.session.service.SessionService;
 
-public class StatelessSessionActivatorTest {
+public class StatelessSessionActivatorTest extends AbstractMockBasedTest {
 
     private StatelessSessionActivator testActivator;
 
@@ -46,7 +48,6 @@ public class StatelessSessionActivatorTest {
     
     @BeforeMethod
     public void setup() {
-        MockitoAnnotations.initMocks(this);
         testActivator = new StatelessSessionActivator(mockSessionFactory);
     }
     

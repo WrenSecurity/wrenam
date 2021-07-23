@@ -12,12 +12,17 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2013-2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 package com.iplanet.dpro.session.operations.strategies;
 
 import static java.util.concurrent.TimeUnit.MINUTES;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.*;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import java.util.concurrent.TimeUnit;
 
@@ -30,11 +35,11 @@ import org.forgerock.openam.utils.TimeTravelUtil;
 import org.forgerock.util.time.TimeService;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import org.wrensecurity.wrenam.test.AbstractMockBasedTest;
 
 import com.iplanet.dpro.session.Session;
 import com.iplanet.dpro.session.SessionException;
@@ -49,7 +54,7 @@ import com.iplanet.dpro.session.share.SessionInfo;
 import com.iplanet.dpro.session.utils.SessionInfoFactory;
 import com.sun.identity.shared.debug.Debug;
 
-public class LocalOperationsTest {
+public class LocalOperationsTest extends AbstractMockBasedTest {
 
     private LocalOperations local;
     @Mock private Session mockRequester;
@@ -66,7 +71,6 @@ public class LocalOperationsTest {
 
     @BeforeMethod
     public void setup() {
-        MockitoAnnotations.initMocks(this);
         TimeTravelUtil.setBackingTimeService(TimeTravelUtil.FrozenTimeService.INSTANCE);
         given(mockSession.getID()).willReturn(mockSessionID);
         given(mockSession.getSessionID()).willReturn(mockSessionID);

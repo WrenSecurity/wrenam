@@ -12,12 +12,16 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 
 package org.forgerock.openam.sso.providers.stateless;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.forgerock.openam.sso.providers.stateless.JwtSessionMapperConfig.*;
+import static org.forgerock.openam.sso.providers.stateless.JwtSessionMapperConfig.COMPRESSION_TYPE;
+import static org.forgerock.openam.sso.providers.stateless.JwtSessionMapperConfig.ENCRYPTION_ALGORITHM;
+import static org.forgerock.openam.sso.providers.stateless.JwtSessionMapperConfig.SIGNING_ALGORITHM;
+import static org.forgerock.openam.sso.providers.stateless.JwtSessionMapperConfig.SIGNING_HMAC_SHARED_SECRET;
 import static org.mockito.BDDMockito.given;
 
 import java.security.Key;
@@ -37,12 +41,12 @@ import org.forgerock.json.jose.jws.handlers.ECDSASigningHandler;
 import org.forgerock.json.jose.jws.handlers.HmacSigningHandler;
 import org.forgerock.json.jose.jws.handlers.RSASigningHandler;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import org.wrensecurity.wrenam.test.AbstractMockBasedTest;
 
-public class JwtSessionMapperConfigTest {
+public class JwtSessionMapperConfigTest extends AbstractMockBasedTest {
 
     @Mock
     private RSAPublicKey mockRSAPublicKey;
@@ -57,7 +61,6 @@ public class JwtSessionMapperConfigTest {
 
     @BeforeMethod
     public void init() {
-        MockitoAnnotations.initMocks(this);
         keyPair = new KeyPair(mockRSAPublicKey, mockRSAPrivateKey);
     }
 

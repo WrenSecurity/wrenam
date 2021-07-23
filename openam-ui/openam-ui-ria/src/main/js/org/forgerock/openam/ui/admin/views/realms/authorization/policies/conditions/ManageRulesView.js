@@ -14,7 +14,6 @@
  * Portions copyright 2014-2016 ForgeRock AS.
  */
 
-
 define([
     "jquery",
     "lodash",
@@ -31,7 +30,6 @@ define([
     "sortable"
 ], ($, _, AbstractView, EventManager, Constants, UIUtils, EditEnvironmentView, EditSubjectView, OperatorRulesView,
     LegacyListItemView) => {
-
     return AbstractView.extend({
         template: "templates/admin/views/realms/authorization/policies/conditions/ManageRulesTemplate.html",
         noBaseTemplate: true,
@@ -96,12 +94,10 @@ define([
 
                 _.each(data, function (item) {
                     if (item && _.contains(operators, item.type)) {
-
                         newRule = new OperatorRulesView();
                         newRule.render(self.data, container, self.idPrefix + self.idCount, (self.idCount === 0));
                         newRule.setValue(item.type);
                         self.idCount++;
-
                     } else if (!_.isEmpty(item)) {
                         if (item.type === Constants.LEGACY) {
                             newRule = new LegacyListItemView();
@@ -203,7 +199,6 @@ define([
                     item.addClass("dropped");
                     clonedItem.animate({ "height": newHeight }, 300, "linear");
                     item.animate(animeAttrs, 300, function () {
-
                         clonedItem.detach();
                         item.removeClass("dropped");
 
@@ -422,7 +417,6 @@ define([
                 } else {
                     this.data.entity[this.property] = null;
                 }
-
             } else if (operatorData[this.property] === null) {
                 this.data.entity[this.property] = null;
             } else {
