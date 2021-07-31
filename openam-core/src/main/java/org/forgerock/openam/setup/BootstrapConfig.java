@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 package org.forgerock.openam.setup;
 
@@ -38,6 +39,10 @@ import com.fasterxml.jackson.databind.SerializationFeature;
  * @since 14.0
  */
 public class BootstrapConfig {
+
+    // Environment variables override (for testing purposes)
+    static Map<String, String> ENVIRONMENT_OVERRIDE;
+
     @JsonIgnore
     private final static ObjectMapper objectMapper = new ObjectMapper();
 
@@ -48,7 +53,6 @@ public class BootstrapConfig {
     @JsonIgnore
     private String dsameUserPassword;
     private List<ConfigStoreProperties> configStore = new ArrayList<ConfigStoreProperties>();
-
 
     public BootstrapConfig() {
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT)
@@ -78,12 +82,14 @@ public class BootstrapConfig {
      * @param value The string to perform env val substitution on
      * @return The expanded string value
      */
-
     public static String expandEnvironmentVariables(String value) {
         // First replace any java system props using the syntax ${prop.name}
         String s = StrSubstitutor.replaceSystemProperties(value);
         // now any env vars
-        return StrSubstitutor.replace(s, System.getenv(), "${env.", "}");
+        return StrSubstitutor.replace(
+                s,
+                ENVIRONMENT_OVERRIDE != null ? ENVIRONMENT_OVERRIDE : System.getenv(),
+                "${env.", "}");
     }
 
     public String getDsameUserPassword() {
