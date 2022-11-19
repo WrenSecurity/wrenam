@@ -89,7 +89,7 @@
 
     <!-- Component Properties -->
     <properties>
-        <pgpWhitelistArtifact>org.wrensecurity:wrensec-pgp-whitelist:1.5.4</pgpWhitelistArtifact>
+        <pgpWhitelistArtifact>org.wrensecurity:wrensec-pgp-whitelist:1.5.5</pgpWhitelistArtifact>
 
         <!-- **************************************************************** -->
         <maven.build.timestamp.format>yyyy-MMM-dd HH:mm:ss</maven.build.timestamp.format>
@@ -107,9 +107,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- Version Properties -->
-        <opendj.server.version>4.0.0-M3</opendj.server.version>
-        <opendj.sdk.version>4.0.0-M3</opendj.sdk.version>
-        <opendj.server.legacy>4.0.0-M3</opendj.server.legacy>
+        <opendj.server.version>4.0.0-M4-SNAPSHOT</opendj.server.version>
+        <opendj.sdk.version>4.0.0-M4-SNAPSHOT</opendj.sdk.version>
+        <opendj.server.legacy>4.0.0-M4-SNAPSHOT</opendj.server.legacy>
 
         <!-- Supress checkstyle errors on legacy com.iplanet and com.sun.identity packages -->
         <checkstyleUnitTestSuppressionsLocation>checkstyle/suppressions.xml</checkstyleUnitTestSuppressionsLocation>

@@ -49,7 +49,7 @@
     <build>
         <finalName>OpenAM-ServerOnly-${project.version}</finalName>
         <plugins>
-            <!-- OpenDJ 3.0: Pre-Pre-Packaging Step to download required Pre-Packaging Resources-->
+            <!-- Wren:DS 4.0: Pre-Pre-Packaging Step to download required Pre-Packaging Resources-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -373,11 +373,11 @@
                             <targetPath>WEB-INF/classes</targetPath>
                             <filtering>false</filtering>
                         </webResource>
-                        <!-- OpenDJ 3.0 Copy in an internal dependency needed by OpenAM -->
+                        <!-- Wren:DS 4.0 Copy in an internal dependency needed by Wren:AM -->
                         <webResource>
-                            <directory>${project.build.directory}/repackage-opendj/opendj/lib</directory>
+                            <directory>${project.build.directory}/repackage-wrends/wrends/lib</directory>
                             <includes>
-                                <include>opendj-je-backend.jar</include>
+                                <include>wrends-je-backend.jar</include>
                                 <include>quicksetup.jar</include>
                             </includes>
                             <targetPath>WEB-INF/lib</targetPath>
@@ -596,7 +596,7 @@
     </profiles>
 
     <dependencies>
-        <!-- Embedded OpenDJ Dependencies -->
+        <!-- Embedded Wren:DS Dependencies -->
         <dependency>
             <groupId>org.forgerock.opendj</groupId>
             <artifactId>opendj-server</artifactId>
