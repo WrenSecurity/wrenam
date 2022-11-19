@@ -319,7 +319,7 @@
             <plugin>
                 <groupId>com.github.eirslett</groupId>
                 <artifactId>frontend-maven-plugin</artifactId>
-                <version>1.1</version>
+                <version>1.12.0</version>
                 <configuration>
                     <installDirectory>${node.install.directory}</installDirectory>
                 </configuration>
@@ -331,8 +331,8 @@
                         </goals>
                         <phase>initialize</phase>
                         <configuration>
-                            <nodeVersion>v4.6.2</nodeVersion>
-                            <npmVersion>3.10.9</npmVersion>
+                            <nodeVersion>v14.17.0</nodeVersion>
+                            <npmVersion>6.14.13</npmVersion>
                             <downloadRoot>https://nodejs.org/dist/</downloadRoot>
                             <npmDownloadRoot>https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/npm/-/</npmDownloadRoot>
                         </configuration>
@@ -343,12 +343,6 @@
                             <goal>npm</goal>
                         </goals>
                         <phase>initialize</phase>
-                        <configuration>
-                            <arguments>install</arguments>
-                            <environmentVariables>
-                                <PHANTOMJS_CDNURL>http://maven.forgerock.org/repo/forgerock-third-party-virtual</PHANTOMJS_CDNURL>
-                            </environmentVariables>
-                        </configuration>
                     </execution>
                     <execution>
                         <id>npm-build</id>
@@ -358,6 +352,10 @@
                         <phase>compile</phase>
                         <configuration>
                             <arguments>run build:production -- --target-version=${project.version}</arguments>
+                            <environmentVariables>
+                                <!-- Workaround for PhantomJS - https://github.com/nodejs/node/discussions/43184 -->
+                                <OPENSSL_CONF>/dev/null</OPENSSL_CONF>
+                            </environmentVariables>
                         </configuration>
                     </execution>
                 </executions>
