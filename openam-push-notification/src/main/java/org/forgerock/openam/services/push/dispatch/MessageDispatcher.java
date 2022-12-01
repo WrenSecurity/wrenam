@@ -12,6 +12,7 @@
 * information: "Portions copyright [year] [name of copyright owner]".
 *
 * Copyright 2016 ForgeRock AS.
+ * Portions copyright 2022 Wren Security
 */
 package org.forgerock.openam.services.push.dispatch;
 
@@ -19,7 +20,7 @@ import com.google.inject.name.Named;
 import com.sun.identity.shared.debug.Debug;
 import java.util.Set;
 import javax.inject.Inject;
-import org.forgerock.guava.common.cache.Cache;
+import org.wrensecurity.guava.common.cache.Cache;
 import org.forgerock.json.JsonValue;
 import org.forgerock.json.resource.NotFoundException;
 import org.forgerock.openam.utils.StringUtils;

@@ -12,7 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
- * Portions Copyright 2021 Wren Security.
+ * Portions Copyright 2021-2022 Wren Security
  */
 
 package org.forgerock.openam.dpro.session;
@@ -20,7 +20,7 @@ package org.forgerock.openam.dpro.session;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.*;
 
-import org.forgerock.guava.common.collect.ImmutableMap;
+import org.wrensecurity.guava.common.collect.ImmutableMap;
 import org.forgerock.openam.core.DNWrapper;
 import org.forgerock.openam.cts.api.fields.SessionTokenField;
 import org.forgerock.openam.identity.idm.IdentityUtils;

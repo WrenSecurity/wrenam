@@ -12,12 +12,13 @@
 * information: "Portions copyright [year] [name of copyright owner]".
 *
 * Copyright 2015 ForgeRock AS.
+ * Portions copyright 2022 Wren Security
 */
 package org.forgerock.openam.saml2;
 
 import java.util.concurrent.TimeUnit;
-import org.forgerock.guava.common.cache.Cache;
-import org.forgerock.guava.common.cache.CacheBuilder;
+import org.wrensecurity.guava.common.cache.Cache;
+import org.wrensecurity.guava.common.cache.CacheBuilder;
 
 /**
  * An internal alternative to using the SAML2 Failover as a mechanism for data transfer.

@@ -121,8 +121,8 @@
                             <include>org.forgerock.opendj:opendj-grizzly</include>
                             <include>org.forgerock.commons:i18n-core</include>
                             <include>org.forgerock.commons:i18n-slf4j</include>
-                            <include>org.forgerock.commons.guava:forgerock-guava-base</include>
-                            <include>org.forgerock.commons.guava:forgerock-guava-collect</include>
+                            <include>org.wrensecurity.commons.guava:wrensec-guava-base</include>
+                            <include>org.wrensecurity.commons.guava:wrensec-guava-collect</include>
                             <include>org.forgerock.http:chf-http-core</include>
                             <include>com.fasterxml.jackson.core:jackson-databind</include>
                             <include>com.fasterxml.jackson.core:jackson-core</include>
@@ -700,12 +700,12 @@
             <artifactId>opendj-grizzly</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.forgerock.commons.guava</groupId>
-            <artifactId>forgerock-guava-collect</artifactId>
+            <groupId>org.wrensecurity.commons.guava</groupId>
+            <artifactId>wrensec-guava-collect</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.forgerock.commons.guava</groupId>
-            <artifactId>forgerock-guava-base</artifactId>
+            <groupId>org.wrensecurity.commons.guava</groupId>
+            <artifactId>wrensec-guava-base</artifactId>
         </dependency>
         <dependency>
             <groupId>joda-time</groupId>

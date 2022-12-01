@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions copyright 2022 Wren Security
  */
 
 package org.forgerock.openam.session.service.access.persistence.caching;
@@ -31,12 +32,12 @@ import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.forgerock.guava.common.base.Throwables;
-import org.forgerock.guava.common.cache.Cache;
-import org.forgerock.guava.common.cache.CacheBuilder;
-import org.forgerock.guava.common.cache.CacheStats;
-import org.forgerock.guava.common.cache.Weigher;
-import org.forgerock.guava.common.collect.ImmutableMap;
+import org.wrensecurity.guava.common.base.Throwables;
+import org.wrensecurity.guava.common.cache.Cache;
+import org.wrensecurity.guava.common.cache.CacheBuilder;
+import org.wrensecurity.guava.common.cache.CacheStats;
+import org.wrensecurity.guava.common.cache.Weigher;
+import org.wrensecurity.guava.common.collect.ImmutableMap;
 import org.forgerock.openam.session.SessionConstants;
 import org.forgerock.openam.session.service.access.persistence.InternalSessionStore;
 import org.forgerock.openam.session.service.access.persistence.InternalSessionStoreStep;

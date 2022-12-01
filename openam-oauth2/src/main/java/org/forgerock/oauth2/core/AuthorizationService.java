@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014-2016 ForgeRock AS.
+ * Portions copyright 2022 Wren Security
  */
 
 package org.forgerock.oauth2.core;
@@ -27,8 +28,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import org.forgerock.guava.common.base.Predicates;
-import org.forgerock.guava.common.collect.Maps;
+import org.wrensecurity.guava.common.base.Predicates;
+import org.wrensecurity.guava.common.collect.Maps;
 import org.forgerock.oauth2.core.exceptions.AccessDeniedException;
 import org.forgerock.oauth2.core.exceptions.BadRequestException;
 import org.forgerock.oauth2.core.exceptions.ClientAuthenticationFailureFactory;

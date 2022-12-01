@@ -25,6 +25,7 @@
  * $Id: LogWriter.java,v 1.3 2008/06/25 05:42:09 qcheng Exp $
  *
  * Portions Copyrighted 2015-2016 ForgeRock AS.
+ * Portions Copyrighted 2022 Wren Security
  */
 
 package com.sun.identity.cli;
@@ -45,7 +46,7 @@ import java.util.Map;
 import java.util.logging.Level;
 
 import org.forgerock.audit.events.AccessAuditEventBuilder;
-import org.forgerock.guava.common.collect.ImmutableMap;
+import org.wrensecurity.guava.common.collect.ImmutableMap;
 import org.forgerock.guice.core.InjectorHolder;
 import org.forgerock.http.Client;
 import org.forgerock.http.HttpApplicationException;

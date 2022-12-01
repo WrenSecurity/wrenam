@@ -42,8 +42,8 @@
             <artifactId>wrensec-guice-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.forgerock.commons.guava</groupId>
-            <artifactId>forgerock-guava-reflect</artifactId>
+            <groupId>org.wrensecurity.commons.guava</groupId>
+            <artifactId>wrensec-guava-reflect</artifactId>
         </dependency>
         <dependency>
             <groupId>com.google.inject.extensions</groupId>

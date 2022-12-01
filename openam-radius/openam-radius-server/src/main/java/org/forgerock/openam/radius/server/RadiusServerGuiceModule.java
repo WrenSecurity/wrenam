@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyrighted 2015 Intellectual Reserve, Inc (IRI)
+ * Portions copyright 2022 Wren Security
  */
 package org.forgerock.openam.radius.server;
 
@@ -21,7 +22,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.forgerock.guava.common.eventbus.EventBus;
+import org.wrensecurity.guava.common.eventbus.EventBus;
 import org.forgerock.guice.core.GuiceModule;
 import org.forgerock.openam.radius.server.audit.RadiusAuditLoggerEventBus;
 import org.forgerock.openam.radius.server.audit.RadiusAuditor;

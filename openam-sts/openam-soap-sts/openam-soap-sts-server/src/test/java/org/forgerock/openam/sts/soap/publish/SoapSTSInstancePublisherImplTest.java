@@ -13,6 +13,7 @@
  *
  * Copyright 2015 ForgeRock AS.
  * Portions Copyrighted 2016 Agile Digital Engineering
+ * Portions Copyrighted 2022 Wren Security
  */
 
 package org.forgerock.openam.sts.soap.publish;
@@ -25,7 +26,7 @@ import com.google.inject.Scopes;
 import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.ws.security.sts.provider.SecurityTokenServiceProvider;
 import org.assertj.core.api.Assertions;
-import org.forgerock.guava.common.collect.Sets;
+import org.wrensecurity.guava.common.collect.Sets;
 import org.forgerock.json.resource.ResourceException;
 import org.forgerock.openam.sts.AMSTSConstants;
 import org.forgerock.openam.sts.TokenType;

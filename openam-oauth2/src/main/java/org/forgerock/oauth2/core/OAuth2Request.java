@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014-2016 ForgeRock AS.
+ * Portions copyright 2022 Wren Security
  */
 
 package org.forgerock.oauth2.core;
@@ -25,8 +26,8 @@ import java.util.Map;
 import java.util.Set;
 
 import com.google.inject.assistedinject.Assisted;
-import org.forgerock.guava.common.collect.ClassToInstanceMap;
-import org.forgerock.guava.common.collect.MutableClassToInstanceMap;
+import org.wrensecurity.guava.common.collect.ClassToInstanceMap;
+import org.wrensecurity.guava.common.collect.MutableClassToInstanceMap;
 import org.forgerock.json.JsonValue;
 import org.forgerock.openam.rest.representations.JacksonRepresentationFactory;
 import org.restlet.Request;

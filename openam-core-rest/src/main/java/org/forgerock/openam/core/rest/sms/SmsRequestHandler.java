@@ -12,11 +12,12 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions copyright 2022 Wren Security
  */
 
 package org.forgerock.openam.core.rest.sms;
 
-import static org.forgerock.guava.common.collect.Sets.newHashSet;
+import static org.wrensecurity.guava.common.collect.Sets.newHashSet;
 import static org.forgerock.http.routing.RoutingMode.EQUALS;
 import static org.forgerock.http.routing.RoutingMode.STARTS_WITH;
 import static org.forgerock.json.resource.Requests.newApiRequest;
@@ -52,7 +53,7 @@ import javax.inject.Named;
 
 import org.forgerock.api.models.ApiDescription;
 import org.forgerock.authz.filter.crest.api.CrestAuthorizationModule;
-import org.forgerock.guava.common.base.Predicate;
+import org.wrensecurity.guava.common.base.Predicate;
 import org.forgerock.guice.core.InjectorHolder;
 import org.forgerock.http.ApiProducer;
 import org.forgerock.http.routing.RoutingMode;

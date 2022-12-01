@@ -13,6 +13,7 @@
  *
  * Copyright 2015 ForgeRock AS.
  * Portions Copyrighted 2016 Agile Digital Engineering
+ * Portions Copyrighted 2022 Wren Security
  */
 
 package org.forgerock.openam.sts.soap.publish;
@@ -23,8 +24,8 @@ import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
 import com.google.inject.name.Names;
 import org.apache.cxf.endpoint.Server;
-import org.forgerock.guava.common.collect.MapDifference;
-import org.forgerock.guava.common.collect.Maps;
+import org.wrensecurity.guava.common.collect.MapDifference;
+import org.wrensecurity.guava.common.collect.Maps;
 import org.forgerock.json.resource.ResourceException;
 import org.forgerock.openam.sts.AMSTSConstants;
 import org.forgerock.openam.sts.STSPublishException;

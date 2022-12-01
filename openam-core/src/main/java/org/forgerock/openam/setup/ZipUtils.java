@@ -14,6 +14,7 @@
  * Copyright 2016 ForgeRock AS.
  *
  * Portions Copyrighted 2006 Sun Microsystems Inc.
+ * Portions Copyrighted 2022 Wren Security
  */
 
 package org.forgerock.openam.setup;
@@ -26,7 +27,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import com.sun.identity.shared.debug.Debug;
-import org.forgerock.guava.common.io.ByteStreams;
+import org.wrensecurity.guava.common.io.ByteStreams;
 
 /**
  * Utilities for creating zip files from directories.
