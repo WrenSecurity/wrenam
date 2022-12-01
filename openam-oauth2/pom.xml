@@ -58,7 +58,7 @@
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.commons</groupId>
+            <groupId>org.wrensecurity.commons</groupId>
             <artifactId>forgerock-jaspi-openid-connect-module</artifactId>
         </dependency>
 
