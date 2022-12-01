@@ -77,7 +77,7 @@
             <artifactId>openam-http</artifactId>
         </dependency>
         <dependency><!-- TODO required until Restlet endpoints are moved to CHF -->
-            <groupId>org.forgerock.http</groupId>
+            <groupId>org.wrensecurity.http</groupId>
             <artifactId>chf-http-servlet</artifactId>
         </dependency>
 

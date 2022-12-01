@@ -123,7 +123,7 @@
                             <include>org.wrensecurity.commons:i18n-slf4j</include>
                             <include>org.wrensecurity.commons.guava:wrensec-guava-base</include>
                             <include>org.wrensecurity.commons.guava:wrensec-guava-collect</include>
-                            <include>org.forgerock.http:chf-http-core</include>
+                            <include>org.wrensecurity.http:chf-http-core</include>
                             <include>com.fasterxml.jackson.core:jackson-databind</include>
                             <include>com.fasterxml.jackson.core:jackson-core</include>
                             <include>com.fasterxml.jackson.core:jackson-annotations</include>
@@ -712,7 +712,7 @@
             <artifactId>joda-time</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.forgerock.http</groupId>
+            <groupId>org.wrensecurity.http</groupId>
             <artifactId>chf-http-core</artifactId>
         </dependency>
         <dependency>
