@@ -64,9 +64,9 @@
                         <configuration>
                             <artifactItems>
                                 <artifactItem>
-                                    <groupId>org.forgerock.opendj</groupId>
+                                    <groupId>org.wrensecurity.wrends</groupId>
                                     <artifactId>opendj-server-legacy</artifactId>
-                                    <version>${opendj.server.legacy}</version>
+                                    <version>${wrends.server.legacy}</version>
                                     <type>zip</type>
                                 </artifactItem>
                             </artifactItems>
@@ -599,19 +599,19 @@
     <dependencies>
         <!-- Embedded Wren:DS Dependencies -->
         <dependency>
-            <groupId>org.forgerock.opendj</groupId>
+            <groupId>org.wrensecurity.wrends</groupId>
             <artifactId>opendj-server</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.forgerock.opendj</groupId>
+            <groupId>org.wrensecurity.wrends</groupId>
             <artifactId>opendj-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.forgerock.opendj</groupId>
+            <groupId>org.wrensecurity.wrends</groupId>
             <artifactId>opendj-grizzly</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.forgerock.opendj</groupId>
+            <groupId>org.wrensecurity.wrends</groupId>
             <artifactId>opendj-server-legacy</artifactId>
         </dependency>
 

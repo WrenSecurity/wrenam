@@ -284,7 +284,7 @@
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.opendj</groupId>
+            <groupId>org.wrensecurity.wrends</groupId>
             <artifactId>opendj-core</artifactId>
         </dependency>
 
@@ -294,7 +294,7 @@
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.opendj</groupId>
+            <groupId>org.wrensecurity.wrends</groupId>
             <artifactId>opendj-grizzly</artifactId>
         </dependency>
 

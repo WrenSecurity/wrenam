@@ -192,19 +192,19 @@
 
         <!-- LDAP APIs -->
         <dependency>
-            <groupId>org.forgerock.opendj</groupId>
+            <groupId>org.wrensecurity.wrends</groupId>
             <artifactId>opendj-server</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.forgerock.opendj</groupId>
+            <groupId>org.wrensecurity.wrends</groupId>
             <artifactId>opendj-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.forgerock.opendj</groupId>
+            <groupId>org.wrensecurity.wrends</groupId>
             <artifactId>opendj-grizzly</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.forgerock.opendj</groupId>
+            <groupId>org.wrensecurity.wrends</groupId>
             <artifactId>opendj-server-legacy</artifactId>
         </dependency>
 

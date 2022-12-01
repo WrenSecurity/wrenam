@@ -117,8 +117,8 @@
                             <include>org.forgerock.openam:openam-client-sts</include>
                             <include>org.forgerock.openam:openam-notifications</include>
                             <include>org.json:json</include>
-                            <include>org.forgerock.opendj:opendj-core</include>
-                            <include>org.forgerock.opendj:opendj-grizzly</include>
+                            <include>org.wrensecurity.wrends:opendj-core</include>
+                            <include>org.wrensecurity.wrends:opendj-grizzly</include>
                             <include>org.wrensecurity.commons:i18n-core</include>
                             <include>org.wrensecurity.commons:i18n-slf4j</include>
                             <include>org.wrensecurity.commons.guava:wrensec-guava-base</include>
@@ -578,13 +578,13 @@
                             </includes>
                         </filter>
                         <filter>
-                            <artifact>org.forgerock.opendj:opendj-core</artifact>
+                            <artifact>org.wrensecurity.wrends:opendj-core</artifact>
                             <includes>
                                 <include>**/*</include>
                             </includes>
                         </filter>
                         <filter>
-                            <artifact>org.forgerock.opendj:opendj-grizzly</artifact>
+                            <artifact>org.wrensecurity.wrends:opendj-grizzly</artifact>
                             <includes>
                                 <include>**/*</include>
                             </includes>
@@ -692,11 +692,11 @@
             <artifactId>openam-client-sts</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.forgerock.opendj</groupId>
+            <groupId>org.wrensecurity.wrends</groupId>
             <artifactId>opendj-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.forgerock.opendj</groupId>
+            <groupId>org.wrensecurity.wrends</groupId>
             <artifactId>opendj-grizzly</artifactId>
         </dependency>
         <dependency>
