@@ -119,8 +119,8 @@
                             <include>org.json:json</include>
                             <include>org.forgerock.opendj:opendj-core</include>
                             <include>org.forgerock.opendj:opendj-grizzly</include>
-                            <include>org.forgerock.commons:i18n-core</include>
-                            <include>org.forgerock.commons:i18n-slf4j</include>
+                            <include>org.wrensecurity.commons:i18n-core</include>
+                            <include>org.wrensecurity.commons:i18n-slf4j</include>
                             <include>org.wrensecurity.commons.guava:wrensec-guava-base</include>
                             <include>org.wrensecurity.commons.guava:wrensec-guava-collect</include>
                             <include>org.forgerock.http:chf-http-core</include>
@@ -590,7 +590,7 @@
                             </includes>
                         </filter>
                         <filter>
-                            <artifact>org.forgerock.commons:i18n-core</artifact>
+                            <artifact>org.wrensecurity.commons:i18n-core</artifact>
                             <includes>
                                 <include>**/**</include>
                             </includes>

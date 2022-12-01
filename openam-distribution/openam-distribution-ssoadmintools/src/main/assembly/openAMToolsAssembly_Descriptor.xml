@@ -22,6 +22,7 @@
 * your own identifying information:
 * "Portions Copyrighted [year] [name of copyright owner]"
 *
+* Portions Copyrighted 2022 Wren Security
 -->
 <assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0"
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -88,7 +89,7 @@
                 <include>org.kohsuke:groovy-sandbox</include>
                 <include>org.codehaus.groovy:groovy-jsr223:jar</include>
                 <include>org.forgerock.opendj:opendj-core</include>
-                <include>org.forgerock.commons:i18n-core</include>
+                <include>org.wrensecurity.commons:i18n-core</include>
                 <include>org.forgerock.commons:forgerock-audit-core</include>
                 <include>org.glassfish.grizzly:grizzly-framework</include>
                 <include>org.forgerock.openam:openam-auth-fr-oath</include>
