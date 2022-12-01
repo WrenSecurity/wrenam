@@ -2187,6 +2187,38 @@
 
         <pluginManagement>
             <plugins>
+                <!-- TODO: Remove this plugin settings. It is already done in wrensec-parent. -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-checkstyle-plugin</artifactId>
+                    <version>${checkstylePluginVersion}</version>
+
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.wrensecurity</groupId>
+                            <artifactId>wrensec-build-tools</artifactId>
+                            <version>${wrenBuildToolsVersion}</version>
+                        </dependency>
+
+                        <dependency>
+                            <groupId>com.puppycrawl.tools</groupId>
+                            <artifactId>checkstyle</artifactId>
+                            <version>8.41.1</version>
+                        </dependency>
+                    </dependencies>
+
+                    <configuration>
+                        <enableRSS>false</enableRSS>
+                        <configLocation>${checkstyleSourceConfigLocation}</configLocation>
+                        <headerLocation>${checkstyleHeaderLocation}</headerLocation>
+                        <suppressionsLocation>${checkstyleSuppressionsLocation}</suppressionsLocation>
+                        <includeTestSourceDirectory>true</includeTestSourceDirectory>
+
+                        <!-- Only output errors if we're not expecting any -->
+                        <consoleOutput>${checkstyleFailOnError}</consoleOutput>
+                        <failsOnError>${checkstyleFailOnError}</failsOnError>
+                    </configuration>
+                </plugin>
                 <plugin>
                     <groupId>com.github.searls</groupId>
                     <artifactId>jasmine-maven-plugin</artifactId>
