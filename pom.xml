@@ -360,7 +360,6 @@
                                             <failWhenParentIsSnapshot>false</failWhenParentIsSnapshot>
                                             <excludes>
                                                 <exclude>org.forgerock.openam:*</exclude>
-                                                <exclude>org.forgerock.commons:forgerock-persistit-core:*</exclude>
                                                 <exclude>org.forgerock.openig:openig-toolkit:*</exclude>
                                             </excludes>
                                         </requireReleaseDeps>
