@@ -894,12 +894,12 @@
 
         <dependency>
             <artifactId>json-resource</artifactId>
-            <groupId>org.forgerock.commons</groupId>
+            <groupId>org.wrensecurity.commons</groupId>
         </dependency>
 
         <dependency>
             <artifactId>json-resource-http</artifactId>
-            <groupId>org.forgerock.commons</groupId>
+            <groupId>org.wrensecurity.commons</groupId>
         </dependency>
 
         <!-- Oauth2 dependencies -->
