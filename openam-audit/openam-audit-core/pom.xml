@@ -41,7 +41,7 @@
             <artifactId>openam-i18n</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.forgerock.commons</groupId>
+            <groupId>org.wrensecurity.commons</groupId>
             <artifactId>forgerock-audit-core</artifactId>
         </dependency>
         <dependency>
