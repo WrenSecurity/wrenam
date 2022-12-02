@@ -90,6 +90,8 @@
 
     <!-- Component Properties -->
     <properties>
+        <wrensec-commons.version>22.4.0</wrensec-commons.version>
+
         <!-- **************************************************************** -->
         <maven.build.timestamp.format>yyyy-MMM-dd HH:mm:ss</maven.build.timestamp.format>
         <!-- **************************************************************** -->
@@ -538,10 +540,18 @@
     <!-- Dependency Management -->
     <dependencyManagement>
         <dependencies>
+            <!-- TODO: Remove org.forgerock.commons -->
             <dependency>
                 <groupId>org.forgerock.commons</groupId>
                 <artifactId>commons-bom</artifactId>
                 <version>22.1.0-SNAPSHOT</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>org.wrensecurity.commons</groupId>
+                <artifactId>commons-bom</artifactId>
+                <version>${wrensec-commons.version}</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
@@ -1774,32 +1784,20 @@
                 </exclusions>
             </dependency>
             <dependency>
-                <groupId>org.forgerock.commons</groupId>
-                <artifactId>forgerock-guice-core</artifactId>
-                <version>${forgerock.guice.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.mockito</groupId>
-                        <artifactId>mockito-all</artifactId>
-                    </exclusion>
-                </exclusions>
+                <groupId>org.wrensecurity.commons</groupId>
+                <artifactId>wrensec-guice-core</artifactId>
+                <version>${wrensec-commons.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.forgerock.commons</groupId>
-                <artifactId>forgerock-guice-servlet</artifactId>
-                <version>${forgerock.guice.version}</version>
+                <groupId>org.wrensecurity.commons</groupId>
+                <artifactId>wrensec-guice-servlet</artifactId>
+                <version>${wrensec-commons.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.forgerock.commons</groupId>
-                <artifactId>forgerock-guice-test</artifactId>
-                <version>${forgerock.guice.version}</version>
+                <groupId>org.wrensecurity.commons</groupId>
+                <artifactId>wrensec-guice-test</artifactId>
+                <version>${wrensec-commons.version}</version>
                 <scope>test</scope>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.mockito</groupId>
-                        <artifactId>mockito-all</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
 
             <dependency>
