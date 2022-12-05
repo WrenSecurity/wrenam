@@ -21,7 +21,6 @@ import java.security.KeyPair;
 import javax.crypto.SecretKey;
 import javax.inject.Inject;
 
-import org.forgerock.guava.common.base.Optional;
 import org.forgerock.json.jose.jwe.EncryptionMethod;
 import org.forgerock.json.jose.jwe.JweAlgorithm;
 import org.forgerock.json.jose.jws.JwsAlgorithm;
@@ -33,6 +32,7 @@ import org.forgerock.selfservice.core.config.StageConfigException;
 import org.forgerock.selfservice.core.snapshot.SnapshotTokenConfig;
 import org.forgerock.selfservice.core.snapshot.SnapshotTokenHandlerFactory;
 import org.forgerock.tokenhandler.TokenHandler;
+import org.wrensecurity.guava.common.base.Optional;
 
 /**
  * Factory for providing snapshot token handlers.
