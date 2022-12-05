@@ -92,6 +92,7 @@
     <properties>
         <wrensec-commons.version>22.4.0</wrensec-commons.version>
         <wrensec-guava.version>18.0.5</wrensec-guava.version>
+        <pgpVerifyKeysVersion>1.7.2</pgpVerifyKeysVersion>
 
         <!-- **************************************************************** -->
         <maven.build.timestamp.format>yyyy-MMM-dd HH:mm:ss</maven.build.timestamp.format>
