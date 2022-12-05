@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions Copyright 2021-2022 Wren Security.
  */
 
 package org.forgerock.openam.core.rest.sms.tree;
@@ -35,7 +36,7 @@ import java.util.Map;
 
 import org.forgerock.authz.filter.api.AuthorizationResult;
 import org.forgerock.authz.filter.crest.api.CrestAuthorizationModule;
-import org.forgerock.guava.common.base.Predicate;
+import org.wrensecurity.guava.common.base.Predicate;
 import org.forgerock.http.routing.RoutingMode;
 import org.forgerock.http.routing.UriRouterContext;
 import org.forgerock.json.resource.ActionRequest;
@@ -151,7 +152,7 @@ public class SmsRouteTreeTest {
         Promise<ResourceResponse, ResourceException> result = routeTree.handleRead(context, request);
 
         //Then
-        assertThat(result).failedWithException();
+        assertThatPromise(result).failedWithException();
         verify(authModule).authorizeRead(any(Context.class), any(ReadRequest.class));
         verifyNoMoreInteractions(requestHandler, defaultAuthModule);
     }
@@ -174,7 +175,7 @@ public class SmsRouteTreeTest {
         Promise<ResourceResponse, ResourceException> result = routeTree.handleRead(context, request);
 
         //Then
-        assertThat(result).succeeded();
+        assertThatPromise(result).succeeded();
         verify(defaultAuthModule).authorizeRead(any(Context.class), any(ReadRequest.class));
         verifyNoMoreInteractions(authModule);
     }
@@ -196,7 +197,7 @@ public class SmsRouteTreeTest {
         Promise<ActionResponse, ResourceException> result = routeTree.handleAction(context, request);
 
         //Then
-        assertThat(result).succeeded();
+        assertThatPromise(result).succeeded();
         assertThat(result.getOrThrow().getJsonContent()).hasArray("result").hasSize(3).containsOnly(
                 object(field("_id", "service1"), field("name", "one"), field("collection", false)),
                 object(field("_id", "service2"), field("name", "two"), field("collection", false)),
@@ -230,7 +231,7 @@ public class SmsRouteTreeTest {
         Promise<ActionResponse, ResourceException> result = routeTree.handleAction(context, request);
 
         //Then
-        assertThat(result).succeeded();
+        assertThatPromise(result).succeeded();
         verifyGetTypeAction(handler1);
         verifyGetTypeAction(handler2);
         verifyGetTypeAction(handler3);
@@ -258,7 +259,7 @@ public class SmsRouteTreeTest {
         Promise<ActionResponse, ResourceException> result = routeTree.handleAction(context, request);
 
         //Then
-        assertThat(result).failedWithException().isInstanceOf(NotSupportedException.class);
+        assertThatPromise(result).failedWithException().isInstanceOf(NotSupportedException.class);
         verifyNoMoreInteractions(handler1);
     }
 

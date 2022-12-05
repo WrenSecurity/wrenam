@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 
 package org.forgerock.openam.upgrade.steps;
@@ -56,6 +57,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import org.wrensecurity.wrenam.test.AbstractMockBasedTest;
 
 import javax.security.auth.Subject;
 import java.security.PrivilegedAction;
@@ -66,7 +68,7 @@ import java.util.Set;
  *
  * @since 13.0.0
  */
-public final class RemoveReferralsStepTest {
+public final class RemoveReferralsStepTest extends AbstractMockBasedTest {
 
     @Mock
     private ApplicationServiceFactory applicationServiceFactory;
@@ -102,7 +104,6 @@ public final class RemoveReferralsStepTest {
 
     @BeforeMethod
     public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
         System.setProperty("com.iplanet.am.version", "12.0.0");
 
         SSOToken token = mock(SSOToken.class);
@@ -163,8 +164,8 @@ public final class RemoveReferralsStepTest {
 
         // Then
         assertThat(isApplicable).isTrue();
-        assertThat(shortReport).containsSequence("applications to be cloned", "Referrals found");
-        assertThat(longReport).containsSequence("app1", "ou=test,ou=forgerock,ou=org");
+        assertThat(shortReport).containsSubsequence("applications to be cloned", "Referrals found");
+        assertThat(longReport).containsSubsequence("app1", "ou=test,ou=forgerock,ou=org");
 
         verify(resourceTypeService).saveResourceType(isA(Subject.class), eq("/a"), resourceTypeCaptor.capture());
         verify(applicationService).saveApplication(applicationCaptor.capture());

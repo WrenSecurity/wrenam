@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 package org.forgerock.openam.test.apidescriptor;
 
@@ -20,6 +21,7 @@ import static org.forgerock.openam.test.apidescriptor.ApiAssertions.assertI18nDe
 import java.util.List;
 
 import org.assertj.core.api.AbstractListAssert;
+import org.assertj.core.api.ObjectAssert;
 import org.forgerock.api.annotations.Parameter;
 
 /**
@@ -27,7 +29,7 @@ import org.forgerock.api.annotations.Parameter;
  *
  * @since 14.0.0
  */
-public final class ApiParameterAssert extends AbstractListAssert<ApiParameterAssert, List<Parameter>, Parameter> {
+public final class ApiParameterAssert extends AbstractListAssert<ApiParameterAssert, List<Parameter>, Parameter, ObjectAssert<Parameter>> {
 
     private final Class<?> annotatedClass;
 
@@ -47,4 +49,15 @@ public final class ApiParameterAssert extends AbstractListAssert<ApiParameterAss
         }
         return this;
     }
+
+	@Override
+	protected ObjectAssert<Parameter> toAssert(Parameter value, String description) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	protected ApiParameterAssert newAbstractIterableAssert(Iterable<? extends Parameter> iterable) {
+		throw new UnsupportedOperationException();
+	}
+
 }

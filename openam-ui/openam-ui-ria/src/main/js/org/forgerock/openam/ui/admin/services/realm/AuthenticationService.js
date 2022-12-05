@@ -56,7 +56,6 @@ define([
                     const authenticationData = response[1];
 
                     _.each(chainsData[0].result, function (chainData) {
-
                         if (chainData._id === authenticationData[0].adminAuthModule) {
                             chainData.defaultConfig = chainData.defaultConfig || {};
                             chainData.defaultConfig.adminAuthModule = true;

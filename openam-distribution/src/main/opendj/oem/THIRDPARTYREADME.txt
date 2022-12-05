@@ -289,11 +289,6 @@ Copyright: Copyright 2013 FasterXML.
 Version: joda-time.jar (2.1)
 Copyright: Copyright 2001-2012 Stephen Colebourne
 
-Version: forgerock-persistit-core.jar (4.3.1)
-Copyright: Copyright 2005-2013 Akiban Technologies, Inc.
-           Copyright 2014 SonarSource
-           Portions Copyright 2015 ForgeRock AS.
-
 Version: org.apache.servicemix.bundles.javax-inject.jar (1.0.0.2)
 Copyright: Copyright 2009 The JSR-330 Expert Group
 

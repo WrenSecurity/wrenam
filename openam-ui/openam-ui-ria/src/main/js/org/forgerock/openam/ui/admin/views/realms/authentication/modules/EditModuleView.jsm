@@ -14,7 +14,6 @@
  * Copyright 2015-2016 ForgeRock AS.
  */
 
-
 import $ from "jquery";
 import "bootstrap-tabdrop";  // jquery dependency
 
@@ -25,7 +24,6 @@ import EventManager from "org/forgerock/commons/ui/common/main/EventManager";
 import Form from "org/forgerock/openam/ui/admin/models/Form";
 import Messages from "org/forgerock/commons/ui/common/components/Messages";
 import Promise from "org/forgerock/openam/ui/common/util/Promise";
-
 
 class ListRealmsView extends AbstractView {
     constructor () {
@@ -38,7 +36,6 @@ class ListRealmsView extends AbstractView {
         };
     }
     render ([realmPath, type, name]) {
-
         this.data.realmPath = realmPath;
         this.data.type = type;
         this.data.name = name;

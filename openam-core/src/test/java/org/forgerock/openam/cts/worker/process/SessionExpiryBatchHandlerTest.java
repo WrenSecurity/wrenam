@@ -12,13 +12,19 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2013-2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 package org.forgerock.openam.cts.worker.process;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.forgerock.openam.cts.api.CTSOptions.OPTIMISTIC_CONCURRENCY_CHECK_OPTION;
 import static org.forgerock.openam.cts.api.CTSOptions.PRE_DELETE_READ_OPTION;
-import static org.mockito.BDDMockito.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -39,10 +45,9 @@ import org.forgerock.openam.tokens.TokenType;
 import org.forgerock.util.Options;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import org.wrensecurity.wrenam.test.AbstractMockBasedTest;
 
 import com.iplanet.dpro.session.operations.strategies.LocalOperations;
 import com.iplanet.dpro.session.service.InternalSession;
@@ -53,7 +58,7 @@ import com.iplanet.dpro.session.service.SessionServiceConfig;
 import com.sun.identity.session.util.SessionUtilsWrapper;
 import com.sun.identity.shared.debug.Debug;
 
-public class SessionExpiryBatchHandlerTest {
+public class SessionExpiryBatchHandlerTest extends AbstractMockBasedTest {
 
     @Mock private Debug mockDebug;
     @Mock private InternalSessionEventBroker mockInternalSessionEventBroker;
@@ -66,11 +71,6 @@ public class SessionExpiryBatchHandlerTest {
     @Mock private StateChangeResultHandlerFactory mockResultHandlerFactory;
     @Mock private TaskDispatcher mockQueue;
 
-    @BeforeMethod
-    public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
-    }
-
     @Test
     public void attemptsToDeleteSessionsThatHaveReachedTheirIdleTimeOut() throws Exception {
         // Given
@@ -81,7 +81,7 @@ public class SessionExpiryBatchHandlerTest {
 
         // Then
         ArgumentCaptor<Options> optionsCaptor = ArgumentCaptor.forClass(Options.class);
-        verify(mockQueue).delete(eq("tokenId"), optionsCaptor.capture(), any(ResultHandler.class));
+        verify(mockQueue).delete(eq("tokenId"), optionsCaptor.capture(), any());
         Options options = optionsCaptor.getValue();
         assertThat(options.get(PRE_DELETE_READ_OPTION)).containsExactly(CoreTokenField.values());
         assertThat(options.get(OPTIMISTIC_CONCURRENCY_CHECK_OPTION)).isEqualTo(etagFor("tokenId"));
@@ -97,7 +97,7 @@ public class SessionExpiryBatchHandlerTest {
 
         // Then
         ArgumentCaptor<Options> optionsCaptor = ArgumentCaptor.forClass(Options.class);
-        verify(mockQueue).delete(eq("tokenId"), optionsCaptor.capture(), any(ResultHandler.class));
+        verify(mockQueue).delete(eq("tokenId"), optionsCaptor.capture(), any());
         Options options = optionsCaptor.getValue();
         assertThat(options.get(PRE_DELETE_READ_OPTION)).containsExactly(CoreTokenField.values());
         assertThat(options.get(OPTIMISTIC_CONCURRENCY_CHECK_OPTION)).isNull();
@@ -177,7 +177,7 @@ public class SessionExpiryBatchHandlerTest {
 
         // Then
         verifyNoMoreInteractions(mockSessionAdapter, mockLocalOperations);
-        verify(mockDebug).message(eq("Failed to delete token with expired timeout. {}"), any(String.class), eq(exception));
+        verify(mockDebug).message(eq("Failed to delete token with expired timeout. {}"), any(), eq(exception));
         assertThat(countDownLatch.getCount()).as("processError decrements CountDownLatch").isEqualTo(0);
     }
 
@@ -198,7 +198,7 @@ public class SessionExpiryBatchHandlerTest {
 
         // Then
         verifyNoMoreInteractions(mockSessionAdapter, mockLocalOperations);
-        verify(mockDebug).error(eq("Failed to delete token with expired timeout. {}"), any(String.class), eq(exception));
+        verify(mockDebug).error(eq("Failed to delete token with expired timeout. {}"), any(), eq(exception));
         assertThat(countDownLatch.getCount()).as("processError decrements CountDownLatch").isEqualTo(0);
     }
 

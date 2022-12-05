@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 
 package org.forgerock.openam.sm.validation;
@@ -22,13 +23,13 @@ import static org.mockito.BDDMockito.given;
 import java.util.Collections;
 
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import org.wrensecurity.wrenam.test.AbstractMockBasedTest;
 
 import com.sun.identity.shared.configuration.ISystemProperties;
 
-public class StatelessSessionSigningAlgorithmValidatorTest {
+public class StatelessSessionSigningAlgorithmValidatorTest extends AbstractMockBasedTest {
 
     @Mock
     private ISystemProperties mockSystemProperties;
@@ -37,7 +38,6 @@ public class StatelessSessionSigningAlgorithmValidatorTest {
 
     @BeforeMethod
     public void createValidator() {
-        MockitoAnnotations.initMocks(this);
         testValidator = new StatelessSessionSigningAlgorithmValidator(mockSystemProperties);
     }
 

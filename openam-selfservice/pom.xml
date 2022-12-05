@@ -13,6 +13,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions copyright 2022 Wren Security
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
@@ -40,32 +41,32 @@
             <artifactId>openam-i18n</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.forgerock.commons</groupId>
+            <groupId>org.wrensecurity.commons</groupId>
             <artifactId>forgerock-selfservice-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.forgerock.commons</groupId>
+            <groupId>org.wrensecurity.commons</groupId>
             <artifactId>forgerock-selfservice-stages</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.forgerock.commons</groupId>
+            <groupId>org.wrensecurity.commons</groupId>
             <artifactId>json-resource</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.forgerock.commons</groupId>
+            <groupId>org.wrensecurity.commons</groupId>
             <artifactId>json-resource-http</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.forgerock.commons</groupId>
+            <groupId>org.wrensecurity.commons</groupId>
             <artifactId>json-web-token</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.forgerock.commons</groupId>
+            <groupId>org.wrensecurity.commons</groupId>
             <artifactId>forgerock-util</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.forgerock.commons</groupId>
-            <artifactId>forgerock-guice-core</artifactId>
+            <groupId>org.wrensecurity.commons</groupId>
+            <artifactId>wrensec-guice-core</artifactId>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -83,15 +84,15 @@
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
+            <artifactId>mockito-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.forgerock.commons</groupId>
+            <groupId>org.wrensecurity.commons</groupId>
             <artifactId>forgerock-test-utils</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.forgerock.commons</groupId>
+            <groupId>org.wrensecurity.commons</groupId>
             <artifactId>json-resource</artifactId>
             <type>test-jar</type>
             <scope>test</scope>

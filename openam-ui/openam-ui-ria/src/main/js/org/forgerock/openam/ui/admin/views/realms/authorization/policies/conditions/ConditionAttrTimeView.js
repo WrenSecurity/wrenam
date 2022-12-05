@@ -14,7 +14,6 @@
  * Copyright 2015-2016 ForgeRock AS.
  */
 
-
 define([
     "jquery",
     "lodash",
@@ -45,7 +44,6 @@ define([
 
         initClockPickers () {
             this.$el.find(".clockpicker").each(function () {
-
                 var clock = $(this);
                 clock.clockpicker({
                     placement: "top",

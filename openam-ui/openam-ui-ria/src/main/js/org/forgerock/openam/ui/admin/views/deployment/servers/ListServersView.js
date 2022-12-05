@@ -25,7 +25,6 @@ define([
     "org/forgerock/openam/ui/admin/views/common/ToggleCardListView"
 ], ($, _, AbstractView, showConfirmationBeforeAction, Messages, ServersService, TemplateBasedView,
     ToggleCardListView) => {
-
     showConfirmationBeforeAction = showConfirmationBeforeAction.default;
 
     const ListServersView = AbstractView.extend({

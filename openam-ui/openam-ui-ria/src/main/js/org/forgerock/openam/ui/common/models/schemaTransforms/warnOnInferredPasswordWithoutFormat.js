@@ -15,7 +15,6 @@
  */
 
 define([], () => {
-
     /**
      * Warns if a property is inferred to be a password and does not have a format of password
      * @param {Object} property Property to transform

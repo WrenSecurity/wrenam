@@ -15,7 +15,6 @@
  */
 
 define([], () => {
-
     /**
     * Recursively add string type to enum
     * @param {Object} property Property to transform

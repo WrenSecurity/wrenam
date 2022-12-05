@@ -13,4 +13,4 @@ upgrade
 upgrade.bat
 lib/je.jar
 lib/je-*.jar
-lib/opendj-je-backend.jar
+lib/wrends-je-backend.jar

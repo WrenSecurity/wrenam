@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2013-2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 
 package org.forgerock.openam.cts.impl;
@@ -72,6 +73,7 @@ import org.forgerock.util.Options;
 import org.forgerock.util.query.QueryFilter;
 import org.forgerock.util.query.QueryFilterVisitor;
 import org.forgerock.util.time.Duration;
+import org.mockito.AdditionalAnswers;
 import org.mockito.ArgumentCaptor;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -92,7 +94,7 @@ public class LdapAdapterTest {
         mockConnection = mock(Connection.class);
         mockConversion = mock(LdapTokenAttributeConversion.class);
         mockQueryFactory = mock(LdapQueryFactory.class);
-        mockQueryVisitor = mock(LdapQueryFilterVisitor.class);
+        mockQueryVisitor = new LdapQueryFilterVisitor(null);
         mockConnectionFactory = mock(ConnectionFactory.class);
         mockConnectionFactoryProvider = mock(LdapConnectionFactoryProvider.class);
         optionFunctionMap = new HashMap<>();

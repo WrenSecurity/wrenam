@@ -13,6 +13,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2011-2016 ForgeRock AS.
+ * Portions copyright 2022 Wren Security
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
@@ -62,13 +63,20 @@
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.http</groupId>
+            <groupId>org.wrensecurity.http</groupId>
             <artifactId>chf-http-core</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.commons</groupId>
+            <groupId>org.wrensecurity.commons</groupId>
             <artifactId>json-resource-http</artifactId>
+            <exclusions>
+                <!-- FIXME This is to prevent duplicate JAXB dependency. -->
+                <exclusion>
+                    <groupId>com.sun.xml.bind</groupId>
+                    <artifactId>jaxb-osgi</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -77,18 +85,18 @@
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.opendj</groupId>
+            <groupId>org.wrensecurity.wrends</groupId>
             <artifactId>opendj-core</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.opendj</groupId>
+            <groupId>org.wrensecurity.wrends</groupId>
             <artifactId>opendj-grizzly</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.commons</groupId>
-            <artifactId>forgerock-guice-core</artifactId>
+            <groupId>org.wrensecurity.commons</groupId>
+            <artifactId>wrensec-guice-core</artifactId>
         </dependency>
 
         <dependency>
@@ -97,7 +105,7 @@
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.commons</groupId>
+            <groupId>org.wrensecurity.commons</groupId>
             <artifactId>forgerock-util</artifactId>
         </dependency>
 
@@ -118,7 +126,7 @@
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.commons</groupId>
+            <groupId>org.wrensecurity.commons</groupId>
             <artifactId>forgerock-test-utils</artifactId>
             <scope>test</scope>
         </dependency>

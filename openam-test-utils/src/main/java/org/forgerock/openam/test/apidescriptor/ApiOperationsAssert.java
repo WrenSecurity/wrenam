@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 package org.forgerock.openam.test.apidescriptor;
 
@@ -22,6 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.assertj.core.api.AbstractListAssert;
+import org.assertj.core.api.ObjectAssert;
 import org.forgerock.api.annotations.ApiError;
 import org.forgerock.api.annotations.Operation;
 
@@ -30,7 +32,7 @@ import org.forgerock.api.annotations.Operation;
  *
  * @since 14.0.0
  */
-public final class ApiOperationsAssert extends AbstractListAssert<ApiOperationsAssert, List<Operation>, Operation> {
+public final class ApiOperationsAssert extends AbstractListAssert<ApiOperationsAssert, List<Operation>, Operation, ObjectAssert<Operation>> {
 
     private final Class<?> annotatedClass;
 
@@ -64,4 +66,15 @@ public final class ApiOperationsAssert extends AbstractListAssert<ApiOperationsA
         }
         return this;
     }
+
+	@Override
+	protected ObjectAssert<Operation> toAssert(Operation value, String description) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	protected ApiOperationsAssert newAbstractIterableAssert(Iterable<? extends Operation> iterable) {
+		throw new UnsupportedOperationException();
+	}
+
 }

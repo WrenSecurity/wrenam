@@ -12,13 +12,14 @@
  * information: "Portions Copyrighted [year] [name of copyright owner]".
  *
  * Copyright 2015 ForgeRock AS.
+ * Portions Copyrighted 2022 Wren Security
  */
 
 package org.forgerock.openam.sts.config.user;
 import static org.testng.Assert.assertNotEquals;
 import static org.testng.Assert.assertEquals;
 
-import org.forgerock.guava.common.collect.Lists;
+import org.wrensecurity.guava.common.collect.Lists;
 import org.forgerock.json.jose.jws.JwsAlgorithm;
 import org.forgerock.json.jose.jws.JwsAlgorithmType;
 import org.testng.annotations.Test;

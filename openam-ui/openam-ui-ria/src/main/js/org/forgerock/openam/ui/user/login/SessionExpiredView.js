@@ -23,7 +23,6 @@ define([
     "org/forgerock/openam/ui/user/login/RESTLoginHelper",
     "org/forgerock/openam/ui/user/login/navigateThenRefresh"
 ], (i18next, AbstractView, Configuration, Constants, EventManager, RESTLoginHelper, navigateThenRefresh) => {
-
     const SessionExpiredView = AbstractView.extend({
         template: "templates/openam/ReturnToLoginTemplate.html",
         baseTemplate: "templates/common/LoginBaseTemplate.html",

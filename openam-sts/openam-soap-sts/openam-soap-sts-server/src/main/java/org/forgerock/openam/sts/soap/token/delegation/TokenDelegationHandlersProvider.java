@@ -12,12 +12,13 @@
  * information: "Portions Copyrighted [year] [name of copyright owner]".
  *
  * Copyright 2015 ForgeRock AS.
+ * Portions copyright 2022 Wren Security
  */
 
 package org.forgerock.openam.sts.soap.token.delegation;
 
 import org.apache.cxf.sts.token.delegation.TokenDelegationHandler;
-import org.forgerock.guava.common.collect.Lists;
+import org.wrensecurity.guava.common.collect.Lists;
 import org.forgerock.openam.sts.soap.config.user.SoapSTSInstanceConfig;
 import org.forgerock.openam.sts.token.ThreadLocalAMTokenCache;
 import org.slf4j.Logger;

@@ -12,22 +12,24 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 
 package org.forgerock.openam.upgrade.steps;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Mockito.*;
-import static org.mockito.MockitoAnnotations.initMocks;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 import java.security.PrivilegedAction;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.iplanet.sso.SSOToken;
 import org.forgerock.openam.sm.datalayer.api.ConnectionFactory;
 import org.forgerock.openam.sm.datalayer.api.ConnectionType;
 import org.forgerock.openam.upgrade.steps.UpgradeCTSMaxConnectionsConfigurationStep.ConnectionCount;
@@ -37,8 +39,11 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import org.wrensecurity.wrenam.test.AbstractMockBasedTest;
 
-public class UpgradeCTSMaxConnectionsConfigurationStepTest {
+import com.iplanet.sso.SSOToken;
+
+public class UpgradeCTSMaxConnectionsConfigurationStepTest extends AbstractMockBasedTest {
 
     private UpgradeCTSMaxConnectionsConfigurationStep upgradeStep;
 
@@ -57,13 +62,12 @@ public class UpgradeCTSMaxConnectionsConfigurationStepTest {
 
     @BeforeMethod
     public void setup() throws Exception {
-        initMocks(this);
         serverInstanceConfigs = new HashMap<>();
         upgradeStep = new UpgradeCTSMaxConnectionsConfigurationStep(adminTokenAction, connectionFactory,
                 connectionCount, helper);
 
-        given(helper.getDefaultServerConfig(any(SSOToken.class))).willReturn(defaultServerInstanceConfig);
-        given(helper.getServerConfigs(any(SSOToken.class))).willReturn(serverInstanceConfigs);
+        given(helper.getDefaultServerConfig(any())).willReturn(defaultServerInstanceConfig);
+        given(helper.getServerConfigs(any())).willReturn(serverInstanceConfigs);
         given(connectionCount.getConnectionCount(anyInt(), any(ConnectionType.class)))
                 .willAnswer(new Answer<Integer>() {
                     @Override

@@ -29,7 +29,6 @@ define([
         attrType: "User",
 
         render (args, callback) {
-
             var self = this,
                 attr;
 

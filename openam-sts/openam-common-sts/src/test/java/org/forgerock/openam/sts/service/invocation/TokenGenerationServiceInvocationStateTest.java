@@ -12,6 +12,7 @@
  * information: "Portions Copyrighted [year] [name of copyright owner]".
  *
  * Copyright 2014-2015 ForgeRock AS.
+ * Portions Copyrighted 2022 Wren Security
  */
 
 package org.forgerock.openam.sts.service.invocation;
@@ -20,7 +21,7 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotEquals;
 import static org.testng.Assert.assertTrue;
 
-import org.forgerock.guava.common.collect.Sets;
+import org.wrensecurity.guava.common.collect.Sets;
 import org.forgerock.openam.sts.AMSTSConstants;
 import org.forgerock.openam.sts.TokenMarshalException;
 import org.forgerock.openam.sts.TokenType;

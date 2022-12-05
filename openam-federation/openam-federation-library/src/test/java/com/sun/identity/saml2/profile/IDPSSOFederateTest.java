@@ -12,13 +12,19 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 
 package com.sun.identity.saml2.profile;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyBoolean;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.when;
+
+import java.io.PrintWriter;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.forgerock.openam.saml2.IDPRequestValidator;
 import org.forgerock.openam.saml2.IDPSSOFederateRequest;
@@ -27,15 +33,11 @@ import org.forgerock.openam.saml2.SAMLAuthenticator;
 import org.forgerock.openam.saml2.SAMLAuthenticatorLookup;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import org.wrensecurity.wrenam.test.AbstractMockBasedTest;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.PrintWriter;
-
-public class IDPSSOFederateTest {
+public class IDPSSOFederateTest extends AbstractMockBasedTest {
 
     @Mock
     private HttpServletRequest mockRequest;
@@ -65,8 +67,7 @@ public class IDPSSOFederateTest {
 
     @BeforeMethod
     public void initMocks() throws ServerFaultException, ClientFaultException {
-        MockitoAnnotations.initMocks(this);
-        when(actorFactory.getIDPRequestValidator(Mockito.anyString(), anyBoolean())).thenReturn(validator);
+        when(actorFactory.getIDPRequestValidator(any(), anyBoolean())).thenReturn(validator);
         when(actorFactory.getSAMLAuthenticator(
                 any(IDPSSOFederateRequest.class),
                 any(HttpServletRequest.class),

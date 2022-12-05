@@ -12,30 +12,44 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 
 package org.forgerock.openam.notifications;
 
-import static com.sun.identity.common.configuration.AgentConfiguration.*;
+import static com.sun.identity.common.configuration.AgentConfiguration.AGENT_TYPE_J2EE;
+import static com.sun.identity.common.configuration.AgentConfiguration.AGENT_TYPE_OAUTH2;
+import static com.sun.identity.common.configuration.AgentConfiguration.AGENT_TYPE_WEB;
 import static javax.servlet.http.HttpServletResponse.SC_FORBIDDEN;
 import static javax.servlet.http.HttpServletResponse.SC_UNAUTHORIZED;
 import static org.fest.assertions.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.lang.annotation.Annotation;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.forgerock.guice.core.GuiceModuleLoader;
 import org.forgerock.guice.core.GuiceTestCase;
+import org.forgerock.guice.core.InjectorConfiguration;
 import org.forgerock.openam.authentication.service.AuthUtilsWrapper;
 import org.forgerock.openam.core.CoreWrapper;
 import org.forgerock.openam.rest.SSOTokenFactory;
 import org.forgerock.openam.utils.CollectionUtils;
 import org.mockito.ArgumentCaptor;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import com.google.inject.Binder;
+import com.google.inject.Module;
 import com.iplanet.sso.SSOException;
 import com.iplanet.sso.SSOToken;
 import com.sun.identity.idm.AMIdentity;
@@ -64,6 +78,19 @@ public class NotificationsWebSocketFilterTest extends GuiceTestCase {
         binder.bind(SSOTokenFactory.class).toInstance(ssoTokenFactory);
         binder.bind(AuthUtilsWrapper.class).toInstance(authUtilsWrapper);
         binder.bind(CoreWrapper.class).toInstance(coreWrapper);
+    }
+
+    // Make sure Guice is not eagerly loading everything on class-path.
+    // This worked due to luck when RestRouterIT was run before this test.
+    // XXX This should be in the parent class or maybe the guice test should be done in a different way?
+    @BeforeClass
+    public static void setupGuice() throws Exception {
+        InjectorConfiguration.setGuiceModuleLoader(new GuiceModuleLoader() {
+            @Override
+            public Set<Class<? extends Module>> getGuiceModules(Class<? extends Annotation> clazz) {
+                return new HashSet<>();
+            }
+        });
     }
 
     @BeforeMethod

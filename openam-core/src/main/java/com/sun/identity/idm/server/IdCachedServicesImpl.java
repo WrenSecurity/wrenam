@@ -25,6 +25,7 @@
  * $Id: IdCachedServicesImpl.java,v 1.21 2009/08/25 06:50:53 hengming Exp $
  *
  * Portions Copyrighted 2011-2016 ForgeRock AS.
+ * Portions Copyrighted 2022 Wren Security
  */
 package com.sun.identity.idm.server;
 
@@ -58,8 +59,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 
-import org.forgerock.guava.common.cache.Cache;
-import org.forgerock.guava.common.cache.CacheBuilder;
+import org.wrensecurity.guava.common.cache.Cache;
+import org.wrensecurity.guava.common.cache.CacheBuilder;
 import org.forgerock.openam.utils.CrestQuery;
 import org.forgerock.util.thread.listener.ShutdownListener;
 import org.forgerock.util.thread.listener.ShutdownManager;

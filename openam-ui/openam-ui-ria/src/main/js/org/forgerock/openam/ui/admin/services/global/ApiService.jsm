@@ -26,7 +26,6 @@ import fetchUrl from "org/forgerock/openam/ui/common/services/fetchUrl";
 const obj = new AbstractDelegate(`${Constants.host}/${Constants.context}/json`);
 
 export function getGroupedPaths () {
-
     return obj.serviceCall({
         url: fetchUrl("/api", { realm: false }),
         headers: { "Accept-API-Version": "protocol=1.0,resource=1.0" }

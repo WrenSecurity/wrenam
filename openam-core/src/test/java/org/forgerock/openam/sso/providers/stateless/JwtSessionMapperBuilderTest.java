@@ -12,14 +12,17 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 
 package org.forgerock.openam.sso.providers.stateless;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
@@ -37,14 +40,15 @@ import org.forgerock.json.jose.jws.JwsAlgorithm;
 import org.forgerock.json.jose.jws.SigningManager;
 import org.forgerock.json.jose.jws.handlers.HmacSigningHandler;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import org.wrensecurity.wrenam.test.AbstractMockBasedTest;
 
 import com.sun.identity.shared.configuration.ISystemProperties;
 
-public class JwtSessionMapperBuilderTest {
+public class JwtSessionMapperBuilderTest extends AbstractMockBasedTest {
+
     private static final String SECRET = "sekret";
 
     private JwtSessionMapperBuilder testBuilder;
@@ -72,7 +76,6 @@ public class JwtSessionMapperBuilderTest {
 
     @BeforeMethod
     public void createBuilder() {
-        MockitoAnnotations.initMocks(this);
         testBuilder = new JwtSessionMapperBuilder(mockSigningManager, mockSystemProperties){
             @Override
             boolean isConfigured() { return true; }

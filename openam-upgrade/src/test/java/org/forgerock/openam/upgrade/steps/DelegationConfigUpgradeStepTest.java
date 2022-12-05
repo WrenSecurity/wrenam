@@ -12,13 +12,14 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014-2015 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 
 package org.forgerock.openam.upgrade.steps;
 
-import static org.fest.assertions.Assertions.*;
-import static org.mockito.BDDMockito.*;
-import static org.mockito.Matchers.eq;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -36,10 +37,10 @@ import org.forgerock.openam.upgrade.UpgradeException;
 import org.forgerock.util.Function;
 import org.forgerock.util.promise.NeverThrowsException;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.w3c.dom.Document;
+import org.wrensecurity.wrenam.test.AbstractMockBasedTest;
 
 import com.iplanet.sso.SSOException;
 import com.iplanet.sso.SSOToken;
@@ -53,7 +54,7 @@ import com.sun.identity.sm.ServiceConfigManager;
  *
  * @since 12.0.0
  */
-public class DelegationConfigUpgradeStepTest {
+public class DelegationConfigUpgradeStepTest extends AbstractMockBasedTest {
 
     private DelegationConfigUpgradeStep step;
 
@@ -79,7 +80,6 @@ public class DelegationConfigUpgradeStepTest {
 
     @BeforeMethod
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
         step = new SafeDelegationConfigUpgradeStep(configManager, tagSwapFunc, adminTokenAction, connectionFactory);
     }
 

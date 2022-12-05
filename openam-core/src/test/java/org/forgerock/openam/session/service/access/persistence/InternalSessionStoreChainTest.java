@@ -12,39 +12,37 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 
 package org.forgerock.openam.session.service.access.persistence;
 
-import static org.mockito.BDDMockito.*;
-import static org.mockito.BDDMockito.inOrder;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import java.util.Arrays;
 
 import org.mockito.InOrder;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import org.wrensecurity.wrenam.test.AbstractMockBasedTest;
 
 import com.iplanet.dpro.session.SessionID;
 import com.iplanet.dpro.session.service.InternalSession;
 
-public class InternalSessionStoreChainTest {
+public class InternalSessionStoreChainTest extends AbstractMockBasedTest {
 
     @Mock
     InternalSessionStore mainStore;
 
     InternalSessionStoreChain testedChain;
-
-    @BeforeMethod
-    public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
-    }
 
     @Test
     public void shouldCallAllElementsInChain() throws Exception {

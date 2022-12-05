@@ -26,7 +26,6 @@ define([
     "org/forgerock/openam/ui/admin/utils/FormHelper",
     "org/forgerock/openam/ui/common/util/BackgridUtils"
 ], function ($, _, Messages, AbstractView, EventManager, Router, Constants, UIUtils, FormHelper, BackgridUtils) {
-
     return AbstractView.extend({
         toolbarTemplateID: "[data-grid-toolbar]",
 

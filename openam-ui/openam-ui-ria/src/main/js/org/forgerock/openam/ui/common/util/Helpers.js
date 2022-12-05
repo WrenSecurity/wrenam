@@ -22,7 +22,6 @@ define([
     "lodash",
     "org/forgerock/openam/ui/common/util/ExternalLinks"
 ], function ($, Handlebars, _, ExternalLinks) {
-
     Handlebars.registerHelper("externalLink", function (key) {
         return _.get(ExternalLinks, key, "");
     });

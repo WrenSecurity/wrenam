@@ -12,39 +12,40 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 
 package org.forgerock.openam.sm.config;
 
 import static org.assertj.core.api.Assertions.assertThat;
-
-import org.forgerock.openam.core.DNWrapper;
 import static org.forgerock.openam.utils.CollectionUtils.asSet;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-
-import com.google.inject.Injector;
-import com.sun.identity.sm.ServiceListener;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.forgerock.openam.core.DNWrapper;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.Mock;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+import org.wrensecurity.wrenam.test.AbstractMockBasedTest;
+
+import com.google.inject.Injector;
+import com.sun.identity.sm.ServiceListener;
+
 /**
  * Unit test for {@link ConsoleConfigHandlerImpl}.
  *
  * @since 13.0.0
  */
-public final class ConsoleConfigHandlerImplTest {
+public final class ConsoleConfigHandlerImplTest extends AbstractMockBasedTest {
 
     @Mock
     private SMSConfigProvider configProvider;
@@ -63,8 +64,6 @@ public final class ConsoleConfigHandlerImplTest {
 
     @BeforeMethod
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
-
         consoleConfigHandler = new ConsoleConfigHandlerImpl(configProvider, dnUtils, injector);
 
         basicAttributes = new HashMap<>();

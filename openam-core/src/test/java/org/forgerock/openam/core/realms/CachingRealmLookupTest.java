@@ -12,32 +12,37 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 
 package org.forgerock.openam.core.realms;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 import static org.testng.Assert.fail;
 
 import javax.inject.Provider;
 
-import com.sun.identity.idm.IdRepoErrorCode;
-import com.sun.identity.sm.ServiceConfigManager;
-import com.sun.identity.sm.ServiceListener;
 import org.forgerock.openam.core.CoreWrapper;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import org.wrensecurity.wrenam.test.AbstractMockBasedTest;
 
-public class CachingRealmLookupTest {
+import com.sun.identity.idm.IdRepoErrorCode;
+import com.sun.identity.sm.ServiceConfigManager;
+import com.sun.identity.sm.ServiceListener;
+
+public class CachingRealmLookupTest extends AbstractMockBasedTest {
 
     private CachingRealmLookup realmsCache;
 
@@ -53,7 +58,6 @@ public class CachingRealmLookupTest {
 
     @BeforeMethod
     public void setup() throws Exception {
-        MockitoAnnotations.initMocks(this);
         realmTestHelper = new RealmTestHelper(coreWrapper);
         realmTestHelper.setupRealmClass();
         realmsCache = new CachingRealmLookup(realmLookupDelegate, new Provider<ServiceConfigManager>() {

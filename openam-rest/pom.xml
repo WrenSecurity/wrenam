@@ -13,6 +13,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2011-2016 ForgeRock AS.
+ * Portions copyright 2022 Wren Security
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
@@ -76,7 +77,7 @@
             <artifactId>openam-http</artifactId>
         </dependency>
         <dependency><!-- TODO required until Restlet endpoints are moved to CHF -->
-            <groupId>org.forgerock.http</groupId>
+            <groupId>org.wrensecurity.http</groupId>
             <artifactId>chf-http-servlet</artifactId>
         </dependency>
 
@@ -92,31 +93,31 @@
 
         <!-- Commons -->
         <dependency>
-            <groupId>org.forgerock.commons</groupId>
+            <groupId>org.wrensecurity.commons</groupId>
             <artifactId>json-resource</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.forgerock.commons</groupId>
+            <groupId>org.wrensecurity.commons</groupId>
             <artifactId>json-resource-http</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.forgerock.commons</groupId>
+            <groupId>org.wrensecurity.commons</groupId>
             <artifactId>json-web-token</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.forgerock.commons</groupId>
+            <groupId>org.wrensecurity.commons</groupId>
             <artifactId>authz-framework</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.forgerock.commons</groupId>
+            <groupId>org.wrensecurity.commons</groupId>
             <artifactId>forgerock-jaspi-runtime</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.forgerock.commons</groupId>
+            <groupId>org.wrensecurity.commons</groupId>
             <artifactId>forgerock-jaspi-jwt-session-module</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.forgerock.commons</groupId>
+            <groupId>org.wrensecurity.commons</groupId>
             <artifactId>forgerock-util</artifactId>
         </dependency>
 
@@ -140,7 +141,7 @@
         </dependency>
         <dependency>
             <groupId>org.powermock</groupId>
-            <artifactId>powermock-api-mockito</artifactId>
+            <artifactId>powermock-api-mockito2</artifactId>
         </dependency>
         <dependency>
             <groupId>org.powermock</groupId>
@@ -179,16 +180,16 @@
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.commons</groupId>
-            <artifactId>forgerock-guice-test</artifactId>
+            <groupId>org.wrensecurity.commons</groupId>
+            <artifactId>wrensec-guice-test</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.forgerock.commons</groupId>
+            <groupId>org.wrensecurity.commons</groupId>
             <artifactId>forgerock-test-utils</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.forgerock.commons</groupId>
+            <groupId>org.wrensecurity.commons</groupId>
             <artifactId>json-resource</artifactId>
             <type>test-jar</type>
             <scope>test</scope>

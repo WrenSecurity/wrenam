@@ -13,6 +13,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions copyright 2022 Wren Security
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
@@ -33,16 +34,16 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.forgerock.http</groupId>
+            <groupId>org.wrensecurity.http</groupId>
             <artifactId>chf-http-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.forgerock.commons</groupId>
-            <artifactId>forgerock-guice-core</artifactId>
+            <groupId>org.wrensecurity.commons</groupId>
+            <artifactId>wrensec-guice-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.forgerock.commons.guava</groupId>
-            <artifactId>forgerock-guava-reflect</artifactId>
+            <groupId>org.wrensecurity.commons.guava</groupId>
+            <artifactId>wrensec-guava-reflect</artifactId>
         </dependency>
         <dependency>
             <groupId>com.google.inject.extensions</groupId>
@@ -61,11 +62,11 @@
             <artifactId>openam-audit-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.forgerock.commons</groupId>
-            <artifactId>forgerock-guice-test</artifactId>
+            <groupId>org.wrensecurity.commons</groupId>
+            <artifactId>wrensec-guice-test</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.forgerock.commons</groupId>
+            <groupId>org.wrensecurity.commons</groupId>
             <artifactId>forgerock-test-utils</artifactId>
             <scope>test</scope>
         </dependency>

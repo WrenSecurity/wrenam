@@ -7,6 +7,7 @@ module.exports = function (config) {
             { pattern: "target/test-classes/**/*.js", included: false },
             { pattern: "target/compiled/**/*.js", included: false },
             { pattern: "target/dependencies/libs/**/*.js", included: false },
+            { pattern: "target/dependencies-expanded/forgerock-ui-user/libs/**/*.js", included: false },
             { pattern: "node_modules/chai/chai.js", included: false },
             { pattern: "node_modules/sinon-chai/lib/sinon-chai.js", included: false }
         ],

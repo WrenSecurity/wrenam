@@ -12,6 +12,7 @@
 * information: "Portions copyright [year] [name of copyright owner]".
 *
 * Copyright 2016 ForgeRock AS.
+ * Portions copyright 2022 Wren Security
 */
 package org.forgerock.openam.services.push;
 
@@ -28,8 +29,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 import javax.inject.Named;
-import org.forgerock.guava.common.cache.Cache;
-import org.forgerock.guava.common.cache.CacheBuilder;
+import org.wrensecurity.guava.common.cache.Cache;
+import org.wrensecurity.guava.common.cache.CacheBuilder;
 import org.forgerock.guice.core.GuiceModule;
 import org.forgerock.openam.services.push.dispatch.MessagePromise;
 

@@ -12,14 +12,18 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 
 package com.sun.identity.setup;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
-import static org.mockito.MockitoAnnotations.initMocks;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.testng.Assert.fail;
 
 import java.io.File;
@@ -37,12 +41,13 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import org.wrensecurity.wrenam.test.AbstractMockBasedTest;
 
 import com.google.inject.Injector;
 import com.sun.identity.common.configuration.ConfigurationException;
 import com.sun.identity.shared.Constants;
 
-public class AMSetupFilterTest {
+public class AMSetupFilterTest extends AbstractMockBasedTest {
 
     private AMSetupFilter setupFilter;
 
@@ -58,7 +63,6 @@ public class AMSetupFilterTest {
 
     @BeforeMethod
     public void setup() {
-        initMocks(this);
         given(injector.getInstance(AMSetupManager.class)).willReturn(setupManager);
 
         setupFilter = new AMSetupFilter();

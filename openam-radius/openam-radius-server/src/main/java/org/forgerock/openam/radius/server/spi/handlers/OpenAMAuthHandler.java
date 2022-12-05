@@ -13,6 +13,7 @@
  *
  * Copyrighted 2015 Intellectual Reserve, Inc (IRI)
  * Portions Copyrighted 2016 ForgeRock AS.
+ * Portions Copyrighted 2022 Wren Security
  */
 package org.forgerock.openam.radius.server.spi.handlers;
 
@@ -30,8 +31,8 @@ import javax.security.auth.callback.ConfirmationCallback;
 import javax.security.auth.callback.NameCallback;
 import javax.security.auth.callback.PasswordCallback;
 
-import org.forgerock.guava.common.base.Strings;
-import org.forgerock.guava.common.eventbus.EventBus;
+import org.wrensecurity.guava.common.base.Strings;
+import org.wrensecurity.guava.common.eventbus.EventBus;
 import org.forgerock.openam.radius.common.AccessAccept;
 import org.forgerock.openam.radius.common.AccessChallenge;
 import org.forgerock.openam.radius.common.AccessReject;

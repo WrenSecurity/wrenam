@@ -12,18 +12,19 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014-2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 
 package org.forgerock.oauth2.core;
 
 import static org.forgerock.openam.utils.Time.currentTimeMillis;
-import static org.mockito.BDDMockito.any;
-import static org.mockito.BDDMockito.anyLong;
-import static org.mockito.BDDMockito.*;
-import static org.mockito.BDDMockito.isNull;
-import static org.mockito.Mockito.anySetOf;
-import static org.mockito.Mockito.anyString;
-import static org.mockito.Mockito.eq;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anySet;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isNull;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -39,7 +40,6 @@ import org.forgerock.oauth2.core.exceptions.InvalidGrantException;
 import org.forgerock.oauth2.core.exceptions.InvalidRequestException;
 import org.forgerock.openam.oauth2.OAuth2UrisFactory;
 import org.forgerock.openam.oauth2.validation.ConfirmationKeyValidator;
-import org.mockito.Matchers;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -71,7 +71,7 @@ public class AccessTokenServiceTest {
                 providerSettingsFactory, urisFactory, mock(ConfirmationKeyValidator.class));
 
         providerSettings = mock(RealmOAuth2ProviderSettings.class);
-        given(providerSettingsFactory.get(Matchers.<OAuth2Request>anyObject())).willReturn(providerSettings);
+        given(providerSettingsFactory.get(any(OAuth2Request.class))).willReturn(providerSettings);
 
         uris = mock(OAuth2Uris.class);
         given(urisFactory.get(any(OAuth2Request.class))).willReturn(uris);
@@ -217,10 +217,10 @@ public class AccessTokenServiceTest {
         given(refreshToken.getClientId()).willReturn("CLIENT_ID");
         given(clientRegistration.getClientId()).willReturn("CLIENT_ID");
         given(refreshToken.getExpiryTime()).willReturn(currentTimeMillis() + 100);
-        given(providerSettings.validateRefreshTokenScope(eq(clientRegistration), anySetOf(String.class),
-                anySetOf(String.class), eq(request))).willReturn(validatedScope);
-        given(tokenStore.createAccessToken(anyString(), anyString(), anyString(), anyString(), anyString(),
-                anyString(), anySetOf(String.class), eq(refreshToken), anyString(), anyString(), eq(request), 
+        given(providerSettings.validateRefreshTokenScope(eq(clientRegistration), anySet(),
+                anySet(), eq(request))).willReturn(validatedScope);
+        given(tokenStore.createAccessToken(any(), any(), any(), any(), any(),
+                any(), anySet(), eq(refreshToken), any(), any(), eq(request), 
                 anyLong())).willReturn(accessToken);
 
         //When
@@ -249,10 +249,10 @@ public class AccessTokenServiceTest {
         given(refreshToken.getClientId()).willReturn("CLIENT_ID");
         given(clientRegistration.getClientId()).willReturn("CLIENT_ID");
         given(refreshToken.getExpiryTime()).willReturn(currentTimeMillis() + 100);
-        given(providerSettings.validateRefreshTokenScope(eq(clientRegistration), anySetOf(String.class),
-                anySetOf(String.class), eq(request))).willReturn(validatedScope);
-        given(tokenStore.createAccessToken(anyString(), anyString(), anyString(), anyString(), anyString(),
-                anyString(), anySetOf(String.class), eq(refreshToken), anyString(), anyString(), eq(request),
+        given(providerSettings.validateRefreshTokenScope(eq(clientRegistration), anySet(),
+                anySet(), eq(request))).willReturn(validatedScope);
+        given(tokenStore.createAccessToken(any(), anyString(), any(), any(), any(),
+                any(), anySet(), eq(refreshToken), any(), any(), eq(request),
                 anyLong()))
                 .willReturn(accessToken);
 
@@ -287,16 +287,16 @@ public class AccessTokenServiceTest {
         given(refreshToken.getClientId()).willReturn("CLIENT_ID");
         given(clientRegistration.getClientId()).willReturn("CLIENT_ID");
         given(refreshToken.getExpiryTime()).willReturn(currentTimeMillis() + 100);
-        given(providerSettings.validateRefreshTokenScope(eq(clientRegistration), anySetOf(String.class),
-                anySetOf(String.class), eq(request))).willReturn(validatedScope);
+        given(providerSettings.validateRefreshTokenScope(eq(clientRegistration), anySet(),
+                anySet(), eq(request))).willReturn(validatedScope);
 
         given(providerSettings.issueRefreshTokensOnRefreshingToken()).willReturn(true);
-        given(tokenStore.createRefreshToken(anyString(), anyString(), anyString(), anyString(), anySetOf(String.class),
-                eq(request), isNull(String.class), anyString(), anyLong())).willReturn(newRefreshToken);
+        given(tokenStore.createRefreshToken(any(), any(), any(), any(), anySet(),
+                eq(request), isNull(), any(), anyLong())).willReturn(newRefreshToken);
         given(newRefreshToken.toString()).willReturn(newRefreshTokenId);
 
-        given(tokenStore.createAccessToken(anyString(), anyString(), anyString(), anyString(), anyString(),
-                anyString(), anySetOf(String.class), eq(newRefreshToken), anyString(), anyString(), eq(request),
+        given(tokenStore.createAccessToken(any(), any(), any(), any(), any(),
+                any(), anySet(), eq(newRefreshToken), any(), any(), eq(request),
                 anyLong())).willReturn(accessToken);
 
         //When

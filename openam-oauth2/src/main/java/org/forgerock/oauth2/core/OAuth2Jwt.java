@@ -13,11 +13,12 @@
  *
  * Copyright 2014-2016 ForgeRock AS.
  * Portions Copyrighted 2015 Nomura Research Institute, Ltd.
+ * Portions Copyrighted 2022 Wren Security
  */
 
 package org.forgerock.oauth2.core;
 
-import org.forgerock.guava.common.annotations.VisibleForTesting;
+import org.wrensecurity.guava.common.annotations.VisibleForTesting;
 import org.forgerock.json.jose.common.JwtReconstruction;
 import org.forgerock.json.jose.jws.SignedJwt;
 import org.forgerock.json.jose.jws.handlers.SigningHandler;

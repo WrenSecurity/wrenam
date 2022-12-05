@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015 ForgeRock AS.
+ * Portions copyright 2022 Wren Security
  */
 /**
  *
@@ -26,8 +27,8 @@ import javax.inject.Named;
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
 
-import org.forgerock.guava.common.eventbus.EventBus;
-import org.forgerock.guava.common.eventbus.Subscribe;
+import org.wrensecurity.guava.common.eventbus.EventBus;
+import org.wrensecurity.guava.common.eventbus.Subscribe;
 import org.forgerock.openam.radius.server.config.RadiusServerConstants;
 import org.forgerock.openam.radius.server.events.AuthRequestAcceptedEvent;
 import org.forgerock.openam.radius.server.events.AuthRequestReceivedEvent;

@@ -22,7 +22,6 @@ define([
     "org/forgerock/openam/ui/admin/services/realm/AuthenticationService",
     "org/forgerock/openam/ui/common/components/SelectComponent"
 ], function ($, _, AbstractView, Router, Messages, AuthenticationService, SelectComponent) {
-
     SelectComponent = SelectComponent.default;
 
     function validateModuleProps () {
@@ -40,7 +39,6 @@ define([
         isValid = moduleName && moduleType;
         this.$el.find("[data-save]").attr("disabled", !isValid);
     }
-
 
     return AbstractView.extend({
         template: "templates/admin/views/realms/authentication/modules/AddModuleTemplate.html",

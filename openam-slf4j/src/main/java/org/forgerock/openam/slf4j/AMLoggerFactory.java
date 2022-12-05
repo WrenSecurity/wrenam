@@ -12,15 +12,16 @@
  * information: "Portions Copyrighted [year] [name of copyright owner]".
  *
  * Copyright 2014-2016 ForgeRock AS.
+ * Portions copyright 2022 Wren Security
  */
 
 package org.forgerock.openam.slf4j;
 
 import com.sun.identity.shared.debug.Debug;
 
-import org.forgerock.guava.common.cache.CacheBuilder;
-import org.forgerock.guava.common.cache.CacheLoader;
-import org.forgerock.guava.common.cache.LoadingCache;
+import org.wrensecurity.guava.common.cache.CacheBuilder;
+import org.wrensecurity.guava.common.cache.CacheLoader;
+import org.wrensecurity.guava.common.cache.LoadingCache;
 import org.slf4j.ILoggerFactory;
 import org.slf4j.Logger;
 

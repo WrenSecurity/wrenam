@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 
 package org.forgerock.openam.session.service.access.persistence.caching;
@@ -25,14 +26,14 @@ import org.forgerock.openam.session.service.access.persistence.SessionPersistenc
 import org.forgerock.openam.session.service.access.persistence.TimeOutSessionFilterStep;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import org.wrensecurity.wrenam.test.AbstractMockBasedTest;
 
 import com.iplanet.dpro.session.SessionID;
 import com.iplanet.dpro.session.service.InternalSession;
 
-public class TimedOutSessionFilterStepTest {
+public class TimedOutSessionFilterStepTest extends AbstractMockBasedTest {
 
     private static String TIMED_OUT_SESSSION_ID = "timedouthandle";
     private static String NOT_TIMED_OUT_SESSSION_ID = "nottimedouthandle";
@@ -55,8 +56,6 @@ public class TimedOutSessionFilterStepTest {
 
     @BeforeMethod
     public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
-
         // Define timed out and not timed out sessions
         when(timedOutSession.isTimedOut()).thenReturn(true);
         when(timedOutSession.willExpire()).thenReturn(true);

@@ -12,18 +12,20 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 
 package org.forgerock.openam.setup;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.forgerock.openam.setup.EmbeddedOpenDJManager.State.*;
+import static org.forgerock.openam.setup.EmbeddedOpenDJManager.State.CONFIGURED;
+import static org.forgerock.openam.setup.EmbeddedOpenDJManager.State.NO_EMBEDDED_INSTANCE;
+import static org.forgerock.openam.setup.EmbeddedOpenDJManager.State.UPGRADE_REQUIRED;
 import static org.forgerock.openam.setup.TestSetupHelper.deleteDirectory;
 import static org.forgerock.openam.setup.TestSetupHelper.extractZip;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
-import static org.mockito.MockitoAnnotations.initMocks;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,15 +33,17 @@ import java.net.URISyntaxException;
 import java.nio.file.Paths;
 import java.util.Random;
 
-import com.sun.identity.shared.debug.Debug;
 import org.assertj.core.api.ThrowableAssert;
 import org.forgerock.openam.upgrade.OpenDJUpgrader;
 import org.mockito.Mock;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import org.wrensecurity.wrenam.test.AbstractMockBasedTest;
 
-public class EmbeddedOpenDJManagerTest {
+import com.sun.identity.shared.debug.Debug;
+
+public class EmbeddedOpenDJManagerTest extends AbstractMockBasedTest {
 
     private final Random random = new Random();
 
@@ -53,7 +57,6 @@ public class EmbeddedOpenDJManagerTest {
 
     @BeforeMethod
     public void setup() {
-        initMocks(this);
         baseDirectoryZipExtractPath = new File("/tmp/base-directory-" + random.nextInt());
         baseDirectory = baseDirectoryZipExtractPath.getAbsolutePath() + File.separator + "base-directory";
     }

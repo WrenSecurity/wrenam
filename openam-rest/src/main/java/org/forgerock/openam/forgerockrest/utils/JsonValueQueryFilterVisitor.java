@@ -12,13 +12,14 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015 ForgeRock AS.
+ * Portions copyright 2022 Wren Security
  */
 
 package org.forgerock.openam.forgerockrest.utils;
 
 import java.util.List;
 
-import org.forgerock.guava.common.base.Predicate;
+import org.wrensecurity.guava.common.base.Predicate;
 import org.forgerock.json.JsonPointer;
 import org.forgerock.json.JsonValue;
 import org.forgerock.util.query.QueryFilter;

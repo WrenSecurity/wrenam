@@ -12,10 +12,12 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2013-2014 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 package org.forgerock.openam.cts.utils.blob;
 
 import org.forgerock.openam.cts.CoreTokenConfig;
+import org.mockito.AdditionalAnswers;
 import org.mockito.ArgumentCaptor;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -28,6 +30,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 public class TokenBlobStrategyTest {
+
     private CoreTokenConfig config;
     private TokenStrategyFactory factory;
 
@@ -40,9 +43,9 @@ public class TokenBlobStrategyTest {
     @Test
     public void shouldPerformAllStrategy() throws TokenStrategyFailedException {
         // Given
-        BlobStrategy first = mock(BlobStrategy.class);
-        BlobStrategy second = mock(BlobStrategy.class);
-        BlobStrategy third = mock(BlobStrategy.class);
+        BlobStrategy first = mock(BlobStrategy.class, AdditionalAnswers.returnsFirstArg());
+        BlobStrategy second = mock(BlobStrategy.class, AdditionalAnswers.returnsFirstArg());
+        BlobStrategy third = mock(BlobStrategy.class, AdditionalAnswers.returnsFirstArg());
 
         given(factory.getStrategies(any(CoreTokenConfig.class)))
                 .willReturn(Arrays.asList(first, second, third));
@@ -63,9 +66,9 @@ public class TokenBlobStrategyTest {
     @Test
     public void shouldReverseAllStrategy() throws TokenStrategyFailedException {
         // Given
-        BlobStrategy first = mock(BlobStrategy.class);
-        BlobStrategy second = mock(BlobStrategy.class);
-        BlobStrategy third = mock(BlobStrategy.class);
+        BlobStrategy first = mock(BlobStrategy.class, AdditionalAnswers.returnsFirstArg());
+        BlobStrategy second = mock(BlobStrategy.class, AdditionalAnswers.returnsFirstArg());
+        BlobStrategy third = mock(BlobStrategy.class, AdditionalAnswers.returnsFirstArg());
 
         given(factory.getStrategies(any(CoreTokenConfig.class)))
                 .willReturn(Arrays.asList(first, second, third));

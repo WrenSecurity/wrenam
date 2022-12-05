@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions copyright 2022 Wren Security
  */
 
 package org.forgerock.openam.rest;
@@ -28,7 +29,7 @@ import java.util.List;
 import com.iplanet.sso.SSOException;
 import com.iplanet.sso.SSOToken;
 import com.sun.identity.idm.IdRepoException;
-import org.forgerock.guava.common.collect.Lists;
+import org.wrensecurity.guava.common.collect.Lists;
 import org.forgerock.http.Filter;
 import org.forgerock.http.Handler;
 import org.forgerock.http.protocol.Form;

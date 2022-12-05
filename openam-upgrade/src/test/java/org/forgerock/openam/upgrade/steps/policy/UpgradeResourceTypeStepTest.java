@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 package org.forgerock.openam.upgrade.steps.policy;
 
@@ -100,9 +101,9 @@ public class UpgradeResourceTypeStepTest {
 
         // Mock organisation and application service configuration
         ServiceConfig orgConfig = mock(ServiceConfig.class);
-        when(configManager.getOrganizationConfig(anyString(), anyString())).thenReturn(orgConfig);
+        when(configManager.getOrganizationConfig(any(), any())).thenReturn(orgConfig);
         ServiceConfig appsConfig = mock(ServiceConfig.class);
-        when(orgConfig.getSubConfig(anyString())).thenReturn(appsConfig);
+        when(orgConfig.getSubConfig(any())).thenReturn(appsConfig);
 
         // Mock application names
         when(appsConfig.getSubConfigNames()).thenReturn(Collections.singleton("MyApplication"));

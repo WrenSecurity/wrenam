@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 
 package org.forgerock.openam.blacklist;
@@ -26,8 +27,10 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import org.wrensecurity.wrenam.test.AbstractMockBasedTest;
 
-public class CachingBlacklistTest {
+public class CachingBlacklistTest extends AbstractMockBasedTest {
+
     private static final String SID = "session1";
     private static final int CACHE_SIZE = 2;
 
@@ -44,7 +47,6 @@ public class CachingBlacklistTest {
 
     @BeforeMethod
     public void setup() {
-        MockitoAnnotations.initMocks(this);
         testBlacklist = new CachingBlacklist<>(mockDelegate, CACHE_SIZE, 0, mockClock);
 
         given(mockSession.getStableStorageID()).willReturn(SID);

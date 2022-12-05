@@ -12,21 +12,25 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 
 package org.forgerock.openam.core.rest.devices.oath;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.forgerock.json.JsonValue.*;
+import static org.forgerock.json.JsonValue.field;
+import static org.forgerock.json.JsonValue.json;
+import static org.forgerock.json.JsonValue.object;
 import static org.forgerock.json.resource.test.assertj.AssertJActionResponseAssert.assertThat;
 import static org.forgerock.json.resource.test.assertj.AssertJQueryResponseAssert.assertThat;
 import static org.forgerock.json.resource.test.assertj.AssertJResourceResponseAssert.assertThat;
 import static org.forgerock.openam.utils.Time.newDate;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -58,10 +62,10 @@ import org.forgerock.services.context.Context;
 import org.forgerock.util.promise.Promise;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import org.wrensecurity.wrenam.test.AbstractMockBasedTest;
 
 import com.iplanet.sso.SSOException;
 import com.iplanet.sso.SSOToken;
@@ -69,7 +73,7 @@ import com.sun.identity.idm.AMIdentity;
 import com.sun.identity.idm.IdRepoException;
 import com.sun.identity.shared.debug.Debug;
 
-public class OathDevicesResourceTest {
+public class OathDevicesResourceTest extends AbstractMockBasedTest {
 
     private OathDevicesResource resource;
 
@@ -90,11 +94,9 @@ public class OathDevicesResourceTest {
 
     @BeforeMethod
     public void setUp() throws Exception {
-
-        MockitoAnnotations.initMocks(this);
         resource = new OathDevicesResourceTestClass(dao, contextHelper, debug, oathServiceFactory);
 
-        given(contextHelper.getUserId((Context) anyObject())).willReturn(USER_ID);
+        given(contextHelper.getUserId(any())).willReturn(USER_ID);
         given(oathServiceFactory.create(anyString())).willReturn(oathService);
 
         realmTestHelper = new RealmTestHelper();
@@ -255,7 +257,7 @@ public class OathDevicesResourceTest {
 
             AMIdentity mockId = mock(AMIdentity.class);
             try {
-                given(mockId.getAttribute(anyString())).willReturn(attribute); // makes them
+                given(mockId.getAttribute(any())).willReturn(attribute); // makes them
             } catch (IdRepoException | SSOException e) {
                 e.printStackTrace();
             }

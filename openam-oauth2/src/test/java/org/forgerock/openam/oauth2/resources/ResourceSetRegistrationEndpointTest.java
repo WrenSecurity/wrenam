@@ -12,17 +12,28 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 
 package org.forgerock.openam.oauth2.resources;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.entry;
-import static org.forgerock.json.JsonValue.*;
+import static org.forgerock.json.JsonValue.array;
+import static org.forgerock.json.JsonValue.field;
+import static org.forgerock.json.JsonValue.json;
+import static org.forgerock.json.JsonValue.object;
 import static org.forgerock.openam.utils.CollectionUtils.asSet;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.anyMapOf;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.when;
 
 import java.net.URI;
 import java.util.Collections;
@@ -33,8 +44,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.forgerock.json.JsonValue;
 import org.forgerock.oauth2.core.AccessToken;
 import org.forgerock.oauth2.core.OAuth2ProviderSettings;
@@ -60,7 +69,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
-import org.mockito.Matchers;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.restlet.Request;
@@ -74,6 +82,9 @@ import org.restlet.ext.json.JsonRepresentation;
 import org.restlet.representation.Representation;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ResourceSetRegistrationEndpointTest {
 
@@ -96,9 +107,7 @@ public class ResourceSetRegistrationEndpointTest {
             new JacksonRepresentationFactory(new ObjectMapper());
 
     @BeforeMethod
-    @SuppressWarnings("unchecked")
     public void setup() throws Exception {
-
         store = mock(ResourceSetStore.class);
         validator = mock(ResourceSetDescriptionValidator.class);
         OAuth2RequestFactory requestFactory = mock(OAuth2RequestFactory.class);
@@ -113,7 +122,7 @@ public class ResourceSetRegistrationEndpointTest {
 
         OAuth2ProviderSettingsFactory providerSettingsFactory = mock(OAuth2ProviderSettingsFactory.class);
         OAuth2ProviderSettings providerSettings = mock(RealmOAuth2ProviderSettings.class);
-        given(providerSettingsFactory.get(Matchers.<OAuth2Request>anyObject())).willReturn(providerSettings);
+        given(providerSettingsFactory.get(any(OAuth2Request.class))).willReturn(providerSettings);
         given(providerSettings.getResourceSetStore()).willReturn(store);
 
         ExceptionHandler exceptionHandler = mock(ExceptionHandler.class);
@@ -138,7 +147,7 @@ public class ResourceSetRegistrationEndpointTest {
         given(endpoint.getResponse()).willReturn(response);
 
         OAuth2Request oAuth2Request = mock(OAuth2Request.class);
-        given(requestFactory.create(Matchers.<Request>anyObject())).willReturn(oAuth2Request);
+        given(requestFactory.create(any())).willReturn(oAuth2Request);
         given(oAuth2Request.getToken(AccessToken.class)).willReturn(accessToken);
     }
 
@@ -173,7 +182,7 @@ public class ResourceSetRegistrationEndpointTest {
 
         given(entity.getJsonObject()).willReturn(jsonObject);
         given(jsonObject.toString()).willReturn(jsonString);
-        given(validator.validate(anyMapOf(String.class, Object.class)))
+        given(validator.validate(anyMap()))
                 .willReturn(RESOURCE_SET_DESCRIPTION_CONTENT.asMap());
 
         return entity;
@@ -187,7 +196,7 @@ public class ResourceSetRegistrationEndpointTest {
 
         given(entity.getJsonObject()).willReturn(jsonObject);
         given(jsonObject.toString()).willReturn(jsonString);
-        given(validator.validate(anyMapOf(String.class, Object.class)))
+        given(validator.validate(anyMap()))
                 .willReturn(RESOURCE_SET_DESCRIPTION_UPDATED_CONTENT.asMap());
 
         return entity;
@@ -219,7 +228,7 @@ public class ResourceSetRegistrationEndpointTest {
                 ArgumentCaptor.forClass(ResourceSetDescription.class);
         InOrder inOrder = inOrder(resourceRegistrationFilter, store, resourceRegistrationFilter);
         inOrder.verify(resourceRegistrationFilter).beforeResourceRegistration(any(ResourceSetDescription.class));
-        inOrder.verify(store).create(Matchers.<OAuth2Request>anyObject(), resourceSetCaptor.capture());
+        inOrder.verify(store).create(any(), resourceSetCaptor.capture());
         inOrder.verify(resourceRegistrationFilter).afterResourceRegistration(any(ResourceSetDescription.class));
         assertThat(resourceSetCaptor.getValue().getId()).isNotNull().isNotEmpty();
         assertThat(resourceSetCaptor.getValue().getClientId()).isEqualTo("CLIENT_ID");
@@ -232,7 +241,7 @@ public class ResourceSetRegistrationEndpointTest {
         Map<String, Object> responseBody = (Map<String, Object>) new ObjectMapper()
                 .readValue(response.getText(), Map.class);
         assertThat(responseBody).containsKey("_id");
-        verify(hook).resourceSetCreated(anyString(), Matchers.<ResourceSetDescription>anyObject());
+        verify(hook).resourceSetCreated(any(), any());
         verify(labelRegistration).updateLabelsForNewResourceSet(any(ResourceSetDescription.class));
     }
 
@@ -341,7 +350,7 @@ public class ResourceSetRegistrationEndpointTest {
         ArgumentCaptor<Status> responseStatusCaptor = ArgumentCaptor.forClass(Status.class);
         verify(response).setStatus(responseStatusCaptor.capture());
         assertThat(responseStatusCaptor.getValue().getCode()).isEqualTo(204);
-        verify(labelRegistration).updateLabelsForDeletedResourceSet(any(ResourceSetDescription.class));
+        verify(labelRegistration).updateLabelsForDeletedResourceSet(any());
     }
 
     @Test

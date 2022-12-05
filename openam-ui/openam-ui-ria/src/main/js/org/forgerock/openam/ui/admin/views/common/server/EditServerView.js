@@ -100,7 +100,6 @@ define([
                                 } else {
                                     input.focus();
                                 }
-
                             }
                         };
                         this.$el.find("[data-tab-search]").append(new TabSearch(options).render().$el);

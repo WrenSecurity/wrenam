@@ -32,7 +32,6 @@ define([
     "org/forgerock/commons/ui/common/main/i18nManager",
     "require"
 ], function ($, AbstractView, tokensService, eventManager, constants, dataTable, i18nManager, require) {
-
     var TokensView = AbstractView.extend({
         template: "templates/openam/oauth2/TokensTemplate.html",
 
@@ -58,7 +57,6 @@ define([
         },
 
         reloadData () {
-
             $("#tokensTable").dataTable({
                 "bProcessing": true,
                 "sAjaxSource": "",
@@ -71,10 +69,10 @@ define([
                                 data.aaData[i].id
                                 }" type="checkbox" />`;
 
-                            if (typeof data.aaData[i].scope !== "undefined") {
-                                cleanScope = data.aaData[i].scope;
-                            } else {
+                            if (typeof data.aaData[i].scope === "undefined") {
                                 cleanScope = "-";
+                            } else {
+                                cleanScope = data.aaData[i].scope;
                             }
                             data.aaData[i].cleanScope = $('<span class="cleanScope" />').text(cleanScope).wrap("<p>")
                                 .parent().html();
@@ -157,7 +155,6 @@ define([
                             }
                             output += "</table>";
 
-
                             td = $(temp).next().children(0);
                             if (td.attr("class") === "details") {
                                 td.html(output);
@@ -194,7 +191,6 @@ define([
                     },
                     id);
             });
-
         }
 
     });

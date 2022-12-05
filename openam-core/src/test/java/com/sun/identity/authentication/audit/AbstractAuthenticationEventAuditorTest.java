@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 package com.sun.identity.authentication.audit;
 
@@ -26,8 +27,9 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import org.wrensecurity.wrenam.test.AbstractMockBasedTest;
 
-public class AbstractAuthenticationEventAuditorTest {
+public class AbstractAuthenticationEventAuditorTest extends AbstractMockBasedTest {
 
     private AbstractAuthenticationEventAuditor auditor;
 
@@ -45,8 +47,6 @@ public class AbstractAuthenticationEventAuditorTest {
 
     @BeforeMethod
     public void setupMocks() {
-        MockitoAnnotations.initMocks(this);
-
         auditor = new AbstractAuthenticationEventAuditor(eventPublisher, eventFactory) {
             // no abstract implementation required
         };

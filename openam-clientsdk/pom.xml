@@ -13,6 +13,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2011-2016 ForgeRock AS.
+ * Portions copyright 2022 Wren Security
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
@@ -81,17 +82,6 @@
         </resources>
         <plugins>
             <plugin>
-                <artifactId>maven-clean-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>clean</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <executions>
@@ -110,7 +100,7 @@
                     -->
                     <artifactSet>
                         <includes>
-                            <include>org.forgerock.commons:forgerock-util</include>
+                            <include>org.wrensecurity.commons:forgerock-util</include>
                             <include>org.forgerock.openam:openam-core</include>
                             <include>org.forgerock.openam:openam-entitlements</include>
                             <include>org.forgerock.openam:openam-audit-context</include>
@@ -127,13 +117,13 @@
                             <include>org.forgerock.openam:openam-client-sts</include>
                             <include>org.forgerock.openam:openam-notifications</include>
                             <include>org.json:json</include>
-                            <include>org.forgerock.opendj:opendj-core</include>
-                            <include>org.forgerock.opendj:opendj-grizzly</include>
-                            <include>org.forgerock.commons:i18n-core</include>
-                            <include>org.forgerock.commons:i18n-slf4j</include>
-                            <include>org.forgerock.commons.guava:forgerock-guava-base</include>
-                            <include>org.forgerock.commons.guava:forgerock-guava-collect</include>
-                            <include>org.forgerock.http:chf-http-core</include>
+                            <include>org.wrensecurity.wrends:opendj-core</include>
+                            <include>org.wrensecurity.wrends:opendj-grizzly</include>
+                            <include>org.wrensecurity.commons:i18n-core</include>
+                            <include>org.wrensecurity.commons:i18n-slf4j</include>
+                            <include>org.wrensecurity.commons.guava:wrensec-guava-base</include>
+                            <include>org.wrensecurity.commons.guava:wrensec-guava-collect</include>
+                            <include>org.wrensecurity.http:chf-http-core</include>
                             <include>com.fasterxml.jackson.core:jackson-databind</include>
                             <include>com.fasterxml.jackson.core:jackson-core</include>
                             <include>com.fasterxml.jackson.core:jackson-annotations</include>
@@ -588,19 +578,19 @@
                             </includes>
                         </filter>
                         <filter>
-                            <artifact>org.forgerock.opendj:opendj-core</artifact>
+                            <artifact>org.wrensecurity.wrends:opendj-core</artifact>
                             <includes>
                                 <include>**/*</include>
                             </includes>
                         </filter>
                         <filter>
-                            <artifact>org.forgerock.opendj:opendj-grizzly</artifact>
+                            <artifact>org.wrensecurity.wrends:opendj-grizzly</artifact>
                             <includes>
                                 <include>**/*</include>
                             </includes>
                         </filter>
                         <filter>
-                            <artifact>org.forgerock.commons:i18n-core</artifact>
+                            <artifact>org.wrensecurity.commons:i18n-core</artifact>
                             <includes>
                                 <include>**/**</include>
                             </includes>
@@ -702,27 +692,27 @@
             <artifactId>openam-client-sts</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.forgerock.opendj</groupId>
+            <groupId>org.wrensecurity.wrends</groupId>
             <artifactId>opendj-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.forgerock.opendj</groupId>
+            <groupId>org.wrensecurity.wrends</groupId>
             <artifactId>opendj-grizzly</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.forgerock.commons.guava</groupId>
-            <artifactId>forgerock-guava-collect</artifactId>
+            <groupId>org.wrensecurity.commons.guava</groupId>
+            <artifactId>wrensec-guava-collect</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.forgerock.commons.guava</groupId>
-            <artifactId>forgerock-guava-base</artifactId>
+            <groupId>org.wrensecurity.commons.guava</groupId>
+            <artifactId>wrensec-guava-base</artifactId>
         </dependency>
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.forgerock.http</groupId>
+            <groupId>org.wrensecurity.http</groupId>
             <artifactId>chf-http-core</artifactId>
         </dependency>
         <dependency>

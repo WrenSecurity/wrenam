@@ -12,6 +12,7 @@
  * information: "Portions Copyrighted [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions copyright 2022 Wren Security
  */
 
 package org.forgerock.openam.sts.tokengeneration.oidc;
@@ -20,7 +21,7 @@ import static org.forgerock.openam.utils.Time.*;
 
 import com.iplanet.sso.SSOToken;
 import org.apache.commons.collections.MapUtils;
-import org.forgerock.guava.common.collect.Lists;
+import org.wrensecurity.guava.common.collect.Lists;
 import org.forgerock.json.jose.builders.JwsHeaderBuilder;
 import org.forgerock.json.jose.builders.JwtBuilderFactory;
 import org.forgerock.json.jose.jwk.KeyUse;

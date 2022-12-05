@@ -14,7 +14,6 @@
  * Copyright 2015-2016 ForgeRock AS.
  */
 
-
 define([
     "jquery",
     "lodash",
@@ -23,7 +22,6 @@ define([
     "handlebars",
     "org/forgerock/commons/ui/common/util/UIUtils"
 ], function ($, _, AbstractView, BootstrapDialog, Handlebars, UIUtils) {
-
     var LinkView = AbstractView.extend({
         template: "templates/admin/views/realms/authentication/chains/LinkTemplate.html",
         popoverTemplate: "templates/admin/views/realms/authentication/chains/PopoverTemplate.html",
@@ -65,7 +63,6 @@ define([
                 popover.options.title = selected.text();
                 self.$el.find("[data-auth-criteria-info]").popover("show");
             });
-
         },
 
         hidePopover () {
@@ -122,5 +119,4 @@ define([
     });
 
     return LinkView;
-
 });

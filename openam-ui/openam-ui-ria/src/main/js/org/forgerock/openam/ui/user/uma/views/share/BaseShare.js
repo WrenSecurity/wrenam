@@ -14,17 +14,14 @@
  * Copyright 2015-2016 ForgeRock AS.
  */
 
-
 define([
     "org/forgerock/commons/ui/common/main/AbstractView",
     "org/forgerock/openam/ui/user/uma/views/share/CommonShare"
 ], function (AbstractView, CommonShare) {
-
     var BaseShare = AbstractView.extend({
         template: "templates/user/uma/views/share/BaseShare.html",
         baseTemplate: "templates/common/DefaultBaseTemplate.html",
         render (args, callback) {
-
             var self = this;
             self.shareView = new CommonShare();
             self.shareView.element = "#commonShare";

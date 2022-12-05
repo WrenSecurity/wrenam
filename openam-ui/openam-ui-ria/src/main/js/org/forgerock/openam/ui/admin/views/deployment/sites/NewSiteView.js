@@ -24,7 +24,6 @@ define([
     "org/forgerock/openam/ui/common/views/jsonSchema/FlatJSONSchemaView",
     "org/forgerock/openam/ui/admin/views/common/Backlink"
 ], ($, _, Messages, AbstractView, Router, SitesService, FlatJSONSchemaView, Backlink) => {
-
     const NewSiteView = AbstractView.extend({
         template: "templates/admin/views/deployment/sites/NewSiteTemplate.html",
         events: {

@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014-2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 
 package com.sun.identity.entitlement.xacml3;
@@ -92,7 +93,7 @@ public class XACMLExportImportTest {
         applicationServiceFactory = mock(ApplicationServiceFactory.class);
         applicationService = mock(ApplicationService.class);
         resourceTypeService = mock(ResourceTypeService.class);
-        when(applicationServiceFactory.create(any(Subject.class), anyString())).thenReturn(applicationService);
+        when(applicationServiceFactory.create(any(), anyString())).thenReturn(applicationService);
 
         Application application = mock(Application.class);
         URLResourceName urlResourceName = mock(URLResourceName.class);
@@ -108,7 +109,7 @@ public class XACMLExportImportTest {
 
         // Given (shared test state)
 
-        given(pmFactory.createReferralPrivilegeManager(eq(ROOT_REALM), any(Subject.class))).willReturn(pm);
+        given(pmFactory.createReferralPrivilegeManager(eq(ROOT_REALM), any())).willReturn(pm);
         given(applicationServiceFactory.create(any(Subject.class), anyString())).willReturn(applicationService);
         given(applicationService.getApplication(anyString())).willReturn(application);
         given(application.getResourceComparator()).willReturn(urlResourceName);

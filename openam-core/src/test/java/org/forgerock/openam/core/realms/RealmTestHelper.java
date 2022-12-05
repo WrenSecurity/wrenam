@@ -17,19 +17,22 @@
 package org.forgerock.openam.core.realms;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Guice;
-import com.iplanet.sso.SSOToken;
 import org.apache.commons.lang.StringUtils;
 import org.assertj.core.description.Description;
 import org.forgerock.openam.core.CoreWrapper;
 import org.forgerock.util.Reject;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.iplanet.sso.SSOToken;
 
 /**
  * Test helper class for setting up the {@link Realm} class so that other tests can use

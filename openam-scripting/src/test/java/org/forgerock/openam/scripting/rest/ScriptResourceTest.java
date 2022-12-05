@@ -12,26 +12,44 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 package org.forgerock.openam.scripting.rest;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.forgerock.json.JsonValue.*;
-import static org.forgerock.openam.scripting.ScriptConstants.*;
-import static org.forgerock.openam.scripting.ScriptConstants.ScriptContext.*;
-import static org.forgerock.openam.scripting.SupportedScriptingLanguage.*;
-import static org.mockito.BDDMockito.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.forgerock.json.JsonValue.field;
+import static org.forgerock.json.JsonValue.json;
+import static org.forgerock.json.JsonValue.object;
+import static org.forgerock.openam.scripting.ScriptConstants.JSON_UUID;
+import static org.forgerock.openam.scripting.ScriptConstants.SCRIPT_CONTEXT;
+import static org.forgerock.openam.scripting.ScriptConstants.SCRIPT_DESCRIPTION;
+import static org.forgerock.openam.scripting.ScriptConstants.SCRIPT_LANGUAGE;
+import static org.forgerock.openam.scripting.ScriptConstants.SCRIPT_NAME;
+import static org.forgerock.openam.scripting.ScriptConstants.SCRIPT_TEXT;
+import static org.forgerock.openam.scripting.ScriptConstants.getContextFromString;
+import static org.forgerock.openam.scripting.ScriptConstants.getLanguageFromString;
+import static org.forgerock.openam.scripting.ScriptConstants.ScriptContext.POLICY_CONDITION;
+import static org.forgerock.openam.scripting.SupportedScriptingLanguage.GROOVY;
+import static org.forgerock.openam.scripting.SupportedScriptingLanguage.JAVASCRIPT;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.testng.AssertJUnit.*;
-import com.sun.identity.shared.encode.Base64;
+import static org.testng.AssertJUnit.assertEquals;
+import static org.testng.AssertJUnit.assertNotNull;
 
-import org.forgerock.openam.test.apidescriptor.ApiAnnotationAssert;
-import org.forgerock.services.context.Context;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.security.auth.Subject;
+
 import org.forgerock.json.JsonValue;
 import org.forgerock.json.resource.ActionRequest;
 import org.forgerock.json.resource.ActionResponse;
@@ -54,6 +72,8 @@ import org.forgerock.openam.scripting.StandardScriptValidator;
 import org.forgerock.openam.scripting.service.ScriptConfiguration;
 import org.forgerock.openam.scripting.service.ScriptingService;
 import org.forgerock.openam.scripting.service.ScriptingServiceFactory;
+import org.forgerock.openam.test.apidescriptor.ApiAnnotationAssert;
+import org.forgerock.services.context.Context;
 import org.forgerock.util.promise.Promise;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
@@ -61,14 +81,7 @@ import org.slf4j.Logger;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import javax.security.auth.Subject;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import com.sun.identity.shared.encode.Base64;
 
 public class ScriptResourceTest {
 
@@ -118,7 +131,7 @@ public class ScriptResourceTest {
         Logger logger = mock(Logger.class);
         ScriptingService scriptingService = new MockScriptingService();
         ScriptingServiceFactory serviceFactory = mock(ScriptingServiceFactory.class);
-        when(serviceFactory.create(anyString())).thenReturn(scriptingService);
+        when(serviceFactory.create(any())).thenReturn(scriptingService);
         ExceptionMappingHandler<ScriptException, ResourceException> errorHandler = new ScriptExceptionMappingHandler();
         scriptResource = new ScriptResource(logger, serviceFactory, errorHandler,
                 new StandardScriptValidator(new StandardScriptEngineManager()));

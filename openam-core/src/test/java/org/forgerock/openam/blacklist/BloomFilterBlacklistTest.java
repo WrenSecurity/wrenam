@@ -12,25 +12,30 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 
 package org.forgerock.openam.blacklist;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
-import com.iplanet.dpro.session.Session;
 import org.forgerock.bloomfilter.BloomFilter;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import org.wrensecurity.wrenam.test.AbstractMockBasedTest;
 
-public class BloomFilterBlacklistTest {
+import com.iplanet.dpro.session.Session;
+
+public class BloomFilterBlacklistTest extends AbstractMockBasedTest {
+
     private static final long PURGE_DELAY = 1000L;
 
     @Mock
@@ -46,7 +51,6 @@ public class BloomFilterBlacklistTest {
 
     @BeforeMethod
     public void setup() {
-        MockitoAnnotations.initMocks(this);
         testBlacklist = new BloomFilterBlacklist<>(mockDelegate, PURGE_DELAY, mockBloomFilter);
     }
 

@@ -36,7 +36,6 @@ define([
             this.$el.find("button#unshareAllResources").prop("disabled", false);
         },
         render (args, callback) {
-
             this.data.labelId = args[1];
             this.data.topLevel = args[1] === "";
             this.renderResources(callback);
@@ -58,7 +57,6 @@ define([
                     self.renderGrid(self.createLabelCollection(this.data.labelId), columns, callback);
                 });
             }
-
         },
         unshareAllResources () {
             var self = this,

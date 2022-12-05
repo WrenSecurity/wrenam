@@ -15,23 +15,23 @@
  */
 package org.forgerock.openam.authentication.modules.oidc;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Guice;
-import org.forgerock.jaspi.modules.openid.exceptions.FailedToLoadJWKException;
-import org.forgerock.jaspi.modules.openid.resolvers.OpenIdResolverFactory;
-import org.forgerock.jaspi.modules.openid.resolvers.OpenIdResolver;
-
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.testng.Assert.assertTrue;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import static org.testng.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.anyInt;
+import org.forgerock.jaspi.modules.openid.resolvers.OpenIdResolver;
+import org.forgerock.jaspi.modules.openid.resolvers.OpenIdResolverFactory;
+import org.forgerock.json.jose.exceptions.FailedToLoadJWKException;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
+
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
 
 
 

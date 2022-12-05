@@ -121,9 +121,10 @@ define([
         /**
          * Property transforms & warnings
          */
-        eachProperty(transformedSchema, [transformBooleanTypeToCheckboxFormat,
-                                         transformEnumTypeToString,
-                                         warnOnInferredPasswordWithoutFormat]);
+        eachProperty(transformedSchema, [
+            transformBooleanTypeToCheckboxFormat,
+            transformEnumTypeToString,
+            warnOnInferredPasswordWithoutFormat]);
 
         /**
          * Additional attributes

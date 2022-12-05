@@ -18,7 +18,6 @@ package org.forgerock.openam.test.apidescriptor;
 import static org.assertj.core.api.Assertions.fail;
 import static org.forgerock.openam.i18n.apidescriptor.ApiDescriptorConstants.TRANSLATION_KEY_PREFIX;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;

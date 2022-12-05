@@ -14,7 +14,6 @@
  * Copyright 2015-2016 ForgeRock AS.
  */
 
-
 define([
     "jquery",
     "lodash",
@@ -38,7 +37,6 @@ define([
 ], function ($, _, Backbone, BackbonePaginator, BackgridFilter, Backgrid, ThemeablePaginator, ThemeableSelectAllCell,
              Messages, AbstractView, EventManager, Router, Constants, UIUtils, URLHelper, BackgridUtils, Script,
              ScriptsService, FormHelper) {
-
     return AbstractView.extend({
         template: "templates/admin/views/realms/scripts/ScriptsTemplate.html",
         toolbarTemplate: "templates/admin/views/realms/scripts/ScriptsToolbarTemplate.html",

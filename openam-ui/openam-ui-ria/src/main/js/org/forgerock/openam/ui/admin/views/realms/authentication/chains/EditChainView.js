@@ -32,7 +32,6 @@ define([
     "sortable"
 ], function ($, _, AbstractView, Constants, EventManager, EditLinkView, FormHelper, Handlebars, LinkView, Messages,
              PostProcessView, Router, AuthenticationService) {
-
     var createLinkView = function (index, view) {
             var linkView = new LinkView();
 
@@ -64,7 +63,6 @@ define([
         },
 
         initSortable = function (self) {
-
             self.$el.find("ol#sortableAuthChain").nestingSortable({
                 exclude: "li:not(.chain-link)",
                 delay: 100,
@@ -161,7 +159,6 @@ define([
             var self = this;
 
             AuthenticationService.authentication.chains.get(args[0], args[1]).then((data) => {
-
                 self.data = {
                     realmPath : args[0],
                     allModules : data.modulesData,
@@ -172,7 +169,6 @@ define([
                 };
 
                 self.parentRender(function () {
-
                     if (self.data.form.chainData.adminAuthModule || self.data.form.chainData.orgConfig) {
                         var popoverOpt = {
                             trigger : "hover",
@@ -195,13 +191,11 @@ define([
                     }
 
                     if (self.data.form.chainData.authChainConfiguration.length > 0) {
-
                         _.each(self.data.form.chainData.authChainConfiguration, function (linkConfig, index) {
                             var linkView = createLinkView(index, self);
                             self.addItemToList(linkView.element);
                             linkView.render();
                         });
-
                     } else {
                         self.validateChain();
                     }
@@ -209,7 +203,6 @@ define([
                     initSortable(self);
                     PostProcessView.render(self.data.form.chainData);
                 });
-
             }, (response) => {
                 Messages.addMessage({
                     type: Messages.TYPE_DANGER,
@@ -273,7 +266,6 @@ define([
                 sufficentIndex,
                 config = this.data.form.chainData.authChainConfiguration;
 
-
             if (config.length === 0) {
                 invalid = true;
                 this.$el.find("#sortableAuthChain").addClass("hidden");
@@ -302,5 +294,4 @@ define([
         }
 
     });
-
 });

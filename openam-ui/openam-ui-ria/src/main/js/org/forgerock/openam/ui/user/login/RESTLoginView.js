@@ -90,7 +90,6 @@ define([
     }
 
     function routeToLoginUnavailable (fragmentParams) {
-
         // We cannot use the Router.getLink() method here and simply apply the subrealm to the route because
         // Router.getLink() does more than its title suggests. It also applies the default properties to the route and
         // these are not always correct if there has been a previous successful login request.
@@ -142,7 +141,6 @@ define([
                 } else {
                     Configuration.setProperty("loggedUser", user);
                     RESTLoginHelper.setSuccessURL(requirements.tokenId, requirements.successUrl).then(() => {
-
                         if (gotoUrl.exists()) {
                             window.location.href = gotoUrl.toHref();
                             $("body").empty();
@@ -251,7 +249,6 @@ define([
             // CommonRoutesConfig login route. This needs to be removed as part of AME-11109.
             this.data.args = [undefined, getFragmentParamString()];
 
-
             if (args) {
                 auth.additional = addtionalArguments;
                 auth.urlParams = {};
@@ -264,7 +261,6 @@ define([
             }
 
             AuthNService.getRequirements().then(_.bind(function (reqs) {
-
                 // Clear out existing session if instructed
                 if (reqs.hasOwnProperty("tokenId") && params.arg === "newsession") {
                     logout.default();
@@ -300,7 +296,6 @@ define([
 
                 const paramString = URIUtils.getCurrentFragmentQueryString();
                 routeToLoginUnavailable(RESTLoginHelper.filterUrlParams(query.parseParameters(paramString)));
-
             }, this));
         },
         renderForm (reqs, urlParams) {

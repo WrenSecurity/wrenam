@@ -14,7 +14,6 @@
  * Portions copyright 2014-2016 ForgeRock AS.
  */
 
-
 define([
     "jquery",
     "lodash",

@@ -1,6 +1,6 @@
 package org.forgerock.openam.core.rest;
 
-import org.forgerock.guava.common.base.Predicate;
+import org.wrensecurity.guava.common.base.Predicate;
 import org.forgerock.services.context.Context;
 
 /**

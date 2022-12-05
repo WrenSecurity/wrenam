@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions copyright 2022 Wren Security
  */
 package org.forgerock.openam.authentication.modules.saml2;
 
@@ -27,7 +28,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.forgerock.guava.common.annotations.VisibleForTesting;
+import org.wrensecurity.guava.common.annotations.VisibleForTesting;
 import org.forgerock.guice.core.InjectorHolder;
 import org.forgerock.openam.federation.saml2.SAML2TokenRepositoryException;
 import org.forgerock.openam.saml2.SAML2Store;
