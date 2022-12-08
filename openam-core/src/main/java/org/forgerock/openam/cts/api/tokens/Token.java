@@ -12,6 +12,8 @@
  * the License file at legal/CDDLv1.0.txt. If applicable, add the following below the CDDL
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
+ *
+ * Portions copyright 2022 Wren Security
  */
 package org.forgerock.openam.cts.api.tokens;
 
@@ -382,11 +384,7 @@ public class Token {
             } else if (field.equals(CoreTokenField.BLOB)) {
                 value = Long.toString(getBlob().length) + " bytes";
             } else {
-                value = String.valueOf(getAttribute(field));
-            }
-
-            if (value == null) {
-                value = "[null]";
+                value = String.valueOf((Object) getAttribute(field));
             }
 
             r += MessageFormat.format(format, field.toString(), value);
