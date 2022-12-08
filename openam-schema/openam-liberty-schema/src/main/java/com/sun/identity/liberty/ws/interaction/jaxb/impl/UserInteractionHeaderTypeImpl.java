@@ -39,7 +39,7 @@ public class UserInteractionHeaderTypeImpl implements com.sun.identity.liberty.w
 
     public boolean isRedirect() {
         if (!has_Redirect) {
-            return javax.xml.bind.DatatypeConverter.parseBoolean(com.sun.xml.bind.DatatypeConverterImpl.installHook("false"));
+            return false;
         } else {
             return _Redirect;
         }
