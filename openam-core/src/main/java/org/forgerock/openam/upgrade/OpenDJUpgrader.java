@@ -90,7 +90,7 @@ import org.opends.server.util.TimeThread;
  * revert their changes by restoring from backup.
  */
 public class OpenDJUpgrader {
-    private static final String ZIP_FILE = "/WEB-INF/template/opendj/opendj.zip";
+    private static final String ZIP_FILE = "/WEB-INF/template/wrends/wrends.zip";
     private static final OpenDJVersion DJ_245_VERSION = OpenDJVersion.valueOf("2.4.5.7743");
     private static final OpenDJVersion DJ_246_VERSION = OpenDJVersion.valueOf("2.4.6.8102");
 
@@ -367,7 +367,7 @@ public class OpenDJUpgrader {
         } else {
             error("Upgrade required: upgrading from " + currentVersion + " to " + newVersion);
         }
-        
+
         return true;
     }
 
@@ -379,7 +379,7 @@ public class OpenDJUpgrader {
     private static void error(final String msg) {
         Debug.getInstance(SetupConstants.DEBUG_NAME).error(msg);
     }
-    
+
     private static void error(final String msg, final Throwable th) {
         Debug.getInstance(SetupConstants.DEBUG_NAME).error(msg, th);
     }
@@ -429,7 +429,7 @@ public class OpenDJUpgrader {
                     String version = IOUtils.readStream(zis);
                     return OpenDJVersion.valueOf(version);
                 }
-            
+
                 zis.closeEntry();
             }
         } catch (final IOException ioe) {
@@ -473,7 +473,7 @@ public class OpenDJUpgrader {
 
                 zis.closeEntry();
             }
-      
+
             message("done");
         } catch (final IOException ioe) {
             error("failed: ", ioe);
