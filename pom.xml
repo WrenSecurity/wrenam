@@ -92,7 +92,7 @@
     <properties>
         <wrensec-commons.version>22.4.0</wrensec-commons.version>
         <wrensec-guava.version>18.0.5</wrensec-guava.version>
-        <pgpVerifyKeysVersion>1.7.2</pgpVerifyKeysVersion>
+        <pgpVerifyKeysVersion>1.7.3</pgpVerifyKeysVersion>
 
         <!-- **************************************************************** -->
         <maven.build.timestamp.format>yyyy-MMM-dd HH:mm:ss</maven.build.timestamp.format>
@@ -142,8 +142,9 @@
         <geoip.version>2.0.0</geoip.version>
         <groovy.version>2.4.6</groovy.version>
         <groovy-sandbox.version>1.6</groovy-sandbox.version>
-        <jaxb.version>1.0.6</jaxb.version>
-        <jaxb1.version>2.0.2</jaxb1.version>
+        <jaxb-api.version>2.3.1</jaxb-api.version>
+        <jaxb.version>2.3.7</jaxb.version>
+        <jaxb1.version>2.2.5-1</jaxb1.version>
         <jaxrpc-api.version>1.1</jaxrpc-api.version>
         <jaxrpc-impl.version>1.1.4_01-wren1</jaxrpc-impl.version>
         <jaxrpc-spi.version>1.1.4_01-wren1</jaxrpc-spi.version>
@@ -1311,7 +1312,7 @@
             <dependency>
                 <groupId>javax.xml.bind</groupId>
                 <artifactId>jaxb-api</artifactId>
-                <version>${jaxb.version}</version>
+                <version>${jaxb-api.version}</version>
             </dependency>
 
             <dependency>
@@ -1323,18 +1324,6 @@
             <dependency>
                 <groupId>com.sun.xml.bind</groupId>
                 <artifactId>jaxb-impl</artifactId>
-                <version>${jaxb.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.sun.xml.bind</groupId>
-                <artifactId>jaxb-libs</artifactId>
-                <version>${jaxb.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.sun.xml.bind</groupId>
-                <artifactId>jaxb-xjc</artifactId>
                 <version>${jaxb.version}</version>
             </dependency>
 
@@ -2310,8 +2299,8 @@
                 </plugin>
                 <plugin>
                     <groupId>org.codehaus.cargo</groupId>
-                    <artifactId>cargo-maven2-plugin</artifactId>
-                    <version>1.4.3</version>
+                    <artifactId>cargo-maven3-plugin</artifactId>
+                    <version>1.9.13</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
