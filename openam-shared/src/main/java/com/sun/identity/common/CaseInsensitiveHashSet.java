@@ -25,6 +25,7 @@
  * $Id: CaseInsensitiveHashSet.java,v 1.4 2008/06/25 05:42:25 qcheng Exp $
  *
  * Portions copyright 2015 ForgeRock AS.
+ * Portions copyright 2022 Wren Security
  */
 
 package com.sun.identity.common;
@@ -126,7 +127,7 @@ public class CaseInsensitiveHashSet<T> extends HashSet<T> {
     }
 
     public Object[] toArray() {
-        return toArray(null);
+        return toArray((Object[]) null);
     }
     
     /**

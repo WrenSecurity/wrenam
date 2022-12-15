@@ -25,6 +25,7 @@
  * $Id: SecureAttrs.java,v 1.12 2009/03/31 17:18:10 exu Exp $
  *
  * Portions Copyrighted 2016 ForgeRock AS.
+ * Portions Copyrighted 2022 Wren Security
  */
 
 package com.sun.identity.sae.api;
@@ -37,7 +38,6 @@ import java.io.*;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import sun.misc.CharacterEncoder;
 import com.sun.identity.shared.encode.Base64;
 import com.sun.identity.security.DataEncryptor;
 import java.security.*;
