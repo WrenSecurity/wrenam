@@ -99,7 +99,18 @@
         <!-- **************************************************************** -->
 
         <!-- Surefire Argument Line -->
-        <java.surefire.options>-Xms256m -Xmx256m</java.surefire.options>
+        <java.surefire.options>
+            -Xmx256m
+            --add-opens java.base/java.lang=ALL-UNNAMED
+            --add-opens java.base/java.io=ALL-UNNAMED
+            --add-opens java.base/java.nio.charset=ALL-UNNAMED
+            --add-opens java.base/java.util=ALL-UNNAMED
+            --add-exports java.base/sun.security.jca=ALL-UNNAMED
+            --add-exports java.base/sun.security.util=ALL-UNNAMED
+            --add-exports java.base/sun.security.x509=ALL-UNNAMED
+            --add-exports java.base/jdk.internal.util=ALL-UNNAMED
+            --add-exports java.base/jdk.internal.util.random=ALL-UNNAMED
+        </java.surefire.options>
 
         <!-- JavaDoc Setting Properties -->
         <javadoc.options>-J-Xms2g -J-Xmx2g</javadoc.options>
