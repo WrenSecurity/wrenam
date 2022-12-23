@@ -147,10 +147,10 @@ a:visited {
 
 /* Rounded Corners div styling */
 .xtop, .xbottom {display:block; background:transparent;}
-.xt1, .xt2, .xt3, .xt4, .xb1, .xb2, .xb3, .xb4 { display: block; overflow: hidden; height: 1px; border-left:1px solid #80b7ab; border-right:1px solid #80b7ab;}
-.xt1, .xt2, .xt3, .xt4 {background:#80b7ab;}
+.xt1, .xt2, .xt3, .xt4, .xb1, .xb2, .xb3, .xb4 { display: block; overflow: hidden; height: 1px; border-left:1px solid #AF1839; border-right:1px solid #AF1839;}
+.xt1, .xt2, .xt3, .xt4 {background:#AF1839;}
 .xt4, .xb1 {height:2px;}
-.xb4 {background:#80b7ab;}
+.xb4 {background:#AF1839;}
 
 .balloonIcon {
     width: 14px;
@@ -545,9 +545,9 @@ div.borderPopUpGray{
 
 /*Gray Boxes */
 .headerBox{
-    background-color: #80b7ab;
+    background-color: #AF1839;
     color: white;
-    border: 1px solid #80b7ab;
+    border: 1px solid #AF1839;
     border-top: none;
     font-size: 100%;
     font-weight: bold;
@@ -559,8 +559,8 @@ div.borderPopUpGray{
     background-color: #efefef;
     padding:10px;
     padding: 1em;
-    /* border: 1px solid #80b7ab; */
-    border: 1px solid #80b7ab;
+    /* border: 1px solid #AF1839; */
+    border: 1px solid #AF1839;
     border-bottom: none;
 }
 input.text, input[type="text"], input[type="checkbox"] {
@@ -568,16 +568,16 @@ input.text, input[type="text"], input[type="checkbox"] {
     margin-left: 10px;
 }
 /*Corners bottom*/
-.xbGray1, .xbGray2, .xbGray3, .xbGray4 { display: block; overflow: hidden; height: 1px; border-left:1px solid #80b7ab; border-right:1px solid #80b7ab;}
+.xbGray1, .xbGray2, .xbGray3, .xbGray4 { display: block; overflow: hidden; height: 1px; border-left:1px solid #AF1839; border-right:1px solid #AF1839;}
 .xbGray1 {height:2px;}
-/*  .xbGray4 {background:#80b7ab;}  */
-.xbGray4 {background:#80b7ab;}
-.xbGray1, .xbGray2, .xbGray3{background:#e5e9ed;}
-/*.xb1, .xb2, .xb3{background:#e5e9ed;}*/
+/*  .xbGray4 {background:#AF1839;}  */
+.xbGray4 {background:#AF1839;}
+.xbGray1, .xbGray2, .xbGray3{background:#efefef;}
+/*.xb1, .xb2, .xb3{background:#efefef;}*/
 
 .header{
-    background: #5e887f;
-    color:#FFFFFF;
+    background: #e5e9ed;
+    color:#000;
     font-size:1.0em;
     font-weight:bold;
     line-height:2;
@@ -629,7 +629,7 @@ tr {
 
 button, button.buttonblue {
     background-image: none;
-    background: #80b7ab;
+    background: #AF1839;
     border: 0px;
     color: #FFF;
     cursor: pointer;
@@ -664,15 +664,15 @@ button, button.buttonblue {
 }
 
 button:hover {
-    background: #5e887f;
+    background: #333333;
 }
 
 button:disabled:hover {
-    background: #80b7ab;
+    background: #333333;
 }
 
 button.buttonblue {
-    background: #5e887f;
+    background: #AF1839;
 }
 
 button.buttonblue:hover {
@@ -680,7 +680,7 @@ button.buttonblue:hover {
 }
 
 button.buttonblue:disabled:hover {
-    background: #5e887f;
+    background: #333333;
 }
 
 #wizard_c {

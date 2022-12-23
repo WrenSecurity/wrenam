@@ -559,7 +559,7 @@ namespace Sun.Identity.Saml2
             string inputFieldFormat = "<input type=\"hidden\" name=\"{0}\" value=\"{1}\" />";
 
             StringBuilder html = new StringBuilder();
-            html.Append("<html><head><title>OpenAM - SP initiated SSO</title></head>");
+            html.Append("<html><head><title>Wren:AM - SP initiated SSO</title></head>");
             html.Append("<body onload=\"document.forms[0].submit();\">");
             html.Append("<form method=\"post\" action=\"");
             html.Append(ssoPostLocation);
@@ -718,7 +718,7 @@ namespace Sun.Identity.Saml2
             string inputFieldFormat = "<input type=\"hidden\" name=\"{0}\" value=\"{1}\" />";
 
             StringBuilder html = new StringBuilder();
-            html.Append("<html><head><title>OpenAM - SP initiated SLO</title></head>");
+            html.Append("<html><head><title>Wren:AM - SP initiated SLO</title></head>");
             html.Append("<body onload=\"document.forms[0].submit();\">");
             html.Append("<form method=\"post\" action=\"");
             html.Append(sloPostLocation);
@@ -877,7 +877,7 @@ namespace Sun.Identity.Saml2
             string inputFieldFormat = "<input type=\"hidden\" name=\"{0}\" value=\"{1}\" />";
 
             StringBuilder html = new StringBuilder();
-            html.Append("<html><head><title>OpenAM - IDP initiated SLO</title></head>");
+            html.Append("<html><head><title>Wren:AM - IDP initiated SLO</title></head>");
             html.Append("<body onload=\"document.forms[0].submit();\">");
             html.Append("<form method=\"post\" action=\"");
             html.Append(sloPostResponseLocation);

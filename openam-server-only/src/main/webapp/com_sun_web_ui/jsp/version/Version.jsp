@@ -90,7 +90,7 @@
 <title><%=windowTitle %></title>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <meta name="Copyright" content="Copyright &copy; 2010-2016, ForgeRock AS. All Rights Reserved.">
+  <meta name="Copyright" content="Copyright &copy; Wren Security">
   <cc:stylesheet />
 </head>
 

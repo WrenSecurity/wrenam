@@ -328,7 +328,7 @@
             "deactivate": "Deactivate",
             "active": "Active",
             "inactive": "Inactive",
-            "copyright" : "Copyright &copy; 2010-2016 ForgeRock AS. All rights reserved.",
+            "copyright" : "&copy; Wren Security",
             "build": "Build",
             "sessionExpired" : "Session Expired",
             "enableCookies" : "Cookies must be enabled to login",

@@ -10,12 +10,15 @@
     padding-right: 10px
 }
 
+h1 {
+    color: black;
+}
+
 h4 {
-    background: #eeea07;
-    border: 1px solid;
-    border-color: #eeea07;
+    background: #AF1839;
+    border: 0;
     font-size: 14px;
-    color: #333333;
+    color: white;
     font-weight: bold;
     padding: 5px;
     margin-left: -5px;

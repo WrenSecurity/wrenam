@@ -34,7 +34,7 @@ public interface SampleConstants {
     String HTML_HEADER =
         "<!DOCTYPE html PUBLIC \"-//w3c//dtd html 4.0 transitional//en\">" +
         "<html><head>" +
-        "<title>OpenAM - Samples - Service Configuration</title>" +
+        "<title>Wren:AM - Samples - Service Configuration</title>" +
         "<link rel=\"stylesheet\" href=\"sample.css\" />" +
         "</head>" +
         "<body style=\"background-color: rgb(255, 255, 255);\"" +
