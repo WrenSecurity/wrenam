@@ -43,7 +43,7 @@
     <parent>
         <groupId>org.wrensecurity</groupId>
         <artifactId>wrensec-parent</artifactId>
-        <version>3.5.0</version>
+        <version>4.0.0</version>
     </parent>
 
     <!-- Component Definition -->
@@ -92,7 +92,10 @@
     <properties>
         <wrensec-commons.version>22.4.0</wrensec-commons.version>
         <wrensec-guava.version>18.0.5</wrensec-guava.version>
-        <pgpVerifyKeysVersion>1.7.3</pgpVerifyKeysVersion>
+        <pgpVerifyKeysVersion>1.7.4-SNAPSHOT</pgpVerifyKeysVersion>
+
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
 
         <!-- **************************************************************** -->
         <maven.build.timestamp.format>yyyy-MMM-dd HH:mm:ss</maven.build.timestamp.format>
@@ -2024,10 +2027,7 @@
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>${maven.compiler.source}</source>
-                    <target>${maven.compiler.target}</target>
-                    <encoding>UTF-8</encoding>
-                    <!-- Override Enforcer Rules for OpenAM Compilation -->
+                    <release combine.self="override" />
                     <compilerArgument>-Xlint:none</compilerArgument>
                     <showDeprecation>false</showDeprecation>
                 </configuration>
@@ -2071,11 +2071,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
-                <version>3.6</version>
                 <configuration>
+                    <!--
                     <rulesets>
                         <ruleset>java-enforce-timeservice</ruleset>
                     </rulesets>
+                    -->
                 </configuration>
                 <executions>
                     <execution>
@@ -2085,6 +2086,7 @@
                         </goals>
                     </execution>
                 </executions>
+                <!--
                 <dependencies>
                     <dependency>
                         <groupId>org.forgerock.openam.pmd.rules</groupId>
@@ -2092,6 +2094,7 @@
                         <version>1.0.0</version>
                     </dependency>
                 </dependencies>
+                -->
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
