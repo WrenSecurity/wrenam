@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2012-2016 ForgeRock AS.
+ * Portions copyright 2022 Wren Security.
  */
 package org.forgerock.openam.core.rest;
 
@@ -42,6 +43,7 @@ import javax.mail.MessagingException;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.forgerock.guice.core.InjectorHolder;
+import org.forgerock.json.JsonPointer;
 import org.forgerock.json.JsonValue;
 import org.forgerock.json.resource.ActionRequest;
 import org.forgerock.json.resource.ActionResponse;
@@ -86,6 +88,7 @@ import org.forgerock.services.context.Context;
 import org.forgerock.util.AsyncFunction;
 import org.forgerock.util.Reject;
 import org.forgerock.util.promise.Promise;
+import org.forgerock.util.query.QueryFilter;
 
 import com.iplanet.am.util.SystemProperties;
 import com.iplanet.sso.SSOException;
@@ -1207,15 +1210,21 @@ public final class IdentityResourceV1 implements CollectionResourceProvider {
         final String realm = realmContext.getRealm().asPath();
 
         try {
-            SSOToken admin = getSSOToken(getCookieFromServerContext(context));
-            // This will only return 1 user..
-            // getQueryFilter() is not implemented yet..returns dummy false value
-            String queryId = request.getQueryId();
-            if (queryId == null || queryId.isEmpty()) {
-                queryId = "*";
+            // If the user specified _queryFilter, then (convert and) use that, otherwise look for _queryID
+            // and if that isn't there either, pretend the user gave a _queryID of "*"
+            QueryFilter<JsonPointer> queryFilter = request.getQueryFilter();
+            CrestQuery query;
+            if (queryFilter != null) {
+                query = new CrestQuery(queryFilter);
+            } else {
+                String queryId = request.getQueryId();
+                if (queryId == null || queryId.isEmpty()) {
+                    queryId = "*";
+                }
+                query = new CrestQuery(queryId);
             }
-            List<String> users = identityServices.search(new CrestQuery(queryId),
-                                                         getIdentityServicesAttributes(realm), admin);
+            SSOToken admin = getSSOToken(getCookieFromServerContext(context));
+            List<String> users = identityServices.search(query, getIdentityServicesAttributes(realm), admin);
             String principalName = PrincipalRestUtils.getPrincipalNameFromServerContext(context);
             debug.message("IdentityResource.queryCollection :: QUERY performed on realm={}  by principalName={}", realm,
                     principalName);
