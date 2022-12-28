@@ -312,14 +312,6 @@
                             <targetPath>legal-notices</targetPath>
                         </webResource>
                         <webResource>
-                            <!-- More third party licenses... -->
-                            <directory>${project.parent.basedir}/license</directory>
-                            <includes>
-                                <include>**/**</include>
-                            </includes>
-                            <targetPath>legal-notices</targetPath>
-                        </webResource>
-                        <webResource>
                             <directory>${project.basedir}/../openam-schema/openam-idsvcs-schema/src/main/resources/xml
                             </directory>
                             <includes>
