@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014-2016 ForgeRock AS.
+ * Portions copyright 2022 Wren Security
  */
 
 package org.forgerock.openam.scripting;
@@ -172,8 +173,8 @@ public final class ThreadPoolScriptEvaluator implements ScriptEvaluator {
                                 newConfiguration.getThreadPoolIdleTimeoutSeconds());
                     }
 
-                    delegateConfigurator.setCorePoolSize(newConfiguration.getThreadPoolCoreSize());
                     delegateConfigurator.setMaximumPoolSize(newConfiguration.getThreadPoolMaxSize());
+                    delegateConfigurator.setCorePoolSize(newConfiguration.getThreadPoolCoreSize());
                     delegateConfigurator.setKeepAliveTime(newConfiguration.getThreadPoolIdleTimeoutSeconds(), TimeUnit.SECONDS);
                 }
 

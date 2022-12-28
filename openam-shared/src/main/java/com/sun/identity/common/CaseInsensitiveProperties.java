@@ -24,26 +24,26 @@
  *
  * $Id: CaseInsensitiveProperties.java,v 1.2 2008/06/25 05:42:25 qcheng Exp $
  *
+ * Portions copyright 2022 Wren Security
+ *
  */
 
 package com.sun.identity.common;
 
 import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.Properties;
 import java.util.Set;
 
 /**
- * A case insensitive Properties with case preservation. If key is a String, a
- * case insensitive hash code is used for hashing but original case of the key
- * is preserved.
+ * A case-insensitive Properties with case preservation.
  */
 public class CaseInsensitiveProperties extends Properties {
 
-    static class CaseInsensitiveEnumeration implements Enumeration {
-        Enumeration mEnum = null;
+    static class CaseInsensitiveEnumeration implements Enumeration<Object> {
 
-        public CaseInsensitiveEnumeration(Enumeration en) {
+        Enumeration<?> mEnum;
+
+        public CaseInsensitiveEnumeration(Enumeration<?> en) {
             mEnum = en;
         }
 
@@ -78,54 +78,43 @@ public class CaseInsensitiveProperties extends Properties {
     }
 
     public String getProperty(String key) {
-        return (String) super.get(new CaseInsensitiveKey(key));
+        return (String) super.get(resolveOriginalKey(key));
     }
 
     public Object setProperty(String key, String value) {
-        return super.put(new CaseInsensitiveKey(key), value);
+        return super.put(resolveOriginalKey(key), value);
     }
 
     public boolean containsKey(Object key) {
-        boolean retval;
         if (key instanceof String) {
-            CaseInsensitiveKey ciKey = new CaseInsensitiveKey((String) key);
-            retval = super.containsKey(ciKey);
+            return keySet().stream()
+                    .map(Object::toString)
+                    .anyMatch(originalKey -> originalKey.equalsIgnoreCase((String) key));
         } else {
-            retval = super.containsKey(key);
+            return super.containsKey(key);
         }
-        return retval;
     }
 
     public Object get(Object key) {
-        Object retval;
         if (key instanceof String) {
-            CaseInsensitiveKey ciKey = new CaseInsensitiveKey((String) key);
-            retval = super.get(ciKey);
+            return super.get(resolveOriginalKey((String) key));
         } else {
-            retval = super.get(key);
+            return super.get(key);
         }
-        return retval;
     }
 
     /**
      * @return a case insensitive hash set of keys.
      */
-    public Set keySet() {
-        Set keys = super.keySet();
-        CaseInsensitiveHashSet ciSet = new CaseInsensitiveHashSet();
-        Iterator iter = keys.iterator();
-        while (iter.hasNext()) {
-            // keys are already CaseInsensitiveKey's so we can just add it.
-            ciSet.add(iter.next());
-        }
-        return ciSet;
+    public Set<Object> keySet() {
+        return new CaseInsensitiveHashSet<>(super.keySet());
     }
 
     /*
      * @return an Enumeration of keys as String objects even though they were
      * internally stored as case insensitive strings.
      */
-    public Enumeration keys() {
+    public Enumeration<Object> keys() {
         return new CaseInsensitiveEnumeration(super.keys());
     }
 
@@ -133,30 +122,37 @@ public class CaseInsensitiveProperties extends Properties {
      * @return an Enumeration of property names as String objects even though
      * they were internally stored as case insensitive strings.
      */
-    public Enumeration propertyNames() {
+    public Enumeration<Object> propertyNames() {
         return new CaseInsensitiveEnumeration(super.propertyNames());
     }
 
     public Object put(Object key, Object value) {
-        Object retval;
         if (key instanceof String) {
-            CaseInsensitiveKey ciKey = new CaseInsensitiveKey((String) key);
-            retval = super.put(ciKey, value);
+            return super.put(resolveOriginalKey((String) key), value);
         } else {
-            retval = super.put(key, value);
+            return super.put(key, value);
         }
-        return retval;
     }
 
     public Object remove(Object key) {
-        Object retval;
         if (key instanceof String) {
-            CaseInsensitiveKey ciKey = new CaseInsensitiveKey((String) key);
-            retval = super.remove(ciKey);
+            return super.remove(resolveOriginalKey((String) key));
         } else {
-            retval = super.remove(key);
+            return super.remove(key);
         }
-        return retval;
+    }
+
+    /**
+     * Resolves already stored original key or the given key if none is found.
+     * The search of key is case-insensitive.
+     *
+     * @return Stored key.
+     */
+    private String resolveOriginalKey(String key) {
+        return keySet().stream()
+                .map(Object::toString)
+                .filter(originalKey -> originalKey.equalsIgnoreCase(key))
+                .findAny().orElse(key);
     }
 
 }

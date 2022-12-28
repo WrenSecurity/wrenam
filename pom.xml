@@ -43,7 +43,7 @@
     <parent>
         <groupId>org.wrensecurity</groupId>
         <artifactId>wrensec-parent</artifactId>
-        <version>3.5.0</version>
+        <version>4.0.0</version>
     </parent>
 
     <!-- Component Definition -->
@@ -92,14 +92,28 @@
     <properties>
         <wrensec-commons.version>22.4.0</wrensec-commons.version>
         <wrensec-guava.version>18.0.5</wrensec-guava.version>
-        <pgpVerifyKeysVersion>1.7.3</pgpVerifyKeysVersion>
+        <pgpVerifyKeysVersion>1.7.4-SNAPSHOT</pgpVerifyKeysVersion>
+
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
 
         <!-- **************************************************************** -->
         <maven.build.timestamp.format>yyyy-MMM-dd HH:mm:ss</maven.build.timestamp.format>
         <!-- **************************************************************** -->
 
         <!-- Surefire Argument Line -->
-        <java.surefire.options>-Xms256m -Xmx256m</java.surefire.options>
+        <java.surefire.options>
+            -Xmx256m
+            --add-opens java.base/java.lang=ALL-UNNAMED
+            --add-opens java.base/java.io=ALL-UNNAMED
+            --add-opens java.base/java.nio.charset=ALL-UNNAMED
+            --add-opens java.base/java.util=ALL-UNNAMED
+            --add-exports java.base/sun.security.jca=ALL-UNNAMED
+            --add-exports java.base/sun.security.util=ALL-UNNAMED
+            --add-exports java.base/sun.security.x509=ALL-UNNAMED
+            --add-exports java.base/jdk.internal.util=ALL-UNNAMED
+            --add-exports java.base/jdk.internal.util.random=ALL-UNNAMED
+        </java.surefire.options>
 
         <!-- JavaDoc Setting Properties -->
         <javadoc.options>-J-Xms2g -J-Xmx2g</javadoc.options>
@@ -179,6 +193,9 @@
         <jetty.jspc.version>9.4.0.M0</jetty.jspc.version>
         <amazon.sns.version>1.10.72</amazon.sns.version>
         <javax.websocket-api.version>1.1</javax.websocket-api.version>
+        <jakarta.annotation-api.version>1.3.5</jakarta.annotation-api.version>
+        <jakarta.xml.soap-api.version>1.4.2</jakarta.xml.soap-api.version>
+        <jakarta.xml.ws-api.version>2.3.3</jakarta.xml.ws-api.version>
 
         <openam.version>OpenAM ${project.version}</openam.version>
         <!--  Project web site -->
@@ -1345,6 +1362,24 @@
                 <version>${jaxrpc-spi.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>jakarta.annotation</groupId>
+                <artifactId>jakarta.annotation-api</artifactId>
+                <version>${jakarta.annotation-api.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>jakarta.xml.soap</groupId>
+                <artifactId>jakarta.xml.soap-api</artifactId>
+                <version>${jakarta.xml.soap-api.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>jakarta.xml.ws</groupId>
+                <artifactId>jakarta.xml.ws-api</artifactId>
+                <version>${jakarta.xml.ws-api.version}</version>
+            </dependency>
+
             <!-- TODO jmx -->
 
             <dependency>
@@ -1992,10 +2027,7 @@
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>${maven.compiler.source}</source>
-                    <target>${maven.compiler.target}</target>
-                    <encoding>UTF-8</encoding>
-                    <!-- Override Enforcer Rules for OpenAM Compilation -->
+                    <release combine.self="override" />
                     <compilerArgument>-Xlint:none</compilerArgument>
                     <showDeprecation>false</showDeprecation>
                 </configuration>
@@ -2039,11 +2071,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
-                <version>3.6</version>
                 <configuration>
+                    <!--
                     <rulesets>
                         <ruleset>java-enforce-timeservice</ruleset>
                     </rulesets>
+                    -->
                 </configuration>
                 <executions>
                     <execution>
@@ -2053,6 +2086,7 @@
                         </goals>
                     </execution>
                 </executions>
+                <!--
                 <dependencies>
                     <dependency>
                         <groupId>org.forgerock.openam.pmd.rules</groupId>
@@ -2060,6 +2094,7 @@
                         <version>1.0.0</version>
                     </dependency>
                 </dependencies>
+                -->
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -2221,7 +2256,6 @@
                     <artifactId>jaxb2-maven-plugin</artifactId>
                     <version>1.3.1</version>
                 </plugin>
-
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>build-helper-maven-plugin</artifactId>
@@ -2233,11 +2267,6 @@
                     <version>2.2.2</version>
                 </plugin>
                 <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-shade-plugin</artifactId>
-                    <version>3.2.4</version>
-                </plugin>
-                <plugin>
                     <groupId>net.ju-n.maven.plugins</groupId>
                     <artifactId>checksum-maven-plugin</artifactId>
                     <version>1.2</version>
@@ -2246,11 +2275,6 @@
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>buildnumber-maven-plugin</artifactId>
                     <version>1.3</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-war-plugin</artifactId>
-                    <version>2.4</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.skins</groupId>
@@ -2301,11 +2325,6 @@
                     <groupId>org.codehaus.cargo</groupId>
                     <artifactId>cargo-maven3-plugin</artifactId>
                     <version>1.9.13</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-plugin-plugin</artifactId>
-                    <version>3.3</version>
                 </plugin>
             </plugins>
         </pluginManagement>

@@ -31,6 +31,13 @@
     <artifactId>openam-xacml3-schema</artifactId>
     <packaging>jar</packaging>
 
+    <dependencies>
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+        </dependency>
+    </dependencies>
+
     <!-- Profiles -->
     <profiles>
         <!-- Place Default Profiles here to override and determine Environment. -->

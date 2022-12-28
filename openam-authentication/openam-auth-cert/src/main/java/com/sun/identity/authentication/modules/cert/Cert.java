@@ -25,6 +25,7 @@
  * $Id: Cert.java,v 1.14 2009/03/13 20:54:42 beomsuk Exp $
  *
  * Portions Copyrighted 2013-2016 ForgeRock AS.
+ * Portions Copyrighted 2022 Wren Security
  */
 
 package com.sun.identity.authentication.modules.cert;
@@ -65,7 +66,6 @@ import com.sun.identity.shared.datastruct.CollectionHelper;
 import com.sun.identity.shared.encode.Base64;
 
 import sun.security.util.DerValue;
-import sun.security.util.ObjectIdentifier;
 import sun.security.x509.CertificateExtensions;
 import sun.security.x509.GeneralName;
 import sun.security.x509.GeneralNameInterface;
@@ -570,14 +570,11 @@ public class Cert extends AMLoginModule {
                     exts.get(SubjectAlternativeNameExtension.NAME);
 
             if (altNameExt != null) {
-                GeneralNames names = (GeneralNames) altNameExt.get
-                    (SubjectAlternativeNameExtension.SUBJECT_NAME);
+                GeneralNames names = altNameExt.get(SubjectAlternativeNameExtension.SUBJECT_NAME);
         
-                GeneralName generalname = null;  
-                ObjectIdentifier upnoid = new ObjectIdentifier(UPNOID); 
-                Iterator itr = (Iterator) names.iterator();
+                Iterator itr = names.iterator();
                 while ((userTokenId == null) && itr.hasNext()) {
-                    generalname = (GeneralName) itr.next(); 
+                    GeneralName generalname = (GeneralName) itr.next();
                     if (generalname != null) {
                         if (amAuthCert_subjectAltExtMapper.
                         	equalsIgnoreCase("UPN") && 
@@ -585,7 +582,7 @@ public class Cert extends AMLoginModule {
                 	        GeneralNameInterface.NAME_ANY)) {
                             OtherName othername = 
                                 (OtherName)generalname.getName(); 
-                            if (upnoid.equals((Object)(othername.getOID()))) {
+                            if (UPNOID.equals(othername.getOID().toString())) {
                                 byte[] nval = othername.getNameValue(); 
                                 DerValue derValue = new DerValue(nval); 
                                 userTokenId = 

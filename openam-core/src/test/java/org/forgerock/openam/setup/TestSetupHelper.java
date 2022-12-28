@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions copyright 2022 Wren Security
  */
 
 package org.forgerock.openam.setup;
@@ -45,7 +46,7 @@ public class TestSetupHelper {
             Files.createDirectories(destinationDirectory);
         }
 
-        try (java.nio.file.FileSystem zipFileSystem = FileSystems.newFileSystem(zipFile.toPath(), null)) {
+        try (java.nio.file.FileSystem zipFileSystem = FileSystems.newFileSystem(zipFile.toPath(), (ClassLoader) null)) {
             Path root = zipFileSystem.getPath("/");
             Files.walkFileTree(root, new SimpleFileVisitor<Path>() {
                 @Override
