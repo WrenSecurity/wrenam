@@ -28,7 +28,7 @@
             <directory>${project.build.directory}/${project.build.finalName}</directory>
             <excludes>
                 <exclude>WEB-INF/lib/je-*.jar</exclude>
-                <exclude>WEB-INF/lib/opendj-je-backend*.jar</exclude>
+                <exclude>WEB-INF/lib/wrends-je-backend*.jar</exclude>
                 <exclude>WEB-INF/classes/AMConfig.properties</exclude>
             </excludes>
             <outputDirectory>/</outputDirectory>

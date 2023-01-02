@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014 ForgeRock AS.
+ * Portions copyright 2022 Wren Security
  */
 
 package com.sun.identity.common;
@@ -21,7 +22,7 @@ import org.testng.annotations.Test;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertEquals;
 
 public class CaseInsensitivePropertiesTest {
 
@@ -39,7 +40,7 @@ public class CaseInsensitivePropertiesTest {
 
         ByteArrayOutputStream pOut = new ByteArrayOutputStream();
         p.store(pOut, null);
-        System.out.println(pOut.toString());
+        System.out.println(pOut);
         ByteArrayInputStream pIn = new ByteArrayInputStream(pOut.toByteArray());
         CaseInsensitiveProperties pp = new CaseInsensitiveProperties();
         pp.load(pIn);

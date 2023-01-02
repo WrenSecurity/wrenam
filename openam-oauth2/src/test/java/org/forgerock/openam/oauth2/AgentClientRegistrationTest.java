@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 package org.forgerock.openam.oauth2;
 
@@ -20,12 +21,15 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.lang.annotation.Annotation;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.forgerock.guice.core.GuiceModuleLoader;
+import org.forgerock.guice.core.InjectorConfiguration;
 import org.forgerock.oauth2.core.OAuth2ProviderSettings;
 import org.forgerock.oauth2.core.RealmOAuth2ProviderSettings;
 import org.forgerock.oauth2.core.exceptions.ServerException;
@@ -33,6 +37,7 @@ import org.forgerock.openam.agent.AgentConstants;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import com.google.inject.Module;
 import com.iplanet.sso.SSOException;
 import com.sun.identity.idm.AMIdentity;
 import com.sun.identity.idm.IdRepoException;
@@ -52,6 +57,19 @@ public class AgentClientRegistrationTest {
         agent = mock(AMIdentity.class);
         when(agent.getName()).thenReturn(AGENT_NAME);
         agentClientRegistration = new AgentClientRegistration(agent);
+    }
+
+    // Make sure Guice is not eagerly loading everything on class-path when InjectionHolder
+    // is called from OAuthProblemException's instance initializer.
+    // XXX This should be in the parent class or maybe the guice test should be done in a different way?
+    @BeforeClass
+    public static void setupGuice() throws Exception {
+        InjectorConfiguration.setGuiceModuleLoader(new GuiceModuleLoader() {
+            @Override
+            public Set<Class<? extends Module>> getGuiceModules(Class<? extends Annotation> clazz) {
+                return new HashSet<>();
+            }
+        });
     }
 
     @Test

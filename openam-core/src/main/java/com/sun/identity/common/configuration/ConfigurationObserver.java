@@ -23,6 +23,7 @@
  * "Portions Copyrighted [year] [name of copyright owner]"
  *
  * Portions Copyrighted 2012-2016 ForgeRock AS.
+ * Portions Copyrighted 2022 Wren Security
  */
 
 package com.sun.identity.common.configuration;
@@ -46,7 +47,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import org.forgerock.guava.common.base.Predicate;
+import org.wrensecurity.guava.common.base.Predicate;
 import org.forgerock.util.Pair;
 
 /**

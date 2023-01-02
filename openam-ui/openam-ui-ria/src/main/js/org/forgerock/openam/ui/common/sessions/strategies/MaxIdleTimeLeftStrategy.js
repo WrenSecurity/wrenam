@@ -31,7 +31,6 @@
 define([
     "org/forgerock/openam/ui/user/services/SessionService"
 ], (SessionService) => {
-
     return function (token) {
         return SessionService.getTimeLeft(token);
     };

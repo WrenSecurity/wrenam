@@ -105,7 +105,6 @@ define([
 
                 expect(clearTimeout).to.be.calledOnce;
             });
-
         });
     });
 });

@@ -25,6 +25,7 @@
  * $Id: CachedSMSEntry.java,v 1.16 2009/10/08 20:33:54 hengming Exp $
  *
  * Portions Copyrighted 2015-2016 ForgeRock AS.
+ * Portions Copyrighted 2022 Wren Security
  */
 
 package com.sun.identity.sm;
@@ -41,7 +42,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
 
-import org.forgerock.guava.common.collect.Ordering;
+import org.wrensecurity.guava.common.collect.Ordering;
 import org.forgerock.opendj.ldap.DN;
 
 import com.iplanet.am.util.SystemProperties;

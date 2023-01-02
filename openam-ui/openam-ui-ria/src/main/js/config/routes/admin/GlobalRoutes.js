@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 
 define([
@@ -27,7 +28,7 @@ define([
         },
         editAuthenticationSettings: {
             view: "org/forgerock/openam/ui/admin/views/configuration/authentication/EditGlobalAuthenticationView",
-            url: /configure\/authentication\/([^\/]+)/,
+            url: /configure\/authentication\/([^/]+)/,
             pattern: "configure/authentication/?",
             role: "ui-global-admin",
             navGroup: "admin"
@@ -41,14 +42,14 @@ define([
         },
         editGlobalService: {
             view: "org/forgerock/openam/ui/admin/views/configuration/global/EditGlobalServiceView",
-            url: /configure\/global-services\/([^\/]+)$/,
+            url: /configure\/global-services\/([^/]+)$/,
             pattern: "configure/global-services/?",
             role: "ui-global-admin",
             navGroup: "admin"
         },
         globalServiceSubSchemaNew: {
             view: "org/forgerock/openam/ui/admin/views/configuration/global/NewGlobalServiceSubSchemaView",
-            url: /configure\/global-services\/([^\/]+)\/([^\/]+)\/new/,
+            url: /configure\/global-services\/([^/]+)\/([^/]+)\/new/,
             pattern: "configure/global-services/?/?/new",
             role: "ui-realm-admin",
             navGroup: "admin",
@@ -56,7 +57,7 @@ define([
         },
         globalServiceSubSchemaEdit: {
             view: "org/forgerock/openam/ui/admin/views/configuration/global/EditGlobalServiceSubSchemaView",
-            url: /configure\/global-services\/([^\/]+)\/([^\/]+)\/edit\/([^\/]+)/,
+            url: /configure\/global-services\/([^/]+)\/([^/]+)\/edit\/([^/]+)/,
             pattern: "configure/global-services/?/?/edit/?",
             role: "ui-realm-admin",
             navGroup: "admin",
@@ -64,7 +65,7 @@ define([
         },
         globalServiceSubSubSchemaEdit: {
             view: "org/forgerock/openam/ui/admin/views/configuration/global/EditGlobalServiceSubSubSchemaView",
-            url: /configure\/global-services\/([^\/]+)\/([^\/]+)\/edit\/([^\/]+)\/([^\/]+)\/edit\/([^\/]+)/,
+            url: /configure\/global-services\/([^/]+)\/([^/]+)\/edit\/([^/]+)\/([^/]+)\/edit\/([^/]+)/,
             pattern: "configure/global-services/?/?/edit/?/?/edit/?",
             role: "ui-realm-admin",
             navGroup: "admin",
@@ -79,7 +80,7 @@ define([
         },
         editSite: {
             view: "org/forgerock/openam/ui/admin/views/deployment/sites/EditSiteView",
-            url: /deployment\/sites\/edit\/([^\/]+)/,
+            url: /deployment\/sites\/edit\/([^/]+)/,
             pattern: "deployment/sites/edit/?",
             role: "ui-global-admin",
             navGroup: "admin"
@@ -107,7 +108,7 @@ define([
         },
         cloneServer: {
             view: "org/forgerock/openam/ui/admin/views/deployment/servers/NewServerView",
-            url: /deployment\/servers\/clone\/([^\/]+)/,
+            url: /deployment\/servers\/clone\/([^/]+)/,
             pattern: "deployment/servers/clone/?",
             role: "ui-global-admin",
             navGroup: "admin"

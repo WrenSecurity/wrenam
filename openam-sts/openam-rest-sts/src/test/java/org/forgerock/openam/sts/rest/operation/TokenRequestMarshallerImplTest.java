@@ -12,6 +12,7 @@
  * information: "Portions Copyrighted [year] [name of copyright owner]".
  *
  * Copyright 2013-2015 ForgeRock AS.
+ * Portions copyright 2022 Wren Security
  */
 
 package org.forgerock.openam.sts.rest.operation;
@@ -34,7 +35,7 @@ import java.util.HashMap;
 import java.util.Set;
 import javax.inject.Named;
 
-import org.forgerock.guava.common.collect.Sets;
+import org.wrensecurity.guava.common.collect.Sets;
 import org.forgerock.services.context.ClientContext;
 import org.forgerock.json.JsonValue;
 import org.forgerock.openam.sts.AMSTSConstants;

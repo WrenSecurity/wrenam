@@ -24,7 +24,6 @@ define([
     "handlebars",
     "selectize"
 ], (_, $, Backbone, Handlebars) => {
-
     function throwOnInvalidOptions (options) {
         if (!options || !_.isObject(options)) {
             throw new Error("[TabSearch] No \"options\" object found.");
@@ -39,7 +38,6 @@ define([
     }
 
     function createSelectize (element, callback) {
-
         element.selectize({
             searchField: ["text", "value"],
             onChange (value) {
@@ -64,9 +62,7 @@ define([
         return element[0].selectize;
     }
 
-
     function populateOptionsFromJsonSchemaGroup (properties, selectize) {
-
         _.each(properties, (group, groupName) => {
             selectize.addOptionGroup(groupName, {
                 label: group.title || " "

@@ -14,7 +14,6 @@
  * Portions copyright 2014-2016 ForgeRock AS.
  */
 
-
 define([
     "jquery",
     "lodash",
@@ -55,7 +54,6 @@ define([
                 self.setElement(`#subject_${itemID}`);
 
                 if (itemData) {
-
                     if (itemData.type === self.IDENTITY_RESOURCE) { // client side fix for 'Identity'
                         self.$el.data("hiddenData", self.getUIDsFromUniversalValues(itemData.subjectValues));
                     }
@@ -152,7 +150,6 @@ define([
                             self.animateIn();
                         });
                     }
-
                 }, delay);
             }
         },
@@ -215,7 +212,6 @@ define([
         setDefaultJsonValues (schema) {
             var itemData = { type: schema.title };
             _.map(schema.config.properties, function (value, key) {
-
                 switch (value.type) {
                     case "string":
                         itemData[key] = "";

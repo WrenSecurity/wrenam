@@ -19,7 +19,6 @@ define([
     "org/forgerock/commons/ui/user/delegates/KBADelegate",
     "org/forgerock/openam/ui/common/util/RealmHelper"
 ], function (Constants, KBADelegate, RealmHelper) {
-
     KBADelegate.serviceUrl = RealmHelper.decorateURIWithSubRealm(`/${Constants.context}/json/__subrealm__/${
             Constants.SELF_SERVICE_CONTEXT
         }`);

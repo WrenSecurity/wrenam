@@ -12,15 +12,21 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014-2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 package org.forgerock.openam.cts.impl.query.worker.queries;
 
-import static org.mockito.BDDMockito.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyInt;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isNull;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 import java.util.Calendar;
+import java.util.List;
 
 import org.forgerock.openam.cts.CoreTokenConfig;
 import org.forgerock.openam.cts.api.fields.SessionTokenField;
@@ -28,9 +34,11 @@ import org.forgerock.openam.sm.datalayer.api.ConnectionFactory;
 import org.forgerock.openam.sm.datalayer.api.query.QueryBuilder;
 import org.forgerock.openam.sm.datalayer.api.query.QueryFactory;
 import org.forgerock.openam.tokens.CoreTokenField;
+import org.forgerock.openam.tokens.TokenType;
 import org.forgerock.opendj.ldap.Connection;
 import org.forgerock.opendj.ldap.Filter;
 import org.forgerock.util.query.QueryFilterVisitor;
+import org.mockito.ArgumentMatchers;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -54,15 +62,10 @@ public class SessionIdleTimeExpiredQueryTest {
                 .willReturn(mockBuilder);
 
         mockQueryFilterConverter = mock(QueryFilterVisitor.class);
-        given(mockQueryFilterConverter.visitLessThanFilter(
-                (Void)isNull(), eq(SessionTokenField.MAX_IDLE_EXPIRATION_TIME.getField()), any(Calendar.class)))
-                .willReturn(Filter.alwaysTrue());
-        given(mockQueryFilterConverter.visitEqualsFilter(
-                (Void)isNull(), eq(SessionTokenField.SESSION_STATE.getField()), any(String.class)))
-                .willReturn(Filter.alwaysTrue());
-        given(mockQueryFilterConverter.visitEqualsFilter(
-                (Void)isNull(), eq(CoreTokenField.TOKEN_TYPE), any(String.class)))
-                .willReturn(Filter.alwaysTrue());
+        given(mockQueryFilterConverter.visitAndFilter(isNull(), argThat(filters -> {
+            // FIXME Make better filter matcher?
+            return filters.size() == 3;
+        }))).willReturn(Filter.alwaysTrue());
 
         mockFactory = mock(QueryFactory.class);
         given(mockFactory.createFilterConverter()).willReturn(mockQueryFilterConverter);

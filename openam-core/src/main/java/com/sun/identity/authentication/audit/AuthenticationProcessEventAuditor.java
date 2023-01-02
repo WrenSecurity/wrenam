@@ -12,39 +12,39 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 package com.sun.identity.authentication.audit;
 
-import static com.sun.identity.authentication.util.ISAuthConstants.*;
-import static org.forgerock.audit.events.AuthenticationAuditEventBuilder.Status.*;
+import static com.sun.identity.authentication.util.ISAuthConstants.AUTH_TYPE;
+import static com.sun.identity.authentication.util.ISAuthConstants.HOST;
+import static org.forgerock.audit.events.AuthenticationAuditEventBuilder.Status.FAILED;
+import static org.forgerock.audit.events.AuthenticationAuditEventBuilder.Status.SUCCESSFUL;
 import static org.forgerock.openam.audit.AMAuditEventBuilderUtils.getTrackingIdFromSSOToken;
 import static org.forgerock.openam.audit.AuditConstants.AUTHENTICATION_TOPIC;
 import static org.forgerock.openam.audit.AuditConstants.Component.AUTHENTICATION;
-import static org.forgerock.openam.audit.AuditConstants.EntriesInfoFieldKey.*;
+import static org.forgerock.openam.audit.AuditConstants.EntriesInfoFieldKey.AUTH_INDEX;
 import static org.forgerock.openam.audit.AuditConstants.EntriesInfoFieldKey.AUTH_LEVEL;
-import static org.forgerock.openam.audit.AuditConstants.EventName.*;
+import static org.forgerock.openam.audit.AuditConstants.EntriesInfoFieldKey.FAILURE_REASON;
+import static org.forgerock.openam.audit.AuditConstants.EntriesInfoFieldKey.IP_ADDRESS;
+import static org.forgerock.openam.audit.AuditConstants.EventName.AM_LOGIN_COMPLETED;
+import static org.forgerock.openam.audit.AuditConstants.EventName.AM_LOGOUT;
 import static org.forgerock.openam.audit.context.AuditRequestContext.getTransactionIdValue;
 import static org.forgerock.openam.utils.StringUtils.isNotEmpty;
 
 import com.iplanet.sso.SSOException;
 import com.iplanet.sso.SSOToken;
 import com.sun.identity.authentication.AuthContext;
-import com.sun.identity.authentication.service.AMAuthErrorCode;
 import com.sun.identity.authentication.service.LoginState;
 import com.sun.identity.common.DNUtils;
+import java.security.Principal;
+import javax.inject.Inject;
 import org.forgerock.openam.audit.AMAuditEventBuilderUtils;
 import org.forgerock.openam.audit.AMAuthenticationAuditEventBuilder;
-import org.forgerock.openam.audit.AuditConstants;
 import org.forgerock.openam.audit.AuditConstants.AuthenticationFailureReason;
 import org.forgerock.openam.audit.AuditEventFactory;
 import org.forgerock.openam.audit.AuditEventPublisher;
 import org.forgerock.openam.audit.model.AuthenticationAuditEntry;
-import org.forgerock.openam.utils.CollectionUtils;
-
-import javax.inject.Inject;
-import javax.security.auth.callback.Callback;
-import javax.security.auth.callback.NameCallback;
-import java.security.Principal;
 
 /**
  * This auditor is specifically aimed at constructing and logging authentication events for the login process.

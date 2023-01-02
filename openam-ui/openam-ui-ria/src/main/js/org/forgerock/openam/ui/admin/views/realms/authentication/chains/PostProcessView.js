@@ -14,7 +14,6 @@
  * Copyright 2015-2016 ForgeRock AS.
  */
 
-
 define([
     "jquery",
     "lodash",
@@ -22,7 +21,6 @@ define([
     "org/forgerock/commons/ui/common/components/BootstrapDialog",
     "handlebars"
 ], function ($, _, AbstractView, BootstrapDialog, Handlebars) {
-
     var PostProcessView = AbstractView.extend({
         template: "templates/admin/views/realms/authentication/chains/PostProcessTemplate.html",
         events: {
@@ -104,5 +102,4 @@ define([
     });
 
     return new PostProcessView();
-
 });

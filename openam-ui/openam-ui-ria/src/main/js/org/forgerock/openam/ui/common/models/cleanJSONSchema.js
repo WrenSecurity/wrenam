@@ -85,8 +85,8 @@ define([
          * Property transforms & warnings
          */
         eachProperty(schema, [transformBooleanTypeToCheckboxFormat,
-                              transformEnumTypeToString,
-                              warnOnInferredPasswordWithoutFormat]);
+            transformEnumTypeToString,
+            warnOnInferredPasswordWithoutFormat]);
 
         return schema;
     };

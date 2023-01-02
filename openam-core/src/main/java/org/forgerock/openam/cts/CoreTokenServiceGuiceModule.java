@@ -15,6 +15,7 @@
  */
 package org.forgerock.openam.cts;
 
+import java.io.Closeable;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -54,6 +55,7 @@ import org.forgerock.openam.sm.datalayer.api.DataLayer;
 import org.forgerock.openam.sm.datalayer.api.DataLayerConstants;
 import org.forgerock.openam.sm.datalayer.api.DataLayerException;
 import org.forgerock.openam.sm.datalayer.api.QueueConfiguration;
+import org.forgerock.opendj.ldap.Connection;
 import org.forgerock.util.Option;
 
 import com.fasterxml.jackson.databind.ObjectMapper;

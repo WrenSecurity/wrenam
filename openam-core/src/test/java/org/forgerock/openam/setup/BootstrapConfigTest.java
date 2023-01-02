@@ -12,13 +12,17 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 package org.forgerock.openam.setup;
 
 import static org.assertj.core.api.Assertions.*;
 
 import java.io.IOException;
+import java.util.Collections;
 
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 /**
@@ -26,13 +30,31 @@ import org.testng.annotations.Test;
  */
 public class BootstrapConfigTest {
 
+    private static final String TEST_ENVIRONMENT_NAME = BootstrapConfigTest.class.getName();
+
+    private static final String TEST_ENVIRONMENT_VALUE = "TEST ENVIRONMENT";
+
+    private static final String TEST_PROPERTY_NAME = BootstrapConfigTest.class.getName();
+
+    private static final String TEST_PROPERTY_VALUE = "TEST PROPERTY";
+
+    @BeforeTest
+    public void setup() {
+        BootstrapConfig.ENVIRONMENT_OVERRIDE = Collections
+                .singletonMap(TEST_ENVIRONMENT_NAME, TEST_ENVIRONMENT_VALUE);
+        System.setProperty(TEST_PROPERTY_NAME, TEST_PROPERTY_VALUE);
+    }
+
+    @AfterTest
+    public void teardown() {
+        BootstrapConfig.ENVIRONMENT_OVERRIDE = null;
+        System.clearProperty(TEST_PROPERTY_NAME);
+    }
+
     @Test
     public void testEnvVarExpansion() {
-        String home = System.getenv("HOME");
-        String user_home = System.getProperty("user.home");
-
-        String instance = "http://${env.HOME}/bar and ${user.home}";
-        String expected = "http://" + home + "/bar and " + user_home;
+        String instance = "HELLO ${env." + TEST_ENVIRONMENT_NAME + "} WORLD ${" + TEST_PROPERTY_NAME + "}";
+        String expected = "HELLO " + TEST_ENVIRONMENT_VALUE + " WORLD " + TEST_ENVIRONMENT_VALUE;
 
         assertThat(BootstrapConfig.expandEnvironmentVariables(instance).equals(expected));
 
@@ -43,16 +65,13 @@ public class BootstrapConfigTest {
 
     @Test
     public void testBasicBootConfig() throws IOException {
-        String home = System.getenv("HOME");
-
-        String instance = "http://${env.HOME}/bar";
-        String expected = "http://" + home + "/bar";
+        String instance = "HELLO ${" + TEST_PROPERTY_NAME + "} WORLD";
+        String expected = "HELLO " + TEST_PROPERTY_VALUE + " WORLD";
 
         BootstrapConfig bs = new BootstrapConfig();
         bs.setInstance(instance);
 
         String s = bs.toJson();
-
         String env = BootstrapConfig.expandEnvironmentVariables(s);
 
         // test marshall back in
@@ -64,7 +83,7 @@ public class BootstrapConfigTest {
     @Test
     public void testJsonInit() throws IOException {
         String json = "{\n" +
-                "  \"instance\" : \"${env.HOME}\",\n" +
+                "  \"instance\" : \"${env." + TEST_ENVIRONMENT_NAME + "}\",\n" +
                 "  \"dsameUser\" : \"cn=dsameuser,ou=DSAME Users,dc=openam,dc=forgerock,dc=org\",\n" +
                 "  \"keystores\" : {\n" +
                 "    \"default\" : {\n" +
@@ -84,11 +103,10 @@ public class BootstrapConfigTest {
                 "}";
 
         BootstrapConfig config = BootstrapConfig.fromJson(json);
-        assertThat(config.getInstance().equals(System.getenv("HOME")));
+        assertThat(config.getInstance().equals(TEST_ENVIRONMENT_VALUE));
 
         ConfigStoreProperties p = config.getConfigStoreList().get(0);
         assertThat(p.getLdapPort() == 389);
     }
-
 
 }

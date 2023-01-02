@@ -345,7 +345,7 @@ public class QueryTypeImpl implements com.sun.identity.liberty.ws.idpp.jaxb.Quer
 
         public boolean isIncludeCommonAttributes() {
             if (!has_IncludeCommonAttributes) {
-                return javax.xml.bind.DatatypeConverter.parseBoolean(com.sun.xml.bind.DatatypeConverterImpl.installHook("false"));
+                return false;
             } else {
                 return _IncludeCommonAttributes;
             }

@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions copyright 2022 Wren Security
  */
 package org.forgerock.openam.sso.providers.stateless;
 
@@ -21,7 +22,7 @@ import java.util.Map;
 
 import javax.crypto.spec.SecretKeySpec;
 
-import org.forgerock.guava.common.annotations.VisibleForTesting;
+import org.wrensecurity.guava.common.annotations.VisibleForTesting;
 import org.forgerock.json.jose.jwe.CompressionAlgorithm;
 import org.forgerock.json.jose.jwe.JweAlgorithmType;
 import org.forgerock.json.jose.jws.JwsAlgorithm;

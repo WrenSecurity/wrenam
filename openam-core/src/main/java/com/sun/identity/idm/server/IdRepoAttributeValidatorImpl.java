@@ -25,12 +25,13 @@
  * $Id: IdRepoAttributeValidatorImpl.java,v 1.1 2009/11/10 01:48:01 hengming Exp $
  *
  * Portions Copyrighted 2015-2016 ForgeRock AS.
+ * Portions Copyrighted 2022 Wren Security
  */
 package com.sun.identity.idm.server;
 
 import static com.sun.identity.idm.IdRepoBundle.*;
 import static com.sun.identity.idm.IdRepoErrorCode.*;
-import static org.forgerock.guava.common.base.Strings.emptyToNull;
+import static org.wrensecurity.guava.common.base.Strings.emptyToNull;
 import static org.forgerock.openam.utils.CollectionUtils.getFirstItem;
 
 import java.util.ArrayList;

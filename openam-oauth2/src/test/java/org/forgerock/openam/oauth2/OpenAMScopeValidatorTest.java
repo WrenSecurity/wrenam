@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014-2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 
 package org.forgerock.openam.oauth2;
@@ -56,7 +57,7 @@ public class OpenAMScopeValidatorTest {
         ScriptEvaluator scriptEvaluator = mock(ScriptEvaluator.class);
         IdentityManager identityManager = mock(IdentityManager.class);
         identity = mock(AMIdentity.class);
-        when(identityManager.getResourceOwnerIdentity(anyString(), anyString())).thenReturn(identity);
+        when(identityManager.getResourceOwnerIdentity(any(), any())).thenReturn(identity);
         validator = new OpenAMScopeValidator(identityManager, null, factory, null, scriptEvaluator, null, null, null);
     }
 

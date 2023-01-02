@@ -21,7 +21,6 @@
 import _ from "lodash";
 import Configuration from "org/forgerock/commons/ui/common/main/Configuration";
 
-
 export function set (value) {
     Configuration.globalData.auth.urlParams.goto = value;
 }

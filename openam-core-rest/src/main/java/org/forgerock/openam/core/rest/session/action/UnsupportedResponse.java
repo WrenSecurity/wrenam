@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 
 package org.forgerock.openam.core.rest.session.action;
@@ -211,4 +212,10 @@ final class UnsupportedResponse implements HttpServletResponse {
     public Locale getLocale() {
         throw new UnsupportedOperationException();
     }
+
+    @Override
+    public void setContentLengthLong(long len) {
+        throw new UnsupportedOperationException();
+    }
+
 }

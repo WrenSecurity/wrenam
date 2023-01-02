@@ -20,6 +20,8 @@
  * with the fields enclosed by brackets [] replaced by
  * your own identifying information:
  * "Portions copyright [year] [name of copyright owner]".
+ *
+ * Portions copyright 2022 Wren Security
  */
 package com.sun.identity.workflow;
 
@@ -43,8 +45,8 @@ import java.util.UUID;
 
 import javax.security.auth.Subject;
 
-import org.forgerock.guava.common.collect.ImmutableMap;
-import org.forgerock.guava.common.collect.ImmutableSet;
+import org.wrensecurity.guava.common.collect.ImmutableMap;
+import org.wrensecurity.guava.common.collect.ImmutableSet;
 import org.forgerock.guice.core.InjectorHolder;
 import org.forgerock.oauth2.core.AuthorizationCodeResponseTypeHandler;
 import org.forgerock.oauth2.core.TokenResponseTypeHandler;

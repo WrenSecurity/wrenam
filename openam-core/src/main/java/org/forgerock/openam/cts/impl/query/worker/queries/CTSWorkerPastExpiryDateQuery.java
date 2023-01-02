@@ -12,22 +12,25 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014-2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 package org.forgerock.openam.cts.impl.query.worker.queries;
 
 import static org.forgerock.openam.sm.datalayer.api.ConnectionType.CTS_EXPIRY_DATE_WORKER;
 import static org.forgerock.openam.utils.Time.getCalendarInstance;
 
-import javax.inject.Inject;
+import java.io.Closeable;
 import java.util.Calendar;
+
+import javax.inject.Inject;
 
 import org.forgerock.openam.cts.CoreTokenConfig;
 import org.forgerock.openam.sm.datalayer.api.ConnectionFactory;
-import org.forgerock.openam.sm.datalayer.api.ConnectionType;
 import org.forgerock.openam.sm.datalayer.api.DataLayer;
 import org.forgerock.openam.sm.datalayer.api.query.QueryBuilder;
 import org.forgerock.openam.sm.datalayer.api.query.QueryFactory;
 import org.forgerock.openam.tokens.CoreTokenField;
+import org.forgerock.opendj.ldap.Filter;
 import org.forgerock.util.Reject;
 import org.forgerock.util.query.QueryFilter;
 
@@ -37,14 +40,16 @@ import org.forgerock.util.query.QueryFilter;
  *
  * @param <C> The type of connection queries are made for.
  */
-public class CTSWorkerPastExpiryDateQuery<C> extends CTSWorkerBaseQuery {
+public class CTSWorkerPastExpiryDateQuery<C extends Closeable> extends CTSWorkerBaseQuery<C> {
 
-    private final QueryFactory<C, CoreTokenField> queryFactory;
+    private final QueryFactory<C, Filter> queryFactory;
     private final int pageSize;
 
     @Inject
-    public CTSWorkerPastExpiryDateQuery(@DataLayer(CTS_EXPIRY_DATE_WORKER) ConnectionFactory factory,
-            @DataLayer(CTS_EXPIRY_DATE_WORKER) QueryFactory queryFactory, CoreTokenConfig config) {
+    public CTSWorkerPastExpiryDateQuery(
+            @DataLayer(CTS_EXPIRY_DATE_WORKER) ConnectionFactory factory,
+            @DataLayer(CTS_EXPIRY_DATE_WORKER) QueryFactory queryFactory,
+            CoreTokenConfig config) {
         super(factory);
         Reject.ifTrue(config.getCleanupPageSize() <= 0);
 
@@ -53,7 +58,7 @@ public class CTSWorkerPastExpiryDateQuery<C> extends CTSWorkerBaseQuery {
     }
 
     @Override
-    public QueryBuilder getQuery() {
+    public QueryBuilder<C, Filter> getQuery() {
         Calendar now = getCalendarInstance();
 
         QueryFilter<CoreTokenField> filter = QueryFilter.lessThan(CoreTokenField.EXPIRY_DATE, now);

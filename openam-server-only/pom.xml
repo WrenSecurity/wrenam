@@ -13,6 +13,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2011-2016 ForgeRock AS.
+ * Portions copyright 2022 Wren Security
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
@@ -49,7 +50,7 @@
     <build>
         <finalName>OpenAM-ServerOnly-${project.version}</finalName>
         <plugins>
-            <!-- OpenDJ 3.0: Pre-Pre-Packaging Step to download required Pre-Packaging Resources-->
+            <!-- Wren:DS 4.0: Pre-Pre-Packaging Step to download required Pre-Packaging Resources-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -63,9 +64,9 @@
                         <configuration>
                             <artifactItems>
                                 <artifactItem>
-                                    <groupId>org.forgerock.opendj</groupId>
+                                    <groupId>org.wrensecurity.wrends</groupId>
                                     <artifactId>opendj-server-legacy</artifactId>
-                                    <version>${opendj.server.legacy}</version>
+                                    <version>${wrends.server.legacy}</version>
                                     <type>zip</type>
                                 </artifactItem>
                             </artifactItems>
@@ -311,14 +312,6 @@
                             <targetPath>legal-notices</targetPath>
                         </webResource>
                         <webResource>
-                            <!-- More third party licenses... -->
-                            <directory>${project.parent.basedir}/license</directory>
-                            <includes>
-                                <include>**/**</include>
-                            </includes>
-                            <targetPath>legal-notices</targetPath>
-                        </webResource>
-                        <webResource>
                             <directory>${project.basedir}/../openam-schema/openam-idsvcs-schema/src/main/resources/xml
                             </directory>
                             <includes>
@@ -373,11 +366,11 @@
                             <targetPath>WEB-INF/classes</targetPath>
                             <filtering>false</filtering>
                         </webResource>
-                        <!-- OpenDJ 3.0 Copy in an internal dependency needed by OpenAM -->
+                        <!-- Wren:DS 4.0 Copy in an internal dependency needed by Wren:AM -->
                         <webResource>
-                            <directory>${project.build.directory}/repackage-opendj/opendj/lib</directory>
+                            <directory>${project.build.directory}/repackage-wrends/wrends/lib</directory>
                             <includes>
-                                <include>opendj-je-backend.jar</include>
+                                <include>wrends-je-backend.jar</include>
                                 <include>quicksetup.jar</include>
                             </includes>
                             <targetPath>WEB-INF/lib</targetPath>
@@ -596,21 +589,21 @@
     </profiles>
 
     <dependencies>
-        <!-- Embedded OpenDJ Dependencies -->
+        <!-- Embedded Wren:DS Dependencies -->
         <dependency>
-            <groupId>org.forgerock.opendj</groupId>
+            <groupId>org.wrensecurity.wrends</groupId>
             <artifactId>opendj-server</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.forgerock.opendj</groupId>
+            <groupId>org.wrensecurity.wrends</groupId>
             <artifactId>opendj-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.forgerock.opendj</groupId>
+            <groupId>org.wrensecurity.wrends</groupId>
             <artifactId>opendj-grizzly</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.forgerock.opendj</groupId>
+            <groupId>org.wrensecurity.wrends</groupId>
             <artifactId>opendj-server-legacy</artifactId>
         </dependency>
 
@@ -619,7 +612,7 @@
             <artifactId>openam-http</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.forgerock.http</groupId>
+            <groupId>org.wrensecurity.http</groupId>
             <artifactId>chf-http-servlet</artifactId>
         </dependency>
 
@@ -646,18 +639,18 @@
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.http</groupId>
+            <groupId>org.wrensecurity.http</groupId>
             <artifactId>chf-http-core</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.http</groupId>
+            <groupId>org.wrensecurity.http</groupId>
             <artifactId>chf-client-apache-sync</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.commons</groupId>
-            <artifactId>forgerock-guice-servlet</artifactId>
+            <groupId>org.wrensecurity.commons</groupId>
+            <artifactId>wrensec-guice-servlet</artifactId>
         </dependency>
 
         <dependency>
@@ -893,12 +886,12 @@
 
         <dependency>
             <artifactId>json-resource</artifactId>
-            <groupId>org.forgerock.commons</groupId>
+            <groupId>org.wrensecurity.commons</groupId>
         </dependency>
 
         <dependency>
             <artifactId>json-resource-http</artifactId>
-            <groupId>org.forgerock.commons</groupId>
+            <groupId>org.wrensecurity.commons</groupId>
         </dependency>
 
         <!-- Oauth2 dependencies -->

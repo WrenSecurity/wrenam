@@ -25,6 +25,7 @@
  * $Id: EmbeddedOpenDS.java,v 1.27 2010/01/15 01:22:39 goodearth Exp $
  *
  * Portions Copyrighted 2010-2016 ForgeRock AS.
+ * Portions Copyrighted 2022 Wren Security
  */
 
 package com.sun.identity.setup;
@@ -66,7 +67,7 @@ import javax.crypto.Cipher;
 import javax.crypto.NoSuchPaddingException;
 import javax.servlet.ServletContext;
 
-import org.forgerock.guava.common.io.ByteStreams;
+import org.wrensecurity.guava.common.io.ByteStreams;
 import org.forgerock.i18n.LocalizableMessage;
 import org.forgerock.openam.ldap.LDAPRequests;
 import org.forgerock.openam.utils.IOUtils;
@@ -162,11 +163,11 @@ public class EmbeddedOpenDS {
         new File(odsRoot).mkdir();
 
         SetupProgress.reportStart("emb.opends.start", null);
-        String zipFileName = "/WEB-INF/template/opendj/opendj.zip";
+        String zipFileName = "/WEB-INF/template/wrends/wrends.zip";
         BufferedInputStream bin = new BufferedInputStream(
                 AMSetupUtils.getResourceAsStream(servletCtx, zipFileName), 10000);
         BufferedOutputStream bout = new BufferedOutputStream(
-                new FileOutputStream(odsRoot + "/opendj.zip"), 10000);
+                new FileOutputStream(odsRoot + "/wrends.zip"), 10000);
 
         try {
             ByteStreams.copy(bin, bout);
@@ -179,7 +180,7 @@ public class EmbeddedOpenDS {
             IOUtils.closeIfNotNull(bout);
         }
 
-        ZipFile opendsZip = new ZipFile(odsRoot + "/opendj.zip");
+        ZipFile opendsZip = new ZipFile(odsRoot + "/wrends.zip");
         Enumeration files = opendsZip.entries();
         // Process the OpenDJ Archive File.
         while (files.hasMoreElements()) {
@@ -245,7 +246,7 @@ public class EmbeddedOpenDS {
         }
 
         // remove zip
-        File toDelete = new File(odsRoot + "/opendj.zip");
+        File toDelete = new File(odsRoot + "/wrends.zip");
         if (!toDelete.delete()) {
             Debug.getInstance(SetupConstants.DEBUG_NAME).error(
                     "EmbeddedOpenDS.setup(): Unable to delete zip file:" +toDelete.getAbsolutePath());
@@ -1329,7 +1330,8 @@ public class EmbeddedOpenDS {
                 "--baseDN",
                 (String) map.get(SetupConstants.CONFIG_VAR_ROOT_SUFFIX),
                 "--rebuildAll",
-                "--noPropertiesFile"};
+                "--noPropertiesFile",
+                "--offline"};
         OutputStream bos = new ByteArrayOutputStream();
         OutputStream boe = new ByteArrayOutputStream();
         TimeThread.start();

@@ -12,24 +12,26 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 
 package org.forgerock.openam.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.*;
-import static org.mockito.MockitoAnnotations.initMocks;
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 import java.io.IOException;
 import java.net.URI;
 import java.util.Collections;
 import java.util.Map;
 
-import com.iplanet.sso.SSOToken;
-import com.sun.identity.idm.IdRepoException;
 import org.forgerock.http.Handler;
 import org.forgerock.http.protocol.Request;
 import org.forgerock.http.protocol.Response;
@@ -66,8 +68,12 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import org.wrensecurity.wrenam.test.AbstractMockBasedTest;
 
-public class RealmContextFilterTest {
+import com.iplanet.sso.SSOToken;
+import com.sun.identity.idm.IdRepoException;
+
+public class RealmContextFilterTest extends AbstractMockBasedTest {
 
     private static final String HOSTNAME = "HOSTNAME";
     private static final String DNS_ALIAS_HOSTNAME = "DNS-ALIAS-HOSTNAME";
@@ -96,10 +102,9 @@ public class RealmContextFilterTest {
     @SuppressWarnings("unchecked")
     @BeforeMethod
     public void setup() throws Exception {
-        initMocks(this);
         filter = new RealmContextFilter(coreWrapper, realmValidator);
 
-        given(coreWrapper.getOrganization(any(SSOToken.class), eq(ENDPOINT_PATH_ELEMENT)))
+        given(coreWrapper.getOrganization(any(), eq(ENDPOINT_PATH_ELEMENT)))
                 .willThrow(IdRepoException.class);
 
         realmTestHelper = new RealmTestHelper(coreWrapper);
@@ -540,13 +545,13 @@ public class RealmContextFilterTest {
     }
 
     private void mockRealmAlias(String alias, String realm) throws Exception {
-        given(coreWrapper.getOrganization(any(SSOToken.class), eq(alias))).willReturn(realm);
+        given(coreWrapper.getOrganization(any(), eq(alias))).willReturn(realm);
         given(coreWrapper.convertOrgNameToRealmName(realm)).willReturn(realm);
         given(realmValidator.isRealm(realm)).willReturn(true);
     }
 
     private void mockInvalidRealmAlias(String alias) throws Exception {
-        doThrow(IdRepoException.class).when(coreWrapper).getOrganization(any(SSOToken.class), eq(alias));
+        doThrow(IdRepoException.class).when(coreWrapper).getOrganization(any(), eq(alias));
     }
 
     private void verifyRealmContext(Context context, Realm expectedRealm) {
@@ -587,7 +592,7 @@ public class RealmContextFilterTest {
         verify(requestHandler, atLeast(0)).handleDelete(contextCaptor.capture(), (DeleteRequest) requestCaptor.capture());
         verify(requestHandler, atLeast(0)).handlePatch(contextCaptor.capture(), (PatchRequest) requestCaptor.capture());
         verify(requestHandler, atLeast(0)).handleAction(contextCaptor.capture(), (ActionRequest) requestCaptor.capture());
-        verify(requestHandler, atLeast(0)).handleQuery(contextCaptor.capture(), (QueryRequest) requestCaptor.capture(), any(QueryResponseHandler.class));
+        verify(requestHandler, atLeast(0)).handleQuery(contextCaptor.capture(), (QueryRequest) requestCaptor.capture(), any());
     }
 
     private Handler getHttpHandler(RequestHandler requestHandler) {
@@ -601,7 +606,7 @@ public class RealmContextFilterTest {
         given(requestHandler.handlePatch(any(Context.class), any(PatchRequest.class))).willReturn(result);
         given(requestHandler.handleAction(any(Context.class), any(ActionRequest.class)))
                 .willReturn(Promises.<ActionResponse, ResourceException>newResultPromise(mock(ActionResponse.class)));
-        given(requestHandler.handleQuery(any(Context.class), any(QueryRequest.class), any(QueryResponseHandler.class)))
+        given(requestHandler.handleQuery(any(Context.class), any(QueryRequest.class), any()))
                 .willReturn(Promises.<QueryResponse, ResourceException>newResultPromise(mock(QueryResponse.class)));
         FilterChain filterChain = new FilterChain(requestHandler, filter);
         return CrestHttp.newHttpHandler(filterChain);

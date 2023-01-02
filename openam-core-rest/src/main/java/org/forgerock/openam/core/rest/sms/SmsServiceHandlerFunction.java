@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions copyright 2022 Wren Security
  */
 package org.forgerock.openam.core.rest.sms;
 
@@ -23,8 +24,8 @@ import java.util.Set;
 import javax.annotation.Nullable;
 import javax.inject.Named;
 
-import org.forgerock.guava.common.base.Function;
-import org.forgerock.guava.common.base.Predicate;
+import org.wrensecurity.guava.common.base.Function;
+import org.wrensecurity.guava.common.base.Predicate;
 
 import com.google.inject.Inject;
 import com.sun.identity.authentication.util.ISAuthConstants;

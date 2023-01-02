@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions copyright 2022 Wren Security
  */
 
 package org.forgerock.openam.core.rest.sms;
@@ -79,7 +80,7 @@ import org.forgerock.api.annotations.Update;
 import org.forgerock.api.enums.CountPolicy;
 import org.forgerock.api.enums.PagingMode;
 import org.forgerock.api.enums.QueryType;
-import org.forgerock.guava.common.collect.Sets;
+import org.wrensecurity.guava.common.collect.Sets;
 import org.forgerock.json.JsonValue;
 import org.forgerock.json.resource.ActionRequest;
 import org.forgerock.json.resource.ActionResponse;

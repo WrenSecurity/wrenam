@@ -30,7 +30,6 @@ define([
     "bootstrap-tabdrop"
 ], function ($, _, Messages, AbstractView, EventManager, Router, Constants, UIUtils, ResourceTypeModel,
              ResourceTypePatternsView, ResourceTypeActionsView, FormHelper) {
-
     return AbstractView.extend({
         partials: [
             "partials/util/_HelpLink.html"

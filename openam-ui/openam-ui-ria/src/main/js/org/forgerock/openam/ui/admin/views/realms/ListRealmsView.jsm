@@ -88,7 +88,6 @@ class ListRealmsView extends AbstractView {
                 : $.t("console.realms.warningDialog.deactivateMessage"),
             buttons
         });
-
     }
     getRealmFromEvent (event) {
         var path = $(event.currentTarget).closest("div[data-realm-path]").data("realm-path"),
@@ -137,7 +136,6 @@ class ListRealmsView extends AbstractView {
             });
 
             self.parentRender(() => {
-
                 const tableData = {
                     "headers": [
                         $.t("console.realms.grid.header.0"), $.t("console.realms.grid.header.1"),

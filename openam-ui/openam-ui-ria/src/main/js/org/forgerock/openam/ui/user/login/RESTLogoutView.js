@@ -14,7 +14,6 @@
  * Portions copyright 2011-2016 ForgeRock AS.
  */
 
-
 define([
     "jquery",
     "org/forgerock/commons/ui/common/main/AbstractView",
@@ -24,7 +23,6 @@ define([
     "org/forgerock/openam/ui/user/login/RESTLoginHelper",
     "org/forgerock/openam/ui/user/login/navigateThenRefresh"
 ], ($, AbstractView, Configuration, Constants, EventManager, RESTLoginHelper, navigateThenRefresh) => {
-
     var LogoutView = AbstractView.extend({
         template: "templates/openam/ReturnToLoginTemplate.html",
         baseTemplate: "templates/common/LoginBaseTemplate.html",

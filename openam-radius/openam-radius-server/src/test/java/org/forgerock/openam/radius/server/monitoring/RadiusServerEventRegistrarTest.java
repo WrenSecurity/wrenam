@@ -12,12 +12,13 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyrighted 2015 Intellectual Reserve, Inc (IRI)
+ * Portions copyright 2022 Wren Security
  */
 package org.forgerock.openam.radius.server.monitoring;
 
 import static org.assertj.core.api.Assertions.*;
 
-import org.forgerock.guava.common.eventbus.EventBus;
+import org.wrensecurity.guava.common.eventbus.EventBus;
 import org.testng.annotations.Test;
 
 /**

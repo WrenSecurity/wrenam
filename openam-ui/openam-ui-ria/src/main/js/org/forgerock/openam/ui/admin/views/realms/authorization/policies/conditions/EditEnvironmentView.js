@@ -169,14 +169,14 @@ define([
                     self.$el.find(".no-float").remove();
                     self.$el.find(".clear-left").remove();
 
-                    if (!_.isEmpty(helperText)) {
+                    if (_.isEmpty(helperText)) {
+                        self.$el.find(".info-button").hide();
+                    } else {
                         self.$el.find(".info-button")
                             .show()
                             .attr("data-title", helperText.title.toString())
                             .attr("data-content", helperText.content.toString())
                             .popover();
-                    } else {
-                        self.$el.find(".info-button").hide();
                     }
 
                     if (!self.$el.parents("#dropbox").length || self.$el.hasClass("editing")) {
@@ -184,7 +184,6 @@ define([
                             self.animateIn();
                         });
                     }
-
                 }, delay);
             }
         },

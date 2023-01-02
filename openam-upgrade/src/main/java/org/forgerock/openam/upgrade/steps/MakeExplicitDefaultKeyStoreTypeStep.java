@@ -12,11 +12,12 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions copyright 2022 Wren Security
  */
 package org.forgerock.openam.upgrade.steps;
 
 import static com.sun.identity.common.configuration.ServerConfiguration.*;
-import static org.forgerock.guava.common.collect.Maps.fromProperties;
+import static org.wrensecurity.guava.common.collect.Maps.fromProperties;
 import static org.forgerock.openam.upgrade.UpgradeServices.LF;
 import static org.forgerock.openam.utils.StringUtils.isEmpty;
 

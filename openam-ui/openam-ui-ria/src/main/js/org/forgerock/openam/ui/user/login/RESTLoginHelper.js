@@ -125,7 +125,6 @@ define([
         return query.parseParameters(paramString);
     };
 
-
     obj.setSuccessURL = function (tokenId, successUrl) {
         const promise = $.Deferred();
         let context = "";

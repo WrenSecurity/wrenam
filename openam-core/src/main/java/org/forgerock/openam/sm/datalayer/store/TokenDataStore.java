@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions copyright 2022 Wren Security
  */
 
 package org.forgerock.openam.sm.datalayer.store;
@@ -23,7 +24,7 @@ import java.util.Set;
 import com.google.inject.Key;
 import com.google.inject.name.Names;
 import com.sun.identity.shared.debug.Debug;
-import org.forgerock.guava.common.annotations.VisibleForTesting;
+import org.wrensecurity.guava.common.annotations.VisibleForTesting;
 import org.forgerock.guice.core.InjectorHolder;
 import org.forgerock.openam.cts.adapters.JavaBeanAdapter;
 import org.forgerock.openam.cts.api.tokens.Token;

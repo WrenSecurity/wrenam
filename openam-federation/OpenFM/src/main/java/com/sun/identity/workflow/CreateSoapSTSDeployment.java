@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions copyright 2022 Wren Security
  */
 
 package com.sun.identity.workflow;
@@ -26,7 +27,7 @@ import com.sun.identity.shared.Constants;
 import com.sun.identity.shared.configuration.SystemPropertiesManager;
 import com.sun.identity.shared.debug.Debug;
 import org.apache.commons.lang.ArrayUtils;
-import org.forgerock.guava.common.annotations.VisibleForTesting;
+import org.wrensecurity.guava.common.annotations.VisibleForTesting;
 import org.forgerock.openam.shared.security.crypto.KeyStoreBuilder;
 import org.forgerock.openam.shared.security.crypto.KeyStoreType;
 import org.forgerock.openam.shared.sts.SharedSTSConstants;

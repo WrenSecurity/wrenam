@@ -15,7 +15,6 @@
  */
 
 define([], () => {
-
     /**
     * Transforms boolean types to checkbox format
     * @param {Object} property Property to transform

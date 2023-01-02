@@ -14,14 +14,12 @@
  * Copyright 2015-2016 ForgeRock AS.
  */
 
-
 define([
     "jquery",
     "lodash",
     "org/forgerock/commons/ui/common/main/AbstractView",
     "org/forgerock/openam/ui/admin/views/realms/authorization/common/StripedListEditingView"
 ], ($, _, AbstractView, StripedListEditingView) => {
-
     function ResourceTypePatternsView () {
     }
 

@@ -25,6 +25,7 @@
  * $Id: SMSEventListenerManager.java,v 1.12 2009/01/28 05:35:03 ww203982 Exp $
  *
  * Portions Copyright 2015-2016 ForgeRock AS.
+ * Portions Copyright 2022 Wren Security
  */
 
 package com.sun.identity.sm;
@@ -33,9 +34,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.forgerock.guava.common.collect.HashMultimap;
-import org.forgerock.guava.common.collect.Multimaps;
-import org.forgerock.guava.common.collect.SetMultimap;
+import org.wrensecurity.guava.common.collect.HashMultimap;
+import org.wrensecurity.guava.common.collect.Multimaps;
+import org.wrensecurity.guava.common.collect.SetMultimap;
 import org.forgerock.openam.utils.CollectionUtils;
 import org.forgerock.opendj.ldap.DN;
 import org.forgerock.opendj.ldap.SearchScope;

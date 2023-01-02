@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions copyright 2022 Wren Security
  */
 package org.forgerock.openam.core.rest.docs.api;
 
@@ -48,8 +49,8 @@ import org.asciidoctor.Placement;
 import org.asciidoctor.SafeMode;
 import org.forgerock.api.markup.ApiDocGenerator;
 import org.forgerock.api.models.ApiDescription;
-import org.forgerock.guava.common.base.Joiner;
-import org.forgerock.guava.common.io.Files;
+import org.wrensecurity.guava.common.base.Joiner;
+import org.wrensecurity.guava.common.io.Files;
 import org.forgerock.http.header.ContentTypeHeader;
 import org.forgerock.http.io.FileBranchingStream;
 import org.forgerock.http.protocol.Request;

@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 package org.forgerock.openam.rest.audit;
 
@@ -94,7 +95,7 @@ public class AbstractRestletAccessAuditFilterTest {
         request.setDate(newDate());
         Response response = new Response(request);
         request.setEntity(new JsonRepresentation((Map<String, Object>) object(field("fred", "v"), field("gary", 7))));
-        when(eventPublisher.isAuditing(anyString(), anyString(), any(EventName.class))).thenReturn(true);
+        when(eventPublisher.isAuditing(any(), anyString(), any(EventName.class))).thenReturn(true);
 
         // When
         auditFilter.beforeHandle(request, response);
@@ -117,7 +118,7 @@ public class AbstractRestletAccessAuditFilterTest {
         request.setDate(newDate());
         Response response = new Response(request);
         response.setEntity(new JsonRepresentation((Map<String, Object>) object(field("fred", "v"), field("gary", 7))));
-        when(eventPublisher.isAuditing(anyString(), anyString(), any(EventName.class))).thenReturn(true);
+        when(eventPublisher.isAuditing(any(), anyString(), any(EventName.class))).thenReturn(true);
 
         // When
         auditFilter.afterHandle(request, response);

@@ -12,10 +12,12 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 
 package org.forgerock.maven.plugins.inject.content;
 
+import org.mockito.AdditionalAnswers;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -31,6 +33,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class IOFactoryTest {
 
@@ -65,6 +68,7 @@ public class IOFactoryTest {
         BufferedWriter writer = mock(BufferedWriter.class);
         File content = mock(File.class);
         ContentConverter contentConverter = mock(ContentConverter.class);
+        when(contentConverter.convert(anyString())).then(AdditionalAnswers.returnsFirstArg());
 
         given(reader.readLine())
                 .willReturn("LINE1")

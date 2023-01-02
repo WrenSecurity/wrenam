@@ -26,7 +26,6 @@ define([
     "text!templates/admin/views/realms/authentication/SelectModuleOption.html"
 ], ($, _, AbstractView, BootstrapDialog, UIUtils, SelectComponent, TemplateComponent, SelectModuleItemTemplate,
     SelectModuleOptionTemplate) => {
-
     SelectComponent = SelectComponent.default;
     TemplateComponent = TemplateComponent.default;
 

@@ -12,14 +12,14 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014-2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 package org.forgerock.openam.sm.datalayer.impl.tasks;
 
 import static org.forgerock.openam.cts.api.CTSOptions.OPTIMISTIC_CONCURRENCY_CHECK_OPTION;
-import static org.mockito.BDDMockito.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -52,7 +52,7 @@ public class UpdateTaskTest {
         mockHandler = mock(ResultHandler.class);
         task = new UpdateTask(mockUpdated, options, mockHandler);
 
-        given(mockAdapter.read(anyString(), eq(options))).willReturn(mockPrevious);
+        given(mockAdapter.read(any(), eq(options))).willReturn(mockPrevious);
         given(mockAdapter.update(mockPrevious, mockUpdated, options)).willReturn(mockReturned);
     }
 
@@ -64,14 +64,14 @@ public class UpdateTaskTest {
 
     @Test
     public void shouldCreateWhenNotPresent() throws Exception {
-        given(mockAdapter.read(anyString(), eq(options))).willReturn(null);
+        given(mockAdapter.read(any(), eq(options))).willReturn(null);
         task.execute(mockAdapter);
         verify(mockAdapter).create(eq(mockUpdated), eq(options));
     }
 
     @Test (expectedExceptions = DataLayerException.class)
     public void shouldHandleException() throws Exception {
-        doThrow(DataLayerException.class).when(mockAdapter).read(anyString(), eq(options));
+        doThrow(DataLayerException.class).when(mockAdapter).read(any(), eq(options));
         task.execute(mockAdapter);
         verify(mockHandler).processError(any(CoreTokenException.class));
     }

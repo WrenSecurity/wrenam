@@ -23,6 +23,7 @@
  * "Portions Copyrighted [year] [name of copyright owner]"
  *
  * Portions Copyrighted 2010-2016 ForgeRock AS.
+ * Portions Copyrighted 2022 Wren Security
  */
 package com.iplanet.am.util;
 
@@ -47,9 +48,9 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import javax.annotation.Nullable;
 
-import org.forgerock.guava.common.base.Predicate;
-import org.forgerock.guava.common.collect.ImmutableMap;
-import org.forgerock.guava.common.collect.Maps;
+import org.wrensecurity.guava.common.base.Predicate;
+import org.wrensecurity.guava.common.collect.ImmutableMap;
+import org.wrensecurity.guava.common.collect.Maps;
 import org.forgerock.openam.utils.StringUtils;
 
 import com.iplanet.sso.SSOToken;

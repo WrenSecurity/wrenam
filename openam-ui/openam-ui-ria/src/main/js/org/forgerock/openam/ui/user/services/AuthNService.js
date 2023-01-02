@@ -37,7 +37,6 @@ define([
     let knownAuth = {};
 
     function handleFragmentParameters (params) {
-
         if (Configuration.globalData.auth.urlParams) {
             _.extend(params, Configuration.globalData.auth.urlParams);
         }

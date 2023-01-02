@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions copyright 2022 Wren Security
  */
 
 package org.forgerock.openam.http;
@@ -21,7 +22,7 @@ import java.lang.annotation.Annotation;
 
 import com.google.inject.Key;
 
-import org.forgerock.guava.common.reflect.TypeToken;
+import org.wrensecurity.guava.common.reflect.TypeToken;
 import org.forgerock.http.ApiProducer;
 import org.forgerock.http.handler.DescribableHandler;
 import org.forgerock.services.context.Context;

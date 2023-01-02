@@ -12,23 +12,25 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 package com.sun.identity.entitlement.xacml3.validation;
 
-import com.sun.identity.entitlement.EntitlementException;
-import com.sun.identity.entitlement.ReferralPrivilege;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import static org.mockito.ArgumentMatchers.anyCollection;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.testng.AssertJUnit.fail;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.mockito.Matchers.anyListOf;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
-import static org.testng.AssertJUnit.fail;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+import com.sun.identity.entitlement.EntitlementException;
+import com.sun.identity.entitlement.ReferralPrivilege;
 
 public class PrivilegeValidatorTest {
 
@@ -44,7 +46,7 @@ public class PrivilegeValidatorTest {
     @Test
     public void shouldErrorIfRealmWasNotValid() throws EntitlementException {
         doThrow(new EntitlementException(EntitlementException.INVALID_SEARCH_FILTER))
-                .when(mockValidator).validateRealms(anyListOf(String.class));
+                .when(mockValidator).validateRealms(anyCollection());
         try {
             validator.validateReferralPrivilege(createReferral("Badger"));
             fail();

@@ -25,7 +25,6 @@ define([
     "org/forgerock/openam/ui/user/login/tokens/SessionToken"
 ], (_, Constants, AnonymousProcessView, SelfRegistrationView, KBAView, Configuration, RESTLoginView,
     SessionToken) => {
-
     function shouldRouteToLoginView (response, destination) {
         return response.type === "selfRegistration" && response.tag === "end" && destination === "login";
     }
@@ -42,7 +41,6 @@ define([
     _.extend(AMSelfRegistrationView.prototype, AnonymousProcessView.prototype);
 
     AMSelfRegistrationView.prototype.renderProcessState = function (response) {
-
         const destination = _.get(Configuration, "globalData.successfulUserRegistrationDestination");
         const realm = _.get(Configuration, "globalData.realm", "");
 
@@ -50,7 +48,6 @@ define([
             const tokenId = _.get(response, "additions.tokenId");
             SessionToken.set(tokenId);
             RESTLoginView.handleExistingSession(response.additions);
-
         } else if (shouldRouteToLoginView(response, destination)) {
             window.location.href = `#login${realm}`;
         } else {

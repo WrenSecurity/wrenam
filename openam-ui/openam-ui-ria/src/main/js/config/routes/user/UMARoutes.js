@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 
 define(function () {
@@ -20,7 +21,7 @@ define(function () {
         "umaResourcesMyResources": {
             view: "org/forgerock/openam/ui/user/uma/views/resource/LabelTreeNavigationView",
             page: "org/forgerock/openam/ui/user/uma/views/resource/MyResourcesPage",
-            url: /^uma\/resources\/?(myresources)?\/?([^\/]+)?\/?$/,
+            url: /^uma\/resources\/?(myresources)?\/?([^/]+)?\/?$/,
             pattern: "uma/resources/?/?",
             role: "ui-uma-user",
             navGroup: "user",
@@ -30,7 +31,7 @@ define(function () {
         "umaResourcesMyResourcesResource": {
             view: "org/forgerock/openam/ui/user/uma/views/resource/LabelTreeNavigationView",
             page: "org/forgerock/openam/ui/user/uma/views/resource/ResourcePage",
-            url: /^uma\/resources\/myresources\/([^\/]+)\/([^\/]+)\/?$/,
+            url: /^uma\/resources\/myresources\/([^/]+)\/([^/]+)\/?$/,
             role: "ui-uma-user",
             navGroup: "user",
             pattern: "uma/resources/myresources/?/?",
@@ -51,7 +52,7 @@ define(function () {
         "umaResourcesSharedWithMeResource": {
             view: "org/forgerock/openam/ui/user/uma/views/resource/LabelTreeNavigationView",
             page: "org/forgerock/openam/ui/user/uma/views/resource/ResourcePage",
-            url: /^uma\/resources\/sharedwithme\/([^\/]+)\/?$/,
+            url: /^uma\/resources\/sharedwithme\/([^/]+)\/?$/,
             role: "ui-uma-user",
             navGroup: "user",
             pattern: "uma/resources/sharedwithme/?",
@@ -72,7 +73,7 @@ define(function () {
         "umaResourcesStarredResource": {
             view: "org/forgerock/openam/ui/user/uma/views/resource/LabelTreeNavigationView",
             page: "org/forgerock/openam/ui/user/uma/views/resource/ResourcePage",
-            url: /^uma\/resources\/starred\/([^\/]+)\/?$/,
+            url: /^uma\/resources\/starred\/([^/]+)\/?$/,
             role: "ui-uma-user",
             navGroup: "user",
             pattern: "uma/resources/starred/?",
@@ -84,7 +85,7 @@ define(function () {
         "umaResourcesMyLabels": {
             view: "org/forgerock/openam/ui/user/uma/views/resource/LabelTreeNavigationView",
             page: "org/forgerock/openam/ui/user/uma/views/resource/MyLabelsPage",
-            url: /^uma\/resources\/mylabels\/([^\/]+)\/?$/,
+            url: /^uma\/resources\/mylabels\/([^/]+)\/?$/,
             pattern: "uma/resources/mylabels/?",
             role: "ui-uma-user",
             navGroup: "user",
@@ -94,7 +95,7 @@ define(function () {
         "umaResourcesMyLabelsResource": {
             view: "org/forgerock/openam/ui/user/uma/views/resource/LabelTreeNavigationView",
             page: "org/forgerock/openam/ui/user/uma/views/resource/ResourcePage",
-            url: /^uma\/resources\/mylabels\/([^\/]+)\/([^\/]+)\/?$/,
+            url: /^uma\/resources\/mylabels\/([^/]+)\/([^/]+)\/?$/,
             role: "ui-uma-user",
             navGroup: "user",
             pattern: "uma/resources/mylabels/?/?",

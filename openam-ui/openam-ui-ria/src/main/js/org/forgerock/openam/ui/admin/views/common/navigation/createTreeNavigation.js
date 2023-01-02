@@ -18,7 +18,6 @@ define([
     "lodash",
     "org/forgerock/commons/ui/common/main/Router"
 ], (_, Router) => {
-
     function throwOnNoData (data) {
         if (!data) {
             throw new Error("[createTreeNavigation] No \"data\" array found.");
@@ -70,7 +69,6 @@ define([
      * @returns {object[]} Returns the same array with an object[].href added to each navigation object.
      */
     function createTreeNavigation (data, args) {
-
         throwOnNoData(data);
         throwOnArgsNotArray(args);
 

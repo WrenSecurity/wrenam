@@ -100,7 +100,6 @@ define([
         }
     };
 
-
     obj.getJATOPageSession = function (realm) {
         return obj.serviceCall({
             url: `/realm/RMRealm?RMRealm.tblDataActionHref=${realm}&requester=XUI`,

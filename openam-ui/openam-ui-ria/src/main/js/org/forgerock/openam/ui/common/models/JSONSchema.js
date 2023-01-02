@@ -143,8 +143,8 @@ define([
      */
     function cleanJSONSchema (schema) {
         eachProperty(schema, [transformBooleanTypeToCheckboxFormat,
-                              transformEnumTypeToString,
-                              warnOnInferredPasswordWithoutFormat]);
+            transformEnumTypeToString,
+            warnOnInferredPasswordWithoutFormat]);
 
         return schema;
     }
@@ -186,6 +186,7 @@ define([
             return this.pick(this.getEnableKey());
         }
         getKeys (sort) {
+            // eslint-disable-next-line no-negated-condition
             sort = typeof sort !== "undefined" ? sort : false;
 
             if (sort) {

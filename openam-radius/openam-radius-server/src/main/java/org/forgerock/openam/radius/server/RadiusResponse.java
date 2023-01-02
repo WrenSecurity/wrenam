@@ -12,10 +12,11 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015 ForgeRock AS.
+ * Portions copyright 2022 Wren Security
  */
 package org.forgerock.openam.radius.server;
 
-import org.forgerock.guava.common.base.Preconditions;
+import org.wrensecurity.guava.common.base.Preconditions;
 import org.forgerock.openam.radius.common.Packet;
 import org.forgerock.openam.radius.server.config.RadiusServerConstants;
 

@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions copyright 2022 Wren Security
  */
 
 package org.forgerock.openam.core.rest.sms;
@@ -50,8 +51,8 @@ import com.sun.identity.sm.InvalidAttributeValueException;
 import com.sun.identity.sm.SMSException;
 import com.sun.identity.sm.ServiceSchema;
 import org.apache.commons.lang.StringUtils;
-import org.forgerock.guava.common.collect.BiMap;
-import org.forgerock.guava.common.collect.HashBiMap;
+import org.wrensecurity.guava.common.collect.BiMap;
+import org.wrensecurity.guava.common.collect.HashBiMap;
 import org.forgerock.json.resource.BadRequestException;
 import org.forgerock.json.JsonException;
 import org.forgerock.json.JsonPointer;

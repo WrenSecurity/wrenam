@@ -12,23 +12,33 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 
 package org.forgerock.openam.uma.rest;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.forgerock.json.JsonValue.*;
-import static org.forgerock.json.resource.Responses.*;
-import static org.forgerock.util.promise.Promises.*;
-import static org.mockito.BDDMockito.*;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.anyListOf;
-import static org.mockito.Mockito.anySetOf;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.entry;
+import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
+import static org.forgerock.json.JsonValue.array;
+import static org.forgerock.json.JsonValue.field;
+import static org.forgerock.json.JsonValue.json;
+import static org.forgerock.json.JsonValue.object;
+import static org.forgerock.json.resource.Responses.newQueryResponse;
+import static org.forgerock.json.resource.Responses.newResourceResponse;
+import static org.forgerock.util.promise.Promises.newExceptionPromise;
+import static org.forgerock.util.promise.Promises.newResultPromise;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyCollection;
+import static org.mockito.ArgumentMatchers.anySet;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 
@@ -42,19 +52,10 @@ import java.util.Set;
 
 import javax.security.auth.Subject;
 
-import com.sun.identity.shared.Constants;
-import org.forgerock.openam.core.realms.Realm;
-import org.forgerock.openam.core.realms.RealmTest;
-import org.forgerock.openam.core.realms.RealmTestHelper;
-import org.forgerock.openam.oauth2.extensions.ExtensionFilterManager;
-import org.forgerock.openam.uma.ResourceSetAcceptAllFilter;
-import org.forgerock.openam.uma.extensions.ResourceDelegationFilter;
-import org.forgerock.services.context.Context;
 import org.forgerock.json.JsonPointer;
 import org.forgerock.json.JsonValue;
 import org.forgerock.json.resource.BadRequestException;
 import org.forgerock.json.resource.ConflictException;
-import org.forgerock.services.context.ClientContext;
 import org.forgerock.json.resource.InternalServerErrorException;
 import org.forgerock.json.resource.NotFoundException;
 import org.forgerock.json.resource.QueryRequest;
@@ -63,20 +64,27 @@ import org.forgerock.json.resource.QueryResponse;
 import org.forgerock.json.resource.Requests;
 import org.forgerock.json.resource.ResourceException;
 import org.forgerock.json.resource.ResourceResponse;
-import org.forgerock.openam.oauth2.ResourceSetDescription;
 import org.forgerock.oauth2.resources.ResourceSetStore;
 import org.forgerock.openam.core.CoreServicesWrapper;
+import org.forgerock.openam.core.realms.Realm;
+import org.forgerock.openam.core.realms.RealmTestHelper;
 import org.forgerock.openam.cts.api.fields.ResourceSetTokenField;
+import org.forgerock.openam.oauth2.ResourceSetDescription;
+import org.forgerock.openam.oauth2.extensions.ExtensionFilterManager;
 import org.forgerock.openam.oauth2.resources.ResourceSetStoreFactory;
 import org.forgerock.openam.rest.RealmContext;
 import org.forgerock.openam.rest.resource.ContextHelper;
 import org.forgerock.openam.rest.resource.SSOTokenContext;
 import org.forgerock.openam.rest.resource.SubjectContext;
+import org.forgerock.openam.uma.ResourceSetAcceptAllFilter;
 import org.forgerock.openam.uma.UmaPolicy;
 import org.forgerock.openam.uma.UmaSettings;
 import org.forgerock.openam.uma.UmaSettingsFactory;
 import org.forgerock.openam.uma.audit.UmaAuditLogger;
+import org.forgerock.openam.uma.extensions.ResourceDelegationFilter;
 import org.forgerock.openam.utils.Config;
+import org.forgerock.services.context.ClientContext;
+import org.forgerock.services.context.Context;
 import org.forgerock.util.Pair;
 import org.forgerock.util.promise.Promise;
 import org.forgerock.util.promise.Promises;
@@ -93,6 +101,7 @@ import com.iplanet.sso.SSOException;
 import com.iplanet.sso.SSOToken;
 import com.sun.identity.entitlement.Evaluator;
 import com.sun.identity.idm.AMIdentity;
+import com.sun.identity.shared.Constants;
 import com.sun.identity.shared.debug.Debug;
 
 public class UmaPolicyServiceImplTest {
@@ -286,7 +295,7 @@ public class UmaPolicyServiceImplTest {
         //Then
         InOrder inOrder = inOrder(resourceDelegationFilter, policyResourceDelegate, resourceDelegationFilter);
         inOrder.verify(resourceDelegationFilter).beforeResourceShared(any(UmaPolicy.class));
-        inOrder.verify(policyResourceDelegate).createPolicies(eq(context), anySetOf(JsonValue.class));
+        inOrder.verify(policyResourceDelegate).createPolicies(eq(context), anySet());
         inOrder.verify(resourceDelegationFilter).afterResourceShared(any(UmaPolicy.class));
 
         assertThat(umaPolicy.getId()).isEqualTo("RESOURCE_SET_ID");
@@ -313,7 +322,7 @@ public class UmaPolicyServiceImplTest {
                 newResultPromise(
                         Pair.of(newQueryResponse(), Collections.singletonList(policyResource)));
 
-        given(policyResourceDelegate.queryPolicies(eq(context), Matchers.<QueryRequest>anyObject()))
+        given(policyResourceDelegate.queryPolicies(eq(context), any()))
                 .willReturn(queryPromise);
 
         //When
@@ -321,7 +330,7 @@ public class UmaPolicyServiceImplTest {
             policyService.createPolicy(context, policy).getOrThrowUninterruptibly();
         } catch (ResourceException e) {
             //Then
-            verify(policyResourceDelegate, never()).createPolicies(eq(context), anySetOf(JsonValue.class));
+            verify(policyResourceDelegate, never()).createPolicies(eq(context), anySet());
             throw e;
         }
     }
@@ -337,9 +346,9 @@ public class UmaPolicyServiceImplTest {
                 Promises.newExceptionPromise((ResourceException) new NotFoundException());
         Promise<List<ResourceResponse>, ResourceException> createPoliciesPromise = Promises.newExceptionPromise(exception);
 
-        given(policyResourceDelegate.queryPolicies(eq(context), Matchers.<QueryRequest>anyObject()))
+        given(policyResourceDelegate.queryPolicies(eq(context), any()))
                 .willReturn(queryPromise);
-        given(policyResourceDelegate.createPolicies(eq(context), Matchers.<Set<JsonValue>>anyObject()))
+        given(policyResourceDelegate.createPolicies(eq(context), any()))
                 .willReturn(createPoliciesPromise);
 
         //When
@@ -412,7 +421,7 @@ public class UmaPolicyServiceImplTest {
         Promise<Pair<QueryResponse, List<ResourceResponse>>, ResourceException> queryPromise =
                 newResultPromise(Pair.of(queryResult, policies));
 
-        given(policyResourceDelegate.queryPolicies(eq(context), Matchers.<QueryRequest>anyObject()))
+        given(policyResourceDelegate.queryPolicies(eq(context), any()))
                 .willReturn(queryPromise);
 
         //When
@@ -433,7 +442,7 @@ public class UmaPolicyServiceImplTest {
         Promise<Pair<QueryResponse, List<ResourceResponse>>, ResourceException> queryPromise =
                 Promises.newExceptionPromise(exception);
 
-        given(policyResourceDelegate.queryPolicies(eq(context), Matchers.<QueryRequest>anyObject()))
+        given(policyResourceDelegate.queryPolicies(eq(context), any()))
                 .willReturn(queryPromise);
 
         //When
@@ -479,7 +488,7 @@ public class UmaPolicyServiceImplTest {
         InOrder inOrder = inOrder(resourceDelegationFilter, policyResourceDelegate);
         inOrder.verify(resourceDelegationFilter).beforeResourceSharedModification(any(UmaPolicy.class),
                 any(UmaPolicy.class));
-        inOrder.verify(policyResourceDelegate, times(2)).updatePolicies(any(Context.class), anySetOf(JsonValue.class));
+        inOrder.verify(policyResourceDelegate, times(2)).updatePolicies(any(Context.class), anySet());
 
         assertThat(umaPolicy.getId()).isEqualTo("RESOURCE_SET_ID");
         assertThat(umaPolicy.getRevision()).isNotNull();
@@ -499,7 +508,7 @@ public class UmaPolicyServiceImplTest {
                 = newResultPromise(Pair.of((QueryResponse) null, Collections.<ResourceResponse>emptyList()));
         Promise<List<ResourceResponse>, ResourceException> updatePoliciesPromise = newExceptionPromise(exception);
 
-        given(policyResourceDelegate.queryPolicies(eq(context), Matchers.<QueryRequest>anyObject()))
+        given(policyResourceDelegate.queryPolicies(eq(context), any()))
                 .willReturn(currentPolicyPromise);
         given(policyResourceDelegate.updatePolicies(eq(context), Matchers.<Set<JsonValue>>anyObject()))
                 .willReturn(updatePoliciesPromise);
@@ -574,7 +583,7 @@ public class UmaPolicyServiceImplTest {
 
         Promise<List<ResourceResponse>, ResourceException> deletePoliciesPromise = newResultPromise(readPolicies);
 
-        given(policyResourceDelegate.deletePolicies(eq(context), anyListOf(String.class)))
+        given(policyResourceDelegate.deletePolicies(eq(context), anyCollection()))
                 .willReturn(deletePoliciesPromise);
 
         //When
@@ -583,7 +592,7 @@ public class UmaPolicyServiceImplTest {
         //Then
         InOrder inOrder = inOrder(resourceDelegationFilter, policyResourceDelegate);
         inOrder.verify(resourceDelegationFilter).onResourceSharedDeletion(any(UmaPolicy.class));
-        inOrder.verify(policyResourceDelegate).deletePolicies(eq(context), anyListOf(String.class));
+        inOrder.verify(policyResourceDelegate).deletePolicies(eq(context), anyCollection());
     }
 
     @Test(expectedExceptions = ResourceException.class)
@@ -596,7 +605,7 @@ public class UmaPolicyServiceImplTest {
         Promise<Pair<QueryResponse, List<ResourceResponse>>, ResourceException> readPoliciesPromise =
                 Promises.newExceptionPromise(exception);
 
-        given(policyResourceDelegate.queryPolicies(eq(context), Matchers.<QueryRequest>anyObject()))
+        given(policyResourceDelegate.queryPolicies(eq(context), any()))
                 .willReturn(readPoliciesPromise);
 
         //When
@@ -604,7 +613,7 @@ public class UmaPolicyServiceImplTest {
             policyService.deletePolicy(context, "RESOURCE_SET_ID").getOrThrowUninterruptibly();
         } catch (ResourceException e) {
             //Then
-            verify(policyResourceDelegate, never()).deletePolicies(eq(context), anyListOf(String.class));
+            verify(policyResourceDelegate, never()).deletePolicies(eq(context), anyCollection());
             throw e;
         }
     }
@@ -625,9 +634,9 @@ public class UmaPolicyServiceImplTest {
                 = newResultPromise(Pair.of((QueryResponse) null, readPolicies));
         Promise<List<ResourceResponse>, ResourceException> deletePoliciesPromise = newExceptionPromise(exception);
 
-        given(policyResourceDelegate.queryPolicies(eq(context), Matchers.<QueryRequest>anyObject()))
+        given(policyResourceDelegate.queryPolicies(eq(context), any()))
                 .willReturn(currentPolicyPromise);
-        given(policyResourceDelegate.deletePolicies(eq(context), anyListOf(String.class)))
+        given(policyResourceDelegate.deletePolicies(eq(context), anyCollection()))
                 .willReturn(deletePoliciesPromise);
 
         //When
@@ -635,7 +644,7 @@ public class UmaPolicyServiceImplTest {
             policyService.deletePolicy(context, "RESOURCE_SET_ID").getOrThrowUninterruptibly();
         } catch (ResourceException e) {
             //Then
-            verify(policyResourceDelegate).deletePolicies(eq(context), anyListOf(String.class));
+            verify(policyResourceDelegate).deletePolicies(eq(context), anyCollection());
             throw e;
         }
     }
@@ -668,7 +677,7 @@ public class UmaPolicyServiceImplTest {
         Promise<Pair<QueryResponse, List<ResourceResponse>>, ResourceException> backendQueryPromise
                 = newResultPromise(Pair.of(queryResult, policyResources));
 
-        given(policyResourceDelegate.queryPolicies(eq(context), Matchers.<QueryRequest>anyObject()))
+        given(policyResourceDelegate.queryPolicies(eq(context), any()))
                 .willReturn(backendQueryPromise);
     }
 

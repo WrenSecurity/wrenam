@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 
 package org.forgerock.openam.upgrade;
@@ -20,7 +21,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.forgerock.openam.setup.TestSetupHelper.deleteDirectory;
 import static org.forgerock.openam.setup.TestSetupHelper.extractZip;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.MockitoAnnotations.initMocks;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,14 +30,16 @@ import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.sun.identity.shared.debug.Debug;
 import org.forgerock.openam.setup.ZipUtils;
 import org.mockito.Mock;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import org.wrensecurity.wrenam.test.AbstractMockBasedTest;
 
-public class EmbeddedOpenDJBackupManagerTest {
+import com.sun.identity.shared.debug.Debug;
+
+public class EmbeddedOpenDJBackupManagerTest extends AbstractMockBasedTest {
 
     private final Random random = new Random();
 
@@ -52,7 +54,6 @@ public class EmbeddedOpenDJBackupManagerTest {
 
     @BeforeMethod
     public void setup() {
-        initMocks(this);
         zipUtils = new ZipUtils(logger);
         baseDirectoryZipExtractPath = new File("/tmp/base-directory-" + random.nextInt());
         baseDirectory = baseDirectoryZipExtractPath.getAbsolutePath() + File.separator + "base-directory";

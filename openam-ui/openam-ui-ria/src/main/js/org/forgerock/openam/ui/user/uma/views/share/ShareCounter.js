@@ -24,7 +24,6 @@ define([
         element: "#shareCounter",
 
         render (count, callback) {
-
             this.data.shareCount = count;
             this.data.shareInfo = this.getShareInfo(count);
             this.data.shareIcon = this.getShareIcon(count);
@@ -33,7 +32,6 @@ define([
                 if (callback) { callback(); }
             });
         },
-
 
         getShareInfo (count) {
             var options = count ? { count } : { context: "none" };

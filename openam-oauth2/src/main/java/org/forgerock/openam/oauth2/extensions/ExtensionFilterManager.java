@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015 ForgeRock AS.
+ * Portions copyright 2022 Wren Security
  */
 
 package org.forgerock.openam.oauth2.extensions;
@@ -25,8 +26,8 @@ import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.forgerock.guava.common.collect.Lists;
-import org.forgerock.guava.common.collect.Sets;
+import org.wrensecurity.guava.common.collect.Lists;
+import org.wrensecurity.guava.common.collect.Sets;
 import org.forgerock.guice.core.InjectorHolder;
 
 /**

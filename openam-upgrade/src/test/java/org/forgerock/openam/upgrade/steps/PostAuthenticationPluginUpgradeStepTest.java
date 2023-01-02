@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 
 package org.forgerock.openam.upgrade.steps;
@@ -28,20 +29,21 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import com.iplanet.sso.SSOException;
-import com.iplanet.sso.SSOToken;
-import com.sun.identity.sm.SMSException;
-import com.sun.identity.sm.ServiceConfig;
 import org.forgerock.openam.sm.datalayer.api.ConnectionFactory;
 import org.forgerock.openam.upgrade.UpgradeException;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import org.wrensecurity.wrenam.test.AbstractMockBasedTest;
 
-public class PostAuthenticationPluginUpgradeStepTest {
+import com.iplanet.sso.SSOException;
+import com.iplanet.sso.SSOToken;
+import com.sun.identity.sm.SMSException;
+import com.sun.identity.sm.ServiceConfig;
+
+public class PostAuthenticationPluginUpgradeStepTest extends AbstractMockBasedTest {
 
     private UpgradeStep upgradeStep;
 
@@ -61,7 +63,6 @@ public class PostAuthenticationPluginUpgradeStepTest {
 
     @BeforeMethod
     public void setup() throws Exception {
-        MockitoAnnotations.initMocks(this);
         realmNames = Collections.singleton("/");
 
         upgradeStep = new PostAuthenticationPluginUpgradeStep(adminTokenAction, connectionFactory) {

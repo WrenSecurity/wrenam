@@ -14,7 +14,6 @@
  * Portions copyright 2014-2016 ForgeRock AS.
  */
 
-
 define([
     "jquery",
     "lodash",
@@ -55,7 +54,6 @@ define([
         },
 
         render (args, callback) {
-
             this.idPrefix = "Sub_";
             this.property = "subject";
             this.properties = "subjects";
@@ -68,7 +66,6 @@ define([
             var self = this;
 
             _.each(this.data.options.availableSubjects, function (item) {
-
                 if (item.logical === true) {
                     self.data.operators.push(item);
                 } else {

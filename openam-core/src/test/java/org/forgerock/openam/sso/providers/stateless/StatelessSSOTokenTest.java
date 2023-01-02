@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 
 package org.forgerock.openam.sso.providers.stateless;
@@ -27,10 +28,10 @@ import java.net.InetAddress;
 import java.security.Principal;
 
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import org.wrensecurity.wrenam.test.AbstractMockBasedTest;
 
 import com.iplanet.dpro.session.SessionException;
 import com.iplanet.dpro.session.SessionID;
@@ -42,7 +43,7 @@ import com.iplanet.sso.SSOTokenListenersUnsupportedException;
 import com.iplanet.sso.providers.dpro.SSOPrincipal;
 import com.sun.identity.authentication.util.ISAuthConstants;
 
-public class StatelessSSOTokenTest {
+public class StatelessSSOTokenTest extends AbstractMockBasedTest {
 
     @Mock
     private StatelessSession mockSession;
@@ -51,7 +52,6 @@ public class StatelessSSOTokenTest {
 
     @BeforeMethod
     public void setup() {
-        MockitoAnnotations.initMocks(this);
         statelessSSOToken = new StatelessSSOToken(mockSession);
     }
 

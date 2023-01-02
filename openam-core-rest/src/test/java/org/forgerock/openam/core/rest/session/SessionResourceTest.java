@@ -12,34 +12,39 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2013-2015 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 
 package org.forgerock.openam.core.rest.session;
 
-import static org.forgerock.json.JsonValue.*;
-import static org.forgerock.json.resource.test.assertj.AssertJActionResponseAssert.*;
-import static org.forgerock.openam.core.rest.session.SessionResource.*;
-import static org.mockito.BDDMockito.*;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.anySetOf;
+import static org.forgerock.json.JsonValue.array;
+import static org.forgerock.json.JsonValue.field;
+import static org.forgerock.json.JsonValue.json;
+import static org.forgerock.json.JsonValue.object;
+import static org.forgerock.json.resource.test.assertj.AssertJActionResponseAssert.assertThat;
+import static org.forgerock.openam.core.rest.session.SessionResource.DELETE_PROPERTY_ACTION_ID;
+import static org.forgerock.openam.core.rest.session.SessionResource.GET_IDLE_ACTION_ID;
+import static org.forgerock.openam.core.rest.session.SessionResource.GET_MAX_TIME_ACTION_ID;
+import static org.forgerock.openam.core.rest.session.SessionResource.GET_PROPERTY_ACTION_ID;
+import static org.forgerock.openam.core.rest.session.SessionResource.GET_PROPERTY_NAMES_ACTION_ID;
+import static org.forgerock.openam.core.rest.session.SessionResource.IS_ACTIVE_ACTION_ID;
+import static org.forgerock.openam.core.rest.session.SessionResource.LOGOUT_ACTION_ID;
+import static org.forgerock.openam.core.rest.session.SessionResource.SET_PROPERTY_ACTION_ID;
+import static org.forgerock.openam.core.rest.session.SessionResource.VALIDATE_ACTION_ID;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyCollection;
+import static org.mockito.ArgumentMatchers.anyMap;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.testng.AssertJUnit.*;
+import static org.testng.AssertJUnit.assertTrue;
 
-import com.iplanet.services.naming.WebtopNamingQuery;
-import com.iplanet.sso.SSOException;
-import com.iplanet.sso.SSOToken;
-import com.iplanet.sso.SSOTokenID;
-import com.iplanet.sso.SSOTokenManager;
-import com.sun.identity.delegation.DelegationException;
-import com.sun.identity.idm.AMIdentity;
-import com.sun.identity.idm.IdRepoException;
-import com.sun.identity.shared.debug.Debug;
 import java.security.Principal;
 import java.util.Arrays;
 import java.util.Collection;
@@ -48,8 +53,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.forgerock.http.session.Session;
 import org.forgerock.http.session.SessionContext;
 import org.forgerock.json.JsonValue;
@@ -81,6 +88,16 @@ import org.forgerock.util.promise.Promise;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import com.iplanet.services.naming.WebtopNamingQuery;
+import com.iplanet.sso.SSOException;
+import com.iplanet.sso.SSOToken;
+import com.iplanet.sso.SSOTokenID;
+import com.iplanet.sso.SSOTokenManager;
+import com.sun.identity.delegation.DelegationException;
+import com.sun.identity.idm.AMIdentity;
+import com.sun.identity.idm.IdRepoException;
+import com.sun.identity.shared.debug.Debug;
 
 public class SessionResourceTest {
 
@@ -574,7 +591,7 @@ public class SessionResourceTest {
         given(ssoTokenManager.retrieveValidTokenWithoutResettingIdleTime("SSO_TOKEN_ID")).willReturn(ssoToken);
         given(ssoTokenManager.isValidToken(ssoToken, false)).willReturn(true);
         given(request.getAction()).willReturn(GET_PROPERTY_ACTION_ID);
-        given(propertyWhitelist.isPropertyListed(any(SSOToken.class), any(String.class), anySetOf(String.class))).willReturn(true);
+        given(propertyWhitelist.isPropertyListed(any(SSOToken.class), any(String.class), anyCollection())).willReturn(true);
         given(ssoToken.getProperty(eq("one"))).willReturn("testOne");
 
         //when
@@ -598,8 +615,8 @@ public class SessionResourceTest {
         given(ssoTokenManager.isValidToken(ssoToken, false)).willReturn(true);
         given(request.getAction()).willReturn(SET_PROPERTY_ACTION_ID);
         given(request.getContent()).willReturn(jsonContent);
-        given(propertyWhitelist.isPropertyListed(any(SSOToken.class), any(String.class), anySetOf(String.class))).willReturn(true);
-        given(propertyWhitelist.isPropertyMapSettable(any(SSOToken.class), anyMapOf(String.class, String.class))).willReturn(true);
+        given(propertyWhitelist.isPropertyListed(any(SSOToken.class), any(String.class), anyCollection())).willReturn(true);
+        given(propertyWhitelist.isPropertyMapSettable(any(SSOToken.class), anyMap())).willReturn(true);
 
         //when
         Promise<ActionResponse, ResourceException> promise = sessionResource.actionInstance(realmContext, resourceId, request);
@@ -623,7 +640,7 @@ public class SessionResourceTest {
         given(ssoTokenManager.isValidToken(ssoToken, false)).willReturn(true);
         given(request.getAction()).willReturn(SET_PROPERTY_ACTION_ID);
         given(request.getContent()).willReturn(jsonContent);
-        given(propertyWhitelist.isPropertyListed(any(SSOToken.class), any(String.class), anySetOf(String.class))).willReturn(false);
+        given(propertyWhitelist.isPropertyListed(any(SSOToken.class), any(String.class), anyCollection())).willReturn(false);
 
         //when
         Promise<ActionResponse, ResourceException> promise = sessionResource.actionInstance(realmContext, resourceId, request);
@@ -645,7 +662,7 @@ public class SessionResourceTest {
         given(ssoTokenManager.isValidToken(ssoToken, false)).willReturn(true);
         given(request.getAction()).willReturn(SET_PROPERTY_ACTION_ID);
         given(request.getContent()).willReturn(jsonContent);
-        given(propertyWhitelist.isPropertyListed(any(SSOToken.class), any(String.class), anySetOf(String.class))).willReturn(false);
+        given(propertyWhitelist.isPropertyListed(any(SSOToken.class), any(String.class), anyCollection())).willReturn(false);
 
         //when
         Promise<ActionResponse, ResourceException> promise = sessionResource.actionInstance(realmContext, resourceId, request);
@@ -666,8 +683,8 @@ public class SessionResourceTest {
         given(ssoTokenManager.isValidToken(ssoToken, false)).willReturn(true);
         given(request.getAction()).willReturn(DELETE_PROPERTY_ACTION_ID);
         given(request.getContent()).willReturn(content);
-        given(propertyWhitelist.isPropertyListed(any(SSOToken.class), any(String.class), anySetOf(String.class))).willReturn(true);
-        given(propertyWhitelist.isPropertySetSettable(any(SSOToken.class), anySetOf(String.class))).willReturn(true);
+        given(propertyWhitelist.isPropertyListed(any(), any(String.class), anyCollection())).willReturn(true);
+        given(propertyWhitelist.isPropertySetSettable(any(), anyCollection())).willReturn(true);
 
         //when
         Promise<ActionResponse, ResourceException> promise = sessionResource.actionInstance(realmContext, resourceId, request);
@@ -692,7 +709,7 @@ public class SessionResourceTest {
         given(ssoTokenManager.isValidToken(ssoToken, false)).willReturn(true);
         given(request.getAction()).willReturn(SET_PROPERTY_ACTION_ID);
         given(request.getContent()).willReturn(jsonContent);
-        given(propertyWhitelist.isPropertyListed(any(SSOToken.class), any(String.class), anySetOf(String.class)))
+        given(propertyWhitelist.isPropertyListed(any(), any(), anyCollection()))
                 .willThrow(new SSOException("Error"));
 
         //when
@@ -716,7 +733,7 @@ public class SessionResourceTest {
         given(ssoTokenManager.isValidToken(ssoToken, false)).willReturn(true);
         given(request.getAction()).willReturn(SET_PROPERTY_ACTION_ID);
         given(request.getContent()).willReturn(jsonContent);
-        given(propertyWhitelist.isPropertyListed(any(SSOToken.class), any(String.class), anySetOf(String.class)))
+        given(propertyWhitelist.isPropertyListed(any(SSOToken.class), any(String.class), anyCollection()))
                 .willThrow(new DelegationException("Error"));
 
         //when
@@ -739,7 +756,7 @@ public class SessionResourceTest {
         given(ssoTokenManager.retrieveValidTokenWithoutResettingIdleTime(resourceId)).willReturn(ssoToken);
         given(ssoTokenManager.isValidToken(ssoToken, false)).willReturn(true);
         given(request.getAction()).willReturn(GET_PROPERTY_ACTION_ID);
-        given(propertyWhitelist.isPropertyListed(any(SSOToken.class), any(String.class), anySetOf(String.class)))
+        given(propertyWhitelist.isPropertyListed(any(SSOToken.class), any(String.class), anyCollection()))
                 .willThrow(new DelegationException("Error"));
 
         //when
@@ -762,7 +779,7 @@ public class SessionResourceTest {
         given(ssoTokenManager.isValidToken(ssoToken, false)).willReturn(true);
         given(request.getAction()).willReturn(DELETE_PROPERTY_ACTION_ID);
         given(request.getContent()).willReturn(content);
-        given(propertyWhitelist.isPropertyListed(any(SSOToken.class), any(String.class), anySetOf(String.class)))
+        given(propertyWhitelist.isPropertyListed(any(SSOToken.class), any(String.class), anyCollection()))
                 .willThrow(new SSOException("Error"));
 
         //when
@@ -786,7 +803,7 @@ public class SessionResourceTest {
         given(ssoTokenManager.isValidToken(ssoToken, false)).willReturn(true);
         given(request.getAction()).willReturn(DELETE_PROPERTY_ACTION_ID);
         given(request.getContent()).willReturn(content);
-        given(propertyWhitelist.isPropertyListed(any(SSOToken.class), any(String.class), anySetOf(String.class)))
+        given(propertyWhitelist.isPropertyListed(any(SSOToken.class), any(String.class), anyCollection()))
                 .willThrow(new DelegationException("Error"));
 
         //when
@@ -808,7 +825,7 @@ public class SessionResourceTest {
         given(ssoTokenManager.isValidToken(ssoToken, false)).willReturn(true);
         given(request.getAction()).willReturn(DELETE_PROPERTY_ACTION_ID);
         given(request.getContent()).willReturn(content);
-        given(propertyWhitelist.isPropertyListed(any(SSOToken.class), any(String.class), anySetOf(String.class))).willReturn(false);
+        given(propertyWhitelist.isPropertyListed(any(SSOToken.class), any(String.class), anyCollection())).willReturn(false);
         given(mockContext.getCallerSSOToken()).willReturn(ssoToken);
         given(propertyWhitelist.userHasReadAdminPrivs(eq(ssoToken), any(String.class))).willReturn(false);
 
@@ -833,7 +850,7 @@ public class SessionResourceTest {
         given(ssoTokenManager.isValidToken(ssoToken, false)).willReturn(true);
         given(request.getAction()).willReturn(DELETE_PROPERTY_ACTION_ID);
         given(request.getContent()).willReturn(content);
-        given(propertyWhitelist.isPropertyListed(any(SSOToken.class), any(String.class), anySetOf(String.class))).willReturn(false);
+        given(propertyWhitelist.isPropertyListed(any(SSOToken.class), any(String.class), anyCollection())).willReturn(false);
 
         //when
         Promise<ActionResponse, ResourceException> promise = sessionResource.actionInstance(realmContext, resourceId, request);

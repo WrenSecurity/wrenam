@@ -14,6 +14,7 @@
  *
  * Copyright 2011-2016 ForgeRock AS.
  * Portions Copyrighted 2016 Agile Digital Engineering
+ * Portions Copyrighted 2022 Wren Security
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
@@ -40,9 +41,9 @@
 
     <!-- Parent Project -->
     <parent>
-        <groupId>org.forgerock</groupId>
-        <artifactId>forgerock-parent</artifactId>
-        <version>2.0.8</version>
+        <groupId>org.wrensecurity</groupId>
+        <artifactId>wrensec-parent</artifactId>
+        <version>4.0.0</version>
     </parent>
 
     <!-- Component Definition -->
@@ -89,15 +90,33 @@
 
     <!-- Component Properties -->
     <properties>
+        <wrensec-commons.version>22.4.0</wrensec-commons.version>
+        <wrensec-guava.version>18.0.5</wrensec-guava.version>
+        <pgpVerifyKeysVersion>1.7.4-SNAPSHOT</pgpVerifyKeysVersion>
+
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+
         <!-- **************************************************************** -->
         <maven.build.timestamp.format>yyyy-MMM-dd HH:mm:ss</maven.build.timestamp.format>
         <!-- **************************************************************** -->
 
         <!-- Surefire Argument Line -->
-        <java.surefire.options>-Xms256m -Xmx256m -XX:MaxPermSize=96m</java.surefire.options>
+        <java.surefire.options>
+            -Xmx256m
+            --add-opens java.base/java.lang=ALL-UNNAMED
+            --add-opens java.base/java.io=ALL-UNNAMED
+            --add-opens java.base/java.nio.charset=ALL-UNNAMED
+            --add-opens java.base/java.util=ALL-UNNAMED
+            --add-exports java.base/sun.security.jca=ALL-UNNAMED
+            --add-exports java.base/sun.security.util=ALL-UNNAMED
+            --add-exports java.base/sun.security.x509=ALL-UNNAMED
+            --add-exports java.base/jdk.internal.util=ALL-UNNAMED
+            --add-exports java.base/jdk.internal.util.random=ALL-UNNAMED
+        </java.surefire.options>
 
         <!-- JavaDoc Setting Properties -->
-        <javadoc.options>-J-Xms2g -J-Xmx2g -J-XX:MaxPermSize=512m</javadoc.options>
+        <javadoc.options>-J-Xms2g -J-Xmx2g</javadoc.options>
         <!-- Shade plugin setting for ClientSDK build -->
         <generate.clientsdk.sources>false</generate.clientsdk.sources>
 
@@ -105,22 +124,21 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- Version Properties -->
-        <opendj.server.version>4.0.0-M1</opendj.server.version>
-        <opendj.sdk.version>4.0.0-M1</opendj.sdk.version>
-        <opendj.server.legacy>4.0.0-M1</opendj.server.legacy>
+        <wrends.server.version>4.0.0-RC1</wrends.server.version>
+        <wrends.sdk.version>4.0.0-RC1</wrends.sdk.version>
+        <wrends.server.legacy>4.0.0-RC1</wrends.server.legacy>
 
         <!-- Supress checkstyle errors on legacy com.iplanet and com.sun.identity packages -->
         <checkstyleUnitTestSuppressionsLocation>checkstyle/suppressions.xml</checkstyleUnitTestSuppressionsLocation>
 
         <forgerock.bloomfilter.version>1.0.1</forgerock.bloomfilter.version>
-        <forgerock.ui.version>16.0.4</forgerock.ui.version>
-        <forgerock.guice.version>2.0.2</forgerock.guice.version>
+        <forgerock.ui.version>22.1.0-SNAPSHOT</forgerock.ui.version>
 
         <javadoc-utils.version>1.0.0</javadoc-utils.version>
         <ant.contrib.version>1.0b3</ant.contrib.version>
         <guice.version>3.0</guice.version>
         <restlet.version>2.3.4</restlet.version>
-        <powermock.version>1.6.6</powermock.version>
+        <powermock.version>2.0.9</powermock.version>
         <slf4j.version>1.7.21</slf4j.version>
         <santuario.xmlsec.version>1.5.6</santuario.xmlsec.version>
         <click.version>2.3.0</click.version>
@@ -137,11 +155,12 @@
         <geoip.version>2.0.0</geoip.version>
         <groovy.version>2.4.6</groovy.version>
         <groovy-sandbox.version>1.6</groovy-sandbox.version>
-        <jaxb.version>1.0.6</jaxb.version>
-        <jaxb1.version>2.0.2</jaxb1.version>
+        <jaxb-api.version>2.3.1</jaxb-api.version>
+        <jaxb.version>2.3.7</jaxb.version>
+        <jaxb1.version>2.2.5-1</jaxb1.version>
         <jaxrpc-api.version>1.1</jaxrpc-api.version>
-        <jaxrpc-impl.version>1.1.3_01-20160905</jaxrpc-impl.version>
-        <jaxrpc-spi.version>1.1.3_01</jaxrpc-spi.version>
+        <jaxrpc-impl.version>1.1.4_01-wren1</jaxrpc-impl.version>
+        <jaxrpc-spi.version>1.1.4_01-wren1</jaxrpc-spi.version>
         <jdom.version>2.0.1</jdom.version>
         <je.version>5.0.104</je.version>
         <jersey-bundle.version>1.1.1-ea</jersey-bundle.version>
@@ -173,6 +192,9 @@
         <jetty.jspc.version>9.4.0.M0</jetty.jspc.version>
         <amazon.sns.version>1.10.72</amazon.sns.version>
         <javax.websocket-api.version>1.1</javax.websocket-api.version>
+        <jakarta.annotation-api.version>1.3.5</jakarta.annotation-api.version>
+        <jakarta.xml.soap-api.version>1.4.2</jakarta.xml.soap-api.version>
+        <jakarta.xml.ws-api.version>2.3.3</jakarta.xml.ws-api.version>
 
         <openam.version>OpenAM ${project.version}</openam.version>
         <!--  Project web site -->
@@ -357,7 +379,6 @@
                                             <failWhenParentIsSnapshot>false</failWhenParentIsSnapshot>
                                             <excludes>
                                                 <exclude>org.forgerock.openam:*</exclude>
-                                                <exclude>org.forgerock.commons:forgerock-persistit-core:*</exclude>
                                                 <exclude>org.forgerock.openig:openig-toolkit:*</exclude>
                                             </excludes>
                                         </requireReleaseDeps>
@@ -497,97 +518,59 @@
 
     <!-- Maven Repositories -->
     <repositories>
-        <!-- ForgeRock Common Internal Project Repositories -->
+
         <repository>
-            <id>forgerock-staging-repository</id>
-            <name>ForgeRock Release Repository</name>
-            <url>http://maven.forgerock.org/repo/releases</url>
+            <id>wrensecurity-releases</id>
+            <name>Wren Security Release Repository</name>
+            <url>https://wrensecurity.jfrog.io/wrensecurity/releases</url>
+
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
-        </repository>
 
-        <repository>
-            <id>forgerock-snapshots-repository</id>
-            <name>ForgeRock Snapshot Repository</name>
-            <url>http://maven.forgerock.org/repo/snapshots</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-
-        <!-- ForgeRock Internal Project Repository -->
-        <repository>
-            <id>maven.forgerock.org</id>
-            <name>maven.forgerock.org-openam-dependencies</name>
-            <url>http://maven.forgerock.org/repo/openam-dependencies</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
         </repository>
 
         <repository>
-            <id>restlet-cache</id>
-            <name>Restlet Cache Repository</name>
-            <url>http://maven.forgerock.org/repo/maven.restlet.org</url>
+            <id>wrensecurity-snapshots</id>
+            <name>Wren Security Snapshot Repository</name>
+            <url>https://wrensecurity.jfrog.io/wrensecurity/snapshots</url>
+
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+
             <releases>
-                <enabled>true</enabled>
+                <enabled>false</enabled>
             </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-
-        <repository>
-            <id>oracle-repository</id>
-            <name>Oracle Repository</name>
-            <url>http://download.oracle.com/maven</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
         </repository>
     </repositories>
-
-    <!-- For Deployment to ForgeRock Maven Repository -->
-    <distributionManagement>
-        <repository>
-            <id>maven.forgerock.org</id>
-            <name>maven.forgerock.org-releases</name>
-            <url>http://maven.forgerock.org/repo/releases</url>
-        </repository>
-        <snapshotRepository>
-            <id>maven.forgerock.org</id>
-            <name>maven.forgerock.org-snapshots</name>
-            <url>http://maven.forgerock.org/repo/snapshots</url>
-        </snapshotRepository>
-        <site>
-            <id>forgerock.org</id>
-            <name>OpenAM Project</name>
-            <url>${siteDistributionURL}</url>
-        </site>
-    </distributionManagement>
 
     <!-- Source Control -->
     <scm>
         <connection>scm:git:ssh://git@stash.forgerock.org:7999/openam/openam.git</connection>
         <developerConnection>scm:git:ssh://git@stash.forgerock.org:7999/openam/openam.git</developerConnection>
         <url>https://stash.forgerock.org/projects/OPENAM/repos/openam/browse</url>
-      <tag>release/13.0.0</tag>
-  </scm>
+        <tag>release/13.0.0</tag>
+    </scm>
 
     <!-- Dependency Management -->
     <dependencyManagement>
         <dependencies>
+            <!-- TODO: Remove org.forgerock.commons -->
             <dependency>
                 <groupId>org.forgerock.commons</groupId>
                 <artifactId>commons-bom</artifactId>
-                <version>21.0.0-alpha-23</version>
+                <version>22.1.0-SNAPSHOT</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>org.wrensecurity.commons</groupId>
+                <artifactId>commons-bom</artifactId>
+                <version>${wrensec-commons.version}</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
@@ -635,17 +618,17 @@
                 <version>${project.version}</version>
             </dependency>
 
-	        <dependency>
-	        	<groupId>org.forgerock.openam</groupId>
-	        	<artifactId>openam-radius-common</artifactId>
-	        	<version>${project.version}</version>
-	        </dependency>
+            <dependency>
+                <groupId>org.forgerock.openam</groupId>
+                <artifactId>openam-radius-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
-	        <dependency>
-	        	<groupId>org.forgerock.openam</groupId>
-	        	<artifactId>openam-radius-server</artifactId>
-	        	<version>${project.version}</version>
-	        </dependency>
+            <dependency>
+                <groupId>org.forgerock.openam</groupId>
+                <artifactId>openam-radius-server</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>org.forgerock.openam</groupId>
@@ -1345,7 +1328,7 @@
             <dependency>
                 <groupId>javax.xml.bind</groupId>
                 <artifactId>jaxb-api</artifactId>
-                <version>${jaxb.version}</version>
+                <version>${jaxb-api.version}</version>
             </dependency>
 
             <dependency>
@@ -1361,25 +1344,13 @@
             </dependency>
 
             <dependency>
-                <groupId>com.sun.xml.bind</groupId>
-                <artifactId>jaxb-libs</artifactId>
-                <version>${jaxb.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.sun.xml.bind</groupId>
-                <artifactId>jaxb-xjc</artifactId>
-                <version>${jaxb.version}</version>
-            </dependency>
-
-            <dependency>
                 <groupId>javax.xml</groupId>
                 <artifactId>jaxrpc-api</artifactId>
                 <version>${jaxrpc-api.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>external</groupId>
+                <groupId>com.sun.xml.rpc</groupId>
                 <artifactId>jaxrpc-impl</artifactId>
                 <version>${jaxrpc-impl.version}</version>
             </dependency>
@@ -1388,6 +1359,24 @@
                 <groupId>com.sun.xml.rpc</groupId>
                 <artifactId>jaxrpc-spi</artifactId>
                 <version>${jaxrpc-spi.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>jakarta.annotation</groupId>
+                <artifactId>jakarta.annotation-api</artifactId>
+                <version>${jakarta.annotation-api.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>jakarta.xml.soap</groupId>
+                <artifactId>jakarta.xml.soap-api</artifactId>
+                <version>${jakarta.xml.soap-api.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>jakarta.xml.ws</groupId>
+                <artifactId>jakarta.xml.ws-api</artifactId>
+                <version>${jakarta.xml.ws-api.version}</version>
             </dependency>
 
             <!-- TODO jmx -->
@@ -1583,27 +1572,27 @@
 
             <!-- OpenDJ API -->
             <dependency>
-                <groupId>org.forgerock.opendj</groupId>
+                <groupId>org.wrensecurity.wrends</groupId>
                 <artifactId>opendj-core</artifactId>
-                <version>${opendj.sdk.version}</version>
+                <version>${wrends.sdk.version}</version>
             </dependency>
             <!-- OpenDJ Grizzly -->
             <dependency>
-                <groupId>org.forgerock.opendj</groupId>
+                <groupId>org.wrensecurity.wrends</groupId>
                 <artifactId>opendj-grizzly</artifactId>
-                <version>${opendj.sdk.version}</version>
+                <version>${wrends.sdk.version}</version>
             </dependency>
             <!-- OpenDJ Server -->
             <dependency>
-                <groupId>org.forgerock.opendj</groupId>
+                <groupId>org.wrensecurity.wrends</groupId>
                 <artifactId>opendj-server</artifactId>
-                <version>${opendj.server.version}</version>
+                <version>${wrends.server.version}</version>
             </dependency>
             <!-- OpenDJ Server -->
             <dependency>
-                <groupId>org.forgerock.opendj</groupId>
+                <groupId>org.wrensecurity.wrends</groupId>
                 <artifactId>opendj-server-legacy</artifactId>
-                <version>${opendj.server.legacy}</version>
+                <version>${wrends.server.legacy}</version>
                 <exclusions>
                     <exclusion>
                         <groupId>org.slf4j</groupId>
@@ -1820,19 +1809,19 @@
                 </exclusions>
             </dependency>
             <dependency>
-                <groupId>org.forgerock.commons</groupId>
-                <artifactId>forgerock-guice-core</artifactId>
-                <version>${forgerock.guice.version}</version>
+                <groupId>org.wrensecurity.commons</groupId>
+                <artifactId>wrensec-guice-core</artifactId>
+                <version>${wrensec-commons.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.forgerock.commons</groupId>
-                <artifactId>forgerock-guice-servlet</artifactId>
-                <version>${forgerock.guice.version}</version>
+                <groupId>org.wrensecurity.commons</groupId>
+                <artifactId>wrensec-guice-servlet</artifactId>
+                <version>${wrensec-commons.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.forgerock.commons</groupId>
-                <artifactId>forgerock-guice-test</artifactId>
-                <version>${forgerock.guice.version}</version>
+                <groupId>org.wrensecurity.commons</groupId>
+                <artifactId>wrensec-guice-test</artifactId>
+                <version>${wrensec-commons.version}</version>
                 <scope>test</scope>
             </dependency>
 
@@ -1928,7 +1917,7 @@
             </dependency>
             <dependency>
                 <groupId>org.powermock</groupId>
-                <artifactId>powermock-api-mockito</artifactId>
+                <artifactId>powermock-api-mockito2</artifactId>
                 <version>${powermock.version}</version>
                 <scope>test</scope>
             </dependency>
@@ -2006,7 +1995,7 @@
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
+            <artifactId>mockito-core</artifactId>
         </dependency>
         <dependency>
             <groupId>org.assertj</groupId>
@@ -2037,10 +2026,7 @@
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>${maven.compiler.source}</source>
-                    <target>${maven.compiler.target}</target>
-                    <encoding>UTF-8</encoding>
-                    <!-- Override Enforcer Rules for OpenAM Compilation -->
+                    <release combine.self="override" />
                     <compilerArgument>-Xlint:none</compilerArgument>
                     <showDeprecation>false</showDeprecation>
                 </configuration>
@@ -2084,11 +2070,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
-                <version>3.6</version>
                 <configuration>
+                    <!--
                     <rulesets>
                         <ruleset>java-enforce-timeservice</ruleset>
                     </rulesets>
+                    -->
                 </configuration>
                 <executions>
                     <execution>
@@ -2098,6 +2085,7 @@
                         </goals>
                     </execution>
                 </executions>
+                <!--
                 <dependencies>
                     <dependency>
                         <groupId>org.forgerock.openam.pmd.rules</groupId>
@@ -2105,6 +2093,7 @@
                         <version>1.0.0</version>
                     </dependency>
                 </dependencies>
+                -->
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -2219,6 +2208,38 @@
 
         <pluginManagement>
             <plugins>
+                <!-- TODO: Remove this plugin settings. It is already done in wrensec-parent. -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-checkstyle-plugin</artifactId>
+                    <version>${checkstylePluginVersion}</version>
+
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.wrensecurity</groupId>
+                            <artifactId>wrensec-build-tools</artifactId>
+                            <version>${wrenBuildToolsVersion}</version>
+                        </dependency>
+
+                        <dependency>
+                            <groupId>com.puppycrawl.tools</groupId>
+                            <artifactId>checkstyle</artifactId>
+                            <version>8.41.1</version>
+                        </dependency>
+                    </dependencies>
+
+                    <configuration>
+                        <enableRSS>false</enableRSS>
+                        <configLocation>${checkstyleSourceConfigLocation}</configLocation>
+                        <headerLocation>${checkstyleHeaderLocation}</headerLocation>
+                        <suppressionsLocation>${checkstyleSuppressionsLocation}</suppressionsLocation>
+                        <includeTestSourceDirectory>true</includeTestSourceDirectory>
+
+                        <!-- Only output errors if we're not expecting any -->
+                        <consoleOutput>${checkstyleFailOnError}</consoleOutput>
+                        <failsOnError>${checkstyleFailOnError}</failsOnError>
+                    </configuration>
+                </plugin>
                 <plugin>
                     <groupId>com.github.searls</groupId>
                     <artifactId>jasmine-maven-plugin</artifactId>
@@ -2234,7 +2255,6 @@
                     <artifactId>jaxb2-maven-plugin</artifactId>
                     <version>1.3.1</version>
                 </plugin>
-
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>build-helper-maven-plugin</artifactId>
@@ -2246,12 +2266,6 @@
                     <version>2.2.2</version>
                 </plugin>
                 <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-shade-plugin</artifactId>
-                    <!-- Local build for MSHADE-237 and MSHADE-182 -->
-                    <version>3.0.0-forgerock-alpha-1</version>
-                </plugin>
-                <plugin>
                     <groupId>net.ju-n.maven.plugins</groupId>
                     <artifactId>checksum-maven-plugin</artifactId>
                     <version>1.2</version>
@@ -2260,11 +2274,6 @@
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>buildnumber-maven-plugin</artifactId>
                     <version>1.3</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-war-plugin</artifactId>
-                    <version>2.4</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.skins</groupId>
@@ -2313,13 +2322,8 @@
                 </plugin>
                 <plugin>
                     <groupId>org.codehaus.cargo</groupId>
-                    <artifactId>cargo-maven2-plugin</artifactId>
-                    <version>1.4.3</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-plugin-plugin</artifactId>
-                    <version>3.3</version>
+                    <artifactId>cargo-maven3-plugin</artifactId>
+                    <version>1.9.13</version>
                 </plugin>
             </plugins>
         </pluginManagement>

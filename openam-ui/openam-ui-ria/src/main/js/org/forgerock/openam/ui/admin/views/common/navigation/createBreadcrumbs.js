@@ -19,7 +19,6 @@ define([
     "lodash",
     "org/forgerock/commons/ui/common/util/URIUtils"
 ], ($, _, URIUtils) => {
-
     function getAllfragments () {
         return _.compact(URIUtils.getCurrentFragment().split("/"));
     }
@@ -56,7 +55,6 @@ define([
     }
 
     return (pattern, droppedFragments = 2) => {
-
         throwOnNoPattern(pattern);
 
         /* Under Realms all routes will follow a repeating pattern of -
@@ -98,11 +96,8 @@ define([
                 breadcrumbs.unshift({ title });
             }
             count = count < fragmentTypes.length - 1 ? count + 1 : 0;
-
         });
 
         return breadcrumbs;
-
     };
-
 });

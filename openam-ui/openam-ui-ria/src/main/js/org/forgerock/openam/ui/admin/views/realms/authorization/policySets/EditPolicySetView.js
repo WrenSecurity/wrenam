@@ -14,7 +14,6 @@
  * Portions copyright 2014-2016 ForgeRock AS.
  */
 
-
 define([
     "jquery",
     "lodash",
@@ -138,7 +137,12 @@ define([
                     return options;
                 };
 
-            if (!this.model.id) {
+            if (this.model.id) {
+                this.resourceTypesPromise.done(function (resourceTypes) {
+                    _.extend(self.data, { options: populateAvailableResourceTypes(resourceTypes.result) });
+                    parentRenderCallback();
+                });
+            } else {
                 // Fill in the necessary information about application
                 $.when(this.appTypePromise, this.envConditionsPromise, this.subjConditionsPromise,
                         this.decisionCombinersPromise, this.resourceTypesPromise)
@@ -149,11 +153,6 @@ define([
                         _.extend(self.data, { options: populateAvailableResourceTypes(resourceTypes[0].result) });
                         parentRenderCallback();
                     });
-            } else {
-                this.resourceTypesPromise.done(function (resourceTypes) {
-                    _.extend(self.data, { options: populateAvailableResourceTypes(resourceTypes.result) });
-                    parentRenderCallback();
-                });
             }
         },
 

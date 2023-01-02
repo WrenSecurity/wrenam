@@ -14,7 +14,6 @@
  * Copyright 2015-2016 ForgeRock AS.
  */
 
-
 define([
     "jquery",
     "org/forgerock/commons/ui/common/main/AbstractView",
@@ -22,7 +21,6 @@ define([
     "org/forgerock/openam/ui/user/login/tokens/SessionToken",
     "org/forgerock/openam/ui/user/login/tokens/AuthenticationToken"
 ], ($, AbstractView, URIUtils, SessionToken, AuthenticationToken) => {
-
     var LoginFailureView = AbstractView.extend({
         template: "templates/openam/ReturnToLoginTemplate.html",
         baseTemplate: "templates/common/LoginBaseTemplate.html",

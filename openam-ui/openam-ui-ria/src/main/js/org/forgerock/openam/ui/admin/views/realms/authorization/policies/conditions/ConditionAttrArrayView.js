@@ -35,7 +35,6 @@ define([
         DEFAULT_TIME_ZONE: "GMT",
 
         render (data, element, callback) {
-
             // default to multiple selection if this option is not specified
             if (data.multiple === undefined) {
                 data.multiple = true;

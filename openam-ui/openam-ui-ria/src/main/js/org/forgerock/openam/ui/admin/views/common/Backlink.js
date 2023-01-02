@@ -24,7 +24,6 @@ define([
     "org/forgerock/commons/ui/common/util/URIUtils",
     "org/forgerock/commons/ui/common/util/UIUtils"
 ], ($, _, Backbone, URIUtils, UIUtils) => {
-
     function getBaseURI (allFragments, fragmentIndex) {
         return _.take(allFragments, fragmentIndex + 1).join("/");
     }
@@ -53,5 +52,4 @@ define([
             );
         }
     });
-
 });

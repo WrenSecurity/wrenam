@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions copyright 2022 Wren Security
  */
 
 package org.forgerock.openam.entitlement.service;
@@ -23,7 +24,7 @@ import java.security.AccessController;
 
 import javax.security.auth.Subject;
 
-import org.forgerock.guava.common.collect.ImmutableMap;
+import org.wrensecurity.guava.common.collect.ImmutableMap;
 import org.forgerock.guice.core.InjectorHolder;
 import org.forgerock.openam.entitlement.PolicyConstants;
 import org.forgerock.openam.entitlement.ResourceType;

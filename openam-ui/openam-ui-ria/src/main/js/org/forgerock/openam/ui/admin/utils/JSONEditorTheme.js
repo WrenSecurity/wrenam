@@ -207,13 +207,13 @@ define([
                         return;
                     }
                     input.controlgroup.className += " has-error";
-                    if (!input.errmsg) {
+                    if (input.errmsg) {
+                        input.errmsg.style.display = "";
+                    } else {
                         input.errmsg = document.createElement("p");
                         input.errmsg.className =
                             `help-block errormsg col-sm-offset-${gridColWidth2} col-sm-${gridColWidth1}`;
                         input.controlgroup.appendChild(input.errmsg);
-                    } else {
-                        input.errmsg.style.display = "";
                     }
 
                     input.errmsg.textContent = text;

@@ -26,6 +26,7 @@
  *
  * Portions Copyrighted 2010-2016 ForgeRock AS.
  * Portions Copyrighted 2016 Nomura Research Institute, Ltd.
+ * Portions Copyrighted 2022 Wren Security
  */
 
 package com.sun.identity.authentication.service;
@@ -65,8 +66,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-import org.forgerock.guava.common.base.Joiner;
-import org.forgerock.guava.common.collect.ImmutableList;
+import org.wrensecurity.guava.common.base.Joiner;
+import org.wrensecurity.guava.common.collect.ImmutableList;
 import org.forgerock.guice.core.InjectorHolder;
 import org.forgerock.openam.authentication.service.DefaultSessionPropertyUpgrader;
 import org.forgerock.openam.authentication.service.SessionPropertyUpgrader;

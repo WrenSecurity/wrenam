@@ -33,6 +33,7 @@
     <build>
         <plugins>
             <plugin>
+                <?m2e execute onConfiguration?>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-plugin-plugin</artifactId>
                 <configuration>
@@ -87,7 +88,7 @@
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
+            <artifactId>mockito-core</artifactId>
         </dependency>
         <dependency>
             <groupId>org.assertj</groupId>

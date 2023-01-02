@@ -33,7 +33,6 @@ class NewAgentView extends AbstractView {
         };
     }
     render ([realmPath, agentType]) {
-
         getInitialState(realmPath, agentType).then((response) => {
             const options = {
                 schema: response.schema,
@@ -49,7 +48,6 @@ class NewAgentView extends AbstractView {
                 $(this.jsonSchemaView.render().el).appendTo(this.$el.find("[data-json-form]"));
             });
         });
-
     }
     onCreateClick () {
         create(this.data.realmPath, this.type, this.jsonSchemaView.getData()).then(() => {

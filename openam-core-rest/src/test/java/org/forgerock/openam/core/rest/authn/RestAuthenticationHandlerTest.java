@@ -12,30 +12,31 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2013-2016 ForgeRock AS.
+ * Portions Copyright 2021 Wren Security.
  */
 
 package org.forgerock.openam.core.rest.authn;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.forgerock.json.test.assertj.AssertJJsonValueAssert.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
-import static org.testng.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.fail;
 
-import javax.security.auth.callback.Callback;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.security.SignatureException;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.iplanet.sso.SSOToken;
-import com.iplanet.sso.SSOTokenID;
-import com.sun.identity.authentication.spi.AuthLoginException;
-import com.sun.identity.authentication.spi.PagePropertiesCallback;
-import com.sun.identity.shared.locale.L10NMessageImpl;
-import org.assertj.core.api.Assertions;
+import javax.security.auth.callback.Callback;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.forgerock.json.JsonValue;
 import org.forgerock.json.jose.jws.SignedJwt;
 import org.forgerock.json.jose.jwt.JwtClaimsSet;
@@ -52,9 +53,14 @@ import org.forgerock.openam.core.rest.authn.exceptions.RestAuthResponseException
 import org.forgerock.openam.utils.JsonValueBuilder;
 import org.json.JSONException;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Matchers;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import com.iplanet.sso.SSOToken;
+import com.iplanet.sso.SSOTokenID;
+import com.sun.identity.authentication.spi.AuthLoginException;
+import com.sun.identity.authentication.spi.PagePropertiesCallback;
+import com.sun.identity.shared.locale.L10NMessageImpl;
 
 public class RestAuthenticationHandlerTest {
 
@@ -104,7 +110,7 @@ public class RestAuthenticationHandlerTest {
         given(loginProcess.isSuccessful()).willReturn(true);
         given(loginProcess.getAuthContext()).willReturn(authContextLocalWrapper);
 
-        given(loginAuthenticator.getLoginProcess(Matchers.<LoginConfiguration>anyObject())).willReturn(loginProcess);
+        given(loginAuthenticator.getLoginProcess(any())).willReturn(loginProcess);
 
         //When
         JsonValue response = restAuthenticationHandler.initiateAuthentication(request, httpResponse,
@@ -144,7 +150,7 @@ public class RestAuthenticationHandlerTest {
         given(loginProcess.isSuccessful()).willReturn(false);
         given(loginProcess.getAuthContext()).willReturn(authContextLocalWrapper);
 
-        given(loginAuthenticator.getLoginProcess(Matchers.<LoginConfiguration>anyObject())).willReturn(loginProcess);
+        given(loginAuthenticator.getLoginProcess(any())).willReturn(loginProcess);
 
         //When
         try {
@@ -199,10 +205,10 @@ public class RestAuthenticationHandlerTest {
         JsonValue jsonCallbacks = new JsonValue(new HashMap<String, Object>());
         jsonCallbacks.add("KEY", "VALUE");
 
-        given(loginAuthenticator.getLoginProcess(Matchers.<LoginConfiguration>anyObject())).willReturn(loginProcess);
+        given(loginAuthenticator.getLoginProcess(any())).willReturn(loginProcess);
         given(restAuthCallbackHandlerManager.handleCallbacks(request, httpResponse, callbacks))
                 .willReturn(jsonCallbacks);
-        given(authIdHelper.createAuthId(Matchers.<LoginConfiguration>anyObject(), eq(authContextLocalWrapper)))
+        given(authIdHelper.createAuthId(any(), eq(authContextLocalWrapper)))
                 .willReturn("AUTH_ID");
 
         //When
@@ -255,10 +261,10 @@ public class RestAuthenticationHandlerTest {
 
         JsonValue jsonCallbacks = new JsonValue(new HashMap<String, Object>());
 
-        given(loginAuthenticator.getLoginProcess(Matchers.<LoginConfiguration>anyObject())).willReturn(loginProcess);
+        given(loginAuthenticator.getLoginProcess(any())).willReturn(loginProcess);
         given(restAuthCallbackHandlerManager.handleCallbacks(request, httpResponse, callbacks))
                 .willReturn(jsonCallbacks);
-        given(authIdHelper.createAuthId(Matchers.<LoginConfiguration>anyObject(), eq(authContextLocalWrapper)))
+        given(authIdHelper.createAuthId(any(), eq(authContextLocalWrapper)))
                 .willReturn("AUTH_ID");
 
         //When
@@ -306,10 +312,10 @@ public class RestAuthenticationHandlerTest {
         RestAuthResponseException restAuthResponseException =
                 new RestAuthResponseException(999, responseHeaders, jsonResponse);
 
-        given(loginAuthenticator.getLoginProcess(Matchers.<LoginConfiguration>anyObject())).willReturn(loginProcess);
+        given(loginAuthenticator.getLoginProcess(any())).willReturn(loginProcess);
         given(restAuthCallbackHandlerManager.handleCallbacks(request, httpResponse, callbacks))
                 .willThrow(restAuthResponseException);
-        given(authIdHelper.createAuthId(Matchers.<LoginConfiguration>anyObject(), eq(authContextLocalWrapper)))
+        given(authIdHelper.createAuthId(any(), eq(authContextLocalWrapper)))
                 .willReturn("AUTH_ID");
 
         //When
@@ -380,7 +386,7 @@ public class RestAuthenticationHandlerTest {
         given(loginProcess.isSuccessful()).willReturn(true);
         given(loginProcess.getAuthContext()).willReturn(authContextLocalWrapper);
 
-        given(loginAuthenticator.getLoginProcess(Matchers.<LoginConfiguration>anyObject())).willReturn(loginProcess);
+        given(loginAuthenticator.getLoginProcess(any())).willReturn(loginProcess);
 
         SignedJwt signedJwt = mock(SignedJwt.class);
         JwtClaimsSet claimsSet = mock(JwtClaimsSet.class);
@@ -430,7 +436,7 @@ public class RestAuthenticationHandlerTest {
         given(loginProcess.isSuccessful()).willReturn(true);
         given(loginProcess.getAuthContext()).willReturn(authContextLocalWrapper);
 
-        given(loginAuthenticator.getLoginProcess(Matchers.<LoginConfiguration>anyObject())).willReturn(loginProcess);
+        given(loginAuthenticator.getLoginProcess(any())).willReturn(loginProcess);
 
         // When
         restAuthenticationHandler.initiateAuthentication(request, response, "module", module, existingSessionId);
@@ -463,9 +469,9 @@ public class RestAuthenticationHandlerTest {
         given(loginProcess.isSuccessful()).willReturn(true);
         given(loginProcess.getAuthContext()).willReturn(authContextLocalWrapper);
 
-        given(loginAuthenticator.getLoginProcess(Matchers.<LoginConfiguration>anyObject())).willReturn(loginProcess);
+        given(loginAuthenticator.getLoginProcess(any())).willReturn(loginProcess);
 
-        given(coreWrapper.convertOrgNameToRealmName(anyString())).willReturn("REALM");
+        given(coreWrapper.convertOrgNameToRealmName(any())).willReturn("REALM");
 
         return restAuthenticationHandler.initiateAuthentication(request, httpResponse, null, null, null);
     }

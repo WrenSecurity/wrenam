@@ -19,7 +19,6 @@ define([
     "backbone",
     "org/forgerock/openam/ui/common/components/table/InlineEditTable"
 ], (_, Backbone, InlineEditTable) => {
-
     const StaticResponseAttributesView = Backbone.View.extend({
 
         initialize ({ staticAttributes }) {

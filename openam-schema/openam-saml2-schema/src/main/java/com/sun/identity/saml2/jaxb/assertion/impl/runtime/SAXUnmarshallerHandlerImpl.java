@@ -26,7 +26,6 @@ import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.LocatorImpl;
 
 import com.sun.xml.bind.JAXBAssertionError;
-import com.sun.xml.bind.unmarshaller.Messages;
 import com.sun.xml.bind.unmarshaller.Tracer;
 import com.sun.xml.bind.util.AttributesImpl;
 
@@ -112,7 +111,7 @@ public class SAXUnmarshallerHandlerImpl
                 // the SAXParserFactory.setNamespaceAware(true). When this happens, you see
                 // the namespace URI is reported as empty whereas you expect something else.
                 throw new SAXParseException(
-                    Messages.format( Messages.UNEXPECTED_ROOT_ELEMENT2,
+                    String.format("unexpected root element (uri:\"%s\", local:\"%s\"). Expected elements are %s",
                         uri, local, computeExpectedRootElements() ),
                     getLocator() );
             }

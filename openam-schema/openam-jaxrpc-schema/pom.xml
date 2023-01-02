@@ -13,6 +13,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2011-2016 ForgeRock AS.
+ * Portions Copyright 2022 Wren Security
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
@@ -37,6 +38,7 @@
             <!-- see http://docs.oracle.com/cd/E17802_01/webservices/webservices/docs/1.5/jaxrpc/jaxrpc-tools.html
                  for Documentation on the wscompile tool. -->
             <plugin>
+                <?m2e execute onConfiguration?>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <executions>
@@ -47,7 +49,7 @@
                             <target name="jaxrpc">
                                 <path id="wscompile.path">
                                     <path refid="maven.compile.classpath" />
-                                    <pathelement path="${env.JAVA_HOME}/lib/tools.jar" />
+                                    <pathelement path="${java.home}/../lib/tools.jar" />
                                 </path>
 
                                 <mkdir dir="${project.build.directory}/classes" />
@@ -129,17 +131,12 @@
         </dependency>
 
         <dependency>
-            <groupId>com.sun.xml.bind</groupId>
-            <artifactId>jaxb-libs</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>javax.xml</groupId>
             <artifactId>jaxrpc-api</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>external</groupId>
+            <groupId>com.sun.xml.rpc</groupId>
             <artifactId>jaxrpc-impl</artifactId>
         </dependency>
 
