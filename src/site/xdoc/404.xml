@@ -28,7 +28,7 @@
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
  <properties>
-  <title>OpenAM Community Site - Page Not Found</title>
+  <title>Wren:AM Community Site - Page Not Found</title>
   <author email="openam-dev@forgerock.org">ForgeRock AS</author>
  </properties>
  <body>

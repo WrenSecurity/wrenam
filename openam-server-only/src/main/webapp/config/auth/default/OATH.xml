@@ -30,7 +30,7 @@
 
 <ModuleProperties moduleName="OATH" version="1.0">
     <Callbacks length="0" order="1" timeout="120" header="#WILL NOT BE SHOWN#" />
-    <Callbacks length="2" order="2" timeout="120" header="Sign in to OpenAM">
+    <Callbacks length="2" order="2" timeout="120" header="Sign in to Wren:AM">
         <PasswordCallback>
             <Prompt>One Time Password:</Prompt>
         </PasswordCallback>

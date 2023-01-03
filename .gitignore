@@ -2,6 +2,7 @@ target/
 dependency-reduced-pom.xml
 openam-ui/openam-ui-ria/npm-debug.log.*
 test-output/
+.DS_Store
 
 # Editor generated files
 *.iml

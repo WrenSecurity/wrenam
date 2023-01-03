@@ -35,7 +35,7 @@
 
 <html>
     <head>
-        <title>OpenAM Demo | Policy Evaluation</title>
+        <title>Wren:AM Demo | Policy Evaluation</title>
     </head>
     <%
     String serverUrl = SystemProperties.get(Constants.AM_SERVER_PROTOCOL)		+ "://" + SystemProperties.get(Constants.AM_SERVER_HOST)

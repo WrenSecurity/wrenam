@@ -31,29 +31,27 @@ define({
                     // The URL of the image.
                     src: "images/logo-horizontal.png",
                     // The title attribute used on <img> tags.
-                    title: "ForgeRock",
+                    title: "Wren Security",
                     // The alt attribute used on <img> tags.
-                    alt: "ForgeRock",
+                    alt: "Wren Security",
                     // The width of the logo as a CSS length.
-                    width: "202px"
+                    height: "54px"
                 },
                 // This logo is displayed on login pages.
                 loginLogo: {
                     // The URL of the image.
                     src: "images/login-logo.png",
                     // The title attribute used on <img> tags.
-                    title: "ForgeRock",
+                    title: "Wren Security",
                     // The alt attribute used on <img> tags.
-                    alt: "ForgeRock",
-                    // The height of the logo as a CSS length.
-                    height: "104px",
+                    alt: "Wren Security",
                     // The width of the logo as a CSS length.
                     width: "210px"
                 },
                 // The footer is displayed on every page.
                 footer: {
                     // A contact email address.
-                    mailto: "info@forgerock.com",
+                    mailto: "info@wrensecurity.org",
                     // A contact phone number. If empty, it will not be displayed.
                     phone: ""
                 }

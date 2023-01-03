@@ -103,7 +103,7 @@
 %>
 <html>
 <head>
-<title>OpenAM (Realm Selection)</title>
+<title>Wren:AM (Realm Selection)</title>
 <link rel="stylesheet" href="<%= contextPath %>/css/styles.css" type="text/css" />
 <script language="JavaScript" src="<%= contextPath %>/js/browserVersion.js"></script>
 <script language="JavaScript" src="<%= contextPath %>/js/auth.js"></script>
@@ -288,7 +288,7 @@
       <td>&nbsp;</td>
       <td>
         <div class="logCpy"><span class="logTxtCpy">
-          Copyright &copy; 2008-2016, ForgeRock AS. All Rights Reserved. Use of this software is subject to the terms and conditions of the ForgeRock&#8482; License and Subscription Agreement.
+          Copyright &copy; Wren Security
         </div>
       </td>
       <td>&nbsp;</td>

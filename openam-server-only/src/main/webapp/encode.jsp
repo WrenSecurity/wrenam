@@ -32,7 +32,7 @@
 <%@page contentType="text/html; charset=UTF-8" %> 
 <html>
 <head>
-    <title>OpenAM</title>
+    <title>Wren:AM</title>
     <link rel="stylesheet" type="text/css" href="com_sun_web_ui/css/css_ns6up.css" />
     <link rel="shortcut icon" href="com_sun_web_ui/images/favicon/favicon.ico" type="image/x-icon" />
 </head>
