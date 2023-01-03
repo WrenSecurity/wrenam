@@ -14,7 +14,7 @@
  *
  * Copyright 2011-2016 ForgeRock AS.
  * Portions Copyrighted 2016 Agile Digital Engineering
- * Portions Copyrighted 2022 Wren Security
+ * Portions Copyright 2022-2023 Wren Security
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
@@ -132,7 +132,7 @@
         <checkstyleUnitTestSuppressionsLocation>checkstyle/suppressions.xml</checkstyleUnitTestSuppressionsLocation>
 
         <forgerock.bloomfilter.version>1.0.1</forgerock.bloomfilter.version>
-        <forgerock.ui.version>22.1.1</forgerock.ui.version>
+        <forgerock.ui.version>22.1.2</forgerock.ui.version>
         <forgerock.guice.version>2.0.0</forgerock.guice.version>
 
         <javadoc-utils.version>1.0.0</javadoc-utils.version>
