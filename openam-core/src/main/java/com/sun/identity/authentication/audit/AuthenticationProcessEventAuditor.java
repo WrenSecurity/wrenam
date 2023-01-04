@@ -22,23 +22,6 @@ import static org.forgerock.audit.events.AuthenticationAuditEventBuilder.Status.
 import static org.forgerock.audit.events.AuthenticationAuditEventBuilder.Status.SUCCESSFUL;
 import static org.forgerock.openam.audit.AMAuditEventBuilderUtils.getTrackingIdFromSSOToken;
 import static org.forgerock.openam.audit.AuditConstants.AUTHENTICATION_TOPIC;
-import static org.forgerock.openam.audit.AuditConstants.AuthenticationFailureReason.ACCOUNT_EXPIRED;
-import static org.forgerock.openam.audit.AuditConstants.AuthenticationFailureReason.AUTH_TYPE_DENIED;
-import static org.forgerock.openam.audit.AuditConstants.AuthenticationFailureReason.INVALID_LEVEL;
-import static org.forgerock.openam.audit.AuditConstants.AuthenticationFailureReason.INVALID_PASSWORD;
-import static org.forgerock.openam.audit.AuditConstants.AuthenticationFailureReason.INVALID_REALM;
-import static org.forgerock.openam.audit.AuditConstants.AuthenticationFailureReason.LOCKED_OUT;
-import static org.forgerock.openam.audit.AuditConstants.AuthenticationFailureReason.LOGIN_FAILED;
-import static org.forgerock.openam.audit.AuditConstants.AuthenticationFailureReason.LOGIN_TIMEOUT;
-import static org.forgerock.openam.audit.AuditConstants.AuthenticationFailureReason.MAX_SESSION_REACHED;
-import static org.forgerock.openam.audit.AuditConstants.AuthenticationFailureReason.MODULE_DENIED;
-import static org.forgerock.openam.audit.AuditConstants.AuthenticationFailureReason.MODULE_NOT_FOUND;
-import static org.forgerock.openam.audit.AuditConstants.AuthenticationFailureReason.NO_CONFIG;
-import static org.forgerock.openam.audit.AuditConstants.AuthenticationFailureReason.NO_USER_PROFILE;
-import static org.forgerock.openam.audit.AuditConstants.AuthenticationFailureReason.REALM_INACTIVE;
-import static org.forgerock.openam.audit.AuditConstants.AuthenticationFailureReason.SESSION_CREATE_ERROR;
-import static org.forgerock.openam.audit.AuditConstants.AuthenticationFailureReason.USER_INACTIVE;
-import static org.forgerock.openam.audit.AuditConstants.AuthenticationFailureReason.USER_NOT_FOUND;
 import static org.forgerock.openam.audit.AuditConstants.Component.AUTHENTICATION;
 import static org.forgerock.openam.audit.AuditConstants.EntriesInfoFieldKey.AUTH_INDEX;
 import static org.forgerock.openam.audit.AuditConstants.EntriesInfoFieldKey.AUTH_LEVEL;
@@ -49,24 +32,19 @@ import static org.forgerock.openam.audit.AuditConstants.EventName.AM_LOGOUT;
 import static org.forgerock.openam.audit.context.AuditRequestContext.getTransactionIdValue;
 import static org.forgerock.openam.utils.StringUtils.isNotEmpty;
 
+import com.iplanet.sso.SSOException;
+import com.iplanet.sso.SSOToken;
+import com.sun.identity.authentication.AuthContext;
+import com.sun.identity.authentication.service.LoginState;
+import com.sun.identity.common.DNUtils;
 import java.security.Principal;
-
 import javax.inject.Inject;
-
 import org.forgerock.openam.audit.AMAuditEventBuilderUtils;
 import org.forgerock.openam.audit.AMAuthenticationAuditEventBuilder;
-import org.forgerock.openam.audit.AuditConstants;
 import org.forgerock.openam.audit.AuditConstants.AuthenticationFailureReason;
 import org.forgerock.openam.audit.AuditEventFactory;
 import org.forgerock.openam.audit.AuditEventPublisher;
 import org.forgerock.openam.audit.model.AuthenticationAuditEntry;
-
-import com.iplanet.sso.SSOException;
-import com.iplanet.sso.SSOToken;
-import com.sun.identity.authentication.AuthContext;
-import com.sun.identity.authentication.service.AMAuthErrorCode;
-import com.sun.identity.authentication.service.LoginState;
-import com.sun.identity.common.DNUtils;
 
 /**
  * This auditor is specifically aimed at constructing and logging authentication events for the login process.
@@ -225,53 +203,6 @@ public class AuthenticationProcessEventAuditor extends AbstractAuthenticationEve
             return (ssoToken == null || name == null) ? null : ssoToken.getProperty(name);
         } catch (SSOException e) {
             return null;
-        }
-    }
-
-    private AuditConstants.AuthenticationFailureReason findFailureReason(LoginState loginState) {
-        String errorCode = loginState == null ? null : loginState.getErrorCode();
-
-        if (errorCode == null) {
-            return LOGIN_FAILED;
-        }
-
-        switch (errorCode) {
-            case AMAuthErrorCode.AUTH_PROFILE_ERROR:
-                return NO_USER_PROFILE;
-            case AMAuthErrorCode.AUTH_ACCOUNT_EXPIRED:
-                return ACCOUNT_EXPIRED;
-            case AMAuthErrorCode.AUTH_INVALID_PASSWORD:
-                return INVALID_PASSWORD;
-            case AMAuthErrorCode.AUTH_USER_INACTIVE:
-                return USER_INACTIVE;
-            case AMAuthErrorCode.AUTH_CONFIG_NOT_FOUND:
-                return NO_CONFIG;
-            case AMAuthErrorCode.AUTH_INVALID_DOMAIN:
-                return INVALID_REALM;
-            case AMAuthErrorCode.AUTH_ORG_INACTIVE:
-                return REALM_INACTIVE;
-            case AMAuthErrorCode.AUTH_TIMEOUT:
-                return LOGIN_TIMEOUT;
-            case AMAuthErrorCode.AUTH_MODULE_DENIED:
-                return MODULE_DENIED;
-            case AMAuthErrorCode.AUTH_MODULE_NOT_FOUND:
-                return MODULE_NOT_FOUND;
-            case AMAuthErrorCode.AUTH_USER_LOCKED:
-                return LOCKED_OUT;
-            case AMAuthErrorCode.AUTH_USER_NOT_FOUND:
-                return USER_NOT_FOUND;
-            case AMAuthErrorCode.AUTH_TYPE_DENIED:
-                return AUTH_TYPE_DENIED;
-            case AMAuthErrorCode.AUTH_MAX_SESSION_REACHED:
-                return MAX_SESSION_REACHED;
-            case AMAuthErrorCode.AUTH_SESSION_CREATE_ERROR:
-                return SESSION_CREATE_ERROR;
-            case AMAuthErrorCode.INVALID_AUTH_LEVEL:
-                return INVALID_LEVEL;
-            case AMAuthErrorCode.MODULE_BASED_AUTH_NOT_ALLOWED:
-                return MODULE_DENIED;
-            default:
-                return LOGIN_FAILED;
         }
     }
 }

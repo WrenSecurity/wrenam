@@ -31,12 +31,28 @@
 package com.sun.identity.cli;
 
 
-import static org.forgerock.audit.events.AuthenticationAuditEventBuilder.Status.*;
-import static org.forgerock.http.routing.Version.*;
-import static org.forgerock.json.JsonValue.*;
-import static org.forgerock.openam.audit.AuditConstants.*;
-import static org.forgerock.openam.utils.Time.*;
+import static org.forgerock.audit.events.AuthenticationAuditEventBuilder.Status.FAILED;
+import static org.forgerock.audit.events.AuthenticationAuditEventBuilder.Status.SUCCESSFUL;
+import static org.forgerock.http.routing.Version.version;
+import static org.forgerock.json.JsonValue.field;
+import static org.forgerock.json.JsonValue.json;
+import static org.forgerock.json.JsonValue.object;
+import static org.forgerock.openam.audit.AuditConstants.EVENT_REALM;
+import static org.forgerock.openam.utils.Time.currentTimeMillis;
 
+import com.google.inject.Key;
+import com.google.inject.name.Names;
+import com.iplanet.am.util.SystemProperties;
+import com.iplanet.dpro.session.SessionID;
+import com.iplanet.services.naming.WebtopNaming;
+import com.iplanet.sso.SSOToken;
+import com.sun.identity.log.LogRecord;
+import com.sun.identity.log.Logger;
+import com.sun.identity.log.messageid.LogMessageID;
+import com.sun.identity.log.messageid.LogMessageProvider;
+import com.sun.identity.log.messageid.MessageProviderFactory;
+import com.sun.identity.security.AdminTokenAction;
+import com.sun.identity.shared.debug.Debug;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.AccessController;
@@ -44,9 +60,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
-
 import org.forgerock.audit.events.AccessAuditEventBuilder;
-import org.wrensecurity.guava.common.collect.ImmutableMap;
 import org.forgerock.guice.core.InjectorHolder;
 import org.forgerock.http.Client;
 import org.forgerock.http.HttpApplicationException;
@@ -61,18 +75,7 @@ import org.forgerock.openam.audit.AuditConstants;
 import org.forgerock.util.Function;
 import org.forgerock.util.promise.NeverThrowsException;
 import org.slf4j.LoggerFactory;
-
-import com.iplanet.am.util.SystemProperties;
-import com.iplanet.dpro.session.SessionID;
-import com.iplanet.services.naming.WebtopNaming;
-import com.iplanet.sso.SSOToken;
-import com.sun.identity.log.LogRecord;
-import com.sun.identity.log.Logger;
-import com.sun.identity.log.messageid.LogMessageID;
-import com.sun.identity.log.messageid.LogMessageProvider;
-import com.sun.identity.log.messageid.MessageProviderFactory;
-import com.sun.identity.security.AdminTokenAction;
-import com.sun.identity.shared.debug.Debug;
+import org.wrensecurity.guava.common.collect.ImmutableMap;
 
 /**
  * Writes audit log entries.
@@ -99,7 +102,7 @@ public class LogWriter {
             .put("realm where entity resides", "realm")
             .put("realm where circle of trust resides", "realm")
             .build();
-    private static final Client client = InjectorHolder.getInstance(Client.class);
+    private static final Client client = InjectorHolder.getInstance(Key.get(Client.class, Names.named("LogWriter")));
 
     private LogWriter() {
     }

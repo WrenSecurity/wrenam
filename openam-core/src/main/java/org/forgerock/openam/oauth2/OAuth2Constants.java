@@ -953,6 +953,7 @@ public class OAuth2Constants {
         public static final String REALM = "realm";
         public static final String KEYS = "keys";
         public static final String SSOTOKEN = "ssoToken";
+        public static final String SESSIONUID = "suid";
     }
 
     /**

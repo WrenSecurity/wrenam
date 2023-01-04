@@ -142,7 +142,6 @@
 
         <forgerock.bloomfilter.version>1.0.1</forgerock.bloomfilter.version>
         <forgerock.ui.version>22.1.2</forgerock.ui.version>
-        <forgerock.guice.version>2.0.0</forgerock.guice.version>
 
         <javadoc-utils.version>1.0.0</javadoc-utils.version>
         <ant.contrib.version>1.0b3</ant.contrib.version>

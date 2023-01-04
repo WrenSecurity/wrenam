@@ -116,7 +116,7 @@ public class LdapTokenAttributeConversion {
     }
 
     private Object[] getMultiAttribute(Token token, CoreTokenField field) {
-        if (CoreTokenFieldTypes.isString(field)) {
+        if (CoreTokenFieldTypes.isString(field) || CoreTokenFieldTypes.isMulti(field)) {
             Collection<String> value = token.getAttribute(field);
             if (!CollectionUtils.isEmpty(value)) {
                 return value.toArray(new String[value.size()]);
@@ -188,7 +188,7 @@ public class LdapTokenAttributeConversion {
     }
 
     private Collection<?> parseMulti(CoreTokenField field, Entry entry, AttributeDescription description) {
-        if (CoreTokenFieldTypes.isString(field)) {
+        if (CoreTokenFieldTypes.isString(field) || CoreTokenFieldTypes.isMulti(field)) {
             return resolveEmptyMultiStringValues(entry, description);
         } else if (CoreTokenFieldTypes.isInteger(field)) {
             return entry.parseAttribute(description).asSetOfInteger();
