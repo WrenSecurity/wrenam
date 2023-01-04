@@ -74,7 +74,7 @@
                             <goal>single</goal>
                         </goals>
                         <configuration>
-                            <finalName>Wren:AM-${project.version}</finalName>
+                            <finalName>WrenAM-${project.version}</finalName>
                             <appendAssemblyId>false</appendAssemblyId>
                             <tarLongFileMode>gnu</tarLongFileMode>
                             <descriptors>

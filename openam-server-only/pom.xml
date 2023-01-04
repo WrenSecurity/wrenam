@@ -48,7 +48,7 @@
 
     <!-- Build -->
     <build>
-        <finalName>Wren:AM-ServerOnly-${project.version}</finalName>
+        <finalName>WrenAM-ServerOnly-${project.version}</finalName>
         <plugins>
             <!-- Wren:DS 4.0: Pre-Pre-Packaging Step to download required Pre-Packaging Resources-->
             <plugin>
