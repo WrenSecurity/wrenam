@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014-2016 ForgeRock AS.
+ * Portions Copyright 2022 Wren Security
  */
 
 package com.sun.identity.shared.debug;
@@ -37,7 +38,7 @@ public class DebugConfigurationFromPropertiesTest {
         DebugConfigurationFromProperties debugConfigurationFromProperties = new DebugConfigurationFromProperties
                 (DEBUG_CONFIG_DIRECTORY + "valid/basicconfig.properties");
         Assert.assertTrue(debugConfigurationFromProperties.getDebugPrefix().isEmpty(), "Debug prefix should be empty");
-        Assert.assertEquals(debugConfigurationFromProperties.getDebugSuffix(), "-MM.dd.yyyy-HH.mm");
+        Assert.assertEquals(debugConfigurationFromProperties.getDebugSuffix(), "-yyyy.MM.dd-HH.mm.ss");
         Assert.assertEquals(debugConfigurationFromProperties.getRotationInterval(), -1, "Debug rotation should be " +
                 "empty");
         Assert.assertEquals(debugConfigurationFromProperties.getRotationFileSizeInByte(), -1, "Debug file size " +
@@ -61,7 +62,7 @@ public class DebugConfigurationFromPropertiesTest {
         DebugConfigurationFromProperties debugConfigurationFromProperties = new DebugConfigurationFromProperties
                 (DEBUG_CONFIG_DIRECTORY + "valid/timeRotationConfig.properties");
         Assert.assertTrue(debugConfigurationFromProperties.getDebugPrefix().isEmpty(), "Debug prefix should be empty");
-        Assert.assertEquals(debugConfigurationFromProperties.getDebugSuffix(), "-MM.dd.yyyy-HH.mm");
+        Assert.assertEquals(debugConfigurationFromProperties.getDebugSuffix(), "-yyyy.MM.dd-HH.mm.ss");
         Assert.assertEquals(debugConfigurationFromProperties.getRotationInterval(), 3);
         Assert.assertEquals(debugConfigurationFromProperties.getRotationFileSizeInByte(), -1, "Debug file size " +
                 "rotation should be empty");
@@ -72,7 +73,7 @@ public class DebugConfigurationFromPropertiesTest {
         DebugConfigurationFromProperties debugConfigurationFromProperties = new DebugConfigurationFromProperties
                 (DEBUG_CONFIG_DIRECTORY + "valid/sizeRotationConfig.properties");
         Assert.assertTrue(debugConfigurationFromProperties.getDebugPrefix().isEmpty(), "Debug prefix should be empty");
-        Assert.assertEquals(debugConfigurationFromProperties.getDebugSuffix(), "-MM.dd.yyyy-HH.mm.ss.SSS");
+        Assert.assertEquals(debugConfigurationFromProperties.getDebugSuffix(), "-yyyy.MM.dd-HH.mm.ss.SSS");
         Assert.assertEquals(debugConfigurationFromProperties.getRotationInterval(), -1, "Debug rotation should be " +
                 "empty");
         Assert.assertEquals(debugConfigurationFromProperties.getRotationFileSizeInByte(), 2 << 20);
@@ -83,7 +84,7 @@ public class DebugConfigurationFromPropertiesTest {
         DebugConfigurationFromProperties debugConfigurationFromProperties = new DebugConfigurationFromProperties
                 (DEBUG_CONFIG_DIRECTORY + "valid/sizeAndTimeRotationConfig.properties");
         Assert.assertTrue(debugConfigurationFromProperties.getDebugPrefix().isEmpty(), "Debug prefix should be empty");
-        Assert.assertEquals(debugConfigurationFromProperties.getDebugSuffix(), "-MM.dd.yyyy-HH.mm.ss.SSS");
+        Assert.assertEquals(debugConfigurationFromProperties.getDebugSuffix(), "-yyyy.MM.dd-HH.mm.ss.SSS");
         Assert.assertEquals(debugConfigurationFromProperties.getRotationInterval(), 3);
         Assert.assertEquals(debugConfigurationFromProperties.getRotationFileSizeInByte(), 2 << 20);
     }
