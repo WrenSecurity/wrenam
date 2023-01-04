@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014-2016 ForgeRock AS.
+ * Portions Copyright 2022 Wren Security
  */
 package com.sun.identity.shared.debug;
 
@@ -41,7 +42,7 @@ public final class DebugConstants {
 
     public static final String CONFIG_DEBUG_LOGFILE_MAX_SIZE = "org.forgerock.openam.debug.rotation.maxsize";
 
-    public static final String DEFAULT_DEBUG_SUFFIX_FORMAT = "-MM.dd.yyyy-kk.mm";
+    public static final String DEFAULT_DEBUG_SUFFIX_FORMAT = "-yyyy.MM.dd-HH.mm.ss";
 
     public static final String CONFIG_DEBUG_LEVEL = "com.iplanet.services.debug.level";
 

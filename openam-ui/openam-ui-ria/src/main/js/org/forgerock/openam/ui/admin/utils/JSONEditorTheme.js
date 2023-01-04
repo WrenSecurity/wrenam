@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions Copyright 2023 Wren Security
  */
 
 define([
@@ -32,7 +33,6 @@ define([
         label.appendChild(span);
         div.setAttribute("class", `checkbox checkbox-slider-primary
             checkbox-slider checkbox-slider--b-flat`);
-        div.style.marginTop = "-5px";
         div.appendChild(label);
         container.setAttribute("class", `col-sm-${gridColWidth1}`);
         container.appendChild(div);
@@ -116,7 +116,6 @@ define([
 
                     if (label && $(input).prop("type") === "checkbox") {
                         input = buildTitaToggle(input, gridColWidth1);
-                        input.style.marginTop = "12px";
                     }
 
                     if (label) {

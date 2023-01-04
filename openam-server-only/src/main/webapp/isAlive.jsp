@@ -41,7 +41,7 @@
 <html>
 
 <head>
-    <title>OpenAM</title>
+    <title>Wren:AM</title>
 </head>
 
 <body>

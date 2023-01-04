@@ -24,7 +24,7 @@
  *
  * $Id: OpenSSOApplicationPrivilegeManager.java,v 1.16 2010/01/11 20:15:46 veiming Exp $
  *
- * Portions Copyrighted 2014-2016 ForgeRock AS.
+ * Portions Copyrighted 2014-2017 ForgeRock AS.
  */
 
 package com.sun.identity.entitlement.opensso;

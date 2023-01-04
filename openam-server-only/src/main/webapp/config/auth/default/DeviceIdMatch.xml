@@ -25,10 +25,7 @@
 
     $Id: LDAP.xml,v 1.3 2008/06/25 05:44:57 qcheng Exp $
 
--->
-
-<!--
-    Portions Copyrighted 2011-2014 ForgeRock AS
+    Portions Copyrighted 2011-2017 ForgeRock AS.
 -->
 
 <!DOCTYPE ModuleProperties PUBLIC "=//iPlanet//Authentication Module Properties XML Interface 1.0 DTD//EN"
@@ -38,7 +35,7 @@
 <ModuleProperties moduleName="DeviceIdMatch" version="1.0" >
     <Callbacks length="0" order="1" timeout="600" header="#WILL NOT BE SHOWN#" />
 
-    <Callbacks length="2" order="2" timeout="120" header="Sign in to OpenAM" >
+    <Callbacks length="2" order="2" timeout="120" header="Sign in to Wren:AM" >
         <HiddenValueCallback>
             <Id>clientScriptOutputData</Id>
         </HiddenValueCallback>
