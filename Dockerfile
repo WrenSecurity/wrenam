@@ -12,16 +12,17 @@ WORKDIR /project
 COPY . .
 
 # Perform actual Wren:AM build
+ARG BUILD_ARGS=-Dpmd.skip
 RUN \
   --mount=type=cache,target=/root/.m2 \
   --mount=type=cache,target=/root/.npm \
-  mvn package -Dpmd.skip
+  mvn package ${BUILD_ARGS}
 
 # Copy built artifacts into target directory
 RUN \
   mkdir /build && \
   mvn -Dexpression=project.version -q -DforceStdout help:evaluate > /build/version.txt && \
-  unzip openam-server/target/OpenAM-$(cat /build/version.txt).war -d /build/wrenam
+  unzip openam-server/target/WrenAM-$(cat /build/version.txt).war -d /build/wrenam
 
 
 FROM tomcat:9-jdk17-temurin

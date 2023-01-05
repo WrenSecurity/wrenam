@@ -33,7 +33,7 @@
 
     <!-- Build -->
     <build>
-        <finalName>Wren:AM-${project.version}</finalName>
+        <finalName>WrenAM-${project.version}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.codehaus.cargo</groupId>
