@@ -13,24 +13,23 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014-2016 ForgeRock AS.
- * Portions Copyright 2018-2022 Wren Security
+ * Portions Copyright 2018-2023 Wren Security
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <name>Wren:AM - Scripting</name>
-    <description>Scripting support for Wren:AM auth modules</description>
-    <artifactId>openam-scripting</artifactId>
-    <packaging>jar</packaging>
-
     <parent>
-        <artifactId>openam</artifactId>
-        <groupId>org.forgerock.openam</groupId>
-        <version>14.0.0-SNAPSHOT</version>
+        <groupId>org.wrensecurity.wrenam</groupId>
+        <artifactId>wrenam-project</artifactId>
+        <version>15.0.0-SNAPSHOT</version>
     </parent>
 
-    <dependencies>
+    <artifactId>openam-scripting</artifactId>
 
+    <name>Wren:AM - Scripting</name>
+    <description>Scripting support for Wren:AM auth modules</description>
+
+    <dependencies>
         <dependency>
             <groupId>org.wrensecurity.commons</groupId>
             <artifactId>wrensec-guice-core</artifactId>
@@ -42,22 +41,23 @@
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-shared</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-core</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-http-client</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-rest</artifactId>
         </dependency>
 
@@ -91,7 +91,7 @@
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-i18n</artifactId>
         </dependency>
 
@@ -101,11 +101,13 @@
             <artifactId>testng</artifactId>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.easytesting</groupId>
             <artifactId>fest-assert</artifactId>
@@ -117,13 +119,15 @@
             <artifactId>javax.servlet-api</artifactId>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.wrensecurity.commons</groupId>
             <artifactId>wrensec-guice-test</artifactId>
             <scope>test</scope>
         </dependency>
+
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-test-utils</artifactId>
             <scope>test</scope>
         </dependency>
@@ -134,14 +138,17 @@
             <testResource>
                 <directory>${basedir}/src/main/groovy</directory>
             </testResource>
+
             <testResource>
                 <directory>${basedir}/src/test/resources</directory>
             </testResource>
         </testResources>
+
         <plugins>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>jslint-maven-plugin</artifactId>
+
                 <configuration>
                     <disallowInsecureCharsInRegExp>false</disallowInsecureCharsInRegExp>
                     <assumeConsoleAlertEtc>true</assumeConsoleAlertEtc>
@@ -154,18 +161,22 @@
                         <exclude>**/policy-condition.js</exclude>
                     </excludes>
                 </configuration>
+
                 <executions>
                     <execution>
                         <phase>package</phase>
+
                         <goals>
                             <goal>jslint</goal>
                         </goals>
                     </execution>
                 </executions>
             </plugin>
+
             <plugin>
                 <groupId>com.github.searls</groupId>
                 <artifactId>jasmine-maven-plugin</artifactId>
+
                 <executions>
                     <execution>
                         <goals>
@@ -173,12 +184,15 @@
                         </goals>
                     </execution>
                 </executions>
+
                 <configuration>
                     <jsSrcDir>${project.basedir}${file.separator}src${file.separator}main${file.separator}js</jsSrcDir>
                     <jsTestSrcDir>${project.basedir}${file.separator}src${file.separator}test${file.separator}js</jsTestSrcDir>
+
                     <preloadSources>
                         <source>am-binding-mocks.js</source>
                     </preloadSources>
+
                     <sourceExcludes>
                         <sourceExclude>**/fontdetector.js</sourceExclude>
                         <sourceExclude>**/authentication-server-side.js</sourceExclude>
@@ -187,18 +201,22 @@
                     </sourceExcludes>
                 </configuration>
             </plugin>
+
             <plugin>
-                <groupId>org.forgerock.maven.plugins</groupId>
+                <groupId>${project.groupId}</groupId>
                 <artifactId>build-helper-plugin</artifactId>
+
                 <executions>
                     <execution>
                         <id>inject-content</id>
                         <phase>prepare-package</phase>
+
                         <goals>
                             <goal>inject-content</goal>
                         </goals>
                     </execution>
                 </executions>
+
                 <configuration>
                     <injects>
                         <inject>
@@ -207,31 +225,38 @@
                                     <id>authentication-server-side-javascript</id>
                                     <file>${project.build.sourceDirectory}/../js/authentication-server-side.js</file>
                                 </content>
+
                                 <content>
                                     <id>authentication-client-side-javascript</id>
                                     <file>${project.build.sourceDirectory}/../js/authentication-client-side.js</file>
                                 </content>
+
                                 <content>
                                     <id>fontdetector</id>
                                     <file>${project.build.sourceDirectory}/../js/fontdetector.js</file>
                                 </content>
+
                                 <content>
                                     <id>deviceIdMatch-client-js</id>
                                     <file>${project.build.sourceDirectory}/../js/deviceIdMatch-client-side.js</file>
                                 </content>
+
                                 <content>
                                     <id>deviceIdMatch-server-js</id>
                                     <file>${project.build.sourceDirectory}/../js/deviceIdMatch-server-side.js</file>
                                 </content>
+
                                 <content>
                                     <id>oidc-claims-extension-groovy</id>
                                     <file>${project.build.sourceDirectory}/../groovy/oidc-claims-extension.groovy</file>
                                 </content>
+
                                 <content>
                                     <id>policy-condition-js</id>
                                     <file>${project.build.sourceDirectory}/../js/policy-condition.js</file>
                                 </content>
                             </contents>
+
                             <destinationFile>${project.build.outputDirectory}/scripting.xml</destinationFile>
                             <contentConverter>xml</contentConverter>
                         </inject>
@@ -240,5 +265,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

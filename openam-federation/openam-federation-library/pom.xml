@@ -13,30 +13,28 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2011-2016 ForgeRock AS.
- * Portions Copyright 2018-2022 Wren Security
+ * Portions Copyright 2018-2023 Wren Security
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- Parent Project -->
     <parent>
-        <groupId>org.forgerock.openam</groupId>
+        <groupId>org.wrensecurity.wrenam</groupId>
         <artifactId>openam-federation</artifactId>
-        <version>14.0.0-SNAPSHOT</version>
+        <version>15.0.0-SNAPSHOT</version>
     </parent>
 
-    <!-- Component Definition -->
+    <artifactId>openam-federation-library</artifactId>
+
     <name>Wren:AM - Federation Library</name>
     <description>Wren:AM Federation Library Components</description>
-    <artifactId>openam-federation-library</artifactId>
-    <packaging>jar</packaging>
 
-    <!-- Build -->
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
+
                 <configuration>
                     <systemPropertyVariables>
                         <com.sun.identity.systemconfiguration>com.sun.identity.configuration.FedLibSystemProperties</com.sun.identity.systemconfiguration>
@@ -44,70 +42,96 @@
                 </configuration>
             </plugin>
         </plugins>
+
         <testResources>
             <testResource>
                 <directory>src/test/resources</directory>
                 <filtering>true</filtering>
             </testResource>
         </testResources>
+
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
+
                 <includes>
                     <include>**/*</include>
                 </includes>
+
                 <excludes>
                     <exclude>*_*/*</exclude>
                 </excludes>
+
                 <filtering>true</filtering>
             </resource>
+
             <resource>
                 <directory>src/main/resources/de_DE</directory>
+
                 <includes>
                     <include>*</include>
                 </includes>
+
                 <filtering>true</filtering>
             </resource>
+
             <resource>
                 <directory>src/main/resources/es_ES</directory>
+
                 <includes>
                     <include>*</include>
                 </includes>
+
                 <filtering>true</filtering>
             </resource>
+
             <resource>
                 <directory>src/main/resources/fr_FR</directory>
+
                 <includes>
                     <include>*</include>
                 </includes>
+
                 <filtering>true</filtering>
             </resource>
+
             <resource>
                 <directory>src/main/resources/ja_JP</directory>
+
                 <includes>
                     <include>*</include>
                 </includes>
+
                 <filtering>true</filtering>
             </resource>
+
             <resource>
                 <directory>src/main/resources/ko_KR</directory>
+
                 <includes>
                     <include>*</include>
                 </includes>
+
                 <filtering>true</filtering>
             </resource>
+
             <resource>
                 <directory>src/main/resources/zh_CN</directory>
+
                 <includes>
                     <include>*</include>
                 </includes>
+
                 <filtering>true</filtering>
             </resource>
+
             <resource>
                 <directory>src/main/resources/zh_TW</directory>
+
                 <includes>
                     <include>*</include>
                 </includes>
+
                 <filtering>true</filtering>
             </resource>
         </resources>
@@ -120,39 +144,44 @@
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-core</artifactId>
+            <version>${project.version}</version>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-xacml3-schema</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-saml2-schema</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-wsfederation-schema</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-liberty-schema</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-shared</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-ldap-utils</artifactId>
         </dependency>
 
@@ -198,8 +227,9 @@
         </dependency>
         
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-idpdiscovery</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
@@ -214,8 +244,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-certs</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>

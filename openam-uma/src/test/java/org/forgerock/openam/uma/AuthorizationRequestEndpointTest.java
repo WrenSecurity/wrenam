@@ -69,7 +69,7 @@ import org.forgerock.openam.uma.extensions.RequestAuthorizationFilter;
 import org.forgerock.util.query.QueryFilter;
 import org.json.JSONObject;
 import org.mockito.InOrder;
-import org.mockito.Matchers;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -340,8 +340,8 @@ public class AuthorizationRequestEndpointTest {
         ArrayList<Entitlement> entitlements = new ArrayList<>();
         entitlements.add(createEntitlement("Read"));
 
-        given(policyEvaluator.evaluate(anyString(), Matchers.<Subject>anyObject(), eq(RESOURCE_NAME),
-                Matchers.<Map<String, Set<String>>>anyObject(), anyBoolean())).willReturn(entitlements);
+        given(policyEvaluator.evaluate(anyString(), any(), eq(RESOURCE_NAME),
+                any(), anyBoolean())).willReturn(entitlements);
 
         Set<String> requestedScopes = new HashSet<>();
         requestedScopes.add("Read");
@@ -424,8 +424,8 @@ public class AuthorizationRequestEndpointTest {
         ArrayList<Entitlement> entitlements = new ArrayList<>();
         entitlements.add(createEntitlement("Read"));
 
-        given(policyEvaluator.evaluate(anyString(), Matchers.<Subject>anyObject(), eq(RESOURCE_NAME),
-                Matchers.<Map<String, Set<String>>>anyObject(), anyBoolean())).willReturn(entitlements);
+        given(policyEvaluator.evaluate(anyString(), any(), eq(RESOURCE_NAME),
+                any(), anyBoolean())).willReturn(entitlements);
 
         Set<String> requestedScopes = new HashSet<>();
         requestedScopes.add("Read");

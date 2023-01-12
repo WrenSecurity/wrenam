@@ -40,7 +40,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoInteractions;
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -90,7 +90,7 @@ import org.forgerock.util.promise.Promise;
 import org.forgerock.util.promise.Promises;
 import org.forgerock.util.query.QueryFilter;
 import org.mockito.InOrder;
-import org.mockito.Matchers;
+import org.mockito.ArgumentMatchers;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.testng.annotations.AfterMethod;
@@ -146,9 +146,9 @@ public class UmaPolicyServiceImplTest {
                 contextHelper, policyEvaluatorFactory, coreServicesWrapper, debug, umaSettingsFactory,
                 extensionFilterManager);
 
-        given(contextHelper.getRealm(Matchers.<Context>anyObject())).willReturn("REALM");
-        given(contextHelper.getUserId(Matchers.<Context>anyObject())).willReturn(RESOURCE_OWNER_ID);
-        given(contextHelper.getUserUid(Matchers.<Context>anyObject())).willReturn("RESOURCE_OWNER_UID");
+        given(contextHelper.getRealm(any())).willReturn("REALM");
+        given(contextHelper.getUserId(any())).willReturn(RESOURCE_OWNER_ID);
+        given(contextHelper.getUserUid(any())).willReturn("RESOURCE_OWNER_UID");
 
         resourceSetStore = mock(ResourceSetStore.class);
         resourceSet = new ResourceSetDescription("RESOURCE_SET_ID",
@@ -286,7 +286,7 @@ public class UmaPolicyServiceImplTest {
         setupQueries(queryPromise, createdPolicy1, createdPolicy2);
 
         Promise<List<ResourceResponse>, ResourceException> createPolicyPromise = newResultPromise(createdPolicies);
-        given(policyResourceDelegate.createPolicies(eq(context), Matchers.<Set<JsonValue>>anyObject()))
+        given(policyResourceDelegate.createPolicies(eq(context), any()))
                 .willReturn(createPolicyPromise);
 
         //When
@@ -370,7 +370,7 @@ public class UmaPolicyServiceImplTest {
 
         //Then
         //Expected ResourceException
-        verifyZeroInteractions(policyResourceDelegate);
+        verifyNoInteractions(policyResourceDelegate);
     }
 
     @Test(expectedExceptions = BadRequestException.class)
@@ -385,7 +385,7 @@ public class UmaPolicyServiceImplTest {
 
         //Then
         //Expected ResourceException
-        verifyZeroInteractions(policyResourceDelegate);
+        verifyNoInteractions(policyResourceDelegate);
     }
 
     @Test(expectedExceptions = InternalServerErrorException.class)
@@ -400,7 +400,7 @@ public class UmaPolicyServiceImplTest {
 
         //Then
         //Expected ResourceException
-        verifyZeroInteractions(policyResourceDelegate);
+        verifyNoInteractions(policyResourceDelegate);
     }
 
     @Test
@@ -477,7 +477,7 @@ public class UmaPolicyServiceImplTest {
 
         setupQueries(currentPolicyPromise, updatedPolicy1, updatedPolicy2);
 
-        given(policyResourceDelegate.updatePolicies(eq(context), Matchers.<Set<JsonValue>>anyObject()))
+        given(policyResourceDelegate.updatePolicies(eq(context), any()))
                 .willReturn(updatePolicyPromise);
 
         //When
@@ -510,7 +510,7 @@ public class UmaPolicyServiceImplTest {
 
         given(policyResourceDelegate.queryPolicies(eq(context), any()))
                 .willReturn(currentPolicyPromise);
-        given(policyResourceDelegate.updatePolicies(eq(context), Matchers.<Set<JsonValue>>anyObject()))
+        given(policyResourceDelegate.updatePolicies(eq(context), any()))
                 .willReturn(updatePoliciesPromise);
 
         //When
@@ -532,7 +532,7 @@ public class UmaPolicyServiceImplTest {
 
         //Then
         //Expected ResourceException
-        verifyZeroInteractions(policyResourceDelegate);
+        verifyNoInteractions(policyResourceDelegate);
     }
 
     @Test(expectedExceptions = BadRequestException.class)
@@ -547,7 +547,7 @@ public class UmaPolicyServiceImplTest {
 
         //Then
         //Expected ResourceException
-        verifyZeroInteractions(policyResourceDelegate);
+        verifyNoInteractions(policyResourceDelegate);
     }
 
     @Test(expectedExceptions = InternalServerErrorException.class)
@@ -562,7 +562,7 @@ public class UmaPolicyServiceImplTest {
 
         //Then
         //Expected ResourceException
-        verifyZeroInteractions(policyResourceDelegate);
+        verifyNoInteractions(policyResourceDelegate);
     }
 
     @Test

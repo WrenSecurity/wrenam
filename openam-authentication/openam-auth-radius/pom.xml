@@ -18,27 +18,27 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- Parent Project -->
     <parent>
-        <groupId>org.forgerock.openam</groupId>
+        <groupId>org.wrensecurity.wrenam</groupId>
         <artifactId>openam-authentication</artifactId>
-        <version>14.0.0-SNAPSHOT</version>
+        <version>15.0.0-SNAPSHOT</version>
     </parent>
 
-    <!-- Component Definition -->
+    <artifactId>openam-auth-radius</artifactId>
+
     <name>Wren:AM - RADIUS Authentication Module</name>
     <description>Wren:AM Authentication Radius</description>
-    <artifactId>openam-auth-radius</artifactId>
-    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
         </dependency>
+
         <dependency>
-        	<groupId>org.forgerock.openam</groupId>
-        	<artifactId>openam-radius-common</artifactId>
+            <groupId>org.wrensecurity.wrenam</groupId>
+            <artifactId>openam-radius-common</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 </project>

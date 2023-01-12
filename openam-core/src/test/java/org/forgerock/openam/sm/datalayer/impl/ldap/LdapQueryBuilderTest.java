@@ -93,7 +93,7 @@ public class LdapQueryBuilderTest {
         Iterator iterator = builder.executeRawResults(mockConnection, PartialToken.class);
 
         // Then
-        verifyZeroInteractions(searchHandler);
+        verifyNoInteractions(searchHandler);
         iterator.next();
         verify(searchHandler).performSearch(eq(mockConnection), any(SearchRequest.class), any(Collection.class));
     }
@@ -122,7 +122,7 @@ public class LdapQueryBuilderTest {
         Iterator<Collection<Token>> results = builder.execute(mockConnection);
 
         // Then
-        verifyZeroInteractions(tokenEntryConverter);
+        verifyNoInteractions(tokenEntryConverter);
         assertThat(results.next().size()).isEqualTo(entries.size());
         verify(tokenEntryConverter, times(2)).convert(any(Entry.class), any(String[].class));
     }

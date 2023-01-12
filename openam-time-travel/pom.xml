@@ -13,30 +13,32 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
- * Portions Copyright 2018-2022 Wren Security
+ * Portions Copyright 2018-2023 Wren Security
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <groupId>org.forgerock.openam</groupId>
-        <artifactId>openam</artifactId>
-        <version>14.0.0-SNAPSHOT</version>
-    </parent>
     <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.wrensecurity.wrenam</groupId>
+        <artifactId>wrenam-project</artifactId>
+        <version>15.0.0-SNAPSHOT</version>
+    </parent>
 
     <artifactId>openam-time-travel</artifactId>
 
     <name>Wren:AM - Time Travel</name>
+
     <dependencies>
         <dependency>
             <groupId>org.wrensecurity.commons</groupId>
             <artifactId>forgerock-util</artifactId>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-rest</artifactId>
             <scope>provided</scope>
         </dependency>
     </dependencies>
-
 </project>

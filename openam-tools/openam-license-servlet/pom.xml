@@ -13,21 +13,21 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014-2016 ForgeRock AS.
- * Portions Copyright 2018 Wren Security.
+ * Portions Copyright 2018-2023 Wren Security.
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <artifactId>openam-tools</artifactId>
-        <groupId>org.forgerock.openam</groupId>
-        <version>14.0.0-SNAPSHOT</version>
+        <groupId>org.wrensecurity.wrenam</groupId>
+        <version>15.0.0-SNAPSHOT</version>
     </parent>
+
+    <artifactId>openam-license-servlet</artifactId>
 
     <name>Wren:AM - ServletContext License Locator</name>
     <description>Wren:AM ServletContext License Locator</description>
-    <artifactId>openam-license-servlet</artifactId>
-    <packaging>jar</packaging>
 
     <properties>
         <checkstyleFailOnError>true</checkstyleFailOnError>
@@ -35,24 +35,25 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-license-core</artifactId>
+            <version>${project.version}</version>
         </dependency>
+
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <scope>provided</scope>
         </dependency>
 
-        <!-- Test dependencies -->
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
         </dependency>
     </dependencies>
-
 </project>

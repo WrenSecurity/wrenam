@@ -19,13 +19,13 @@ import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoInteractions;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -115,7 +115,7 @@ public class CORSServiceTest {
         testService.handleRequest(mockRequest, mockResponse);
 
         //then
-        verifyZeroInteractions(mockResponse);
+        verifyNoInteractions(mockResponse);
     }
 
     @Test
@@ -127,7 +127,7 @@ public class CORSServiceTest {
         testService.handleRequest(mockRequest, mockResponse);
 
         //then
-        verifyZeroInteractions(mockResponse);
+        verifyNoInteractions(mockResponse);
     }
 
     @Test
@@ -139,7 +139,7 @@ public class CORSServiceTest {
         testService.handleRequest(mockRequest, mockResponse);
 
         //then
-        verifyZeroInteractions(mockResponse);
+        verifyNoInteractions(mockResponse);
     }
 
     @Test
@@ -151,7 +151,7 @@ public class CORSServiceTest {
         testService.handleRequest(mockRequest, mockResponse);
 
         //then
-        verifyZeroInteractions(mockResponse);
+        verifyNoInteractions(mockResponse);
     }
 
 
@@ -165,7 +165,7 @@ public class CORSServiceTest {
         testService.handleRequest(mockRequest, mockResponse);
 
         //then
-        verifyZeroInteractions(mockResponse);
+        verifyNoInteractions(mockResponse);
     }
 
     @Test
@@ -231,7 +231,7 @@ public class CORSServiceTest {
         testService.handleRequest(mockRequest, mockResponse);
 
         //then
-        verifyZeroInteractions(mockResponse);
+        verifyNoInteractions(mockResponse);
     }
 
     @Test
@@ -243,7 +243,7 @@ public class CORSServiceTest {
         testService.handleRequest(mockRequest, mockResponse);
 
         //then
-        verifyZeroInteractions(mockResponse);
+        verifyNoInteractions(mockResponse);
     }
 
     @Test
@@ -255,7 +255,7 @@ public class CORSServiceTest {
         testService.handleRequest(mockRequest, mockResponse);
 
         //then
-        verifyZeroInteractions(mockResponse);
+        verifyNoInteractions(mockResponse);
     }
 
     @Test
@@ -281,7 +281,7 @@ public class CORSServiceTest {
         testService.handleRequest(mockRequest, mockResponse);
 
         //then
-        verifyZeroInteractions(mockResponse);
+        verifyNoInteractions(mockResponse);
     }
 
 

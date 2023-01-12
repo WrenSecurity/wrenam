@@ -13,26 +13,25 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2013-2016 ForgeRock AS.
- * Portions Copyright 2018 Wren Security.
+ * Portions Copyright 2018-2023 Wren Security.
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <!-- Parent Project -->
+
     <parent>
-        <groupId>org.forgerock.openam</groupId>
+        <groupId>org.wrensecurity.wrenam</groupId>
         <artifactId>openam-examples</artifactId>
-        <version>14.0.0-SNAPSHOT</version>
+        <version>15.0.0-SNAPSHOT</version>
     </parent>
 
-    <!-- Component Definition -->
+    <artifactId>openam-example-clientsdk-cli</artifactId>
+
     <name>Wren:AM - Example ClientSDK CLI</name>
     <description>Wren:AM Example ClientSDK CLI module</description>
-    <artifactId>openam-example-clientsdk-cli</artifactId>
-    <packaging>jar</packaging>
 
-    <!-- Build -->
     <build>
         <finalName>ExampleClientSDK-CLI-${project.version}</finalName>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -41,9 +40,11 @@
                     <execution>
                         <id>make-assembly</id>
                         <phase>package</phase>
+
                         <goals>
                             <goal>single</goal>
                         </goals>
+
                         <configuration>
                             <appendAssemblyId>false</appendAssemblyId>
                             <descriptors>
@@ -55,28 +56,35 @@
             </plugin>
         </plugins>
     </build>
+
     <dependencies>
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-clientsdk</artifactId>
+            <version>${project.version}</version>
         </dependency>
+
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>org.apache.santuario</groupId>
             <artifactId>xmlsec</artifactId>
         </dependency>
-         <dependency>
+
+        <dependency>
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
         </dependency>
+
         <dependency>
             <groupId>com.sun.xml.rpc</groupId>
             <artifactId>jaxrpc-impl</artifactId>
         </dependency>
+
         <dependency>
             <groupId>com.sun.xml.bind</groupId>
             <artifactId>jaxb-impl</artifactId>

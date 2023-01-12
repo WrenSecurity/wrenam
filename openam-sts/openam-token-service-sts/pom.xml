@@ -13,62 +13,76 @@
  * information: "Portions Copyrighted [year] [name of copyright owner]".
  *
  * Copyright 2013-2016 ForgeRock AS.
- * Portions Copyright 2018-2022 Wren Security
+ * Portions Copyright 2018-2023 Wren Security
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.forgerock.openam</groupId>
+        <groupId>org.wrensecurity.wrenam</groupId>
         <artifactId>openam-sts</artifactId>
-        <version>14.0.0-SNAPSHOT</version>
+        <version>15.0.0-SNAPSHOT</version>
     </parent>
+
+    <artifactId>openam-token-service-sts</artifactId>
 
     <name>Wren:AM - STS Token Service</name>
     <description>Token generation and validation service consumed by the STS</description>
-    <artifactId>openam-token-service-sts</artifactId>
-    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-common-sts</artifactId>
+            <version>${project.version}</version>
         </dependency>
+
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-publish-sts</artifactId>
+            <version>${project.version}</version>
         </dependency>
+
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-client-sts</artifactId>
+            <version>${project.version}</version>
         </dependency>
+
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>OpenFM</artifactId>
+            <version>${project.version}</version>
         </dependency>
+
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-federation-library</artifactId>
+            <version>${project.version}</version>
         </dependency>
+
         <dependency>
             <groupId>com.google.inject</groupId>
             <artifactId>guice</artifactId>
             <classifier>no_aop</classifier>
         </dependency>
+
         <dependency>
             <groupId>org.wrensecurity.commons</groupId>
             <artifactId>json-resource</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.wrensecurity.commons</groupId>
             <artifactId>json-resource-http</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.apache.santuario</groupId>
             <artifactId>xmlsec</artifactId>
         </dependency>
+
         <!--
-        Necessary because SSOTokenManager is referenced?
+            Necessary because SSOTokenManager is referenced?
         -->
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -82,6 +96,7 @@
             <artifactId>testng</artifactId>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>

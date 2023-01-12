@@ -13,20 +13,19 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2013-2016 ForgeRock AS.
- * Portions Copyright 2018-2022 Wren Security
+ * Portions Copyright 2018-2023 Wren Security
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- Parent Project -->
     <parent>
-        <groupId>org.forgerock.openam</groupId>
-        <artifactId>openam</artifactId>
-        <version>14.0.0-SNAPSHOT</version>
+        <groupId>org.wrensecurity.wrenam</groupId>
+        <artifactId>wrenam-project</artifactId>
+        <version>15.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>openam-ldap-utils</artifactId>
-    <packaging>jar</packaging>
+
     <name>Wren:AM - LDAP Utilities</name>
     <description>Wren:AM LDAP Utilites</description>
 
@@ -39,18 +38,22 @@
             <groupId>org.wrensecurity.wrends</groupId>
             <artifactId>opendj-core</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.wrensecurity.wrends</groupId>
             <artifactId>opendj-grizzly</artifactId>
         </dependency>
+
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-shared</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.easytesting</groupId>
             <artifactId>fest-assert</artifactId>

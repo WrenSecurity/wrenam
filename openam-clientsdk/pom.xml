@@ -13,31 +13,89 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2011-2016 ForgeRock AS.
- * Portions Copyright 2018-2022 Wren Security
+ * Portions Copyright 2018-2023 Wren Security
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- Parent Project -->
     <parent>
-        <groupId>org.forgerock.openam</groupId>
-        <artifactId>openam</artifactId>
-        <version>14.0.0-SNAPSHOT</version>
+        <groupId>org.wrensecurity.wrenam</groupId>
+        <artifactId>wrenam-project</artifactId>
+        <version>15.0.0-SNAPSHOT</version>
     </parent>
 
-    <!-- Component Definition -->
+    <artifactId>openam-clientsdk</artifactId>
+
     <name>Wren:AM - Client SDK</name>
     <description>Wren:AM Java Client SDK</description>
-    <artifactId>openam-clientsdk</artifactId>
-    <packaging>jar</packaging>
 
     <properties>
-        <shade.package>org.forgerock.openam.sdk</shade.package>
+        <shade.package>org.wrensecurity.wrenam.sdk</shade.package>
     </properties>
 
-    <!-- Build -->
+    <dependencies>
+        <dependency>
+            <groupId>org.wrensecurity.wrenam</groupId>
+            <artifactId>openam-jaxrpc-schema</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.wrensecurity.wrenam</groupId>
+            <artifactId>openam-dtd-schema</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.wrensecurity.wrenam</groupId>
+            <artifactId>openam-xacml3-schema</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.wrensecurity.wrenam</groupId>
+            <artifactId>OpenFM</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.wrensecurity.wrenam</groupId>
+            <artifactId>openam-entitlements</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wrensecurity.wrenam</groupId>
+            <artifactId>openam-client-sts</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.wrensecurity.wrends</groupId>
+            <artifactId>opendj-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wrensecurity.wrends</groupId>
+            <artifactId>opendj-grizzly</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wrensecurity.commons.guava</groupId>
+            <artifactId>wrensec-guava-collect</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wrensecurity.commons.guava</groupId>
+            <artifactId>wrensec-guava-base</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wrensecurity.http</groupId>
+            <artifactId>chf-http-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+    </dependencies>
+
     <build>
         <finalName>ClientSDK-${project.version}</finalName>
+
         <resources>
             <resource>
                 <directory>${project.build.directory}/generated-resources</directory>
@@ -80,10 +138,12 @@
                 </includes>
             </resource>
         </resources>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
+
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -92,6 +152,7 @@
                         </goals>
                     </execution>
                 </executions>
+
                 <configuration>
                     <!--
                     Anything you can find here is just a replication attempt of the ant ClientSDK build system.
@@ -101,21 +162,21 @@
                     <artifactSet>
                         <includes>
                             <include>org.wrensecurity.commons:forgerock-util</include>
-                            <include>org.forgerock.openam:openam-core</include>
-                            <include>org.forgerock.openam:openam-entitlements</include>
-                            <include>org.forgerock.openam:openam-audit-context</include>
-                            <include>org.forgerock.openam:openam-shared</include>
-                            <include>org.forgerock.openam:openam-dtd-schema</include>
-                            <include>org.forgerock.openam:openam-jaxrpc-schema</include>
-                            <include>org.forgerock.openam:openam-ldap-utils</include>
-                            <include>org.forgerock.openam:openam-liberty-schema</include>
-                            <include>org.forgerock.openam:openam-mib-schema</include>
-                            <include>org.forgerock.openam:openam-saml2-schema</include>
-                            <include>org.forgerock.openam:openam-xacml3-schema</include>
-                            <include>org.forgerock.openam:openam-federation-library</include>
-                            <include>org.forgerock.openam:OpenFM</include>
-                            <include>org.forgerock.openam:openam-client-sts</include>
-                            <include>org.forgerock.openam:openam-notifications</include>
+                            <include>org.wrensecurity.wrenam:openam-core</include>
+                            <include>org.wrensecurity.wrenam:openam-entitlements</include>
+                            <include>org.wrensecurity.wrenam:openam-audit-context</include>
+                            <include>org.wrensecurity.wrenam:openam-shared</include>
+                            <include>org.wrensecurity.wrenam:openam-dtd-schema</include>
+                            <include>org.wrensecurity.wrenam:openam-jaxrpc-schema</include>
+                            <include>org.wrensecurity.wrenam:openam-ldap-utils</include>
+                            <include>org.wrensecurity.wrenam:openam-liberty-schema</include>
+                            <include>org.wrensecurity.wrenam:openam-mib-schema</include>
+                            <include>org.wrensecurity.wrenam:openam-saml2-schema</include>
+                            <include>org.wrensecurity.wrenam:openam-xacml3-schema</include>
+                            <include>org.wrensecurity.wrenam:openam-federation-library</include>
+                            <include>org.wrensecurity.wrenam:OpenFM</include>
+                            <include>org.wrensecurity.wrenam:openam-client-sts</include>
+                            <include>org.wrensecurity.wrenam:openam-notifications</include>
                             <include>org.json:json</include>
                             <include>org.wrensecurity.wrends:opendj-core</include>
                             <include>org.wrensecurity.wrends:opendj-grizzly</include>
@@ -132,9 +193,11 @@
                             <include>external:jdmkrt</include>
                         </includes>
                     </artifactSet>
+
                     <filters>
                         <filter>
-                            <artifact>org.forgerock.openam:openam-core</artifact>
+                            <artifact>org.wrensecurity.wrenam:openam-core</artifact>
+
                             <includes>
                                 <include>amAuth.properties</include>
                                 <include>amAuthContext.properties</include>
@@ -330,35 +393,36 @@
                                 <include>com/sun/identity/sm/jaxrpc/**</include>
                                 <include>com/sun/identity/util/**</include>
 
-                                <include>org/forgerock/openam/core/realms/RealmLookupException*</include>
-                                <include>org/forgerock/openam/idm/**</include>
-                                <include>org/forgerock/openam/authentication/service/protocol/**</include>
-                                <include>org/forgerock/openam/console/base/ConsoleViewBeanBase*</include>
-                                <include>org/forgerock/openam/core/realms/*</include>
-                                <include>org/forgerock/openam/core/DNWrapper*</include>
-                                <include>org/forgerock/openam/dpro/session/InvalidSessionIdException*</include>
-                                <include>org/forgerock/openam/entitlement/ConditionTypeRegistry*</include>
-                                <include>org/forgerock/openam/entitlement/EntitlementModule*</include>
-                                <include>org/forgerock/openam/entitlement/EntitlementRegistry*</include>
-                                <include>org/forgerock/openam/entitlement/indextree/TreeSaveIndex*</include>
-                                <include>org/forgerock/openam/entitlement/indextree/TreeSearchIndex*</include>
-                                <include>org/forgerock/openam/entitlement/utils/EntitlementUtils*</include>
-                                <include>org/forgerock/openam/entitlement/utils/NullNotificationBroker*</include>
-                                <include>org/forgerock/openam/entitlement/conditions/**</include>
-                                <include>org/forgerock/openam/entitlement/NameAlreadyRegisteredException*</include>
-                                <include>org/forgerock/openam/entitlement/PolicyConstants*</include>
-                                <include>org/forgerock/openam/entitlement/service/ApplicationService*</include>
-                                <include>org/forgerock/openam/entitlement/service/EntitlementConfigurationFactory*</include>
-                                <include>org/forgerock/openam/entitlement/service/ResourceTypeService*</include>
-                                <include>org/forgerock/openam/services/cdm/**</include>
-                                <include>org/forgerock/openam/session/*</include>
-                                <include>org/forgerock/openam/security/whitelist/**</include>
-                                <include>org/forgerock/openam/sso/providers/stateless/*</include>
-                                <include>org/forgerock/openam/upgrade/UpgradeException*</include>
-                                <include>org/forgerock/openam/validation/ResponseValidationFilter*</include>
+                                <include>org.wrensecurity.wrenam/core/realms/RealmLookupException*</include>
+                                <include>org.wrensecurity.wrenam/idm/**</include>
+                                <include>org.wrensecurity.wrenam/authentication/service/protocol/**</include>
+                                <include>org.wrensecurity.wrenam/console/base/ConsoleViewBeanBase*</include>
+                                <include>org.wrensecurity.wrenam/core/realms/*</include>
+                                <include>org.wrensecurity.wrenam/core/DNWrapper*</include>
+                                <include>org.wrensecurity.wrenam/dpro/session/InvalidSessionIdException*</include>
+                                <include>org.wrensecurity.wrenam/entitlement/ConditionTypeRegistry*</include>
+                                <include>org.wrensecurity.wrenam/entitlement/EntitlementModule*</include>
+                                <include>org.wrensecurity.wrenam/entitlement/EntitlementRegistry*</include>
+                                <include>org.wrensecurity.wrenam/entitlement/indextree/TreeSaveIndex*</include>
+                                <include>org.wrensecurity.wrenam/entitlement/indextree/TreeSearchIndex*</include>
+                                <include>org.wrensecurity.wrenam/entitlement/utils/EntitlementUtils*</include>
+                                <include>org.wrensecurity.wrenam/entitlement/utils/NullNotificationBroker*</include>
+                                <include>org.wrensecurity.wrenam/entitlement/conditions/**</include>
+                                <include>org.wrensecurity.wrenam/entitlement/NameAlreadyRegisteredException*</include>
+                                <include>org.wrensecurity.wrenam/entitlement/PolicyConstants*</include>
+                                <include>org.wrensecurity.wrenam/entitlement/service/ApplicationService*</include>
+                                <include>org.wrensecurity.wrenam/entitlement/service/EntitlementConfigurationFactory*</include>
+                                <include>org.wrensecurity.wrenam/entitlement/service/ResourceTypeService*</include>
+                                <include>org.wrensecurity.wrenam/services/cdm/**</include>
+                                <include>org.wrensecurity.wrenam/session/*</include>
+                                <include>org.wrensecurity.wrenam/security/whitelist/**</include>
+                                <include>org.wrensecurity.wrenam/sso/providers/stateless/*</include>
+                                <include>org.wrensecurity.wrenam/upgrade/UpgradeException*</include>
+                                <include>org.wrensecurity.wrenam/validation/ResponseValidationFilter*</include>
 
-                                <include>META-INF/services/org.forgerock.openam.entitlement.ConditionTypeRegistry</include>
+                                <include>META-INF/services/org.wrensecurity.wrenam.entitlement.ConditionTypeRegistry</include>
                             </includes>
+
                             <excludes>
                                 <exclude>com/iplanet/am/sdk/ldap/**</exclude>
                                 <exclude>com/iplanet/am/sdk/remote/DirectoryManager*</exclude>
@@ -391,38 +455,49 @@
                                 <exclude>com/sun/identity/sm/jaxrpc/SMSJAXRPCObjectImpl*</exclude>
                             </excludes>
                         </filter>
+
                         <filter>
-                            <artifact>org.forgerock.openam:openam-shared</artifact>
+                            <artifact>org.wrensecurity.wrenam:openam-shared</artifact>
+
                             <includes>
                                 <include>**/**</include>
                             </includes>
+
                             <excludes>
                                 <exclude>com/sun/identity/shared/test/**</exclude>
                             </excludes>
                         </filter>
+
                         <filter>
-                            <artifact>org.forgerock.openam:openam-audit-context</artifact>
+                            <artifact>org.wrensecurity.wrenam:openam-audit-context</artifact>
+
                             <includes>
                                 <include>**/**</include>
                             </includes>
+
                             <excludes>
-                                <exclude>org/forgerock/openam/audit/context/AuditContextFilter*</exclude>
+                                <exclude>org.wrensecurity.wrenam/audit/context/AuditContextFilter*</exclude>
                             </excludes>
                         </filter>
+
                         <filter>
-                            <artifact>org.forgerock.openam:openam-jaxrpc-schema</artifact>
+                            <artifact>org.wrensecurity.wrenam:openam-jaxrpc-schema</artifact>
+
                             <includes>
                                 <include>com/iplanet/sso/**</include>
                                 <include>com/sun/identity/liberty/ws/security/**</include>
                                 <include>com/sun/identity/saml/**</include>
                                 <include>com/sun/identity/sm/*</include>
                             </includes>
+
                             <excludes>
                                 <exclude>com/sun/identity/liberty/ws/security/SecurityTokenException_SOAPBuilder*</exclude>
                             </excludes>
                         </filter>
+
                         <filter>
-                            <artifact>org.forgerock.openam:OpenFM</artifact>
+                            <artifact>org.wrensecurity.wrenam:OpenFM</artifact>
+
                             <includes>
                                 <include>fmConfigurationService.properties</include>
                                 <include>fmLibertySecurity.properties</include>
@@ -443,8 +518,9 @@
                                 <include>com/sun/identity/setup/SwapClientConfig*</include>
                             </includes>
                         </filter>
+
                         <filter>
-                            <artifact>org.forgerock.openam:openam-federation-library</artifact>
+                            <artifact>org.wrensecurity.wrenam:openam-federation-library</artifact>
                             <includes>
                                 <include>libAuthnSvc.properties</include>
                                 <include>libBinarySecurityToken.properties</include>
@@ -517,6 +593,7 @@
                                 <include>com/sun/identity/xmlenc/**</include>
                                 <include>com/sun/liberty/**</include>
                             </includes>
+
                             <excludes>
                                 <exclude>com/sun/identity/federation/message/common/Extension*</exclude>
                                 <exclude>com/sun/identity/federation/meta/IDFFCOTUtils*</exclude>
@@ -532,69 +609,91 @@
                                 <exclude>com/sun/identity/saml2/protocol/impl/SubjectQueryAbstractImpl*</exclude>
                             </excludes>
                         </filter>
+
                         <filter>
-                            <artifact>org.forgerock.openam:openam-liberty-schema</artifact>
+                            <artifact>org.wrensecurity.wrenam:openam-liberty-schema</artifact>
+
                             <includes>
                                 <include>**/**</include>
                             </includes>
+
                             <excludes>
                                 <exclude>com/sun/identity/liberty/ws/common/jaxb/xmlsec/**</exclude>
                             </excludes>
                         </filter>
+
                         <filter>
-                            <artifact>org.forgerock.openam:openam-saml2-schema</artifact>
+                            <artifact>org.wrensecurity.wrenam:openam-saml2-schema</artifact>
+
                             <includes>
                                 <include>**/**</include>
                             </includes>
                         </filter>
+
                         <filter>
-                            <artifact>org.forgerock.openam:openam-xacml3-schema</artifact>
+                            <artifact>org.wrensecurity.wrenam:openam-xacml3-schema</artifact>
+
                             <includes>
                                 <include>**/**</include>
                             </includes>
                         </filter>
+
                         <filter>
-                            <artifact>org.forgerock.openam:openam-dtd-schema</artifact>
+                            <artifact>org.wrensecurity.wrenam:openam-dtd-schema</artifact>
+
                             <includes>
                                 <include>com/sun/identity/log/messageid/amLogMessage.dtd</include>
                             </includes>
                         </filter>
+
                         <filter>
-                            <artifact>org.forgerock.openam:openam-entitlements</artifact>
+                            <artifact>org.wrensecurity.wrenam:openam-entitlements</artifact>
+
                             <includes>
                                 <include>**/**</include>
                             </includes>
                         </filter>
+
                         <filter>
-                            <artifact>org.forgerock.openam:openam-client-sts</artifact>
+                            <artifact>org.wrensecurity.wrenam:openam-client-sts</artifact>
+
                             <includes>
                                 <include>**/**</include>
                             </includes>
                         </filter>
+
                         <filter>
                             <artifact>org.json:json</artifact>
+
                             <includes>
                                 <include>**/**</include>
                             </includes>
                         </filter>
+
                         <filter>
                             <artifact>org.wrensecurity.wrends:opendj-core</artifact>
+
                             <includes>
                                 <include>**/*</include>
                             </includes>
                         </filter>
+
                         <filter>
                             <artifact>org.wrensecurity.wrends:opendj-grizzly</artifact>
+
                             <includes>
                                 <include>**/*</include>
                             </includes>
                         </filter>
+
                         <filter>
                             <artifact>org.wrensecurity.commons:i18n-core</artifact>
+
                             <includes>
                                 <include>**/**</include>
                             </includes>
                         </filter>
+
                         <filter>
                             <artifact>*:*</artifact>
                             <excludes>
@@ -605,6 +704,7 @@
                             </excludes>
                         </filter>
                     </filters>
+
                     <transformers>
                         <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                             <manifestEntries>
@@ -623,39 +723,53 @@
                                 <!-- TODO Add License to Manifest -->
                             </manifestEntries>
                         </transformer>
+
                         <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
                     </transformers>
+
                     <relocations>
                         <relocation>
                             <pattern>org/</pattern>
+
                             <shadedPattern>${shade.package}.org.</shadedPattern>
+
                             <excludes>
-                                <exclude>org.forgerock.openam.**.*</exclude>
+                                <exclude>org.wrensecurity.wrenam.**.*</exclude>
                                 <exclude>org.w3c.dom.**.*</exclude>
                                 <exclude>org.xml.sax.**.*</exclude>
                             </excludes>
                         </relocation>
+
                         <relocation>
                             <pattern>com/</pattern>
+
                             <shadedPattern>${shade.package}.com.</shadedPattern>
+
                             <excludes>
                                 <exclude>com.sun.identity.**.*</exclude>
                                 <exclude>com.iplanet.**.*</exclude>
                             </excludes>
                         </relocation>
+
                         <relocation>
                             <pattern>javax.inject</pattern>
+
                             <shadedPattern>${shade.package}.javax.inject</shadedPattern>
                         </relocation>
+
                         <relocation>
                             <pattern>javax.mail</pattern>
+
                             <shadedPattern>${shade.package}.javax.mail</shadedPattern>
                         </relocation>
+
                         <relocation>
                             <pattern>javax.activation</pattern>
+
                             <shadedPattern>${shade.package}.javax.activation</shadedPattern>
                         </relocation>
                     </relocations>
+
                     <shadedArtifactAttached>false</shadedArtifactAttached>
                     <createDependencyReducedPom>true</createDependencyReducedPom>
                     <shadeSourcesContent>true</shadeSourcesContent>
@@ -665,59 +779,4 @@
             </plugin>
         </plugins>
     </build>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.forgerock.openam</groupId>
-            <artifactId>openam-jaxrpc-schema</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.forgerock.openam</groupId>
-            <artifactId>openam-dtd-schema</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.forgerock.openam</groupId>
-            <artifactId>openam-xacml3-schema</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.forgerock.openam</groupId>
-            <artifactId>OpenFM</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.forgerock.openam</groupId>
-            <artifactId>openam-entitlements</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.forgerock.openam</groupId>
-            <artifactId>openam-client-sts</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wrensecurity.wrends</groupId>
-            <artifactId>opendj-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wrensecurity.wrends</groupId>
-            <artifactId>opendj-grizzly</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wrensecurity.commons.guava</groupId>
-            <artifactId>wrensec-guava-collect</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wrensecurity.commons.guava</groupId>
-            <artifactId>wrensec-guava-base</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wrensecurity.http</groupId>
-            <artifactId>chf-http-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-        </dependency>
-    </dependencies>
 </project>

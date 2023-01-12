@@ -44,7 +44,7 @@ import static java.util.Collections.singleton;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.forgerock.openam.utils.CollectionUtils.asSet;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.anySetOf;
+import static org.mockito.ArgumentMatchers.anySet;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -155,7 +155,7 @@ public class PrivilegePolicyStoreTest {
         QueryRequest request = mockQueryRequest(QueryFilter.alwaysTrue());
         List<Privilege> policies = Arrays.<Privilege>asList(
                 new StubPrivilege("one"), new StubPrivilege("two"), new StubPrivilege("three"));
-        given(mockManager.search(anySetOf(SearchFilter.class))).willReturn(policies);
+        given(mockManager.search(anySet())).willReturn(policies);
 
         // When
         List<Privilege> result = testStore.query(request);

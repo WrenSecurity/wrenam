@@ -120,7 +120,7 @@ public class CrestAuditorTest {
         auditor.auditAccessFailure(500, "sorry");
 
         // Then
-        verifyZeroInteractions(auditEventPublisher);
+        verifyNoInteractions(auditEventPublisher);
     }
 
     private void givenAccessAuditingEnabled(AuditEventPublisher auditEventPublisher) {

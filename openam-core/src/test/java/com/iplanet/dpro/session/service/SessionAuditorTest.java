@@ -248,7 +248,7 @@ public class SessionAuditorTest {
                 System.currentTimeMillis()));
 
         // Then
-        verifyZeroInteractions(auditEventPublisher);
+        verifyNoInteractions(auditEventPublisher);
     }
 
     @Test
@@ -260,7 +260,7 @@ public class SessionAuditorTest {
                 System.currentTimeMillis()));
 
         // Then
-        verifyZeroInteractions(auditEventPublisher);
+        verifyNoInteractions(auditEventPublisher);
     }
 
     @Test

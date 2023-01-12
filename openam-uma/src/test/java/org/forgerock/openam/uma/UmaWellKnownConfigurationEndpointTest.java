@@ -30,7 +30,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.forgerock.oauth2.core.exceptions.NotFoundException;
 import org.forgerock.oauth2.core.exceptions.ServerException;
 import org.forgerock.openam.rest.representations.JacksonRepresentationFactory;
-import org.mockito.Matchers;
+import org.mockito.ArgumentMatchers;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.restlet.Request;
@@ -68,8 +68,8 @@ public class UmaWellKnownConfigurationEndpointTest {
 
         umaUris = mock(UmaUris.class);
         providerSettings = mock(UmaProviderSettings.class);
-        given(umaUrisFactory.get(Matchers.<Request>anyObject())).willReturn(umaUris);
-        given(providerSettingsFactory.get(Matchers.<Request>anyObject())).willReturn(providerSettings);
+        given(umaUrisFactory.get((Request) any())).willReturn(umaUris);
+        given(providerSettingsFactory.get((Request) any())).willReturn(providerSettings);
     }
 
     private UmaProviderSettings setupProviderSettings() throws NotFoundException, ServerException {
@@ -92,7 +92,7 @@ public class UmaWellKnownConfigurationEndpointTest {
 
     private UmaProviderSettings setupProviderSettingsWithOptionalConfiguration() throws NotFoundException, ServerException {
         setupProviderSettings();
-        given(umaUrisFactory.get(Matchers.<Request>anyObject())).willReturn(umaUris);
+        given(umaUrisFactory.get((Request) any())).willReturn(umaUris);
         given(providerSettings.getSupportedClaimTokenProfiles())
                 .willReturn(Collections.singleton("CLAIM_TOKEN_PROFILE"));
         given(providerSettings.getSupportedUmaProfiles()).willReturn(Collections.singleton(URI.create("UMA_PROFILE")));
@@ -112,7 +112,7 @@ public class UmaWellKnownConfigurationEndpointTest {
         Representation configuration = endpoint.getConfiguration();
 
         //Then
-        Map<String, Object> configurationResponse = (Map<String, Object>) new ObjectMapper()
+        Map<String, Object> configurationResponse = new ObjectMapper()
                 .readValue(configuration.getText(), Map.class);
         assertThat(configurationResponse).contains(entry("version", "VERSION"), entry("issuer", "ISSUER"),
                 entry("pat_profiles_supported", Collections.singletonList("PAT_PROFILE")),
@@ -126,7 +126,7 @@ public class UmaWellKnownConfigurationEndpointTest {
                 entry("permission_registration_endpoint", "PERMISSION_REGISTRATION_ENDPOINT"),
                 entry("rpt_endpoint", "RPT_ENDPOINT"));
 
-        verifyZeroInteractions(response);
+        verifyNoInteractions(response);
     }
 
     @Test
@@ -140,7 +140,7 @@ public class UmaWellKnownConfigurationEndpointTest {
         Representation configuration = endpoint.getConfiguration();
 
         //Then
-        Map<String, Object> configurationResponse = (Map<String, Object>) new ObjectMapper()
+        Map<String, Object> configurationResponse = new ObjectMapper()
                 .readValue(configuration.getText(), Map.class);
         assertThat(configurationResponse).contains(entry("version", "VERSION"), entry("issuer", "ISSUER"),
                 entry("pat_profiles_supported", Collections.singletonList("PAT_PROFILE")),
@@ -158,7 +158,7 @@ public class UmaWellKnownConfigurationEndpointTest {
                 entry("dynamic_client_endpoint", "DYNAMIC_CLIENT_ENDPOINT"),
                 entry("requesting_party_claims_endpoint", "REQUESTING_PARTY_CLAIMS_ENDPOINT"));
 
-        verifyZeroInteractions(response);
+        verifyNoInteractions(response);
     }
 
     @Test(expectedExceptions = NotFoundException.class)
@@ -166,7 +166,7 @@ public class UmaWellKnownConfigurationEndpointTest {
     public void shouldThrowNotFoundExceptionWhenUmaProviderNotConfigured() throws Exception {
 
         //Given
-        doThrow(NotFoundException.class).when(providerSettingsFactory).get(Matchers.<Request>anyObject());
+        doThrow(NotFoundException.class).when(providerSettingsFactory).get((Request) any());
 
         //When
         endpoint.getConfiguration();

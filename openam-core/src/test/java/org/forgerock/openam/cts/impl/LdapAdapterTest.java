@@ -548,7 +548,7 @@ public class LdapAdapterTest {
         // Given
         final QueryBuilder<Connection, Filter> mockBuilder = mock(QueryBuilder.class);
         given(mockBuilder.withFilter(any(Filter.class))).willReturn(mockBuilder);
-        given(mockBuilder.returnTheseAttributes(anySetOf(CoreTokenField.class))).willReturn(mockBuilder);
+        given(mockBuilder.returnTheseAttributes(anySet())).willReturn(mockBuilder);
         given(mockBuilder.limitResultsTo(anyInt())).willReturn(mockBuilder);
         given(mockBuilder.within(any(Duration.class))).willReturn(mockBuilder);
         given(mockBuilder.execute(any(Connection.class)))
@@ -574,7 +574,7 @@ public class LdapAdapterTest {
         // Given
         final QueryBuilder<Connection, Filter> mockBuilder = mock(QueryBuilder.class);
         given(mockBuilder.withFilter(any(Filter.class))).willReturn(mockBuilder);
-        given(mockBuilder.returnTheseAttributes(anySetOf(CoreTokenField.class))).willReturn(mockBuilder);
+        given(mockBuilder.returnTheseAttributes(anySet())).willReturn(mockBuilder);
         given(mockBuilder.limitResultsTo(anyInt())).willReturn(mockBuilder);
         given(mockBuilder.within(any(Duration.class))).willReturn(mockBuilder);
 

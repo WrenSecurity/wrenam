@@ -26,7 +26,7 @@
 -->
 
 <!-- Parent Project -->
-<project name="openam-server-war-preparation" default="openam_server-prepare-war">
+<project name="openam-server-war-preparation" default="openam-server-prepare-war">
 
     <description>OpenAM Server Prepare WAR ANT Script</description>
     <target name="openam-server-prepare-war">

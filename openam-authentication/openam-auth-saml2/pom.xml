@@ -13,21 +13,21 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
- * Portions Copyright 2018-2022 Wren Security
+ * Portions Copyright 2018-2023 Wren Security
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <artifactId>openam-authentication</artifactId>
-        <groupId>org.forgerock.openam</groupId>
-        <version>14.0.0-SNAPSHOT</version>
-    </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- Component Definition -->
+    <parent>
+        <groupId>org.wrensecurity.wrenam</groupId>
+        <artifactId>openam-authentication</artifactId>
+        <version>15.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>openam-auth-saml2</artifactId>
+
     <name>Wren:AM - SAML2 Authentication Module</name>
     <description>Wren:AM Authentication SAML2</description>
-    <artifactId>openam-auth-saml2</artifactId>
-    <packaging>jar</packaging>
 
     <properties>
         <checkstyleFailOnError>true</checkstyleFailOnError>
@@ -35,18 +35,22 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-auth-common</artifactId>
         </dependency>
+
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-federation-library</artifactId>
+            <version>${project.version}</version>
         </dependency>
+
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>org.wrensecurity.commons.guava</groupId>
             <artifactId>wrensec-guava-cache</artifactId>

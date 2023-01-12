@@ -13,23 +13,22 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2011-2016 ForgeRock AS.
- * Portions Copyright 2018-2022 Wren Security
+ * Portions Copyright 2018-2023 Wren Security
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- Parent Project -->
     <parent>
-        <groupId>org.forgerock.openam</groupId>
-        <artifactId>openam</artifactId>
-        <version>14.0.0-SNAPSHOT</version>
+        <groupId>org.wrensecurity.wrenam</groupId>
+        <artifactId>wrenam-project</artifactId>
+        <version>15.0.0-SNAPSHOT</version>
     </parent>
 
-    <!-- Component Definition -->
-    <name>Wren:AM - Server Only</name>
-    <description>Wren:AM Server Only Component</description>
     <artifactId>openam-server-only</artifactId>
     <packaging>war</packaging>
+
+    <name>Wren:AM - Server Only</name>
+    <description>Wren:AM Server Only Component</description>
 
     <properties>
         <!-- Default settings for standard embedded dj. -->
@@ -46,21 +45,22 @@
         <full.version.information>@VERSION@ Build @REVISION@ (@DATESTAMP@)</full.version.information>
     </properties>
 
-    <!-- Build -->
     <build>
         <finalName>WrenAM-ServerOnly-${project.version}</finalName>
         <plugins>
-            <!-- Wren:DS 4.0: Pre-Pre-Packaging Step to download required Pre-Packaging Resources-->
             <plugin>
+                <?m2e execute onConfiguration?>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>war-pre-packaging</id>
+                        <id>fetch-wrends</id>
                         <phase>validate</phase>
+
                         <goals>
                             <goal>copy</goal>
                         </goals>
+
                         <configuration>
                             <artifactItems>
                                 <artifactItem>
@@ -70,31 +70,32 @@
                                     <type>zip</type>
                                 </artifactItem>
                             </artifactItems>
-
+                            
                             <outputDirectory>${project.build.directory}</outputDirectory>
-                            <overWriteReleases>false</overWriteReleases>
-                            <overWriteSnapshots>false</overWriteSnapshots>
-                            <overWriteIfNewer>true</overWriteIfNewer>
                         </configuration>
                     </execution>
+
                     <execution>
-                        <id>unpack</id>
+                        <id>unpack-modules</id>
                         <phase>validate</phase>
+
                         <goals>
                             <goal>unpack</goal>
                         </goals>
+
                         <configuration>
                             <artifactItems>
                                 <artifactItem>
-                                    <groupId>org.forgerock.openam</groupId>
+                                    <groupId>org.wrensecurity.wrenam</groupId>
                                     <artifactId>openam-jaxrpc-schema</artifactId>
                                     <type>jar</type>
                                     <overWrite>false</overWrite>
                                     <outputDirectory>${project.build.directory}/unpacked</outputDirectory>
                                     <includes>jaxrpc/IdentityManagementServices.wsdl</includes>
                                 </artifactItem>
+
                                 <artifactItem>
-                                    <groupId>org.forgerock.openam</groupId>
+                                    <groupId>org.wrensecurity.wrenam</groupId>
                                     <artifactId>openam-ui-ria</artifactId>
                                     <classifier>www</classifier>
                                     <type>zip</type>
@@ -102,8 +103,9 @@
                                     <outputDirectory>${project.build.directory}/XUI</outputDirectory>
                                     <includes>**/*</includes>
                                 </artifactItem>
+
                                 <artifactItem>
-                                    <groupId>org.forgerock.openam</groupId>
+                                    <groupId>org.wrensecurity.wrenam</groupId>
                                     <artifactId>openam-ui-api</artifactId>
                                     <type>jar</type>
                                     <overWrite>false</overWrite>
@@ -112,41 +114,24 @@
                             </artifactItems>
                         </configuration>
                     </execution>
-
-                    <execution>
-                        <id>Copy license</id>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>copy</goal>
-                        </goals>
-                        <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>${forgerock.license.groupId}</groupId>
-                                    <artifactId>${forgerock.license.artifactId}</artifactId>
-                                    <version>${forgerock.license.version}</version>
-                                    <type>txt</type>
-                                    <overWrite>true</overWrite>
-                                    <outputDirectory>${project.build.directory}/legal-notices</outputDirectory>
-                                    <destFileName>license.txt</destFileName>
-                                </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution>
                 </executions>
             </plugin>
 
-            <!-- Pre-Packaging step for WAR elements. -->
             <plugin>
+                <?m2e execute onConfiguration?>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <executions>
                     <execution>
                         <id>war-pre-packaging</id>
                         <phase>validate</phase>
+
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+
                         <configuration>
                             <target>
-
                                 <property name="openam.version" value="${project.version}" />
 
                                 <property name="openam.temp.target" value="${project.build.directory}/openam_TEMP" />
@@ -171,16 +156,15 @@
                                 </ant>
                             </target>
                         </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
                     </execution>
                 </executions>
+
                 <dependencies>
                     <dependency>
                         <groupId>ant-contrib</groupId>
                         <artifactId>ant-contrib</artifactId>
                         <version>${ant.contrib.version}</version>
+
                         <exclusions>
                             <exclusion>
                                 <groupId>ant</groupId>
@@ -194,6 +178,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
+
                 <configuration>
                     <packagingExcludes>
                         WEB-INF/lib/jersey-core-1.1.5.2.jar,
@@ -202,6 +187,7 @@
                         WEB-INF/lib/jaxb-xjc-1.0.6.jar,
                         WEB-INF/lib/jaxp-api-1.4.2.jar,
                     </packagingExcludes>
+
                     <archive>
                         <manifestEntries>
                             <Specification-Title>Wren:AM Server</Specification-Title>
@@ -214,6 +200,7 @@
                             <Build-Time>${maven.build.timestamp}</Build-Time>
                         </manifestEntries>
                     </archive>
+
                     <nonFilteredFileExtensions>
                         <!-- Exclude any binary files based upon File Types. -->
                         <nonFilteredFileExtension>bin</nonFilteredFileExtension>
@@ -249,6 +236,7 @@
                         <nonFilteredFileExtension>ttf</nonFilteredFileExtension>
                         <!-- See: http://en.wikipedia.org/wiki/List_of_file_formats -->
                     </nonFilteredFileExtensions>
+
                     <webResources>
                         <webResource>
                             <directory>${project.build.directory}/XUI/</directory>
@@ -258,6 +246,7 @@
                             <targetPath>XUI</targetPath>
                             <filtering>true</filtering>
                         </webResource>
+
                         <webResource>
                             <directory>${project.build.directory}/api/</directory>
                             <includes>
@@ -266,6 +255,7 @@
                             <targetPath>api</targetPath>
                             <filtering>true</filtering>
                         </webResource>
+
                         <webResource>
                             <directory>${basedir}/src/main/webapp</directory>
                             <includes>
@@ -279,6 +269,7 @@
                             <targetPath />
                             <filtering>true</filtering>
                         </webResource>
+
                         <webResource>
                             <directory>${basedir}/src/main/webapp/com_sun_web_ui/images</directory>
                             <includes>
@@ -287,6 +278,7 @@
                             <targetPath>com_sun_web_ui/images</targetPath>
                             <filtering>false</filtering>
                         </webResource>
+
                         <webResource>
                             <directory>${project.basedir}/src/main/webapp/WEB-INF</directory>
                             <includes>
@@ -295,22 +287,15 @@
                             <targetPath>WEB-INF</targetPath>
                             <filtering>true</filtering>
                         </webResource>
+
                         <webResource>
-                            <!-- Copy all licenses into the legal-notices directory. -->
-                            <directory>${project.build.directory}/legal-notices</directory>
+                            <directory>${project.basedir}/../legal-notices</directory>
                             <includes>
                                 <include>**/**</include>
                             </includes>
                             <targetPath>legal-notices</targetPath>
                         </webResource>
-                        <webResource>
-                            <!-- Copy all third-party licences too. -->
-                            <directory>${project.parent.basedir}/${third.party.legal.directory}</directory>
-                            <includes>
-                                <include>**/**</include>
-                            </includes>
-                            <targetPath>legal-notices</targetPath>
-                        </webResource>
+
                         <webResource>
                             <directory>${project.basedir}/../openam-schema/openam-idsvcs-schema/src/main/resources/xml
                             </directory>
@@ -320,6 +305,7 @@
                             <targetPath>WEB-INF/wsdl</targetPath>
                             <filtering>false</filtering>
                         </webResource>
+
                         <webResource>
                             <directory>${project.build.directory}/unpacked/jaxrpc
                             </directory>
@@ -329,6 +315,7 @@
                             <targetPath>WEB-INF/wsdl</targetPath>
                             <filtering>true</filtering>
                         </webResource>
+
                         <webResource>
                             <!-- This pickup the remaining moved elements build from the
                                  "openam-server-prepare-war"
@@ -341,6 +328,7 @@
                             <targetPath />
                             <filtering>false</filtering>
                         </webResource>
+
                         <webResource>
                             <directory>${project.basedir}/../openam-sts/openam-rest-sts/src/main/resources
                             </directory>
@@ -350,6 +338,7 @@
                             <targetPath>WEB-INF/classes</targetPath>
                             <filtering>false</filtering>
                         </webResource>
+
                         <webResource>
                             <directory>${project.basedir}/../openam-audit/openam-audit-configuration/src/main/resources</directory>
                             <includes>
@@ -358,6 +347,7 @@
                             <targetPath>WEB-INF/classes</targetPath>
                             <filtering>false</filtering>
                         </webResource>
+
                         <webResource>
                             <directory>${project.basedir}/../openam-selfservice/src/main/resources</directory>
                             <includes>
@@ -366,6 +356,7 @@
                             <targetPath>WEB-INF/classes</targetPath>
                             <filtering>false</filtering>
                         </webResource>
+
                         <!-- Wren:DS 4.0 Copy in an internal dependency needed by Wren:AM -->
                         <webResource>
                             <directory>${project.build.directory}/repackage-wrends/wrends/lib</directory>
@@ -378,7 +369,6 @@
                         </webResource>
                     </webResources>
                 </configuration>
-
             </plugin>
 
             <plugin>
@@ -388,6 +378,7 @@
                     <skip>true</skip>
                 </configuration>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
@@ -395,11 +386,14 @@
                     <execution>
                         <id>copy-resources</id>
                         <phase>generate-resources</phase>
+
                         <goals>
                             <goal>copy-resources</goal>
                         </goals>
+
                         <configuration>
                             <outputDirectory>${project.build.outputDirectory}</outputDirectory>
+
                             <resources>
                                 <resource>
                                     <directory>src/main/resources/services</directory>
@@ -418,9 +412,11 @@
             <resource>
                 <filtering>true</filtering>
                 <directory>src/main/resources</directory>
+
                 <includes>
                     <include>**/*</include>
                 </includes>
+
                 <excludes>
                     <exclude>config/**</exclude>
                     <exclude>locale/**</exclude>
@@ -431,17 +427,22 @@
                     <exclude>*.conf</exclude>
                 </excludes>
             </resource>
+
             <resource>
                 <filtering>true</filtering>
                 <directory>src/main/resources/config</directory>
+
                 <includes>
                     <include>serviceNames.properties</include>
                 </includes>
+
                 <targetPath>${project.build.directory}/classes</targetPath>
             </resource>
+
             <resource>
                 <filtering>true</filtering>
                 <directory>src/main/resources</directory>
+
                 <includes>
                     <include>AMConfig.properties</include>
                 </includes>
@@ -451,30 +452,26 @@
 
     <profiles>
         <profile>
-            <id>with-oem</id>
-            <properties>
-                <exclusion.list.filename>opendj_oem_exclusion_list</exclusion.list.filename>
-                <third.party.legal.directory>legal-oem</third.party.legal.directory>
-                <is.oem.build>true</is.oem.build>
-            </properties>
-        </profile>
-        <profile>
             <id>release</id>
+
             <dependencies>
                 <dependency>
                     <artifactId>openam-auth-securid</artifactId>
-                    <groupId>org.forgerock.openam</groupId>
+                    <groupId>org.wrensecurity.wrenam</groupId>
                 </dependency>
             </dependencies>
+
             <properties>
                 <auth.securID.xml>amAuthSecurID.xml</auth.securID.xml>
             </properties>
+
             <build>
                 <plugins>
                     <!-- Transform the 'amAuth.xml' to add the SecurID auth module -->
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>xml-maven-plugin</artifactId>
+
                         <executions>
                             <execution>
                                 <goals>
@@ -482,10 +479,12 @@
                                 </goals>
                             </execution>
                         </executions>
+
                         <configuration>
                             <catalogs>
                                 <catalog>src/main/xslt/catalog.xml</catalog>
                             </catalogs>
+
                             <transformationSets>
                                 <transformationSet>
                                     <dir>${project.build.outputDirectory}</dir>
@@ -501,23 +500,28 @@
                 </plugins>
             </build>
         </profile>
+
         <profile>
             <id>development</id>
+
             <dependencies>
                 <dependency>
                     <artifactId>openam-auth-securid</artifactId>
-                    <groupId>org.forgerock.openam</groupId>
+                    <groupId>org.wrensecurity.wrenam</groupId>
                 </dependency>
             </dependencies>
+
             <properties>
                 <auth.securID.xml>amAuthSecurID.xml</auth.securID.xml>
             </properties>
+
             <build>
                 <plugins>
                     <!-- Transform the 'amAuth.xml' to add the SecurID auth module -->
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>xml-maven-plugin</artifactId>
+
                         <executions>
                             <execution>
                                 <phase>prepare-package</phase>
@@ -526,16 +530,20 @@
                                 </goals>
                             </execution>
                         </executions>
+
                         <configuration>
                             <catalogs>
                                 <catalog>src/main/xslt/catalog.xml</catalog>
                             </catalogs>
+
                             <transformationSets>
                                 <transformationSet>
                                     <dir>${project.build.outputDirectory}</dir>
+
                                     <includes>
                                         <include>amAuth.xml</include>
                                     </includes>
+
                                     <stylesheet>src/main/xslt/amAuthTransform.xslt</stylesheet>
                                     <outputDir>${project.build.outputDirectory}</outputDir>
                                 </transformationSet>
@@ -545,6 +553,7 @@
                 </plugins>
             </build>
         </profile>
+
         <profile>
             <id>precompile-jsps</id>
             <build>
@@ -553,12 +562,15 @@
                         <groupId>org.eclipse.jetty</groupId>
                         <artifactId>jetty-jspc-maven-plugin</artifactId>
                         <version>${jetty.jspc.version}</version>
+
                         <executions>
                             <execution>
                                 <id>jspc</id>
+
                                 <goals>
                                     <goal>jspc</goal>
                                 </goals>
+
                                 <configuration>
                                     <!-- Exclude JSPs with known compilation issues: -->
                                     <excludes>**/ButtonFrame.jsp,**/Masthead.jsp,**/Version.jsp,
@@ -567,21 +579,24 @@
                             </execution>
                         </executions>
                     </plugin>
-
                 </plugins>
             </build>
         </profile>
+
         <profile>
             <id>forgerock-dev</id>
+
             <dependencies>
                 <dependency>
-                    <groupId>org.forgerock.openam</groupId>
+                    <groupId>org.wrensecurity.wrenam</groupId>
                     <artifactId>openam-time-travel</artifactId>
                 </dependency>
             </dependencies>
         </profile>
+
         <profile>
             <id>suppress-upgrade</id>
+
             <properties>
                 <full.version.information />
             </properties>
@@ -594,47 +609,54 @@
             <groupId>org.wrensecurity.wrends</groupId>
             <artifactId>opendj-server</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.wrensecurity.wrends</groupId>
             <artifactId>opendj-core</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.wrensecurity.wrends</groupId>
             <artifactId>opendj-grizzly</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.wrensecurity.wrends</groupId>
             <artifactId>opendj-server-legacy</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-http</artifactId>
+            <version>${project.version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.wrensecurity.http</groupId>
             <artifactId>chf-http-servlet</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-ui-ria</artifactId>
+            <version>${project.version}</version>
             <type>zip</type>
             <classifier>www</classifier>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-ui-api</artifactId>
-            <type>jar</type>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-core</artifactId>
         </dependency>
+
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-core-rest</artifactId>
         </dependency>
 
@@ -654,234 +676,279 @@
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-cli-definitions</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-cli-impl</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-server-auth-ui</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-federation-library</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>OpenFM</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-uma</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-dtd-schema</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-jaxrpc-schema</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-saml2-schema</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-rest</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-dashboard</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-datastore</artifactId>
+            <version>${project.version}</version>
         </dependency>
         
         <dependency>
-        	<groupId>org.forgerock.openam</groupId>
+        	<groupId>org.wrensecurity.wrenam</groupId>
         	<artifactId>openam-radius-common</artifactId>
+            <version>${project.version}</version>
         </dependency>
         
         <dependency>
-        	<groupId>org.forgerock.openam</groupId>
+        	<groupId>org.wrensecurity.wrenam</groupId>
         	<artifactId>openam-radius-server</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-push-notification</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-audit-configuration</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-audit-rest</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-selfservice</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-notifications</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-notifications-websocket</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-notifications-integration</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <!-- Include all Authentication Modules -->
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-auth-ad</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-auth-anonymous</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-auth-adaptive</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-auth-application</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-auth-cert</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-auth-datastore</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-auth-persistentcookie</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-auth-hotp</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-auth-scripted</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-auth-device-id</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-auth-httpbasic</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-auth-jdbc</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-auth-ldap</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-auth-membership</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-auth-msisdn</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-auth-nt</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-auth-oath</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-auth-fr-oath</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-auth-saml2</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-auth-push</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-auth-oauth2</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-auth-radius</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-auth-amster</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <artifactId>openam-auth-windowsdesktopsso</artifactId>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <artifactId>openam-auth-oidc</artifactId>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
@@ -896,46 +963,54 @@
 
         <!-- Oauth2 dependencies -->
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-oauth2</artifactId>
         </dependency>
+
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-oauth2-saml2</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-rest-sts</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-common-sts</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-client-sts</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-token-service-sts</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-publish-sts</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-slf4j</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-upgrade</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -950,6 +1025,7 @@
             <artifactId>javax.servlet-api</artifactId>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>javax.servlet.jsp</groupId>
             <artifactId>jsp-api</artifactId>

@@ -18,6 +18,7 @@ package org.forgerock.openam.core.rest.authn.callbackhandlers;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.forgerock.json.test.assertj.AssertJJsonValueAssert.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -31,7 +32,6 @@ import org.forgerock.json.JsonValue;
 import org.forgerock.openam.core.rest.authn.exceptions.RestAuthException;
 import org.forgerock.openam.core.rest.authn.exceptions.RestAuthResponseException;
 import org.forgerock.openam.utils.JsonValueBuilder;
-import org.mockito.Matchers;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -92,7 +92,7 @@ public class RestAuthPasswordCallbackHandlerTest {
                 passwordCallback);
 
         //Then
-        verify(passwordCallback, never()).setPassword(Matchers.<char[]>anyObject());
+        verify(passwordCallback, never()).setPassword(any());
         assertThat(updated).isFalse();
     }
 
@@ -112,7 +112,7 @@ public class RestAuthPasswordCallbackHandlerTest {
                 passwordCallback);
 
         //Then
-        verify(passwordCallback, never()).setPassword(Matchers.<char[]>anyObject());
+        verify(passwordCallback, never()).setPassword(any());
         assertThat(updated).isFalse();
     }
 

@@ -22,6 +22,7 @@ import static org.forgerock.json.JsonValue.json;
 import static org.forgerock.json.JsonValue.object;
 import static org.forgerock.openam.utils.CollectionUtils.asSet;
 import static org.forgerock.util.test.assertj.AssertJPromiseAssert.assertThatPromise;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -57,7 +58,7 @@ import org.forgerock.util.promise.Promise;
 import org.forgerock.util.promise.Promises;
 import org.forgerock.util.query.QueryFilter;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Matchers;
+import org.mockito.ArgumentMatchers;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -157,7 +158,7 @@ public class ResourceSetResourceTest {
         given(contextHelper.getUserId(context)).willReturn("RESOURCE_OWNER_ID");
         given(request.getQueryFilter()).willReturn(queryFilter);
         given(resourceSetService.getResourceSets(eq(context), eq("REALM"),
-                Matchers.<ResourceSetWithPolicyQuery>anyObject(), eq("RESOURCE_OWNER_ID"), eq(false))).willReturn(resourceSetsPromise);
+                any(), eq("RESOURCE_OWNER_ID"), eq(false))).willReturn(resourceSetsPromise);
 
         //When
         Promise<QueryResponse, ResourceException> promise = resource.queryCollection(context, request, handler);

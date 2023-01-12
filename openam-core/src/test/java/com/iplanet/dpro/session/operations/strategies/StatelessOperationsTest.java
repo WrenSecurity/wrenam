@@ -171,7 +171,7 @@ public class StatelessOperationsTest extends AbstractMockBasedTest {
             statelessOperations.destroy(requester, mockSession);
         } finally {
             // Then
-            verifyZeroInteractions(mockSessionBlacklist);
+            verifyNoInteractions(mockSessionBlacklist);
         }
     }
 }

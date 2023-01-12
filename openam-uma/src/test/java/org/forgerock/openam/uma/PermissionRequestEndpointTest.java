@@ -43,7 +43,7 @@ import org.forgerock.openam.rest.representations.JacksonRepresentationFactory;
 import org.forgerock.openam.uma.extensions.PermissionRequestFilter;
 import org.json.JSONObject;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Matchers;
+import org.mockito.ArgumentMatchers;
 import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.data.Status;
@@ -73,7 +73,7 @@ public class PermissionRequestEndpointTest {
         OAuth2ProviderSettingsFactory providerSettingFactory = mock(OAuth2ProviderSettingsFactory.class);
         OAuth2ProviderSettings providerSettings = mock(RealmOAuth2ProviderSettings.class);
 
-        given(providerSettingFactory.get(Matchers.<OAuth2Request>anyObject())).willReturn(providerSettings);
+        given(providerSettingFactory.get(any(OAuth2Request.class))).willReturn(providerSettings);
         given(providerSettings.getResourceSetStore()).willReturn(resourceSetStore);
 
         UmaProviderSettingsFactory umaProviderSettingsFactory = mock(UmaProviderSettingsFactory.class);
@@ -313,7 +313,7 @@ public class PermissionRequestEndpointTest {
         setupResourceSetStore();
 
         PermissionTicket ticket = new PermissionTicket("abc", null, null, null);
-        given(umaTokenStore.createPermissionTicket(eq("RESOURCE_SET_ID"), anySetOf(String.class), eq("CLIENT_ID"))).willReturn(ticket);
+        given(umaTokenStore.createPermissionTicket(eq("RESOURCE_SET_ID"), anySet(), eq("CLIENT_ID"))).willReturn(ticket);
 
         //When
         Representation responseBody = endpoint.registerPermissionRequest(entity);
@@ -323,7 +323,7 @@ public class PermissionRequestEndpointTest {
                 .readValue(responseBody.getText(), Map.class);
         assertThat(permissionTicket).containsEntry("ticket", "abc");
 
-        verify(permissionRequestFilter).onPermissionRequest(any(ResourceSetDescription.class), anySetOf(String.class),
+        verify(permissionRequestFilter).onPermissionRequest(any(ResourceSetDescription.class), anySet(),
                 anyString());
         ArgumentCaptor<Status> statusCaptor = ArgumentCaptor.forClass(Status.class);
         verify(response).setStatus(statusCaptor.capture());

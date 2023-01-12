@@ -12,7 +12,7 @@ import org.testng.annotations.Test;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 
 @PrepareForTest({ SystemProperties.class, WebtopNaming.class })

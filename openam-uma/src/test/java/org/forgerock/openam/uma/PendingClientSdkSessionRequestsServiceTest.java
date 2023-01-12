@@ -22,8 +22,8 @@ import static org.forgerock.json.test.assertj.AssertJJsonValueAssert.assertThat;
 import static org.forgerock.openam.sm.datalayer.impl.uma.UmaPendingRequest.*;
 import static org.forgerock.openam.uma.UmaConstants.UmaPolicy.*;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.*;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -314,14 +314,14 @@ public class PendingClientSdkSessionRequestsServiceTest {
     private void mockPendingRequestCreationEmailTemplate(String resourceOwnerId, String realm) {
         given(pendingRequestEmailTemplate.getCreationTemplate(resourceOwnerId, realm))
                 .willReturn(Pair.of("CREATION_SUBJECT", "CREATION_BODY {0} {1} {2}"));
-        given(pendingRequestEmailTemplate.buildScopeString(anySetOf(String.class), eq(resourceOwnerId), eq(realm)))
+        given(pendingRequestEmailTemplate.buildScopeString(anySet(), eq(resourceOwnerId), eq(realm)))
                 .willReturn(SCOPE);
     }
 
     private void mockPendingRequestApprovalEmailTemplate(String resourceOwnerId, String realm) {
         given(pendingRequestEmailTemplate.getApprovalTemplate(resourceOwnerId, realm))
                 .willReturn(Pair.of("APPROVAL_SUBJECT", "APPROVAL_BODY {0} {1} {2}"));
-        given(pendingRequestEmailTemplate.buildScopeString(anySetOf(String.class), eq(resourceOwnerId), eq(realm)))
+        given(pendingRequestEmailTemplate.buildScopeString(anySet(), eq(resourceOwnerId), eq(realm)))
                 .willReturn(SCOPE);
     }
 

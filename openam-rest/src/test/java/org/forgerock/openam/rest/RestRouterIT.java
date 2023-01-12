@@ -33,14 +33,14 @@ import static org.forgerock.openam.audit.AuditConstants.NO_REALM;
 import static org.forgerock.openam.rest.Routers.ssoToken;
 import static org.forgerock.util.promise.Promises.newResultPromise;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoInteractions;
 
 import com.google.inject.Binder;
 import com.google.inject.Key;
@@ -350,7 +350,7 @@ public class RestRouterIT extends GuiceTestCase {
         Response response = promise.get();
         assertThat(response.getStatus()).isEqualTo(Status.NOT_FOUND);
 
-        verifyZeroInteractions(internalResource);
+        verifyNoInteractions(internalResource);
     }
 
     @Test

@@ -13,41 +13,44 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2011-2016 ForgeRock AS.
- * Portions Copyright 2018 Wren Security.
+ * Portions Copyright 2018-2023 Wren Security.
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- Parent Project -->
     <parent>
-        <groupId>org.forgerock.openam</groupId>
+        <groupId>org.wrensecurity.wrenam</groupId>
         <artifactId>openam-distribution</artifactId>
-        <version>14.0.0-SNAPSHOT</version>
+        <version>15.0.0-SNAPSHOT</version>
     </parent>
 
-    <!-- Component Definition -->
-    <name>Wren:AM - Distribution Fedlet UnConfigured</name>
-    <description>Wren:AM Distribution Fedlet UnConfigured</description>
     <artifactId>openam-distribution-fedlet-unconfigured</artifactId>
     <packaging>pom</packaging>
 
-    <!-- Build -->
+    <name>Wren:AM - Distribution Fedlet UnConfigured</name>
+    <description>Wren:AM Distribution Fedlet UnConfigured</description>
+
     <build>
         <finalName>Fedlet-${project.version}</finalName>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
+
                 <executions>
                     <execution>
                         <id>fedlet-assembly</id>
                         <phase>package</phase>
+
                         <goals>
                             <goal>single</goal>
                         </goals>
+
                         <configuration>
                             <appendAssemblyId>false</appendAssemblyId>
                             <tarLongFileMode>gnu</tarLongFileMode>
+
                             <descriptors>
                                 <descriptor>src/main/assembly/openAMFedlet_ZIP_Assembly_Descriptor.xml</descriptor>
                             </descriptors>
@@ -60,10 +63,10 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-fedlet-unconfigured-war</artifactId>
+            <version>${project.version}</version>
             <type>war</type>
         </dependency>
     </dependencies>
 </project>
-

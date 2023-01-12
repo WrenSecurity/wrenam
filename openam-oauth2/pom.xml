@@ -13,15 +13,15 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2012-2016 ForgeRock AS.
- * Portions Copyright 2018-2022 Wren Security
+ * Portions Copyright 2018-2023 Wren Security
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.forgerock.openam</groupId>
-        <artifactId>openam</artifactId>
-        <version>14.0.0-SNAPSHOT</version>
+        <groupId>org.wrensecurity.wrenam</groupId>
+        <artifactId>wrenam-project</artifactId>
+        <version>15.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>openam-oauth2</artifactId>
@@ -31,21 +31,25 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-rest</artifactId>
         </dependency>
+
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-core</artifactId>
         </dependency>
+
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-scripting</artifactId>
         </dependency>
+
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-i18n</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.wrensecurity.http</groupId>
             <artifactId>chf-http-core</artifactId>
@@ -62,43 +66,52 @@
             <artifactId>forgerock-jaspi-openid-connect-module</artifactId>
         </dependency>
 
-
         <dependency>
             <groupId>com.google.inject.extensions</groupId>
             <artifactId>guice-assistedinject</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.apache.servicemix.bundles</groupId>
             <artifactId>org.apache.servicemix.bundles.javax-inject</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.wrensecurity.commons</groupId>
             <artifactId>json-web-token</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.wrensecurity.commons.guava</groupId>
             <artifactId>wrensec-guava-collect</artifactId>
         </dependency>
+
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-shared</artifactId>
         </dependency>
+
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-tokens</artifactId>
+            <version>${project.version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.freemarker</groupId>
             <artifactId>freemarker</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.wrensecurity.commons</groupId>
             <artifactId>wrensec-guice-core</artifactId>
         </dependency>
+
         <dependency>
             <groupId>external</groupId>
             <artifactId>esapiport</artifactId>
@@ -109,15 +122,16 @@
             <artifactId>org.restlet.ext.json</artifactId>
         </dependency>
 
-        <!-- Restlet -->
         <dependency>
             <groupId>org.restlet.jee</groupId>
             <artifactId>org.restlet</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.restlet.jee</groupId>
             <artifactId>org.restlet.ext.jackson</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.restlet.jee</groupId>
             <artifactId>org.restlet.ext.freemarker</artifactId>
@@ -127,77 +141,89 @@
                     <artifactId>freemarker</artifactId>
                 </exclusion>
             </exclusions>
-            <!--scope>provided</scope-->
         </dependency>
+
         <dependency>
             <groupId>org.restlet.jee</groupId>
             <artifactId>org.restlet.ext.servlet</artifactId>
         </dependency>
+
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-restlet</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
-
-
-        <!-- Test Dependencies -->
         <dependency>
             <groupId>org.easytesting</groupId>
             <artifactId>fest-assert</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
         </dependency>
+
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-slf4j</artifactId>
+            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.wrensecurity.commons</groupId>
             <artifactId>forgerock-test-utils</artifactId>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.wrensecurity.commons</groupId>
             <artifactId>json-resource</artifactId>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
+
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-notifications-integration</artifactId>
+            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-core</artifactId>
+            <version>${project.version}</version>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
 
-        <!-- Powermock -->
         <dependency>
             <groupId>org.powermock</groupId>
             <artifactId>powermock-api-mockito2</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.powermock</groupId>
             <artifactId>powermock-core</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.powermock</groupId>
             <artifactId>powermock-reflect</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.powermock</groupId>
             <artifactId>powermock-module-testng</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.powermock</groupId>
             <artifactId>powermock-module-testng-common</artifactId>
         </dependency>
+
         <dependency>
             <groupId>javassist</groupId>
             <artifactId>javassist</artifactId>

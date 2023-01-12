@@ -19,7 +19,7 @@ import static org.fest.assertions.Assertions.*;
 import static org.forgerock.openam.utils.Time.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.mock;
-import static org.mockito.Matchers.*;
+import static org.mockito.ArgumentMatchers.*;
 
 import org.forgerock.openam.cts.TokenTestUtils;
 import org.forgerock.openam.tokens.TokenType;
@@ -95,7 +95,7 @@ public class SAMLAdapterTest {
         SAMLToken samlToken = new SAMLToken("primary", null, 12345, "");
 
         given(tokenIdFactory.toSAMLPrimaryTokenId(anyString())).willReturn("id");
-        given(serialisation.serialise(anyObject())).willReturn("");
+        given(serialisation.serialise(any())).willReturn("");
 
         // When
         Token token = adapter.toToken(samlToken);

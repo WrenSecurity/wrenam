@@ -13,29 +13,26 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2011-2016 ForgeRock AS.
- * Portions Copyright 2018 Wren Security.
+ * Portions Copyright 2018-2023 Wren Security.
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- Parent Project -->
     <parent>
-        <groupId>org.forgerock.openam</groupId>
-        <artifactId>openam</artifactId>
-        <version>14.0.0-SNAPSHOT</version>
+        <groupId>org.wrensecurity.wrenam</groupId>
+        <artifactId>wrenam-project</artifactId>
+        <version>15.0.0-SNAPSHOT</version>
     </parent>
 
-    <!-- Component Definition -->
-    <name>Wren:AM - Example Projects</name>
-    <description>Wren:AM Example Projects</description>
     <artifactId>openam-examples</artifactId>
     <packaging>pom</packaging>
 
-    <!-- Child Modules -->
+    <name>Wren:AM - Example Projects</name>
+    <description>Wren:AM Example Projects</description>
+
     <modules>
         <module>openam-example-clientsdk-cli</module>
         <module>openam-example-clientsdk-war</module>
         <module>openam-example-api-descriptor</module>
     </modules>
 </project>
-

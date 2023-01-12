@@ -22,6 +22,7 @@ import static org.mockito.BDDMockito.eq;
 import static org.mockito.BDDMockito.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.ArgumentMatchers.any;
 import static org.testng.AssertJUnit.*;
 
 import java.security.Principal;
@@ -37,7 +38,7 @@ import javax.security.auth.message.MessageInfo;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.mockito.Matchers;
+import org.mockito.ArgumentMatchers;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -132,7 +133,7 @@ public class JaspiAuthLoginModuleTest {
         Callback[] callbacks = new Callback[0];
         int state = ISAuthConstants.LOGIN_START;
 
-        given(jaspiAuthWrapper.validateRequest(Matchers.<MessageInfo>anyObject(), Matchers.<Subject>anyObject()))
+        given(jaspiAuthWrapper.validateRequest(any(), any()))
                 .willReturn(AuthStatus.SUCCESS);
 
         //When
@@ -140,7 +141,7 @@ public class JaspiAuthLoginModuleTest {
 
         //Then
         assertTrue(processMethodCalled);
-        verify(jaspiAuthWrapper).validateRequest(Matchers.<MessageInfo>anyObject(), Matchers.<Subject>anyObject());
+        verify(jaspiAuthWrapper).validateRequest(any(), any());
         assertEquals(returnedState, ISAuthConstants.LOGIN_SUCCEED);
     }
 
@@ -151,7 +152,7 @@ public class JaspiAuthLoginModuleTest {
         Callback[] callbacks = new Callback[0];
         int state = ISAuthConstants.LOGIN_START;
 
-        given(jaspiAuthWrapper.validateRequest(Matchers.<MessageInfo>anyObject(), Matchers.<Subject>anyObject()))
+        given(jaspiAuthWrapper.validateRequest(any(), any()))
                 .willReturn(AuthStatus.SEND_SUCCESS);
 
         //When
@@ -159,7 +160,7 @@ public class JaspiAuthLoginModuleTest {
 
         //Then
         assertTrue(processMethodCalled);
-        verify(jaspiAuthWrapper).validateRequest(Matchers.<MessageInfo>anyObject(), Matchers.<Subject>anyObject());
+        verify(jaspiAuthWrapper).validateRequest(any(), any());
         assertEquals(returnedState, ISAuthConstants.LOGIN_SUCCEED);
     }
 
@@ -170,7 +171,7 @@ public class JaspiAuthLoginModuleTest {
         Callback[] callbacks = new Callback[0];
         int state = ISAuthConstants.LOGIN_START;
 
-        given(jaspiAuthWrapper.validateRequest(Matchers.<MessageInfo>anyObject(), Matchers.<Subject>anyObject()))
+        given(jaspiAuthWrapper.validateRequest(any(), any()))
                 .willReturn(AuthStatus.SEND_FAILURE);
 
         //When
@@ -185,7 +186,7 @@ public class JaspiAuthLoginModuleTest {
 
         //Then
         assertTrue(processMethodCalled);
-        verify(jaspiAuthWrapper).validateRequest(Matchers.<MessageInfo>anyObject(), Matchers.<Subject>anyObject());
+        verify(jaspiAuthWrapper).validateRequest(any(), any());
         assertTrue(exceptionCaught);
         assertEquals(exception.getErrorCode(), "authFailed");
     }
@@ -197,7 +198,7 @@ public class JaspiAuthLoginModuleTest {
         Callback[] callbacks = new Callback[0];
         int state = ISAuthConstants.LOGIN_START;
 
-        given(jaspiAuthWrapper.validateRequest(Matchers.<MessageInfo>anyObject(), Matchers.<Subject>anyObject()))
+        given(jaspiAuthWrapper.validateRequest(any(), any()))
                 .willReturn(AuthStatus.SEND_CONTINUE);
 
         //When
@@ -205,7 +206,7 @@ public class JaspiAuthLoginModuleTest {
 
         //Then
         assertTrue(processMethodCalled);
-        verify(jaspiAuthWrapper).validateRequest(Matchers.<MessageInfo>anyObject(), Matchers.<Subject>anyObject());
+        verify(jaspiAuthWrapper).validateRequest(any(), any());
         assertEquals(returnedState, ISAuthConstants.LOGIN_IGNORE);
     }
 

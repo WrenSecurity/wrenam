@@ -22,7 +22,6 @@ import static org.mockito.Mockito.*;
 
 import org.forgerock.json.JsonPointer;
 import org.forgerock.util.query.QueryFilter;
-import org.mockito.AdditionalAnswers;
 import org.mockito.ArgumentCaptor;
 import org.testng.annotations.Test;
 
@@ -64,8 +63,8 @@ public class QueryByStringFilterConverterTest {
         verify(mockConverter, times(1)).visitAndFilter(any(), captor.capture());
         assertThat(captor.getValue().size()).isEqualTo(2);
 
-        verify(mockConverter, times(1)).visitEqualsFilter(any(), any(JsonPointer.class), anyObject());
-        verify(mockConverter, times(1)).visitContainsFilter(any(), any(JsonPointer.class), anyObject());
+        verify(mockConverter, times(1)).visitEqualsFilter(any(), any(JsonPointer.class), any());
+        verify(mockConverter, times(1)).visitContainsFilter(any(), any(JsonPointer.class), any());
     }
 
     @Test
@@ -84,8 +83,8 @@ public class QueryByStringFilterConverterTest {
         verify(mockConverter, times(1)).visitOrFilter(any(), captor.capture());
         assertThat(captor.getValue().size()).isEqualTo(2);
 
-        verify(mockConverter, times(1)).visitEqualsFilter(any(), any(JsonPointer.class), anyObject());
-        verify(mockConverter, times(1)).visitContainsFilter(any(), any(JsonPointer.class), anyObject());
+        verify(mockConverter, times(1)).visitEqualsFilter(any(), any(JsonPointer.class), any());
+        verify(mockConverter, times(1)).visitContainsFilter(any(), any(JsonPointer.class), any());
     }
 
     @Test
@@ -111,7 +110,7 @@ public class QueryByStringFilterConverterTest {
         assertThat(orCaptor.getAllValues().get(0).size()).isEqualTo(2);
         assertThat(orCaptor.getAllValues().get(1).size()).isEqualTo(2);
 
-        verify(mockConverter, times(2)).visitEqualsFilter(any(), any(JsonPointer.class), anyObject());
-        verify(mockConverter, times(2)).visitContainsFilter(any(), any(JsonPointer.class), anyObject());
+        verify(mockConverter, times(2)).visitEqualsFilter(any(), any(JsonPointer.class), any());
+        verify(mockConverter, times(2)).visitContainsFilter(any(), any(JsonPointer.class), any());
     }
 }

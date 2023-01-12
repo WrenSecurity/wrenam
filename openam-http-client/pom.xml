@@ -13,61 +13,41 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014-2016 ForgeRock AS.
- * Portions Copyright 2018-2022 Wren Security
+ * Portions Copyright 2018-2023 Wren Security
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.forgerock.openam</groupId>
-        <artifactId>openam</artifactId>
-        <version>14.0.0-SNAPSHOT</version>
+        <groupId>org.wrensecurity.wrenam</groupId>
+        <artifactId>wrenam-project</artifactId>
+        <version>15.0.0-SNAPSHOT</version>
     </parent>
+
+    <artifactId>openam-http-client</artifactId>
 
     <name>Wren:AM - HTTP client</name>
     <description>Common HTTP client implementation used by ForgeRock Wren:AM custom scripting modules</description>
-    <url>https://svn.forgerock.org/openam/branches/sprint_57_script_auth_module/openam/openam-http-client</url>
-    <artifactId>openam-http-client</artifactId>
-
-    <licenses>
-        <license>
-            <name>CDDL 1.0</name>
-            <url>http://www.opensource.org/licenses/CDDL-1.0</url>
-            <comments>Common Development and Distribution License (CDDL) 1.0.
-                This license applies as indicated in the source files.</comments>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
-
-    <issueManagement>
-        <system>Jira</system>
-        <url>https://bugster.forgerock.org/jira/browse/COMMONS</url>
-    </issueManagement>
-
-    <scm>
-        <url>https://svn.forgerock.org/commons/forgerock-http-client/trunk</url>
-        <connection>scm:svn:https://svn.forgerock.org/commons/forgerock-http-client/trunk</connection>
-        <developerConnection>scm:svn:https://svn.forgerock.org/commons/forgerock-http-client/trunk</developerConnection>
-      <tag>release/13.0.0</tag>
-  </scm>
 
     <dependencies>
         <dependency>
             <groupId>org.wrensecurity.commons</groupId>
             <artifactId>wrensec-guice-core</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.wrensecurity.http</groupId>
             <artifactId>chf-http-core</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.restlet.jee</groupId>
             <artifactId>org.restlet</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.wrensecurity.commons</groupId>
             <artifactId>forgerock-util</artifactId>
         </dependency>
     </dependencies>
-
 </project>

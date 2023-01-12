@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.forgerock.json.JsonValue.*;
 import static org.forgerock.json.resource.Resources.*;
 import static org.forgerock.openam.utils.Time.newDate;
-import static org.mockito.BDDMockito.anyObject;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.*;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.mock;
@@ -48,7 +48,7 @@ import org.forgerock.openam.test.apidescriptor.ApiAnnotationAssert;
 import org.forgerock.services.context.ClientContext;
 import org.forgerock.services.context.Context;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Matchers;
+import org.mockito.ArgumentMatchers;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -69,7 +69,7 @@ public class TrustedDevicesResourceTest {
 
         resource = new TrustedDevicesResource(dao, contextHelper);
 
-        given(contextHelper.getUserId((Context) anyObject())).willReturn("demo");
+        given(contextHelper.getUserId(any(Context.class))).willReturn("demo");
 
         realmTestHelper = new RealmTestHelper();
         realmTestHelper.setupRealmClass();
@@ -103,7 +103,7 @@ public class TrustedDevicesResourceTest {
         connection.query(ctx(), request, handler);
 
         //Then
-        verify(handler, times(2)).handleResource(Matchers.<ResourceResponse>anyObject());
+        verify(handler, times(2)).handleResource(any());
     }
 
     @Test

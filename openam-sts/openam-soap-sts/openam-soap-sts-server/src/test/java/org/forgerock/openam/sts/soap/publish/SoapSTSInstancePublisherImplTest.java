@@ -37,7 +37,7 @@ import org.forgerock.openam.sts.soap.config.user.SoapSTSInstanceConfig;
 import org.forgerock.openam.sts.soap.config.user.SoapSTSKeystoreConfig;
 import org.forgerock.openam.sts.soap.healthcheck.HealthCheck;
 import org.forgerock.openam.sts.soap.healthcheck.HealthCheckImpl;
-import org.mockito.Matchers;
+import org.mockito.ArgumentMatchers;
 import org.slf4j.Logger;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -47,7 +47,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;

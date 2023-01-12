@@ -13,30 +13,86 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2012-2016 ForgeRock AS.
- * Portions Copyright 2018 Wren Security.
+ * Portions Copyright 2018-2023 Wren Security.
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- Parent Project -->
     <parent>
-        <groupId>org.forgerock.openam</groupId>
+        <groupId>org.wrensecurity.wrenam</groupId>
         <artifactId>openam-cli</artifactId>
-        <version>14.0.0-SNAPSHOT</version>
+        <version>15.0.0-SNAPSHOT</version>
     </parent>
 
-    <!-- Component Definition -->
+    <artifactId>openam-cli-impl</artifactId>
+
     <name>Wren:AM - CLI Implementation</name>
     <description>Wren:AM Command Line Implementation</description>
-    <artifactId>openam-cli-impl</artifactId>
-    <packaging>jar</packaging>
 
-    <!-- Build -->
+    <dependencies>
+        <dependency>
+            <groupId>org.wrensecurity.wrenam</groupId>
+            <artifactId>openam-cli-definitions</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.wrensecurity.wrenam</groupId>
+            <artifactId>openam-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.wrensecurity.wrenam</groupId>
+            <artifactId>openam-core-rest</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.wrensecurity.wrenam</groupId>
+            <artifactId>OpenFM</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.wrensecurity.wrenam</groupId>
+            <artifactId>openam-shared</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.wrensecurity.wrenam</groupId>
+            <artifactId>openam-entitlements</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.wrensecurity.wrenam</groupId>
+            <artifactId>openam-xacml3-schema</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.wrensecurity.wrenam</groupId>
+            <artifactId>openam-audit-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.wrensecurity.wrenam</groupId>
+            <artifactId>openam-audit-configuration</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
     <build>
         <plugins>
             <plugin>
-                <groupId>org.forgerock.maven.plugins</groupId>
+                <?m2e execute onConfiguration?>
+                <groupId>${project.groupId}</groupId>
                 <artifactId>build-helper-plugin</artifactId>
+
                 <executions>
                     <execution>
                         <phase>generate-resources</phase>
@@ -45,13 +101,15 @@
                         </goals>
                     </execution>
                 </executions>
+
                 <dependencies>
                     <dependency>
-                        <groupId>org.forgerock.openam</groupId>
+                        <groupId>org.wrensecurity.wrenam</groupId>
                         <artifactId>openam-cli-definitions</artifactId>
                         <version>${project.version}</version>
                     </dependency>
                 </dependencies>
+
                 <configuration>
                     <outputDir>${project.build.directory}/generated-resources</outputDir>
                     <definitions>
@@ -62,47 +120,4 @@
             </plugin>
         </plugins>
     </build>
-    <dependencies>
-        <dependency>
-            <groupId>org.forgerock.openam</groupId>
-            <artifactId>openam-cli-definitions</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.forgerock.openam</groupId>
-            <artifactId>openam-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.forgerock.openam</groupId>
-            <artifactId>openam-core-rest</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.forgerock.openam</groupId>
-            <artifactId>OpenFM</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.forgerock.openam</groupId>
-            <artifactId>openam-shared</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.forgerock.openam</groupId>
-            <artifactId>openam-entitlements</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.forgerock.openam</groupId>
-            <artifactId>openam-xacml3-schema</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.forgerock.openam</groupId>
-            <artifactId>openam-audit-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.forgerock.openam</groupId>
-            <artifactId>openam-audit-configuration</artifactId>
-        </dependency>
-    </dependencies>
 </project>

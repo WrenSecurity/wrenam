@@ -93,7 +93,7 @@ public class TokenOperationsStoreTest {
         tokenOperationsStore.addTokenOperation(tokenType, operation, true);
 
         //Then
-        verifyZeroInteractions(operationStoreFactory);
+        verifyNoInteractions(operationStoreFactory);
         verify(typeOperationStore).add(operation);
     }
 
