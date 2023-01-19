@@ -26,6 +26,7 @@
  *
  * Portions Copyrighted 2011-2016 ForgeRock AS.
  * Portions Copyrighted 2014 Nomura Research Institute, Ltd
+ * Portions Copyrighted 2023 Wren Security
  */
 package com.sun.identity.authentication.service;
 
@@ -566,6 +567,7 @@ public class AMLoginContext {
         AuthenticationFailureReason failureReason = null;
         AMAccountLockout amAccountLockout;
         boolean loginSuccess = false;
+        java.util.Locale locale = com.sun.identity.shared.locale.Locale.getLocale(authContext.getLoginState().getLocale());
         try {
             loginContext.login();
             Subject subject = loginContext.getSubject();
@@ -577,7 +579,7 @@ public class AMLoginContext {
                     debug.warning("AMLoginContext.runLogin():auth failed, "
                             +  "using invalid realm name for internal user");
                 }
-                logFailedMessage = AuthUtils.getErrorVal(AMAuthErrorCode.AUTH_MODULE_DENIED, AuthUtils.ERROR_MESSAGE);
+                logFailedMessage = AuthUtils.getErrorVal(AMAuthErrorCode.AUTH_MODULE_DENIED, AuthUtils.ERROR_MESSAGE, locale);
                 logFailedError = "MODULEDENIED";
                 failureReason = MODULE_DENIED;
                 throw new AuthException(AMAuthErrorCode.AUTH_MODULE_DENIED, null);
@@ -645,7 +647,7 @@ public class AMLoginContext {
                             debug.message("login success");
                         } else {
                             logFailedMessage = AuthUtils.getErrorVal(AMAuthErrorCode.AUTH_MAX_SESSION_REACHED,
-                                    AuthUtils.ERROR_MESSAGE);
+                                    AuthUtils.ERROR_MESSAGE, locale);
                             logFailedError = "MAXSESSIONREACHED";
                             failureReason = MAX_SESSION_REACHED;
                             throw new AuthException(AMAuthErrorCode.AUTH_MAX_SESSION_REACHED, null);
@@ -692,7 +694,6 @@ public class AMLoginContext {
                 debug.message(e.getMessage());
             }
             isFailed = true;
-            java.util.Locale locale = com.sun.identity.shared.locale.Locale.getLocale(authContext.getLoginState().getLocale());
             authContext.getLoginState().setModuleErrorMessage(e.getL10NMessage(locale));
             authContext.getLoginState().setErrorCode(e.getAuthErrorCode());
             authContext.setLoginException(e);
@@ -702,7 +703,6 @@ public class AMLoginContext {
                 debug.message("Exception " , me);
             }
 
-            java.util.Locale locale = com.sun.identity.shared.locale.Locale.getLocale(authContext.getLoginState().getLocale());
             authContext.getLoginState().setModuleErrorMessage(me.getL10NMessage(locale));
             authContext.getLoginState().setErrorMessage(me.getL10NMessage(locale));
             isFailed = true;
@@ -714,7 +714,7 @@ public class AMLoginContext {
                     debug.warning(
                             "AMLoginContext.runLogin():auth failed, using invalid auth module name for internal user");
                 }
-                logFailedMessage = AuthUtils.getErrorVal(AMAuthErrorCode.AUTH_MODULE_DENIED, AuthUtils.ERROR_MESSAGE);
+                logFailedMessage = AuthUtils.getErrorVal(AMAuthErrorCode.AUTH_MODULE_DENIED, AuthUtils.ERROR_MESSAGE, locale);
                 logFailedError = "MODULEDENIED";
                 failureReason = MODULE_DENIED;
                 authContext.getLoginState().setErrorCode(AMAuthErrorCode.AUTH_MODULE_DENIED);
@@ -1476,8 +1476,9 @@ public class AMLoginContext {
             if (debug.messageEnabled()) {
                 debug.message("resProperty is.. :" + resProperty);
             }
-            String errorMsg = AuthUtils.getErrorVal(errorCode, AuthUtils.ERROR_MESSAGE);
-            String templateName = AuthUtils.getErrorVal(errorCode, AuthUtils.ERROR_TEMPLATE);
+            java.util.Locale locale = com.sun.identity.shared.locale.Locale.getLocale(authContext.getLoginState().getLocale());
+            String errorMsg = AuthUtils.getErrorVal(errorCode, AuthUtils.ERROR_MESSAGE, locale);
+            String templateName = AuthUtils.getErrorVal(errorCode, AuthUtils.ERROR_TEMPLATE, locale);
 
             if (debug.messageEnabled()) {
                 debug.message("Error Message : " + errorMsg);
@@ -1496,8 +1497,9 @@ public class AMLoginContext {
         authContext.getLoginState().setErrorCode(AMAuthErrorCode.AUTH_TIMEOUT);
         authContext.getLoginState().logFailed(bundle.getString("loginTimeout"), "LOGINTIMEOUT");
         auditor.auditLoginFailure(authContext.getLoginState(), LOGIN_TIMEOUT);
-        authContext.getLoginState().setErrorMessage(AuthUtils.getErrorVal(AMAuthErrorCode.AUTH_TIMEOUT, AuthUtils.ERROR_MESSAGE));
-        return AuthUtils.getErrorVal(AMAuthErrorCode.AUTH_TIMEOUT, AuthUtils.ERROR_TEMPLATE);
+        java.util.Locale locale = com.sun.identity.shared.locale.Locale.getLocale(authContext.getLoginState().getLocale());
+        authContext.getLoginState().setErrorMessage(AuthUtils.getErrorVal(AMAuthErrorCode.AUTH_TIMEOUT, AuthUtils.ERROR_MESSAGE, locale));
+        return AuthUtils.getErrorVal(AMAuthErrorCode.AUTH_TIMEOUT, AuthUtils.ERROR_TEMPLATE, locale);
     }
 
     /**
