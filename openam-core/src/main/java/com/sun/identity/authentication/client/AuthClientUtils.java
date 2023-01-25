@@ -25,6 +25,7 @@
  * $Id: AuthClientUtils.java,v 1.40 2010/01/22 03:31:01 222713 Exp $
  *
  * Portions Copyrighted 2010-2016 ForgeRock AS.
+ * Portions Copyrighted 2023 Wren Security
  */
 package com.sun.identity.authentication.client;
 
@@ -66,6 +67,7 @@ import com.sun.identity.shared.debug.Debug;
 import com.sun.identity.shared.encode.Base64;
 import com.sun.identity.shared.encode.CookieUtils;
 import com.sun.identity.shared.encode.URLEncDec;
+import com.sun.identity.shared.locale.AMResourceBundleCache;
 import com.sun.identity.shared.locale.Locale;
 import com.sun.identity.sm.SMSEntry;
 import com.sun.identity.sm.SMSException;
@@ -124,7 +126,6 @@ public class AuthClientUtils {
 
     private static AMClientDetector clientDetector;
     private static Client defaultClient;
-    private static volatile ResourceBundle bundle;
     private static final boolean urlRewriteInPath =
         Boolean.valueOf(SystemProperties.get(
         Constants.REWRITE_AS_PATH,"")).booleanValue();
@@ -205,7 +206,6 @@ public class AuthClientUtils {
                 defaultClient = ClientsManager.getDefaultInstance();
             }
         }
-        bundle = Locale.getInstallResourceBundle(BUNDLE_NAME);
         String proto = SystemProperties.get(Constants.DISTAUTH_SERVER_PROTOCOL);
         String host = null;
         String port = null;
@@ -1849,23 +1849,24 @@ public class AuthClientUtils {
         return isTimedOut;
     }
 
-    public static String getErrorVal(String errorCode,String type) {
+    public static String getErrorVal(String errorCode, String type) {
+        java.util.Locale locale = Locale.getDefaultLocale();
+        return getErrorVal(errorCode, type, locale);
+    }
 
-        if (Locale.getDefaultLocale() != bundle.getLocale()) {
-            bundle = Locale.getInstallResourceBundle(BUNDLE_NAME);
-        }
-
+    public static String getErrorVal(String errorCode, String type, java.util.Locale locale) {
+        ResourceBundle bundle = AMResourceBundleCache.getInstance().getResBundle(BUNDLE_NAME, locale);
         String errorMsg=null;
         String templateName=null;
         String resProperty = bundle.getString(errorCode);
         if (utilDebug.messageEnabled()) {
             utilDebug.message("errorCod='{}', resProperty='{}'", errorCode, resProperty);
         }
-        if ((resProperty != null) && (resProperty.length() != 0)) {
+        if (resProperty.length() != 0) {
             int commaIndex = resProperty.indexOf(MSG_DELIMITER);
             if (commaIndex != -1) {
                 templateName = 
-                    resProperty.substring(commaIndex+1,resProperty.length());
+                    resProperty.substring(commaIndex + 1);
                 errorMsg = resProperty.substring(0,commaIndex);
             } else {
                 errorMsg = resProperty;
