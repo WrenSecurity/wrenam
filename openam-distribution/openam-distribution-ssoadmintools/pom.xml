@@ -129,8 +129,8 @@
                                 </tstamp>
                                 <property name="version.set" value="${project.version}" />
 
-                                <filter token="DATESTAMP" value="${war.time.stamp}" />
-                                <filter token="VERSION" value="${version.set}" />
+                                <filter token="VERSION" value="${project.version}" />
+                                <filter token="DATESTAMP" value="${project.build.outputTimestamp}" />
 
                                 <!-- Set our Version Information for the Package -->
                                 <copy todir="${project.build.directory}/resources" overwrite="true" filtering="true" flatten="yes">

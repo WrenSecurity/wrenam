@@ -104,7 +104,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
 
-        <!-- XXX Skip PMD plugin execution (code base is not ready for it) -->
+        <!-- XXX Skip PMD plugin execution (https://github.com/WrenSecurity/wrenam/issues/71) -->
         <pmd.skip>true</pmd.skip>
 
         <!-- Surefire Argument Line -->
@@ -134,6 +134,9 @@
         <openam.version>Wren:AM ${project.version}</openam.version>
 
         <!-- XXX END Configuration under consideration -->
+
+        <!-- https://maven.apache.org/guides/mini/guide-reproducible-builds.html -->
+        <project.build.outputTimestamp>2023-01-01T00:00:00Z</project.build.outputTimestamp>
 
         <!-- Wren Security Dependencies -->
         <wrends.version>4.0.0-RC1</wrends.version>
@@ -1200,7 +1203,7 @@
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>buildnumber-maven-plugin</artifactId>
-                    <version>1.3</version>
+                    <version>3.0.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.skins</groupId>
@@ -1261,10 +1264,17 @@
                 <artifactId>buildnumber-maven-plugin</artifactId>
 
                 <configuration>
-                    <buildNumberPropertyName>git.short.sha1</buildNumberPropertyName>
                     <getRevisionOnlyOnce>true</getRevisionOnlyOnce>
                     <shortRevisionLength>10</shortRevisionLength>
                 </configuration>
+
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>create</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>
@@ -1383,15 +1393,15 @@
                         <index>true</index>
                         <manifestEntries>
                             <Specification-Title>${project.name}</Specification-Title>
-                            <Specification-Version>${project.version} - ${git.short.sha1}</Specification-Version>
+                            <Specification-Version>${project.version} - ${buildNumber}</Specification-Version>
                             <Specification-Vendor>Wren Security</Specification-Vendor>
                             <Implementation-Title>${project.name}</Implementation-Title>
-                            <Implementation-Version>${project.version} - ${git.short.sha1}</Implementation-Version>
+                            <Implementation-Version>${project.version} - ${buildNumber}</Implementation-Version>
                             <Implementation-Vendor>Wren Security</Implementation-Vendor>
                             <Built-By>${user.name}</Built-By>
                             <Build-Jdk>${java.version}</Build-Jdk>
                             <Version>${project.version}</Version>
-                            <Revision>${git.short.sha1}</Revision>
+                            <Revision>${buildNumber}</Revision>
                         </manifestEntries>
                     </archive>
                 </configuration>

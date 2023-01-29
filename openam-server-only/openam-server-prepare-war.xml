@@ -24,26 +24,18 @@
 * "Portions Copyrighted [year] [name of copyright owner]"
 *
 -->
-
-<!-- Parent Project -->
-<project name="openam-server-war-preparation" default="openam_server-prepare-war">
+<project name="openam-server-war-preparation" default="openam-server-prepare-war">
 
     <description>OpenAM Server Prepare WAR ANT Script</description>
     <target name="openam-server-prepare-war">
 
-
-        <tstamp>
-            <format property="war.time.stamp" pattern="yyyy-MMMM-dd HH:mm" locale="en,UK"/>
-        </tstamp>
-        <property name="version.set" value="${openam.version}"/>
         <property name="opendj.repackage.dir" value="${project.build.directory}/repackage-wrends"/>
-
 
         <filter token="FULL_VERSION_INFO" value="${full.version.information}"/>
 
-        <filter token="DATESTAMP" value="${war.time.stamp}"/>
-        <filter token="VERSION" value="${version.set}"/>
-        <filter token="REVISION" value="${git.short.sha1}"/>
+        <filter token="VERSION" value="${openam.version}"/>
+        <filter token="REVISION" value="${buildNumber}"/>
+        <filter token="DATESTAMP" value="${project.build.outputTimestamp}"/>
 
         <mkdir dir="${openam.temp.target}"/>
 

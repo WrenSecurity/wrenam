@@ -39,14 +39,13 @@
         <exclusion.list.filename>opendj_exclusion_list</exclusion.list.filename>
         <!-- Default folder to use for pulling in third party distribution legal notices. -->
         <third.party.legal.directory>legal</third.party.legal.directory>
-        <!-- Default value for whether the build is running in oem mode -->
-        <is.oem.build>false</is.oem.build>
 
         <full.version.information>@VERSION@ Build @REVISION@ (@DATESTAMP@)</full.version.information>
     </properties>
 
     <build>
         <finalName>WrenAM-ServerOnly-${project.version}</finalName>
+
         <plugins>
             <plugin>
                 <?m2e execute onConfiguration?>
@@ -55,7 +54,7 @@
                 <executions>
                     <execution>
                         <id>fetch-wrends</id>
-                        <phase>validate</phase>
+                        <phase>generate-resources</phase>
 
                         <goals>
                             <goal>copy</goal>
@@ -66,7 +65,6 @@
                                 <artifactItem>
                                     <groupId>org.wrensecurity.wrends</groupId>
                                     <artifactId>opendj-server-legacy</artifactId>
-                                    <version>${wrends.server.legacy}</version>
                                     <type>zip</type>
                                 </artifactItem>
                             </artifactItems>
@@ -77,7 +75,7 @@
 
                     <execution>
                         <id>unpack-modules</id>
-                        <phase>validate</phase>
+                        <phase>generate-resources</phase>
 
                         <goals>
                             <goal>unpack</goal>
@@ -124,7 +122,7 @@
                 <executions>
                     <execution>
                         <id>war-pre-packaging</id>
-                        <phase>validate</phase>
+                        <phase>generate-resources</phase>
 
                         <goals>
                             <goal>run</goal>
@@ -148,8 +146,6 @@
                                 <property name="federation.xml.dir" value="${project.basedir}/../openam-federation/OpenFM/src/main/resources/xml" />
 
                                 <property name="exclusion.list" value="${exclusion.list.filename}" />
-
-                                <property name="is.oem" value="${is.oem.build}" />
 
                                 <ant antfile="${project.basedir}/openam-server-prepare-war.xml">
                                     <target name="openam-server-prepare-war" />
@@ -191,13 +187,11 @@
                     <archive>
                         <manifestEntries>
                             <Specification-Title>Wren:AM Server</Specification-Title>
-                            <Specification-Version>${project.version} - ${maven.build.timestamp}</Specification-Version>
+                            <Specification-Version>${project.version} - ${project.build.outputTimestamp}</Specification-Version>
                             <Specification-Vendor>Wren Security</Specification-Vendor>
                             <Implementation-Title>Wren:AM Server</Implementation-Title>
-                            <Implementation-Version>${project.version} - ${maven.build.timestamp}
-                            </Implementation-Version>
-                            <Implementation-Vendor>ForgeRock</Implementation-Vendor>
-                            <Build-Time>${maven.build.timestamp}</Build-Time>
+                            <Implementation-Version>${project.version} - ${project.build.outputTimestamp}</Implementation-Version>
+                            <Implementation-Vendor>Wren Security</Implementation-Vendor>
                         </manifestEntries>
                     </archive>
 
@@ -233,6 +227,7 @@
                         <nonFilteredFileExtension>7z</nonFilteredFileExtension>
                         <nonFilteredFileExtension>woff2</nonFilteredFileExtension>
                         <nonFilteredFileExtension>woff</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>otf</nonFilteredFileExtension>
                         <nonFilteredFileExtension>ttf</nonFilteredFileExtension>
                         <!-- See: http://en.wikipedia.org/wiki/List_of_file_formats -->
                     </nonFilteredFileExtensions>

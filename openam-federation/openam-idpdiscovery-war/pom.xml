@@ -42,12 +42,11 @@
                     <archive>
                         <manifestEntries>
                             <Specification-Title>Wren:AM IdP Discovery WAR</Specification-Title>
-                            <Specification-Version>${project.version} - ${maven.build.timestamp}</Specification-Version>
+                            <Specification-Version>${project.version} - ${project.build.outputTimestamp}</Specification-Version>
                             <Specification-Vendor>Wren Security</Specification-Vendor>
                             <Implementation-Title>Wren:AM IdP Discovery WAR</Implementation-Title>
-                            <Implementation-Version>${project.version} - ${maven.build.timestamp}</Implementation-Version>
-                            <Implementation-Vendor>ForgeRock</Implementation-Vendor>
-                            <Build-Time>${maven.build.timestamp}</Build-Time>
+                            <Implementation-Version>${project.version} - ${project.build.outputTimestamp}</Implementation-Version>
+                            <Implementation-Vendor>Wren Security</Implementation-Vendor>
                         </manifestEntries>
                     </archive>
 

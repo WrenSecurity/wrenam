@@ -41,10 +41,10 @@
                     <archive>
                         <manifestEntries>
                             <Specification-Title>Wren:AM Example ClientSDK WAR</Specification-Title>
-                            <Specification-Version>${project.version} - ${git.short.sha1}</Specification-Version>
+                            <Specification-Version>${project.version} - ${buildNumber}</Specification-Version>
                             <Specification-Vendor>Wren Security</Specification-Vendor>
                             <Implementation-Title>Wren:AM Example ClientSDK WAR</Implementation-Title>
-                            <Implementation-Version>${project.version} - ${git.short.sha1}</Implementation-Version>
+                            <Implementation-Version>${project.version} - ${buildNumber}</Implementation-Version>
                             <Implementation-Vendor>Wren Security</Implementation-Vendor>
                         </manifestEntries>
                     </archive>

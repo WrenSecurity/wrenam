@@ -42,12 +42,11 @@
                 <executions>
                     <execution>
                         <id>uberwar</id>
+                        <phase>prepare-package</phase>
 
                         <goals>
                             <goal>uberwar</goal>
                         </goals>
-
-                        <phase>prepare-package</phase>
                     </execution>
                 </executions>
 
@@ -91,42 +90,4 @@
             <type>war</type>
         </dependency>
     </dependencies>
-
-    <profiles>
-        <profile>
-            <id>with-oem</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-assembly-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>oem-war</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>single</goal>
-                                </goals>
-                                <configuration>
-                                    <descriptors>
-                                        <descriptor>src/assembly/oem-assembly.xml</descriptor>
-                                    </descriptors>
-                                    <filters>
-                                        <filter>src/assembly/oem.properties</filter>
-                                    </filters>
-                                    <attach>true</attach>
-                                    <archive>
-                                        <addMavenDescriptor>false</addMavenDescriptor>
-                                        <manifest>
-                                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
-                                        </manifest>
-                                    </archive>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
 </project>
