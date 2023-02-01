@@ -20,7 +20,7 @@ import static org.forgerock.json.JsonValue.*;
 import static org.forgerock.openam.services.push.PushNotificationConstants.*;
 import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.*;
-import static org.mockito.Mockito.anyObject;
+import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
@@ -126,7 +126,7 @@ public class SnsMessageResourceTest {
 
         ActionRequest request = mock(ActionRequest.class);
         given(request.getContent()).willReturn(content);
-        doThrow(new NotFoundException()).when(mockDispatcher).handle(anyString(), (JsonValue) anyObject());
+        doThrow(new NotFoundException()).when(mockDispatcher).handle(anyString(), any(JsonValue.class));
         given(mockCTS.read("asdf")).willReturn(mockToken);
         given(mockToken.getBlob()).willReturn("{ }".getBytes());
         given(mockSerialisation.serialise(any())).willReturn("");
@@ -156,7 +156,7 @@ public class SnsMessageResourceTest {
 
         ActionRequest request = mock(ActionRequest.class);
         given(request.getContent()).willReturn(content);
-        doThrow(new NotFoundException()).when(mockDispatcher).handle(anyString(), (JsonValue) anyObject());
+        doThrow(new NotFoundException()).when(mockDispatcher).handle(anyString(), any(JsonValue.class));
         given(mockCTS.read("asdf")).willReturn(mockToken);
         given(mockToken.getBlob()).willReturn("{ }".getBytes());
         given(mockSerialisation.serialise(any())).willReturn("");
@@ -206,7 +206,7 @@ public class SnsMessageResourceTest {
         ActionRequest request = mock(ActionRequest.class);
         given(request.getContent()).willReturn(content);
 
-        doThrow(new PredicateNotMetException("")).when(mockDispatcher).handle(anyString(), (JsonValue) anyObject());
+        doThrow(new PredicateNotMetException("")).when(mockDispatcher).handle(anyString(), any(JsonValue.class));
 
         //when
         Promise<ActionResponse, ResourceException> result = messageResource.authenticate(realmContext, request);
@@ -229,7 +229,7 @@ public class SnsMessageResourceTest {
         given(request.getContent()).willReturn(content);
         given(mockCTS.read("asdf")).willReturn(null);
 
-        doThrow(new NotFoundException()).when(mockDispatcher).handle(anyString(), (JsonValue) anyObject());
+        doThrow(new NotFoundException()).when(mockDispatcher).handle(anyString(), any(JsonValue.class));
 
         //when
         Promise<ActionResponse, ResourceException> result = messageResource.authenticate(realmContext, request);

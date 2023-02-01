@@ -65,8 +65,7 @@ public class DeleteOnQueryResultHandlerTest {
         Collection<PartialToken> hits = getHits(5);
         handler.processResults(hits);
 
-        willThrow(new CoreTokenException("")).willNothing().given(mockTaskDispatcher)
-                .delete(anyString(), any(ResultHandler.class));
+        willThrow(new CoreTokenException("")).given(mockTaskDispatcher).delete(anyString(), any());
         for (PartialToken hit : hits) {
             verify(mockTaskDispatcher).delete(eq(hit.<String>getValue(CoreTokenField.TOKEN_ID)),
                     any());

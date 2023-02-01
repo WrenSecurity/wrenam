@@ -34,7 +34,6 @@ import org.forgerock.json.JsonException;
 import org.forgerock.json.JsonValue;
 import org.forgerock.json.resource.BadRequestException;
 import org.forgerock.json.test.assertj.AssertJJsonValueAssert;
-import org.mockito.Matchers;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -173,7 +172,7 @@ public class SmsJsonConverterTest {
     @Test
     public void convertFromJson() throws Exception {
         //Given
-        given(serviceSchema.validateAttributes(Matchers.<Map>anyObject())).willReturn(true);
+        given(serviceSchema.validateAttributes(any())).willReturn(true);
 
         //When
         Map<String, Set<String>> result = converter.fromJson(jsonRepresentation);
@@ -186,7 +185,7 @@ public class SmsJsonConverterTest {
     @Test
     public void convertToJson() throws SMSException {
         //Given
-        given(serviceSchema.validateAttributes(Matchers.<Map>anyObject())).willReturn(true);
+        given(serviceSchema.validateAttributes(any())).willReturn(true);
 
         //When
         JsonValue result = converter.toJson(mapRepresentation, true);
@@ -229,7 +228,7 @@ public class SmsJsonConverterTest {
     @Test(expectedExceptions = JsonException.class)
     public void invalidValuesToJson() throws SMSException {
         //Given
-        given(serviceSchema.validateAttributes(Matchers.<Map>anyObject())).willReturn(false);
+        given(serviceSchema.validateAttributes(any())).willReturn(false);
 
         //When
         converter.toJson(mapRepresentation, true);
@@ -238,7 +237,7 @@ public class SmsJsonConverterTest {
     @Test(expectedExceptions = JsonException.class)
     public void invalidValuesToMap() throws Exception {
         //Given
-        given(serviceSchema.validateAttributes(Matchers.<Map>anyObject())).willReturn(false);
+        given(serviceSchema.validateAttributes(any())).willReturn(false);
 
         //When
         converter.fromJson(jsonRepresentation);

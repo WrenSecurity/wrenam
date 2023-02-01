@@ -59,7 +59,7 @@ public class TokenDataStoreTest {
     public void testCreate() throws Exception {
         // Given
         Token token = new Token("123", TokenType.GENERIC);
-        when(adapter.toToken(anyObject())).thenReturn(token);
+        when(adapter.toToken(any())).thenReturn(token);
         Task task = givenCreateTaskCompletesSuccessfully();
 
         // When
@@ -74,7 +74,7 @@ public class TokenDataStoreTest {
     public void testCreateError() throws Exception {
         // Given
         Token token = new Token("123", TokenType.GENERIC);
-        when(adapter.toToken(anyObject())).thenReturn(token);
+        when(adapter.toToken(any())).thenReturn(token);
         givenCreateTaskFailsToComplete();
 
         // When
@@ -88,7 +88,7 @@ public class TokenDataStoreTest {
         // Given
         Token token = new Token("123", TokenType.GENERIC);
         final Task task = mock(Task.class);
-        when(adapter.toToken(anyObject())).thenReturn(token);
+        when(adapter.toToken(any())).thenReturn(token);
         when(taskFactory.create(any(Token.class), any(Options.class), any(ResultHandler.class))).thenReturn(task);
         doThrow(DataLayerException.class).when(taskExecutor).execute("123", task);
 
@@ -156,7 +156,7 @@ public class TokenDataStoreTest {
     public void testUpdate() throws Exception {
         // Given
         final Token token = new Token("123", TokenType.GENERIC);
-        when(adapter.toToken(anyObject())).thenReturn(token);
+        when(adapter.toToken(any())).thenReturn(token);
         Task readTask = givenReadTaskCompletesSuccessfully("123", token);
         Task updateTask = givenUpdateTaskCompletesSuccessfully(token);
 
@@ -173,7 +173,7 @@ public class TokenDataStoreTest {
     public void testUpdateNotExisting() throws Exception {
         // Given
         final Token token = new Token("123", TokenType.GENERIC);
-        when(adapter.toToken(anyObject())).thenReturn(token);
+        when(adapter.toToken(any())).thenReturn(token);
         givenReadTaskCompletesSuccessfully("123", null);
 
         // When

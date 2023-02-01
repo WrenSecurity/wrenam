@@ -13,42 +13,43 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2013-2016 ForgeRock AS.
- * Portions Copyright 2018 Wren Security.
+ * Portions Copyright 2018-2023 Wren Security.
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- Parent Project -->
     <parent>
-        <groupId>org.forgerock.openam</groupId>
+        <groupId>org.wrensecurity.wrenam</groupId>
         <artifactId>openam-federation</artifactId>
-        <version>14.0.0-SNAPSHOT</version>
+        <version>15.0.0-SNAPSHOT</version>
     </parent>
 
-    <!-- Component Definition -->
-    <name>Wren:AM - IdP Discovery WAR</name>
-    <description>Wren:AM IdP Discovery WAR</description>
     <artifactId>openam-idpdiscovery-war</artifactId>
     <packaging>war</packaging>
 
+    <name>Wren:AM - IdP Discovery WAR</name>
+    <description>Wren:AM IdP Discovery WAR</description>
+
     <build>
         <finalName>IDPDiscovery-${project.version}</finalName>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
+
                 <configuration>
                     <archive>
                         <manifestEntries>
                             <Specification-Title>Wren:AM IdP Discovery WAR</Specification-Title>
-                            <Specification-Version>${project.version} - ${maven.build.timestamp}</Specification-Version>
+                            <Specification-Version>${project.version} - ${project.build.outputTimestamp}</Specification-Version>
                             <Specification-Vendor>Wren Security</Specification-Vendor>
                             <Implementation-Title>Wren:AM IdP Discovery WAR</Implementation-Title>
-                            <Implementation-Version>${project.version} - ${maven.build.timestamp}</Implementation-Version>
-                            <Implementation-Vendor>ForgeRock</Implementation-Vendor>
-                            <Build-Time>${maven.build.timestamp}</Build-Time>
+                            <Implementation-Version>${project.version} - ${project.build.outputTimestamp}</Implementation-Version>
+                            <Implementation-Vendor>Wren Security</Implementation-Vendor>
                         </manifestEntries>
                     </archive>
+
                     <nonFilteredFileExtensions>
                         <!-- Exclude any binary files based upon File Types. -->
                         <nonFilteredFileExtension>bin</nonFilteredFileExtension>
@@ -85,19 +86,23 @@
             </plugin>
         </plugins>
     </build>
+
     <dependencies>
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-shared</artifactId>
         </dependency>
+
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-idpdiscovery</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 </project>

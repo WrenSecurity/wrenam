@@ -13,42 +13,50 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
- * Portions Copyright 2018-2022 Wren Security
+ * Portions Copyright 2018-2023 Wren Security
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>org.forgerock.openam</groupId>
-    <artifactId>openam-radius</artifactId>
-    <version>14.0.0-SNAPSHOT</version>
-  </parent>
-  <artifactId>openam-radius-server</artifactId>
-  <name>Wren:AM - RADIUS Server</name>
-  <description>Provides a RADIUS server that runs as a service inside Wren:AM and uses Wren:AM
-  auth chains to resolve authN requests.</description>
-  
-  <dependencies>
-      <dependency>
-      	<groupId>${project.groupId}</groupId>
-      	<artifactId>openam-radius-common</artifactId>
-      	<version>${project.version}</version>
-      </dependency>
-      <dependency>
-      	<groupId>${project.groupId}</groupId>
-      	<artifactId>openam-core</artifactId>
-      </dependency>
-       <dependency>
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.wrensecurity.wrenam</groupId>
+        <artifactId>openam-radius</artifactId>
+        <version>15.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>openam-radius-server</artifactId>
+
+    <name>Wren:AM - RADIUS Server</name>
+
+    <description>
+        Provides a RADIUS server that runs as a service inside Wren:AM and uses Wren:AM
+        auth chains to resolve authN requests.
+    </description>
+
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>openam-radius-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>openam-core</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
-           <scope>provided</scope>
-       </dependency>
-        <dependency>
-	        <groupId>org.wrensecurity.commons.guava</groupId>
-	        <artifactId>wrensec-guava-eventbus</artifactId>
-        </dependency>      
-  </dependencies>
+            <scope>provided</scope>
+        </dependency>
 
-    <!-- Build -->
+        <dependency>
+            <groupId>org.wrensecurity.commons.guava</groupId>
+            <artifactId>wrensec-guava-eventbus</artifactId>
+        </dependency>      
+    </dependencies>
+
     <build>
         <resources>
             <resource>
@@ -56,10 +64,12 @@
                 <filtering>false</filtering>
             </resource>
         </resources>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
+
                 <configuration>
                     <archive>
                         <manifest>
@@ -70,21 +80,19 @@
                     </archive>
                 </configuration>
             </plugin>
-              <plugin>
-                 <!--  Enforce Checkstyle during compilation
 
-                 Strictly speaking Checkstyle should be invoked as a
-                      report during site generation. However, we want
-                      to fail the build if source code does not comply with
-                      our coding guidelines, and not at a later stage when
-                      the site is generated (which may never occur for some
-                      projects). -->
-                
+            <plugin>
                  <groupId>org.apache.maven.plugins</groupId>
                  <artifactId>maven-checkstyle-plugin</artifactId>
                  <executions>
                      <execution>
                          <id>check-src-and-tests</id>
+                         <phase>process-test-classes</phase>
+
+                         <goals>
+                             <goal>checkstyle</goal>
+                         </goals>
+
                          <configuration>
                              <configLocation>${checkstyleSourceConfigLocation}</configLocation>
                              <headerLocation>${checkstyleHeaderLocation}</headerLocation>
@@ -95,10 +103,6 @@
                              <failsOnError>${checkstyleFailOnError}</failsOnError>
                              <excludes>**/resources/**/*</excludes>
                          </configuration>
-                         <phase>process-test-classes</phase>
-                         <goals>
-                             <goal>checkstyle</goal>
-                         </goals>
                      </execution>
                  </executions>
              </plugin>         

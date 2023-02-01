@@ -29,11 +29,11 @@ import java.util.Collections;
 import java.util.Date;
 
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
@@ -186,7 +186,7 @@ public class LicenseCheckerTest {
         checker.checkLicenseAcceptance();
 
         // Then
-        verifyZeroInteractions(mockLog);
+        verifyNoInteractions(mockLog);
     }
 
     @Test
@@ -199,6 +199,6 @@ public class LicenseCheckerTest {
         checker.checkLicenseAcceptance();
 
         // Then
-        verifyZeroInteractions(mockLog);
+        verifyNoInteractions(mockLog);
     }
 }

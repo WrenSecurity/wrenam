@@ -129,7 +129,7 @@ public class UmaLabelResourceTest {
         Promise<ResourceResponse, ResourceException> promise = umaLabelResource.createInstance(serverContext, createRequest);
 
         //Then
-        verifyZeroInteractions(umaLabelsStore);
+        verifyNoInteractions(umaLabelsStore);
         assertThat(promise).failedWithResourceException().isInstanceOf(BadRequestException.class);
     }
 
@@ -148,7 +148,7 @@ public class UmaLabelResourceTest {
         Promise<ResourceResponse, ResourceException> promise = umaLabelResource.createInstance(serverContext, createRequest);
 
         //Then
-        verifyZeroInteractions(umaLabelsStore);
+        verifyNoInteractions(umaLabelsStore);
         assertThat(promise).failedWithResourceException().isInstanceOf(BadRequestException.class);
     }
 
@@ -206,7 +206,7 @@ public class UmaLabelResourceTest {
                 queryRequest, queryResourceHandler);
 
         //Then
-        verifyZeroInteractions(umaLabelsStore);
+        verifyNoInteractions(umaLabelsStore);
         assertThat(promise).failedWithException().isInstanceOf(BadRequestException.class);
     }
 

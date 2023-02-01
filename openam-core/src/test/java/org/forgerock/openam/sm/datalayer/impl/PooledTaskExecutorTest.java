@@ -102,7 +102,7 @@ public class PooledTaskExecutorTest {
         debug("Task 3 now queued on semaphore");
 
         // Then
-        verifyZeroInteractions(task3.task);
+        verifyNoInteractions(task3.task);
 
         // When
         debug("Unblocking task 2");

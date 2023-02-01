@@ -40,39 +40,27 @@
             <outputFileNameMapping>${artifact.build.finalName}.${artifact.extension}</outputFileNameMapping>
             <!-- Include fully packaged Modules -->
             <includes>
-                <include>org.forgerock.openam:openam-server:war</include>
-                <include>org.forgerock.openam:openam-clientsdk:jar</include>
-                <include>org.forgerock.openam:openam-distauth:war</include>
-                <include>org.forgerock.openam:openam-example-clientsdk-cli:zip</include>
-                <include>org.forgerock.openam:openam-example-clientsdk-war:war</include>
-                <include>org.forgerock.openam:openam-distribution-fedlet-unconfigured:zip</include>
-                <include>org.forgerock.openam:openam-distribution-ssoadmintools:zip</include>
-                <include>org.forgerock.openam:openam-distribution-ssoconfiguratortools:zip</include>
-                <include>org.forgerock.openam:openam-idpdiscovery-war:war</include>
-                <include>org.forgerock.openam:openam-soap-sts-server:war</include>
+                <include>org.wrensecurity.wrenam:openam-server:war</include>
+                <include>org.wrensecurity.wrenam:openam-clientsdk:jar</include>
+                <include>org.wrensecurity.wrenam:openam-distauth:war</include>
+                <include>org.wrensecurity.wrenam:openam-example-clientsdk-cli:zip</include>
+                <include>org.wrensecurity.wrenam:openam-example-clientsdk-war:war</include>
+                <include>org.wrensecurity.wrenam:openam-distribution-fedlet-unconfigured:zip</include>
+                <include>org.wrensecurity.wrenam:openam-distribution-ssoadmintools:zip</include>
+                <include>org.wrensecurity.wrenam:openam-distribution-ssoconfiguratortools:zip</include>
+                <include>org.wrensecurity.wrenam:openam-idpdiscovery-war:war</include>
+                <include>org.wrensecurity.wrenam:openam-soap-sts-server:war</include>
             </includes>
         </dependencySet>
     </dependencySets>
     <fileSets>
         <fileSet>
             <outputDirectory>legal-notices</outputDirectory>
-            <directory>${project.build.directory}/legal-notices</directory>
-            <includes>
-                <include>license.txt</include>
-            </includes>
-        </fileSet>
-        <fileSet>
-            <outputDirectory>legal-notices</outputDirectory>
-            <directory>../../legal</directory>
-        </fileSet>
-        <fileSet>
-            <outputDirectory>legal-notices</outputDirectory>
-            <directory>../../license</directory>
+            <directory>../../legal-notices</directory>
         </fileSet>
         <fileSet>
             <outputDirectory>ldif</outputDirectory>
             <directory>../../openam-federation/OpenFM/src/main/ldif</directory>
         </fileSet>
     </fileSets>
-
 </assembly>

@@ -20,7 +20,6 @@ import org.forgerock.json.JsonValue;
 import org.forgerock.openam.core.rest.authn.callbackhandlers.RestAuthCallbackHandler;
 import org.forgerock.openam.core.rest.authn.exceptions.RestAuthResponseException;
 import org.forgerock.openam.core.rest.authn.exceptions.RestAuthException;
-import org.mockito.Matchers;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -30,6 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.HttpHeaders;
 import java.util.LinkedHashMap;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -67,8 +67,7 @@ public class RestAuthCallbackHandlerManagerTest {
         JsonValue jsonCallback2 = new JsonValue(new LinkedHashMap<String, String>());
         jsonCallback2.put("KEY2", "VALUE2");
 
-        given(restAuthCallbackHandlerFactory.getRestAuthCallbackHandler(
-                    Matchers.<Class<? extends Callback>>anyObject()))
+        given(restAuthCallbackHandlerFactory.getRestAuthCallbackHandler(any()))
                 .willReturn(restAuthCallbackHandler1)
                 .willReturn(restAuthCallbackHandler1).willReturn(restAuthCallbackHandler2);
         given(restAuthCallbackHandler1.updateCallbackFromRequest(request, response, callback1))
@@ -104,8 +103,7 @@ public class RestAuthCallbackHandlerManagerTest {
         RestAuthCallbackHandler restAuthCallbackHandler1 = mock(RestAuthCallbackHandler.class);
         RestAuthCallbackHandler restAuthCallbackHandler2 = mock(RestAuthCallbackHandler.class);
 
-        given(restAuthCallbackHandlerFactory.getRestAuthCallbackHandler(
-                Matchers.<Class<? extends Callback>>anyObject())).willReturn(
+        given(restAuthCallbackHandlerFactory.getRestAuthCallbackHandler(any())).willReturn(
                 restAuthCallbackHandler1).willReturn(restAuthCallbackHandler2);
         given(restAuthCallbackHandler1.updateCallbackFromRequest(request, response, callback1))
                 .willReturn(true);
@@ -141,8 +139,7 @@ public class RestAuthCallbackHandlerManagerTest {
         JsonValue jsonCallback2 = new JsonValue(new LinkedHashMap<String, String>());
         jsonCallback2.put("KEY2", "VALUE2");
 
-        given(restAuthCallbackHandlerFactory.getRestAuthCallbackHandler(
-                    Matchers.<Class<? extends Callback>>anyObject()))
+        given(restAuthCallbackHandlerFactory.getRestAuthCallbackHandler(any()))
                 .willReturn(restAuthCallbackHandler1).willReturn(restAuthCallbackHandler2)
                 .willReturn(restAuthCallbackHandler1).willReturn(restAuthCallbackHandler2);
         given(restAuthCallbackHandler1.updateCallbackFromRequest(request, response, callback1))
@@ -184,8 +181,7 @@ public class RestAuthCallbackHandlerManagerTest {
         given(jsonCallbacks.size()).willReturn(2);
         given(jsonCallbacks.get(0)).willReturn(jsonCallback1);
         given(jsonCallbacks.get(1)).willReturn(jsonCallback2);
-        given(restAuthCallbackHandlerFactory.getRestAuthCallbackHandler(
-                Matchers.<Class<? extends Callback>>anyObject()))
+        given(restAuthCallbackHandlerFactory.getRestAuthCallbackHandler(any()))
                 .willReturn(restAuthCallbackHandler1)
                 .willReturn(restAuthCallbackHandler2);
         given(restAuthCallbackHandler1.getCallbackClassName()).willReturn("CALLBACK1");
@@ -224,8 +220,7 @@ public class RestAuthCallbackHandlerManagerTest {
         JsonValue jsonCallback2Type = mock(JsonValue.class);
 
 
-        given(restAuthCallbackHandlerFactory.getRestAuthCallbackHandler(
-                Matchers.<Class<? extends Callback>>anyObject()))
+        given(restAuthCallbackHandlerFactory.getRestAuthCallbackHandler(any()))
                 .willReturn(restAuthCallbackHandler1)
                 .willReturn(restAuthCallbackHandler2);
         given(restAuthCallbackHandler1.getCallbackClassName()).willReturn("CALLBACK1");
@@ -269,8 +264,7 @@ public class RestAuthCallbackHandlerManagerTest {
         JsonValue jsonCallback2Type = mock(JsonValue.class);
 
 
-        given(restAuthCallbackHandlerFactory.getRestAuthCallbackHandler(
-                Matchers.<Class<? extends Callback>>anyObject()))
+        given(restAuthCallbackHandlerFactory.getRestAuthCallbackHandler(any()))
                 .willReturn(restAuthCallbackHandler1)
                 .willReturn(restAuthCallbackHandler2)
                 .willReturn(restAuthCallbackHandler3);

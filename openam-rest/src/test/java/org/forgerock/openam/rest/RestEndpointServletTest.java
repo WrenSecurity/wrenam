@@ -29,7 +29,6 @@ import java.util.Collections;
 
 import org.forgerock.http.Filter;
 import org.forgerock.openam.rest.service.RestletServiceServlet;
-import org.mockito.Matchers;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
@@ -73,9 +72,9 @@ public class RestEndpointServletTest {
         restEndpointServlet.init();
 
         //Then
-        verifyZeroInteractions(restletXACMLServiceServlet);
-        verifyZeroInteractions(restletOAuth2ServiceServlet);
-        verifyZeroInteractions(restletUMAServiceServlet);
+        verifyNoInteractions(restletXACMLServiceServlet);
+        verifyNoInteractions(restletOAuth2ServiceServlet);
+        verifyNoInteractions(restletUMAServiceServlet);
     }
 
     @DataProvider(name = "restletPaths")
@@ -104,11 +103,11 @@ public class RestEndpointServletTest {
         restEndpointServlet.service(request, response);
 
         //Then
-        verify(servlet).service(Matchers.<HttpServletRequest>anyObject(), eq(response));
+        verify(servlet).service(any(), eq(response));
         for (HttpServlet s : Arrays.asList(restletXACMLHttpServlet, restletOAuth2ServiceServlet,
                 restletUMAServiceServlet)) {
             if (s != servlet) {
-                verifyZeroInteractions(s);
+                verifyNoInteractions(s);
             }
         }
     }

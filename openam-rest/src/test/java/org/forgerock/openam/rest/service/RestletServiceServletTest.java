@@ -91,7 +91,7 @@ public class RestletServiceServletTest {
         assertEquals(restletServiceServlet.getServletName(), "test");
 
         //Then
-        verifyZeroInteractions(servlet);
+        verifyNoInteractions(servlet);
     }
 
     @Test

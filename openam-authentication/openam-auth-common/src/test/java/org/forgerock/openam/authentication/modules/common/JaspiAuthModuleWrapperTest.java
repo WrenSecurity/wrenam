@@ -31,7 +31,6 @@ import javax.security.auth.message.module.ServerAuthModule;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.mockito.Matchers;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -65,7 +64,7 @@ public class JaspiAuthModuleWrapperTest {
         jaspiAuthWrapper.initialize(callbackHandler, config);
 
         //Then
-        verify(serverAuthModule).initialize(Matchers.<MessagePolicy>anyObject(), (MessagePolicy) isNull(),
+        verify(serverAuthModule).initialize(any(), (MessagePolicy) isNull(),
                 eq(callbackHandler), eq(config));
     }
 }

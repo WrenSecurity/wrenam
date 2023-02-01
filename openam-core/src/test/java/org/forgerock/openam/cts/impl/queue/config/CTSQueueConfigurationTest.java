@@ -16,9 +16,8 @@
 package org.forgerock.openam.cts.impl.queue.config;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.mockito.BDDMockito.anyObject;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 
 import java.util.Map;
@@ -48,7 +47,7 @@ public class CTSQueueConfigurationTest {
         LdapDataLayerConfiguration dataLayerConfiguration = mock(LdapDataLayerConfiguration.class);
         given(dataLayerConfiguration.getStoreMode()).willReturn(StoreMode.DEFAULT);
         Map<ConnectionType, LdapDataLayerConfiguration> configMap = mock(Map.class);
-        given(configMap.get(anyObject())).willReturn(dataLayerConfiguration);
+        given(configMap.get(any())).willReturn(dataLayerConfiguration);
         config = new CTSQueueConfiguration(mockConfigFactory, mock(Debug.class));
     }
 

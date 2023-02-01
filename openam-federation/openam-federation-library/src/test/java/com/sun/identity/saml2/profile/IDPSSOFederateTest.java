@@ -98,7 +98,7 @@ public class IDPSSOFederateTest extends AbstractMockBasedTest {
         // Act
         idpSsoFederateRequest.process(mockRequest, mockResponse, mockPrintWriter, null);
         // Assert
-        Mockito.verifyZeroInteractions(authenticator, authenticationLookup);
+        Mockito.verifyNoInteractions(authenticator, authenticationLookup);
     }
 
     @Test
@@ -117,7 +117,7 @@ public class IDPSSOFederateTest extends AbstractMockBasedTest {
 
         // Assert
         Mockito.verify(authenticator).authenticate();
-        Mockito.verifyZeroInteractions(authenticationLookup);
+        Mockito.verifyNoInteractions(authenticationLookup);
     }
 
     @Test
@@ -136,6 +136,6 @@ public class IDPSSOFederateTest extends AbstractMockBasedTest {
 
         // Assert
         Mockito.verify(authenticationLookup).retrieveAuthenticationFromCache();
-        Mockito.verifyZeroInteractions(authenticator);
+        Mockito.verifyNoInteractions(authenticator);
     }
 }

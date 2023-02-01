@@ -39,7 +39,7 @@ import com.sun.identity.authentication.util.ISAuthConstants;
 import org.forgerock.openam.core.rest.authn.core.wrappers.AuthContextLocalWrapper;
 import org.forgerock.openam.core.rest.authn.core.wrappers.CoreServicesWrapper;
 import org.forgerock.openam.core.rest.authn.exceptions.RestAuthException;
-import org.mockito.Matchers;
+import org.mockito.ArgumentMatchers;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -74,7 +74,7 @@ public class LoginAuthenticatorTest {
                 .indexValue(authIndexValue);
 
         given(coreServicesWrapper.getDomainNameByRequest(request)).willReturn("ORG_DN");
-        given(coreServicesWrapper.getAuthContext(eq(request), eq((HttpServletResponse) null), (SessionID) anyObject(),
+        given(coreServicesWrapper.getAuthContext(eq(request), eq((HttpServletResponse) null), any(SessionID.class),
                 eq(false), eq(false))).willReturn(authContextLocalWrapper);
         given(coreServicesWrapper.isNewRequest(authContextLocalWrapper)).willReturn(true);
 
@@ -83,7 +83,7 @@ public class LoginAuthenticatorTest {
 
         //Then
         verify(authContextLocalWrapper).login();
-        verify(coreServicesWrapper).getAuthContext(eq(request), eq((HttpServletResponse) null), (SessionID) anyObject(),
+        verify(coreServicesWrapper).getAuthContext(eq(request), eq((HttpServletResponse) null), any(SessionID.class),
                 eq(false), eq(false));
         assertNotNull(loginProcess);
     }
@@ -106,7 +106,7 @@ public class LoginAuthenticatorTest {
                 .indexValue(authIndexValue);
 
         given(coreServicesWrapper.getDomainNameByRequest(request)).willReturn("ORG_DN");
-        given(coreServicesWrapper.getAuthContext(eq(request), eq((HttpServletResponse) null), (SessionID) anyObject(),
+        given(coreServicesWrapper.getAuthContext(eq(request), eq((HttpServletResponse) null), any(SessionID.class),
                 eq(false), eq(false))).willReturn(authContextLocalWrapper);
         given(coreServicesWrapper.isNewRequest(authContextLocalWrapper)).willReturn(true);
 
@@ -115,7 +115,7 @@ public class LoginAuthenticatorTest {
 
         //Then
         verify(authContextLocalWrapper).login(AuthContext.IndexType.MODULE_INSTANCE, "INDEX_VALUE");
-        verify(coreServicesWrapper).getAuthContext(eq(request), eq((HttpServletResponse) null), (SessionID) anyObject(),
+        verify(coreServicesWrapper).getAuthContext(eq(request), eq((HttpServletResponse) null), any(SessionID.class),
                 eq(false), eq(false));
         assertNotNull(loginProcess);
     }
@@ -139,7 +139,7 @@ public class LoginAuthenticatorTest {
                 .indexValue(authIndexValue);
 
         given(coreServicesWrapper.getDomainNameByRequest(request)).willReturn("ORG_DN");
-        given(coreServicesWrapper.getAuthContext(eq(request), eq((HttpServletResponse) null), (SessionID) anyObject(),
+        given(coreServicesWrapper.getAuthContext(eq(request), eq((HttpServletResponse) null), any(SessionID.class),
                 eq(false), eq(false))).willReturn(authContextLocalWrapper);
         given(coreServicesWrapper.isNewRequest(authContextLocalWrapper)).willReturn(true);
         given(coreServicesWrapper.getEnvMap(request)).willReturn(envMap);
@@ -149,7 +149,7 @@ public class LoginAuthenticatorTest {
 
         //Then
         verify(authContextLocalWrapper).login(AuthContext.IndexType.RESOURCE, "INDEX_VALUE", envMap, null);
-        verify(coreServicesWrapper).getAuthContext(eq(request), eq((HttpServletResponse) null), (SessionID) anyObject(),
+        verify(coreServicesWrapper).getAuthContext(eq(request), eq((HttpServletResponse) null), any(SessionID.class),
                 eq(false), eq(false));
         assertNotNull(loginProcess);
     }
@@ -171,7 +171,7 @@ public class LoginAuthenticatorTest {
                 .indexValue(authIndexValue);
 
         given(coreServicesWrapper.getDomainNameByRequest(request)).willReturn("/ORG_DN");
-        given(coreServicesWrapper.getAuthContext(eq(request), eq((HttpServletResponse) null), (SessionID) anyObject(),
+        given(coreServicesWrapper.getAuthContext(eq(request), eq((HttpServletResponse) null), any(SessionID.class),
                 eq(false), eq(false))).willReturn(authContextLocalWrapper);
         given(coreServicesWrapper.isNewRequest(authContextLocalWrapper)).willReturn(false);
 
@@ -179,14 +179,14 @@ public class LoginAuthenticatorTest {
         LoginProcess loginProcess = loginAuthenticator.getLoginProcess(loginConfiguration);
 
         //Then
-        verifyZeroInteractions(authContextLocalWrapper);
+        verifyNoInteractions(authContextLocalWrapper);
         assertNotNull(loginProcess);
-        verify(coreServicesWrapper).getAuthContext(eq(request), eq((HttpServletResponse) null), (SessionID) anyObject(),
+        verify(coreServicesWrapper).getAuthContext(eq(request), eq((HttpServletResponse) null), any(SessionID.class),
                 eq(false), eq(false));
         verify(coreServicesWrapper).isNewRequest(authContextLocalWrapper);
         verify(coreServicesWrapper).getDomainNameByRequest(request);
         verify(coreServicesWrapper).isOrganizationActive("/ORG_DN");
-        verify(coreServicesWrapper).getExistingValidSSOToken(Matchers.<SessionID>anyObject());
+        verify(coreServicesWrapper).getExistingValidSSOToken(any());
         verifyNoMoreInteractions(coreServicesWrapper);
     }
 
@@ -211,7 +211,7 @@ public class LoginAuthenticatorTest {
                 .sessionUpgrade(ssoTokenId);
 
         given(coreServicesWrapper.getDomainNameByRequest(request)).willReturn("ORG_DN");
-        given(coreServicesWrapper.getAuthContext(eq(request), eq((HttpServletResponse) null), (SessionID) anyObject(),
+        given(coreServicesWrapper.getAuthContext(eq(request), eq((HttpServletResponse) null), any(SessionID.class),
                 eq(false), eq(false))).willReturn(authContextLocalWrapper);
         given(coreServicesWrapper.getExistingValidSSOToken(eq(new SessionID("SSO_TOKEN_ID")))).willReturn(ssoToken);
         given(coreServicesWrapper.isNewRequest(authContextLocalWrapper)).willReturn(true);
@@ -247,7 +247,7 @@ public class LoginAuthenticatorTest {
         given(ssoToken.getProperty("UserToken")).willReturn("INDEX_VALUE");
 
         given(coreServicesWrapper.getDomainNameByRequest(request)).willReturn("ORG_DN");
-        given(coreServicesWrapper.getAuthContext(eq(request), eq((HttpServletResponse) null), (SessionID) anyObject(),
+        given(coreServicesWrapper.getAuthContext(eq(request), eq((HttpServletResponse) null), any(SessionID.class),
                 eq(false), eq(false))).willReturn(authContextLocalWrapper);
         given(coreServicesWrapper.getExistingValidSSOToken(eq(new SessionID("SSO_TOKEN_ID")))).willReturn(ssoToken);
         given(coreServicesWrapper.isNewRequest(authContextLocalWrapper)).willReturn(true);
@@ -283,7 +283,7 @@ public class LoginAuthenticatorTest {
         given(ssoToken.getProperty("Role")).willReturn("INDEX_VALUE");
 
         given(coreServicesWrapper.getDomainNameByRequest(request)).willReturn("ORG_DN");
-        given(coreServicesWrapper.getAuthContext(eq(request), eq((HttpServletResponse) null), (SessionID) anyObject(),
+        given(coreServicesWrapper.getAuthContext(eq(request), eq((HttpServletResponse) null), any(SessionID.class),
                 eq(false), eq(false))).willReturn(authContextLocalWrapper);
         given(coreServicesWrapper.getExistingValidSSOToken(eq(new SessionID("SSO_TOKEN_ID")))).willReturn(ssoToken);
         given(coreServicesWrapper.isNewRequest(authContextLocalWrapper)).willReturn(true);
@@ -321,7 +321,7 @@ public class LoginAuthenticatorTest {
         given(ssoToken.getProperty("Service")).willReturn("INDEX_VALUE");
 
         given(coreServicesWrapper.getDomainNameByRequest(request)).willReturn("ORG_DN");
-        given(coreServicesWrapper.getAuthContext(eq(request), eq((HttpServletResponse) null), (SessionID) anyObject(),
+        given(coreServicesWrapper.getAuthContext(eq(request), eq((HttpServletResponse) null), any(SessionID.class),
                 eq(false), eq(false))).willReturn(authContextLocalWrapper);
         given(coreServicesWrapper.getExistingValidSSOToken(eq(new SessionID("SSO_TOKEN_ID")))).willReturn(ssoToken);
         given(coreServicesWrapper.isNewRequest(authContextLocalWrapper)).willReturn(true);
@@ -359,7 +359,7 @@ public class LoginAuthenticatorTest {
         given(ssoToken.getProperty("AuthType")).willReturn("INDEX_VALUE");
 
         given(coreServicesWrapper.getDomainNameByRequest(request)).willReturn("ORG_DN");
-        given(coreServicesWrapper.getAuthContext(eq(request), eq((HttpServletResponse) null), (SessionID) anyObject(),
+        given(coreServicesWrapper.getAuthContext(eq(request), eq((HttpServletResponse) null), any(SessionID.class),
                 eq(false), eq(false))).willReturn(authContextLocalWrapper);
         given(coreServicesWrapper.getExistingValidSSOToken(eq(new SessionID("SSO_TOKEN_ID")))).willReturn(ssoToken);
         given(coreServicesWrapper.isNewRequest(authContextLocalWrapper)).willReturn(true);
@@ -397,7 +397,7 @@ public class LoginAuthenticatorTest {
         given(ssoToken.getProperty("AuthLevel")).willReturn("10");
 
         given(coreServicesWrapper.getDomainNameByRequest(request)).willReturn("ORG_DN");
-        given(coreServicesWrapper.getAuthContext(eq(request), eq((HttpServletResponse) null), (SessionID) anyObject(),
+        given(coreServicesWrapper.getAuthContext(eq(request), eq((HttpServletResponse) null), any(SessionID.class),
                 eq(false), eq(false))).willReturn(authContextLocalWrapper);
         given(coreServicesWrapper.getExistingValidSSOToken(eq(new SessionID("SSO_TOKEN_ID")))).willReturn(ssoToken);
         given(coreServicesWrapper.isNewRequest(authContextLocalWrapper)).willReturn(true);
@@ -435,7 +435,7 @@ public class LoginAuthenticatorTest {
         given(ssoToken.getProperty("UserToken")).willReturn("INDEX_VALUE");
 
         given(coreServicesWrapper.getDomainNameByRequest(request)).willReturn("ORG_DN");
-        given(coreServicesWrapper.getAuthContext(eq(request), eq((HttpServletResponse) null), (SessionID) anyObject(),
+        given(coreServicesWrapper.getAuthContext(eq(request), eq((HttpServletResponse) null), any(SessionID.class),
                 eq(true), eq(false))).willReturn(authContextLocalWrapper);
         given(coreServicesWrapper.getExistingValidSSOToken(eq(new SessionID("SSO_TOKEN_ID")))).willReturn(ssoToken);
         given(coreServicesWrapper.isNewRequest(authContextLocalWrapper)).willReturn(true);
@@ -471,7 +471,7 @@ public class LoginAuthenticatorTest {
         given(ssoToken.getProperty("Role")).willReturn("INDEX_VALUE");
 
         given(coreServicesWrapper.getDomainNameByRequest(request)).willReturn("ORG_DN");
-        given(coreServicesWrapper.getAuthContext(eq(request), eq((HttpServletResponse) null), (SessionID) anyObject(),
+        given(coreServicesWrapper.getAuthContext(eq(request), eq((HttpServletResponse) null), any(SessionID.class),
                 eq(true), eq(false))).willReturn(authContextLocalWrapper);
         given(coreServicesWrapper.getExistingValidSSOToken(eq(new SessionID("SSO_TOKEN_ID")))).willReturn(ssoToken);
         given(coreServicesWrapper.isNewRequest(authContextLocalWrapper)).willReturn(true);
@@ -509,7 +509,7 @@ public class LoginAuthenticatorTest {
         given(ssoToken.getProperty("Service")).willReturn("INDEX_VALUE");
 
         given(coreServicesWrapper.getDomainNameByRequest(request)).willReturn("ORG_DN");
-        given(coreServicesWrapper.getAuthContext(eq(request), eq((HttpServletResponse) null), (SessionID) anyObject(),
+        given(coreServicesWrapper.getAuthContext(eq(request), eq((HttpServletResponse) null), any(SessionID.class),
                 eq(true), eq(false))).willReturn(authContextLocalWrapper);
         given(coreServicesWrapper.getExistingValidSSOToken(eq(new SessionID("SSO_TOKEN_ID")))).willReturn(ssoToken);
         given(coreServicesWrapper.isNewRequest(authContextLocalWrapper)).willReturn(true);
@@ -547,7 +547,7 @@ public class LoginAuthenticatorTest {
         given(ssoToken.getProperty("AuthType")).willReturn("INDEX_VALUE");
 
         given(coreServicesWrapper.getDomainNameByRequest(request)).willReturn("ORG_DN");
-        given(coreServicesWrapper.getAuthContext(eq(request), eq((HttpServletResponse) null), (SessionID) anyObject(),
+        given(coreServicesWrapper.getAuthContext(eq(request), eq((HttpServletResponse) null), any(SessionID.class),
                 eq(true), eq(false))).willReturn(authContextLocalWrapper);
         given(coreServicesWrapper.getExistingValidSSOToken(eq(new SessionID("SSO_TOKEN_ID")))).willReturn(ssoToken);
         given(coreServicesWrapper.isNewRequest(authContextLocalWrapper)).willReturn(true);
@@ -585,7 +585,7 @@ public class LoginAuthenticatorTest {
         given(ssoToken.getProperty("AuthLevel")).willReturn("10");
 
         given(coreServicesWrapper.getDomainNameByRequest(request)).willReturn("ORG_DN");
-        given(coreServicesWrapper.getAuthContext(eq(request), eq((HttpServletResponse) null), (SessionID) anyObject(),
+        given(coreServicesWrapper.getAuthContext(eq(request), eq((HttpServletResponse) null), any(SessionID.class),
                 eq(true), eq(false))).willReturn(authContextLocalWrapper);
         given(coreServicesWrapper.getExistingValidSSOToken(eq(new SessionID("SSO_TOKEN_ID")))).willReturn(ssoToken);
         given(coreServicesWrapper.isNewRequest(authContextLocalWrapper)).willReturn(true);
@@ -621,10 +621,10 @@ public class LoginAuthenticatorTest {
                 .indexValue(authIndexValue)
                 .sessionUpgrade(ssoTokenId);
 
-        given(coreServicesWrapper.getDomainNameByRequest(Matchers.<HttpServletRequest>anyObject()))
+        given(coreServicesWrapper.getDomainNameByRequest(any()))
                 .willReturn("ORG_DN");
-        given(coreServicesWrapper.getAuthContext((HttpServletRequest) anyObject(), eq((HttpServletResponse) null),
-                (SessionID) anyObject(), eq(true), eq(false))).willReturn(authContextLocalWrapper);
+        given(coreServicesWrapper.getAuthContext(any(HttpServletRequest.class), eq((HttpServletResponse) null),
+                any(SessionID.class), eq(true), eq(false))).willReturn(authContextLocalWrapper);
         given(authContextLocalWrapper.isSessionUpgrade()).willReturn(true);
         given(coreServicesWrapper.getExistingValidSSOToken(eq(new SessionID("SSO_TOKEN_ID")))).willReturn(ssoToken);
         given(coreServicesWrapper.isNewRequest(authContextLocalWrapper)).willReturn(true);
@@ -657,10 +657,10 @@ public class LoginAuthenticatorTest {
                 .indexValue(authIndexValue)
                 .sessionUpgrade(ssoTokenId);
 
-        given(coreServicesWrapper.getDomainNameByRequest(Matchers.<HttpServletRequest>anyObject()))
+        given(coreServicesWrapper.getDomainNameByRequest(any()))
                 .willReturn("ORG_DN");
-        given(coreServicesWrapper.getAuthContext((HttpServletRequest) anyObject(), eq((HttpServletResponse) null),
-                (SessionID) anyObject(), eq(false), eq(false))).willReturn(authContextLocalWrapper);
+        given(coreServicesWrapper.getAuthContext(any(HttpServletRequest.class), eq((HttpServletResponse) null),
+                any(SessionID.class), eq(false), eq(false))).willReturn(authContextLocalWrapper);
         given(coreServicesWrapper.getExistingValidSSOToken(eq(new SessionID("SSO_TOKEN_ID")))).willReturn(ssoToken);
         given(coreServicesWrapper.isNewRequest(authContextLocalWrapper)).willReturn(true);
         given(authContextLocalWrapper.isSessionUpgrade()).willReturn(true);

@@ -18,12 +18,12 @@ package org.forgerock.openam.rest.query;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.forgerock.json.resource.Responses.newResourceResponse;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 import org.forgerock.json.resource.ResourceResponse;
-import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.testng.annotations.BeforeMethod;
@@ -65,7 +65,7 @@ public class PagingQueryResponseHandlerTest {
     public void shouldOnlyReadUntilPageIsRead() {
         // Given
         testHandler = new PagingQueryResponseHandler(mockHandler, 2, 0);
-        given(mockHandler.handleResource(Matchers.any(ResourceResponse.class))).willReturn(true);
+        given(mockHandler.handleResource(any(ResourceResponse.class))).willReturn(true);
 
         // When
         boolean firstHandle = testHandler.handleResource(newResourceResponse("a", null, null));
@@ -95,7 +95,7 @@ public class PagingQueryResponseHandlerTest {
     public void shouldIgnoreExtraResources() {
         // Given
         testHandler = new PagingQueryResponseHandler(mockHandler, 1, 0);
-        given(mockHandler.handleResource(Matchers.any(ResourceResponse.class))).willReturn(true);
+        given(mockHandler.handleResource(any(ResourceResponse.class))).willReturn(true);
         ResourceResponse expected = newResourceResponse("expected", null, null);
 
         // When

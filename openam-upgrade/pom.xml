@@ -13,70 +13,82 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
- * Portions Copyright 2018-2022 Wren Security
+ * Portions Copyright 2018-2023 Wren Security
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>openam</artifactId>
-        <groupId>org.forgerock.openam</groupId>
-        <version>14.0.0-SNAPSHOT</version>
+        <artifactId>wrenam-project</artifactId>
+        <groupId>org.wrensecurity.wrenam</groupId>
+        <version>15.0.0-SNAPSHOT</version>
     </parent>
+
+    <artifactId>openam-upgrade</artifactId>
 
     <name>Wren:AM - Upgrade</name>
     <description>Upgrade support for Wren:AM</description>
-    <artifactId>openam-upgrade</artifactId>
-    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
             <groupId>org.wrensecurity.commons</groupId>
             <artifactId>wrensec-guice-core</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.wrensecurity.commons</groupId>
             <artifactId>forgerock-util</artifactId>
         </dependency>
+
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-shared</artifactId>
         </dependency>
+
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-core</artifactId>
         </dependency>
+
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-rest</artifactId>
         </dependency>
+
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-auth-oath</artifactId>
+            <version>${project.version}</version>
         </dependency>
+
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-auth-fr-oath</artifactId>
+            <version>${project.version}</version>
         </dependency>
+
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-entitlements</artifactId>
         </dependency>
+
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-uma</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>jstl</artifactId>
         </dependency>
+
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>javax.servlet.jsp</groupId>
             <artifactId>jsp-api</artifactId>
@@ -86,9 +98,11 @@
             <groupId>org.easytesting</groupId>
             <artifactId>fest-assert</artifactId>
         </dependency>
+
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-core</artifactId>
+            <version>${project.version}</version>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
@@ -99,26 +113,31 @@
             <plugin>
                 <groupId>org.bsc.maven</groupId>
                 <artifactId>maven-processor-plugin</artifactId>
+
                 <executions>
                     <execution>
                         <id>process</id>
+                        <phase>generate-resources</phase>
+
                         <goals>
                             <goal>process</goal>
                         </goals>
-                        <phase>generate-resources</phase>
+
                         <configuration>
                             <processors>
                                 <processor>org.forgerock.openam.upgrade.apt.UpgradeStepProcessor</processor>
                             </processors>
+
                             <options>
                                 <outputFile>${project.build.directory}/generated-resources/upgradesteps.properties</outputFile>
                             </options>
                         </configuration>
                     </execution>
                 </executions>
+
                 <dependencies>
                     <dependency>
-                        <groupId>org.forgerock.openam</groupId>
+                        <groupId>org.wrensecurity.wrenam</groupId>
                         <artifactId>openam-build-tools</artifactId>
                         <version>${project.version}</version>
                         <exclusions>
@@ -132,14 +151,15 @@
                 </dependencies>
             </plugin>
         </plugins>
+
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
             </resource>
+
             <resource>
                 <directory>${project.build.directory}/generated-resources</directory>
             </resource>
         </resources>
     </build>
-
 </project>

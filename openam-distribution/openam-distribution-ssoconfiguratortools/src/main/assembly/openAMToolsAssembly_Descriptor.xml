@@ -3,6 +3,7 @@
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 *
 * Copyright (c) 2012-2017 ForgeRock AS. All Rights Reserved
+* Portions Copyright 2023 Wren Security
 *
 * The contents of this file are subject to the terms
 * of the Common Development and Distribution License
@@ -23,56 +24,53 @@
 * "Portions Copyrighted [year] [name of copyright owner]"
 *
 -->
-<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0"
-          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0 http://maven.apache.org/xsd/assembly-1.1.0.xsd">
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0 http://maven.apache.org/xsd/assembly-1.1.0.xsd">
     <id>openam-ssoConfiguratorTools</id>
+
     <formats>
         <format>zip</format>
     </formats>
+
     <includeBaseDirectory>false</includeBaseDirectory>
 
     <dependencySets>
         <dependencySet>
             <outputFileNameMapping>${artifact.artifactId}-${artifact.baseVersion}${dashClassifier?}.${artifact.extension}</outputFileNameMapping>
             <outputDirectory>lib</outputDirectory>
+
             <includes>
                 <include>com.google.inject:guice:jar:no_aop</include>
-                <include>org.forgerock.commons:forgerock-guice-core</include>
-                <include>org.forgerock.openam:openam-license-manager-cli</include>
+                <include>org.wrensecurity.commons:wrensec-guice-core</include>
+                <include>org.wrensecurity.wrenam:openam-license-manager-cli</include>
                 <include>org.apache.servicemix.bundles:org.apache.servicemix.bundles.javax-inject</include>
                 <include>org.slf4j:slf4j-api</include>
                 <include>org.slf4j:slf4j-nop</include>
                 <include>commons-lang:commons-lang</include>
-                <include>org.forgerock.openam:openam-tools</include>
-                <include>org.forgerock.openam:openam-license-core</include>
-                <include>org.forgerock.openam:openam-installer-utils</include>
+                <include>org.wrensecurity.wrenam:openam-license-core</include>
+                <include>org.wrensecurity.wrenam:openam-installer-utils</include>
             </includes>
         </dependencySet>
+
         <dependencySet>
             <outputDirectory></outputDirectory>
+
             <includes>
-                <include>org.forgerock.openam:openam-configurator-tool</include>
-                <include>org.forgerock.openam:openam-upgrade-tool</include>
+                <include>org.wrensecurity.wrenam:openam-configurator-tool</include>
+                <include>org.wrensecurity.wrenam:openam-upgrade-tool</include>
             </includes>
         </dependencySet>
     </dependencySets>
+
     <!-- Single Files -->
     <fileSets>
         <fileSet>
             <outputDirectory>legal-notices</outputDirectory>
-            <directory>${project.build.directory}/legal-notices</directory>
+            <directory>${project.basedir}/../../legal-notices</directory>
             <includes>
                 <include>license.txt</include>
             </includes>
         </fileSet>
-        <fileSet>
-            <outputDirectory>legal-notices</outputDirectory>
-            <directory>${project.basedir}/../../license</directory>
-            <includes>
-                <include>**/**</include>
-            </includes>
-        </fileSet>
+
         <fileSet>
             <directory>${basedir}/src/main/assembly/config</directory>
             <outputDirectory></outputDirectory>
@@ -80,4 +78,3 @@
         </fileSet>
     </fileSets>
 </assembly>
-

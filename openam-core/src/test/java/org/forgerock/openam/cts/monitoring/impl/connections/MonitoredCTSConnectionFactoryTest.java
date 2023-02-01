@@ -18,7 +18,7 @@ package org.forgerock.openam.cts.monitoring.impl.connections;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
-import static org.mockito.BDDMockito.verifyZeroInteractions;
+import static org.mockito.BDDMockito.verifyNoInteractions;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -88,7 +88,7 @@ public class MonitoredCTSConnectionFactoryTest {
 
         //then
         verify(connectionFactory).createAsync();
-        verifyZeroInteractions(monitoringStore);
+        verifyNoInteractions(monitoringStore);
         promise.handleException(new DataLayerException("reason"));
         verify(monitoringStore).addConnection(false);
     }

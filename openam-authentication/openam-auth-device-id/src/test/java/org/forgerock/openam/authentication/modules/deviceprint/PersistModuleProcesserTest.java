@@ -33,7 +33,7 @@ import static org.forgerock.openam.authentication.modules.deviceprint.DeviceIdSa
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoInteractions;
 
 public class PersistModuleProcesserTest {
 
@@ -62,7 +62,7 @@ public class PersistModuleProcesserTest {
 
         //Then
         assertThat(newState).isEqualTo(ISAuthConstants.LOGIN_SUCCEED);
-        verifyZeroInteractions(profilePersister);
+        verifyNoInteractions(profilePersister);
     }
 
     @Test
@@ -79,7 +79,7 @@ public class PersistModuleProcesserTest {
 
         //Then
         assertThat(newState).isEqualTo(ISAuthConstants.LOGIN_SUCCEED);
-        verifyZeroInteractions(profilePersister);
+        verifyNoInteractions(profilePersister);
     }
 
     @Test
@@ -119,7 +119,7 @@ public class PersistModuleProcesserTest {
 
         //Then
         assertThat(newState).isEqualTo(SAVE_PROFILE_STATE);
-        verifyZeroInteractions(profilePersister);
+        verifyNoInteractions(profilePersister);
     }
 
     @Test
@@ -139,7 +139,7 @@ public class PersistModuleProcesserTest {
 
         //Then
         assertThat(newState).isEqualTo(NAME_PROFILE_STATE);
-        verifyZeroInteractions(profilePersister);
+        verifyNoInteractions(profilePersister);
     }
 
     @Test
@@ -159,7 +159,7 @@ public class PersistModuleProcesserTest {
 
         //Then
         assertThat(newState).isEqualTo(ISAuthConstants.LOGIN_SUCCEED);
-        verifyZeroInteractions(profilePersister);
+        verifyNoInteractions(profilePersister);
     }
 
     @Test

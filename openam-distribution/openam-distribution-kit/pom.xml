@@ -14,69 +14,42 @@
  *
  * Copyright 2011-2016 ForgeRock AS.
  * Portions Copyrighted 2016 Agile Digital Engineering
- * Portions Copyright 2018 Wren Security.
+ * Portions Copyright 2018-2023 Wren Security.
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- Parent Project -->
     <parent>
-        <groupId>org.forgerock.openam</groupId>
+        <groupId>org.wrensecurity.wrenam</groupId>
         <artifactId>openam-distribution</artifactId>
-        <version>14.0.0-SNAPSHOT</version>
+        <version>15.0.0-SNAPSHOT</version>
     </parent>
 
-    <!-- Component Definition -->
-    <name>Wren:AM - Distribution Kit</name>
-    <description>Wren:AM Distribution Kit, containing all distributable artifacts.</description>
     <artifactId>openam-distribution-kit</artifactId>
     <packaging>pom</packaging>
 
-    <!-- Build -->
+    <name>Wren:AM - Distribution Kit</name>
+    <description>Wren:AM Distribution Kit, containing all distributable artifacts.</description>
+
     <build>
         <plugins>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>Copy license</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>copy</goal>
-                        </goals>
-                        <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>${forgerock.license.groupId}</groupId>
-                                    <artifactId>${forgerock.license.artifactId}</artifactId>
-                                    <version>${forgerock.license.version}</version>
-                                    <type>txt</type>
-                                    <overWrite>true</overWrite>
-                                    <outputDirectory>${project.build.directory}/legal-notices</outputDirectory>
-                                    <destFileName>license.txt</destFileName>
-                                </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>admintools-assembly</id>
+                        <id>kit-assembly</id>
                         <phase>package</phase>
+
                         <goals>
                             <goal>single</goal>
                         </goals>
+
                         <configuration>
                             <finalName>WrenAM-${project.version}</finalName>
                             <appendAssemblyId>false</appendAssemblyId>
                             <tarLongFileMode>gnu</tarLongFileMode>
+
                             <descriptors>
                                 <descriptor>src/main/assembly/openAM_KitAssembly_Descriptor.xml</descriptor>
                             </descriptors>
@@ -84,95 +57,77 @@
                     </execution>
                 </executions>
             </plugin>
-
-            <!-- Post-Packaging step for preparing Artifacts for Upload to Nightly Download Area -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>post-packaging</id>
-                        <phase>package</phase>
-                        <configuration>
-                            <target>
-
-                                <property name="distribution.target.dir" value="${project.build.directory}" />
-
-                                <tstamp>
-                                    <format property="time.stamp" pattern="yyyyMMdd" />
-                                </tstamp>
-                                <property name="zipname.set" value="nightly_${time.stamp}" />
-
-                                <filter token="ZIPNAME" value="${zipname.set}" />
-                                <filter token="BUILD_DATE" value="${time.stamp}" />
-                                <filter token="BUILD_VERSION" value="${project.version}" />
-
-                                <copy file="../../src/main/jenkins/openam_link.js.template" tofile="${distribution.target.dir}/openam_link.js" filtering="true" />
-                                <copy file="../../src/main/jenkins/build_date.js.template" tofile="${distribution.target.dir}/build_date.js" filtering="true" />
-
-                            </target>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
 
     <dependencies>
+        <dependency>
+            <groupId>org.wrensecurity.wrenam</groupId>
+            <artifactId>openam-server</artifactId>
+            <version>${project.version}</version>
+            <type>war</type>
+        </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
-            <artifactId>openam-server</artifactId>
-            <type>war</type>
-        </dependency>
-        <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-server-only</artifactId>
+            <version>${project.version}</version>
             <type>war</type>
         </dependency>
+
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-clientsdk</artifactId>
-            <type>jar</type>
+            <version>${project.version}</version>
         </dependency>
+
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-distribution-fedlet-unconfigured</artifactId>
+            <version>${project.version}</version>
             <type>zip</type>
         </dependency>
+
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-distribution-ssoadmintools</artifactId>
+            <version>${project.version}</version>
             <type>zip</type>
         </dependency>
+
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-example-clientsdk-cli</artifactId>
+            <version>${project.version}</version>
             <type>zip</type>
         </dependency>
+
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-example-clientsdk-war</artifactId>
+            <version>${project.version}</version>
             <type>war</type>
         </dependency>
+
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-idpdiscovery-war</artifactId>
+            <version>${project.version}</version>
             <type>war</type>
         </dependency>
+
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-distribution-ssoconfiguratortools</artifactId>
+            <version>${project.version}</version>
             <type>zip</type>
         </dependency>
+
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-soap-sts-server</artifactId>
+            <version>${project.version}</version>
             <type>war</type>
         </dependency>
     </dependencies>
 </project>
-

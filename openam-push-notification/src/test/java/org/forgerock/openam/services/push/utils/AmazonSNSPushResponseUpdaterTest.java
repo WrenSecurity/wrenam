@@ -17,7 +17,7 @@ package org.forgerock.openam.services.push.utils;
 
 import static org.forgerock.json.JsonValue.*;
 import static org.forgerock.json.test.assertj.AssertJJsonValueAssert.*;
-import static org.mockito.BDDMockito.anyObject;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.*;
 import static org.mockito.Mockito.mock;
 
@@ -52,7 +52,7 @@ public class AmazonSNSPushResponseUpdaterTest {
         CreatePlatformEndpointResult endpointResult = new CreatePlatformEndpointResult();
         endpointResult.setEndpointArn("endpointArn");
 
-        given(mockClient.createPlatformEndpoint((CreatePlatformEndpointRequest) anyObject()))
+        given(mockClient.createPlatformEndpoint(any(CreatePlatformEndpointRequest.class)))
                 .willReturn(endpointResult);
 
         JwtClaimsSetBuilder jwtClaimsSetBuilder = new JwtClaimsSetBuilder()
@@ -90,7 +90,7 @@ public class AmazonSNSPushResponseUpdaterTest {
 
         CreatePlatformEndpointResult endpointResult = new CreatePlatformEndpointResult();
 
-        given(mockClient.createPlatformEndpoint((CreatePlatformEndpointRequest) anyObject()))
+        given(mockClient.createPlatformEndpoint(any(CreatePlatformEndpointRequest.class)))
                 .willReturn(endpointResult);
 
         JwtClaimsSetBuilder jwtClaimsSetBuilder = new JwtClaimsSetBuilder()

@@ -32,7 +32,7 @@ import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import java.net.URI;
@@ -263,7 +263,7 @@ public class ResourceSetRegistrationEndpointTest {
         //Then
         ArgumentCaptor<QueryFilter> queryCaptor = ArgumentCaptor.forClass(QueryFilter.class);
         verify(store).query(queryCaptor.capture());
-        verifyZeroInteractions(resourceRegistrationFilter);
+        verifyNoInteractions(resourceRegistrationFilter);
         String queryString = queryCaptor.getValue().toString();
         assertThat(queryString)
                 .contains("name eq \"NAME\"")

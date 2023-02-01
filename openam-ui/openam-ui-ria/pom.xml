@@ -13,22 +13,23 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2017 ForgeRock AS.
- * Portions Copyright 2018-2022 Wren Security
+ * Portions Copyright 2018-2023 Wren Security
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
-        <groupId>org.forgerock.openam</groupId>
+        <groupId>org.wrensecurity.wrenam</groupId>
         <artifactId>openam-ui</artifactId>
-        <version>14.0.0-SNAPSHOT</version>
+        <version>15.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>openam-ui-ria</artifactId>
-    <name>Wren:AM - RIA Web UI</name>
     <packaging>pom</packaging>
 
+    <name>Wren:AM - RIA Web UI</name>
+
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <codemirror.version>4.10</codemirror.version>
         <handlebars.version>3.0.3</handlebars.version>
         <node.install.directory>${project.basedir}</node.install.directory>
@@ -38,13 +39,16 @@
         <dependency>
             <groupId>org.forgerock.commons.ui</groupId>
             <artifactId>forgerock-ui-user</artifactId>
+            <version>${wrensec-ui.version}</version>
             <type>zip</type>
             <classifier>www</classifier>
         </dependency>
+
         <dependency>
             <groupId>org.mozilla</groupId>
             <artifactId>rhino</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
             <artifactId>selectize-non-standalone</artifactId>
@@ -52,12 +56,14 @@
             <classifier>min</classifier>
             <type>js</type>
         </dependency>
+
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
             <artifactId>text</artifactId>
             <version>2.0.15</version>
             <type>js</type>
         </dependency>
+
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
             <artifactId>sifter</artifactId>
@@ -65,12 +71,14 @@
             <classifier>min</classifier>
             <type>js</type>
         </dependency>
+
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
             <artifactId>microplugin</artifactId>
             <version>0.0.3</version>
             <type>js</type>
         </dependency>
+
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
             <artifactId>qrcode</artifactId>
@@ -78,12 +86,14 @@
             <classifier>min</classifier>
             <type>js</type>
         </dependency>
+
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
             <artifactId>jquery-nestingSortable</artifactId>
             <version>0.9.12</version>
             <type>js</type>
         </dependency>
+
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
             <artifactId>jsoneditor</artifactId>
@@ -91,18 +101,21 @@
             <classifier>min</classifier>
             <type>js</type>
         </dependency>
+
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
             <artifactId>bootstrap-tabdrop</artifactId>
             <version>1.0</version>
             <type>js</type>
         </dependency>
+
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
             <artifactId>CodeMirror</artifactId>
             <version>${codemirror.version}</version>
             <type>zip</type>
         </dependency>
+
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
             <artifactId>bootstrap-clockpicker</artifactId>
@@ -110,6 +123,7 @@
             <classifier>min</classifier>
             <type>js</type>
         </dependency>
+
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
             <artifactId>bootstrap-clockpicker</artifactId>
@@ -117,6 +131,7 @@
             <classifier>min</classifier>
             <type>css</type>
         </dependency>
+
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
             <artifactId>bootstrap-datetimepicker</artifactId>
@@ -124,6 +139,7 @@
             <classifier>min</classifier>
             <type>js</type>
         </dependency>
+
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
             <artifactId>bootstrap-datetimepicker</artifactId>
@@ -131,6 +147,7 @@
             <classifier>min</classifier>
             <type>css</type>
         </dependency>
+
         <dependency>
             <!-- handlebars need for fix the processing dependencies in the release build -->
             <groupId>org.forgerock.commons.ui.libs</groupId>
@@ -139,6 +156,7 @@
             <type>js</type>
             <classifier>min</classifier>
         </dependency>
+
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
             <artifactId>redux</artifactId>
@@ -146,6 +164,7 @@
             <classifier>min</classifier>
             <type>js</type>
         </dependency>
+
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
             <artifactId>react-bootstrap</artifactId>
@@ -153,12 +172,14 @@
             <classifier>min</classifier>
             <type>js</type>
         </dependency>
+
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
             <artifactId>classnames</artifactId>
             <version>2.2.5</version>
             <type>js</type>
         </dependency>
+
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
             <artifactId>react-input-autosize</artifactId>
@@ -166,6 +187,7 @@
             <classifier>min</classifier>
             <type>js</type>
         </dependency>
+
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
             <artifactId>react-select</artifactId>
@@ -173,6 +195,7 @@
             <classifier>min</classifier>
             <type>js</type>
         </dependency>
+
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
             <artifactId>react-select</artifactId>
@@ -188,6 +211,7 @@
             <type>js</type>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
             <artifactId>qunit</artifactId>
@@ -195,6 +219,7 @@
             <type>js</type>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
             <artifactId>qunit</artifactId>
@@ -202,6 +227,7 @@
             <version>1.15.0</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
             <artifactId>squire</artifactId>
@@ -209,6 +235,7 @@
             <type>js</type>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
             <artifactId>base64</artifactId>
@@ -216,6 +243,7 @@
             <classifier>min</classifier>
             <type>js</type>
         </dependency>
+
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
             <artifactId>backbone.paginator.min</artifactId>
@@ -223,6 +251,7 @@
             <classifier>min</classifier>
             <type>js</type>
         </dependency>
+
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
             <artifactId>backgrid.min</artifactId>
@@ -230,6 +259,7 @@
             <classifier>min</classifier>
             <type>js</type>
         </dependency>
+
         <dependency>
             <groupId>org.forgerock.commons.ui.libs</groupId>
             <artifactId>backgrid-filter.min</artifactId>
@@ -244,6 +274,7 @@
             <resource>
                 <directory>${basedir}/src/main/js</directory>
             </resource>
+
             <resource>
                 <directory>${basedir}/src/main/resources</directory>
                 <filtering>true</filtering>
@@ -254,6 +285,7 @@
             <testResource>
                 <directory>${basedir}/src/test/js</directory>
             </testResource>
+
             <testResource>
                 <directory>${basedir}/src/test/resources</directory>
             </testResource>
@@ -263,6 +295,7 @@
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>2.7</version>
+
                 <dependencies>
                     <dependency>
                         <groupId>org.apache.maven.shared</groupId>
@@ -270,9 +303,11 @@
                         <version>1.3</version>
                     </dependency>
                 </dependencies>
+
                 <executions>
                     <execution>
                         <phase>process-resources</phase>
+
                         <goals>
                             <goal>resources</goal>
                             <goal>testResources</goal>
@@ -284,6 +319,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
+
                 <executions>
                     <execution>
                         <id>unpack-forgerock-ui-user</id>
@@ -291,8 +327,10 @@
                         <goals>
                             <goal>unpack</goal>
                         </goals>
+
                         <configuration>
                             <outputDirectory>target/dependencies-expanded/forgerock-ui-user</outputDirectory>
+
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>org.forgerock.commons.ui</groupId>
@@ -304,12 +342,15 @@
                             </artifactItems>
                         </configuration>
                     </execution>
+
                     <execution>
                         <id>unpack-codemirror</id>
                         <phase>process-resources</phase>
+
                         <goals>
                             <goal>unpack</goal>
                         </goals>
+
                         <configuration>
                             <outputDirectory>${project.build.directory}</outputDirectory>
                             <artifactItems>
@@ -325,9 +366,11 @@
                     <execution>
                         <id>copy-dependencies-test</id>
                         <phase>process-resources</phase>
+
                         <goals>
                             <goal>copy-dependencies</goal>
                         </goals>
+
                         <configuration>
                             <outputDirectory>${project.build.directory}/test-classes/libs</outputDirectory>
                             <includeArtifactIds>sinon,qunit,squire</includeArtifactIds>
@@ -338,20 +381,25 @@
                     </execution>
                 </executions>
             </plugin>
+
             <plugin>
                 <groupId>com.github.eirslett</groupId>
                 <artifactId>frontend-maven-plugin</artifactId>
                 <version>1.12.0</version>
+
                 <configuration>
                     <installDirectory>${node.install.directory}</installDirectory>
                 </configuration>
+
                 <executions>
                     <execution>
                         <id>install-node-and-npm</id>
+                        <phase>initialize</phase>
+
                         <goals>
                             <goal>install-node-and-npm</goal>
                         </goals>
-                        <phase>initialize</phase>
+
                         <configuration>
                             <nodeVersion>v18.12.1</nodeVersion>
                             <npmVersion>8.19.2</npmVersion>
@@ -359,21 +407,27 @@
                             <npmDownloadRoot>https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/npm/-/</npmDownloadRoot>
                         </configuration>
                     </execution>
+
                     <execution>
                         <id>npm-install</id>
+                        <phase>initialize</phase>
+
                         <goals>
                             <goal>npm</goal>
                         </goals>
-                        <phase>initialize</phase>
                     </execution>
+
                     <execution>
                         <id>npm-build</id>
+                        <phase>compile</phase>
+
                         <goals>
                             <goal>npm</goal>
                         </goals>
-                        <phase>compile</phase>
+
                         <configuration>
                             <arguments>run build:production -- --target-version=${project.version}</arguments>
+
                             <environmentVariables>
                                 <!-- Workaround for PhantomJS - https://github.com/nodejs/node/discussions/43184 -->
                                 <OPENSSL_CONF>/dev/null</OPENSSL_CONF>
@@ -382,29 +436,37 @@
                     </execution>
                 </executions>
             </plugin>
+
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
+
                 <executions>
                     <execution>
                         <id>prepare-working-dir</id>
                         <phase>process-resources</phase>
+
                         <goals>
                             <goal>single</goal>
                         </goals>
+
                         <configuration>
                             <finalName>dependencies</finalName>
                             <appendAssemblyId>false</appendAssemblyId>
+
                             <descriptors>
                                 <descriptor>src/main/assembly/dir.xml</descriptor>
                             </descriptors>
                         </configuration>
                     </execution>
+
                     <execution>
                         <id>build-final-zip</id>
                         <phase>package</phase>
+
                         <goals>
                             <goal>single</goal>
                         </goals>
+
                         <configuration>
                             <descriptors>
                                 <descriptor>src/main/assembly/zip.xml</descriptor>

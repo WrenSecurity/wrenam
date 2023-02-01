@@ -26,7 +26,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
@@ -76,7 +76,7 @@ public class OperationStoreTest {
         operationStore.add(operation);
 
         //Then
-        verifyZeroInteractions(operationRateFactory);
+        verifyNoInteractions(operationRateFactory);
         verify(opRate).increment();
     }
 

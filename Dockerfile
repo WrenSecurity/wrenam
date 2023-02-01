@@ -12,7 +12,7 @@ WORKDIR /project
 COPY . .
 
 # Perform actual Wren:AM build
-ARG BUILD_ARGS=-Dpmd.skip
+ARG BUILD_ARGS
 RUN \
   --mount=type=cache,target=/root/.m2 \
   --mount=type=cache,target=/root/.npm \

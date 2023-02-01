@@ -23,7 +23,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.testng.Assert.fail;
 
 import java.io.File;
@@ -104,7 +104,7 @@ public class AMSetupFilterTest extends AbstractMockBasedTest {
         setupFilter.init(config);
 
         //Then
-        verifyZeroInteractions(context);
+        verifyNoInteractions(context);
     }
 
     @Test
@@ -151,7 +151,7 @@ public class AMSetupFilterTest extends AbstractMockBasedTest {
 
         //Then
         verify(response).sendRedirect("SCHEME://SERVER_NAME:8080/CONTEXT_PATH");
-        verifyZeroInteractions(chain);
+        verifyNoInteractions(chain);
     }
 
     @Test
@@ -171,7 +171,7 @@ public class AMSetupFilterTest extends AbstractMockBasedTest {
 
         //Then
         verify(response).sendRedirect("CONFIG_STORE_DOWN_REDIRECT_URI");
-        verifyZeroInteractions(chain);
+        verifyNoInteractions(chain);
     }
 
     @Test
@@ -194,7 +194,7 @@ public class AMSetupFilterTest extends AbstractMockBasedTest {
         } catch (ServletException e) {
             //Then
             assertThat(e.getCause()).isInstanceOf(ConfigurationException.class);
-            verifyZeroInteractions(response, chain);
+            verifyNoInteractions(response, chain);
         }
     }
 
@@ -233,7 +233,7 @@ public class AMSetupFilterTest extends AbstractMockBasedTest {
 
         //Then
         verify(response).sendRedirect("SCHEME://SERVER_NAME:8080/CONTEXT_PATH/config/options.htm");
-        verifyZeroInteractions(chain);
+        verifyNoInteractions(chain);
     }
 
     @Test
@@ -256,7 +256,7 @@ public class AMSetupFilterTest extends AbstractMockBasedTest {
         } catch (ServletException e) {
             //Then
             assertThat(e.getCause()).isInstanceOf(ConfigurationException.class);
-            verifyZeroInteractions(response, chain);
+            verifyNoInteractions(response, chain);
         }
     }
 

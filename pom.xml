@@ -19,37 +19,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- Build Notes:
-
-         To Build all of Wren:AM use the following Maven Command:
-         cd to openam top directory.
-         mvn clean install
-
-         To Build only a specify Module: (This will pull existing modules whichever is newest local or remote).
-         mvn clean install -pl <module Name>
-
-         To Build only specific Module and Dependencies
-         mvn clean install -pl <module Name> -am
-
-         Skipping Tests add:
-         -DskipTests=true
-
-         Running only a test or list of tests:
-         -DfailIfNoTests=false -Dtest=org.forgerock.restlet.ext.openam.OpenAMParametersTest
-
-    -->
-
-    <!-- Parent Project -->
     <parent>
         <groupId>org.wrensecurity</groupId>
         <artifactId>wrensec-parent</artifactId>
         <version>4.0.0</version>
+        <relativePath />
     </parent>
 
-    <!-- Component Definition -->
-    <groupId>org.forgerock.openam</groupId>
-    <artifactId>openam</artifactId>
-    <version>14.0.0-SNAPSHOT</version>
+    <groupId>org.wrensecurity.wrenam</groupId>
+    <artifactId>wrenam-project</artifactId>
+    <version>15.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Wren:AM - Parent</name>
@@ -74,41 +53,59 @@
     <licenses>
         <license>
             <name>CDDL-1.0</name>
-            <url>http://www.opensource.org/licenses/cddl1.php</url>
-
-            <comments>
-                Common Development and Distribution License (CDDL) 1.0.
-                This license applies to Wren:AM source code as indicated in the
-                source code.
-            </comments>
-
-            <distribution>repo</distribution>
-        </license>
-
-        <license>
-            <name>CC BY-NC-ND 3.0</name>
-            <url>http://creativecommons.org/licenses/by-nc-nd/3.0/</url>
-            <comments>Creative Commons Attribution-NonCommercial-NoDerivs 3.0
-                Unported. This license applies to the site content, and to the
-                documentation as indicated in the documentation source code.
-            </comments>
-
+            <url>http://opensource.org/licenses/CDDL-1.0</url>
+            <comments>Common Development and Distribution License (CDDL) 1.0</comments>
             <distribution>repo</distribution>
         </license>
     </licenses>
 
-    <!-- Component Properties -->
-    <properties>
-        <wrensec-commons.version>22.4.0</wrensec-commons.version>
-        <wrensec-guava.version>18.0.5</wrensec-guava.version>
-        <pgpVerifyKeysVersion>1.7.4-SNAPSHOT</pgpVerifyKeysVersion>
+    <scm>
+        <url>https://github.com/WrenSecurity/WrenAM</url>
+        <connection>scm:git:git://github.com/WrenSecurity/WrenAM.git</connection>
+        <developerConnection>scm:git:git@github.com:WrenSecurity/WrenAM.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
 
+    <repositories>
+        <repository>
+            <id>wrensecurity-releases</id>
+            <name>Wren Security Release Repository</name>
+            <url>https://wrensecurity.jfrog.io/wrensecurity/releases</url>
+
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+
+        <repository>
+            <id>wrensecurity-snapshots</id>
+            <name>Wren Security Snapshot Repository</name>
+            <url>https://wrensecurity.jfrog.io/wrensecurity/snapshots</url>
+
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </repository>
+    </repositories>
+
+    <properties>
+        <pgpVerifyKeysVersion>1.7.4-SNAPSHOT</pgpVerifyKeysVersion>
+        <wrenBuildToolsVersion>1.1.1-SNAPSHOT</wrenBuildToolsVersion>
+
+        <!-- Source code has to be Java 8 compliant (code base is not JPMS ready) -->
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
 
-        <!-- **************************************************************** -->
-        <maven.build.timestamp.format>yyyy-MMM-dd HH:mm:ss</maven.build.timestamp.format>
-        <!-- **************************************************************** -->
+        <!-- XXX Skip PMD plugin execution (https://github.com/WrenSecurity/wrenam/issues/71) -->
+        <pmd.skip>true</pmd.skip>
 
         <!-- Surefire Argument Line -->
         <java.surefire.options>
@@ -124,25 +121,30 @@
             --add-exports java.base/jdk.internal.util.random=ALL-UNNAMED
         </java.surefire.options>
 
+        <!-- XXX BEGIN Configuration under consideration -->
+
         <!-- JavaDoc Setting Properties -->
         <javadoc.options>-J-Xms2g -J-Xmx2g</javadoc.options>
         <!-- Shade plugin setting for ClientSDK build -->
         <generate.clientsdk.sources>false</generate.clientsdk.sources>
-
-        <!-- Project Encoding -->
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-        <!-- Version Properties -->
-        <wrends.server.version>4.0.0-RC1</wrends.server.version>
-        <wrends.sdk.version>4.0.0-RC1</wrends.sdk.version>
-        <wrends.server.legacy>4.0.0-RC1</wrends.server.legacy>
-
         <!-- Supress checkstyle errors on legacy com.iplanet and com.sun.identity packages -->
         <checkstyleUnitTestSuppressionsLocation>checkstyle/suppressions.xml</checkstyleUnitTestSuppressionsLocation>
+        <checkstyleFailOnError>false</checkstyleFailOnError>
 
-        <forgerock.bloomfilter.version>1.0.1</forgerock.bloomfilter.version>
-        <forgerock.ui.version>22.1.2</forgerock.ui.version>
+        <openam.version>Wren:AM ${project.version}</openam.version>
 
+        <!-- XXX END Configuration under consideration -->
+
+        <!-- https://maven.apache.org/guides/mini/guide-reproducible-builds.html -->
+        <project.build.outputTimestamp>2023-01-01T00:00:00Z</project.build.outputTimestamp>
+
+        <!-- Wren Security Dependencies -->
+        <wrends.version>4.0.0-RC1</wrends.version>
+        <wrensec-commons.version>22.5.0-SNAPSHOT</wrensec-commons.version>
+        <wrensec-guava.version>18.0.5</wrensec-guava.version>
+        <wrensec-ui.version>22.1.2</wrensec-ui.version>
+
+        <mockito.version>3.12.4</mockito.version>
         <javadoc-utils.version>1.0.0</javadoc-utils.version>
         <ant.contrib.version>1.0b3</ant.contrib.version>
         <guice.version>3.0</guice.version>
@@ -171,7 +173,6 @@
         <jaxrpc-impl.version>1.1.4_01-wren1</jaxrpc-impl.version>
         <jaxrpc-spi.version>1.1.4_01-wren1</jaxrpc-spi.version>
         <jdom.version>2.0.1</jdom.version>
-        <je.version>5.0.104</je.version>
         <jersey-bundle.version>1.1.1-ea</jersey-bundle.version>
         <jato.version>2005-05-04</jato.version>
         <cc-ui.version>2008-08-08</cc-ui.version>
@@ -204,365 +205,60 @@
         <jakarta.annotation-api.version>1.3.5</jakarta.annotation-api.version>
         <jakarta.xml.soap-api.version>1.4.2</jakarta.xml.soap-api.version>
         <jakarta.xml.ws-api.version>2.3.3</jakarta.xml.ws-api.version>
-
-        <openam.version>Wren:AM ${project.version}</openam.version>
-        <!--  Project web site -->
-        <siteDistributionURL>scp://community.internal.forgerock.com/var/www/vhosts/openam.forgerock.org/httpdocs</siteDistributionURL>
-        <!-- Latest policy agent community versions -->
-        <webAgentsDocCommunityVersion>4.0.0-SNAPSHOT</webAgentsDocCommunityVersion>
-        <javaEEAgentsDocCommunityVersion>3.5.0-SNAPSHOT</javaEEAgentsDocCommunityVersion>
-
-        <!-- Default license (CDDL) to package into the artifacts -->
-        <forgerock.license.groupId>org.forgerock</forgerock.license.groupId>
-        <forgerock.license.artifactId>cddl-license</forgerock.license.artifactId>
-        <forgerock.license.version>1.0.0</forgerock.license.version>
-        <checkstyleFailOnError>false</checkstyleFailOnError>
     </properties>
 
-    <!-- Profiles -->
-    <profiles>
-        <!-- Place Default Profiles here to override and determine Environment. -->
-
-        <profile>
-            <id>release</id>
-            <activation>
-                <property>
-                    <name>performRelease</name>
-                    <value>true</value>
-                </property>
-            </activation>
-            <properties>
-                <generate.clientsdk.sources>true</generate.clientsdk.sources>
-            </properties>
-            <repositories>
-                <repository>
-                    <id>forgerock-internal</id>
-                    <name>Forgerock Internal Repository</name>
-                    <url>http://maven.forgerock.org/repo/internal</url>
-                </repository>
-            </repositories>
-            <dependencyManagement>
-                <dependencies>
-                    <!-- Don't include the authapi*.jar in the war for a release build -->
-                    <dependency>
-                        <groupId>external</groupId>
-                        <artifactId>authapi</artifactId>
-                        <version>${authapi.version}</version>
-                        <scope>provided</scope>
-                    </dependency>
-                </dependencies>
-            </dependencyManagement>
-        </profile>
-
-        <!-- When building an Enterprise binary download, include the correct binary license terms. -->
-        <profile>
-            <!-- Overrides the default CDDL license with the Forgerock binary license. Only available from Forgerock internal repository. -->
-            <id>binary-licensing</id>
-            <repositories>
-                <repository>
-                    <id>forgerock-internal</id>
-                    <name>Forgerock Internal Repository</name>
-                    <url>http://maven.forgerock.org/repo/internal</url>
-                </repository>
-            </repositories>
-            <properties>
-                <forgerock.license.groupId>com.forgerock</forgerock.license.groupId>
-                <forgerock.license.artifactId>binary-license</forgerock.license.artifactId>
-                <forgerock.license.version>1.0.0</forgerock.license.version>
-            </properties>
-        </profile>
-
-        <profile>
-            <id>development</id>
-            <repositories>
-                <repository>
-                    <id>forgerock-internal</id>
-                    <name>Forgerock Internal Repository</name>
-                    <url>http://maven.forgerock.org/repo/internal</url>
-                </repository>
-            </repositories>
-        </profile>
-
-        <!-- The clover profile should be activated to generate coverage reports using Atlassian Clover -->
-        <profile>
-            <id>clover</id>
-            <properties>
-                <clover.plugin.version>4.1.1</clover.plugin.version>
-            </properties>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>com.atlassian.maven.plugins</groupId>
-                        <artifactId>clover-maven-plugin</artifactId>
-                        <version>${clover.plugin.version}</version>
-                        <configuration>
-                            <includesTestSourceRoots>false</includesTestSourceRoots>
-                            <singleCloverDatabase>true</singleCloverDatabase>
-                            <generateHistorical>false</generateHistorical>
-                            <generateHtml>true</generateHtml>
-                            <title>Wren:AM ${project.version} Coverage Report</title>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-            <dependencies>
-                <dependency>
-                    <groupId>com.atlassian.clover</groupId>
-                    <artifactId>clover</artifactId>
-                    <version>${clover.plugin.version}</version>
-                </dependency>
-            </dependencies>
-        </profile>
-
-        <profile>
-            <id>forgerock-release</id>
-
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <inherited>false</inherited>
-                        <configuration>
-                            <charset>utf-8</charset>
-                            <encoding>utf-8</encoding>
-                            <source>${maven.compiler.source}</source>
-                            <additionalJOption>${javadoc.options}</additionalJOption>
-                            <detectLinks>true</detectLinks>
-                            <bottom>
-                                <![CDATA[Copyright &#169; 2010-2016, <a href="http://www.forgerock.com">ForgeRock<a> All Rights Reserved.]]>
-                            </bottom>
-                            <links>
-                                <link>http://docs.oracle.com/javase/7/docs/api</link>
-                                <link>http://openam.forgerock.org/apidocs/</link>
-                                <link>http://www.restlet.org/documentation/2.1/jse/api</link>
-                                <link>http://www.restlet.org/documentation/2.1/jse/ext</link>
-                                <link>http://www.restlet.org/documentation/2.1/jse/engine</link>
-                            </links>
-                            <taglets>
-                                <taglet>
-                                    <tagletClass>com.sun.identity.tools.javadocs.SupportedAPITaglet</tagletClass>
-                                </taglet>
-                                <taglet>
-                                    <tagletClass>com.sun.identity.tools.javadocs.SupportedAllAPITaglet</tagletClass>
-                                </taglet>
-                            </taglets>
-                            <tagletArtifact>
-                                <groupId>org.forgerock.openam</groupId>
-                                <artifactId>javadoc-utils</artifactId>
-                                <version>${javadoc-utils.version}</version>
-                            </tagletArtifact>
-                            <doctitle>Wren:AM ${project.version} Public API Javadoc</doctitle>
-                            <outputDirectory>${project.build.directory}/site/apidocs</outputDirectory>
-                            <finalName>openam-${project.version}-public</finalName>
-                            <subpackages>
-                                com.iplanet.am.sdk:com.iplanet.am.util:com.iplanet.dpro.parser:com.iplanet.dpro.session.service:com.iplanet.log:com.iplanet.services.cdm:com.iplanet.services.ldap:com.iplanet.services.util:com.iplanet.sso:com.iplanet.ums:com.sun.identity.authentication:com.sun.identity.entitlement:com.sun.identity.federation.accountmgmt:com.sun.identity.federation.common:com.sun.identity.federation.message:com.sun.identity.federation.message.common:com.sun.identity.federation.plugins:com.sun.identity.federation.services:com.sun.identity.idm:com.sun.identity.jaxrpc:com.sun.identity.liberty.ws.authnsvc:com.sun.identity.liberty.ws.authnsvc.mechanism:com.sun.identity.liberty.ws.authnsvc.protocol:com.sun.identity.liberty.ws.common:com.sun.identity.liberty.ws.common.wsse:com.sun.identity.liberty.ws.disco:com.sun.identity.liberty.ws.disco.plugins:com.sun.identity.liberty.ws.dst:com.sun.identity.liberty.ws.dst.service:com.sun.identity.liberty.ws.idpp.common:com.sun.identity.liberty.ws.idpp.plugin:com.sun.identity.liberty.ws.interaction:com.sun.identity.liberty.ws.interfaces:com.sun.identity.liberty.ws.paos:com.sun.identity.liberty.ws.security:com.sun.identity.liberty.ws.soapbinding:com.sun.identity.log:com.sun.identity.plugin.configuration:com.sun.identity.plugin.datastore:com.sun.identity.plugin.log:com.sun.identity.plugin.session:com.sun.identity.policy:com.sun.identity.sae.api:com.sun.identity.saml:com.sun.identity.saml2.assertion:com.sun.identity.saml2.common:com.sun.identity.saml2.ecp:com.sun.identity.saml2.plugins:com.sun.identity.saml2.profile:com.sun.identity.saml2.protocol:com.sun.identity.security:com.sun.identity.shared.debug:com.sun.identity.shared.jaxrpc:com.sun.identity.shared.locale:com.sun.identity.shared.stats:com.sun.identity.shared.whitelist:com.sun.identity.sm:com.sun.identity.wsfederation.common:com.sun.identity.wsfederation.plugins:com.sun.identity.wss.provider:com.sun.identity.wss.security:com.sun.identity.wss.security.handler:com.sun.identity.wss.sts:com.sun.identity.xacml.client:com.sun.identity.xacml.common:com.sun.identity.xacml.context:com.sun.identity.xacml.context.impl:com.sun.identity.xacml.policy:com.sun.identity.xacml.policy.impl:com.sun.identity.xacml.saml2:com.sun.identity.xacml.saml2.impl:com.sun.liberty:org.forgerock.openam.authentication.modules.oath.plugins:org.forgerock.oauth2.core:org.forgerock.openam.authentication.service:org.forgerock.openam.entitlement:org.forgerock.openam.ldap:org.forgerock.openam.oauth2.provider:org.forgerock.openam.session.service:org.forgerock.openam.upgrade:org.forgerock.openam.authentication.modules.common.mapping:org.forgerock.openam.services.email:org.forgerock.openam.selfservice.config:org.forgerock.openam.selfservice.config.beans:org.forgerock.openam.sts.tokengeneration.saml2.statements:org.forgerock.openam.sts.config.user:org.forgerock.openam.sts.token:org.forgerock.openam.sts.user.invocation:org.forgerock.openam.sts:org.forgerock.openam.sts.rest.token.validator:org.forgerock.openam.sts.tokengeneration.oidc
-                            </subpackages>
-                            <doclet>com.sun.identity.tools.javadocs.SupportedAPIDoclet</doclet>
-                            <docletArtifact>
-                                <groupId>org.forgerock.openam</groupId>
-                                <artifactId>javadoc-utils</artifactId>
-                                <version>${javadoc-utils.version}</version>
-                            </docletArtifact>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>precommit</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-enforcer-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>enforce-no-snapshots</id>
-                                <goals>
-                                    <goal>enforce</goal>
-                                </goals>
-                                <configuration>
-                                    <rules>
-                                        <requireReleaseDeps>
-                                            <message>No snapshot dependencies allowed</message>
-                                            <failWhenParentIsSnapshot>false</failWhenParentIsSnapshot>
-                                            <excludes>
-                                                <exclude>org.forgerock.openam:*</exclude>
-                                                <exclude>org.forgerock.openig:openig-toolkit:*</exclude>
-                                            </excludes>
-                                        </requireReleaseDeps>
-                                    </rules>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
-
-    <!-- Wren:AM Child Modules -->
-    <!-- Build order will be determined by the Maven Reactor. -->
     <modules>
-        <module>openam-http</module>
-
-        <module>openam-ldap-utils</module>
-        <module>openam-datastore</module>
-
-        <!-- Wren:AM Shared - Common Module -->
-        <module>openam-shared</module>
-
-        <!-- Wren:AM Scripting -->
-        <module>openam-scripting</module>
-
-        <!-- Wren:AM Entitlement Module (XACML 3)-->
-        <module>openam-entitlements</module>
-
-        <!-- Wren:AM Authentication Modules -->
+        <module>openam-annotations</module>
+        <module>openam-audit</module>
         <module>openam-authentication</module>
-
-        <!-- Wren:AM Schema Modules -->
-        <module>openam-schema</module>
-
-        <!-- Wren:AM CoreToken Module -->
+        <module>openam-certs</module>
+        <module>openam-cli</module>
+        <module>openam-clientsdk</module>
+        <module>openam-common-auth-ui</module>
+        <module>openam-console</module>
+        <module>openam-core-rest</module>
+        <module>openam-core</module>
         <module>openam-coretoken</module>
-
-        <!-- Wren:AM REST - CORE Module -->
+        <module>openam-dashboard</module>
+        <module>openam-datastore</module>
+        <module>openam-distribution</module>
+        <module>openam-entitlements</module>
+        <module>openam-examples</module>
+        <module>openam-federation</module>
+        <module>openam-http-client</module>
+        <module>openam-http</module>
+        <module>openam-i18n</module>
+        <module>openam-ldap-utils</module>
+        <module>openam-notifications-integration</module>
+        <module>openam-notifications-websocket</module>
+        <module>openam-notifications</module>
+        <module>openam-oauth2-saml2</module>
+        <module>openam-oauth2</module>
+        <module>openam-plugins</module>
+        <module>openam-push-notification</module>
+        <module>openam-radius</module>
         <module>openam-rest</module>
         <module>openam-restlet</module>
-
-        <module>openam-plugins</module>
-
-        <module>openam-console</module>
-
-        <!-- Wren:AM Core Module -->
-        <module>openam-core</module>
-        <module>openam-core-rest</module>
-
-        <!-- Wren:AM CLI Module -->
-        <module>openam-cli</module>
-
-        <!-- Wren:AM Federation Modules -->
-        <module>openam-federation</module>
-
-        <!-- Wren:AM OAuth2 Token Service -->
-        <module>openam-oauth2</module>
-        <module>openam-uma</module>
-
-        <module>openam-common-auth-ui</module>
-
-        <module>openam-server-auth-ui</module>
-
-        <module>openam-ui</module>
-
-        <module>openam-server-only</module>
-
-        <!-- Wren:AM Server -->
-        <module>openam-server</module>
-
-        <!-- Tools Artifacts -->
-        <module>openam-tools</module>
-
-        <!-- Java Client SDK Artifacts -->
-        <module>openam-clientsdk</module>
-
-        <!-- Documentation -->
-        <module>openam-documentation</module>
-
-        <!-- Final Packaging Distribution Kit -->
-        <module>openam-distribution</module>
-        <!-- Final Packaging Distribution Kit -->
-        <module>openam-dashboard</module>
-
-        <!-- Radius Server and common libs. -->
-        <module>openam-radius</module>
-
-        <module>openam-examples</module>
-        <module>openam-annotations</module>
-        <module>openam-sts</module>
-        <module>openam-slf4j</module>
-        <module>openam-oauth2-saml2</module>
-        <module>openam-http-client</module>
-        <module>openam-tokens</module>
-        <module>openam-certs</module>
-        <module>openam-upgrade</module>
-        <module>openam-audit</module>
+        <module>openam-scripting</module>
         <module>openam-selfservice</module>
-
-        <!-- (Mobile) Push Notification Service -->
-        <module>openam-push-notification</module>
-
-        <module>openam-time-travel</module>
-        <module>openam-i18n</module>
+        <module>openam-server-auth-ui</module>
+        <module>openam-server-only</module>
+        <module>openam-server</module>
+        <module>openam-shared</module>
+        <module>openam-schema</module>
+        <module>openam-slf4j</module>
+        <module>openam-sts</module>
         <module>openam-test-utils</module>
-        <module>openam-notifications</module>
-        <module>openam-notifications-websocket</module>
-        <module>openam-notifications-integration</module>
+        <module>openam-time-travel</module>
+        <module>openam-tokens</module>
+        <module>openam-tools</module>
+        <module>openam-ui</module>
+        <module>openam-uma</module>
+        <module>openam-upgrade</module>
     </modules>
 
-    <!-- Mailing Lists -->
-    <mailingLists>
-        <mailingList>
-            <name>Wren Security Mailing List</name>
-            <archive>https://groups.google.com/forum/#!forum/wren-security</archive>
-            <subscribe>https://groups.google.com/forum/#!forum/wren-security</subscribe>
-            <unsubscribe>https://groups.google.com/forum/#!forum/wren-security</unsubscribe>
-            <post>wren-security@googlegroups.com</post>
-        </mailingList>
-    </mailingLists>
-
-    <!-- Maven Repositories -->
-    <repositories>
-
-        <repository>
-            <id>wrensecurity-releases</id>
-            <name>Wren Security Release Repository</name>
-            <url>https://wrensecurity.jfrog.io/wrensecurity/releases</url>
-
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-        </repository>
-
-        <repository>
-            <id>wrensecurity-snapshots</id>
-            <name>Wren Security Snapshot Repository</name>
-            <url>https://wrensecurity.jfrog.io/wrensecurity/snapshots</url>
-
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-        </repository>
-    </repositories>
-
-    <!-- Source Control -->
-    <scm>
-        <url>https://github.com/WrenSecurity/WrenAM</url>
-        <connection>scm:git:git://github.com/WrenSecurity/WrenAM.git</connection>
-        <developerConnection>scm:git:git@github.com:WrenSecurity/WrenAM.git</developerConnection>
-        <tag>HEAD</tag>
-    </scm>
-
-
-    <!-- Dependency Management -->
     <dependencyManagement>
         <dependencies>
-            <!-- TODO: Remove org.forgerock.commons -->
-            <dependency>
-                <groupId>org.forgerock.commons</groupId>
-                <artifactId>commons-bom</artifactId>
-                <version>22.1.0-SNAPSHOT</version>
-                <scope>import</scope>
-                <type>pom</type>
-            </dependency>
             <dependency>
                 <groupId>org.wrensecurity.commons</groupId>
                 <artifactId>commons-bom</artifactId>
@@ -570,603 +266,87 @@
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
-            <!-- Wren:AM project dependencies -->
+
+            <!-- We need to downgrade Mockito version because PowerMock is not compatible with 4+ -->
             <dependency>
-                <groupId>org.forgerock.openam</groupId>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
+                <version>${mockito.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.wrensecurity.wrenam</groupId>
                 <artifactId>openam-audit-context</artifactId>
                 <version>${project.version}</version>
             </dependency>
+
             <dependency>
-                <groupId>org.forgerock.openam</groupId>
+                <groupId>org.wrensecurity.wrenam</groupId>
                 <artifactId>openam-audit-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
+
             <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-audit-configuration</artifactId>
+                <groupId>org.wrensecurity.wrenam</groupId>
+                <artifactId>openam-auth-common</artifactId>
                 <version>${project.version}</version>
             </dependency>
+
             <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-audit-rest</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-shared</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
+                <groupId>org.wrensecurity.wrenam</groupId>
                 <artifactId>openam-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
+
             <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-core</artifactId>
-                <type>test-jar</type>
-                <scope>test</scope>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
+                <groupId>org.wrensecurity.wrenam</groupId>
                 <artifactId>openam-core-rest</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-radius-common</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-radius-server</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-push-notification</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-notifications</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-notifications-websocket</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-notifications-integration</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-
-            <!-- Include all Authentication Modules -->
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-auth-ad</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-auth-anonymous</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-auth-adaptive</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-auth-application</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-auth-cert</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-auth-datastore</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-auth-persistentcookie</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-auth-common</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-auth-hotp</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-auth-httpbasic</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-auth-jdbc</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-auth-ldap</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-auth-scripted</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-auth-device-id</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-auth-membership</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-auth-msisdn</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-auth-nt</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-auth-oath</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-auth-fr-oath</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-auth-saml2</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-auth-push</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-auth-oauth2</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-auth-radius</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-auth-safeword</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-auth-securid</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-auth-windowsdesktopsso</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-auth-oidc</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-auth-amster</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-coretoken</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
+                <groupId>org.wrensecurity.wrenam</groupId>
                 <artifactId>openam-entitlements</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-restlet</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-rest</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-dashboard</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-annotations</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-datastore</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-ldap-utils</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-federation-library</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-fedlet-unconfigured-war</artifactId>
-                <type>war</type>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-idpdiscovery</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>OpenFM</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-idpdiscovery-war</artifactId>
-                <version>${project.version}</version>
-                <type>war</type>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-example-clientsdk-cli</artifactId>
-                <version>${project.version}</version>
-                <type>zip</type>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-example-clientsdk-war</artifactId>
-                <version>${project.version}</version>
-                <type>war</type>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-oauth2</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-oauth2-saml2</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-uma</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-installtools</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-installtools-launcher</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-certs</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-selfservice</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-
-            <!-- Wren:AM schema projects -->
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-dtd-schema</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-jaxrpc-schema</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-saml2-schema</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-mib-schema</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-wsfederation-schema</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-idsvcs-schema</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-liberty-schema</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-xacml3-schema</artifactId>
-                <version>${project.version}</version>
-            </dependency>
 
             <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-common-auth-ui</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-server-auth-ui</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-installer-tools</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-sts</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-rest-sts</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-publish-sts</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-soap-sts</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-soap-sts-server</artifactId>
-                <version>${project.version}</version>
-                <type>war</type>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-common-sts</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-token-service-sts</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-client-sts</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-slf4j</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-scripting</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-http-client</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-tokens</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-http</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <!-- New RIA Client UI -->
-            <dependency>
-                <groupId>org.forgerock.commons.ui</groupId>
-                <artifactId>forgerock-ui-user</artifactId>
-                <version>${forgerock.ui.version}</version>
-                <type>zip</type>
-                <classifier>www</classifier>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-ui-ria</artifactId>
-                <version>${project.version}</version>
-                <classifier>www</classifier>
-                <type>zip</type>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-ui-api</artifactId>
-                <version>${project.version}</version>
-                <type>jar</type>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.commons.ui.libs</groupId>
-                <artifactId>jquery.qrcode</artifactId>
-                <version>0.11.0</version>
-                <type>js</type>
-                <classifier>min</classifier>
-            </dependency>
-
-            <!-- CLI components -->
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-cli-definitions</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-cli-impl</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <!-- License -->
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-license-manager-cli</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-license-core</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-license-servlet</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-installer-utils</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <!-- Distribution dependencies -->
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-server</artifactId>
-                <version>${project.version}</version>
-                <type>war</type>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-server-only</artifactId>
-                <version>${project.version}</version>
-                <type>war</type>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-console</artifactId>
-                <version>${project.version}</version>
-                <type>war</type>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-clientsdk</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-configurator-tool</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-upgrade-tool</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-distribution-fedlet-unconfigured</artifactId>
-                <version>${project.version}</version>
-                <type>zip</type>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-distribution-ssoadmintools</artifactId>
-                <version>${project.version}</version>
-                <type>zip</type>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-distribution-ssoconfiguratortools</artifactId>
-                <version>${project.version}</version>
-                <type>zip</type>
-            </dependency>
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-upgrade</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
-                <artifactId>openam-authfilter-shared</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.forgerock.openam</groupId>
+                <groupId>org.wrensecurity.wrenam</groupId>
                 <artifactId>openam-i18n</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <!-- External project dependencies -->
+
+            <dependency>
+                <groupId>org.wrensecurity.wrenam</groupId>
+                <artifactId>openam-ldap-utils</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.wrensecurity.wrenam</groupId>
+                <artifactId>openam-oauth2</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.wrensecurity.wrenam</groupId>
+                <artifactId>openam-rest</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.wrensecurity.wrenam</groupId>
+                <artifactId>openam-scripting</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.wrensecurity.wrenam</groupId>
+                <artifactId>openam-shared</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.apache.click</groupId>
                 <artifactId>click-extras</artifactId>
@@ -1233,27 +413,25 @@
                 <version>${commons-logging-api.version}</version>
             </dependency>
 
-            <!-- Mozilla Rhino Javascript engine -->
             <dependency>
                 <groupId>org.mozilla</groupId>
                 <artifactId>rhino</artifactId>
                 <version>${rhino.version}</version>
             </dependency>
 
-            <!-- Groovy scripting support -->
             <dependency>
                 <groupId>org.codehaus.groovy</groupId>
                 <artifactId>groovy-jsr223</artifactId>
                 <version>${groovy.version}</version>
             </dependency>
 
-            <!-- Groovy JSON parsing support -->
             <dependency>
                 <groupId>org.codehaus.groovy</groupId>
                 <artifactId>groovy-json</artifactId>
                 <version>${groovy.version}</version>
             </dependency>
 
+            <!-- FIXME Do we need this dependency? -->
             <dependency>
                 <!-- MIT licensed: http://groovy-sandbox.kohsuke.org/license.html -->
                 <groupId>org.kohsuke</groupId>
@@ -1268,6 +446,7 @@
                 </exclusions>
             </dependency>
 
+            <!-- FIXME Do we need this dependency? -->
             <dependency>
                 <groupId>external</groupId>
                 <artifactId>esapiport</artifactId>
@@ -1375,19 +554,10 @@
                 <version>${jakarta.xml.ws-api.version}</version>
             </dependency>
 
-            <!-- TODO jmx -->
-
             <dependency>
                 <groupId>org.jdom</groupId>
                 <artifactId>jdom</artifactId>
                 <version>${jdom.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.sleepycat</groupId>
-                <artifactId>je</artifactId>
-                <version>${je.version}</version>
-                <scope>runtime</scope>
             </dependency>
 
             <dependency>
@@ -1552,7 +722,6 @@
                 <version>${fastinfoset.version}</version>
             </dependency>
 
-
             <dependency>
                 <groupId>javax.servlet.jsp</groupId>
                 <artifactId>jsp-api</artifactId>
@@ -1566,29 +735,28 @@
                 <version>${xsdlib.version}</version>
             </dependency>
 
-            <!-- OpenDJ API -->
             <dependency>
                 <groupId>org.wrensecurity.wrends</groupId>
                 <artifactId>opendj-core</artifactId>
-                <version>${wrends.sdk.version}</version>
+                <version>${wrends.version}</version>
             </dependency>
-            <!-- OpenDJ Grizzly -->
+
             <dependency>
                 <groupId>org.wrensecurity.wrends</groupId>
                 <artifactId>opendj-grizzly</artifactId>
-                <version>${wrends.sdk.version}</version>
+                <version>${wrends.version}</version>
             </dependency>
-            <!-- OpenDJ Server -->
+
             <dependency>
                 <groupId>org.wrensecurity.wrends</groupId>
                 <artifactId>opendj-server</artifactId>
-                <version>${wrends.server.version}</version>
+                <version>${wrends.version}</version>
             </dependency>
-            <!-- OpenDJ Server -->
+
             <dependency>
                 <groupId>org.wrensecurity.wrends</groupId>
                 <artifactId>opendj-server-legacy</artifactId>
-                <version>${wrends.server.legacy}</version>
+                <version>${wrends.version}</version>
                 <exclusions>
                     <exclusion>
                         <groupId>org.slf4j</groupId>
@@ -1724,14 +892,14 @@
 
             <!-- Commons Dependencies -->
             <dependency>
-                <groupId>org.forgerock.commons</groupId>
+                <groupId>org.wrensecurity.commons</groupId>
                 <artifactId>forgerock-bloomfilter-core</artifactId>
-                <version>${forgerock.bloomfilter.version}</version>
+                <version>${wrensec-commons.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.forgerock.commons</groupId>
+                <groupId>org.wrensecurity.commons</groupId>
                 <artifactId>forgerock-bloomfilter-monitoring</artifactId>
-                <version>${forgerock.bloomfilter.version}</version>
+                <version>${wrensec-commons.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.google.code.findbugs</groupId>
@@ -1960,7 +1128,7 @@
                 <scope>test</scope>
             </dependency>
             <dependency>
-                <groupId>org.forgerock.openam</groupId>
+                <groupId>org.wrensecurity.wrenam</groupId>
                 <artifactId>openam-test-utils</artifactId>
                 <version>${project.version}</version>
                 <scope>test</scope>
@@ -1977,7 +1145,7 @@
                 <version>${hikaricp.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.forgerock.openam</groupId>
+                <groupId>org.wrensecurity.wrenam</groupId>
                 <artifactId>openam-time-travel</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -1999,250 +1167,16 @@
         </dependency>
     </dependencies>
 
-    <!-- Build -->
     <build>
-        <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>buildnumber-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>create</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <buildNumberPropertyName>git.short.sha1</buildNumberPropertyName>
-                    <getRevisionOnlyOnce>true</getRevisionOnlyOnce>
-                    <shortRevisionLength>10</shortRevisionLength>
-                </configuration>
-            </plugin>
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <release combine.self="override" />
-                    <compilerArgument>-Xlint:none</compilerArgument>
-                    <showDeprecation>false</showDeprecation>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <configuration>
-                    <autoVersionSubmodules>true</autoVersionSubmodules>
-                    <updateBranchVersions>true</updateBranchVersions>
-                    <goals>install javadoc:aggregate-jar deploy</goals>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <argLine>${java.surefire.options}</argLine>
-                    <redirectTestOutputToFile>true</redirectTestOutputToFile>
-                    <forkMode>once</forkMode>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>test</phase>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>integration-test</goal>
-                            <goal>verify</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-pmd-plugin</artifactId>
-                <configuration>
-                    <!--
-                    <rulesets>
-                        <ruleset>java-enforce-timeservice</ruleset>
-                    </rulesets>
-                    -->
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>process-sources</phase>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <!--
-                <dependencies>
-                    <dependency>
-                        <groupId>org.forgerock.openam.pmd.rules</groupId>
-                        <artifactId>enforce-timeservice</artifactId>
-                        <version>1.0.0</version>
-                    </dependency>
-                </dependencies>
-                -->
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <inherited>true</inherited>
-                <configuration>
-                    <escapeString>\</escapeString>
-                    <encoding>UTF-8</encoding>
-                    <nonFilteredFileExtensions>
-                        <!-- Exclude any binary files based upon File Types. -->
-                        <nonFilteredFileExtension>bin</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>bkf</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>bmp</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>bz2</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>deb</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>dll</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>dmg</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>ear</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>exe</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>gif</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>gz</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>gzip</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>ico</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>jar</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>jks</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>jceks</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>jpg</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>jpeg</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>lz</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>png</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>pdf</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>rar</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>rpm</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>tar</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>tgz</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>war</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>zip</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>7z</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>woff2</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>woff</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>ttf</nonFilteredFileExtension>
-                        <!-- See: http://en.wikipedia.org/wiki/List_of_file_formats -->
-                    </nonFilteredFileExtensions>
-                    <useDefaultDelimiters>false</useDefaultDelimiters>
-                    <delimiters>
-                        <delimiter>${*}</delimiter>
-                    </delimiters>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <configuration>
-                    <archive>
-                        <index>true</index>
-                        <manifestEntries>
-                            <Specification-Title>${project.name}</Specification-Title>
-                            <Specification-Version>${project.version} - ${maven.build.timestamp}</Specification-Version>
-                            <Specification-Vendor>Wren Security</Specification-Vendor>
-                            <Implementation-Title>${project.name}</Implementation-Title>
-                            <Implementation-Version>${project.version} - ${maven.build.timestamp}</Implementation-Version>
-                            <Implementation-Vendor>ForgeRock</Implementation-Vendor>
-                            <Built-By>${user.name}</Built-By>
-                            <Build-Jdk>${java.version}</Build-Jdk>
-                            <Build-Time>${maven.build.timestamp}</Build-Time>
-                            <Version>${project.version}</Version>
-                            <Create-On>${maven.build.timestamp}</Create-On>
-                            <Revision>${git.short.sha1}</Revision>
-                        </manifestEntries>
-                    </archive>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.forgerock.maven.plugins</groupId>
-                <artifactId>javadoc-updater-maven-plugin</artifactId>
-                <version>1.0.0</version>
-                <executions>
-                    <execution>
-                        <phase>site</phase>
-                        <goals>
-                            <goal>fixjavadoc</goal>
-                        </goals>
-                        <configuration>
-                            <directory>${project.reporting.outputDirectory}</directory>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>net.ju-n.maven.plugins</groupId>
-                <artifactId>checksum-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>generate-checksum</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>artifacts</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <failOnError>false</failOnError>
-                    <algorithms>
-                        <algorithm>SHA</algorithm>
-                    </algorithms>
-                    <individualFiles>true</individualFiles>
-                    <quiet>true</quiet>
-                </configuration>
-            </plugin>
-        </plugins>
-
         <pluginManagement>
             <plugins>
-                <!-- TODO: Remove this plugin settings. It is already done in wrensec-parent. -->
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-checkstyle-plugin</artifactId>
-                    <version>${checkstylePluginVersion}</version>
-
-                    <dependencies>
-                        <dependency>
-                            <groupId>org.wrensecurity</groupId>
-                            <artifactId>wrensec-build-tools</artifactId>
-                            <version>${wrenBuildToolsVersion}</version>
-                        </dependency>
-
-                        <dependency>
-                            <groupId>com.puppycrawl.tools</groupId>
-                            <artifactId>checkstyle</artifactId>
-                            <version>8.41.1</version>
-                        </dependency>
-                    </dependencies>
-
-                    <configuration>
-                        <enableRSS>false</enableRSS>
-                        <configLocation>${checkstyleSourceConfigLocation}</configLocation>
-                        <headerLocation>${checkstyleHeaderLocation}</headerLocation>
-                        <suppressionsLocation>${checkstyleSuppressionsLocation}</suppressionsLocation>
-                        <includeTestSourceDirectory>true</includeTestSourceDirectory>
-
-                        <!-- Only output errors if we're not expecting any -->
-                        <consoleOutput>${checkstyleFailOnError}</consoleOutput>
-                        <failsOnError>${checkstyleFailOnError}</failsOnError>
-                    </configuration>
-                </plugin>
                 <plugin>
                     <groupId>com.github.searls</groupId>
                     <artifactId>jasmine-maven-plugin</artifactId>
                     <version>2.0-alpha-01</version>
                 </plugin>
                 <plugin>
-                    <groupId>org.forgerock.maven.plugins</groupId>
+                    <groupId>${project.groupId}</groupId>
                     <artifactId>build-helper-plugin</artifactId>
                     <version>${project.version}</version>
                 </plugin>
@@ -2269,7 +1203,7 @@
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>buildnumber-maven-plugin</artifactId>
-                    <version>1.3</version>
+                    <version>3.0.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.skins</groupId>
@@ -2323,6 +1257,156 @@
                 </plugin>
             </plugins>
         </pluginManagement>
+
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>buildnumber-maven-plugin</artifactId>
+
+                <configuration>
+                    <getRevisionOnlyOnce>true</getRevisionOnlyOnce>
+                    <shortRevisionLength>10</shortRevisionLength>
+                </configuration>
+
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>create</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+
+                <configuration>
+                    <release combine.self="override" />
+                    <compilerArgument>-Xlint:none</compilerArgument>
+                    <showDeprecation>false</showDeprecation>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+
+                <configuration>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <updateBranchVersions>true</updateBranchVersions>
+                    <goals>install javadoc:aggregate-jar deploy</goals>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+
+                <configuration>
+                    <argLine>${java.surefire.options}</argLine>
+                    <redirectTestOutputToFile>true</redirectTestOutputToFile>
+                    <forkMode>once</forkMode>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+
+                <configuration>
+                    <!-- XXX We might want to replicate behaviour of the missing plugin
+                    <rulesets>
+                        <ruleset>java-enforce-timeservice</ruleset>
+                    </rulesets>
+                    -->
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+
+                <configuration>
+                    <escapeString>\</escapeString>
+                    <encoding>UTF-8</encoding>
+                    <nonFilteredFileExtensions>
+                        <!-- Exclude any binary files based upon File Types. -->
+                        <nonFilteredFileExtension>bin</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>bkf</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>bmp</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>bz2</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>deb</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>dll</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>dmg</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>ear</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>exe</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>gif</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>gz</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>gzip</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>ico</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>jar</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>jks</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>jceks</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>jpg</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>jpeg</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>lz</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>png</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>pdf</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>rar</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>rpm</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>tar</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>tgz</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>war</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>zip</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>7z</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>woff2</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>woff</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>ttf</nonFilteredFileExtension>
+                        <!-- See: http://en.wikipedia.org/wiki/List_of_file_formats -->
+                    </nonFilteredFileExtensions>
+                    <useDefaultDelimiters>false</useDefaultDelimiters>
+                    <delimiters>
+                        <delimiter>${*}</delimiter>
+                    </delimiters>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <index>true</index>
+                        <manifestEntries>
+                            <Specification-Title>${project.name}</Specification-Title>
+                            <Specification-Version>${project.version} - ${buildNumber}</Specification-Version>
+                            <Specification-Vendor>Wren Security</Specification-Vendor>
+                            <Implementation-Title>${project.name}</Implementation-Title>
+                            <Implementation-Version>${project.version} - ${buildNumber}</Implementation-Version>
+                            <Implementation-Vendor>Wren Security</Implementation-Vendor>
+                            <Built-By>${user.name}</Built-By>
+                            <Build-Jdk>${java.version}</Build-Jdk>
+                            <Version>${project.version}</Version>
+                            <Revision>${buildNumber}</Revision>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
 
     <reporting>

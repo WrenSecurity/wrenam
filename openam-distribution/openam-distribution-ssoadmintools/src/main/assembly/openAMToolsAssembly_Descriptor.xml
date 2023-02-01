@@ -38,29 +38,29 @@
             <outputFileNameMapping>${artifact.artifactId}-${artifact.baseVersion}${dashClassifier?}.${artifact.extension}</outputFileNameMapping>
             <outputDirectory>lib</outputDirectory>
             <includes>
-                <include>org.forgerock.openam:openam-shared</include>
-                <include>org.forgerock.openam:openam-core</include>
-                <include>org.forgerock.openam:openam-cli-definitions</include>
-                <include>org.forgerock.openam:openam-cli-impl</include>
-                <include>org.forgerock.openam:openam-entitlements</include>
-                <include>org.forgerock.openam:openam-federation-library</include>
-                <include>org.forgerock.openam:OpenFM</include>
-                <include>org.forgerock.openam:openam-dtd-schema</include>
-                <include>org.forgerock.openam:openam-jaxrpc-schema</include>
-                <include>org.forgerock.openam:openam-idsvcs-schema</include>
-                <include>org.forgerock.openam:openam-liberty-schema</include>
-                <include>org.forgerock.openam:openam-saml2-schema</include>
-                <include>org.forgerock.openam:openam-xacml3-schema</include>
-                <include>org.forgerock.openam:openam-wsfederation-schema</include>
+                <include>org.wrensecurity.wrenam:openam-shared</include>
+                <include>org.wrensecurity.wrenam:openam-core</include>
+                <include>org.wrensecurity.wrenam:openam-cli-definitions</include>
+                <include>org.wrensecurity.wrenam:openam-cli-impl</include>
+                <include>org.wrensecurity.wrenam:openam-entitlements</include>
+                <include>org.wrensecurity.wrenam:openam-federation-library</include>
+                <include>org.wrensecurity.wrenam:OpenFM</include>
+                <include>org.wrensecurity.wrenam:openam-dtd-schema</include>
+                <include>org.wrensecurity.wrenam:openam-jaxrpc-schema</include>
+                <include>org.wrensecurity.wrenam:openam-idsvcs-schema</include>
+                <include>org.wrensecurity.wrenam:openam-liberty-schema</include>
+                <include>org.wrensecurity.wrenam:openam-saml2-schema</include>
+                <include>org.wrensecurity.wrenam:openam-xacml3-schema</include>
+                <include>org.wrensecurity.wrenam:openam-wsfederation-schema</include>
                 <include>org.forgerock.opendj:opendj-server</include>
                 <include>org.forgerock.commons:forgerock-util</include>
-                <include>org.forgerock.openam:openam-license-manager-cli</include>
+                <include>org.wrensecurity.wrenam:openam-license-manager-cli</include>
                 <include>org.forgerock.commons:forgerock-guice-core</include>
-                <include>org.forgerock.openam:openam-license-core</include>
-                <include>org.forgerock.openam:openam-auth-scripted</include>
-                <include>org.forgerock.openam:openam-scripting</include>
-                <include>org.forgerock.openam:openam-ldap-utils</include>
-                <include>org.forgerock.openam:openam-audit-context</include>
+                <include>org.wrensecurity.wrenam:openam-license-core</include>
+                <include>org.wrensecurity.wrenam:openam-auth-scripted</include>
+                <include>org.wrensecurity.wrenam:openam-scripting</include>
+                <include>org.wrensecurity.wrenam:openam-ldap-utils</include>
+                <include>org.wrensecurity.wrenam:openam-audit-context</include>
                 <include>org.forgerock.commons:json-resource</include>
                 <include>javax.inject:javax.inject</include>
                 <include>com.google.inject:guice:jar:no_aop</include>
@@ -92,7 +92,7 @@
                 <include>org.wrensecurity.commons:i18n-core</include>
                 <include>org.forgerock.commons:forgerock-audit-core</include>
                 <include>org.glassfish.grizzly:grizzly-framework</include>
-                <include>org.forgerock.openam:openam-auth-fr-oath</include>
+                <include>org.wrensecurity.wrenam:openam-auth-fr-oath</include>
             </includes>
         </dependencySet>
         <dependencySet>
@@ -112,14 +112,7 @@
         </fileSet>
         <fileSet>
             <outputDirectory>legal-notices</outputDirectory>
-            <directory>${project.build.directory}/legal-notices</directory>
-            <includes>
-                <include>license.txt</include>
-            </includes>
-        </fileSet>
-        <fileSet>
-            <outputDirectory>legal-notices</outputDirectory>
-            <directory>${project.basedir}/../../license</directory>
+            <directory>${project.basedir}/../../legal-notices</directory>
             <includes>
                 <include>**/**</include>
             </includes>
@@ -257,4 +250,3 @@
         </file>
     </files>
 </assembly>
-

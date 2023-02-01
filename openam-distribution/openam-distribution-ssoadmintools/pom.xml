@@ -13,24 +13,23 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2011-2016 ForgeRock AS.
- * Portions Copyright 2018-2022 Wren Security
+ * Portions Copyright 2018-2023 Wren Security
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- Parent Project -->
     <parent>
-        <groupId>org.forgerock.openam</groupId>
+        <groupId>org.wrensecurity.wrenam</groupId>
         <artifactId>openam-distribution</artifactId>
-        <version>14.0.0-SNAPSHOT</version>
+        <version>15.0.0-SNAPSHOT</version>
     </parent>
 
-    <!-- Component Definition -->
-    <name>Wren:AM - Distribution SSO Admin Tools</name>
-    <description>Wren:AM Distribution SSO Admin Tools Kit.
-    </description>
     <artifactId>openam-distribution-ssoadmintools</artifactId>
     <packaging>pom</packaging>
+
+    <name>Wren:AM - Distribution SSO Admin Tools</name>
+    <description>Wren:AM Distribution SSO Admin Tools Kit.</description>
+
     <properties>
         <setupArtifactIDs>
             opendj-server,forgerock-util,json,xmlsec,openam-core,
@@ -40,47 +39,27 @@
             slf4j-api,slf4j-nop,opendj-core,opendj-grizzly,i18n-core,openam-ldap-utils,grizzly-framework,
             forgerock-audit-core,openam-audit-configuration,i18n-slf4j,
             opendj-server-legacy,opendj-config,opendj-cli,chf-http-core,joda-time,
-            jackson-core,jackson-databind,jackson-annotations
+            jackson-core,jackson-databind,jackson-annotations,jaxb-api
         </setupArtifactIDs>
     </properties>
 
-
-    <!-- Build -->
     <build>
         <finalName>SSOAdminTools-${project.version}</finalName>
+
         <plugins>
-            <!-- Get the relevant license from Artifactory -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.10</version>
+
                 <executions>
-                    <execution>
-                        <id>Copy license</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>copy</goal>
-                        </goals>
-                        <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>${forgerock.license.groupId}</groupId>
-                                    <artifactId>${forgerock.license.artifactId}</artifactId>
-                                    <version>${forgerock.license.version}</version>
-                                    <type>txt</type>
-                                    <overWrite>true</overWrite>
-                                    <outputDirectory>${project.build.directory}/legal-notices</outputDirectory>
-                                    <destFileName>license.txt</destFileName>
-                                </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution>
                     <execution>
                         <id>Copy JARs</id>
                         <phase>prepare-package</phase>
+
                         <goals>
                             <goal>copy-dependencies</goal>
                         </goals>
+
                         <configuration>
                             <outputDirectory>${project.build.directory}/lib</outputDirectory>
                             <overWriteReleases>false</overWriteReleases>
@@ -89,12 +68,15 @@
                             <excludeArtifactIds>${forgerock.license.artifactId},openam-rest,openam-installtools,openam-slf4j</excludeArtifactIds>
                         </configuration>
                     </execution>
+
                     <execution>
                         <id>Unix setup classpath</id>
                         <phase>prepare-package</phase>
+
                         <goals>
                             <goal>build-classpath</goal>
                         </goals>
+
                         <configuration>
                             <fileSeparator>/</fileSeparator>
                             <pathSeparator>:</pathSeparator>
@@ -103,12 +85,15 @@
                             <outputProperty>unix.setup.classpath</outputProperty>
                         </configuration>
                     </execution>
+
                     <execution>
                         <id>Windows setup classpath</id>
                         <phase>prepare-package</phase>
+
                         <goals>
                             <goal>build-classpath</goal>
                         </goals>
+
                         <configuration>
                             <fileSeparator>\</fileSeparator>
                             <pathSeparator>;</pathSeparator>
@@ -124,13 +109,14 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
+
                 <executions>
                     <execution>
                         <id>zip-pre-packaging</id>
                         <phase>compile</phase>
+
                         <configuration>
                             <target>
-
                                 <property name="build.class.path" refid="maven.compile.classpath" />
                                 <property name="project.basedir" value="./" />
 
@@ -143,8 +129,8 @@
                                 </tstamp>
                                 <property name="version.set" value="${project.version}" />
 
-                                <filter token="DATESTAMP" value="${war.time.stamp}" />
-                                <filter token="VERSION" value="${version.set}" />
+                                <filter token="VERSION" value="${project.version}" />
+                                <filter token="DATESTAMP" value="${project.build.outputTimestamp}" />
 
                                 <!-- Set our Version Information for the Package -->
                                 <copy todir="${project.build.directory}/resources" overwrite="true" filtering="true" flatten="yes">
@@ -154,6 +140,7 @@
                                 </copy>
                             </target>
                         </configuration>
+
                         <goals>
                             <goal>run</goal>
                         </goals>
@@ -168,15 +155,19 @@
                     <execution>
                         <id>admintools-assembly</id>
                         <phase>package</phase>
+
                         <goals>
                             <goal>single</goal>
                         </goals>
+
                         <configuration>
                             <appendAssemblyId>false</appendAssemblyId>
                             <tarLongFileMode>gnu</tarLongFileMode>
+
                             <descriptors>
                                 <descriptor>src/main/assembly/openAMToolsAssembly_Descriptor.xml</descriptor>
                             </descriptors>
+
                             <escapeString>\</escapeString>
                         </configuration>
                     </execution>
@@ -187,62 +178,71 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-entitlements</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-installtools</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-core</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-cli-definitions</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-cli-impl</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-federation-library</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>OpenFM</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-dtd-schema</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-jaxrpc-schema</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-saml2-schema</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-auth-scripted</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-scripting</artifactId>
         </dependency>
 
@@ -253,8 +253,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-license-manager-cli</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
@@ -278,8 +279,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-slf4j</artifactId>
+            <version>${project.version}</version>
             <scope>runtime</scope>
         </dependency>
 
@@ -299,8 +301,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-auth-fr-oath</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>

@@ -25,7 +25,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertTrue;
 
@@ -237,7 +237,7 @@ public class JaspiAuthLoginModulePAPTest {
         jaspiPostAuthPlugin.onLoginFailure(requestParamsMap, request, response);
 
         //Then
-        verifyZeroInteractions(jaspiAuthWrapper);
+        verifyNoInteractions(jaspiAuthWrapper);
     }
 
     @Test
@@ -252,6 +252,6 @@ public class JaspiAuthLoginModulePAPTest {
         jaspiPostAuthPlugin.onLogout(request, response, ssoToken);
 
         //Then
-        verifyZeroInteractions(jaspiAuthWrapper);
+        verifyNoInteractions(jaspiAuthWrapper);
     }
 }

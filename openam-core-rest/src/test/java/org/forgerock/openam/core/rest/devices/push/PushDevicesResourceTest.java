@@ -23,9 +23,8 @@ import static org.forgerock.json.resource.test.assertj.AssertJQueryResponseAsser
 import static org.forgerock.json.resource.test.assertj.AssertJResourceResponseAssert.assertThat;
 import static org.forgerock.openam.utils.Time.newDate;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
@@ -91,7 +90,7 @@ public class PushDevicesResourceTest {
         MockitoAnnotations.initMocks(this);
         resource = new PushDevicesResourceTestClass(dao, contextHelper, debug, pushServiceFactory);
 
-        given(contextHelper.getUserId((Context) anyObject())).willReturn(USER_ID);
+        given(contextHelper.getUserId(any(Context.class))).willReturn(USER_ID);
         given(pushServiceFactory.create(anyString())).willReturn(pushService);
 
         realmTestHelper = new RealmTestHelper();

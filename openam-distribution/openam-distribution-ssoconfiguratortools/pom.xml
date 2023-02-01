@@ -13,56 +13,27 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2011-2017 ForgeRock AS.
- * Portions Copyright 2018 Wren Security
+ * Portions Copyright 2018-2023 Wren Security
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- Parent Project -->
     <parent>
-        <groupId>org.forgerock.openam</groupId>
+        <groupId>org.wrensecurity.wrenam</groupId>
         <artifactId>openam-distribution</artifactId>
-        <version>14.0.0-SNAPSHOT</version>
+        <version>15.0.0-SNAPSHOT</version>
     </parent>
 
-    <!-- Component Definition -->
-    <name>Wren:AM - Distribution SSO Configurator Tools</name>
-    <description>Wren:AM Distribution SSO Configurator Tools Kit.</description>
     <artifactId>openam-distribution-ssoconfiguratortools</artifactId>
     <packaging>pom</packaging>
 
-    <!-- Build -->
+    <name>Wren:AM - Distribution SSO Configurator Tools</name>
+    <description>Wren:AM Distribution SSO Configurator Tools Kit.</description>
+
     <build>
         <finalName>SSOConfiguratorTools-${project.version}</finalName>
-        <plugins>
-            <!-- Get the relevant license from Artifactory -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>Copy license</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>copy</goal>
-                        </goals>
-                        <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>${forgerock.license.groupId}</groupId>
-                                    <artifactId>${forgerock.license.artifactId}</artifactId>
-                                    <version>${forgerock.license.version}</version>
-                                    <type>txt</type>
-                                    <overWrite>true</overWrite>
-                                    <outputDirectory>${project.build.directory}/legal-notices</outputDirectory>
-                                    <destFileName>license.txt</destFileName>
-                                </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
 
+        <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -70,15 +41,19 @@
                     <execution>
                         <id>openam-ssoconfiguratortools</id>
                         <phase>package</phase>
+
                         <goals>
                             <goal>single</goal>
                         </goals>
+
                         <configuration>
                             <appendAssemblyId>false</appendAssemblyId>
                             <tarLongFileMode>gnu</tarLongFileMode>
+
                             <descriptors>
                                 <descriptor>src/main/assembly/openAMToolsAssembly_Descriptor.xml</descriptor>
                             </descriptors>
+
                             <escapeString>\</escapeString>
                         </configuration>
                     </execution>
@@ -89,17 +64,21 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-configurator-tool</artifactId>
+            <version>${project.version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-nop</artifactId>
             <scope>runtime</scope>
         </dependency>
+
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-upgrade-tool</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 </project>

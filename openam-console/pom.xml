@@ -13,30 +13,29 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2012-2016 ForgeRock AS.
- * Portions Copyright 2018 Wren Security.
+ * Portions Copyright 2018-2023 Wren Security.
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- Parent Project -->
     <parent>
-        <groupId>org.forgerock.openam</groupId>
-        <artifactId>openam</artifactId>
-        <version>14.0.0-SNAPSHOT</version>
+        <groupId>org.wrensecurity.wrenam</groupId>
+        <artifactId>wrenam-project</artifactId>
+        <version>15.0.0-SNAPSHOT</version>
     </parent>
 
-    <!-- Component Definition -->
-    <name>Wren:AM - Admin Console</name>
-    <description>Wren:AM Admin Console</description>
     <artifactId>openam-console</artifactId>
     <packaging>war</packaging>
 
-    <!-- Build -->
+    <name>Wren:AM - Admin Console</name>
+    <description>Wren:AM Admin Console</description>
+
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
+
                 <configuration>
                     <packagingExcludes>
                         WEB-INF/lib/jersey-core-1.1.5.2.jar,
@@ -45,18 +44,18 @@
                         WEB-INF/lib/jaxb-xjc-1.0.6.jar,
                         WEB-INF/lib/jdom-2.0.1.jar,
                     </packagingExcludes>
+
                     <archive>
                         <manifestEntries>
                             <Specification-Title>Wren:AM Admin Console</Specification-Title>
-                            <Specification-Version>${project.version} - ${maven.build.timestamp}</Specification-Version>
+                            <Specification-Version>${project.version} - ${project.build.outputTimestamp}</Specification-Version>
                             <Specification-Vendor>Wren Security</Specification-Vendor>
                             <Implementation-Title>Wren:AM Admin Console</Implementation-Title>
-                            <Implementation-Version>${project.version} - ${maven.build.timestamp}
-                            </Implementation-Version>
-                            <Implementation-Vendor>ForgeRock</Implementation-Vendor>
-                            <Build-Time>${maven.build.timestamp}</Build-Time>
+                            <Implementation-Version>${project.version} - ${project.build.outputTimestamp}</Implementation-Version>
+                            <Implementation-Vendor>Wren Security</Implementation-Vendor>
                         </manifestEntries>
                     </archive>
+
                     <nonFilteredFileExtensions>
                         <!-- Exclude any binary files based upon File Types. -->
                         <nonFilteredFileExtension>bin</nonFilteredFileExtension>
@@ -95,11 +94,11 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
+
                 <configuration>
                     <skip>true</skip>
                 </configuration>
             </plugin>
-
         </plugins>
     </build>
 
@@ -108,79 +107,99 @@
             <groupId>com.iplanet.jato</groupId>
             <artifactId>jato</artifactId>
         </dependency>
+
         <dependency>
             <groupId>com.sun.web.ui</groupId>
             <artifactId>cc</artifactId>
         </dependency>
+
         <dependency>
             <groupId>com.sun.web.ui</groupId>
             <artifactId>cc_de</artifactId>
         </dependency>
+
         <dependency>
             <groupId>com.sun.web.ui</groupId>
             <artifactId>cc_es</artifactId>
         </dependency>
+
         <dependency>
             <groupId>com.sun.web.ui</groupId>
             <artifactId>cc_fr</artifactId>
         </dependency>
+
         <dependency>
             <groupId>com.sun.web.ui</groupId>
             <artifactId>cc_it</artifactId>
         </dependency>
+
         <dependency>
             <groupId>com.sun.web.ui</groupId>
             <artifactId>cc_ja</artifactId>
         </dependency>
+
         <dependency>
             <groupId>com.sun.web.ui</groupId>
             <artifactId>cc_ko</artifactId>
         </dependency>
+
         <dependency>
             <groupId>com.sun.web.ui</groupId>
             <artifactId>cc_sv</artifactId>
         </dependency>
+
         <dependency>
             <groupId>com.sun.web.ui</groupId>
             <artifactId>cc_zh</artifactId>
         </dependency>
+
         <dependency>
             <groupId>com.sun.web.ui</groupId>
             <artifactId>cc_zh_CN</artifactId>
         </dependency>
+
         <dependency>
             <groupId>com.sun.web.ui</groupId>
             <artifactId>cc_zh_HK</artifactId>
         </dependency>
+
         <dependency>
             <groupId>com.sun.web.ui</groupId>
             <artifactId>cc_zh_TW</artifactId>
         </dependency>
+
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>javax.servlet.jsp</groupId>
             <artifactId>jsp-api</artifactId>
         </dependency>
+
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-core</artifactId>
         </dependency>
+
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-entitlements</artifactId>
         </dependency>
+
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>OpenFM</artifactId>
+            <version>${project.version}</version>
         </dependency>
+
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
+            <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-oauth2</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.easytesting</groupId>
             <artifactId>fest-assert</artifactId>
