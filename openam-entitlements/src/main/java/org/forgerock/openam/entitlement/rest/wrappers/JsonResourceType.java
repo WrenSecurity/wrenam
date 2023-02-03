@@ -31,7 +31,7 @@ import java.util.Set;
  * Wrapper for the conversion of ResourceType to and from JSON.
  *
  * Taking an instance of an {@link org.forgerock.openam.entitlement.ResourceType} this class exposes the necessary
- * parts of that class to the Jackson {@link org.codehaus.jackson.map.ObjectMapper} via annotations.
+ * parts of that class to the Jackson {@link com.fasterxml.jackson.databind.ObjectMapper} via annotations.
  */
 public class JsonResourceType {
 

@@ -29,7 +29,7 @@ import org.forgerock.openam.utils.JsonValueBuilder;
 
 /**
  * Wrapper for the jsonification of {@link ReferralPrivilege} objects, for
- * interaction via the REST endpoint {@link org.forgerock.openam.forgerockrest.entitlements.ReferralsResource}.
+ * interaction via the REST endpoint {@code org.forgerock.openam.rest.entitlements.ReferralsResource}.
  */
 public class ReferralWrapper implements Comparable<ReferralWrapper> {
 

@@ -1,4 +1,4 @@
-/**
+/*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
  * Copyright (c) 2006 Sun Microsystems Inc. All Rights Reserved
@@ -24,9 +24,8 @@
  *
  * $Id: CLIDefinitionGenerator.java,v 1.9 2008/06/25 05:42:24 qcheng Exp $
  *
- */
-/**
  * Portions Copyrighted 2012 ForgeRock Inc
+ * Portions Copyright 2023 Wren Security
  */
 package org.forgerock.maven.plugins;
 
@@ -48,44 +47,40 @@ import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 
-/**
- *
- * @author Peter Major
- * @goal generate-cli
- */
+@Mojo(name = "generate-cli")
 public class CLIDefinitionGenerator extends AbstractMojo {
-    
+
     private static Map<String, String> mapLongToShortOptionName =
             new HashMap<String, String>();
     /**
      * A list of fully qualified classnames of CLI definitions.
-     * @parameter
      */
+    @Parameter
     private List<String> definitions = new ArrayList<String>();
+
     /**
      * The directory where the generated properties files should be written to.
-     * @parameter
-     * @required
      */
+    @Parameter(required = true)
     private String outputDir;
-    /**
-     * @parameter default-value="${project}"
-     * @required
-     * @readonly
-     */
+
+    @Parameter(defaultValue = "${project}",required = true, readonly = true)
     protected MavenProject project = new MavenProject();
-    
+
+    @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         for (String className : definitions) {
             try {
                 Class clazz = Class.forName(className);
                 Field pdtField = clazz.getDeclaredField("product");
-                
+
                 if (pdtField != null) {
                     DefinitionClassInfo classInfo = pdtField.getAnnotation(DefinitionClassInfo.class);
-                    
+
                     PrintStream rbOut = createResourcePrintStream(outputDir, classInfo);
                     getCommonResourceStrings(rbOut, clazz);
                     rbOut.println("product-name=" + classInfo.productName());
@@ -110,7 +105,7 @@ public class CLIDefinitionGenerator extends AbstractMojo {
      */
     private void getCommonResourceStrings(PrintStream rbOut, Class clazz) throws Exception {
         Field field = clazz.getDeclaredField("resourcestrings");
-        
+
         if (field != null) {
             ResourceStrings resStrings = field.getAnnotation(ResourceStrings.class);
             List<String> list = toList(resStrings.string());
@@ -119,7 +114,7 @@ public class CLIDefinitionGenerator extends AbstractMojo {
             }
         }
     }
-    
+
     private PrintStream createResourcePrintStream(String resourceDir, DefinitionClassInfo classInfo)
             throws IOException {
         new File(resourceDir).mkdirs();
@@ -130,7 +125,7 @@ public class CLIDefinitionGenerator extends AbstractMojo {
         FileOutputStream rbStream = new FileOutputStream(rbFile);
         return new PrintStream(rbStream);
     }
-    
+
     private void getCommands(String className, Class clazz, PrintStream rbOut) throws Exception {
         Field[] fields = clazz.getDeclaredFields();
         for (Field fld : fields) {
@@ -139,11 +134,11 @@ public class CLIDefinitionGenerator extends AbstractMojo {
                 if ((info.implClassName() == null) || (info.description() == null)) {
                     throw new Exception("Incorrect Definition, class=" + className + " field=" + fld.toString());
                 }
-                
+
                 List<String> mandatoryOptions = toList(info.mandatoryOptions());
                 List<String> optionalOptions = toList(info.optionalOptions());
                 List<String> optionAliases = toList(info.optionAliases());
-                
+
                 if (info.macro() != null && info.macro().length() > 0) {
                     Field fldMarco = clazz.getDeclaredField(info.macro());
                     Macro macroInfo = fldMarco.getAnnotation(Macro.class);
@@ -151,12 +146,12 @@ public class CLIDefinitionGenerator extends AbstractMojo {
                     appendToList(optionalOptions, macroInfo.optionalOptions());
                     appendToList(optionAliases, macroInfo.optionAliases());
                 }
-                
+
                 validateOption(mandatoryOptions);
                 validateOption(optionalOptions);
-                
+
                 String subcmdName = fld.getName().replace('_', '-');
-                
+
                 String resPrefix = "subcmd-" + subcmdName;
                 String desc = info.description().replaceAll("&#124;", "|");
                 rbOut.println(resPrefix + "=" + desc);
@@ -166,13 +161,13 @@ public class CLIDefinitionGenerator extends AbstractMojo {
             }
         }
     }
-    
+
     private void validateOption(List<String> options) throws MojoFailureException {
         for (String option : options) {
             int idx = option.indexOf('|');
             String longName = option.substring(0, idx);
             String shortName = option.substring(idx + 1, idx + 2);
-            
+
             String test = mapLongToShortOptionName.get(longName);
             if (test == null) {
                 mapLongToShortOptionName.put(longName, shortName);
@@ -181,13 +176,13 @@ public class CLIDefinitionGenerator extends AbstractMojo {
             }
         }
     }
-    
+
     private void addResourceStrings(List<String> res, PrintStream rbOut) {
         for (String s : res) {
             rbOut.println(s);
         }
     }
-    
+
     private void createResourceForOptions(String prefix, List<String> options, PrintStream rbOut) {
         for (String option : options) {
             String opt = option.substring(0, option.indexOf('|'));
@@ -197,7 +192,7 @@ public class CLIDefinitionGenerator extends AbstractMojo {
                 rbOut.println(prefix + "__web__-" + opt + "=" + description.substring(idxWeb + 5));
                 description = description.substring(0, idxWeb);
             }
-            
+
             rbOut.println(prefix + opt + "=" + description);
         }
     }

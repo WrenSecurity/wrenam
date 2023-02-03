@@ -138,7 +138,7 @@ public class OAuth2UserApplications {
      *
      * @param context The request context.
      * @param queryHandler The query handler.
-     * @param request Unused but necessary for used of the {@link @Query} annotation.
+     * @param request Unused but necessary for used of the {@link Query} annotation.
      * @return A promise of a query response.
      */
     @Query(operationDescription = @Operation(description = OAUTH2_USER_APPLICATIONS + QUERY_DESCRIPTION,

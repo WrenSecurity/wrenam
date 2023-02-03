@@ -253,8 +253,8 @@ public class SessionURL {
      * If the encoding scheme is QUERY then the cookie value would be
      * written in the URL in the following format:
      * <pre>
-     * protocol://server:port/path?&lt;cookieName>=&lt;cookieValue>
-     * protocol://server:port/path?queryString&&lt;cookieName>=&lt;cookieValue>
+     * protocol://server:port/path?&lt;cookieName>=&lt;cookieValue&gt;
+     * protocol://server:port/path?queryString&amp;&lt;cookieName&gt;=&lt;cookieValue&gt;
      * </pre>
      * <p>
      * This is the default and OpenAM always encodes in this format

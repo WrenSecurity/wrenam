@@ -1,4 +1,4 @@
-/**
+/*
  Copyright (c) 2011 IETF Trust and the persons identified as
  authors of the code. All rights reserved.
 
@@ -66,8 +66,7 @@ public class TOTPAlgorithm {
      * @param key          the shared secret HEX encoded
      * @param time         a value that reflects a time
      * @param returnDigits number of digits to return
-     * @return a numeric String in base 10 that includes
-     *         {@link truncationDigits} digits
+     * @return a numeric String in base 10 that includes {@code returnDigits} digits
      */
 
     public static String generateTOTP(byte[] key,
@@ -84,8 +83,7 @@ public class TOTPAlgorithm {
      * @param key          the shared secret
      * @param time         a value that reflects a time
      * @param returnDigits number of digits to return
-     * @return a numeric String in base 10 that includes
-     *         {@link truncationDigits} digits
+     * @return a numeric String in base 10 that includes {@code returnDigits} digits
      */
 
     public static String generateTOTP256(byte[] key,
@@ -101,8 +99,7 @@ public class TOTPAlgorithm {
      * @param key          the shared secret
      * @param time         a value that reflects a time
      * @param returnDigits number of digits to return
-     * @return a numeric String in base 10 that includes
-     *         {@link truncationDigits} digits
+     * @return a numeric String in base 10 that includes {@code returnDigits} digits
      */
 
     public static String generateTOTP512(byte[] key,
@@ -120,8 +117,7 @@ public class TOTPAlgorithm {
      * @param time         a value that reflects a time
      * @param returnDigits number of digits to return
      * @param crypto       the crypto function to use
-     * @return a numeric String in base 10 that includes
-     *         {@link truncationDigits} digits
+     * @return a numeric String in base 10 that includes {@code returnDigits} digits
      */
 
     public static String generateTOTP(byte[] key,

@@ -51,7 +51,7 @@ public class ObjectFactory
      *     the Class object of the javacontent interface to instantiate
      * @return
      *     a new instance
-     * @throws JAXBException
+     * @throws javax.xml.bind.JAXBException
      *     if an error occurs
      */
     public Object newInstance(Class javaContentInterface)
@@ -70,7 +70,7 @@ public class ObjectFactory
      *     the name of the property to retrieve
      * @return
      *     the value of the requested property
-     * @throws PropertyException
+     * @throws javax.xml.bind.PropertyException
      *     when there is an error retrieving the given property or value
      */
     public Object getProperty(String name)
@@ -89,7 +89,7 @@ public class ObjectFactory
      *     the name of the property to retrieve
      * @param value
      *     the value of the property to be set
-     * @throws PropertyException
+     * @throws javax.xml.bind.PropertyException
      *     when there is an error processing the given property or value
      */
     public void setProperty(String name, Object value)
@@ -101,7 +101,7 @@ public class ObjectFactory
     /**
      * Create an instance of AnyType
      * 
-     * @throws JAXBException
+     * @throws javax.xml.bind.JAXBException
      *     if an error occurs
      */
     public AnyType createAnyType()

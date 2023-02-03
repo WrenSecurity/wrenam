@@ -73,7 +73,7 @@ import java.util.concurrent.TimeUnit;
  * Sadly though the question of "Who will guard the guards themselves?" is intentionally
  * avoided by this class and should be considered out of scope.
  *
- * @link https://en.wikipedia.org/wiki/Quis_custodiet_ipsos_custodes%3F
+ * @see <a href="https://en.wikipedia.org/wiki/Quis_custodiet_ipsos_custodes%3F">Quis custodiet ipsos custodes?</a>
  * @see com.sun.identity.common.ShutdownManager
  * @see org.forgerock.util.thread.listener.ShutdownManager
  */
@@ -150,6 +150,7 @@ public class ThreadMonitor {
     public void watchThread(final ExecutorService service, final Runnable runnable) {
         Reject.ifNull(service, runnable);
         workPool.submit(new WatchDog(new StartThread() {
+            @Override
             public Future<?> start() {
                 return service.submit(runnable);
             }
@@ -182,6 +183,7 @@ public class ThreadMonitor {
                                      final TimeUnit timeUnit) {
         Reject.ifNull(scheduledService, runnable);
         workPool.submit(new WatchDog(new StartThread() {
+            @Override
             public Future<?> start() {
                 return scheduledService.scheduleAtFixedRate(runnable, delay, duration, timeUnit);
             }
@@ -211,6 +213,7 @@ public class ThreadMonitor {
         public WatchDog(StartThread startThread) {
             this.startThread = startThread;
             shutdownManager.addShutdownListener(new ShutdownListener() {
+                @Override
                 public void shutdown() {
                     cancel();
                 }
@@ -269,6 +272,7 @@ public class ThreadMonitor {
             return complete;
         }
 
+        @Override
         public void run() {
             while (!isComplete()) {
                 // Allow a recovery delay when hitting successive errors
@@ -333,6 +337,7 @@ public class ThreadMonitor {
          *
          * @return Identification details of the thread.
          */
+        @Override
         String toString();
     }
 

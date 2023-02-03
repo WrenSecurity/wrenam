@@ -24,7 +24,7 @@ package org.forgerock.http.client.request;
 public class HttpClientRequestFactory {
 
     /**
-     * Create a new empty {@link HttpClientRequest} that can be sent over a {@link org.forgerock.http.client.HttpClient}.
+     * Create a new empty {@link HttpClientRequest} that can be sent over a {@code org.forgerock.http.client.HttpClient}.
      *
      * @return An empty {@link HttpClientRequest}.
      */

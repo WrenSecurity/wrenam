@@ -70,7 +70,7 @@ public class AuthSessionFactory {
      *
      * @param domain      Authentication Domain
      * @return Non null Authentication SSO Token
-     * @throws Exception If there was any unexpected error which prevented the token from being generated.
+     * @throws SSOException If there was any unexpected error which prevented the token from being generated.
      */
     public SSOToken getAuthenticationSession(String domain) throws SSOException, SessionException {
         try {

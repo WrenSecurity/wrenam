@@ -68,7 +68,7 @@ import org.forgerock.util.promise.Promise;
 
 /**
  * A collection provider for UMA Labels.
- * @Since 13.0.0
+ * @since 13.0.0
  */
 @CollectionProvider(
         details = @Handler(

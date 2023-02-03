@@ -31,7 +31,7 @@ import com.sun.identity.shared.debug.Debug;
  * This class is a singleton instance acting as the entry point both for starting up the RADIUS server feature in OpenAM
  * and for tearing it down upon container shutdown. This class is also responsible for ensuring that the radius
  * configuration pages are installed in OpenAM and installing them if they are not. Its daemon defers to the
- * {@link org.forgerock.openam.radius.server.config.StartupCoordinator} to ensure that OpenAM is ready for business,
+ * {@code org.forgerock.openam.radius.server.config.StartupCoordinator} to ensure that OpenAM is ready for business,
  * uses the {@link org.forgerock.openam.radius.server.config.ConfigLoader} to watch for and share changes in
  * configuration in the admin console, and starts up or shuts down the radius
  * {@link org.forgerock.openam.radius.server.RadiusRequestListener} accordingly.

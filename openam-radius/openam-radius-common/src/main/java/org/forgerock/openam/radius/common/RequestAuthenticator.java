@@ -55,7 +55,6 @@ public class RequestAuthenticator implements Authenticator {
      * @param rand   in instance of SecureRandom as the source of randomness.
      * @param secret the secret shared between a radius client and server.
      * @throws NoSuchAlgorithmException if the MD5 algorithm is not available.
-     * @throws UnsupportedEncodingException 
      */
     public RequestAuthenticator(SecureRandom rand, String secret)
             throws NoSuchAlgorithmException {

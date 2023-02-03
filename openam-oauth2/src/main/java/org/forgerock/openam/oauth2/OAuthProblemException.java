@@ -134,7 +134,7 @@ public class OAuthProblemException extends ResourceException {
 
         /**
          * Create a new exception from the given {@code request} parameter.
-         * 
+         *
          * @param request
          * @return new instance of OAuthProblemException
          */
@@ -271,6 +271,7 @@ public class OAuthProblemException extends ResourceException {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Status getStatus() {
         if (null == description) {
             return super.getStatus();
@@ -285,7 +286,7 @@ public class OAuthProblemException extends ResourceException {
      * Save the OAuthProblemException into the attributes and the
      * {@link OAuthProblemException#popException(org.restlet.Request)} method
      * retreive it.
-     * 
+     *
      * @throws ResourceException
      *             if the embedded request is null
      */
@@ -303,7 +304,7 @@ public class OAuthProblemException extends ResourceException {
 
     /**
      * Used for formatting error according to chapter 5.2.
-     * 
+     *
      * @see <a
      *      href="http://tools.ietf.org/html/draft-ietf-oauth-v2-24#section-5.2">5.2.
      *      Error Response</a>
@@ -324,11 +325,11 @@ public class OAuthProblemException extends ResourceException {
      * Used for formatting error according to chapter 4.2.2.1.
      * <p/>
      * Authorization Code (Query) HTTP/1.1 302 Found Location:
-     * https://client.example.com/cb?error=access_denied&state=xyz
+     * https://client.example.com/cb?error=access_denied&amp;state=xyz
      * <p/>
      * Implicit (Fragment) HTTP/1.1 302 Found Location:
-     * https://client.example.com/cb#error=access_denied&state=xyz
-     * 
+     * https://client.example.com/cb#error=access_denied&amp;state=xyz
+     *
      * @see <a
      *      href="http://tools.ietf.org/html/draft-ietf-oauth-v2-24#section-4.2.2.1">4.2.2.1.
      *      Error Response</a>
@@ -363,7 +364,7 @@ public class OAuthProblemException extends ResourceException {
 
     /**
      * Creates invalid_request exception with given message
-     * 
+     *
      * @param message
      *            error message
      * @return new instance of OAuthProblemException
@@ -375,7 +376,7 @@ public class OAuthProblemException extends ResourceException {
     /**
      * Creates OAuthProblemException that contains set of missing oauth
      * parameters
-     * 
+     *
      * @param missingParams
      *            missing oauth parameters
      * @return OAuthProblemException with user friendly message about missing

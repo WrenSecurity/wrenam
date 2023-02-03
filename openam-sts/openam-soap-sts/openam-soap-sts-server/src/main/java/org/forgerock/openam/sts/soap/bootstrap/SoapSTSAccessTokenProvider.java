@@ -40,7 +40,6 @@ public interface SoapSTSAccessTokenProvider {
 
     /**
      * Retrieves soap-sts agent token with retry. 
-     * @param accessToken the accessToken returned fom getAccessToken.
      * @return the SSOToken identifier corresponding to the authN of this soap-sts deployment. Won't return null.
      * @throws org.forgerock.json.resource.ResourceException if authentication failed for any reason.
      */

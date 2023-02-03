@@ -94,7 +94,7 @@ public class UpgradeExternalCTSConfigurationStep extends AbstractUpgradeStep {
 
     /**
      * Set the default values from the server-default values.
-     * 
+     *
      * @param props the properties from the server
      */
     protected void setDefaultValues(Properties props) {
@@ -107,9 +107,9 @@ public class UpgradeExternalCTSConfigurationStep extends AbstractUpgradeStep {
     }
 
     /**
-     * Will check if {@link CoreTokenConstant.CTS_STORE_HOSTNAME} property will need to be updated and need the host
-     * port appended to the connection string.
-     * 
+     * Will check if {@code org.forgerock.openam.cts.api.CoreTokenConstant#CTS_STORE_HOSTNAME} property
+     * will need to be updated and need the host port appended to the connection string.
+     *
      * @param serverName the name of the server Instance.
      * @param serverProperties the configuration of the server Instance.
      */
@@ -199,7 +199,7 @@ public class UpgradeExternalCTSConfigurationStep extends AbstractUpgradeStep {
                 sb.append(delimiter);
             }
             sb.append(BULLET).append(BUNDLE.getString("upgrade.delattr")).append(": ").append(CTS_STORE_PORT).append(delimiter);
-            tags.put(MOD_ATTRS, sb.toString());          
+            tags.put(MOD_ATTRS, sb.toString());
 
         } else {
             tags.put(MOD_ATTRS, BUNDLE.getString("upgrade.none"));

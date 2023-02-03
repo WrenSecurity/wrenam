@@ -75,7 +75,7 @@ import com.sun.identity.shared.debug.Debug;
  *      |                                      .
  *      | AccessRequest                        .
  *      | [username + password]                .
- *      + -----------------------------------> +
+ *      + -----------------------------------&gt; +
  *      .                                      | ac = new AuthContext(realm)
  *      .                                      | ac.login(VIA_CHAIN, chain)
  *      .                                      |
@@ -84,7 +84,7 @@ import com.sun.identity.shared.debug.Debug;
  *      .   accepts username and password -->  | find nameCallback and inject username
  *      .                                      | find passwordCallback and inject password
  *      . AccessReject                         |
- *      + <----------------------------------- + if unable to find name/password callbacks or inject values
+ *      + &lt;----------------------------------- + if unable to find name/password callbacks or inject values
  *      .                                      |
  *      .                                      +-- while ac.hasMoreRequirements()
  *      .                                      .    | callback[] cbs = ac.getRequirements(true)
@@ -94,11 +94,11 @@ import com.sun.identity.shared.debug.Debug;
  * callback
  *      . AccessChallenge                      .    .   |
  *      . [message + state(n)]                 .    .   |
- *      + <---------------------------------------------+
+ *      + &lt;---------------------------------------------+
  *      |                                      .    .   .
  *      | AccessRequest                        .    .   .
  *      | [username + answer + state(n)]       .    .   .
- *      + --------------------------------------------->+
+ *      + ---------------------------------------------&gt;+
  *      .                                      .    .   | inject value into cbs(n)
  *      .                                      .    +---+
  *      .                                      .    |
@@ -106,10 +106,10 @@ import com.sun.identity.shared.debug.Debug;
  *      .                                      +----+
  *      .                                      |
  *      . AccessAccept                         | s = ac.getStatus()
- *      + <----------------------------------- + if s == SUCCESS
+ *      + &lt;----------------------------------- + if s == SUCCESS
  *      .                                      |
  *      . AccessReject                         |
- *      + <----------------------------------- + all else
+ *      + &lt;----------------------------------- + all else
  *      |                                      .
  *      |                                      .
  * </pre>
@@ -218,7 +218,6 @@ public class OpenAMAuthHandler implements AccessRequestHandler {
      *            - provides methods that the handler can use to obtain information about the context in which the
      *            request was made, for example the name and IP address of the client from which the request was
      *            received.
-     * @return
      * @throws RadiusProcessingException
      *             - when the response can not be sent.
      */

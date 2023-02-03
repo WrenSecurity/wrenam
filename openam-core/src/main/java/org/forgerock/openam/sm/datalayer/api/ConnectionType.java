@@ -64,15 +64,15 @@ public enum ConnectionType {
      */
     CTS_EXPIRY_DATE_WORKER(CTSConnectionModule.class),
     /**
-     * @see org.forgerock.openam.entitlement.indextree.IndexTreeService
+     * @see "org.forgerock.openam.entitlement.indextree.IndexTreeService"
      */
     DATA_LAYER(SMSConnectionModule.class),
     /**
-     * @see org.forgerock.oauth2.resources.ResourceSetStore
+     * @see "org.forgerock.oauth2.resources.ResourceSetStore"
      */
     RESOURCE_SETS(ResourceSetConnectionModule.class),
     /**
-     * @see org.forgerock.openam.uma.audit.UmaAuditLogger
+     * @see "org.forgerock.openam.uma.audit.UmaAuditLogger"
      */
     UMA_AUDIT_ENTRY(UmaAuditConnectionModule.class),
 

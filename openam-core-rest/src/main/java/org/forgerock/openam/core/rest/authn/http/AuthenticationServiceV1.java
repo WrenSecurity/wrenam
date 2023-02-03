@@ -300,7 +300,6 @@ public class AuthenticationServiceV1 {
      * Modifies a response by adding cache control headers.
      *
      * @param response The response object to change.
-     * @return a response object populated with the entity and no-cache headers.
      */
     protected void setNoCacheHeaders(Response response) {
         response.getHeaders().put(CACHE_CONTROL_HEADER_NAME, NO_CACHE_CACHE_CONTROL_HEADER);

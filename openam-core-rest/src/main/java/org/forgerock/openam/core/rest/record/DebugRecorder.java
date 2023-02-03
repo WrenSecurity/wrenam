@@ -26,7 +26,6 @@ public interface DebugRecorder {
      * Start recording
      *
      * @param jsonProperties record json properties
-     * @return the current recording, created from the jsonProperties
      * @throws RecordException if y
      */
     void startRecording(JsonValue jsonProperties) throws RecordException;
@@ -35,7 +34,6 @@ public interface DebugRecorder {
      * Get the current record if exist
      *
      * @return the current record or null if we are not recording
-     * @throws RecordException
      */
     Record getCurrentRecord();
 
@@ -43,7 +41,6 @@ public interface DebugRecorder {
      * Stop recording
      *
      * @return the stopped record or null if we are not recording
-     * @throws RecordException
      */
     Record stopRecording() throws RecordException;
 

@@ -25,8 +25,6 @@ public interface SAML2EventLogger {
 
     /**
      * Publishes an audit event with details of the attempted SAML2 operation, if the 'access' topic is audited.
-     *
-     * @throws AuditException If an exception occurred that prevented the audit event from being published.
      */
     void auditAccessAttempt();
 

@@ -255,6 +255,7 @@ public class Session implements Blacklistable, AMSession{
      * Returns the session ID.
      * @return The session ID.
      */
+    @Override
     public SessionID getID() {
         return sessionID;
     }
@@ -462,7 +463,7 @@ public class Session implements Blacklistable, AMSession{
      * @param session Must be an app token
      * @param restrictedId The SSOTokenID of the restricted token
      * @return The SSOTokenID string of the master token
-     * @throws SSOException If the master token cannot be dereferenced
+     * @throws SessionException If the master token cannot be dereferenced
      */
     public String dereferenceRestrictedTokenID(Session session, String restrictedId) throws SessionException {
         String masterSID;
@@ -735,6 +736,7 @@ public class Session implements Blacklistable, AMSession{
         try {
             RestrictedTokenContext.doUsing(activeContext,
                     new RestrictedTokenAction() {
+                        @Override
                         public Object run() throws Exception {
                             doRefresh(reset);
                             return null;

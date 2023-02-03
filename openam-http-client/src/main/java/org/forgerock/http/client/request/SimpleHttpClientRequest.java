@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * A basic implementation of {@link HttpClientRequest} that a script can send over a {@link org.forgerock.http.client.HttpClient}.
+ * A basic implementation of {@link HttpClientRequest} that a script can send over a {@code org.forgerock.http.client.HttpClient}.
  *
  * @since 12.0.0
  */
@@ -37,6 +37,7 @@ public class SimpleHttpClientRequest implements HttpClientRequest {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void addHeader(String field, String value) {
         this.headers.put(field, value);
     }
@@ -44,6 +45,7 @@ public class SimpleHttpClientRequest implements HttpClientRequest {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void addQueryParameter(String field, String value) {
         this.queryParameters.put(field, value);
     }
@@ -51,6 +53,7 @@ public class SimpleHttpClientRequest implements HttpClientRequest {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void addCookie(String domain, String field, String value) {
         this.cookies.add(new HttpClientRequestCookie(domain, field, value));
     }
@@ -58,6 +61,7 @@ public class SimpleHttpClientRequest implements HttpClientRequest {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setMethod(String method) {
         this.method = method;
     }
@@ -65,6 +69,7 @@ public class SimpleHttpClientRequest implements HttpClientRequest {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setUri(String uri) {
         this.uri = uri;
     }
@@ -72,6 +77,7 @@ public class SimpleHttpClientRequest implements HttpClientRequest {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setEntity(String entity) {
         this.entity = entity;
     }
@@ -79,6 +85,7 @@ public class SimpleHttpClientRequest implements HttpClientRequest {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<String, String> getHeaders() {
         return headers;
     }
@@ -86,6 +93,7 @@ public class SimpleHttpClientRequest implements HttpClientRequest {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<String, String> getQueryParameters() {
         return queryParameters;
     }
@@ -93,6 +101,7 @@ public class SimpleHttpClientRequest implements HttpClientRequest {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getMethod() {
         return method;
     }
@@ -100,6 +109,7 @@ public class SimpleHttpClientRequest implements HttpClientRequest {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getUri() {
         return uri;
     }
@@ -107,6 +117,7 @@ public class SimpleHttpClientRequest implements HttpClientRequest {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getEntity() {
         return entity;
     }
@@ -114,6 +125,7 @@ public class SimpleHttpClientRequest implements HttpClientRequest {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Set<HttpClientRequestCookie> getCookies() {
         return cookies;
     }

@@ -50,7 +50,7 @@ import org.forgerock.openam.services.push.dispatch.Predicate;
  *
  * If no delegate has been configured, the service will attempt to load the config for that realm before accessing
  * the delegate instance. Updating the service config via the service interface (after the service has been
- * instantiated) also causes the attempt to load the config & mint a delegate.
+ * instantiated) also causes the attempt to load the config &amp; mint a delegate.
  *
  * Later changes in the config will update the delegateFactory and depending upon the delegate's implementation of
  * the isRequireNewDelegate(PushNotificationServiceConfig) method may require the generation of a new delegate. If

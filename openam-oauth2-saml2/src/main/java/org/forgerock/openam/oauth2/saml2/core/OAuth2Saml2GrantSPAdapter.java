@@ -34,24 +34,18 @@ import org.forgerock.util.encode.Base64url;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 public class OAuth2Saml2GrantSPAdapter extends SAML2ServiceProviderAdapter {
 
-    /**
-     * @{inheritDoc}
-     */
+    @Override
     public void initialize(Map initParams){
         return;
     }
 
-    /**
-     * @{inheritDoc}
-     */
+    @Override
     public void preSingleSignOnRequest(
             String hostedEntityID,
             String idpEntityID,
@@ -63,10 +57,7 @@ public class OAuth2Saml2GrantSPAdapter extends SAML2ServiceProviderAdapter {
         return;
     }
 
-
-    /**
-     * @{inheritDoc}
-     */
+    @Override
     public void preSingleSignOnProcess(
             String hostedEntityID,
             String realm,
@@ -79,9 +70,7 @@ public class OAuth2Saml2GrantSPAdapter extends SAML2ServiceProviderAdapter {
         return;
     }
 
-    /**
-     * @{inheritDoc}
-     */
+    @Override
     public boolean postSingleSignOnSuccess(
             String hostedEntityID,
             String realm,
@@ -125,10 +114,7 @@ public class OAuth2Saml2GrantSPAdapter extends SAML2ServiceProviderAdapter {
         return true;
     }
 
-
-    /**
-     * @{inheritDoc}
-     */
+    @Override
     public boolean postSingleSignOnFailure(
             String hostedEntityID,
             String realm,
@@ -141,10 +127,7 @@ public class OAuth2Saml2GrantSPAdapter extends SAML2ServiceProviderAdapter {
         return false;
     }
 
-
-    /**
-     * @{inheritDoc}
-     */
+    @Override
     public void postNewNameIDSuccess(
             String hostedEntityID,
             String realm,
@@ -157,9 +140,7 @@ public class OAuth2Saml2GrantSPAdapter extends SAML2ServiceProviderAdapter {
         return;
     }
 
-    /**
-     * @{inheritDoc}
-     */
+    @Override
     public void postTerminateNameIDSuccess(
             String hostedEntityID,
             String realm,
@@ -172,9 +153,7 @@ public class OAuth2Saml2GrantSPAdapter extends SAML2ServiceProviderAdapter {
         return;
     }
 
-    /**
-     * @{inheritDoc}
-     */
+    @Override
     public void preSingleLogoutProcess(
             String hostedEntityID,
             String realm,
@@ -188,9 +167,7 @@ public class OAuth2Saml2GrantSPAdapter extends SAML2ServiceProviderAdapter {
         return;
     }
 
-    /**
-     * @{inheritDoc}
-     */
+    @Override
     public void postSingleLogoutSuccess(
             String hostedEntityID,
             String realm,

@@ -56,7 +56,7 @@ public class ResizableSemaphore extends Semaphore {
      * Overridden method to stop it being protected.
      * Decrease the number of available permits by the amount in the supplied argument.
      *
-     * @param reduction {@inheritdoc}
+     * @param reduction {@inheritDoc}
      */
     @Override
     protected void reducePermits(int reduction) {
