@@ -172,7 +172,7 @@ public class ResourceSetService {
      * @param resourceSet The resource set to check.
      * @param resourceUserId The id of the user to check.
      * @param realm The realm to check in.
-     * @return @code{true} if the user can access that ResourceSet.
+     * @return {@code true} if the user can access that ResourceSet.
      */
     public boolean isSharedWith(ResourceSetDescription resourceSet, String resourceUserId, String realm)
             throws InternalServerErrorException{
@@ -281,6 +281,7 @@ public class ResourceSetService {
 
     private static final AsyncFunction<ResourceException, Void, ResourceException> IGNORE_NOTFOUNDEXCEPTION =
             new AsyncFunction<ResourceException, Void, ResourceException>() {
+                @Override
                 public Promise<Void, ResourceException> apply(ResourceException e) {
                     if (e instanceof org.forgerock.json.resource.NotFoundException) {
                         return newResultPromise(null);

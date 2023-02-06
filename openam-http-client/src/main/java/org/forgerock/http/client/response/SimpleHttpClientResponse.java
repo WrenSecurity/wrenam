@@ -19,7 +19,7 @@ import java.util.Map;
 
 /**
  * A basic implementation of {@link HttpClientResponse} that a script can receive from sending a
- * {@link org.forgerock.http.client.request.HttpClientRequest} over a {@link org.forgerock.http.client.HttpClient}.
+ * {@link org.forgerock.http.client.request.HttpClientRequest} over a {@code org.forgerock.http.client.HttpClient}.
  *
  * @since 12.0.0
  */
@@ -52,6 +52,7 @@ public class SimpleHttpClientResponse implements HttpClientResponse {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Integer getStatusCode() {
         return statusCode;
     }
@@ -59,6 +60,7 @@ public class SimpleHttpClientResponse implements HttpClientResponse {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getReasonPhrase() {
         return reasonPhrase;
     }
@@ -66,6 +68,7 @@ public class SimpleHttpClientResponse implements HttpClientResponse {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean hasHeaders() {
         return (!(headers == null) || !(headers.isEmpty()));
     }
@@ -73,6 +76,7 @@ public class SimpleHttpClientResponse implements HttpClientResponse {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<String, String> getHeaders() {
         return headers;
     }
@@ -80,6 +84,7 @@ public class SimpleHttpClientResponse implements HttpClientResponse {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getEntity() {
         return messageBody;
     }
@@ -87,6 +92,7 @@ public class SimpleHttpClientResponse implements HttpClientResponse {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean hasCookies() {
         return (!(cookies == null) || !(cookies.isEmpty()));
     }
@@ -94,6 +100,7 @@ public class SimpleHttpClientResponse implements HttpClientResponse {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<String, String> getCookies() {
         return cookies;
     }

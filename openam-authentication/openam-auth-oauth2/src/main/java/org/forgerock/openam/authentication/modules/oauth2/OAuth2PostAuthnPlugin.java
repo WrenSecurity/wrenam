@@ -52,7 +52,7 @@ import static org.forgerock.openam.authentication.modules.oauth2.OAuthParam.*;
  * AMPostAuthProcessInterface interface for authentication
  * post processing. This class can only be used for the OAuth2 authentication
  * module.
- * 
+ *
  * The post processing class can be assigned per ORGANIZATION or SERVICE
  */
 public class OAuth2PostAuthnPlugin implements AMPostAuthProcessInterface {
@@ -60,14 +60,15 @@ public class OAuth2PostAuthnPlugin implements AMPostAuthProcessInterface {
     private static String FB_API_KEY = "api_key";
     private static String FB_SESSION_KEY  ="session_key";
     private static String FB_NEXT = "next";
-    
+
     /** Post processing on successful authentication.
      * @param requestParamsMap - map contains HttpServletRequest parameters
      * @param request HttpServletRequest object
      * @param response HttpServletResponse object
      * @param ssoToken  authenticated user's ssoToken
-     * @exception Authentication Exception when there is an error
+     * @exception AuthenticationException when there is an error
      */
+    @Override
     public void onLoginSuccess(Map requestParamsMap,
             HttpServletRequest request,
             HttpServletResponse response,
@@ -84,11 +85,12 @@ public class OAuth2PostAuthnPlugin implements AMPostAuthProcessInterface {
      * @param response HttpServletResponse object
      * @exception AuthenticationException when there is an error
      */
+    @Override
     public void onLoginFailure(Map requestParamsMap,
             HttpServletRequest request,
             HttpServletResponse response)
             throws AuthenticationException {
-        
+
         OAuthUtil.debugMessage("OAuth2PostAuthnPlugin:onLoginFailure called");
 
     }
@@ -98,14 +100,15 @@ public class OAuth2PostAuthnPlugin implements AMPostAuthProcessInterface {
      * @param response HttpServletResponse object
      * @param ssoToken - user's session
      */
+    @Override
     public void onLogout(HttpServletRequest request,
             HttpServletResponse response,
             SSOToken ssoToken)
             throws AuthenticationException {
-        
+
         OAuthUtil.debugMessage("OAuth2PostAuthnPlugin:onLogout called " + request.getRequestURL());
         String gotoParam = request.getParameter(PARAM_GOTO);
-        String serviceURI = SystemProperties.get(Constants.AM_SERVICES_DEPLOYMENT_DESCRIPTOR); 
+        String serviceURI = SystemProperties.get(Constants.AM_SERVICES_DEPLOYMENT_DESCRIPTOR);
 
         try {
             String loginURL = OAuthUtil.findCookie(request, COOKIE_PROXY_URL);
@@ -118,7 +121,7 @@ public class OAuth2PostAuthnPlugin implements AMPostAuthProcessInterface {
             if ("donotlogout".equalsIgnoreCase(logoutBehaviour)) {
                 return;
             }
-            
+
             if (accessToken != null && !accessToken.isEmpty()) {
                 OAuthUtil.debugMessage("OAuth2PostAuthnPlugin: OAuth2 logout");
 
@@ -129,16 +132,16 @@ public class OAuth2PostAuthnPlugin implements AMPostAuthProcessInterface {
                     OAuthUtil.debugMessage("OAuth2PostAuthnPlugin: facebook");
                     String origUrl = URLEncoder.encode(loginURL, "UTF-8");
                     String query = "";
-                    if (accessToken.contains("\\|")) { 
+                    if (accessToken.contains("\\|")) {
                         // Non encrypted token
                         String[] tokenParts = accessToken.split("\\|");
                         String api_key = tokenParts[0];
                         String session_key = tokenParts[1];
-                        query = FB_API_KEY +"=" + api_key + "&" + FB_SESSION_KEY + 
+                        query = FB_API_KEY +"=" + api_key + "&" + FB_SESSION_KEY +
                                 "=" + session_key + "&" + FB_NEXT + "=" + origUrl;
-                    } else {      
+                    } else {
                         // Encrypted token
-                        query = FB_NEXT + "=" + origUrl + "&" + 
+                        query = FB_NEXT + "=" + origUrl + "&" +
                                 PARAM_ACCESS_TOKEN +"=" + accessToken;
                     }
                     logoutURL += "?" + query;
@@ -146,15 +149,15 @@ public class OAuth2PostAuthnPlugin implements AMPostAuthProcessInterface {
 
                 logoutURL = serviceURI + "/oauth2c/OAuthLogout.jsp?" + PARAM_LOGOUT_URL +
                         "=" + URLEncoder.encode(logoutURL, "UTF-8");;
-                
+
                 if (logoutBehaviour.equalsIgnoreCase("logout")) {
                     logoutURL += "&" + PARAM_LOGGEDOUT + "=logmeout";
                 }
-                
+
                 if (gotoParam != null && !gotoParam.isEmpty()) {
-                    logoutURL = logoutURL + "&" + PARAM_GOTO + "=" + 
+                    logoutURL = logoutURL + "&" + PARAM_GOTO + "=" +
                             URLEncoder.encode(gotoParam, "UTF-8");
-                } 
+                }
 
                 String realm = DNMapper.orgNameToRealmName(ssoToken.getProperty("Organization"));
                 logoutURL = logoutURL + "&" + PARAM_LOGOUT_REALM + "=" + URLEncoder.encode(realm, "UTF-8");

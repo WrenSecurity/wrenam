@@ -454,7 +454,7 @@ public interface OAuth2ProviderSettings {
      * Whether or not to enforce the Code Verifier Parameter.
      *
      * @return Whether the Code Verifier option has been configured.
-     * @see <a href="https://tools.ietf.org/html/draft-ietf-oauth-spop-12"</a>
+     * @see <a href="https://tools.ietf.org/html/draft-ietf-oauth-spop-12">PKCE</a>
      */
     boolean isCodeVerifierRequired() throws ServerException;
 

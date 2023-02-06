@@ -70,8 +70,8 @@ public class SimpleTimeCondition extends EntitlementConditionAdaptor {
     public static final String ENFORCEMENT_TIME_ZONE = "enforcementTimeZone";
 
     /**
-     * Key that is used to define the time zone that is passed in the {@code env parameter while invoking
-     * {@codegetConditionDecision} method of a {@code SimpleTimeCondition} Value for the key should be a {@codeTimeZone}
+     * Key that is used to define the time zone that is passed in the {@code env} parameter while invoking
+     * {@code getConditionDecision} method of a {@code SimpleTimeCondition} Value for the key should be a {@code TimeZone}
      * object. This would be used only if the {@code ENFORCEMENT_TIME_ZONE} is not defined for the
      * {@code SimpleTimeCondition}.
      *

@@ -28,8 +28,8 @@ public interface TokenAuthenticationRequestDispatcher<T> {
     /**
      *
      * @param url The URL against which the request should be dispatched.
-     * @param authTarget Necessary to access the Map<String, Object> which can contain necessary context information - e.g. configured
-     *                   parameters for the targeted authN module. This reference can be null.
+     * @param authTarget Necessary to access the {@code Map<String, Object>} which can contain necessary context 
+     * information - e.g. configured parameters for the targeted authN module. This reference can be null.
      * @param token The token which will be dispatched to the OpenAM authN context.
      * @return The state corresponding to a successful invocation. Produced by the OpenAM rest-authN context.
      * Includes the OpenAM session id.

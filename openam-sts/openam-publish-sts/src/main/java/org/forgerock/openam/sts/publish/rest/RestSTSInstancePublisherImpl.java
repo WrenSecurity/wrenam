@@ -215,7 +215,8 @@ public class RestSTSInstancePublisherImpl implements RestSTSInstancePublisher {
     }
 
     /**
-     * {@InheritDoc}
+     * {@inheritDoc}
+     * 
      * The method is synchronized primarily as a sanity check, as excluding concurrent updates to published rest-sts instance
      * state makes the system easier to reason about.
      */
@@ -232,7 +233,8 @@ public class RestSTSInstancePublisherImpl implements RestSTSInstancePublisher {
     }
 
     /**
-     * {@InheritDoc}
+     * {@inheritDoc}
+     * 
      * The method is synchronized so that two instances are not updated concurrently, as multiple configurations must be
      * completed atomically.
      */

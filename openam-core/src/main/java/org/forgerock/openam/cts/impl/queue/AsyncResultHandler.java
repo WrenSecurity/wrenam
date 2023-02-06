@@ -39,10 +39,8 @@ import com.sun.identity.shared.debug.Debug;
  * is sized to one to enforce the usage of this ResultHandler as being used only
  * once.
  *
- * @see TaskDispatcher#read(String, org.forgerock.openam.sm.datalayer.api.ResultHandler)
+ * @see TaskDispatcher#read(String, org.forgerock.util.Options, org.forgerock.openam.sm.datalayer.api.ResultHandler)
  * @see TaskDispatcher#query(TokenFilter, org.forgerock.openam.sm.datalayer.api.ResultHandler)
- *
- * @param <T> {@inheritDoc}
  */
 public class AsyncResultHandler<T> implements ResultHandler<T, CoreTokenException> {
     private static final String NULL_SIGNAL = "--NULL--";
@@ -80,6 +78,7 @@ public class AsyncResultHandler<T> implements ResultHandler<T, CoreTokenExceptio
      * @return {@inheritDoc}
      * @throws CoreTokenException {@inheritDoc}
      */
+    @Override
     @SuppressWarnings("unchecked")
     public T getResults() throws CoreTokenException {
         try {
@@ -129,6 +128,7 @@ public class AsyncResultHandler<T> implements ResultHandler<T, CoreTokenExceptio
     /**
      * @param error The error to store in this result handler.
      */
+    @Override
     public void processError(Exception error) {
         debug("Received: Error {0}", error.getMessage());
         syncQueue.offer(error);

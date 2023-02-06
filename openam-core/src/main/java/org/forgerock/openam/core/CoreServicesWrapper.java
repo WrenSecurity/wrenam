@@ -19,7 +19,6 @@ package org.forgerock.openam.core;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.security.AccessController;
-import java.util.Hashtable;
 import java.util.Map;
 import java.util.Set;
 
@@ -39,7 +38,6 @@ import com.sun.identity.security.AdminTokenAction;
 import com.sun.identity.sm.DNMapper;
 import com.sun.identity.sm.SMSException;
 import com.sun.identity.sm.ServiceConfigManager;
-import org.forgerock.openam.core.realms.Realm;
 
 /**
  * A wrapper class around core static class and methods.
@@ -52,11 +50,10 @@ public class CoreServicesWrapper {
     /**
      * Gets the Session Id from the HttpServletRequest.
      *
-     * {@link com.sun.identity.authentication.service.AuthUtils#getSessionIDFromRequest(
-     *      javax.servlet.http.HttpServletRequest)}
-     *
      * @param request The HttpServletRequest.
      * @return The SessionID from the request.
+     *
+     * @see com.sun.identity.authentication.service.AuthUtils#getSessionIDFromRequest(javax.servlet.http.HttpServletRequest)
      */
     public SessionID getSessionIDFromRequest(HttpServletRequest request) {
         return AuthUtils.getSessionIDFromRequest(request);
@@ -65,10 +62,10 @@ public class CoreServicesWrapper {
     /**
      * Gets the environment map from a HttpServletRequest.
      *
-     * {@link com.sun.identity.authentication.client.AuthClientUtils#getEnvMap(javax.servlet.http.HttpServletRequest)}
-     *
      * @param request The HttpServletRequest.
      * @return The environment map.
+     *
+     * @see com.sun.identity.authentication.client.AuthClientUtils#getEnvMap(javax.servlet.http.HttpServletRequest)
      */
     public Map<String, Set<String>> getEnvMap(HttpServletRequest request) {
         return AuthClientUtils.getEnvMap(request);
@@ -77,10 +74,10 @@ public class CoreServicesWrapper {
     /**
      * Gets the resource URL to use for resource-based authentication.
      *
-     * {@link AuthClientUtils#getResourceURL(HttpServletRequest)}
-     *
      * @param request the servlet request.
      * @return the resource URL to authenticate for.
+     *
+     * @see AuthClientUtils#getResourceURL(HttpServletRequest)
      */
     public String getResourceURL(HttpServletRequest request) {
         return AuthClientUtils.getResourceURL(request);
@@ -89,9 +86,9 @@ public class CoreServicesWrapper {
     /**
      * Gets the admin SSO Token.
      *
-     * {@link java.security.AccessController#doPrivileged(java.security.PrivilegedAction)}
-     *
      * @return The SSOToken.
+     *
+     * @see java.security.AccessController#doPrivileged(java.security.PrivilegedAction)
      */
     public SSOToken getAdminToken() {
         return AccessController.doPrivileged(AdminTokenAction.getInstance());
@@ -100,13 +97,13 @@ public class CoreServicesWrapper {
     /**
      * Gets a ServiceConfigManager instance.
      *
-     * {@link com.sun.identity.sm.ServiceConfigManager(String, com.iplanet.sso.SSOToken)}
-     *
      * @param serviceName The service name.
      * @param token The SSOToken.
      * @return A ServiceConfigManager instance.
      * @throws com.iplanet.sso.SSOException If there is a problem when creating the ServiceConfigManager instance.
      * @throws com.sun.identity.sm.SMSException If the SSO Token is invalid or expired.
+     *
+     * @see com.sun.identity.sm.ServiceConfigManager#ServiceConfigManager(String, com.iplanet.sso.SSOToken)
      */
     public ServiceConfigManager getServiceConfigManager(String serviceName, SSOToken token) throws SSOException,
             SMSException {
@@ -181,11 +178,10 @@ public class CoreServicesWrapper {
     /**
      * This method determines the organization parameter and determines the organization DN based on query parameters.
      *
-     * {@link com.sun.identity.authentication.client.AuthClientUtils#getDomainNameByRequest(HttpServletRequest,
-     *          Hashtable)}
-     *
      * @param request The HTTP Servlet Request.
      * @return Organization DN.
+     *
+     * @see com.sun.identity.authentication.client.AuthClientUtils#getDomainNameByRequest(HttpServletRequest, Map)
      */
     public String getDomainNameByRequest(HttpServletRequest request) {
         return AuthClientUtils.getDomainNameByRequest(request, AuthClientUtils.parseRequestParameters(request));
@@ -194,12 +190,12 @@ public class CoreServicesWrapper {
     /**
      * Checks to see if the Organization is active.
      *
-     * {@link com.sun.identity.idm.IdUtils#isOrganizationActive(SSOToken, String)}
-     *
      * @param realm The organization DN to check the status of.
      * @return True if organization is active, otherwise false.
      * @throws IdRepoException If cannot find any information for organization.
      * @throws SSOException If there is a problem with the admin SSOToken.
+     *
+     * @see com.sun.identity.idm.IdUtils#isOrganizationActive(SSOToken, String)
      */
     public boolean isOrganizationActive(String realm) throws IdRepoException, SSOException {
         return IdUtils.isOrganizationActive(getAdminToken(), realm);

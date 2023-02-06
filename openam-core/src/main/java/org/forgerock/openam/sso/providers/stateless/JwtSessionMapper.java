@@ -44,7 +44,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.iplanet.dpro.session.share.SessionInfo;
 
 /**
- * Responsible for converting {@link SessionInfo} objects to/from JWT with optional signing &/or encryption.
+ * Responsible for converting {@link SessionInfo} objects to/from JWT with optional signing and/or encryption.
  *
  * @since 13.0.0
  */

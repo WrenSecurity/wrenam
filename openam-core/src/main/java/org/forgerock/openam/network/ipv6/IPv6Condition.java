@@ -40,7 +40,7 @@ import java.util.*;
 /**
  * @author alin.brici@forgerock.com
  *
- * @deprecated Use {@link org.forgerock.openam.entitlement.conditions.environment.IPv6Condition} instead.
+ * @deprecated Use {@code org.forgerock.openam.entitlement.conditions.environment.IPv6Condition} instead.
  */
 @Deprecated
 public class IPv6Condition implements Condition {
@@ -91,6 +91,7 @@ public class IPv6Condition implements Condition {
      *
      * @return list of property names
      */
+    @Override
     public List getPropertyNames() {
         return (new ArrayList(propertyNames));
     }
@@ -102,6 +103,7 @@ public class IPv6Condition implements Condition {
      * @param property property name
      * @return <code>Syntax<code> for the property name
      */
+    @Override
     public Syntax getPropertySyntax(String property) {
         return Syntax.NONE;
     }
@@ -118,6 +120,7 @@ public class IPv6Condition implements Condition {
      * @return display name for the property name
      * @throws com.sun.identity.policy.PolicyException
      */
+    @Override
     public String getDisplayName(String property, Locale locale)
             throws PolicyException {
         return "";
@@ -132,6 +135,7 @@ public class IPv6Condition implements Condition {
      * @return Set of valid values for the property.
      * @exception PolicyException if unable to get the Syntax.
      */
+    @Override
     public Set getValidValues(String property) throws PolicyException {
         return Collections.EMPTY_SET;
     }
@@ -160,6 +164,7 @@ public class IPv6Condition implements Condition {
      * @see #REQUEST_IP
      * @see #REQUEST_DNS_NAME
      */
+    @Override
     public void setProperties(Map properties) throws PolicyException {
         this.properties = properties;
         ipList.clear();
@@ -173,6 +178,7 @@ public class IPv6Condition implements Condition {
      *         Please note that properties is  not cloned before returning
      * @see #setProperties(Map)
      */
+    @Override
     public Map getProperties() {
         return (properties == null)
                 ? null : Collections.unmodifiableMap(properties);
@@ -215,8 +221,8 @@ public class IPv6Condition implements Condition {
      * @see #DNS_NAME
      * @see #REQUEST_IP
      * @see #REQUEST_DNS_NAME
-     * @see com.sun.identity.policy.
      */
+    @Override
     public ConditionDecision getConditionDecision(SSOToken token, Map env)
             throws PolicyException, SSOException {
         boolean allowed = false;
@@ -256,6 +262,7 @@ public class IPv6Condition implements Condition {
      *
      * @return a copy of this object
      */
+    @Override
     public Object clone() {
         IPv6Condition theClone = null;
         try {

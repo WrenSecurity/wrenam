@@ -868,7 +868,7 @@ public class DJLDAPv3Repo extends IdRepo implements IdentityMovedOrRenamedListen
         if (DEBUG.messageEnabled()) {
             DEBUG.message("setAttributes invoked");
         }
-        setAttributes(token, type, name, (Map) attributes, isAdd, true, true);
+        setAttributes(token, type, name, attributes, isAdd, true, true);
     }
 
     /**
@@ -897,7 +897,7 @@ public class DJLDAPv3Repo extends IdRepo implements IdentityMovedOrRenamedListen
         if (DEBUG.messageEnabled()) {
             DEBUG.message("setBinaryAttributes invoked");
         }
-        setAttributes(token, type, name, (Map) attributes, isAdd, false, true);
+        setAttributes(token, type, name, attributes, isAdd, false, true);
     }
 
     /**
@@ -1101,7 +1101,7 @@ public class DJLDAPv3Repo extends IdRepo implements IdentityMovedOrRenamedListen
     /**
      * Performs a search in the directory based on the provided parameters.
      * Using the pattern and avPairs parameters an example search filter would look something like:
-     * <code>(&(|(attr1=value1)(attr2=value2))(searchAttr=pattern)(objectclassfilter))</code>.
+     * {@code (&(|(attr1=value1)(attr2=value2))(searchAttr=pattern)(objectclassfilter))}.
      *
      * @param token Not used.
      * @param type The type of the identity.
@@ -1753,7 +1753,7 @@ public class DJLDAPv3Repo extends IdRepo implements IdentityMovedOrRenamedListen
                     ocs.addAll(attrs.get(OBJECT_CLASS_ATTR));
                     attrMap.put(OBJECT_CLASS_ATTR, ocs);
                 }
-                setAttributes(token, type, name, (Map) attrMap, false, true, false);
+                setAttributes(token, type, name, attrMap, false, true, false);
             }
         } else if (type.equals(IdType.REALM)) {
             if (serviceName != null && !serviceName.isEmpty() && attrMap != null) {
@@ -1958,7 +1958,7 @@ public class DJLDAPv3Repo extends IdRepo implements IdentityMovedOrRenamedListen
             if (sType.equals(SchemaType.DYNAMIC)) {
                 throw newIdRepoException(IdRepoErrorCode.CANNOT_MODIFY_SERVICE, CLASS_NAME, sType.toString(), type.getName());
             } else {
-                setAttributes(token, type, name, (Map) attrMap, false, true, false);
+                setAttributes(token, type, name, attrMap, false, true, false);
             }
         } else if (type.equals(IdType.REALM)) {
             Map<String, Set<String>> previousAttrs = serviceMap.get(serviceName);
@@ -2169,6 +2169,7 @@ public class DJLDAPv3Repo extends IdRepo implements IdentityMovedOrRenamedListen
      * Called if an identity has been renamed or moved within the identity store.
      * @param previousDN The DN of the identity before the move or rename
      */
+    @Override
     public void identityMovedOrRenamed(DN previousDN) {
 
         if (dnCacheEnabled) {
@@ -2575,7 +2576,7 @@ public class DJLDAPv3Repo extends IdRepo implements IdentityMovedOrRenamedListen
             return result;
         }
     }
-    
+
     private Connection createConnection() throws IdRepoException {
         try {
             return connectionFactory.create();

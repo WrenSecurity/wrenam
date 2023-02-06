@@ -26,7 +26,7 @@
  *     &#64;Field(CoreTokenField.STRING_ONE)
  *     private String name;
  *     &#64;Field(CoreTokenField.BLOB, converter = MapToJsonBytesConverter.class)
- *     private Map&lt;String,?> complexData;
+ *     private Map&lt;String,?&gt; complexData;
  *
  *     // getters and setters follow...
  * }

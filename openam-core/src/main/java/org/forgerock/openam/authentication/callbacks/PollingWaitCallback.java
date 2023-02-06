@@ -55,7 +55,7 @@ public class PollingWaitCallback implements Callback {
 
     /**
      * Gets a new PollingWaitCallbackBuilder to use for construction of a PollingWaitCallback.
-     * @returna new PollingWaitCallbackBuilder object.
+     * @return new PollingWaitCallbackBuilder object.
      */
     public static PollingWaitCallbackBuilder makeCallback() {
         return new PollingWaitCallbackBuilder();

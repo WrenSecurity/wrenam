@@ -68,7 +68,6 @@ public interface InternalSessionStoreStep {
      *
      * @param session Non null SessionID.
      * @exception SessionPersistenceException If the storage operation failed.
-     * @return The InternalSession that was removed from the cache.
      */
     void remove(InternalSession session, InternalSessionStore next) throws SessionPersistenceException;
 

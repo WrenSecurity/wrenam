@@ -145,7 +145,6 @@
         <wrensec-ui.version>22.1.2</wrensec-ui.version>
 
         <mockito.version>3.12.4</mockito.version>
-        <javadoc-utils.version>1.0.0</javadoc-utils.version>
         <ant.contrib.version>1.0b3</ant.contrib.version>
         <guice.version>3.0</guice.version>
         <restlet.version>2.3.4</restlet.version>
@@ -1284,6 +1283,24 @@
                     <release combine.self="override" />
                     <compilerArgument>-Xlint:none</compilerArgument>
                     <showDeprecation>false</showDeprecation>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-javadoc-plugin</artifactId>
+
+                <configuration>
+                    <doclint>all,-missing,-html</doclint>
+                    <tags>
+                        <tag>
+                            <name>supported.all.api</name>
+                            <placement>a</placement>
+                        </tag>
+                        <tag>
+                            <name>supported.api</name>
+                            <placement>a</placement>
+                        </tag>
+                    </tags>
                 </configuration>
             </plugin>
 

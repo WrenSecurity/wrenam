@@ -49,7 +49,7 @@ import com.sun.identity.delegation.DelegationPermissionFactory;
 public class HttpPrivilegeAuthzModule extends PrivilegeAuthzModule implements Filter {
 
     /**
-     * Create a new instance of {@link HttpAuthorizationModule}.
+     * Create a new instance of {@link HttpPrivilegeAuthzModule}.
      *
      * @param evaluator The Delegation Evaluator.
      * @param actionToDefinition The action to definition map.

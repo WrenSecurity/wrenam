@@ -69,7 +69,7 @@ import org.restlet.resource.ServerResource;
 /**
  * Restlet endpoint for OAuth2 resource servers to register resource set that should be protected.
  *
- * @link https://tools.ietf.org/html/draft-hardjono-oauth-resource-reg-04
+ * @see <a href="https://tools.ietf.org/html/draft-hardjono-oauth-resource-reg-04">OAuth 2.0 Resource Set Registration</a>
  * @since 13.0.0
  */
 public class ResourceSetRegistrationEndpoint extends ServerResource {

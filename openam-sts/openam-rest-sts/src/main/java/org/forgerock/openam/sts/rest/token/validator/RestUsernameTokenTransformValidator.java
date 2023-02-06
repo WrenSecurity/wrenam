@@ -25,7 +25,7 @@ import org.forgerock.openam.sts.token.validator.PrincipalFromSession;
 import org.forgerock.openam.sts.token.validator.ValidationInvocationContext;
 
 /**
- * Responsible for validating RestUsernameToken instances, which is simply a <username,password> combination.
+ * Responsible for validating RestUsernameToken instances, which is simply a &lt;username,password&gt; combination.
  */
 public class RestUsernameTokenTransformValidator implements RestTokenTransformValidator<RestUsernameToken> {
     private final AuthenticationHandler<RestUsernameToken> authenticationHandler;

@@ -81,7 +81,7 @@ public class SmsConsoleServiceNameFilter {
      * Filters (mutates) the provided service set to remove services which should not be displayed to the console.
      *
      * @param services The set of service identities to filter.
-     * @throws AMConfigurationException If there was an issue loading internal handlers and managers used to filter.
+     * @throws SMSException If there was an issue loading internal handlers and managers used to filter.
      */
     public void filter(Set<String> services) throws SSOException, SMSException {
         filterByAuthServices(services);

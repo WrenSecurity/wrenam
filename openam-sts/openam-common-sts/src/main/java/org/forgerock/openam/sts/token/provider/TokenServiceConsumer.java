@@ -105,7 +105,7 @@ public interface TokenServiceConsumer {
      * @param callerSSOTokenString The session id corresponding to the caller. The TokenService will be protected
      *                             by an authz module.
      * @return true if the token is valid.
-     * @throws TokenCancellationException in case the TokenService could not be invoked, or threw an exception in the context
+     * @throws TokenValidationException in case the TokenService could not be invoked, or threw an exception in the context
      * of validating the token.
      */
     boolean validateToken(String tokenId, String callerSSOTokenString) throws TokenValidationException;

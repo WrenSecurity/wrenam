@@ -27,8 +27,8 @@ import java.util.Calendar;
  * Other enumerations may exist for the convenience of development, however
  * they must link to these enumerated values.
  *
- * @see org.forgerock.openam.cts.api.fields.SAMLTokenField
- * @see org.forgerock.openam.cts.api.fields.OAuthTokenField
+ * @see "org.forgerock.openam.cts.api.fields.SAMLTokenField"
+ * @see "org.forgerock.openam.cts.api.fields.OAuthTokenField"
  */
 public enum CoreTokenField {
     /**

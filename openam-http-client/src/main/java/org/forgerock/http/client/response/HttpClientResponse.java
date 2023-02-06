@@ -19,7 +19,7 @@ import java.util.Map;
 
 /**
  * Models the response that a script can receive from sending a
- * {@link org.forgerock.http.client.request.HttpClientRequest} over a {@link org.forgerock.http.client.HttpClient}.
+ * {@link org.forgerock.http.client.request.HttpClientRequest} over a {@code org.forgerock.http.client.HttpClient}.
  * Is designed to be a basic HTTP/1.1 response. See http://www.w3.org/Protocols/rfc2616/rfc2616-sec6.html#sec6
  *
  * NB: 'HttpClientResponse' used rather than 'Response' to avoid clashes with {@link org.restlet.Response}.

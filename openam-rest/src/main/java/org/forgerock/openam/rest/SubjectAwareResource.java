@@ -29,7 +29,7 @@ import org.forgerock.openam.rest.resource.SSOTokenContext;
 public abstract class SubjectAwareResource implements CollectionResourceProvider {
 
     /**
-     * Retrieves the {@link javax.security.auth.Subject} from the {@link org.forgerock.http.context.Context}.
+     * Retrieves the {@link javax.security.auth.Subject} from the {@link Context}.
      * If there's no Subject or no SSOTokenContext in the provided context this method will return null.
      *
      * @param context Context of the request made to this resource.
