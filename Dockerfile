@@ -22,7 +22,9 @@ RUN \
 RUN \
   mkdir /build && \
   mvn -Dexpression=project.version -q -DforceStdout help:evaluate > /build/version.txt && \
-  unzip openam-server/target/WrenAM-$(cat /build/version.txt).war -d /build/wrenam
+  unzip openam-server/target/WrenAM-$(cat /build/version.txt).war -d /build/wrenam && \
+  unzip openam-distribution/openam-distribution-ssoadmintools/target/SSOAdminTools-$(cat /build/version.txt).zip -d /build/ssoadm && \
+  unzip openam-distribution/openam-distribution-ssoconfiguratortools/target/SSOConfiguratorTools-$(cat /build/version.txt).zip -d /build/ssoconf
 
 
 FROM tomcat:9-jdk17-temurin
@@ -50,6 +52,8 @@ RUN addgroup --gid ${WRENAM_GID} wrenam && \
 # Deploy wrenam project
 ARG WRENAM_CONTEXT=auth
 COPY --chown=wrenam:root --from=project-build /build/wrenam /usr/local/tomcat/webapps/${WRENAM_CONTEXT}
+COPY --chown=wrenam:root --from=project-build /build/ssoadm /opt/ssoadm
+COPY --chown=wrenam:root --from=project-build /build/ssoconf /opt/ssoconf
 
 USER ${WRENAM_UID}
 WORKDIR ${WRENAM_HOME}
