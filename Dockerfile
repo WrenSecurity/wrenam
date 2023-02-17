@@ -36,6 +36,7 @@ ENV \
     --add-exports=java.base/sun.security.tools.keytool=ALL-UNNAMED \
     --add-exports=java.base/sun.security.x509=ALL-UNNAMED \
     --add-exports=java.management/sun.management=ALL-UNNAMED \
+    --add-exports=java.xml/com.sun.org.apache.xerces.internal.dom=ALL-UNNAMED \
     --add-opens=java.base/java.lang.reflect=ALL-UNNAMED \
     --add-opens=java.base/java.net=ALL-UNNAMED \
     --add-opens=java.base/java.util.regex=ALL-UNNAMED \
