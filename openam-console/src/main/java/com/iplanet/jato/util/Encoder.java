@@ -40,18 +40,18 @@ public class Encoder {
         return decodeBase64(s);
     }
 
-    public static byte[] serialize(Serializable o, boolean compress) throws IOException {
+    public static byte[] serialize(Serializable object, boolean compress) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream(512);
-        ObjectOutputStream oos = new ObjectOutputStream(baos);
-        oos.writeObject(o);
+        ObjectOutputStream oos = new ObjectOutputStream(compress ? new DeflaterOutputStream(baos) : baos);
+        oos.writeObject(object);
         oos.flush();
         oos.close();
         return baos.toByteArray();
     }
 
-    public static Object deserialize(byte[] b, boolean compressed) throws IOException, ClassNotFoundException {
-        ByteArrayInputStream bais = new ByteArrayInputStream(b);
-        return new ApplicationObjectInputStream(bais).readObject();
+    public static Object deserialize(byte[] data, boolean compressed) throws IOException, ClassNotFoundException {
+        ByteArrayInputStream input = new ByteArrayInputStream(data);
+        return new ApplicationObjectInputStream(compressed ? new InflaterInputStream(input) : input).readObject();
     }
 
 }
