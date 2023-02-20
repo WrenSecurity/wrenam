@@ -52,6 +52,7 @@ import org.forgerock.openam.cts.continuous.ChangeType;
 import org.forgerock.openam.cts.continuous.ContinuousQueryListener;
 import org.forgerock.openam.cts.exceptions.CoreTokenException;
 import org.forgerock.openam.notifications.Consumer;
+import org.forgerock.openam.notifications.LocalOnly;
 import org.forgerock.openam.notifications.NotificationBroker;
 import org.forgerock.openam.notifications.Subscription;
 import org.forgerock.openam.notifications.Topic;
@@ -105,7 +106,7 @@ public final class CTSNotificationBroker implements NotificationBroker {
      */
     @Inject
     public CTSNotificationBroker(CTSPersistentStore store,
-            @Named("localBroker") NotificationBroker localBroker,
+            @LocalOnly NotificationBroker localBroker,
             @Named("ctsQueueSize") int queueSize,
             @Named("tokenExpirySeconds") long tokenExpirySeconds,
             @Named("publishFrequencyMilliseconds") long publishFrequencyMilliseconds,
