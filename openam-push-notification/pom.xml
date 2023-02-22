@@ -21,7 +21,7 @@
     <parent>
         <artifactId>wrenam-project</artifactId>
         <groupId>org.wrensecurity.wrenam</groupId>
-        <version>15.0.0-M1</version>
+        <version>15.0.0-M2-SNAPSHOT</version>
     </parent>
 
     <properties>
