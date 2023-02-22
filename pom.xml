@@ -97,7 +97,7 @@
     </repositories>
 
     <properties>
-        <pgpVerifyKeysVersion>1.7.4-SNAPSHOT</pgpVerifyKeysVersion>
+        <pgpVerifyKeysVersion>1.7.4</pgpVerifyKeysVersion>
         <wrenBuildToolsVersion>1.1.1-SNAPSHOT</wrenBuildToolsVersion>
 
         <!-- Source code has to be Java 8 compliant (code base is not JPMS ready) -->
@@ -139,8 +139,8 @@
         <project.build.outputTimestamp>2023-01-01T00:00:00Z</project.build.outputTimestamp>
 
         <!-- Wren Security Dependencies -->
-        <wrends.version>4.0.0-RC1</wrends.version>
-        <wrensec-commons.version>22.5.0-SNAPSHOT</wrensec-commons.version>
+        <wrends.version>4.0.0-RC2</wrends.version>
+        <wrensec-commons.version>22.5.0</wrensec-commons.version>
         <wrensec-guava.version>18.0.5</wrensec-guava.version>
         <wrensec-ui.version>22.1.2</wrensec-ui.version>
 
