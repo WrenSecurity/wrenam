@@ -26,6 +26,7 @@
  *
  * Portions Copyrighted 2011-2016 ForgeRock AS.
  * Portions Copyrighted 2014 Nomura Research Institute, Ltd
+ * Portions Copyright 2023 Wren Security.
  */
 package com.sun.identity.authentication.config;
 
@@ -60,7 +61,7 @@ import com.sun.identity.sm.ServiceSchema;
 import com.sun.identity.sm.ServiceSchemaManager;
 
 /**
- * This class provides interfaces to manage authentication module instances. 
+ * This class provides interfaces to manage authentication module instances.
  */
 public class AMAuthenticationManager {
 
@@ -126,8 +127,8 @@ public class AMAuthenticationManager {
 
     /**
      * Returns a Set contains all the authentication types that are plugged in
-     * this server. 
-     * @return Set of String values of the authentication types available on 
+     * this server.
+     * @return Set of String values of the authentication types available on
      *         this server.
      */
     public static Set<String> getAuthenticationTypes() {
@@ -136,8 +137,8 @@ public class AMAuthenticationManager {
 
     /**
      * Returns a Set contains all the module service names that are plugged in
-     * this server. 
-     * @return Set of String values of the module service names available on 
+     * this server.
+     * @return Set of String values of the module service names available on
      *         this server.
      */
     public static Set<String> getAuthenticationServiceNames() {
@@ -176,7 +177,7 @@ public class AMAuthenticationManager {
                     module = module.substring(index + 1);
                 }
                 // Application is not one of the selectable instance type.
-                if (!module.equals(ISAuthConstants.APPLICATION_MODULE)) { 
+                if (!module.equals(ISAuthConstants.APPLICATION_MODULE)) {
                     AUTH_TYPES.add(module);
                 }
                 String serviceName = MODULE_SERVICE_NAMES.get(module);
@@ -203,12 +204,12 @@ public class AMAuthenticationManager {
             }
         }
     }
-    
+
     /**
      * build the module instance table for the realm.
      * format of this table:
      * Table:  key = realm, value = module Map for the realm.
-     * module Map for the realm: 
+     * module Map for the realm:
      *   key = module type, value = Set of module instances
      */
     private static void buildModuleInstanceTable(SSOToken token, String realm) {
@@ -334,7 +335,7 @@ public class AMAuthenticationManager {
 
     /**
      * Returns an <code>AMAuthenticationSchema</code> object for the specified
-     * authentication type. 
+     * authentication type.
      *
      * @param authType Type of the authentication module instance.
      * @return <code>AMAuthenticationSchema</code> object of the specified
@@ -342,7 +343,7 @@ public class AMAuthenticationManager {
      * @throws AMConfigurationException if error occurred during retrieving
      *         the service schema.
      */
-    public AMAuthenticationSchema getAuthenticationSchema(String authType) 
+    public AMAuthenticationSchema getAuthenticationSchema(String authType)
             throws AMConfigurationException {
         return getAuthenticationSchema(authType, token);
     }
@@ -355,7 +356,7 @@ public class AMAuthenticationManager {
         try {
             ServiceSchema serviceSchema;
             String serviceName = getServiceName(authType);
-            ServiceSchemaManager scm = new ServiceSchemaManager(serviceName, 
+            ServiceSchemaManager scm = new ServiceSchemaManager(serviceName,
                 token);
             ServiceSchema orgSchema = scm.getOrganizationSchema();
             ServiceSchema subSchema = orgSchema.getSubSchema(
@@ -367,7 +368,7 @@ public class AMAuthenticationManager {
                 // fall back to the org schema if the DIT is old.
                 serviceSchema = orgSchema;
             }
-            AMAuthenticationSchema amschema = 
+            AMAuthenticationSchema amschema =
                 new AMAuthenticationSchema(serviceSchema);
             return amschema;
         } catch (Exception e) {
@@ -378,7 +379,7 @@ public class AMAuthenticationManager {
     /**
      * Returns the <code>AMAuthenticationInstance</code> object whose name is
      * as specified.
-     * Name uniqueness is required for the instances among the same realm, as 
+     * Name uniqueness is required for the instances among the same realm, as
      * well as the instances that are available to this realm.
      *
      * @param authName Authentication instance name.
@@ -436,7 +437,7 @@ public class AMAuthenticationManager {
         try {
             scm = new ServiceConfigManager(serviceName, token);
             service = scm.getOrganizationConfig(realm, null);
-                    
+
             if (service != null) {
                 if (authName.equals(type)
                         // Must check if there is a sub-config with the auth
@@ -453,11 +454,11 @@ public class AMAuthenticationManager {
         } catch (SSOException e) {
             if (DEBUG.warningEnabled()) {
                 DEBUG.warning("Token doesn't have access to service: " +
-                   token + " :: " + serviceName); 
+                   token + " :: " + serviceName);
             }
         } catch (SMSException e) {
             // normal exception for global service configuration.
-            // no need to log anything. 
+            // no need to log anything.
         }
 
         if (DEBUG.messageEnabled()) {
@@ -489,7 +490,7 @@ public class AMAuthenticationManager {
     }
 
     /**
-     * Returns the type of the authentication module instance with the 
+     * Returns the type of the authentication module instance with the
      * specified instance name.
      */
     public String getAuthInstanceType(String authName) {
@@ -536,8 +537,8 @@ public class AMAuthenticationManager {
 
 
     /**
-     * Returns a Set of all registered module instance names, including 
-     * both the old instances from 6.3 DIT and the new instances in 7.0. 
+     * Returns a Set of all registered module instance names, including
+     * both the old instances from 6.3 DIT and the new instances in 7.0.
      */
     private Set<String> getRegisteredModuleNames() {
         Set<String> instances = Collections.EMPTY_SET;
@@ -581,7 +582,7 @@ public class AMAuthenticationManager {
             ISAuthConstants.AUTH_ALLOWED_MODULES);
         if (defaultModuleNames != null && defaultModuleNames.contains(name)) {
             return true;
-        } 
+        }
         return false;
     }
 
@@ -602,10 +603,10 @@ public class AMAuthenticationManager {
     }
 
     /**
-     * Returns the authentication module instances that are available to this 
+     * Returns the authentication module instances that are available to this
      * realm except the Application instance which is for internal use only.
      *
-     * @return A Set of <code>AMAuthenticationInstance</code> objects that are 
+     * @return A Set of <code>AMAuthenticationInstance</code> objects that are
      *         available to this realm.
      */
     public Set<AMAuthenticationInstance> getAuthenticationInstances() {
@@ -647,19 +648,19 @@ public class AMAuthenticationManager {
      * @param type Type of the authentication module instance.
      * @param attributes A Map of parameters for this module instance.
      * @return <code>AMAuthenticationInstance</code> object is newly created.
-     * @throws AMConfigurationException if error occurred during the 
+     * @throws AMConfigurationException if error occurred during the
      *         authentication creation.
      */
     public AMAuthenticationInstance createAuthenticationInstance(
-        String name, 
+        String name,
         String type,
-        Map attributes
+        Map<?, ?> attributes
     ) throws AMConfigurationException {
         if (name.indexOf(' ') != -1) {
             throw new AMConfigurationException(BUNDLE_NAME,
                 "invalidAuthenticationInstanceName", null);
         }
-        Set moduleTypes = getAuthenticationTypes();
+        Set<String> moduleTypes = getAuthenticationTypes();
         if (!moduleTypes.contains(type)) {
             throw new AMConfigurationException(BUNDLE_NAME, "wrongType",
                 new Object[]{type} );
@@ -679,13 +680,13 @@ public class AMAuthenticationManager {
 
         ServiceSchema schema = null;
         try {
-            ServiceSchemaManager ssm = 
+            ServiceSchemaManager ssm =
                 new ServiceSchemaManager(serviceName, token);
             schema = ssm.getSchema(SchemaType.GLOBAL);
         } catch (SSOException e) {
             if (DEBUG.warningEnabled()) {
                 DEBUG.warning("Token doesn't have access to service: " +
-                   token + " -> " + serviceName); 
+                   token + " -> " + serviceName);
             }
         } catch (SMSException e) {
             // normal exception for service without global configuration.
@@ -703,17 +704,8 @@ public class AMAuthenticationManager {
             if (orgConfig == null) {
                 orgConfig = ocm.addServiceConfig(serviceName, null);
             }
-            ServiceConfig subConfig = orgConfig;
-            if (!name.equals(type)) {
-                orgConfig.addSubConfig(name, ISAuthConstants.SERVER_SUBSCHEMA, 
-                    0, attributes);
-                subConfig = orgConfig.getSubConfig(name);
-            } else {
-                // if the module instance name equals to its type, set the
-                // the attributes in its organization config, not sub config.
-                subConfig.setAttributes(attributes);
-            }
-
+            orgConfig.addSubConfig(name, ISAuthConstants.SERVER_SUBSCHEMA, 0, attributes);
+            ServiceConfig subConfig = orgConfig.getSubConfig(name);
             //In case of server mode AMAuthLevelManager will update AMAuthenticationManager about the change, and
             //there is no need to reinitialize the configuration twice. In client mode it is less likely that
             //AMAuthLevelManager listeners are in place, so let's reinitialize to be on the safe side.
@@ -729,12 +721,12 @@ public class AMAuthenticationManager {
 
     /**
      * Deletes a specified authentication module instance.
-     * @param name Name of the authentication module instance going to be 
+     * @param name Name of the authentication module instance going to be
      *                deleted.
-     * @throws AMConfigurationException if it fails to delete the 
+     * @throws AMConfigurationException if it fails to delete the
      *         authentication instance.
      */
-    public void deleteAuthenticationInstance(String name) 
+    public void deleteAuthenticationInstance(String name)
         throws AMConfigurationException {
         AMAuthenticationInstance instance = getAuthenticationInstance(name);
         if (instance == null) {
@@ -753,18 +745,15 @@ public class AMAuthenticationManager {
                 "authInstanceIsGlobal", new Object[] {type});
              }
         try {
-            if (name.equals(type)) {
-                // no subconfig
-                Map attrs = serviceConfig.getAttributesWithoutDefaults();
+            String serviceName = serviceConfig.getServiceName();
+            ServiceConfigManager scm = new ServiceConfigManager(serviceName, token);
+            ServiceConfig orgConfig = scm.getOrganizationConfig(realm, null);
+            if (name.equals(type) && orgConfig.getSubConfig(name) == null) {
+                Map<?, ?> attrs = serviceConfig.getAttributesWithoutDefaults();
                 if (attrs != null) {
                     serviceConfig.removeAttributes(attrs.keySet());
                 }
             } else {
-                // remove sub config
-                String serviceName = serviceConfig.getServiceName();
-                ServiceConfigManager scm = new ServiceConfigManager(
-                    serviceName, token);
-                ServiceConfig orgConfig = scm.getOrganizationConfig(realm,null);
                 orgConfig.removeSubConfig(name);
             }
             if (isInheritedAuthInstance(name)) {
@@ -806,7 +795,7 @@ public class AMAuthenticationManager {
      *
      * @param moduleInstance Name of the module instance.
      * @return <code>true</code> if the module instance in use.
-     */ 
+     */
     private boolean isModuleInstanceInUse(String moduleInstance) {
         Set services = Collections.EMPTY_SET;
         boolean returnValue = false;
@@ -817,9 +806,9 @@ public class AMAuthenticationManager {
             ServiceConfig oConfig = scm.getOrganizationConfig(realm, null);
 
             if (oConfig != null) {
-                ServiceConfig namedConfig = 
+                ServiceConfig namedConfig =
                     oConfig.getSubConfig("Configurations");
-                if (namedConfig != null) { 
+                if (namedConfig != null) {
                         services = namedConfig.getSubConfigNames("*");
                 }
             }
@@ -840,7 +829,7 @@ public class AMAuthenticationManager {
                 }
                 returnValue = true;
                 break;
-            } 
+            }
         }
         return returnValue;
     }
@@ -874,7 +863,7 @@ public class AMAuthenticationManager {
                 if (DEBUG.messageEnabled()) {
                     DEBUG.message("service config for " + serviceName + "  = "
                         + xmlConfig);
-                } 
+                }
 
                 if (xmlConfig != null && xmlConfig.length() != 0) {
                         Document doc = XMLUtils.toDOMDocument(xmlConfig, DEBUG);
