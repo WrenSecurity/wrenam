@@ -34,6 +34,7 @@ import org.forgerock.openam.utils.TimeUtils;
 
 import com.iplanet.sso.SSOException;
 import com.iplanet.sso.SSOToken;
+import com.sun.identity.shared.Constants;
 import com.sun.identity.shared.DateUtils;
 import com.sun.identity.shared.debug.Debug;
 
@@ -104,7 +105,7 @@ public class PartialSessionFactory {
     public PartialSession fromSSOToken(SSOToken ssoToken) {
         Builder builder = new Builder();
         try {
-            String universalId = ssoToken.getPrincipal().getName();
+            String universalId = ssoToken.getProperty(Constants.UNIVERSAL_IDENTIFIER);
             builder.username(identityUtils.getIdentityName(universalId));
             builder.universalId(universalId);
             builder.realm(dnWrapper.orgNameToRealmName(ssoToken.getProperty("Organization")));
