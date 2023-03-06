@@ -39,54 +39,66 @@
             <artifactId>openam-jaxrpc-schema</artifactId>
             <version>${project.version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-dtd-schema</artifactId>
             <version>${project.version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-xacml3-schema</artifactId>
             <version>${project.version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>OpenFM</artifactId>
             <version>${project.version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-entitlements</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-client-sts</artifactId>
             <version>${project.version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.wrensecurity.wrends</groupId>
             <artifactId>opendj-core</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.wrensecurity.wrends</groupId>
             <artifactId>opendj-grizzly</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.wrensecurity.commons.guava</groupId>
             <artifactId>wrensec-guava-collect</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.wrensecurity.commons.guava</groupId>
             <artifactId>wrensec-guava-base</artifactId>
         </dependency>
+
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.wrensecurity.http</groupId>
             <artifactId>chf-http-core</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -147,6 +159,7 @@
                 <executions>
                     <execution>
                         <phase>package</phase>
+
                         <goals>
                             <goal>shade</goal>
                         </goals>
@@ -393,34 +406,34 @@
                                 <include>com/sun/identity/sm/jaxrpc/**</include>
                                 <include>com/sun/identity/util/**</include>
 
-                                <include>org.wrensecurity.wrenam/core/realms/RealmLookupException*</include>
-                                <include>org.wrensecurity.wrenam/idm/**</include>
-                                <include>org.wrensecurity.wrenam/authentication/service/protocol/**</include>
-                                <include>org.wrensecurity.wrenam/console/base/ConsoleViewBeanBase*</include>
-                                <include>org.wrensecurity.wrenam/core/realms/*</include>
-                                <include>org.wrensecurity.wrenam/core/DNWrapper*</include>
-                                <include>org.wrensecurity.wrenam/dpro/session/InvalidSessionIdException*</include>
-                                <include>org.wrensecurity.wrenam/entitlement/ConditionTypeRegistry*</include>
-                                <include>org.wrensecurity.wrenam/entitlement/EntitlementModule*</include>
-                                <include>org.wrensecurity.wrenam/entitlement/EntitlementRegistry*</include>
-                                <include>org.wrensecurity.wrenam/entitlement/indextree/TreeSaveIndex*</include>
-                                <include>org.wrensecurity.wrenam/entitlement/indextree/TreeSearchIndex*</include>
-                                <include>org.wrensecurity.wrenam/entitlement/utils/EntitlementUtils*</include>
-                                <include>org.wrensecurity.wrenam/entitlement/utils/NullNotificationBroker*</include>
-                                <include>org.wrensecurity.wrenam/entitlement/conditions/**</include>
-                                <include>org.wrensecurity.wrenam/entitlement/NameAlreadyRegisteredException*</include>
-                                <include>org.wrensecurity.wrenam/entitlement/PolicyConstants*</include>
-                                <include>org.wrensecurity.wrenam/entitlement/service/ApplicationService*</include>
-                                <include>org.wrensecurity.wrenam/entitlement/service/EntitlementConfigurationFactory*</include>
-                                <include>org.wrensecurity.wrenam/entitlement/service/ResourceTypeService*</include>
-                                <include>org.wrensecurity.wrenam/services/cdm/**</include>
-                                <include>org.wrensecurity.wrenam/session/*</include>
-                                <include>org.wrensecurity.wrenam/security/whitelist/**</include>
-                                <include>org.wrensecurity.wrenam/sso/providers/stateless/*</include>
-                                <include>org.wrensecurity.wrenam/upgrade/UpgradeException*</include>
-                                <include>org.wrensecurity.wrenam/validation/ResponseValidationFilter*</include>
+                                <include>org/forgerock/openam/core/realms/RealmLookupException*</include>
+                                <include>org/forgerock/openam/idm/**</include>
+                                <include>org/forgerock/openam/authentication/service/protocol/**</include>
+                                <include>org/forgerock/openam/console/base/ConsoleViewBeanBase*</include>
+                                <include>org/forgerock/openam/core/realms/*</include>
+                                <include>org/forgerock/openam/core/DNWrapper*</include>
+                                <include>org/forgerock/openam/dpro/session/InvalidSessionIdException*</include>
+                                <include>org/forgerock/openam/entitlement/ConditionTypeRegistry*</include>
+                                <include>org/forgerock/openam/entitlement/EntitlementModule*</include>
+                                <include>org/forgerock/openam/entitlement/EntitlementRegistry*</include>
+                                <include>org/forgerock/openam/entitlement/indextree/TreeSaveIndex*</include>
+                                <include>org/forgerock/openam/entitlement/indextree/TreeSearchIndex*</include>
+                                <include>org/forgerock/openam/entitlement/utils/EntitlementUtils*</include>
+                                <include>org/forgerock/openam/entitlement/utils/NullNotificationBroker*</include>
+                                <include>org/forgerock/openam/entitlement/conditions/**</include>
+                                <include>org/forgerock/openam/entitlement/NameAlreadyRegisteredException*</include>
+                                <include>org/forgerock/openam/entitlement/PolicyConstants*</include>
+                                <include>org/forgerock/openam/entitlement/service/ApplicationService*</include>
+                                <include>org/forgerock/openam/entitlement/service/EntitlementConfigurationFactory*</include>
+                                <include>org/forgerock/openam/entitlement/service/ResourceTypeService*</include>
+                                <include>org/forgerock/openam/services/cdm/**</include>
+                                <include>org/forgerock/openam/session/*</include>
+                                <include>org/forgerock/openam/security/whitelist/**</include>
+                                <include>org/forgerock/openam/sso/providers/stateless/*</include>
+                                <include>org/forgerock/openam/upgrade/UpgradeException*</include>
+                                <include>org/forgerock/openam/validation/ResponseValidationFilter*</include>
 
-                                <include>META-INF/services/org.wrensecurity.wrenam.entitlement.ConditionTypeRegistry</include>
+                                <include>META-INF/services/org.forgerock.openam.entitlement.ConditionTypeRegistry</include>
                             </includes>
 
                             <excludes>
@@ -476,7 +489,7 @@
                             </includes>
 
                             <excludes>
-                                <exclude>org.wrensecurity.wrenam/audit/context/AuditContextFilter*</exclude>
+                                <exclude>org/forgerock/openam/audit/context/AuditContextFilter*</exclude>
                             </excludes>
                         </filter>
 
@@ -521,6 +534,7 @@
 
                         <filter>
                             <artifact>org.wrensecurity.wrenam:openam-federation-library</artifact>
+
                             <includes>
                                 <include>libAuthnSvc.properties</include>
                                 <include>libBinarySecurityToken.properties</include>
@@ -731,7 +745,7 @@
                             <shadedPattern>${shade.package}.org.</shadedPattern>
 
                             <excludes>
-                                <exclude>org.wrensecurity.wrenam.**.*</exclude>
+                                <exclude>org.forgerock.openam.**.*</exclude>
                                 <exclude>org.w3c.dom.**.*</exclude>
                                 <exclude>org.xml.sax.**.*</exclude>
                             </excludes>
@@ -766,8 +780,7 @@
                             <shadedPattern>${shade.package}.javax.activation</shadedPattern>
                         </relocation>
                     </relocations>
-
-                    <shadedArtifactAttached>false</shadedArtifactAttached>
+rtifactAttached>
                     <createDependencyReducedPom>true</createDependencyReducedPom>
                     <shadeSourcesContent>true</shadeSourcesContent>
                     <createSourcesJar>${generate.clientsdk.sources}</createSourcesJar>
