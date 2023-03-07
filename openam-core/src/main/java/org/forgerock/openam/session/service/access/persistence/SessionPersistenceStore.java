@@ -12,7 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
- * Portions copyright 2022 Wren Security
+ * Portions copyright 2022-2023 Wren Security
  */
 
 package org.forgerock.openam.session.service.access.persistence;
@@ -282,7 +282,7 @@ public class SessionPersistenceStore {
 
     /**
      * Returns the expiration information of all sessions belonging to a user
-     * (uuid). The returned value will be a Map (sid->expiration_time).
+     * (uuid). The returned value will be a Map (sid-&gt;expiration_time).
      *
      * @param uuid
      *            User's universal unique ID.

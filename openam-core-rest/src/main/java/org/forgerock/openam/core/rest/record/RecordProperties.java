@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions Copyright 2023 Wren Security
  */
 package org.forgerock.openam.core.rest.record;
 
@@ -359,8 +360,6 @@ public class RecordProperties {
 
     /**
      * Get Issue ID
-     *
-     * @return
      */
     public Long getIssueID() {
         return issueID;
@@ -368,8 +367,6 @@ public class RecordProperties {
 
     /**
      * Get Reference ID
-     *
-     * @return
      */
     public String getReferenceID() {
         return referenceID;
@@ -377,8 +374,6 @@ public class RecordProperties {
 
     /**
      * Get Description
-     *
-     * @return
      */
     public String getDescription() {
         return description;
@@ -386,8 +381,6 @@ public class RecordProperties {
 
     /**
      * is ThreadDump feature enable
-     *
-     * @return
      */
     public Boolean isThreadDumpEnabled() {
         return threadDumpEnable;
@@ -396,8 +389,6 @@ public class RecordProperties {
     /**
      * Get ThreadDump delay between two threads dumps in seconds
      * NB: Thread dump should be enable first
-     *
-     * @return
      */
     public Long getThreadDumpDelayInSeconds() {
         return threadDumpDelayInSeconds;
@@ -405,8 +396,6 @@ public class RecordProperties {
 
     /**
      * is config export feature enable
-     *
-     * @return
      */
     public Boolean isConfigExportEnabled() {
         return configExportEnable;
@@ -414,8 +403,6 @@ public class RecordProperties {
 
     /**
      * is share password enable
-     *
-     * @return
      */
     public Boolean isConfigExportSharePasswordEnabled() {
         return configExportSharePassword;
@@ -424,8 +411,6 @@ public class RecordProperties {
     /**
      * Get configuration export password
      * NB: Config export should be enable first
-     *
-     * @return
      */
     public String getConfigExportPassword() {
         return configExportPassword;
@@ -433,8 +418,6 @@ public class RecordProperties {
 
     /**
      * Get debug level
-     *
-     * @return
      */
     public DebugLevel getDebugLevel() {
         return debugLevel;
@@ -442,8 +425,6 @@ public class RecordProperties {
 
     /**
      * Is auto stop feature enable
-     *
-     * @return
      */
     public Boolean isAutoStopEnabled() {
         return autoStopEnable;
@@ -451,8 +432,6 @@ public class RecordProperties {
 
     /**
      * Is auto stop time feature enable
-     *
-     * @return
      */
     public Boolean isAutoStopTimeEnabled() {
         return autoStopTimeEnable;
@@ -461,8 +440,6 @@ public class RecordProperties {
     /**
      * Get auto stop time in milli-seconds
      * NB: auto stop time should be enable first
-     *
-     * @return
      */
     public Long getAutoStopTimeInMS() {
         return autoStopTimeInMS;
@@ -470,8 +447,6 @@ public class RecordProperties {
 
     /**
      * is auto stop file size enable
-     *
-     * @return
      */
     public Boolean isAutoStopFileSizeEnabled() {
         return autoStopFileSizeEnable;
@@ -480,8 +455,6 @@ public class RecordProperties {
     /**
      * Get auto stop file size in KB
      * NB: auto stop file size should be enable first
-     *
-     * @return
      */
     public Long getAutoStopFileSizeInKB() {
         return autoStopFileSizedInKB;
@@ -489,8 +462,6 @@ public class RecordProperties {
 
     /**
      * is zip enable
-     *
-     * @return
      */
     public Boolean isZipEnabled() {
         return zipEnable;

@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014 ForgeRock AS.
+ * Portions Copyright 2023 Wren Security
  */
 
 package org.forgerock.openam.scripting;
@@ -277,7 +278,7 @@ public final class ScriptEngineConfiguration {
          * Sets the maximum amount of time (in seconds) to allow a script to execute before interrupting it. Use
          * {@link #NO_TIMEOUT} for no timeout.
          *
-         * @param timeout the script execution timeout. Must be >= 0.
+         * @param timeout the script execution timeout. Must be &gt;= 0.
          * @param unit the time units of the timeout.
          * @return this.
          */
@@ -339,7 +340,7 @@ public final class ScriptEngineConfiguration {
          * {@link org.forgerock.openam.scripting.ThreadPoolScriptEvaluator}). This is the number of threads that will
          * be created to service requests before new requests are queued.
          *
-         * @param coreSize the number of threads to keep in the thread pool. Must be >= 1.
+         * @param coreSize the number of threads to keep in the thread pool. Must be &gt;= 1.
          * @return this.
          */
         public Builder withThreadPoolCoreSize(final int coreSize) {

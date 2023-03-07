@@ -27,6 +27,7 @@
  */
 /*
  * Portions Copyrighted 2011-2014 ForgeRock AS
+ * Portions Copyright 2023 Wren Security
  */
 
 package org.forgerock.openam.network.ipv4;
@@ -139,7 +140,6 @@ public class IPv4Condition implements Condition {
      * @param property property name
      * @param locale locale for which the property name must be customized
      * @return display name for the property name
-     * @throws PolicyException
      */
     @Override
     public String getDisplayName(String property, Locale locale)

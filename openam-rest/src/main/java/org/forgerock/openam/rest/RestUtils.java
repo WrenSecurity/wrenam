@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2012-2016 ForgeRock AS.
+ * Portions Copyright 2023 Wren Security
  */
 
 package org.forgerock.openam.rest;
@@ -86,7 +87,7 @@ import org.xml.sax.SAXException;
 final public class RestUtils {
 
     private static final Debug debug = Debug.getInstance("frRest");
-    
+
     private static Map<String, List<String>> adminUserIds = new ConcurrentHashMap<String, List<String>>();
 
     /**
@@ -123,7 +124,7 @@ final public class RestUtils {
             DelegationEvaluator delegationEvaluator = new DelegationEvaluatorImpl();
             DelegationPermission delegationPermission = new DelegationPermission();
             Map<String, Set<String>> envParams = Collections.<String, Set<String>>emptyMap();
-            
+
             //If the user has delegated admin permissions in the realm they are currently logged in to,
             //they have read access to global-config endpoints
             if (isGlobalRole(role)) {
@@ -176,12 +177,12 @@ final public class RestUtils {
         }
         return LegacyUIConfigHolder.realmService;
     }
-    
+
     private static boolean isGlobalRole(String role) {
         if (StringUtils.isNotEmpty(role) && role.contains("global")) {
             return true;
         }
-        return false; 
+        return false;
     }
 
     /**
@@ -214,7 +215,6 @@ final public class RestUtils {
 
     /**
      * Parses out deployment url
-     * @param deploymentURL
      */
     public static StringBuilder getFullDeploymentURI(final String deploymentURL) throws URISyntaxException{
 
@@ -239,7 +239,6 @@ final public class RestUtils {
 
     /**
      * Gets an SSOToken for Administrator
-     * @return
      */
     public static SSOToken getToken() {
         return AccessController.doPrivileged(AdminTokenAction.getInstance());
@@ -360,7 +359,7 @@ final public class RestUtils {
         private static Set<String> globalService = new HashSet<String>();
         private static Set<String> realmService = new HashSet<String>();
 
-        // Until JATO is completely replaced with XUI, we are going to base the permission behavior on old JATO UI. 
+        // Until JATO is completely replaced with XUI, we are going to base the permission behavior on old JATO UI.
         // Since AMViewConfig doesn't reflect changes to amConsoleConfig.xml dynamically,
         // we are only loading services list once.
         static {
@@ -371,7 +370,7 @@ final public class RestUtils {
         }
 
         /**
-         * parse loaded amConsoleConfig.xml to get the list of service names 
+         * parse loaded amConsoleConfig.xml to get the list of service names
          */
         private static void loadLegacyConsoleConfig(Document doc) {
             NodeList nodes = doc.getElementsByTagName("tabs");

@@ -20,6 +20,8 @@
  * with the fields enclosed by brackets [] replaced by
  * your own identifying information:
  * "Portions Copyrighted [year] [name of copyright owner]"
+ *
+ * Portions Copyright 2023 Wren Security
  */
 
 package org.forgerock.openam.network.ipv6;
@@ -118,7 +120,6 @@ public class IPv6Condition implements Condition {
      * @param property property name
      * @param locale locale for which the property name must be customized
      * @return display name for the property name
-     * @throws com.sun.identity.policy.PolicyException
      */
     @Override
     public String getDisplayName(String property, Locale locale)

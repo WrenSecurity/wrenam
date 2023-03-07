@@ -13,7 +13,7 @@
  *
  * Copyrighted 2015 Intellectual Reserve, Inc (IRI)
  * Portions Copyrighted 2016 ForgeRock AS.
- * Portions Copyrighted 2022 Wren Security
+ * Portions Copyrighted 2022-2023 Wren Security
  */
 package org.forgerock.openam.radius.server.spi.handlers;
 
@@ -81,7 +81,7 @@ import com.sun.identity.shared.debug.Debug;
  *      .                                      |
  *      .   at a minimum the auth chain used   | ac.hasMoreRequirements()
  *      .   must have a first module that      | callback[] cbs = ac.getRequirements(true)
- *      .   accepts username and password -->  | find nameCallback and inject username
+ *      .   accepts username and password --&gt;  | find nameCallback and inject username
  *      .                                      | find passwordCallback and inject password
  *      . AccessReject                         |
  *      + &lt;----------------------------------- + if unable to find name/password callbacks or inject values

@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015 ForgeRock AS.
+ * Portions Copyright 2023 Wren Security
  */
 
 package org.forgerock.openam.sm.datalayer.impl.ldap;
@@ -83,7 +84,6 @@ public abstract class LdapDataLayerConnectionModule extends DataLayerConnectionM
     /**
      * Returns the provider of {@link org.forgerock.openam.sm.datalayer.api.ConnectionFactory}. The default is to use
      * {@link org.forgerock.openam.sm.datalayer.providers.DataLayerConnectionFactoryCache}.
-     * @return
      */
     protected Class<? extends javax.inject.Provider<ConnectionFactory>> getConnectionFactoryProviderType() {
         return DataLayerConnectionFactoryCache.class;

@@ -12,6 +12,7 @@
 * information: "Portions copyright [year] [name of copyright owner]".
 *
 * Copyright 2016 ForgeRock AS.
+* Portions Copyright 2023 Wren Security
 */
 
 package org.forgerock.openam.services.push.sns;
@@ -82,8 +83,8 @@ import com.sun.identity.shared.debug.Debug;
  *     "messageId" : "..." // unique identifier for this message
  * }
  *
- * {@see SnsHttpDelegate}.
- * {@see PushNotificationService}.
+ * @see SnsHttpDelegate
+ * @see PushNotificationService
  */
 @RequestHandler(@Handler(mvccSupported = false,
         title = SNS_MESSAGE_RESOURCE + TITLE, description = SNS_MESSAGE_RESOURCE + DESCRIPTION))

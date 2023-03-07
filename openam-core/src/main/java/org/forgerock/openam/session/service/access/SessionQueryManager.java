@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions Copyright 2023 Wren Security
  */
 
 package org.forgerock.openam.session.service.access;
@@ -88,7 +89,7 @@ public class SessionQueryManager {
 
     /**
      * Returns the expiration information of all sessions belonging to a user
-     * (uuid). The returned value will be a Map (sid->expiration_time).
+     * (uuid). The returned value will be a Map (sid-&gt;expiration_time).
      *
      * @param uuid
      *            User's universal unique ID.
@@ -104,9 +105,6 @@ public class SessionQueryManager {
     /**
      * Gets all valid Internal Sessions, depending on the value of the user's
      * preferences.
-     *
-     * @param actingSession
-     * @throws SessionException
      */
     public SearchResults<SessionInfo> getValidSessions(Session actingSession, String pattern) throws SessionException {
         if (actingSession.getState(false) != VALID) {

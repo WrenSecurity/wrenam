@@ -25,6 +25,7 @@
  * $Id: UpgradeUtils.java,v 1.18 2009/09/30 17:35:24 goodearth Exp $
  *
  * Portions Copyrighted 2011-2016 ForgeRock AS.
+ * Portions Copyright 2023 Wren Security
  */
 
 package org.forgerock.openam.upgrade;
@@ -1529,7 +1530,6 @@ public class UpgradeUtils {
      * Imports service data
      *
      * @param fileList list of files to be imported.
-     * @throws UpgradeException
      */
     public static void importServiceData(List<String> fileList)
             throws UpgradeException {
@@ -1601,7 +1601,6 @@ public class UpgradeUtils {
      * Imports new service schema.
      *
      * @param fileList list of files
-     * @throws UpgradeException
      */
     public static void importNewServiceSchema(
             List<String> fileList) throws UpgradeException {

@@ -23,6 +23,7 @@
  * "Portions Copyrighted [year] [name of copyright owner]"
  *
  * Portions Copyrighted 2014-2016 ForgeRock AS.
+ * Portions Copyright 2023 Wren Security
  */
 
 package org.forgerock.openam.session;
@@ -231,7 +232,7 @@ public class SessionURL {
      * If the encoding scheme is SLASH then the  cookie value would be
      * written in the URL as extra path info in the following format:
      * <pre>
-     * protocol://server:port/servletpath/&lt;cookieName>=&lt;cookieValue>?
+     * protocol://server:port/servletpath/&lt;cookieName&gt;=&lt;cookieValue&gt;?
      *       queryString
      * </pre>
      * <p>
@@ -244,7 +245,7 @@ public class SessionURL {
      * If the encoding scheme is SEMICOLON then the cookie value would be
      * written in the URL as extra path info in the following format:
      * <pre>
-     * protocol://server:port/path;&lt;cookieName=cookieValue>?queryString
+     * protocol://server:port/path;&lt;cookieName=cookieValue&gt;?queryString
      * </pre>
      * Note that this is not supported in the servlet specification and
      * some web containers do not support this.
@@ -253,7 +254,7 @@ public class SessionURL {
      * If the encoding scheme is QUERY then the cookie value would be
      * written in the URL in the following format:
      * <pre>
-     * protocol://server:port/path?&lt;cookieName>=&lt;cookieValue&gt;
+     * protocol://server:port/path?&lt;cookieName&gt;=&lt;cookieValue&gt;
      * protocol://server:port/path?queryString&amp;&lt;cookieName&gt;=&lt;cookieValue&gt;
      * </pre>
      * <p>
