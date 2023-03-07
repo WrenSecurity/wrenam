@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015 ForgeRock AS.
+ * Portions Copyright 2023 Wren Security
  */
 
 package org.forgerock.openam.sm.datalayer.api;
@@ -22,7 +23,6 @@ import org.forgerock.util.promise.Promise;
 
 /**
  * Creates connections of type T either asynchronously or synchronously.
- * @param <T>
  */
 public interface ConnectionFactory<T> extends Closeable {
 

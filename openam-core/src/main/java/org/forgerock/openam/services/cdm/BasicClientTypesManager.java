@@ -21,6 +21,7 @@
  * your own identifying information:
  * "Portions Copyrighted [year] [name of copyright owner]"
  *
+ * Portions Copyright 2023 Wren Security
  */
 
 package org.forgerock.openam.services.cdm;
@@ -51,8 +52,8 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * This class provides a basic implementation for the CDM ClientTypesManager
  * interface.
- * 
- * The different Client objects are constructed from the contents on the 
+ *
+ * The different Client objects are constructed from the contents on the
  * BasicClientTypesManager.properties file within the OpenAM web application.
  *
  * @author Steve Ferris steve.ferris@forgerock.com
@@ -73,7 +74,7 @@ public class BasicClientTypesManager implements ClientTypesManager {
     protected final static String EQUALS = "=";
     protected final static String CLASS_NAME = "BasicClientTypesManager";
     protected static Debug debug = Debug.getInstance("amClientDetection");
-    
+
     // client detection module service name
     protected static final String CDM_SERVICE_NAME = "iPlanetAMClientDetection";
 
@@ -255,7 +256,6 @@ public class BasicClientTypesManager implements ClientTypesManager {
      * _attributes is a comma delimited list of attributes for the client type
      *
      * @param props The properties file to parse
-     * @throws InvalidPropertiesFormatException
      */
     protected void processProps(Properties props)
     throws InvalidPropertiesFormatException {
@@ -278,7 +278,6 @@ public class BasicClientTypesManager implements ClientTypesManager {
      *
      * @param clientName The name of the client to populate
      * @param props The incoming properties file
-     * @throws InvalidPropertiesFormatException
      */
     protected void populateClient(String clientName, Properties props)
     throws InvalidPropertiesFormatException {

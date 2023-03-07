@@ -21,6 +21,7 @@
  * your own identifying information:
  * "Portions Copyrighted [year] [name of copyright owner]"
  *
+ * Portions Copyright 2023 Wren Security
  */
 
 package org.forgerock.openam.authentication.service.protocol;
@@ -65,7 +66,7 @@ public class RemoteSession implements HttpSession, Serializable {
 
     private final static String SERIALIZABLE_INT = "java.io.Serializable";
     private final static String COLLECTION_INT = "java.util.Collection";
-    
+
     /**
      * Construct a new session facade. This class wraps the standard HttpSession
      * object allowing it to become serializable.
@@ -76,21 +77,21 @@ public class RemoteSession implements HttpSession, Serializable {
         super();
         debug = Debug.getInstance("remoteSession");
         this.session = (HttpSession) session;
-        
+
         creationTime = session.getCreationTime();
         id = session.getId();
         lastAccessedTime = session.getLastAccessedTime();
         maxInactiveInterval = session.getMaxInactiveInterval();
         isNew = session.isNew();
         internalAttributes = new HashMap();
-        
+
         // iterate over the attribute storing those that can be serialized
         Enumeration aNames = getAttributeNames();
-        
+
         while (aNames.hasMoreElements()) {
             String attributeName = (String) aNames.nextElement();
-            
-            if (isSerializable(getAttribute(attributeName)) && 
+
+            if (isSerializable(getAttribute(attributeName)) &&
                     !attributeName.equals("LoginCallbacks") &&
                     !attributeName.equals("AuthContext")) {
                 internalAttributes.put(attributeName, getAttribute(attributeName));
@@ -134,7 +135,7 @@ public class RemoteSession implements HttpSession, Serializable {
      * @return The last session accessed time
      */
     public long getLastAccessedTime() {
-        return (session != null) ? session.getLastAccessedTime() : 
+        return (session != null) ? session.getLastAccessedTime() :
             lastAccessedTime;
     }
 
@@ -167,7 +168,7 @@ public class RemoteSession implements HttpSession, Serializable {
      * @return The maximum session inactive interval
      */
     public int getMaxInactiveInterval() {
-        return (session != null) ? session.getMaxInactiveInterval() : 
+        return (session != null) ? session.getMaxInactiveInterval() :
             maxInactiveInterval;
     }
 
@@ -200,7 +201,6 @@ public class RemoteSession implements HttpSession, Serializable {
      * Same functionality as @see getAttribute.
      *
      * @deprecated
-     * @param name
      * @return The value of the named attribute or null if not found or non-serializable
      */
     public Object getValue(String name) {
@@ -312,14 +312,14 @@ public class RemoteSession implements HttpSession, Serializable {
 
     /**
      * Tests if an object implements the java.io.Serializable interface.
-     * 
+     *
      * @param obj The obj to test for serialization.
      * @return true if the object implements Serializable, false otherwise.
      */
     protected boolean isSerializable(Object obj) {
         boolean serializable = true;
         Class[] interfaces = obj.getClass().getInterfaces();
-        
+
         for (int i = 0; i < interfaces.length; i++) {
             if (interfaces[i].getName().equals(SERIALIZABLE_INT)) {
                 serializable &= true;
@@ -327,7 +327,7 @@ public class RemoteSession implements HttpSession, Serializable {
                 serializable &= false;
             }
          }
-        
+
         return serializable;
     }
 }

@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions Copyright 2023 Wren Security
  */
 
 package org.forgerock.openam.core.rest.sms;
@@ -49,7 +50,7 @@ import org.forgerock.openam.utils.StringUtils;
  * situations where the service's schema simply does not allow it to be rendered (by having blank
  * i18n fields).
  *
- * The 'map' function helps to a set of internal names to a map of resourcenames -> displayable names.
+ * The 'map' function helps to a set of internal names to a map of resourcenames -&gt; displayable names.
  * Any service where its internal name is equal to its displayable name is not included in the returned map.
  *
  */

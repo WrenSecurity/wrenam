@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015 ForgeRock AS.
+ * Portions Copyright 2023 Wren Security
  */
 package org.forgerock.openam.core.rest.record;
 
@@ -75,8 +76,6 @@ public class RecordResource {
 
     /**
      * Start action
-     *
-     * @return
      */
     @Action(name = "start",
             operationDescription = @Operation(
@@ -104,8 +103,6 @@ public class RecordResource {
 
     /**
      * Status action
-     *
-     * @return
      */
     @Action(name = "status",
             operationDescription = @Operation(
@@ -127,8 +124,6 @@ public class RecordResource {
 
     /**
      * Stop action
-     *
-     * @return
      */
     @Action(name = "stop",
             operationDescription = @Operation(

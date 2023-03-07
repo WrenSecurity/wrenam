@@ -21,6 +21,7 @@
  * your own identifying information:
  * "Portions Copyrighted [year] [name of copyright owner]"
  *
+ * Portions Copyright 2023 Wren Security
  */
 
 package org.forgerock.openam.upgrade;
@@ -29,50 +30,46 @@ import org.w3c.dom.Node;
 
 /**
  * Wraps the definition of a new sub schema
- * 
+ *
  * @author steve
  */
 public class NewSubSchemaWrapper {
     private String serviceName = null;
     private String subSchemaName = null;
     private Node subSchemas = null;
-    
+
     /**
      * Creates a new sub schema wrapper
-     * 
-     * @param serviceName
-     * @param subSchemaName
-     * @param subSchemas 
      */
     public NewSubSchemaWrapper(String serviceName, String subSchemaName, Node subSchemas) {
         this.serviceName = serviceName;
-        this.subSchemaName = subSchemaName;       
+        this.subSchemaName = subSchemaName;
         this.subSchemas = subSchemas;
     }
-    
+
     /**
      * Get the name of the service within which this new sub schema will be
      * defined.
-     * 
+     *
      * @return The service name
      */
     public String getServiceName() {
         return serviceName;
     }
-    
+
     /**
      * Get the name of the new sub schema that will be created.
-     * 
+     *
      * @return The name of the sub schema
      */
     public String getSubSchemaName() {
         return subSchemaName;
     }
-    
+
     /**
      * Get the XML node that defines this new sub schema, sub-sub schemas are
      * supported
-     * 
+     *
      * @return The XML Node of the new sub schema
      */
     public Node getSubSchemaNode() {

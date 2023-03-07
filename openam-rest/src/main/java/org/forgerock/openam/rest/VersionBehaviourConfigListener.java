@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014-2016 ForgeRock AS.
+ * Portions Copyright 2023 Wren Security
  */
 
 package org.forgerock.openam.rest;
@@ -60,7 +61,6 @@ public class VersionBehaviourConfigListener implements ServiceListener, Resource
 
     /**
      * Registers the listener with the {@code ServiceConfigManager} and sets the initial default version behaviour.
-     * @param mgr
      */
     public void register(ServiceConfigManager mgr) {
         this.mgr = mgr;

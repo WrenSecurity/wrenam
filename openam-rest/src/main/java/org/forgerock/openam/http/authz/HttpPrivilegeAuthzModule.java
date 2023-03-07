@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions Copyright 2023 Wren Security
  */
 package org.forgerock.openam.http.authz;
 
@@ -42,7 +43,7 @@ import com.sun.identity.delegation.DelegationEvaluator;
 import com.sun.identity.delegation.DelegationPermissionFactory;
 
 /**
- * An HTTP authorization module for performing privilege checking, {@see PrivilegeAuthzModule} for more detail.
+ * An HTTP authorization module for performing privilege checking, {@link PrivilegeAuthzModule} for more detail.
  *
  * @since 14.0.0
  */

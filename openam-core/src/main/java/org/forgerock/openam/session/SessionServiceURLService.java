@@ -23,6 +23,7 @@
  * "Portions Copyrighted [year] [name of copyright owner]"
  *
  * Portions Copyrighted 2014-2016 ForgeRock AS.
+ * Portions Copyright 2023 Wren Security
  */
 
 package org.forgerock.openam.session;
@@ -75,7 +76,6 @@ public class SessionServiceURLService {
      * @param port Session Server port.
      * @param uri Session Server URI.
      * @return URL Session Service URL.
-     * @exception com.iplanet.dpro.session.SessionException
      */
     public URL getSessionServiceURL(String protocol, String server, String port, String uri)
             throws SessionException {
@@ -99,7 +99,6 @@ public class SessionServiceURLService {
      *
      * @param serverID server ID from the platform server list.
      * @return Session Service URL.
-     * @exception SessionException
      */
     public URL getSessionServiceURL(String serverID) throws SessionException {
         try {
@@ -122,7 +121,6 @@ public class SessionServiceURLService {
      *
      * @param sid Session ID
      * @return Session Service URL.
-     * @exception SessionException
      */
     public URL getSessionServiceURL(SessionID sid) throws SessionException {
         String primaryId;

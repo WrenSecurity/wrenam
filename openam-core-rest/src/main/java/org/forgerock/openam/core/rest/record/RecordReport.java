@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions Copyright 2023 Wren Security
  */
 package org.forgerock.openam.core.rest.record;
 
@@ -74,9 +75,6 @@ public class RecordReport {
 
     /**
      * Create the infoReport
-     *
-     * @param record
-     * @return
      */
     public JsonValue infoReport(Record record) {
         JsonObject report = JsonValueBuilder.jsonValue();
@@ -91,7 +89,6 @@ public class RecordReport {
 
     /**
      * Create the global information report
-     * * @return
      */
     private JsonValue globalInformationReport(Record record) {
 
@@ -116,10 +113,6 @@ public class RecordReport {
 
     /**
      * Get Date from info report
-     *
-     * @param jsonRecordProperties
-     * @return
-     * @throws ParseException
      */
     public Date getDateFromInfoReport(JsonValue jsonRecordProperties) throws ParseException, JsonValueException {
         JsonValue globalInfo = jsonRecordProperties.get(GLOBAL_INFO_LABEL).required();
@@ -129,8 +122,6 @@ public class RecordReport {
 
     /**
      * Create the JVM information
-     *
-     * @return
      */
     private JsonValue getJVMInformation() {
         JsonObject report = JsonValueBuilder.jsonValue();
@@ -188,8 +179,6 @@ public class RecordReport {
 
     /**
      * Get the system properties
-     *
-     * @return
      */
     private JsonValue getSystemProperties() {
         JsonObject report = JsonValueBuilder.jsonValue();
@@ -202,9 +191,6 @@ public class RecordReport {
 
     /**
      * Create the history report
-     *
-     * @param record
-     * @return
      */
     public String recordHistoryReport(Record record) {
         StringBuilder report = new StringBuilder();

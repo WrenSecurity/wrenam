@@ -21,6 +21,7 @@
  * your own identifying information:
  * "Portions Copyrighted [year] [name of copyright owner]"
  *
+ * Portions Copyright 2023 Wren Security
  */
 package org.forgerock.openam.session.model;
 
@@ -154,7 +155,6 @@ public abstract class AMRootEntity implements Serializable {
 
     /**
      * Base64 Encoded Data.
-     * @return
      */
     public String getData() {
         return data;

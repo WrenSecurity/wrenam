@@ -12,6 +12,8 @@
  * the License file at legal/CDDLv1.0.txt. If applicable, add the following below the CDDL
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
+ *
+ * Portions Copyright 2023 Wren Security
  */
 package org.forgerock.openam.cts.api.fields;
 
@@ -54,7 +56,6 @@ public class CoreTokenFieldTypes {
      *
      * @param field The CoreTokenField to validate against.
      * @param value The value to verify. Non null.
-     * @throws CoreTokenException
      */
     public static void validateType(CoreTokenField field, Object value) throws CoreTokenException {
         if (value == null) {

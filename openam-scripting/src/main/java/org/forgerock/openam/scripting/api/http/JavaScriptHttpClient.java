@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2010-2016 ForgeRock AS.
+ * Portions Copyright 2023 Wren Security
  */
 
 package org.forgerock.openam.scripting.api.http;
@@ -56,7 +57,6 @@ public class JavaScriptHttpClient extends RestletHttpClient {
      * @param uri URI of resource to be accessed
      * @param requestData Data to be sent during the request
      * @return The response from the REST call
-     * @throws UnsupportedEncodingException
      */
     public HttpClientResponse get(String uri, NativeObject requestData) throws UnsupportedEncodingException {
         DEBUG.warning("'get' has been deprecated. Use 'send' instead");
@@ -68,7 +68,6 @@ public class JavaScriptHttpClient extends RestletHttpClient {
      * @param body The body of the http request
      * @param requestData Data to be sent during the request
      * @return The response from the REST call
-     * @throws UnsupportedEncodingException
      */
     public HttpClientResponse post(String uri, String body, NativeObject requestData)
             throws UnsupportedEncodingException {

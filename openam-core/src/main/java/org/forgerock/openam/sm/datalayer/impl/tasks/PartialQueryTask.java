@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014-2016 ForgeRock AS.
+ * Portions Copyright 2023 Wren Security
  */
 package org.forgerock.openam.sm.datalayer.impl.tasks;
 
@@ -49,7 +50,6 @@ public class PartialQueryTask extends AbstractTask {
      * Performs the partial query operation from the persistence store using the TokenStorageAdapter.
      *
      * @param adapter Utility functions to perform the task with.
-     * @throws DataLayerException
      * @throws IllegalArgumentException If the TokenFilter did not define any return fields.
      */
     @Override

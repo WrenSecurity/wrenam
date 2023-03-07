@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015 ForgeRock AS.
+ * Portions Copyright 2023 Wren Security
  */
 package org.forgerock.openam.core.rest.record;
 
@@ -28,8 +29,6 @@ public class RecordException extends Exception {
 
     /**
      * Record Exception constructor with a message
-     *
-     * @param message
      */
     public RecordException(String message) {
         super(message);
@@ -37,9 +36,6 @@ public class RecordException extends Exception {
 
     /**
      * Record exception constructor with a message and an exception
-     *
-     * @param message
-     * @param cause
      */
     public RecordException(String message, Throwable cause) {
         super(message, cause);
@@ -47,8 +43,6 @@ public class RecordException extends Exception {
 
     /**
      * Record exception constructor with an exception
-     *
-     * @param cause
      */
     public RecordException(Throwable cause) {
         super(cause);

@@ -12,6 +12,7 @@
 * information: "Portions copyright [year] [name of copyright owner]".
 *
 * Copyright 2016-2017 ForgeRock AS.
+* Portions Copyright 2023 Wren Security
 */
 package org.forgerock.openam.sm.datalayer.impl.ldap;
 
@@ -37,7 +38,7 @@ public class CTSDJLDAPv3PersistentSearchBuilder {
     /**
      * Generates a new builder.
      *
-     * @param connectionFactory The {@link ConnectionFactory<org.forgerock.opendj.ldap.Connection>}
+     * @param connectionFactory The connection factory
      *                          to be passed into generated persistent searches.
      */
     public CTSDJLDAPv3PersistentSearchBuilder(ConnectionFactory connectionFactory) {

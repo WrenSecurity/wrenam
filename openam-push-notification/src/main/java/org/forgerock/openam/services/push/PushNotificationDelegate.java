@@ -12,6 +12,7 @@
 * information: "Portions copyright [year] [name of copyright owner]".
 *
 * Copyright 2016 ForgeRock AS.
+* Portions Copyright 2023 Wren Security
 */
 package org.forgerock.openam.services.push;
 
@@ -73,7 +74,7 @@ public interface PushNotificationDelegate extends Closeable {
      * Otherwise returns null.
      *
      * @return The (public, relative) service location of this delegate as exposed to the world, may be relative to the
-     * OpenAM server instance ID {@see WebtopNaming}.
+     * OpenAM server instance ID {@link com.iplanet.services.naming.WebtopNaming}.
      */
     String getRegServiceLocation();
 
@@ -82,7 +83,7 @@ public interface PushNotificationDelegate extends Closeable {
      * Otherwise returns null.
      *
      * @return The (public, relative) service location of this delegate as exposed to the world, may be relative to the
-     * OpenAM server instance ID {@see WebtopNaming}.
+     * OpenAM server instance ID {@link com.iplanet.services.naming.WebtopNaming}.
      */
     String getAuthServiceLocation();
 

@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014-2016 ForgeRock AS.
+ * Portions Copyright 2023 Wren Security
  */
 
 package org.forgerock.openam.authz;
@@ -156,7 +157,6 @@ public abstract class PrivilegeAuthzModule {
      * Check to see if the realm logged into is valid for getting access to the realm requested.
      * @param requestedRealm The realm requested.
      * @param loggedInRealm The realm logged in to.
-     * @return
      */
     protected boolean loggedIntoValidRealm(String requestedRealm, String loggedInRealm) {
         return requestedRealm.equalsIgnoreCase(loggedInRealm)

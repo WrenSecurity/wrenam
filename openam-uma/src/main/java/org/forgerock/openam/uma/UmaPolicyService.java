@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015 ForgeRock AS.
+ * Portions Copyright 2023 Wren Security
  */
 
 package org.forgerock.openam.uma;
@@ -70,13 +71,6 @@ public interface UmaPolicyService {
      */
     Promise<Void, ResourceException> deletePolicy(Context context, String resourceSetId);
 
-    /**
-     *
-     *
-     * @param context
-     * @param request
-     * @return
-     */
     Promise<Pair<QueryResponse, Collection<UmaPolicy>>, ResourceException> queryPolicies(Context context,
             QueryRequest request);
 }

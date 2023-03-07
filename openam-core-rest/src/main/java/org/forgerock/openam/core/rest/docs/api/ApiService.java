@@ -12,7 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
- * Portions copyright 2022 Wren Security
+ * Portions copyright 2022-2023 Wren Security
  */
 package org.forgerock.openam.core.rest.docs.api;
 
@@ -62,22 +62,11 @@ public class ApiService {
     private static final Pattern REMOVE_RESOURCE_ID = Pattern.compile("/\\{(.+)\\}");
     private static final String OPERATION_DELIMITER = "#";
 
-    /**
-     *
-     * @param describableHandler
-     */
     @Inject
     public ApiService( @Named("RestHandler") DescribableHandler describableHandler) {
         this.describableHandler = describableHandler;
     }
 
-    /**
-     *
-     * @param request
-     * @return
-     * @throws URISyntaxException
-     * @throws MalformedHeaderException
-     */
     @Get
     public Response handle(@Contextual Request request) throws URISyntaxException, MalformedHeaderException {
 

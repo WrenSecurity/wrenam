@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015 ForgeRock AS.
+ * Portions Copyright 2023 Wren Security
  */
 
 package org.forgerock.openam.uma;
@@ -31,30 +32,14 @@ public final class PolicySearch {
 
     private final Collection<UmaPolicy> policies;
 
-    /**
-     *
-     *
-     * @param policies
-     */
     public PolicySearch(Collection<UmaPolicy> policies) {
         this.policies = policies;
     }
 
-    /**
-     *
-     *
-     */
     public PolicySearch() {
         this.policies = new HashSet<UmaPolicy>();
     }
 
-    /**
-     *
-     *
-     * @param field
-     * @param value
-     * @return
-     */
     public PolicySearch equals(JsonPointer field, Object value) {
         PolicySearch policySearch = new PolicySearch();
 
@@ -81,33 +66,16 @@ public final class PolicySearch {
         this.policies.add(policy);
     }
 
-    /**
-     *
-     *
-     * @return
-     */
     public Collection<UmaPolicy> getPolicies() {
         return policies;
     }
 
-    /**
-     *
-     *
-     * @param search
-     * @return
-     */
     public PolicySearch combine(PolicySearch search) {
         HashSet<UmaPolicy> combinedPolicies = new HashSet<UmaPolicy>(this.policies);
         combinedPolicies.addAll(search.policies);
         return new PolicySearch(combinedPolicies);
     }
 
-    /**
-     *
-     *
-     * @param search
-     * @return
-     */
     public PolicySearch remove(PolicySearch search) {
         Set<UmaPolicy> subPolicies = new HashSet<UmaPolicy>(this.policies);
         subPolicies.removeAll(search.policies);

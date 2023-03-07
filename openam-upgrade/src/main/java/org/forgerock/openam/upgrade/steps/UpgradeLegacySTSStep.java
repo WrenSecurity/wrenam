@@ -12,7 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015 ForgeRock AS.
- * Portions copyright 2022 Wren Security
+ * Portions copyright 2022-2023 Wren Security
  */
 
 package org.forgerock.openam.upgrade.steps;
@@ -50,7 +50,7 @@ import static org.forgerock.openam.upgrade.UpgradeServices.tagSwapReport;
 /**
  * The removal of the legacy STS involves removing SubSchema elements from the AgentService, SubSchema removal which
  * the UpgradeServiceSchemaStep does not currently support. Enhancement of this functionality, done under AME-8900,
- * resulted in ~200 functional test failures on a 12.0.2->13 upgraded OpenAM deployment. The presumption is that it
+ * resulted in ~200 functional test failures on a 12.0.2-&gt;13 upgraded OpenAM deployment. The presumption is that it
  * is very difficult to know unequivocally that remaining code does not rely upon removed Service SubSchema elements,
  * so this class will perform a more tactical removal, which will only address the removal of the four SubSchema elements
  * of the AgentService which pertain to the old sts. It will also remove the four Agent instances of these agent types which
