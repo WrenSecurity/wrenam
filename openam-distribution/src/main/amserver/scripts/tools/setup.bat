@@ -1,9 +1,9 @@
 @echo off
 :
 : DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
-:  
+:
 : Copyright (c) 2007 Sun Microsystems Inc. All Rights Reserved
-:  
+:
 : The contents of this file are subject to the terms
 : of the Common Development and Distribution License
 : (the License). You may not use this file except in
@@ -36,36 +36,11 @@ goto exit
 
 :checkJavaHome
 if not exist "%JAVA_HOME%\bin\java.exe" goto invalidJavaHome
-goto validJavaHome
+goto runSetup
 
 :invalidJavaHome
 echo The defined JAVA_HOME environment variable is not correct
 echo setup program will use the JVM defined in JAVA_HOME for all the CLI tools
-goto exit
-
-:validJavaHome
-SETLOCAL
-CALL %JAVA_HOME%\bin\java.exe -version 2>&1|more > java_version.txt
-SET /P java_version=< java_version.txt
-DEL java_version.txt
-CALL :GET_VERSION_NUM %java_version:"1.= %
-CALL :GET_MID_VERSION_NUM %java_version:.= %
-IF "%java_version%" == "0" goto invalidJavaVersion
-IF "%java_version%" == "1" goto invalidJavaVersion
-IF "%java_version%" == "2" goto invalidJavaVersion
-IF "%java_version%" == "3" goto invalidJavaVersion
-goto runSetup
-
-:invalidJavaVersion
-echo This program is designed to work with 1.4 or newer JRE.
-goto exit
-
-:GET_VERSION_NUM
-SET java_version=%3
-goto exit
-
-:GET_MID_VERSION_NUM
-SET java_version=%1
 goto exit
 
 :runSetup
