@@ -25,20 +25,25 @@
  * $Id: UpgradeUtils.java,v 1.18 2009/09/30 17:35:24 goodearth Exp $
  *
  * Portions Copyrighted 2011-2015 ForgeRock AS.
+ * Portions Copyright 2023 Wren Security.
  */
 package org.forgerock.openam.upgrade;
+
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.format.DateTimeParseException;
+import java.util.AbstractMap.SimpleEntry;
+import java.util.Locale;
+import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.iplanet.am.util.SystemProperties;
 import com.sun.identity.common.configuration.ServerConfiguration;
 import com.sun.identity.shared.Constants;
 import com.sun.identity.shared.debug.Debug;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Utility class that deals with determining and comparing versions of OpenAM.
@@ -48,65 +53,54 @@ import java.util.regex.Pattern;
 public class VersionUtils {
 
     private static final Debug DEBUG = Debug.getInstance("amUpgrade");
+
+    // Pattern to match serialized version with two capture groups (numeric version and build date)
     private static final Pattern VERSION_FORMAT_PATTERN = Pattern.compile("^(?:.*?(\\d+\\.\\d+\\.?\\d*).*)?\\((.*)\\)");
+    private static final DateTimeFormatter DATE_FORMATTER = new DateTimeFormatterBuilder().
+            appendOptional(DateTimeFormatter.ISO_DATE_TIME).
+            appendOptional(DateTimeFormatter.ofPattern("yyyy-MMMM-dd HH:mm")). // Legacy build date format
+            toFormatter(Locale.US).
+            withZone(ZoneOffset.UTC);;
+
     private static volatile boolean evaluatedUpgradeVersion = false;
     private static boolean isVersionNewer = false;
 
-    private VersionUtils() {
-    }
 
     /**
-     * Returns true if the OpenAM version of the war file is newer than the one
-     * currently deployed.
-     *
-     * @return true if the war file version is newer than the deployed version
+     * @see #isVersionNewer(String, String).
      */
     public static boolean isVersionNewer() {
-
         if (!evaluatedUpgradeVersion) {
             // Cache result to avoid repeated evaluations
             isVersionNewer = isVersionNewer(getCurrentVersion(), getWarFileVersion());
             evaluatedUpgradeVersion = true;
         }
-
         return isVersionNewer;
     }
 
-    public static boolean isVersionNewer(String currentVersion, String warVersion) {
-        String[] current = parseVersion(currentVersion);
-        String[] war = parseVersion(warVersion);
+    /**
+     * Check whether version of the war file is newer than the one currently deployed.
+     * @param currentValue Serialized version of the currently deployed instance. Can be null.
+     * @param warValue Serialized version of WAR file. Can be null.
+     * @return true when version is newer, false otherwise.
+     */
+    public static boolean isVersionNewer(String currentValue, String warValue) {
+        // Ignore version check when upgrade is globally disabled
+        if (SystemProperties.get("org.forgerock.donotupgrade") != null) {
+            return false;
+        }
+        // Parsed serialized values
+        Entry<Integer, ZonedDateTime> current = parseVersion(currentValue);
+        Entry<Integer, ZonedDateTime> war = parseVersion(warValue);
         if (current == null || war == null) {
             return false;
         }
-        if (SystemProperties.get("org.forgerock.donotupgrade") != null) return false;
-
-        SimpleDateFormat versionDateFormat = new SimpleDateFormat(Constants.VERSION_DATE_FORMAT, Locale.UK);
-        Date currentVersionDate = null;
-        Date warVersionDate = null;
-
-        try {
-            currentVersionDate = versionDateFormat.parse(current[1]);
-            warVersionDate = versionDateFormat.parse(war[1]);
-        } catch (ParseException pe) {
-            DEBUG.error("Unable to parse date strings; current:" + currentVersion +
-                    " war version: " + warVersion, pe);
+        // Compare numeric versions when different
+        if (!current.getKey().equals(war.getKey())) {
+            return current.getKey() < war.getKey();
         }
-
-        if (currentVersionDate == null || warVersionDate == null) {
-            // stop upgrade if we cannot check
-            return false;
-        }
-
-        if (DEBUG.messageEnabled()) {
-            DEBUG.message("Current version: " + currentVersionDate);
-            DEBUG.message("War version: " + warVersionDate);
-        }
-        boolean isBefore = currentVersionDate.before(warVersionDate);
-        if (isBefore) {
-            return Integer.valueOf(current[0]) <= Integer.valueOf(war[0]);
-        } else {
-            return Integer.valueOf(current[0]) < Integer.valueOf(war[0]);
-        }
+        // Compare build dates
+        return current.getValue() != null && war.getValue() != null && war.getValue().isAfter(current.getValue());
     }
 
     public static String getCurrentVersion() {
@@ -117,52 +111,52 @@ public class VersionUtils {
         return ServerConfiguration.getWarFileVersion();
     }
 
-    private static String[] parseVersion(String version) {
-        //Handle the special case when we were unable to determine the current or the new version, this can happen for
-        //example when the configuration store is not available and the current version cannot be retrieved.
-        if (version == null) {
-            return null;
-        }
-        Matcher matcher = VERSION_FORMAT_PATTERN.matcher(version);
-        if (matcher.matches()) {
-            String ver = matcher.group(1);
-            if (ver == null) {
-                ver = "-1";
-            } else {
-                ver = ver.replace(".", "");
-            }
-            return new String[]{ver, matcher.group(2)};
-        }
-        return null;
-    }
-
     /**
-     * Checks if the currently deployed OpenAM has the same version number as the expected version number.
-     *
-     * @param expectedVersion The version we should match OpenAM's current version against.
+     * Check if the currently deployed Wren:AM has the same version number as the expected version number.
+     * @param expectedVersion Expected version to check. Never null.
      * @return <code>false</code> if the version number cannot be detected or if the local version does not match,
      * <code>true</code> otherwise.
      */
     public static boolean isCurrentVersionEqualTo(Integer expectedVersion) {
-        String[] parsedVersion = parseVersion(getCurrentVersion());
-        if (parsedVersion == null) {
-            //unable to determine current version, we can't tell if it matches the expected.
+        Entry<Integer, ZonedDateTime> current = parseVersion(getCurrentVersion());
+        if (current == null) {
             return false;
         }
-        return expectedVersion.equals(Integer.valueOf(parsedVersion[0]));
+        return expectedVersion.equals(current.getKey());
     }
 
     /**
-     * Checks to see if the currently installed OpenAM version is less than the specified version.
-     * @param expectedVersion The version to test for.
+     * Check if the currently deployed Wren:AM version is less than the specified version.
+     * @param version Version to check.
      * @param notParsed The value to return if the current version cannot be parsed.
      */
-    public static boolean isCurrentVersionLessThan(int expectedVersion, boolean notParsed) {
-        String[] parsedVersion = parseVersion(getCurrentVersion());
-        if (parsedVersion == null) {
-            //unable to determine current version, we can't tell if it matches the expected.
+    public static boolean isCurrentVersionLessThan(int version, boolean notParsed) {
+        Entry<Integer, ZonedDateTime> current = parseVersion(getCurrentVersion());
+        if (current == null) {
             return notParsed;
         }
-        return Integer.valueOf(parsedVersion[0]).intValue() < expectedVersion;
+        return current.getKey() < version;
     }
+
+    /**
+     * Extract version represented as integer value (e.g. '15.0.0' -> 1500 ) and build date from the specified serialized value.
+     */
+    private static Entry<Integer, ZonedDateTime> parseVersion(String value) {
+        if (value == null) {
+            return null;
+        }
+        Matcher matcher = VERSION_FORMAT_PATTERN.matcher(value);
+        if (!matcher.matches()) {
+            return null;
+        }
+        Integer version = matcher.group(1) != null ? Integer.valueOf(matcher.group(1).replace(".", "")) : -1;
+        ZonedDateTime buildDate = null;
+        try {
+            buildDate = ZonedDateTime.parse(matcher.group(2), DATE_FORMATTER);
+        } catch (DateTimeParseException e) {
+            DEBUG.error("Failed to parse build date: '" + value + "' during version check.", e);
+        }
+        return new SimpleEntry<>(version, buildDate);
+    }
+
 }

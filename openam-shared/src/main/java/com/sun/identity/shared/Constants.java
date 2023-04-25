@@ -1184,9 +1184,6 @@ public interface Constants {
     static final String CLIENT_IP_ADDR_HEADER =
             "com.sun.identity.authentication.client.ipAddressHeader";
 
-    static final String VERSION_DATE_FORMAT =
-            "yyyy-MMMM-dd HH:mm";
-
     /**
      * Switch to allow for a generic Authentication Exception rather than
      * the more specific InvalidPassword Exception from the SOAP and REST API
@@ -1376,7 +1373,7 @@ public interface Constants {
 
     /** Service name for the REST APIs service. */
     String REST_APIS_SERVICE_NAME = "RestApisService";
-    
+
     /** Service version for the REST APIs service. */
     String REST_APIS_SERVICE_VERSION = "1.0";
 
