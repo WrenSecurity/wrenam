@@ -25,6 +25,7 @@
  * $Id: AdminTokenAction.java,v 1.14 2009/06/19 02:35:11 bigfatrat Exp $
  *
  * Portions Copyrighted 2010-2017 ForgeRock AS.
+ * Portions Copyright 2023 Wren Security.
  */
 
 package com.sun.identity.security;
@@ -154,7 +155,7 @@ public class AdminTokenAction implements PrivilegedAction<SSOToken> {
     }
 
     /**
-     * Resets cached SSOToken. WITHOUT destroying.  Called when we know the 
+     * Resets cached SSOToken. WITHOUT destroying.  Called when we know the
      * token is invalid
      */
     public static void invalid() {
@@ -178,11 +179,12 @@ public class AdminTokenAction implements PrivilegedAction<SSOToken> {
 
     private void resetInstance() {
         if (appSSOToken != null) {
-            try {
-                getInstance().tokenManager.destroyToken(appSSOToken);
-            } catch (SSOException ssoe) {
-                debug.error("AdminTokenAction.reset: cannot destroy appSSOToken.", ssoe);
-            }
+            // XXX Temporarily disabled to workaround unavailable CTS token store issue (see https://github.com/WrenSecurity/wrenam/issues/63)
+            // try {
+            //     getInstance().tokenManager.destroyToken(appSSOToken);
+            // } catch (SSOException ssoe) {
+            //     debug.error("AdminTokenAction.reset: cannot destroy appSSOToken.", ssoe);
+            // }
             appSSOToken = null;
         }
         internalAppSSOToken = null;
@@ -276,7 +278,7 @@ public class AdminTokenAction implements PrivilegedAction<SSOToken> {
 
     private SSOToken getSSOToken() {
         // Please NEVER make this method public!!!!!!!!!!
-        // This can only be used in server site. 
+        // This can only be used in server site.
         SSOToken ssoAuthToken = null;
 
         try {
