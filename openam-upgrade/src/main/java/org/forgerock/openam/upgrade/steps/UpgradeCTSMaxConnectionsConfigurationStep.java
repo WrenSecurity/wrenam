@@ -80,7 +80,7 @@ public class UpgradeCTSMaxConnectionsConfigurationStep extends AbstractUpgradeSt
     private static final String DETAIL_REPORT_SUMMARY = "upgrade.ctsmaxconnections.detail.summary";
     private static final String DETAIL_REPORT_SERVER = "upgrade.ctsmaxconnections.detail.server";
     private static final String DETAIL_REPORT = "upgrade.ctsmaxconnections.detail";
-    private static final int AM_13 = 1300;
+    private static final String AM_13 = "13.0.0";
 
     private final ConnectionCount connectionCount;
     private final Helper helper;

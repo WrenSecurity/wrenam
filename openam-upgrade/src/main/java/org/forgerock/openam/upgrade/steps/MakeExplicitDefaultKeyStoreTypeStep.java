@@ -60,7 +60,7 @@ public final class MakeExplicitDefaultKeyStoreTypeStep extends AbstractUpgradeSt
     private final static String AUDIT_FAILURE = "upgrade.assign.default.keystore.type.failure";
 
     private static final String KEYSTORE_TYPE = "com.sun.identity.saml.xmlsig.storetype";
-    private static final int AM_13_5 = 1350;
+    private static final String AM_13_5 = "13.5.0";
 
     private boolean applicability;
 

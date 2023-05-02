@@ -59,7 +59,7 @@ public final class CopyJavaCryptoExtKeyStoreStep extends AbstractUpgradeStep {
     private final static String AUDIT_SUCCESS = "upgrade.copy.keystore.to.configuration.success";
     private final static String AUDIT_FAILURE = "upgrade.copy.keystore.to.configuration.failure";
 
-    private static final int AM_13_5 = 1350;
+    private static final String AM_13_5 = "13.5.0";
 
     private static final String KEYSTORE_NAME = "keystore.jceks";
     private static final String KEYSTORE_PATH = "/WEB-INF/template/keystore/" + KEYSTORE_NAME;

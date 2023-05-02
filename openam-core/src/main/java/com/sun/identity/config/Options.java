@@ -45,13 +45,15 @@ public class Options extends TemplatedPage {
     protected boolean upgradeCompleted = false;
     protected boolean isOpenDS1x = false;
     protected boolean debugOn = false;
-    
+
     private java.util.Locale configLocale = null;
-    
+
+    @Override
     protected String getTitle() {
         return isNewInstall() ? "configuration.options.title" : "upgrade.title";
     }
 
+    @Override
     public void doInit() {
         upgrade = !isNewInstall();
         upgradeCompleted = AMSetupServlet.isUpgradeCompleted();
@@ -68,9 +70,9 @@ public class Options extends TemplatedPage {
         if (isOpenDS1x) {
             addModel("odsdir", AMSetupServlet.getBaseDir());
         }
-        
+
         debugOn = getContext().getRequest().getParameter( "debug" ) != null;
-        
+
         if (debugOn) {
             AMSetupServlet.enableDebug();
         }

@@ -71,8 +71,8 @@ public class UpgradeOAuth2ClientStep extends AbstractUpgradeStep {
     private static final Pattern pattern = Pattern.compile("\\[\\d+\\]=.*");
     private final Map<String, Map<AgentType, Map<String, Set<String>>>> upgradableConfigs =
             new HashMap<String, Map<AgentType, Map<String, Set<String>>>>();
-    private static final int AM_13 = 1300;
-    
+    private static final String AM_13 = "13.0.0";
+
     @Inject
     public UpgradeOAuth2ClientStep(final PrivilegedAction<SSOToken> adminTokenAction,
             @DataLayer(ConnectionType.DATA_LAYER) final ConnectionFactory factory) {
@@ -128,7 +128,7 @@ public class UpgradeOAuth2ClientStep extends AbstractUpgradeStep {
             for (Map.Entry<String, Set<String>> entry : attrs.entrySet()) {
                 final String attrName = entry.getKey();
                 if (CHANGED_PROPERTIES.contains(attrName)) {
-                    
+
                     // Check if single string scopes are included in the Scope(s) or Default Scope(s).
                     Set<String> scopes = attrs.get(attrName);
                     if (VersionUtils.isCurrentVersionLessThan(AM_13, true) && (SCOPES.equals(attrName) || DEFAULT_SCOPES.equals(attrName))) {
@@ -139,7 +139,7 @@ public class UpgradeOAuth2ClientStep extends AbstractUpgradeStep {
                             }
                         }
                     }
-                    
+
                     String value = CollectionHelper.getMapAttr(attrs, attrName);
                     if (value == null) {
                         //this doesn't prove anything, let's advance to the next property
@@ -203,12 +203,12 @@ public class UpgradeOAuth2ClientStep extends AbstractUpgradeStep {
                         for (String attrName : subConfig.getValue()) {
                             if (CHANGED_PROPERTIES.contains(attrName)) {
                                 Set<String> values = attrs.get(attrName);
-                                
+
                                 // If single string scopes are included in the Scope(s) or Default Scope(s), then apend a pipe.
                                 if (VersionUtils.isCurrentVersionLessThan(AM_13, true) && (SCOPES.equals(attrName) || DEFAULT_SCOPES.equals(attrName))) {
                                     addScopesWithPipe(attrs, attrName, values);
                                 }
-                                
+
                                 String value = CollectionHelper.getMapAttr(attrs, attrName);
                                 if (value != null) {
                                     if (!pattern.matcher(value).matches()) {

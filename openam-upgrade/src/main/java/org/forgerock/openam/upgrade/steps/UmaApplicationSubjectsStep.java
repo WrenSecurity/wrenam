@@ -63,7 +63,7 @@ import com.sun.identity.shared.datastruct.CollectionHelper;
 @UpgradeStepInfo(dependsOn = "org.forgerock.openam.upgrade.steps.UpgradeEntitlementsStep")
 public class UmaApplicationSubjectsStep extends AbstractUpgradeStep {
 
-    private final static int AM_13 = 1300;
+    private final static String AM_13 = "13.0.0";
     private static final Set<String> SUBJECT_TYPES = asSet(getSubjectTypeName(JwtClaimSubject.class));
     private final Map<String, Set<Application>> needUpgrade = new HashMap<>();
     private final AMIdentityRepositoryFactory idRepoFactory;

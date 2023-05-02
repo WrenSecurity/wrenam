@@ -92,7 +92,7 @@ public class OldPolicyConditionMigrationUpgradeStep extends AbstractUpgradeStep 
      */
     @Override
     public void initialize() throws UpgradeException {
-        if (!isCurrentVersionLessThan(1300, true)) {
+        if (!isCurrentVersionLessThan("13.0.0", true)) {
             return;
         }
         try {
