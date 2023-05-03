@@ -1205,16 +1205,6 @@
                     <version>3.0.0</version>
                 </plugin>
                 <plugin>
-                    <groupId>org.apache.maven.skins</groupId>
-                    <artifactId>maven-default-skin</artifactId>
-                    <version>1.0</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.skins</groupId>
-                    <artifactId>maven-skins</artifactId>
-                    <version>4</version>
-                </plugin>
-                <plugin>
                     <groupId>org.bsc.maven</groupId>
                     <artifactId>maven-processor-plugin</artifactId>
                     <version>2.2.4</version>
@@ -1435,16 +1425,33 @@
             </plugin>
 
             <plugin>
+                <artifactId>maven-javadoc-plugin</artifactId>
+
+                <configuration>
+                    <doclint>all,-missing,-html</doclint>
+                    <tags>
+                        <tag>
+                            <name>supported.all.api</name>
+                            <placement>a</placement>
+                        </tag>
+                        <tag>
+                            <name>supported.api</name>
+                            <placement>a</placement>
+                        </tag>
+                    </tags>
+                </configuration>
+            </plugin>
+
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>2.6</version>
                 <reportSets>
                     <reportSet>
                         <reports>
                             <report>index</report>
-                            <report>mailing-list</report>
-                            <report>issue-tracking</report>
-                            <report>license</report>
+                            <report>mailing-lists</report>
+                            <report>issue-management</report>
+                            <report>licenses</report>
                             <report>scm</report>
                         </reports>
                     </reportSet>

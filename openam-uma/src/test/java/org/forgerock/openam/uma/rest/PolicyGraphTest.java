@@ -64,12 +64,12 @@ import org.testng.annotations.Test;
  *     |                           VIEW                          |
  *     |                             |                           |
  *     V                             V                           V
- *    Bob ---- DELETE, EDIT ----> Charlie                      Dave
+ *    Bob ---- DELETE, EDIT ----&qt; Charlie                      Dave
  *     ^                             |                           |
  *     |                           VIEW                          |
  *     |                             |                           |
  *     |                             V                           |
- *     +---------- DELETE --------- Ed <----- VIEW, DELETE ------+
+ *     +---------- DELETE --------- Ed &lt;----- VIEW, DELETE ------+
  * </pre>
  * For all tests, this will be the current graph that will be computed from
  * the policies, and where updates are required, the graph will be making

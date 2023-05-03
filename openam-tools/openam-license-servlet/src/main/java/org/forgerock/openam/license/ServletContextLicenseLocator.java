@@ -40,7 +40,7 @@ public class ServletContextLicenseLocator extends ResourceLoaderLicenseLocator {
      *                     silently pre-pended.
      * @see ServletContext#getResourceAsStream(String)
      */
-    public ServletContextLicenseLocator(ServletContext servletContext, Charset charset, String...licenseFiles) {
+    public ServletContextLicenseLocator(ServletContext servletContext, Charset charset, String... licenseFiles) {
         super(charset, licenseFiles);
 
         if (servletContext == null) {

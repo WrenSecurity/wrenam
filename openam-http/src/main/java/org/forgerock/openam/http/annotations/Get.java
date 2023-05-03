@@ -30,6 +30,8 @@ import java.lang.annotation.Target;
 public @interface Get {
     /**
      * An optional path fragment.
+     *
+     * @return an optional path fragment.
      */
     String value() default "";
 }

@@ -35,7 +35,7 @@ public class ClasspathLicenseLocator extends ResourceLoaderLicenseLocator {
      * @param charset the charset to use for decoding license files.
      * @param licenseFiles the list of license file names to load.
      */
-    public ClasspathLicenseLocator(ClassLoader classLoader, Charset charset, String...licenseFiles) {
+    public ClasspathLicenseLocator(ClassLoader classLoader, Charset charset, String... licenseFiles) {
         super(charset, licenseFiles);
         if (classLoader == null) {
             throw new NullPointerException("ClassLoader is null");

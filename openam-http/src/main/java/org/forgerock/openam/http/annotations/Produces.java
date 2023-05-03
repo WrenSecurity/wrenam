@@ -30,6 +30,8 @@ import java.lang.annotation.Target;
 public @interface Produces {
     /**
      * The content type.
+     *
+     * @return the content type.
      */
     String value();
 }

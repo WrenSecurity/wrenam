@@ -30,16 +30,22 @@ public @interface Field {
 
     /**
      * The {@code CoreTokenField}.
+     *
+     * @return CoreTokenField.
      */
     CoreTokenField field();
 
     /**
      * Whether the field value should be generated.
+     *
+     * @return true or false.
      */
     boolean generated() default false;
 
     /**
      * The field converter.
+     *
+     * @return field converter.
      */
     Class<? extends Converter> converter() default Converter.IdentityConverter.class;
 }

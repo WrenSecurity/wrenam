@@ -67,7 +67,7 @@ public class ContextHolderCacheTest {
     /**
      * Test for the following method;.
      *
-     * @see org.forgerock.openam.radius.server.spi.handlers.amhandler.ContextHolderCache#getCacheKey
+     * @see org.forgerock.openam.radius.server.spi.handlers.amhandler.ContextHolder#getCacheKey
      */
     @Test
     public void removeReducesSizeByOne() {
