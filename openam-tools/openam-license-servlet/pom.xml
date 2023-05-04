@@ -21,7 +21,7 @@
     <parent>
         <artifactId>openam-tools</artifactId>
         <groupId>org.wrensecurity.wrenam</groupId>
-        <version>15.0.0-M2</version>
+        <version>15.0.0-M3-SNAPSHOT</version>
     </parent>
 
     <artifactId>openam-license-servlet</artifactId>

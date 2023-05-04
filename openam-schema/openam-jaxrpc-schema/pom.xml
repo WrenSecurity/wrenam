@@ -21,7 +21,7 @@
     <parent>
         <groupId>org.wrensecurity.wrenam</groupId>
         <artifactId>openam-schema</artifactId>
-        <version>15.0.0-M2</version>
+        <version>15.0.0-M3-SNAPSHOT</version>
     </parent>
 
     <artifactId>openam-jaxrpc-schema</artifactId>
