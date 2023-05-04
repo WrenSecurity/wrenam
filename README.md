@@ -62,7 +62,7 @@ Following software is needed to build the project:
 
 | Software  | Required Version |
 | --------- | -------------    |
-| OpenJDK   | 8 and above      |
+| OpenJDK   | 11 and above     |
 | Git       | 2.0 and above    |
 | Maven     | 3.0 and above    |
 
@@ -77,9 +77,14 @@ $ mvn clean package
 
 Built binary can be found in `${GIT_REPOSITORIES}/wrenam/openam/openam-server/target/OpenAM-${VERSION}.war`.
 
+### Docker image
+
+You can also run Wren:AM in a Docker container. Official Wren:AM Docker images can be found [here](https://hub.docker.com/r/wrensecurity/wrenam).
+
+
 ## Documentation
 
-[![Documentation](https://img.shields.io/badge/Documentation-WIP-yellow)](https://github.com/WrenSecurity/wrenam)
+Project documentation can be found in our documentation platform ([docs.wrensecurity.org](https://docs.wrensecurity.org/wrenam/latest/index.html)).
 
 Documentation is still work in progress.
 
