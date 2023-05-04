@@ -79,7 +79,7 @@ import com.sun.identity.sm.ServiceConfigManager;
 @UpgradeStepInfo(dependsOn = "org.forgerock.openam.upgrade.steps.UpgradeEntitlementSubConfigsStep")
 public class UpgradeResourceTypeStep extends AbstractEntitlementUpgradeStep {
 
-    private final static int AM_13 = 1300;
+    private final static String AM_13 = "13.0.0";
 
     private static final String RESOURCES_TYPE_NAME_SUFFIX = "ResourceType";
     private static final String RESOURCE_TYPE_DESCRIPTION = "This resource type was created during upgrade for ";

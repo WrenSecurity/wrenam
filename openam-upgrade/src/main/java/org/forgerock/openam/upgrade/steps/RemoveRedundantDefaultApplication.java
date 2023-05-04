@@ -55,7 +55,7 @@ public final class RemoveRedundantDefaultApplication extends AbstractEntitlement
     private final static String AUDIT_REMOVAL_FAILURE = "upgrade.policy.applications.removal.failure";
     private final static String AUDIT_APPLICATION_REMOVAL_REPORT = "upgrade.policy.applications.removal.report";
 
-    private final static int AM_13 = 1300;
+    private final static String AM_13 = "13.0.0";
     private final static String DEFAULT_REALM = "/";
 
     private final Set<String> removedDefaultApplications;

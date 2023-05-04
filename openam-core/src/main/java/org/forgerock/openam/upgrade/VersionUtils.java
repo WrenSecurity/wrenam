@@ -25,6 +25,7 @@
  * $Id: UpgradeUtils.java,v 1.18 2009/09/30 17:35:24 goodearth Exp $
  *
  * Portions Copyrighted 2011-2015 ForgeRock AS.
+ * Portions Copyright 2023 Wren Security.
  */
 package org.forgerock.openam.upgrade;
 
@@ -32,13 +33,6 @@ import com.iplanet.am.util.SystemProperties;
 import com.sun.identity.common.configuration.ServerConfiguration;
 import com.sun.identity.shared.Constants;
 import com.sun.identity.shared.debug.Debug;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Utility class that deals with determining and comparing versions of OpenAM.
@@ -48,121 +42,100 @@ import java.util.regex.Pattern;
 public class VersionUtils {
 
     private static final Debug DEBUG = Debug.getInstance("amUpgrade");
-    private static final Pattern VERSION_FORMAT_PATTERN = Pattern.compile("^(?:.*?(\\d+\\.\\d+\\.?\\d*).*)?\\((.*)\\)");
-    private static volatile boolean evaluatedUpgradeVersion = false;
-    private static boolean isVersionNewer = false;
-
-    private VersionUtils() {
-    }
 
     /**
-     * Returns true if the OpenAM version of the war file is newer than the one
-     * currently deployed.
-     *
-     * @return true if the war file version is newer than the deployed version
+     * Cached result of version evaluation.
+     */
+    private static Boolean isVersionNewer;
+
+    /**
+     * @see #isVersionNewer(String, String)
      */
     public static boolean isVersionNewer() {
-
-        if (!evaluatedUpgradeVersion) {
+        if (isVersionNewer == null) {
             // Cache result to avoid repeated evaluations
             isVersionNewer = isVersionNewer(getCurrentVersion(), getWarFileVersion());
-            evaluatedUpgradeVersion = true;
         }
-
         return isVersionNewer;
     }
 
-    public static boolean isVersionNewer(String currentVersion, String warVersion) {
-        String[] current = parseVersion(currentVersion);
-        String[] war = parseVersion(warVersion);
-        if (current == null || war == null) {
+    /**
+     * Check whether version of the WAR file is newer than the one currently installed.
+     *
+     * @param currentValue Serialized version of the currently installed instance. Can be null.
+     * @param warValue Serialized version of the WAR file. Can be null.
+     * @return true when the WAR file version is newer than the currently installed version, false otherwise.
+     */
+    public static boolean isVersionNewer(String currentValue, String warValue) {
+        // Ignore version check when the upgrade is globally disabled
+        if (SystemProperties.get("org.forgerock.donotupgrade") != null) {
             return false;
         }
-        if (SystemProperties.get("org.forgerock.donotupgrade") != null) return false;
-
-        SimpleDateFormat versionDateFormat = new SimpleDateFormat(Constants.VERSION_DATE_FORMAT, Locale.UK);
-        Date currentVersionDate = null;
-        Date warVersionDate = null;
-
-        try {
-            currentVersionDate = versionDateFormat.parse(current[1]);
-            warVersionDate = versionDateFormat.parse(war[1]);
-        } catch (ParseException pe) {
-            DEBUG.error("Unable to parse date strings; current:" + currentVersion +
-                    " war version: " + warVersion, pe);
-        }
-
-        if (currentVersionDate == null || warVersionDate == null) {
-            // stop upgrade if we cannot check
+        // Parse serialized version values
+        ParsedVersion currentVersion = ParsedVersion.parse(currentValue);
+        ParsedVersion warVersion = ParsedVersion.parse(warValue);
+        if (currentVersion == null || warVersion == null) {
+            DEBUG.warning("Unable to determine versions for upgrade; current: {}, war: {}",
+                    currentValue, warValue);
             return false;
         }
-
-        if (DEBUG.messageEnabled()) {
-            DEBUG.message("Current version: " + currentVersionDate);
-            DEBUG.message("War version: " + warVersionDate);
-        }
-        boolean isBefore = currentVersionDate.before(warVersionDate);
-        if (isBefore) {
-            return Integer.valueOf(current[0]) <= Integer.valueOf(war[0]);
-        } else {
-            return Integer.valueOf(current[0]) < Integer.valueOf(war[0]);
-        }
+        // Compare version numbers
+        return currentVersion.compareTo(warVersion) < 0;
     }
 
+    /**
+     * Get version string for the current installation.
+     *
+     * @return Version string. Can be null if unable to retrieve.
+     */
     public static String getCurrentVersion() {
         return SystemProperties.get(Constants.AM_VERSION);
     }
 
+    /**
+     * Get version from the deployed WAR file.
+     *
+     * @return Version string. Can be null in unable to retrieve.
+     */
     public static String getWarFileVersion() {
         return ServerConfiguration.getWarFileVersion();
     }
 
-    private static String[] parseVersion(String version) {
-        //Handle the special case when we were unable to determine the current or the new version, this can happen for
-        //example when the configuration store is not available and the current version cannot be retrieved.
-        if (version == null) {
-            return null;
-        }
-        Matcher matcher = VERSION_FORMAT_PATTERN.matcher(version);
-        if (matcher.matches()) {
-            String ver = matcher.group(1);
-            if (ver == null) {
-                ver = "-1";
-            } else {
-                ver = ver.replace(".", "");
-            }
-            return new String[]{ver, matcher.group(2)};
-        }
-        return null;
-    }
-
     /**
-     * Checks if the currently deployed OpenAM has the same version number as the expected version number.
+     * Check if the currently installed version has the same version as the expected version number.
      *
-     * @param expectedVersion The version we should match OpenAM's current version against.
-     * @return <code>false</code> if the version number cannot be detected or if the local version does not match,
-     * <code>true</code> otherwise.
+     * @param version Version number to check. Never null.
+     * @return True if the current version is the same as the installed one, false otherwise.
      */
-    public static boolean isCurrentVersionEqualTo(Integer expectedVersion) {
-        String[] parsedVersion = parseVersion(getCurrentVersion());
-        if (parsedVersion == null) {
-            //unable to determine current version, we can't tell if it matches the expected.
+    public static boolean isCurrentVersionEqualTo(String version) {
+        ParsedVersion currentVersion = ParsedVersion.parse(getCurrentVersion());
+        if (currentVersion == null) {
             return false;
         }
-        return expectedVersion.equals(Integer.valueOf(parsedVersion[0]));
+        ParsedVersion compareVersion = ParsedVersion.parse(version);
+        if (compareVersion == null) {
+            return false;
+        }
+        return currentVersion.compareTo(compareVersion) == 0;
     }
 
     /**
-     * Checks to see if the currently installed OpenAM version is less than the specified version.
-     * @param expectedVersion The version to test for.
-     * @param notParsed The value to return if the current version cannot be parsed.
+     * Check if the currently installed version is less than the specified version.
+     *
+     * @param version Version number to check. Never null.
+     * @param fallback Fallback value to return if the current version cannot be determined.
+     * @return True if the current version is less than the given one, false otherwise.
      */
-    public static boolean isCurrentVersionLessThan(int expectedVersion, boolean notParsed) {
-        String[] parsedVersion = parseVersion(getCurrentVersion());
-        if (parsedVersion == null) {
-            //unable to determine current version, we can't tell if it matches the expected.
-            return notParsed;
+    public static boolean isCurrentVersionLessThan(String version, boolean fallback) {
+        ParsedVersion currentVersion = ParsedVersion.parse(getCurrentVersion());
+        if (currentVersion == null) {
+            return fallback;
         }
-        return Integer.valueOf(parsedVersion[0]).intValue() < expectedVersion;
+        ParsedVersion compareVersion = ParsedVersion.parse(version);
+        if (compareVersion == null) {
+            return fallback;
+        }
+        return currentVersion.compareTo(compareVersion) < 0;
     }
+
 }

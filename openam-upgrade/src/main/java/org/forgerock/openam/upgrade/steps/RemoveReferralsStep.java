@@ -88,7 +88,7 @@ public final class RemoveReferralsStep extends AbstractUpgradeStep {
 
     private final static String REFERRAL_SEARCH_FILTER
             = "(&(ou:dn:=sunEntitlementIndexes)(ou:dn:=referrals)(sunserviceID=indexes))";
-    private final static int AM_13 = 1300;
+    private final static String AM_13 = "13.0.0";
 
     private final ObjectMapper mapper = new ObjectMapper();
 

@@ -63,7 +63,7 @@ import com.sun.identity.sm.ServiceSchemaManager;
 public class SchemaXmlAttributeUpgradeStep extends AbstractUpgradeStep {
 
     private static final String PROGRESS = "upgrade.schema.xml.attributes.progress";
-    private static final int AM_14 = 1400;
+    private static final String AM_14 = "14.0.0";
 
     private Map<String, Function<Document, Boolean, XPathExpressionException>> serviceModifications;
     private XPath xpath = XPathFactory.newInstance().newXPath();

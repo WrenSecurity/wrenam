@@ -91,7 +91,7 @@ public class AuthServiceHelper extends AbstractUpgradeHelper {
             return existingAttr.getI18NKey() != null && !existingAttr.getI18NKey().isEmpty() ? newAttr : null;
         }
         if (HMAC_SHARED_SECRET.equals(newAttr.getName())) {
-            if (VersionUtils.isCurrentVersionEqualTo(1300)) {
+            if (VersionUtils.isCurrentVersionEqualTo("13.0.0")) {
                 if (CollectionUtils.isEmpty(existingAttr.getDefaultValues())) {
                     return newAttr;
                 } else {
@@ -131,7 +131,7 @@ public class AuthServiceHelper extends AbstractUpgradeHelper {
         } else if (XUI_ADMIN_CONSOLE_ENABLED.equals(newAttr.getName())) {
             // XUI admin console should not be default for upgraded systems
             newAttr = updateDefaultValues(newAttr, asSet("false"));
-        } else if (newAttr.getName().equals(XUI_REVERSE_PROXY_SUPPORT) && VersionUtils.isCurrentVersionEqualTo(1200)) {
+        } else if (newAttr.getName().equals(XUI_REVERSE_PROXY_SUPPORT) && VersionUtils.isCurrentVersionEqualTo("12.0.0")) {
             newAttr = updateDefaultValues(newAttr, asSet("false"));
         }
 

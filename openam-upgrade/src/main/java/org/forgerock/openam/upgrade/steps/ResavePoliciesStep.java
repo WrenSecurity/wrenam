@@ -60,7 +60,7 @@ import java.util.Set;
 @UpgradeStepInfo(dependsOn = "org.forgerock.openam.upgrade.steps.RemoveReferralsStep")
 public class ResavePoliciesStep extends AbstractUpgradeStep {
 
-    private static final int AM_14 = 1400;
+    private static final String AM_14 = "14.0.0";
     private static final String POLICY_DATA = "%POLICY_DATA%";
 
     private final Map<String, Set<String>> policyMap = new HashMap<>();
@@ -71,10 +71,12 @@ public class ResavePoliciesStep extends AbstractUpgradeStep {
         super(adminTokenAction, connectionFactory);
     }
 
+    @Override
     public boolean isApplicable() {
         return !policyMap.isEmpty();
     }
 
+    @Override
     public void initialize() throws UpgradeException {
         DEBUG.message("Initializing ResavePoliciesStep");
         if (isCurrentVersionLessThan(AM_14, true)) {
@@ -100,6 +102,7 @@ public class ResavePoliciesStep extends AbstractUpgradeStep {
         }
     }
 
+    @Override
     public void perform() throws UpgradeException {
         Subject adminSubject = getAdminSubject();
 
@@ -128,6 +131,7 @@ public class ResavePoliciesStep extends AbstractUpgradeStep {
         }
     }
 
+    @Override
     public String getShortReport(String delimiter) {
         int policyCount = 0;
         for (Set<String> policyNames : policyMap.values()) {
@@ -141,6 +145,7 @@ public class ResavePoliciesStep extends AbstractUpgradeStep {
         return sb.toString();
     }
 
+    @Override
     public String getDetailedReport(String delimiter) {
         Map<String, String> tags = new HashMap<String, String>();
         tags.put(LF, delimiter);

@@ -89,7 +89,7 @@ public class DirectoryContentUpgrader {
 
     // Knowledge Based Authentication information container - the object class for kbaInfo
     private static final String KBA_INFO_OC = "kbaInfoContainer";
-    private static final int VERSION_1350 = 1350;
+    private static final String VERSION_1350 = "13.5.0";
 
     private final List<Upgrader> upgraders = new ArrayList<Upgrader>();
     private final ConnectionFactory<Connection> connFactory;
