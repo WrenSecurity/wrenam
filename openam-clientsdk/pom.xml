@@ -780,7 +780,8 @@
                             <shadedPattern>${shade.package}.javax.activation</shadedPattern>
                         </relocation>
                     </relocations>
-rtifactAttached&gt;
+
+                    <shadedArtifactAttached>false</shadedArtifactAttached>
                     <createDependencyReducedPom>true</createDependencyReducedPom>
                     <shadeSourcesContent>true</shadeSourcesContent>
                     <createSourcesJar>${generate.clientsdk.sources}</createSourcesJar>
