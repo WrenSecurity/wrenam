@@ -21,7 +21,7 @@
     <parent>
         <groupId>org.wrensecurity.wrenam</groupId>
         <artifactId>wrenam-project</artifactId>
-        <version>15.0.0-M2-SNAPSHOT</version>
+        <version>15.0.0-M2</version>
     </parent>
 
     <artifactId>openam-clientsdk</artifactId>
@@ -780,7 +780,7 @@
                             <shadedPattern>${shade.package}.javax.activation</shadedPattern>
                         </relocation>
                     </relocations>
-rtifactAttached>
+rtifactAttached&gt;
                     <createDependencyReducedPom>true</createDependencyReducedPom>
                     <shadeSourcesContent>true</shadeSourcesContent>
                     <createSourcesJar>${generate.clientsdk.sources}</createSourcesJar>

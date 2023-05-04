@@ -28,7 +28,7 @@
 
     <groupId>org.wrensecurity.wrenam</groupId>
     <artifactId>wrenam-project</artifactId>
-    <version>15.0.0-M2-SNAPSHOT</version>
+    <version>15.0.0-M2</version>
     <packaging>pom</packaging>
 
     <name>Wren:AM - Parent</name>
@@ -63,7 +63,7 @@
         <url>https://github.com/WrenSecurity/WrenAM</url>
         <connection>scm:git:git://github.com/WrenSecurity/WrenAM.git</connection>
         <developerConnection>scm:git:git@github.com:WrenSecurity/WrenAM.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>15.0.0-M2</tag>
     </scm>
 
     <repositories>
@@ -136,7 +136,7 @@
         <!-- XXX END Configuration under consideration -->
 
         <!-- https://maven.apache.org/guides/mini/guide-reproducible-builds.html -->
-        <project.build.outputTimestamp>2023-02-22T13:35:15Z</project.build.outputTimestamp>
+        <project.build.outputTimestamp>2023-05-04T11:03:20Z</project.build.outputTimestamp>
 
         <!-- Wren Security Dependencies -->
         <wrends.version>4.0.0-RC2</wrends.version>
