@@ -33,8 +33,6 @@ public @interface UpgradeStepInfo {
     /**
      * References to UpgradeStep implementations that needs to run prior to the current step.
      *
-     * <p>Returns the names of other steps that needs to run before executing the currently annotated step.</p>
-     *
      * @return the names of other steps that needs to run before executing the currently annotated step.
      */
     String[] dependsOn() default {};

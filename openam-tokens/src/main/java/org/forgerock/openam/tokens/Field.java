@@ -38,7 +38,7 @@ public @interface Field {
     /**
      * Whether the field value should be generated.
      *
-     * @return true or false.
+     * @return true if the field value should be generated, false otherwise.
      */
     boolean generated() default false;
 

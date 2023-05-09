@@ -32,7 +32,7 @@ public @interface Payload {
      * If the payload is of a type that is not supported by default,
      * this allows a translator to be registered for it.
      *
-     * @return a method parameter as the payload for {@link Post} and {@link Put} requests.
+     * @return payload translator class.
      */
     Class<? extends PayloadTranslator> value() default PayloadTranslator.class;
 }
