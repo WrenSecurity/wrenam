@@ -139,7 +139,7 @@
         <project.build.outputTimestamp>2023-05-04T11:15:16Z</project.build.outputTimestamp>
 
         <!-- Wren Security Dependencies -->
-        <wrends.version>4.0.0-RC2</wrends.version>
+        <wrends.version>5.0.0</wrends.version>
         <wrensec-commons.version>22.5.0</wrensec-commons.version>
         <wrensec-guava.version>18.0.5</wrensec-guava.version>
         <wrensec-ui.version>22.1.2</wrensec-ui.version>
