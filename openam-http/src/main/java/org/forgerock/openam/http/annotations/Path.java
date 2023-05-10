@@ -30,6 +30,8 @@ import java.lang.annotation.Target;
 public @interface Path {
     /**
      * The sub path.
+     *
+     * @return sub path.
      */
     String value();
 }

@@ -29,6 +29,8 @@ import java.lang.annotation.Target;
 public @interface Type {
     /**
      * The Token type.
+     *
+     * @return the Token type.
      */
     TokenType value();
 }

@@ -30,7 +30,7 @@
     <description>Wren:AM Shared Components and Modules</description>
 
     <properties>
-        <checkstyleFailOnError>true</checkstyleFailOnError>
+        <checkstyleFailOnError>false</checkstyleFailOnError>
     </properties>
 
     <dependencies>

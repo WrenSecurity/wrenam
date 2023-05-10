@@ -1,112 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ! CCPL HEADER START
-  !
-  ! This work is licensed under the Creative Commons
-  ! Attribution-NonCommercial-NoDerivs 3.0 Unported License.
-  ! To view a copy of this license, visit
-  ! http://creativecommons.org/licenses/by-nc-nd/3.0/
-  ! or send a letter to Creative Commons, 444 Castro Street,
-  ! Suite 900, Mountain View, California, 94041, USA.
-  !
-  ! You can also obtain a copy of the license at
-  ! src/main/resources/legal-notices/CC-BY-NC-ND.txt.
-  ! See the License for the specific language governing permissions
-  ! and limitations under the License.
-  !
-  ! If applicable, add the following below this CCPL HEADER, with the fields
-  ! enclosed by brackets "[]" replaced with your own identifying information:
-  !      Portions Copyright [yyyy] [name of copyright owner]
-  !
-  ! CCPL HEADER END
-  !
-  !      Copyright 2011-2016 ForgeRock AS.
-  !    
+  The contents of this file are subject to the terms of the Common Development and
+  Distribution License (the License). You may not use this file except in compliance with the
+  License.
+
+  You can obtain a copy of the License at legal/CDDLv1.0.txt. See the License for the
+  specific language governing permission and limitations under the License.
+
+  When distributing Covered Software, include this CDDL Header Notice in each file and include
+  the License file at legal/CDDLv1.0.txt. If applicable, add the following below the CDDL
+  Header, with the fields enclosed by brackets [] replaced by your own identifying
+  information: "Portions Copyright [year] [name of copyright owner]".
+
+  Portions Copyright 2023 Wren Security.
 -->
 <project name="${project.name}"
- xmlns="http://maven.apache.org/DECORATION/1.0.1"
- xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.1 http://maven.apache.org/xsd/decoration-1.0.1.xsd">
+    xmlns="http://maven.apache.org/DECORATION/1.0.1"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.1
+    http://maven.apache.org/xsd/decoration-1.0.1.xsd">
 
- <publishDate position="right" format="yyyy.MM.dd" />
- <version position="right" />
+    <publishDate position="right" format="yyyy.MM.dd"/>
+    <version position="right"/>
 
- <body>
- 
-  <breadcrumbs>
-   <item name="Developer Community" href="http://www.forgerock.org" />
-   <item name="OpenAM" href="http://openam.forgerock.org" />
-  </breadcrumbs>
+    <body>
 
-    <menu name="OpenAM">
-     <item name="Welcome" href="index.html" />
-     <item name="News" href="news.html" />
-     <item name="FAQ" href="faq.html" />
-     <item name="Mailing Lists" href="mail-lists.html" />
-     <item name="Wiki" href="https://wikis.forgerock.org/confluence/display/OPENAM/Home" />
-     <item name="Downloads" href="https://forgerock.org/downloads/" />
-     <item name="Archives" href="http://forgerock.org/openam-archive.html" />
-    </menu>
+        <breadcrumbs>
+            <item name="Wren:AM" href="https://wrensecurity.org/projects/wrenam"/>
+        </breadcrumbs>
 
-  <menu name="ForgeRock">
-   <item name="Services" href="https://www.forgerock.com/services/" />
-   <item name="Partners" href="https://www.forgerock.com/partner/" />
-   <item name="Register" href="https://forgerock.org/registration/" />
-  </menu>
+        <menu name="Wren:AM" inherit="top">
+            <item name="Welcome" href="index.html"/>
+            <item name="Documentation" href="https://docs.wrensecurity.org/wrenam/latest"/>
+            <item name="Releases" href="https://github.com/WrenSecurity/wrenam/releases"/>
+        </menu>
 
-  <menu name="Released Documentation">
-   <item name="OpenAM 13" href="https://backstage.forgerock.com/#!/docs/openam/13"/>
-   <item name="OpenAM 12" href="https://backstage.forgerock.com/#!/docs/openam/12.0.0"/>
-   <item name="OpenAM 11" href="https://backstage.forgerock.com/#!/docs/openam/11.0.0"/>
-   <item name="OpenAM 10.1 (EOSL)"
-         href="https://backstage.forgerock.com/#!/docs/openam/10.1.0"/>
-   <item name="OpenAM 10" href="https://backstage.forgerock.com/#!/docs/openam/10.0.0"/>
-  </menu>
+        <menu name="Wren:AM Development" inherit="top">
+            <item name="Getting Started" href="https://docs.wrensecurity.org/wrenam/latest/getting-started.html"/>
+            <item name="Community" href="https://docs.wrensecurity.org/wrenam/latest/community.html"/>
+            <item name="Source Repository" href="scm.html"/>
+            <item name="Maven Repository" href="distribution-management.html"/>
+            <item name="Issue Tracking" href="issue-management.html"/>
+            <item name="License" href="licenses.html"/>
+        </menu>
 
-  <menu name="OpenAM Docs (in progress)">
-   <!-- Label: Try OpenAM -->
-   <item name="Quick Start Guide" href="./doc/bootstrap/quick-start-guide/index.html" />
-   <!-- Label: Installation and Maintenance -->
-   <item name="Deployment Planning Guide" href="./doc/bootstrap/deployment-planning-guide/index.html" />
-   <item name="Install Guide" href="./doc/bootstrap/install-guide/index.html" />
-   <item name="Upgrade Guide" href="./doc/bootstrap/upgrade-guide/index.html" />
-   <item name="Setup and Maintenance Guide" href="./doc/bootstrap/maintenance-guide/index.html" />
-   <item name="UI Customization Guide" href="./doc/bootstrap/ui-customization-guide/index.html" />
-   <item name="Release Notes" href="./doc/bootstrap/release-notes/index.html" />
-   <item name="Reference" href="./doc/bootstrap/reference/index.html" />
-   <!-- Label: Access Management -->
-   <item name="Authentication and Single Sign-On Guide" href="./doc/bootstrap/authentication-guide/index.html" />
-   <item name="Authorization Guide" href="./doc/bootstrap/authorization-guide/index.html" />
-   <item name="RADIUS Server Guide" href="./doc/bootstrap/radius-server-guide/index.html" />
-   <!-- Label: User Services -->
-   <item name="User Self-Service Guide" href="./doc/bootstrap/user-self-service-guide/index.html" />
-   <item name="User-Managed Access (UMA) 1.0 Guide" href="./doc/bootstrap/uma-guide/index.html" />
-   <!-- Label: Federation -->
-   <item name="OAuth 2.0 Guide" href="./doc/bootstrap/oauth2-guide/index.html" />
-   <item name="OpenID Connect 1.0 Guide" href="./doc/bootstrap/oidc1-guide/index.html" />
-   <item name="SAML v1.x Guide" href="./doc/bootstrap/saml1-guide/index.html" />
-   <item name="SAML v2.0 Guide" href="./doc/bootstrap/saml2-guide/index.html" />
-   <item name="Security Token Service Guide" href="./doc/bootstrap/sts-guide/index.html" />
-   <!-- Label: Extensibility -->
-   <item name="Development Guide" href="./doc/bootstrap/dev-guide/index.html" />
-   <item name="Javadoc" href="./apidocs/index.html" />
-  </menu>
-
-  <menu name="Policy Agent Docs (in progress)">
-   <item name="All Formats" href="docs.html"/>
-   <item name="Java EE Policy Agent Guide" href="./doc/bootstrap/javaee-pa-guide/index.html" />
-   <item name="Java EE Policy Agent Release Notes" href="./doc/bootstrap/javaee-pa-rnotes/index.html" />
-   <item name="Web Policy Agent Guide" href="./doc/bootstrap/web-pa-guide/index.html" />
-   <item name="Web Policy Agent Release Notes" href="./doc/bootstrap/web-pa-rnotes/index.html" />
-
-  </menu>
-
-  <menu name="Project Information">
-   <item name="Issue Tracking" href="issue-tracking.html" />
-   <item name="Mailing Lists" href="mail-lists.html" />
-   <item name="License" href="license.html" />
-   <item name="Source Repository" href="source-repository.html" />
-  </menu>  
- </body>
+    </body>
 
 </project>
