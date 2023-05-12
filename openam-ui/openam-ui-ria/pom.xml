@@ -401,9 +401,9 @@
                         </goals>
 
                         <configuration>
-                            <nodeVersion>v18.12.1</nodeVersion>
-                            <npmVersion>8.19.2</npmVersion>
-                            <downloadRoot>https://nodejs.org/dist/</downloadRoot>
+                            <nodeVersion>v18.16.0</nodeVersion>
+                            <npmVersion>8.19.4</npmVersion>
+                            <nodeDownloadRoot>https://nodejs.org/dist/</nodeDownloadRoot>
                             <npmDownloadRoot>https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/npm/-/</npmDownloadRoot>
                         </configuration>
                     </execution>
