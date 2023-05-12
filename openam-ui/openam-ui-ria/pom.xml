@@ -30,8 +30,6 @@
     <name>Wren:AM - RIA Web UI</name>
 
     <properties>
-        <codemirror.version>4.10</codemirror.version>
-        <handlebars.version>3.0.3</handlebars.version>
         <node.install.directory>${project.basedir}</node.install.directory>
     </properties>
 
@@ -47,225 +45,6 @@
         <dependency>
             <groupId>org.mozilla</groupId>
             <artifactId>rhino</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.forgerock.commons.ui.libs</groupId>
-            <artifactId>selectize-non-standalone</artifactId>
-            <version>0.12.1</version>
-            <classifier>min</classifier>
-            <type>js</type>
-        </dependency>
-
-        <dependency>
-            <groupId>org.forgerock.commons.ui.libs</groupId>
-            <artifactId>text</artifactId>
-            <version>2.0.15</version>
-            <type>js</type>
-        </dependency>
-
-        <dependency>
-            <groupId>org.forgerock.commons.ui.libs</groupId>
-            <artifactId>sifter</artifactId>
-            <version>0.4.1</version>
-            <classifier>min</classifier>
-            <type>js</type>
-        </dependency>
-
-        <dependency>
-            <groupId>org.forgerock.commons.ui.libs</groupId>
-            <artifactId>microplugin</artifactId>
-            <version>0.0.3</version>
-            <type>js</type>
-        </dependency>
-
-        <dependency>
-            <groupId>org.forgerock.commons.ui.libs</groupId>
-            <artifactId>qrcode</artifactId>
-            <version>1.0.0</version>
-            <classifier>min</classifier>
-            <type>js</type>
-        </dependency>
-
-        <dependency>
-            <groupId>org.forgerock.commons.ui.libs</groupId>
-            <artifactId>jquery-nestingSortable</artifactId>
-            <version>0.9.12</version>
-            <type>js</type>
-        </dependency>
-
-        <dependency>
-            <groupId>org.forgerock.commons.ui.libs</groupId>
-            <artifactId>jsoneditor</artifactId>
-            <version>0.7.9</version>
-            <classifier>min</classifier>
-            <type>js</type>
-        </dependency>
-
-        <dependency>
-            <groupId>org.forgerock.commons.ui.libs</groupId>
-            <artifactId>bootstrap-tabdrop</artifactId>
-            <version>1.0</version>
-            <type>js</type>
-        </dependency>
-
-        <dependency>
-            <groupId>org.forgerock.commons.ui.libs</groupId>
-            <artifactId>CodeMirror</artifactId>
-            <version>${codemirror.version}</version>
-            <type>zip</type>
-        </dependency>
-
-        <dependency>
-            <groupId>org.forgerock.commons.ui.libs</groupId>
-            <artifactId>bootstrap-clockpicker</artifactId>
-            <version>0.0.7</version>
-            <classifier>min</classifier>
-            <type>js</type>
-        </dependency>
-
-        <dependency>
-            <groupId>org.forgerock.commons.ui.libs</groupId>
-            <artifactId>bootstrap-clockpicker</artifactId>
-            <version>0.0.7</version>
-            <classifier>min</classifier>
-            <type>css</type>
-        </dependency>
-
-        <dependency>
-            <groupId>org.forgerock.commons.ui.libs</groupId>
-            <artifactId>bootstrap-datetimepicker</artifactId>
-            <version>4.14.30</version>
-            <classifier>min</classifier>
-            <type>js</type>
-        </dependency>
-
-        <dependency>
-            <groupId>org.forgerock.commons.ui.libs</groupId>
-            <artifactId>bootstrap-datetimepicker</artifactId>
-            <version>4.14.30</version>
-            <classifier>min</classifier>
-            <type>css</type>
-        </dependency>
-
-        <dependency>
-            <!-- handlebars need for fix the processing dependencies in the release build -->
-            <groupId>org.forgerock.commons.ui.libs</groupId>
-            <artifactId>handlebars</artifactId>
-            <version>${handlebars.version}</version>
-            <type>js</type>
-            <classifier>min</classifier>
-        </dependency>
-
-        <dependency>
-            <groupId>org.forgerock.commons.ui.libs</groupId>
-            <artifactId>redux</artifactId>
-            <version>3.5.2</version>
-            <classifier>min</classifier>
-            <type>js</type>
-        </dependency>
-
-        <dependency>
-            <groupId>org.forgerock.commons.ui.libs</groupId>
-            <artifactId>react-bootstrap</artifactId>
-            <version>0.30.1</version>
-            <classifier>min</classifier>
-            <type>js</type>
-        </dependency>
-
-        <dependency>
-            <groupId>org.forgerock.commons.ui.libs</groupId>
-            <artifactId>classnames</artifactId>
-            <version>2.2.5</version>
-            <type>js</type>
-        </dependency>
-
-        <dependency>
-            <groupId>org.forgerock.commons.ui.libs</groupId>
-            <artifactId>react-input-autosize</artifactId>
-            <version>1.1.0</version>
-            <classifier>min</classifier>
-            <type>js</type>
-        </dependency>
-
-        <dependency>
-            <groupId>org.forgerock.commons.ui.libs</groupId>
-            <artifactId>react-select</artifactId>
-            <version>1.0.0-rc.2</version>
-            <classifier>min</classifier>
-            <type>js</type>
-        </dependency>
-
-        <dependency>
-            <groupId>org.forgerock.commons.ui.libs</groupId>
-            <artifactId>react-select</artifactId>
-            <version>1.0.0-rc.2</version>
-            <classifier>min</classifier>
-            <type>css</type>
-        </dependency>
-
-        <dependency>
-            <groupId>org.forgerock.commons.ui.libs</groupId>
-            <artifactId>sinon</artifactId>
-            <version>1.15.4</version>
-            <type>js</type>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.forgerock.commons.ui.libs</groupId>
-            <artifactId>qunit</artifactId>
-            <version>1.15.0</version>
-            <type>js</type>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.forgerock.commons.ui.libs</groupId>
-            <artifactId>qunit</artifactId>
-            <type>css</type>
-            <version>1.15.0</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.forgerock.commons.ui.libs</groupId>
-            <artifactId>squire</artifactId>
-            <version>0.2.0</version>
-            <type>js</type>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.forgerock.commons.ui.libs</groupId>
-            <artifactId>base64</artifactId>
-            <version>1.0.0</version>
-            <classifier>min</classifier>
-            <type>js</type>
-        </dependency>
-
-        <dependency>
-            <groupId>org.forgerock.commons.ui.libs</groupId>
-            <artifactId>backbone.paginator.min</artifactId>
-            <version>2.0.2</version>
-            <classifier>min</classifier>
-            <type>js</type>
-        </dependency>
-
-        <dependency>
-            <groupId>org.forgerock.commons.ui.libs</groupId>
-            <artifactId>backgrid.min</artifactId>
-            <version>0.3.5</version>
-            <classifier>min</classifier>
-            <type>js</type>
-        </dependency>
-
-        <dependency>
-            <groupId>org.forgerock.commons.ui.libs</groupId>
-            <artifactId>backgrid-filter.min</artifactId>
-            <version>0.3.5</version>
-            <classifier>min</classifier>
-            <type>js</type>
         </dependency>
     </dependencies>
 
@@ -342,43 +121,6 @@
                             </artifactItems>
                         </configuration>
                     </execution>
-
-                    <execution>
-                        <id>unpack-codemirror</id>
-                        <phase>process-resources</phase>
-
-                        <goals>
-                            <goal>unpack</goal>
-                        </goals>
-
-                        <configuration>
-                            <outputDirectory>${project.build.directory}</outputDirectory>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>org.forgerock.commons.ui.libs</groupId>
-                                    <artifactId>CodeMirror</artifactId>
-                                    <type>zip</type>
-                                </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution>
-
-                    <execution>
-                        <id>copy-dependencies-test</id>
-                        <phase>process-resources</phase>
-
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-
-                        <configuration>
-                            <outputDirectory>${project.build.directory}/test-classes/libs</outputDirectory>
-                            <includeArtifactIds>sinon,qunit,squire</includeArtifactIds>
-                            <overWriteReleases>false</overWriteReleases>
-                            <overWriteSnapshots>false</overWriteSnapshots>
-                            <overWriteIfNewer>true</overWriteIfNewer>
-                        </configuration>
-                    </execution>
                 </executions>
             </plugin>
 
@@ -427,11 +169,6 @@
 
                         <configuration>
                             <arguments>run build:production -- --target-version=${project.version}</arguments>
-
-                            <environmentVariables>
-                                <!-- Workaround for PhantomJS - https://github.com/nodejs/node/discussions/43184 -->
-                                <OPENSSL_CONF>/dev/null</OPENSSL_CONF>
-                            </environmentVariables>
                         </configuration>
                     </execution>
                 </executions>
@@ -441,24 +178,6 @@
                 <artifactId>maven-assembly-plugin</artifactId>
 
                 <executions>
-                    <execution>
-                        <id>prepare-working-dir</id>
-                        <phase>process-resources</phase>
-
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-
-                        <configuration>
-                            <finalName>dependencies</finalName>
-                            <appendAssemblyId>false</appendAssemblyId>
-
-                            <descriptors>
-                                <descriptor>src/main/assembly/dir.xml</descriptor>
-                            </descriptors>
-                        </configuration>
-                    </execution>
-
                     <execution>
                         <id>build-final-zip</id>
                         <phase>package</phase>
