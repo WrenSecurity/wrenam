@@ -13,6 +13,7 @@
  *
  * Copyright 2014-2016 ForgeRock AS.
  * Portions Copyrighted 2015 Nomura Research Institute, Ltd.
+ * Portions Copyright 2023 Wren Security.
  */
 
 package org.forgerock.oauth2.core;
@@ -971,6 +972,8 @@ public class RealmOAuth2ProviderSettings implements OAuth2ProviderSettings {
                     attributeCache.clear();
                     jwks.clear();
                     loginUrlTemplate = null;
+                    supportedScopesWithoutTranslations = null;
+                    supportedClaimsWithoutTranslations = null;
                 }
             } else {
                 if (logger.messageEnabled()) {
