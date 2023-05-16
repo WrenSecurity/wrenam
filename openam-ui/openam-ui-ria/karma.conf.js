@@ -1,3 +1,5 @@
+process.env.CHROME_BIN = require("puppeteer").executablePath();
+
 module.exports = function (config) {
     config.set({
         basePath: ".",
@@ -29,7 +31,13 @@ module.exports = function (config) {
         colors: true,
         logLevel: config.LOG_INFO,
         autoWatch: true,
-        browsers: ["PhantomJS"],
-        singleRun: false
+        browsers: [process.env.DISABLE_PUPPETEER_SANDBOX ? "ChromeHeadlessNoSandbox" : "ChromeHeadless"],
+        singleRun: false,
+        customLaunchers: {
+            ChromeHeadlessNoSandbox: {
+                base: "ChromeHeadless",
+                flags: ["--no-sandbox"]
+            }
+        }
     });
 };

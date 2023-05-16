@@ -75,6 +75,50 @@ module.exports = function (grunt) {
             "css/bootstrap-3.3.5-custom.css",
             "themes/**/*.*"
         ],
+        copyLibs = [
+            // JS - npm
+            { src: "node_modules/requirejs-text/text.js", dest: "target/dependencies/libs/text-2.0.15.js" },
+            { src: "node_modules/selectize/dist/js/selectize.min.js", dest: "target/dependencies/libs/selectize-non-standalone-0.12.1-min.js" },
+            { src: "node_modules/microplugin/src/microplugin.js", dest: "target/dependencies/libs/microplugin-0.0.3.js" },
+            { src: "node_modules/json-editor/dist/jsoneditor.min.js", dest: "target/dependencies/libs/jsoneditor-0.7.9-min.js" },
+            { src: "node_modules/redux/dist/redux.min.js", dest: "target/dependencies/libs/redux-3.5.2-min.js" },
+            { src: "node_modules/react-bootstrap/dist/react-bootstrap.min.js", dest: "target/dependencies/libs/react-bootstrap-0.30.1-min.js" },
+            { src: "node_modules/classnames/index.js", dest: "target/dependencies/libs/classnames-2.2.5.js" },
+            { src: "node_modules/react-select/dist/react-select.min.js", dest: "target/dependencies/libs/react-select-1.0.0-rc.2-min.js" },
+            { src: "node_modules/sinon/pkg/sinon-1.15.4.js", dest: "target/test-classes/libs/sinon-1.15.4.js" },
+            { src: "node_modules/backbone.paginator/lib/backbone.paginator.min.js", dest: "target/dependencies/libs/backbone.paginator.min-2.0.2-min.js" },
+            { src: "node_modules/handlebars/dist/handlebars.amd.min.js", dest: "target/dependencies/libs/handlebars-3.0.3-min.js" },
+
+            // JS - custom
+            { src: "libs/js/sifter-0.4.1-min.js", dest: "target/dependencies/libs/sifter-0.4.1-min.js" },
+            { src: "libs/js/qrcode-1.0.0-min.js", dest: "target/dependencies/libs/qrcode-1.0.0-min.js" },
+            { src: "libs/js/jquery-nestingSortable-0.9.12.js", dest: "target/dependencies/libs/jquery-nestingSortable-0.9.12.js" },
+            { src: "libs/js/bootstrap-tabdrop-1.0.js", dest: "target/dependencies/libs/bootstrap-tabdrop-1.0.js" },
+            { src: "libs/js/bootstrap-clockpicker-0.0.7-min.js", dest: "target/dependencies/libs/bootstrap-clockpicker-0.0.7-min.js" },
+            { src: "libs/js/bootstrap-datetimepicker-4.14.30-min.js", dest: "target/dependencies/libs/bootstrap-datetimepicker-4.14.30-min.js" },
+            { src: "libs/js/react-input-autosize-1.1.0-min.js", dest: "target/dependencies/libs/react-input-autosize-1.1.0-min.js" },
+            { src: "libs/js/qunit-1.15.0.js", dest: "target/test-classes/libs/qunit-1.15.0.js" },
+            { src: "libs/js/squire-0.2.0.js", dest: "target/test-classes/libs/squire-0.2.0.js" },
+            { src: "libs/js/base64-1.0.0-min.js", dest: "target/dependencies/libs/base64-1.0.0-min.js" },
+            { src: "libs/js/backgrid.min-0.3.5-min.js", dest: "target/dependencies/libs/backgrid.min-0.3.5-min.js" },
+            { src: "libs/js/backgrid-filter.min-0.3.5-min.js", dest: "target/dependencies/libs/backgrid-filter.min-0.3.5-min.js" },
+
+            // CSS - npm
+            { src: "node_modules/react-select/dist/react-select.min.css", dest: "target/dependencies/css/react-select-1.0.0-rc.2-min.css" },
+
+            // CSS - custom
+            { src: "libs/css/bootstrap-clockpicker-0.0.7-min.css", dest: "target/dependencies/css/bootstrap-clockpicker-0.0.7-min.css" },
+            { src: "libs/css/bootstrap-datetimepicker-4.14.30-min.css", dest: "target/dependencies/css/bootstrap-datetimepicker-4.14.30-min.css" },
+            { src: "libs/css/qunit-1.15.0.css", dest: "target/test-classes/libs/qunit-1.15.0.css" },
+
+            // Codemirror
+            { src: "node_modules/codemirror/addon/display/fullscreen.js", dest: "target/dependencies/libs/codemirror/addon/display/fullscreen.js" },
+            { src: "node_modules/codemirror/lib/codemirror.js", dest: "target/dependencies/libs/codemirror/lib/codemirror.js" },
+            { src: "node_modules/codemirror/mode/groovy/groovy.js", dest: "target/dependencies/libs/codemirror/mode/groovy/groovy.js" },
+            { src: "node_modules/codemirror/mode/javascript/javascript.js", dest: "target/dependencies/libs/codemirror/mode/javascript/javascript.js" },
+            { src: "node_modules/codemirror/addon/display/fullscreen.css", dest: "target/dependencies/css/codemirror/addon/display/fullscreen.css" },
+            { src: "node_modules/codemirror/lib/codemirror.css", dest: "target/dependencies/css/codemirror/lib/codemirror.css" }
+        ],
         serverDeployDirectory = process.env.OPENAM_HOME + "/XUI";
 
     grunt.initConfig({
@@ -116,6 +160,12 @@ module.exports = function (grunt) {
             }
         },
         copy: {
+            /**
+             * Copy libs installed by NPM or provided locally.
+             */
+            libs: {
+                files: copyLibs
+            },
             /**
              * Copy all the sources and resources from this project and all dependencies into the composition directory.
              *
@@ -352,6 +402,7 @@ module.exports = function (grunt) {
      * Resync the compiled directory and deploy to the web server.
      */
     grunt.registerTask("deploy", [
+        "copy:libs",
         "sync:compose",
         "newer:babel",
         "less",
@@ -366,6 +417,7 @@ module.exports = function (grunt) {
      * Rebuild the compiled directory. Maven then packs this directory into the final archive artefact.
      */
     grunt.registerTask("build", [
+        "copy:libs",
         "copy:compose",
         "eslint",
         "babel",
@@ -377,7 +429,7 @@ module.exports = function (grunt) {
         "karma:build"
     ]);
 
-    grunt.registerTask("dev", ["copy:compose", "babel", "deploy", "watch"]);
+    grunt.registerTask("dev", ["copy:libs", "copy:compose", "babel", "deploy", "watch"]);
     grunt.registerTask("prod", ["build"]);
 
     grunt.registerTask("default", ["dev"]);
