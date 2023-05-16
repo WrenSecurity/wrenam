@@ -52,6 +52,7 @@
         </dependencySet>
 
         <dependencySet>
+            <outputFileNameMapping>${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>
             <outputDirectory></outputDirectory>
 
             <includes>
