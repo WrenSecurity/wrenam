@@ -119,6 +119,7 @@
             --add-exports java.base/sun.security.x509=ALL-UNNAMED
             --add-exports java.base/jdk.internal.util=ALL-UNNAMED
             --add-exports java.base/jdk.internal.util.random=ALL-UNNAMED
+            -Duser.language=en -Duser.region=US
         </java.surefire.options>
 
         <!-- XXX BEGIN Configuration under consideration -->
