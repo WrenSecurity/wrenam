@@ -28,6 +28,7 @@
 
 <!--
     Portions Copyrighted 2011-2013 ForgeRock AS
+    Portions Copyrighted 2023 Wren Security.
 -->
 
 OpenAM: openam-distribution-ssoconfiguratortools-${project.version}.zip
@@ -54,10 +55,10 @@ Before setting up ssoConfiguratorTools.zip, JAVA_HOME environment variable
 needs to be initialized to a path of a compatible Java Runtime.
 
 If you want to setup OpenAM then run the following command:
-        \${JAVA_HOME}/bin/java -jar openam-configurator-tool-${project.version}.jar -f <configuration file>
+        \${JAVA_HOME}/bin/java -jar openam-configurator-tool.jar -f <configuration file>
 
 If you have already deployed OpenAM and want to upgrade run the following command:
-        \${JAVA_HOME}/bin/java -jar openam-upgrade-tool-${project.version}.jar -f <upgrade file>
+        \${JAVA_HOME}/bin/java -jar openam-upgrade-tool.jar -f <upgrade file>
 
 3. What does this package contain?
 ----------------------------------
@@ -65,9 +66,9 @@ If you have already deployed OpenAM and want to upgrade run the following comman
 |
 |----README (this file)
 |
-|----openam-configurator-tool-${project.version}.jar (binaries needed for the configuration tool)
+|----openam-configurator-tool.jar (binaries needed for the configuration tool)
 |
-|----openam-upgrade-tool-${project.version}.jar (binaries needed for the upgrade tool)
+|----openam-upgrade-tool.jar (binaries needed for the upgrade tool)
 |
 |----legal-notices/ (folder containing license files)
 |
