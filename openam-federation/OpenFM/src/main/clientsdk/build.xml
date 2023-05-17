@@ -101,14 +101,11 @@
             </fileset>
 
             <manifest>
-               <attribute name="Created-On" value="${pstamp}" />
+                <attribute name="Created-On" value="${pstamp}" />
                 <section name="com.sun.identity">
-                    <attribute name="Implementation-Title"
-                        value="OpenAM Client SDK"/>
-                    <attribute name="Implementation-Version"
-                        value="${clientsdk.stamp}"/>
-                    <attribute name="Implementation-Vendor"
-                        value="ForgeRock AS"/>
+                    <attribute name="Implementation-Title" value="Wren:AM Client SDK" />
+                    <attribute name="Implementation-Version" value="${clientsdk.stamp}" />
+                    <attribute name="Implementation-Vendor" value="Wren Security" />
                 </section>
             </manifest>
             <zipfileset src="${sharedlib.dist.dir}/opensso-sharedlib.jar" includes="**/*.class"/>

@@ -68,15 +68,12 @@
                 <includesfile name="${fedlibrary.clientsdkbase.dir}/ClientSDKProperties"/>
             </fileset>
             <manifest>
-               <attribute name="Created-On" value="${pstamp}" />
-	<section name="com.sun.identity">
-                     <attribute name="Implementation-Title"
-                         value="OpenAM Client SDK"/>
-                     <attribute name="Implementation-Version"
-                         value="${clientsdk.stamp}"/>
-                     <attribute name="Implementation-Vendor"
-                         value="ForgeRock AS"/>
-	</section>
+                <attribute name="Created-On" value="${pstamp}" />
+                <section name="com.sun.identity">
+                    <attribute name="Implementation-Title" value="Wren:AM Client SDK" />
+                    <attribute name="Implementation-Version" value="${clientsdk.stamp}" />
+                    <attribute name="Implementation-Vendor" value="Wren Security" />
+                </section>
             </manifest>
         </jar>
 
