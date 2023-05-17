@@ -25,6 +25,7 @@
  * $Id: BootstrapCreator.java,v 1.14 2009/08/03 23:32:54 veiming Exp $
  *
  * Portions Copyrighted 2011-2016 ForgeRock AS.
+ * Portions Copyrighted 2023 Wren Security
  */
 package com.sun.identity.setup;
 
@@ -62,9 +63,9 @@ import com.sun.identity.sm.SMSException;
  */
 public class BootstrapCreator {
     private static BootstrapCreator instance = new BootstrapCreator();
-    private static boolean isUnix = 
+    private static boolean isUnix =
         System.getProperty("path.separator").equals(":");
-    
+
     static final String template =
         "@DS_PROTO@://@DS_HOST@/@INSTANCE_NAME@" +
         "?user=@DSAMEUSER_NAME@&pwd=@DSAMEUSER_PWD@" +
@@ -82,7 +83,7 @@ public class BootstrapCreator {
     public static BootstrapCreator getInstance() {
         return instance;
     }
-    
+
     public static void updateBootstrap()
         throws ConfigurationException {
         try {
@@ -124,10 +125,13 @@ public class BootstrapCreator {
             }
             final AMKeyProvider amKeyProvider = new AMKeyProvider(ksc);
 
-            // write the required boot passwords to the keystore
-            amKeyProvider.setSecretKeyEntry(BootstrapData.DSAME_PWD_KEY, dspw);
-            amKeyProvider.setSecretKeyEntry(BootstrapData.CONFIG_PWD_KEY, configStorepw);
-            amKeyProvider.store();
+            // Update boot passwords in the AM keystore
+            boolean updateKeystore = false;
+            updateKeystore |= updateSecretKey(amKeyProvider, BootstrapData.DSAME_PWD_KEY, dspw);
+            updateKeystore |= updateSecretKey(amKeyProvider, BootstrapData.CONFIG_PWD_KEY, configStorepw);
+            if (updateKeystore) {
+                amKeyProvider.store();
+            }
 
             bootConfig.writeConfig(baseDir + "/boot.json");
             // We delay deletion of legacy bootstrap until the very end.
@@ -172,12 +176,12 @@ public class BootstrapCreator {
         String connPwd = svrCfg.getPasswd();
         String rootSuffix = svrCfg.getBaseDN();
 
-        Collection serverList = sg.getServersList();
+        Collection<Server> serverList = sg.getServersList();
         if (serverList.isEmpty()) {
             throw new ConfigurationException("Server list is empty");
         }
 
-        Iterator iterator = serverList.iterator();
+        Iterator<Server> iterator = serverList.iterator();
         while (iterator.hasNext()) {
             Server serverObj = (Server) iterator.next();
             ConfigStoreProperties cfg = new ConfigStoreProperties();
@@ -255,5 +259,20 @@ public class BootstrapCreator {
             ksc.setKeyStoreType("JCEKS");
         }
         return ksc;
+    }
+
+    /**
+     * Update secret key with the given alias in the specified key provider.
+     * @param keyProvider Key provider to update secret key.
+     * @param alias Secret key alias.
+     * @param password Secret key value.
+     * @return true when secret key was updated, false when no change was performed.
+     */
+    private boolean updateSecretKey(AMKeyProvider keyProvider, String alias, String password) throws KeyStoreException {
+        if (!keyProvider.containsKey(alias) || !keyProvider.getSecret(alias).equals(password)) {
+            keyProvider.setSecretKeyEntry(alias, password);
+            return true;
+        }
+        return false;
     }
 }
