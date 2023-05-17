@@ -556,7 +556,7 @@
                 "name": "Username",
                 "password": "Password"
             },
-            "unavailable": "Unable to login to OpenAM"
+            "unavailable": "Unable to login to Wren:AM"
         },
         "authDevices": {
             "header": "Authentication Devices",
@@ -574,7 +574,7 @@
             "deviceDetailsDialog": {
                 "recoveryCodes": "Recovery codes",
                 "deviceName": "Device name",
-                "copyRecoveryCodes": "Keep a copy of these codes in a safe place. You will need to use one of your recovery codes to authenticate to OpenAM if you lose your device."
+                "copyRecoveryCodes": "Keep a copy of these codes in a safe place. You will need to use one of your recovery codes to authenticate to Wren:AM if you lose your device."
             }
         }
     },
@@ -787,7 +787,7 @@
                 "table" : ["Url", "Site Name"],
                 "empty" : "No Servers found",
                 "clone" : "Clone",
-                "description": "Configure server-specific properties in OpenAM instances."
+                "description": "Configure server-specific properties in Wren:AM instances."
             },
             "new": {
                 "title" : "New Server",
@@ -809,7 +809,7 @@
             "modules": {
                 "title" : "Modules",
                 "newModule": "New Module",
-                "description" : "OpenAM uses authentication modules to identify the user. Normally authentication modules are associated with an authentication chain. Each realm has a default authentication chain that will be used to authenticate users. This section is used to add, configure or remove authentication module available for authentication into this realm.",
+                "description" : "Wren:AM uses authentication modules to identify the user. Normally authentication modules are associated with an authentication chain. Each realm has a default authentication chain that will be used to authenticate users. This section is used to add, configure or remove authentication module available for authentication into this realm.",
                 "addModuleTitle" : "New Module",
                 "addModuleError": "Authentication instance already exists.",
                 "selectModuleType" : "Select Module type",
@@ -923,7 +923,7 @@
             "list": {
                 "service": "Service",
                 "title": "Services",
-                "description": "Configure realm-specific properties for OpenAM functionality.",
+                "description": "Configure realm-specific properties for Wren:AM functionality.",
                 "addService": "Add a Service",
                 "addServicePrompt": "No services found",
                 "grid": {
@@ -960,11 +960,11 @@
             },
             "realmStatusPopover": {
                 "title": "Realm Status",
-                "content": "If the realm is inactive, all OpenAM services will be unavailable for all users in this realm."
+                "content": "If the realm is inactive, all Wren:AM services will be unavailable for all users in this realm."
             },
             "realmAliasesPopover": {
                 "title": "Realm/DNS Aliases",
-                "content": "When a request is received by the authentication user interface, OpenAM searches this attribute in all realms to find the matching realm into which the user should be authenticated. <br> OpenAM must only find one matching realm so therefore do not put duplicate entries into multiple realms. <br> Additionally if OpenAM does not find a matching realm, the user is presented with an error screen."
+                "content": "When a request is received by the authentication user interface, Wren:AM searches this attribute in all realms to find the matching realm into which the user should be authenticated. <br> Wren:AM must only find one matching realm so therefore do not put duplicate entries into multiple realms. <br> Additionally if Wren:AM does not find a matching realm, the user is presented with an error screen."
             },
             "realmNameValidationError" : "Characters $, &, +, \\, \", comma, /, :, ;, =, ?, @, space, #, %, <, > are not allowed in a realm's name."
         },
