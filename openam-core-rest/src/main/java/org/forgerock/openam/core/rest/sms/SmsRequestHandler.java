@@ -12,7 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
- * Portions copyright 2022 Wren Security
+ * Portions copyright 2022-2023 Wren Security
  */
 
 package org.forgerock.openam.core.rest.sms;
@@ -41,6 +41,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -829,7 +830,7 @@ public class SmsRequestHandler implements RequestHandler, SMSObjectListener, Ser
         this.api = routeTree.handleApiRequest(
                 new UriRouterContext(new RootContext(), "", "", Collections.<String, String>emptyMap()),
                 newApiRequest(ResourcePath.empty()));
-        if (!oldApi.equals(api)) {
+        if (!Objects.equals(oldApi, this.api)) {
             for (Listener listener : apiListeners) {
                 listener.notifyDescriptorChange();
             }
