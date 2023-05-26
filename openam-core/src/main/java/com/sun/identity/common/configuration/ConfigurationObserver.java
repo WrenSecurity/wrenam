@@ -23,7 +23,7 @@
  * "Portions Copyrighted [year] [name of copyright owner]"
  *
  * Portions Copyrighted 2012-2016 ForgeRock AS.
- * Portions Copyrighted 2022 Wren Security
+ * Portions Copyrighted 2022-2023 Wren Security
  */
 
 package com.sun.identity.common.configuration;
@@ -69,7 +69,7 @@ public class ConfigurationObserver implements ServiceListener {
         migratedServiceNames.add(Constants.SVC_NAME_PLATFORM);
         createAttributeMapping();
     }
-    
+
     private void createAttributeMapping() {
         // this does not apply client mode because client's property
         // never get store in SMS services
@@ -81,7 +81,7 @@ public class ConfigurationObserver implements ServiceListener {
             }
         }
     }
-    
+
     private synchronized void registerListeners() {
         if (!hasRegisteredListeners) {
             SSOToken adminToken = AccessController.doPrivileged(AdminTokenAction.getInstance());
@@ -96,12 +96,12 @@ public class ConfigurationObserver implements ServiceListener {
             hasRegisteredListeners = true;
         }
     }
-    
+
     /**
      * Returns an instance of <code>ConfigurationObserver</code>.
      *
      * @return an instance of <code>ConfigurationObserver</code>.
-     */    
+     */
     public static ConfigurationObserver getInstance() {
         instance.registerListeners();
         return instance;
@@ -109,21 +109,21 @@ public class ConfigurationObserver implements ServiceListener {
 
     /**
      * This method will be invoked when a service's schema has been changed.
-     * 
+     *
      * @param serviceName Name of the service.
      * @param version Version of the service.
      */
     public void schemaChanged(String serviceName, String version) {
         //no-op
     }
-    
+
     /**
      * This method will be invoked when a service's global configuration data
      * has been changed. The parameter <code>groupName</code> denote the name
      * of the configuration grouping (e.g. default) and
      * <code>serviceComponent</code> denotes the service's sub-component that
      * changed (e.g. <code>/NamedPolicy</code>, <code>/Templates</code>).
-     * 
+     *
      * @param serviceName Name of the service.
      * @param version Version of the service.
      * @param groupName Name of the configuration grouping.
@@ -146,8 +146,10 @@ public class ConfigurationObserver implements ServiceListener {
                     SSOToken adminToken = AccessController.doPrivileged(AdminTokenAction.getInstance());
                     try {
                         Properties newProp = ServerConfiguration.getServerInstance(adminToken, serverName);
-                        SystemProperties.initializeProperties(newProp, true, true);
-                        notifies(Constants.SVC_NAME_PLATFORM);
+                        if (newProp != null) {
+                            SystemProperties.initializeProperties(newProp, true, true);
+                            notifies(Constants.SVC_NAME_PLATFORM);
+                        }
                     } catch (SSOException | IOException | SMSException ex) {
                         // ignored
                     }
