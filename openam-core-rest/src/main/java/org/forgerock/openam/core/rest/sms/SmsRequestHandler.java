@@ -17,7 +17,6 @@
 
 package org.forgerock.openam.core.rest.sms;
 
-import static org.wrensecurity.guava.common.collect.Sets.newHashSet;
 import static org.forgerock.http.routing.RoutingMode.EQUALS;
 import static org.forgerock.http.routing.RoutingMode.STARTS_WITH;
 import static org.forgerock.json.resource.Requests.newApiRequest;
@@ -30,6 +29,7 @@ import static org.forgerock.openam.core.rest.sms.tree.SmsRouteTreeBuilder.filter
 import static org.forgerock.openam.core.rest.sms.tree.SmsRouteTreeBuilder.leaf;
 import static org.forgerock.openam.core.rest.sms.tree.SmsRouteTreeBuilder.tree;
 import static org.forgerock.openam.utils.CollectionUtils.asSet;
+import static org.wrensecurity.guava.common.collect.Sets.newHashSet;
 
 import java.security.AccessController;
 import java.security.PrivilegedAction;
@@ -37,12 +37,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -54,7 +53,6 @@ import javax.inject.Named;
 
 import org.forgerock.api.models.ApiDescription;
 import org.forgerock.authz.filter.crest.api.CrestAuthorizationModule;
-import org.wrensecurity.guava.common.base.Predicate;
 import org.forgerock.guice.core.InjectorHolder;
 import org.forgerock.http.ApiProducer;
 import org.forgerock.http.routing.RoutingMode;
@@ -88,6 +86,7 @@ import org.forgerock.services.context.RootContext;
 import org.forgerock.services.descriptor.Describable;
 import org.forgerock.services.routing.RouteMatcher;
 import org.forgerock.util.promise.Promise;
+import org.wrensecurity.guava.common.base.Predicate;
 
 import com.google.inject.assistedinject.Assisted;
 import com.iplanet.sso.SSOException;
@@ -142,7 +141,7 @@ public class SmsRequestHandler implements RequestHandler, SMSObjectListener, Ser
     private final SmsServiceHandlerFunction smsServiceHandlerFunction;
     private final SitesResourceProvider sitesResourceProvider;
     private final ServersResourceProvider serversResourceProvider;
-    private final List<Describable.Listener> apiListeners = new ArrayList<>();
+    private final List<Describable.Listener> apiListeners = new CopyOnWriteArrayList<>();
 
     private final ReadWriteLock lock = new ReentrantReadWriteLock();
     private final Lock read = lock.readLock();
@@ -801,25 +800,11 @@ public class SmsRequestHandler implements RequestHandler, SMSObjectListener, Ser
         }
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * Thread Safety: Read/Write locking to protect access to {@link #routeTree} during modifications.
-     *
-     * @param listener {@inheritDoc}
-     */
     @Override
     public void addDescriptorListener(Listener listener) {
         apiListeners.add(listener);
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * Thread Safety: Read/Write locking to protect access to {@link #routeTree} during modifications.
-     *
-     * @param listener {@inheritDoc}
-     */
     @Override
     public void removeDescriptorListener(Listener listener) {
         apiListeners.remove(listener);
@@ -827,7 +812,7 @@ public class SmsRequestHandler implements RequestHandler, SMSObjectListener, Ser
 
     private synchronized void notifyDescriptorChange() {
         ApiDescription oldApi = this.api;
-        this.api = routeTree.handleApiRequest(
+        this.api = handleApiRequest(
                 new UriRouterContext(new RootContext(), "", "", Collections.<String, String>emptyMap()),
                 newApiRequest(ResourcePath.empty()));
         if (!Objects.equals(oldApi, this.api)) {
