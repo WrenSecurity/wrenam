@@ -11,7 +11,8 @@
  *  Header, with the fields enclosed by brackets [] replaced by your own identifying
  *  information: "Portions copyright [year] [name of copyright owner]".
  *
- *  Copyright 2016 ForgeRock AS.
+ * Copyright 2016 ForgeRock AS.
+ * Portions Copyright 2023 Wren Security.
  */
 
 package org.forgerock.openam.entitlement;
@@ -42,6 +43,7 @@ public final class SetupInternalNotificationSubscriptions implements SetupListen
 
     public static final Topic TOPIC_INTERNAL_POLICYSET = Topic.of("/internal/policySet");
 
+    public static final String MESSAGE_ATTR_BODY = "body";
     public static final String MESSAGE_ATTR_EVENT_TYPE = "eventType";
     public static final String MESSAGE_ATTR_REALM = "realm";
     public static final String MESSAGE_ATTR_NAME = "name";
@@ -60,9 +62,9 @@ public final class SetupInternalNotificationSubscriptions implements SetupListen
     private static final class PolicySetNotificationConsumer implements Consumer {
         @Override
         public void accept(JsonValue notification) {
-            JsonValue eventType = notification.get(MESSAGE_ATTR_EVENT_TYPE);
-            JsonValue realm = notification.get(MESSAGE_ATTR_REALM);
-
+            JsonValue notificationBody = notification.get(MESSAGE_ATTR_BODY);
+            JsonValue eventType = notificationBody.get(MESSAGE_ATTR_EVENT_TYPE);
+            JsonValue realm = notificationBody.get(MESSAGE_ATTR_REALM);
             if (eventType.isNull() || realm.isNull()) {
                 PolicyConstants.DEBUG.error("One or more required fields {}, {} are missing. " +
                         "Discarding the PolicySet notification {}",
