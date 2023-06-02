@@ -20,7 +20,7 @@ import { sessionAddInfo } from "store/actions/creators";
 import AbstractDelegate from "org/forgerock/commons/ui/common/main/AbstractDelegate";
 import Constants from "org/forgerock/commons/ui/common/util/Constants";
 import store from "store/index";
-import { exists as gotoExists, get as getGoto } from "org/forgerock/openam/ui/user/login/gotoUrl";
+import Configuration from "org/forgerock/commons/ui/common/main/Configuration";
 import moment from "moment";
 
 const obj = new AbstractDelegate(`${Constants.host}/${Constants.context}/json/sessions`);
@@ -56,9 +56,9 @@ export const updateSessionInfo = (token, options) => {
 export const isSessionValid = (token) => getSessionInfo(token).then((response) => _.has(response, "username"));
 
 export const logout = () => {
-    const paramString = gotoExists() ? `&goto=${getGoto()}` : "";
+    const gotoUrl = Configuration.gotoURL;
     return obj.serviceCall({
-        url: `?_action=logout${paramString}`,
+        url: `?_action=logout${gotoUrl ? `&goto=${encodeURIComponent(gotoUrl)}` : ""}`,
         type: "POST",
         data: {},
         headers: {

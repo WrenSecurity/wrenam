@@ -36,11 +36,10 @@ define([
     "org/forgerock/commons/ui/common/util/URIUtils",
     "org/forgerock/openam/ui/user/login/logout",
     "org/forgerock/openam/ui/common/util/uri/query",
-    "org/forgerock/openam/ui/user/login/gotoUrl",
     "store/index"
 ], ($, _, AbstractView, AuthNService, BootstrapDialog, Configuration, Constants, CookieHelper, EventManager, Form2js,
     Handlebars, i18nManager, Messages, RESTLoginHelper, isRealmChanged, Router, SessionManager, UIUtils,
-    URIUtils, logout, query, gotoUrl, store) => {
+    URIUtils, logout, query, store) => {
     isRealmChanged = isRealmChanged.default;
 
     function hasSsoRedirectOrPost (goto) {
@@ -141,8 +140,8 @@ define([
                 } else {
                     Configuration.setProperty("loggedUser", user);
                     RESTLoginHelper.setSuccessURL(requirements.tokenId, requirements.successUrl).then(() => {
-                        if (gotoUrl.exists()) {
-                            window.location.href = gotoUrl.toHref();
+                        if (Configuration.globalData.auth.validatedGoto) {
+                            window.location.href = Configuration.globalData.auth.validatedGoto;
                             $("body").empty();
                             return false;
                         }
@@ -529,11 +528,12 @@ define([
 
     Handlebars.registerHelper("intendedRealmParameter", () => {
         const sessionInfoIntendedRealm = store.default.getState().server.realm;
-        return sessionInfoIntendedRealm ? `&realm=${sessionInfoIntendedRealm}` : "";
+        return sessionInfoIntendedRealm ? `&realm=${encodeURIComponent(sessionInfoIntendedRealm)}` : "";
     });
 
     Handlebars.registerHelper("gotoParameter", () => {
-        return gotoUrl.exists() ? `&goto=${gotoUrl.get()}` : "";
+        const gotoUrl = Configuration.globalData.auth.validatedGoto;
+        return gotoUrl ? `&goto=${encodeURIComponent(gotoUrl)}` : "";
     });
 
     return new LoginView();

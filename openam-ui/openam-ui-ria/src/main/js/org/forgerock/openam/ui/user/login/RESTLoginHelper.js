@@ -29,10 +29,9 @@ define([
     "org/forgerock/openam/ui/user/services/SessionService",
     "org/forgerock/openam/ui/user/UserModel",
     "org/forgerock/openam/ui/user/login/logout",
-    "org/forgerock/openam/ui/common/util/uri/query",
-    "org/forgerock/openam/ui/user/login/gotoUrl"
+    "org/forgerock/openam/ui/common/util/uri/query"
 ], ($, _, AbstractConfigurationAware, Configuration, ServiceInvoker, ViewManager, Constants, URIUtils,
-    fetchUrl, SessionToken, AuthNService, SessionService, UserModel, logout, query, gotoUrl) => {
+    fetchUrl, SessionToken, AuthNService, SessionService, UserModel, logout, query) => {
     var obj = new AbstractConfigurationAware();
 
     obj.login = function (params, successCallback, errorCallback) {
@@ -137,7 +136,7 @@ define([
                     data.successURL.indexOf(`/${Constants.context}`) !== 0) {
                     context = `/${Constants.context}`;
                 }
-                gotoUrl.set(encodeURIComponent(context + data.successURL));
+                Configuration.globalData.auth.validatedGoto = context + data.successURL;
                 promise.resolve();
             }, () => {
                 promise.reject();
@@ -148,8 +147,8 @@ define([
                     Configuration.globalData.auth.urlParams = {};
                 }
 
-                if (!gotoUrl.exists()) {
-                    gotoUrl.set(successUrl);
+                if (!Configuration.globalData.auth.validatedGoto) {
+                    Configuration.globalData.auth.validatedGoto = successUrl;
                 }
             }
             promise.resolve();
