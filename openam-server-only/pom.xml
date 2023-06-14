@@ -68,7 +68,7 @@
                                     <type>zip</type>
                                 </artifactItem>
                             </artifactItems>
-                            
+
                             <outputDirectory>${project.build.directory}</outputDirectory>
                         </configuration>
                     </execution>
@@ -568,8 +568,7 @@
 
                                 <configuration>
                                     <!-- Exclude JSPs with known compilation issues: -->
-                                    <excludes>**/ButtonFrame.jsp,**/Masthead.jsp,**/Version.jsp,
-                                        **/userconsole.jsp</excludes>
+                                    <excludes>**/Masthead.jsp</excludes>
                                 </configuration>
                             </execution>
                         </executions>
@@ -740,13 +739,13 @@
             <artifactId>openam-datastore</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+
         <dependency>
         	<groupId>org.wrensecurity.wrenam</groupId>
         	<artifactId>openam-radius-common</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+
         <dependency>
         	<groupId>org.wrensecurity.wrenam</groupId>
         	<artifactId>openam-radius-server</artifactId>

@@ -2159,21 +2159,21 @@
       <required>false</required>
       <rtexprvalue>true</rtexprvalue>
     </attribute>
-    <attribute> 
-      <name>target</name> 
-      <required>false</required> 
-      <rtexprvalue>true</rtexprvalue> 
+    <attribute>
+      <name>target</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
     </attribute>
-    <attribute> 
-      <name>type</name> 
-      <required>false</required> 
-      <rtexprvalue>true</rtexprvalue> 
+    <attribute>
+      <name>type</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
     </attribute>
-    <!-- i18n support --> 
-    <attribute> 
-      <name>bundleID</name> 
-      <required>false</required> 
-      <rtexprvalue>true</rtexprvalue> 
+    <!-- i18n support -->
+    <attribute>
+      <name>bundleID</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
       <name>tabIndex</name>
@@ -3393,7 +3393,7 @@
       <rtexprvalue>true</rtexprvalue>
     </attribute>
   </tag>
-  
+
   <!-- ===================== Client Side Tree Tag ====================== -->
   <tag>
     <name>ctree</name>
@@ -3483,125 +3483,6 @@
     </attribute>
     <attribute>
       <name>tabIndex</name>
-      <required>false</required>
-      <rtexprvalue>true</rtexprvalue>
-    </attribute>
-  </tag>
-  
-  <!-- ========================= Version Tags ======================== -->
-  <tag>
-    <name>version</name>
-    <tagclass>com.sun.web.ui.taglib.version.CCVersionWindowTag</tagclass>
-    <bodycontent>JSP</bodycontent>
-    <attribute>
-      <name>name</name>
-      <!-- name attribute is not required for 1.0 compatibility -->
-      <required>false</required>
-      <rtexprvalue>true</rtexprvalue>
-    </attribute>
-    <attribute>
-      <name>versionNumber</name>
-      <required>false</required>
-      <rtexprvalue>true</rtexprvalue>
-    </attribute>
-    <attribute>
-      <name>fireDisplayEvents</name>
-      <required>false</required>
-      <rtexprvalue>true</rtexprvalue>
-    </attribute>
-    <attribute>
-      <name>bundleID</name>
-      <required>false</required>
-      <rtexprvalue>true</rtexprvalue>
-    </attribute>
-    <attribute>
-      <name>height</name>
-      <required>false</required>
-      <rtexprvalue>true</rtexprvalue>
-    </attribute>
-    <attribute>
-      <name>width</name>
-      <required>false</required>
-      <rtexprvalue>true</rtexprvalue>
-    </attribute>
-    <attribute>
-      <name>pathPrefix</name>
-      <required>false</required>
-      <rtexprvalue>true</rtexprvalue>
-    </attribute>
-    <attribute>
-      <name>versionFile</name>
-      <required>false</required>
-      <rtexprvalue>true</rtexprvalue>
-    </attribute>
-    <attribute>
-      <name>productName</name>
-      <required>false</required>
-      <rtexprvalue>true</rtexprvalue>
-    </attribute>
-    <attribute>
-      <name>productNameSrc</name>
-      <required>false</required>
-      <rtexprvalue>true</rtexprvalue>
-    </attribute>
-    <attribute>
-      <name>productNameHeight</name>
-      <required>false</required>
-      <rtexprvalue>true</rtexprvalue>
-    </attribute>
-    <attribute>
-      <name>productNameWidth</name>
-      <required>false</required>
-      <rtexprvalue>true</rtexprvalue>
-    </attribute>
-    <attribute>
-      <name>tabIndex</name>
-      <required>false</required>
-      <rtexprvalue>true</rtexprvalue>
-    </attribute>
-    <attribute>
-      <name>onClick</name>
-      <required>false</required>
-      <rtexprvalue>true</rtexprvalue>
-    </attribute>
-  </tag>
-  <tag>
-    <name>versionbanner</name>
-    <tagclass>com.sun.web.ui.taglib.version.CCVersionBannerTag</tagclass>
-    <bodycontent>JSP</bodycontent>
-    <attribute>
-      <name>name</name>
-      <!-- name attribute is not required for 1.0 compatibility -->
-      <required>false</required>
-      <rtexprvalue>true</rtexprvalue>
-    </attribute>
-    <attribute>
-      <name>fireDisplayEvents</name>
-      <required>false</required>
-      <rtexprvalue>true</rtexprvalue>
-    </attribute>
-    <attribute>
-      <name>productNameSrc</name>
-      <required>true</required>
-      <rtexprvalue>true</rtexprvalue>
-    </attribute>
-    <attribute>
-      <name>versionFile</name>
-      <required>true</required>
-      <rtexprvalue>true</rtexprvalue>
-    </attribute>
-    <attribute>
-      <name>productNameHeight</name>
-      <required>true</required>
-      <rtexprvalue>true</rtexprvalue>
-    </attribute>
-    <attribute>
-      <name>productNameWidth</name>
-      <required>true</required>
-      <rtexprvalue>true</rtexprvalue>
-    </attribute>
-    <attribute>
-      <name>bundleID</name>
       <required>false</required>
       <rtexprvalue>true</rtexprvalue>
     </attribute>
