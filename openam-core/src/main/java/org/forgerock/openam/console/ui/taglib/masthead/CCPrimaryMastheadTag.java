@@ -21,7 +21,8 @@
  * your own identifying information:
  * "Portions Copyrighted [year] [name of copyright owner]"
  *
- */  
+  * Portions Copyrighted 2023 Wren Security
+ */
 package org.forgerock.openam.console.ui.taglib.masthead;
 
 import com.iplanet.am.util.SystemProperties;
@@ -40,5 +41,9 @@ public class CCPrimaryMastheadTag extends com.sun.web.ui.taglib.masthead.CCPrima
     @Override
     protected void appendHelpLink(NonSyncStringBuffer buffer) throws JspException {
         return;
+    }
+
+    @Override
+    protected void appendVersionLink(NonSyncStringBuffer buffer) throws JspException {
     }
 }

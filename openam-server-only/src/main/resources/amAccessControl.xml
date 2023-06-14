@@ -1,8 +1,8 @@
 <!--
    DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
-  
+
    Copyright (c) 2006 Sun Microsystems Inc. All Rights Reserved
-  
+
    The contents of this file are subject to the terms
    of the Common Development and Distribution License
    (the License). You may not use this file except in
@@ -26,6 +26,7 @@
 
    Portions Copyrighted 2013-2016 ForgeRock AS.
    Portions Copyrighted 2014-2015 Nomura Research Institute, Ltd.
+   Portions Copyrighted 2023 Wren Security
 -->
 <accesscontrols>
     <!-- REALM -->
@@ -308,7 +309,6 @@
     <viewbean view="*" modify="*" classname="com.sun.identity.console.base.AMAdminFrameViewBean" />
     <viewbean view="*" modify="*" classname="com.sun.identity.console.base.AMPostViewBean" />
     <viewbean view="*" modify="*" classname="com.sun.identity.console.base.AuthenticatedViewBean" />
-    <viewbean view="*" modify="*" classname="com.sun.identity.console.base.VersionViewBean" />
     <viewbean view="*" modify="*" classname="com.sun.identity.console.realm.RealmResourceOfferingAddViewBean" />
     <viewbean view="*" modify="*" classname="com.sun.identity.console.realm.RealmResourceOfferingEditViewBean" />
     <viewbean view="*" modify="*" classname="com.sun.identity.console.realm.RealmResourceOfferingViewBean" />
