@@ -25,6 +25,7 @@
  * $Id: SessionRequestHandler.java,v 1.9 2009/04/02 04:11:44 ericow Exp $
  *
  * Portions Copyrighted 2011-2016 ForgeRock AS.
+ * Portions Copyrighted 2023 Wren Security
  */
 package com.iplanet.dpro.session.service;
 
@@ -43,6 +44,7 @@ import org.forgerock.guice.core.InjectorHolder;
 import org.forgerock.openam.dpro.session.InvalidSessionIdException;
 import org.forgerock.openam.session.SessionCache;
 import org.forgerock.openam.session.SessionPLLSender;
+import org.forgerock.openam.session.authorisation.SessionChangeAuthorizer;
 import org.forgerock.openam.session.service.access.SessionQueryManager;
 import org.forgerock.openam.sso.providers.stateless.StatelessSessionManager;
 
@@ -101,6 +103,7 @@ public class SessionRequestHandler implements RequestHandler {
     private final Debug sessionDebug;
     private final StatelessSessionManager statelessSessionManager;
     private final SessionQueryManager sessionQueryManager;
+    private final SessionChangeAuthorizer sessionChangeAuthorizer;
 
     private SSOToken clientToken = null;
 
@@ -112,6 +115,7 @@ public class SessionRequestHandler implements RequestHandler {
         sessionDebug =  InjectorHolder.getInstance(Key.get(Debug.class, Names.named(SESSION_DEBUG)));
         statelessSessionManager = InjectorHolder.getInstance(StatelessSessionManager.class);
         sessionQueryManager = InjectorHolder.getInstance(SessionQueryManager.class);
+        sessionChangeAuthorizer = InjectorHolder.getInstance(SessionChangeAuthorizer.class);
     }
 
     /**
@@ -359,12 +363,21 @@ public class SessionRequestHandler implements RequestHandler {
                 break;
 
             case SessionRequest.GetSessionCount:
-                String uuid = req.getUUID();
-                Map sessions =  sessionQueryManager.getAllSessionsByUUID(uuid);
+                // Perform security check
+                boolean isAdmin = false;
+                try {
+                    isAdmin = sessionChangeAuthorizer.hasTopLevelAdminRole(requesterSession.getSessionID());
+                } catch (SSOException e) {
+                    return handleException(req, requesterSession.getSessionID(), SessionBundle.getString("invalidSessionState"));
+                }
+                if (!isAdmin && !requesterSession.getClientID().equals(req.getUUID())) {
+                    return handleException(req, requesterSession.getSessionID(), SessionBundle.getString("noPrivilege"));
+                }
+                // Perform actual sessions search
+                Map<String, Long> sessions = sessionQueryManager.getAllSessionsByUUID(req.getUUID());
                 if (sessions != null) {
                     res.setSessionsForGivenUUID(sessions);
                 }
-
                 break;
 
             default:
