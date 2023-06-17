@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions Copyright 2023 Wren Security
  */
 
 package org.forgerock.openam.selfservice;
@@ -25,6 +26,7 @@ import com.google.inject.TypeLiteral;
 import org.forgerock.http.routing.RoutingMode;
 import org.forgerock.openam.rest.AbstractRestRouteProvider;
 import org.forgerock.openam.rest.ResourceRouter;
+import org.forgerock.openam.rest.authz.ResourceOwnerOrSuperUserAuthzModule;
 import org.forgerock.openam.selfservice.config.beans.ForgottenPasswordConsoleConfig;
 import org.forgerock.openam.selfservice.config.beans.ForgottenUsernameConsoleConfig;
 import org.forgerock.openam.selfservice.config.beans.UserRegistrationConsoleConfig;
@@ -73,6 +75,7 @@ public final class SelfServiceRestRouteProvider extends AbstractRestRouteProvide
                 .route("/selfservice/user")
                 .auditAs(USERS)
                 .authenticateWith(ssoToken())
+                .authorizeWith(ResourceOwnerOrSuperUserAuthzModule.class)
                 .toCollection(UserUpdateService.class);
 
         realmRouter

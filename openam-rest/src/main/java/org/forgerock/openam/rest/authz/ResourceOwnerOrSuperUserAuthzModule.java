@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015 ForgeRock AS.
+ * Portions Copyright 2023 Wren Security
  */
 
 package org.forgerock.openam.rest.authz;
@@ -32,25 +33,17 @@ import org.forgerock.util.promise.Promises;
 import com.iplanet.dpro.session.service.SessionService;
 import com.iplanet.sso.SSOException;
 import com.iplanet.sso.SSOToken;
+import com.sun.identity.idm.AMIdentity;
 import com.sun.identity.idm.IdUtils;
 import com.sun.identity.shared.debug.Debug;
 
 /**
- *
- *
- * @since 13.0.0
+ * Authorization module that grants access only to resource owners or administrators.
  */
 public class ResourceOwnerOrSuperUserAuthzModule extends AdminOnlyAuthzModule {
 
-    /** Name used by the LoggingAuthzModule. */
     public static final String NAME = "ResourceOwnerOrSuperUserAuthzModule";
 
-    /**
-     * Constructs a new ResourceOwnerOrSuperUserAuthzModule instance.
-     *
-     * @param sessionService An instance of the SessionService.
-     * @param debug An instance of the Rest Debugger.
-     */
     @Inject
     public ResourceOwnerOrSuperUserAuthzModule(Config<SessionService> sessionService, @Named("frRest") Debug debug) {
         super(sessionService, debug);
@@ -80,7 +73,11 @@ public class ResourceOwnerOrSuperUserAuthzModule extends AdminOnlyAuthzModule {
 
     protected String getUserIdFromUri(Context context) throws InternalServerErrorException {
         String username = context.asContext(UriRouterContext.class).getUriTemplateVariables().get("user");
+        if (username == null) {
+            username = context.asContext(UriRouterContext.class).getRemainingUri();
+        }
         String realm = context.asContext(RealmContext.class).getRealm().asPath();
-        return IdUtils.getIdentity(username, realm).getUniversalId();
+        AMIdentity user = IdUtils.getIdentity(username, realm);
+        return user != null ? user.getUniversalId() : null;
     }
 }
