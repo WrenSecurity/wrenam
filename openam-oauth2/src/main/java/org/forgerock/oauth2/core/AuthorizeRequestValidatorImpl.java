@@ -12,13 +12,17 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014-2017 ForgeRock AS.
+ * Portions Copyright 2023 Wren Security.
  */
 
 package org.forgerock.oauth2.core;
 
-import static org.forgerock.openam.oauth2.OAuth2Constants.Params.*;
-import static org.forgerock.oauth2.core.Utils.*;
+import static org.forgerock.openam.oauth2.OAuth2Constants.DeviceCode.USER_CODE;
+import static org.forgerock.openam.oauth2.OAuth2Constants.Params.CLIENT_ID;
+import static org.forgerock.openam.oauth2.OAuth2Constants.Params.REDIRECT_URI;
+import static org.forgerock.openam.oauth2.OAuth2Constants.Params.RESPONSE_TYPE;
 
+import com.sun.identity.shared.debug.Debug;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.forgerock.oauth2.core.exceptions.InvalidClientException;
@@ -27,9 +31,6 @@ import org.forgerock.oauth2.core.exceptions.NotFoundException;
 import org.forgerock.oauth2.core.exceptions.RedirectUriMismatchException;
 import org.forgerock.oauth2.core.exceptions.ServerException;
 import org.forgerock.oauth2.core.exceptions.UnsupportedResponseTypeException;
-import org.forgerock.openam.oauth2.OAuth2Constants;
-
-import com.sun.identity.shared.debug.Debug;
 
 /**
  * Implementation of the request validator for the OAuth2 authorize endpoint.
@@ -63,32 +64,26 @@ public class AuthorizeRequestValidatorImpl implements AuthorizeRequestValidator 
         this.responseTypeValidator = responseTypeValidator;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void validateRequest(OAuth2Request request) throws InvalidClientException, InvalidRequestException,
             RedirectUriMismatchException, UnsupportedResponseTypeException, ServerException, NotFoundException {
-
-        if (isEmpty(request.<String>getParameter(CLIENT_ID))) {
+        // Validate client identifier
+        if (Utils.isEmpty(request.<String>getParameter(CLIENT_ID))) {
             String errMsg = "Missing parameter, " + CLIENT_ID;
             debug.error(errMsg);
             throw new InvalidRequestException(errMsg);
         }
-
-        if (isEmpty(request.<String>getParameter(RESPONSE_TYPE))) {
+        ClientRegistration clientRegistration = clientRegistrationStore.get(request.<String>getParameter(CLIENT_ID), request);
+        // Validate redirect URL
+        redirectUriValidator.validate(clientRegistration, request.<String>getParameter(REDIRECT_URI),
+                request.<String>getParameter(USER_CODE));
+        // Validate response type
+        if (Utils.isEmpty(request.<String>getParameter(RESPONSE_TYPE))) {
             String errMsg = "Missing parameter, " + RESPONSE_TYPE;
             debug.error(errMsg);
             throw new InvalidRequestException(errMsg);
         }
-
-        final ClientRegistration clientRegistration = clientRegistrationStore.get(request.<String>getParameter("client_id"),
-                request);
-
-        if (request.getParameter(OAuth2Constants.DeviceCode.USER_CODE) == null) {
-            redirectUriValidator.validate(clientRegistration, request.<String>getParameter(REDIRECT_URI));
-        }
-
-        responseTypeValidator.validate(clientRegistration, splitResponseType(request.<String>getParameter(RESPONSE_TYPE)),
-                providerSettingsFactory.get(request), request);
+        responseTypeValidator.validate(clientRegistration, Utils.splitResponseType(
+                request.<String>getParameter(RESPONSE_TYPE)), providerSettingsFactory.get(request), request);
     }
 }

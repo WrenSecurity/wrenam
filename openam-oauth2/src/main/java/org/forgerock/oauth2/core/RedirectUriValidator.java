@@ -12,11 +12,10 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014-2015 ForgeRock AS.
+ * Portions Copyright 2023 Wren Security.
  */
 
 package org.forgerock.oauth2.core;
-
-import static org.forgerock.oauth2.core.Utils.*;
 
 import java.net.URI;
 import org.forgerock.oauth2.core.exceptions.InvalidRequestException;
@@ -35,35 +34,24 @@ public class RedirectUriValidator {
      *
      * @param clientRegistration The client's registration.
      * @param redirectUri The redirect uri.
+     * @param userCode The user code.
      * @throws InvalidRequestException If the request is missing any required parameters or is otherwise malformed.
      * @throws RedirectUriMismatchException If the redirect uri on the request does not match the redirect uri
      *          registered for the client.
      */
-    public void validate(ClientRegistration clientRegistration, String redirectUri) throws InvalidRequestException,
+    public void validate(ClientRegistration clientRegistration, String redirectUri, String userCode) throws InvalidRequestException,
             RedirectUriMismatchException {
-
-        if (isEmpty(redirectUri)) {
-            if (clientRegistration.getRedirectUris().size() == 1) {
-                return;
+        // Check if redirect URI is mandatory
+        if (Utils.isEmpty(redirectUri)) {
+            if (userCode == null && clientRegistration.getRedirectUris().size() != 1) {
+                throw new InvalidRequestException("Missing parameter: redirect_uri");
             }
-
-            throw new InvalidRequestException("Missing parameter: redirect_uri");
+            return;
         }
-
-        final URI request = URI.create(redirectUri);
-
-        if (request.getFragment() != null) {
+        // Check redirect URI validity
+        URI uri = URI.create(redirectUri);
+        if (uri.getFragment() != null || !uri.isAbsolute() || !clientRegistration.getRedirectUris().contains(uri)) {
             throw new RedirectUriMismatchException();
         }
-        if (!request.isAbsolute()) {
-            throw new RedirectUriMismatchException();
-        }
-        for (URI uri : clientRegistration.getRedirectUris()) {
-            if (uri.equals(request)) {
-                //GOOD CASE
-                return;
-            }
-        }
-        throw new RedirectUriMismatchException();
     }
 }

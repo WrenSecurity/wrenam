@@ -12,18 +12,19 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014 ForgeRock AS.
+ * Portions Copyright 2023 Wren Security.
  */
 
 package org.forgerock.oauth2.core;
 
+import static org.forgerock.openam.oauth2.OAuth2Constants.Params.CODE;
+import static org.forgerock.openam.oauth2.OAuth2Constants.Params.REDIRECT_URI;
+
+import javax.inject.Inject;
 import org.forgerock.oauth2.core.exceptions.InvalidClientException;
 import org.forgerock.oauth2.core.exceptions.InvalidRequestException;
 import org.forgerock.oauth2.core.exceptions.RedirectUriMismatchException;
 import org.forgerock.util.Reject;
-
-import javax.inject.Inject;
-
-import static org.forgerock.oauth2.core.Utils.isEmpty;
 
 /**
  * Implementation of the AuthorizationCodeRequestValidator for OAuth2 request validation.
@@ -55,9 +56,9 @@ public class AuthorizationCodeRequestValidatorImpl implements AuthorizationCodeR
                     "exchange request. Scope parameter should be supplied to the authorize request.");
         }
 
-        Reject.ifTrue(Utils.isEmpty(request.<String>getParameter("code")), "Missing parameter, 'code'");
-        Reject.ifTrue(Utils.isEmpty(request.<String>getParameter("redirect_uri")), "Missing parameter, 'redirect_uri'");
+        Reject.ifTrue(Utils.isEmpty(request.<String>getParameter(CODE)), "Missing parameter, 'code'");
+        Reject.ifTrue(Utils.isEmpty(request.<String>getParameter(REDIRECT_URI)), "Missing parameter, 'redirect_uri'");
 
-        redirectUriValidator.validate(clientRegistration, request.<String>getParameter("redirect_uri"));
+        redirectUriValidator.validate(clientRegistration, request.<String>getParameter(REDIRECT_URI), null);
     }
 }
