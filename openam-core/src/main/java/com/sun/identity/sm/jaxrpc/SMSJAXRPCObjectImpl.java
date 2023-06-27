@@ -25,6 +25,7 @@
  * $Id: SMSJAXRPCObjectImpl.java,v 1.22 2009/10/28 04:24:27 hengming Exp $
  *
  * Portions Copyrighted 2010-2016 ForgeRock AS.
+ * Portions Copyrighted 2023 Wren Security
  */
 
 package com.sun.identity.sm.jaxrpc;
@@ -43,6 +44,7 @@ import com.iplanet.sso.SSOToken;
 import com.iplanet.sso.SSOTokenManager;
 import com.sun.identity.common.CaseInsensitiveHashMap;
 import com.sun.identity.jaxrpc.JAXRPCUtil;
+import com.sun.identity.session.util.SessionUtils;
 import com.sun.identity.shared.Constants;
 import com.sun.identity.shared.debug.Debug;
 import com.sun.identity.shared.xml.XMLUtils;
@@ -67,7 +69,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -116,7 +117,7 @@ public class SMSJAXRPCObjectImpl implements SMSObjectIF, SMSObjectListener {
                         + "Unable to get SSO Token Manager");
                 initializationError = ssoe;
             }
-            
+
             // Register for notifications & polling cache
             if (SMSNotificationManager.isCacheEnabled()) {
                 SMSNotificationManager.getInstance()
@@ -125,7 +126,7 @@ public class SMSJAXRPCObjectImpl implements SMSObjectIF, SMSObjectListener {
                     debug.message("SMSJAXRPCObjectImpl.init " +
                         "Registered for notifications");
                 }
-                
+
                 // Obtain the cache size, if configured
                 String cacheSizeStr = SystemProperties.get(
                     Constants.EVENT_LISTENER_REMOTE_CLIENT_BACKLOG_CACHE);
@@ -142,7 +143,7 @@ public class SMSJAXRPCObjectImpl implements SMSObjectIF, SMSObjectListener {
                         "EventNotification cache size is set to " + cacheSize);
                 }
             }
-            
+
             // Construct server URL
             String namingURL = SystemProperties.get(Constants.AM_NAMING_URL);
             if (namingURL != null) {
@@ -200,15 +201,15 @@ public class SMSJAXRPCObjectImpl implements SMSObjectIF, SMSObjectListener {
             Map attrs = ce.getSMSEntry().getAttributes();
             if ((attrs != null) && (attrs instanceof CaseInsensitiveHashMap)) {
                 returnAttributes = new HashMap();
-                for (Iterator items = attrs.keySet().iterator(); 
+                for (Iterator items = attrs.keySet().iterator();
                     items.hasNext();) {
                     String attrName = items.next().toString();
                     Object o = attrs.get(attrName);
                     returnAttributes.put(attrName, o);
-                }            
+                }
             } else { // could be null or instance of HashMap - return as it is.
                 returnAttributes = attrs;
-            }                             
+            }
         }
         return returnAttributes;
 
@@ -308,10 +309,10 @@ public class SMSJAXRPCObjectImpl implements SMSObjectIF, SMSObjectListener {
         if (debug.messageEnabled()) {
             debug.message("SMSJAXRPCObjectImpl::subentries dn: " + dn);
         }
-        
+
         CachedSubEntries ce = CachedSubEntries.getInstance(
                 getToken(tokenID), dn);
-        return (ce.getSubEntries(getToken(tokenID), filter));        
+        return (ce.getSubEntries(getToken(tokenID), filter));
     }
 
     /**
@@ -327,7 +328,7 @@ public class SMSJAXRPCObjectImpl implements SMSObjectIF, SMSObjectListener {
         if (debug.messageEnabled()) {
             debug.message("SMSJAXRPCObjectImpl::subentries dn: " + dn);
         }
-        
+
         CachedSubEntries ce = CachedSubEntries.getInstance(
                 getToken(tokenID), dn);
         return (ce.getSchemaSubEntries(getToken(tokenID), filter, sidFilter));
@@ -336,51 +337,58 @@ public class SMSJAXRPCObjectImpl implements SMSObjectIF, SMSObjectListener {
       /**
        * Searchs the data store for objects that match the filter
        */
-    public Set search(String tokenID, String startDN, String filter)
+    public Set<String> search(String tokenID, String startDN, String filter)
             throws SMSException, SSOException, RemoteException {
         initialize();
+        SSOToken token = getToken(tokenID);
+        checkReadAccess(token, startDN);
+
         if (debug.messageEnabled()) {
-            debug.message("SMSJAXRPCObjectImpl::search dn: " + startDN
-                    + " filter: " + filter);
+            debug.message("SMSJAXRPCObjectImpl::search dn: " + startDN + " filter: " + filter);
         }
-        return (SMSEntry.search(getToken(tokenID), startDN, filter, 0, 0,
-            false, false));
-    }     
+        return (SMSEntry.search(token, startDN, filter, 0, 0, false, false));
+    }
 
     /**
      * Searchs the data store for objects that match the filter
      */
-    public Set search2(String tokenID, String startDN, String filter,
+    public Set<String> search2(String tokenID, String startDN, String filter,
         int numOfEntries, int timeLimit, boolean sortResults,
         boolean ascendingOrder)
             throws SMSException, SSOException, RemoteException {
         initialize();
+        SSOToken token = getToken(tokenID);
+        checkReadAccess(token, startDN);
+
         if (debug.messageEnabled()) {
             debug.message("SMSJAXRPCObjectImpl::search dn: " + startDN
                     + " filter: " + filter);
         }
-        return (SMSEntry.search(getToken(tokenID), startDN, filter,
+        return (SMSEntry.search(token, startDN, filter,
             numOfEntries, timeLimit, sortResults, ascendingOrder));
     }
 
     /**
      * Searches the data store for objects that match the filter with an exclude set
      */
-    public Set search3(String tokenID, String startDN, String filter,
+    public Set<String> search3(String tokenID, String startDN, String filter,
         int numOfEntries, int timeLimit, boolean sortResults,
         boolean ascendingOrder, Set excludes)
             throws SMSException, SSOException, RemoteException {
         initialize();
+        SSOToken token = getToken(tokenID);
+        checkReadAccess(token, startDN);
+
         if (debug.messageEnabled()) {
             debug.message("SMSJAXRPCObjectImpl::search dn: " + startDN
                     + " filter: " + filter + " excludes: " + excludes);
         }
-        
-        Iterator i = SMSEntry.search(getToken(tokenID), startDN, filter,
-            numOfEntries, timeLimit, sortResults, ascendingOrder, excludes);
-        
+
+        Iterator i = SMSEntry.search(token, startDN, filter, numOfEntries,
+                timeLimit, sortResults, ascendingOrder, excludes);
+
         Set<String> result = new HashSet<String>();
-        
+
         while (i.hasNext()) {
             SMSDataEntry e = (SMSDataEntry)i.next();
             try {
@@ -390,7 +398,7 @@ public class SMSJAXRPCObjectImpl implements SMSObjectIF, SMSObjectListener {
                     + " filter: " + filter + " excludes: " + excludes, ex);
             }
         }
-        
+
         return result;
     }
 
@@ -633,7 +641,7 @@ public class SMSJAXRPCObjectImpl implements SMSObjectIF, SMSObjectListener {
 
     /**
      * Processes object changed events from other severs
-     * 
+     *
      * @param name DN of the object changed
      * @param type change type
      * @throws java.rmi.RemoteException
@@ -717,5 +725,26 @@ public class SMSJAXRPCObjectImpl implements SMSObjectIF, SMSObjectListener {
                     "sms-JAXRPC-cannot-copy-fromModStringToModItem"));
         }
         return (answer);
+    }
+
+    /**
+     * Check that the user has read access to the entry with the specified DN.
+     * @param token {@link SSOToken} of user to check.
+     * @param dn Distinguished name of entry to check.
+     * @throws SSOException when user is not allowed to read the specified entry.
+     */
+    private void checkReadAccess(SSOToken token, String dn) throws SSOException, SMSException {
+        if (token == null || dn == null) {
+            return;
+        }
+        // Try to read entry with specified DN to check permissions
+        new SMSEntry(token, dn);
+        // Root entry is available only for administrator
+        if (dn.equalsIgnoreCase(SMSEntry.getRootSuffix())) {
+            SSOToken adminToken = SessionUtils.getAdminToken();
+            if (!SessionUtils.isAdmin(adminToken, token)) {
+                throw new SMSException(SMSException.STATUS_NO_PERMISSION, "sms-INSUFFICIENT_ACCESS_RIGHTS");
+            }
+        }
     }
 }
