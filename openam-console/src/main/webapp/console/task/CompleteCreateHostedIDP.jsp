@@ -1,8 +1,8 @@
 <%--
    DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
-  
+
    Copyright (c) 2008 Sun Microsystems Inc. All Rights Reserved
-  
+
    The contents of this file are subject to the terms
    of the Common Development and Distribution License
    (the License). You may not use this file except in
@@ -25,6 +25,7 @@
    $Id: CompleteCreateHostedIDP.jsp,v 1.6 2009/07/06 21:58:43 babysunil Exp $
 
    Portions Copyrighted 2015 ForgeRock AS.
+   Portions Copyrighted 2023 Wren Security
 --%>
 
 <%@ page info="CompleteCreateHostedIDP" language="java" %>
@@ -62,7 +63,7 @@
         var realm = frm.elements['CompleteCreateHostedIDP.tfrealm'].value;
         var entityId = frm.elements['CompleteCreateHostedIDP.tfentityId'].value;
         top.location.replace('../task/CreateFedlet?cot=' +
-            escapeEx(cot) + '&realm=' + escapeEx(realm) + 
+            escapeEx(cot) + '&realm=' + escapeEx(realm) +
             '&entityId=' + escapeEx(entityId));
     }
     function configureGoogleApps() {
@@ -71,10 +72,10 @@
         var realm = frm.elements['CompleteCreateHostedIDP.tfrealm'].value;
         var entityId = frm.elements['CompleteCreateHostedIDP.tfentityId'].value;
         top.location.replace('../task/ConfigureGoogleApps?cot=' +
-            escapeEx(cot) + '&realm=' + escapeEx(realm) + 
+            escapeEx(cot) + '&realm=' + escapeEx(realm) +
             '&entityId=' + escapeEx(entityId));
     }
-    
+
     function configureSalesForceApps() {
             var frm = document.forms[0];
             var cot = frm.elements['CompleteCreateHostedIDP.tfcot'].value;
@@ -84,13 +85,13 @@
                 escapeEx(cot) + '&realm=' + escapeEx(realm) +
                 '&entityId=' + escapeEx(entityId));
     }
-    
+
     function modifyIDP() {
         top.location.replace('../federation/Federation');
     }
 
 </script>
-<console:redirectToXui realm="encodeURIComponent(frm.elements['CompleteCreateHostedIDP.tfrealm'].value)"
+<console:redirectToXui realm="encodeURIComponent(document.forms[0].elements['CompleteCreateHostedIDP.tfrealm'].value)"
                        xuiPath="../XUI#realms/{realm}/dashboard"/>
 <blockquote>
 <blockquote>
