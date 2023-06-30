@@ -25,8 +25,8 @@
  * $Id: FSNameIdentifierMappingResponse.java,v 1.2 2008/06/25 05:46:44 qcheng Exp $
  *
  * Portions Copyrighted 2014-2016 ForgeRock AS.
+ * Portions Copyrighted 2023 Wren Security
  */
-
 package com.sun.identity.federation.message;
 
 import static org.forgerock.openam.utils.Time.*;
@@ -69,13 +69,13 @@ import org.w3c.dom.NodeList;
  */
 @Deprecated
 public class FSNameIdentifierMappingResponse extends AbstractResponse {
-    
+
     private String providerID;
     private Status status;
     private NameIdentifier nameIdentifier;
     private int minorVersion = IFSConstants.FF_12_PROTOCOL_MINOR_VERSION;
     private String signatureString;
-    
+
     /**
      * Constructor to create <code>FSNameIdentifierMappingResponse</code> object.
      *
@@ -96,7 +96,7 @@ public class FSNameIdentifierMappingResponse extends AbstractResponse {
         this.responseID = FSUtils.generateID();
         setIssueInstant(newDate());
     }
-    
+
     /**
      * Constructor to create <code>FSNameIdentifierMappingResponse</code> object.
      * This object is created from the Document Element.
@@ -119,7 +119,7 @@ public class FSNameIdentifierMappingResponse extends AbstractResponse {
                     "FSNameIdentifierMappingRequest: wrong input");
             throw new FSMsgException("wrongInput",null);
         }
-        
+
         // get IssueInstant
         String instantString = root.getAttribute(IFSConstants.ISSUE_INSTANT);
         if (instantString==null || instantString.length()==0) {
@@ -136,7 +136,7 @@ public class FSNameIdentifierMappingResponse extends AbstractResponse {
                 throw new FSMsgException("wrongInput",null);
             }
         }
-        
+
         // get ResponseID
         responseID = root.getAttribute(IFSConstants.RESPONSE_ID);
         if ((responseID == null) || (responseID.length() < 1)) {
@@ -145,7 +145,7 @@ public class FSNameIdentifierMappingResponse extends AbstractResponse {
             String[] args = { IFSConstants.RESPONSE_ID };
             throw new FSMsgException("missingAttribute",args);
         }
-        
+
         // get InResponseTo
         inResponseTo = root.getAttribute(IFSConstants.IN_RESPONSE_TO);
         if (inResponseTo == null) {
@@ -154,11 +154,11 @@ public class FSNameIdentifierMappingResponse extends AbstractResponse {
             String[] args = { IFSConstants.IN_RESPONSE_TO };
             throw new FSMsgException("missingAttribute",args);
         }
-        
+
         // get and check versions
         parseMajorVersion(root.getAttribute(IFSConstants.MAJOR_VERSION));
         parseMinorVersion(root.getAttribute(IFSConstants.MINOR_VERSION));
-        
+
         // get ProviderID, Status & NameIdentifier
         NodeList nl = root.getChildNodes();
         Node child;
@@ -190,7 +190,7 @@ public class FSNameIdentifierMappingResponse extends AbstractResponse {
                 }
             }
         }
-        
+
         // get signature
         List signs = XMLUtils.getElementsByTagNameNS1(
                 root,
@@ -207,7 +207,7 @@ public class FSNameIdentifierMappingResponse extends AbstractResponse {
             throw new FSMsgException("moreElement",null);
         }
     }
-    
+
     /**
      * Creates <code>FSNameIdentifierMappingResponse</code> object.
      * This object is created by parsing the <code>XML</code> string.
@@ -228,7 +228,7 @@ public class FSNameIdentifierMappingResponse extends AbstractResponse {
         Element root = doc.getDocumentElement();
         return new FSNameIdentifierMappingResponse(root);
     }
-    
+
     /**
      * Returns the value of <code>ProviderID</code> attribute.
      *
@@ -237,7 +237,7 @@ public class FSNameIdentifierMappingResponse extends AbstractResponse {
     public String getProviderID() {
         return providerID;
     }
-    
+
     /**
      * Returns the <code>Status</code>.
      *
@@ -246,7 +246,7 @@ public class FSNameIdentifierMappingResponse extends AbstractResponse {
     public Status getStatus() {
         return status;
     }
-    
+
     /**
      * Returns the <code>NameIdentifier</code> object. This is the resulting
      * mapped name identifier for the desired identity federation.
@@ -257,7 +257,7 @@ public class FSNameIdentifierMappingResponse extends AbstractResponse {
     public NameIdentifier getNameIdentifier() {
         return nameIdentifier;
     }
-    
+
     /**
      * Sets the <code>MajorVersion</code> by parsing the version string.
      *
@@ -275,7 +275,7 @@ public class FSNameIdentifierMappingResponse extends AbstractResponse {
             }
             throw new FSMsgException("wrongInput",null);
         }
-        
+
         if (majorVersion != SAMLConstants.PROTOCOL_MAJOR_VERSION) {
             if (majorVersion > SAMLConstants.PROTOCOL_MAJOR_VERSION) {
                 if (FSUtils.debug.messageEnabled()) {
@@ -292,7 +292,7 @@ public class FSNameIdentifierMappingResponse extends AbstractResponse {
             }
         }
     }
-    
+
     /**
      * Sets the <code>MinorVersion</code> by parsing the version string.
      *
@@ -324,7 +324,7 @@ public class FSNameIdentifierMappingResponse extends AbstractResponse {
             throw new FSMsgException("requestVersionTooLow",null);
         }
     }
-    
+
     /**
      * Signs the XML document representing
      * <code>NameIdentifierMappingResponse</code> using the certificate
@@ -339,7 +339,7 @@ public class FSNameIdentifierMappingResponse extends AbstractResponse {
                 Constants.SAML_XMLSIG_CERT_ALIAS);
         signXML(certAlias);
     }
-    
+
     /**
      * Signs the <code>XML</code> document representing
      * <code>NameIdentifierMappingResponse</code> using the specified
@@ -385,7 +385,7 @@ public class FSNameIdentifierMappingResponse extends AbstractResponse {
                     FSUtils.BUNDLE_NAME,"signFailed",null);
         }
     }
-    
+
     /**
      * Returns the string representation of this object.
      *
@@ -395,7 +395,7 @@ public class FSNameIdentifierMappingResponse extends AbstractResponse {
     public String toXMLString()  throws FSMsgException {
         return toXMLString(true, true);
     }
-    
+
     /**
      * Returns a String representation of this object.
      *
@@ -407,12 +407,12 @@ public class FSNameIdentifierMappingResponse extends AbstractResponse {
      * @throws FSMsgException if there is an error converting
      *         this object ot a string.
      */
-    
+
     public String toXMLString(boolean includeNS, boolean declareNS)
     throws FSMsgException {
         return toXMLString(includeNS, declareNS, false);
     }
-    
+
     /**
      * Returns a String representation of this object.
      *
@@ -428,7 +428,7 @@ public class FSNameIdentifierMappingResponse extends AbstractResponse {
      */
     public String toXMLString(boolean includeNS, boolean declareNS,
             boolean includeHeader) throws FSMsgException {
-        
+
         String prefixLIB = "";
         String uriLIB = "";
         String uriSAML = "";
@@ -471,7 +471,7 @@ public class FSNameIdentifierMappingResponse extends AbstractResponse {
         .append(IFSConstants.IN_RESPONSE_TO)
         .append(IFSConstants.EQUAL_TO)
         .append(IFSConstants.QUOTE)
-        .append(inResponseTo)
+        .append(XMLUtils.escapeSpecialCharacters(inResponseTo))
         .append(IFSConstants.QUOTE)
         .append(IFSConstants.SPACE)
         .append(IFSConstants.SPACE)
@@ -514,7 +514,7 @@ public class FSNameIdentifierMappingResponse extends AbstractResponse {
         .append(IFSConstants.PROVIDER_ID)
         .append(IFSConstants.RIGHT_ANGLE)
         .append(status.toString(includeNS, true));
-        
+
         if (nameIdentifier != null) {
             xml.append(nameIdentifier.toString());
         }
@@ -522,7 +522,7 @@ public class FSNameIdentifierMappingResponse extends AbstractResponse {
         .append(prefixLIB)
         .append(IFSConstants.NAMEID_MAPPING_RESPONSE)
         .append(IFSConstants.RIGHT_ANGLE);
-        
+
         return xml.toString();
     }
 }

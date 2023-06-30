@@ -25,8 +25,8 @@
  * $Id: FSLogoutResponse.java,v 1.4 2008/06/25 05:46:44 qcheng Exp $
  *
  * Portions Copyrighted 2014-2016 ForgeRock AS.
+ * Portions Copyrighted 2023 Wren Security
  */
-
 package com.sun.identity.federation.message;
 
 import static org.forgerock.openam.utils.Time.*;
@@ -81,7 +81,7 @@ public class FSLogoutResponse extends AbstractResponse {
     protected String signatureString;
     protected String id;
     private String inResponseTo;
-    
+
     /**
      * Default Constructor.
      */
@@ -95,9 +95,9 @@ public class FSLogoutResponse extends AbstractResponse {
         } catch (SAMLException e){
             FSUtils.debug.error("FSLogoutResponse.constructor:", e);
         }
-        
+
     }
-    
+
     /**
      * Constructor creates <code>FSLogoutResponse</code> object.
      *
@@ -122,7 +122,7 @@ public class FSLogoutResponse extends AbstractResponse {
         } else {
             this.responseID = responseID;
         }
-        
+
         if (inResponseTo == null) {
             FSUtils.debug.message("Response: inResponseTo is null.");
             throw new FSMsgException("nullInput",null);
@@ -137,7 +137,7 @@ public class FSLogoutResponse extends AbstractResponse {
         this.relayState = relayState;
         setIssueInstant(newDate());
     }
-    
+
     /**
      * Constructor creates <code>FSLogoutResponse</code> object from
      * a Document element.
@@ -157,9 +157,9 @@ public class FSLogoutResponse extends AbstractResponse {
             FSUtils.debug.message("FSLogoutResponse.parseXML: wrong input.");
             throw new FSMsgException("wrongInput",null);
         }
-        
+
         id = root.getAttribute(IFSConstants.ID);
-        
+
         // Attribute ResponseID
         responseID = root.getAttribute(IFSConstants.RESPONSE_ID);
         if ((responseID == null) || (responseID.length() == 0)) {
@@ -201,7 +201,7 @@ public class FSLogoutResponse extends AbstractResponse {
                 throw new FSMsgException("wrongInput", null);
             }
         }
-        
+
         NodeList nl = root.getChildNodes();
         Node child;
         String childName;
@@ -241,18 +241,18 @@ public class FSLogoutResponse extends AbstractResponse {
                 }
             } // end if childName != null
         } // end for loop
-        
+
         if (status == null) {
             FSUtils.debug.message("FSLogoutResponse:missing element <Status>.");
             throw new FSMsgException("oneElement",null);
         }
-        
+
         if (providerId == null) {
             FSUtils.debug.message(
                     "FSLogoutResponse: missing element providerId.");
             throw new FSMsgException("oneElement",null);
         }
-        
+
         //check for signature
         List signs = XMLUtils.getElementsByTagNameNS1(root,
                 SAMLConstants.XMLSIG_NAMESPACE_URI,
@@ -272,7 +272,7 @@ public class FSLogoutResponse extends AbstractResponse {
             throw new FSMsgException("moreElement",null);
         }
     }
-    
+
     /**
      * Returns the value of <code>RelayState</code> attribute.
      *
@@ -282,7 +282,7 @@ public class FSLogoutResponse extends AbstractResponse {
     public String getRelayState(){
         return relayState;
     }
-    
+
     /**
      * Set the value of <code>RelayState</code> attribute.
      *
@@ -292,7 +292,7 @@ public class FSLogoutResponse extends AbstractResponse {
     public void setRelayState(String relayState){
         this.relayState = relayState;
     }
-    
+
     /**
      * Returns the value of <code>InResponseTo</code> attribute.
      *
@@ -302,7 +302,7 @@ public class FSLogoutResponse extends AbstractResponse {
     public String getResponseTo(){
         return inResponseTo;
     }
-    
+
     /**
      * Sets the value of <code>InResponseTo</code> attribute.
      *
@@ -312,7 +312,7 @@ public class FSLogoutResponse extends AbstractResponse {
     public void setResponseTo(String inResponseTo){
         this.inResponseTo = inResponseTo;
     }
-    
+
     /**
      * Returns the value of <code>id</code> attribute.
      *
@@ -322,7 +322,7 @@ public class FSLogoutResponse extends AbstractResponse {
     public String getID(){
         return id;
     }
-    
+
     /**
      * Sets the value of <code>id</code> attribute.
      *
@@ -332,18 +332,18 @@ public class FSLogoutResponse extends AbstractResponse {
     public void setID(String id){
         this.id = id;
     }
-    
+
     /**
      * Returns the value of <code>ProviderID</code> attribute.
      *
      * @return the value of <code>ProviderID</code> attribute.
      * @see #setProviderId(String).
      */
-    
+
     public String getProviderId(){
         return providerId;
     }
-    
+
     /**
      * Sets the value of  <code>ProviderID</code> attribute.
      *
@@ -353,7 +353,7 @@ public class FSLogoutResponse extends AbstractResponse {
     public void setProviderId(String providerId){
         this.providerId = providerId;
     }
-    
+
     /**
      * Returns the Signed <code>LogoutResponse</code> string.
      *
@@ -362,7 +362,7 @@ public class FSLogoutResponse extends AbstractResponse {
     public String getSignatureString(){
         return signatureString;
     }
-    
+
     /**
      * Returns the value of <code>MinorVersion</code> attribute.
      *
@@ -372,7 +372,7 @@ public class FSLogoutResponse extends AbstractResponse {
     public int getMinorVersion() {
         return minorVersion;
     }
-    
+
     /**
      * Sets the value of <code>MinorVersion</code> attribute.
      *
@@ -382,7 +382,7 @@ public class FSLogoutResponse extends AbstractResponse {
     public void setMinorVersion(int version) {
         minorVersion = version;
     }
-    
+
     /**
      * Returns the Logout <code>Status</code>.
      *
@@ -393,7 +393,7 @@ public class FSLogoutResponse extends AbstractResponse {
     public Status getStatus() {
         return status;
     }
-    
+
     /**
      * Sets the Logout <code>Status</code>.
      *
@@ -411,7 +411,7 @@ public class FSLogoutResponse extends AbstractResponse {
             }
         }
     }
-    
+
     /**
      * Sets the Logout <code>Status</code>.
      *
@@ -421,7 +421,7 @@ public class FSLogoutResponse extends AbstractResponse {
     public void setStatus(Status status) {
         this.status=status;
     }
-    
+
     /**
      * Sets the <code>MajorVersion</code> by parsing the version string.
      *
@@ -441,7 +441,7 @@ public class FSLogoutResponse extends AbstractResponse {
             }
             throw new FSMsgException("wrongInput",null);
         }
-        
+
         if (majorVersion != SAMLConstants.PROTOCOL_MAJOR_VERSION) {
             if (majorVersion > SAMLConstants.PROTOCOL_MAJOR_VERSION) {
                 if (FSUtils.debug.messageEnabled()) {
@@ -460,7 +460,7 @@ public class FSLogoutResponse extends AbstractResponse {
             }
         }
     }
-    
+
     /**
      * Sets the <code>MinorVersion</code> by parsing the version string.
      *
@@ -491,7 +491,7 @@ public class FSLogoutResponse extends AbstractResponse {
                         "responseVersionTooLow",null);
         }
     }
-    
+
     /**
      * Returns the <code>FSLogoutResponse</code> object.
      *
@@ -500,7 +500,7 @@ public class FSLogoutResponse extends AbstractResponse {
      * @throws FSMsgException if there is
      *         error creating the object.
      */
-    
+
     public static FSLogoutResponse parseXML(String xml) throws FSMsgException {
         FSLogoutResponse logoutResponse = null;
         try{
@@ -516,7 +516,7 @@ public class FSLogoutResponse extends AbstractResponse {
         }
         return logoutResponse;
     }
-    
+
     /**
      * Returns a String representation of the <code>LogoutResponse</code>
      * object. This method translates the response to an XML string.
@@ -526,7 +526,7 @@ public class FSLogoutResponse extends AbstractResponse {
     public String toXMLString()  throws FSMsgException {
         return this.toXMLString(true, true);
     }
-    
+
     /**
      * Returns a String representation of the <code>LogoutResponse</code>
      * object.
@@ -539,7 +539,7 @@ public class FSLogoutResponse extends AbstractResponse {
     throws FSMsgException {
         return toXMLString(includeNS, declareNS, false);
     }
-    
+
     /**
      * Returns a String representation of the <code>LogoutResponse</code>
      * object.
@@ -554,7 +554,7 @@ public class FSLogoutResponse extends AbstractResponse {
      * @throws FSMsgException if there is an error converting
      *         this object ot a string.
      */
-    
+
     public String toXMLString(boolean includeNS, boolean declareNS,
             boolean includeHeader)  throws FSMsgException {
         StringBuffer xml = new StringBuffer(300);
@@ -572,7 +572,7 @@ public class FSLogoutResponse extends AbstractResponse {
         if (includeNS) {
             prefixLIB = IFSConstants.LIB_PREFIX;
         }
-        
+
         if (declareNS) {
             if(minorVersion == IFSConstants.FF_12_PROTOCOL_MINOR_VERSION) {
                 uriLIB = IFSConstants.LIB_12_NAMESPACE_STRING;
@@ -580,9 +580,9 @@ public class FSLogoutResponse extends AbstractResponse {
                 uriLIB = IFSConstants.LIB_NAMESPACE_STRING;
             }
         }
-        
+
         String instantString = DateUtils.toUTCDateFormat(issueInstant);
-        
+
         if((providerId == null) || (providerId.length() == 0)){
             FSUtils.debug.error("FSLogoutResponse.toXMLString: "
                     + "providerId is null in the response with responseId:"
@@ -590,13 +590,13 @@ public class FSLogoutResponse extends AbstractResponse {
             String[] args = { responseID };
             throw new FSMsgException("nullProviderIdWResponseId",args);
         }
-        
+
         xml.append(IFSConstants.LEFT_ANGLE)
         .append(prefixLIB)
         .append(IFSConstants.LOGOUT_RESPONSE)
         .append(uriLIB)
         .append(IFSConstants.SPACE);
-        
+
         if (minorVersion == IFSConstants.FF_11_PROTOCOL_MINOR_VERSION &&
                 id != null && !(id.length() == 0)) {
             xml.append(IFSConstants.ID)
@@ -607,7 +607,7 @@ public class FSLogoutResponse extends AbstractResponse {
             .append(IFSConstants.SPACE)
             .append(IFSConstants.SPACE);
         }
-        
+
         if (responseID != null) {
             xml.append(IFSConstants.RESPONSE_ID)
             .append(IFSConstants.EQUAL_TO)
@@ -617,17 +617,17 @@ public class FSLogoutResponse extends AbstractResponse {
             .append(IFSConstants.SPACE)
             .append(IFSConstants.SPACE);
         }
-        
+
         if (inResponseTo != null) {
             xml.append(IFSConstants.IN_RESPONSE_TO)
             .append(IFSConstants.EQUAL_TO)
             .append(IFSConstants.QUOTE)
-            .append(inResponseTo)
+            .append(XMLUtils.escapeSpecialCharacters(inResponseTo))
             .append(IFSConstants.QUOTE)
             .append(IFSConstants.SPACE)
             .append(IFSConstants.SPACE);
         }
-        
+
         xml.append(IFSConstants.MAJOR_VERSION)
         .append(IFSConstants.EQUAL_TO)
         .append(IFSConstants.QUOTE)
@@ -657,7 +657,7 @@ public class FSLogoutResponse extends AbstractResponse {
                 xml.append(signatureString);
             }
         }
-        
+
         if (providerId != null) {
             xml.append(IFSConstants.LEFT_ANGLE)
             .append(prefixLIB)
@@ -669,11 +669,11 @@ public class FSLogoutResponse extends AbstractResponse {
             .append(IFSConstants.PROVIDER_ID)
             .append(IFSConstants.RIGHT_ANGLE);
         }
-        
+
         if (status != null) {
             xml.append(status.toString(includeNS, true));
         }
-        
+
         if (relayState != null) {
             xml.append(IFSConstants.LEFT_ANGLE)
             .append(prefixLIB)
@@ -685,15 +685,15 @@ public class FSLogoutResponse extends AbstractResponse {
             .append(IFSConstants.RELAY_STATE)
             .append(IFSConstants.RIGHT_ANGLE);
         }
-        
+
         xml.append(IFSConstants.START_END_ELEMENT)
         .append(prefixLIB)
         .append(IFSConstants.LOGOUT_RESPONSE)
         .append(IFSConstants.RIGHT_ANGLE);
-        
+
         return xml.toString();
     }
-    
+
     /**
      * Returns <code>FSLogoutResponse</code> object. The object
      * is created by parsing an Base64 encode authentication
@@ -722,7 +722,7 @@ public class FSLogoutResponse extends AbstractResponse {
             throw new FSMsgException("nullInput",null);
         }
     }
-    
+
     /**
      * Returns a Base64 Encoded String.
      *
@@ -740,13 +740,13 @@ public class FSLogoutResponse extends AbstractResponse {
         }
         return Base64.encode(this.toXMLString().getBytes());
     }
-    
+
     /**
      * Unsupported operation.
      */
     public void signXML() {
     }
-    
+
     /**
      * Signs the <code>LogoutResponse</code>.
      *
@@ -787,10 +787,10 @@ public class FSLogoutResponse extends AbstractResponse {
                     FSUtils.debug.message("invalid minor version.");
                 }
             }
-            
+
             signature = XMLUtils.toDOMDocument(signatureString, FSUtils.debug)
             .getDocumentElement();
-            
+
             signed = true;
             xmlString = this.toXMLString(true, true);
         } catch (Exception e) {
@@ -798,7 +798,7 @@ public class FSLogoutResponse extends AbstractResponse {
                     "signFailed",null);
         }
     }
-    
+
     /**
      * Sets the Signature.
      *
@@ -809,7 +809,7 @@ public class FSLogoutResponse extends AbstractResponse {
         signatureString = XMLUtils.print(elem);
         return super.setSignature(elem);
     }
-    
+
     /**
      * Returns an URL Encoded String.
      *
@@ -832,13 +832,13 @@ public class FSLogoutResponse extends AbstractResponse {
                 throw new FSMsgException("errorGenerateID",null);
             }
         }
-        
+
         StringBuffer urlEncodedAuthnReq = new StringBuffer(300);
         urlEncodedAuthnReq.append(IFSConstants.RESPONSE_ID)
         .append(IFSConstants.EQUAL_TO)
         .append(URLEncDec.encode(responseID))
         .append(IFSConstants.AMPERSAND);
-        
+
         if((inResponseTo != null) && (inResponseTo.length() > 0)) {
             urlEncodedAuthnReq.append(IFSConstants.IN_RESPONSE_TO)
             .append(IFSConstants.EQUAL_TO)
@@ -853,7 +853,7 @@ public class FSLogoutResponse extends AbstractResponse {
         .append(IFSConstants.EQUAL_TO)
         .append(minorVersion)
         .append(IFSConstants.AMPERSAND);
-        
+
         if (issueInstant != null) {
             urlEncodedAuthnReq.append(IFSConstants.ISSUE_INSTANT)
             .append(IFSConstants.EQUAL_TO)
@@ -872,14 +872,14 @@ public class FSLogoutResponse extends AbstractResponse {
                 .append(URLEncDec.encode(providerId))
                 .append(IFSConstants.AMPERSAND);
             }
-            
+
             if(relayState != null && relayState.length() != 0) {
                 urlEncodedAuthnReq.append(IFSConstants.RELAY_STATE)
                 .append(IFSConstants.EQUAL_TO)
                 .append(URLEncDec.encode(relayState))
                 .append(IFSConstants.AMPERSAND);
             }
-            
+
             if (status != null) {
                 urlEncodedAuthnReq.append(IFSConstants.VALUE)
                 .append(IFSConstants.EQUAL_TO)
@@ -889,8 +889,8 @@ public class FSLogoutResponse extends AbstractResponse {
             }
             return urlEncodedAuthnReq.toString();
         }
-        
-        
+
+
         /**
          * Returns <code>FSLogoutResponse</code> object. The
          * object is creating by parsing the <code>HttpServletRequest</code>
@@ -915,7 +915,7 @@ public class FSLogoutResponse extends AbstractResponse {
             } catch(NumberFormatException ex){
                 throw new FSMsgException("invalidNumber",null);
             }
-            
+
             String requestID = request.getParameter(IFSConstants.RESPONSE_ID);
             if (requestID != null) {
                 retLogoutResponse.responseID = requestID ;
@@ -925,7 +925,7 @@ public class FSLogoutResponse extends AbstractResponse {
             }
             retLogoutResponse.inResponseTo =
                     request.getParameter(IFSConstants.IN_RESPONSE_TO);
-            
+
             String instantString =
                     request.getParameter(IFSConstants.ISSUE_INSTANT);
             if (instantString == null || instantString.length() == 0) {
@@ -953,7 +953,7 @@ public class FSLogoutResponse extends AbstractResponse {
                 }
                 throw new FSMsgException("missingElement",null);
             }
-            
+
             String relayState = request.getParameter(IFSConstants.RELAY_STATE);
             if (relayState != null) {
                 retLogoutResponse.relayState = relayState;
@@ -962,7 +962,7 @@ public class FSLogoutResponse extends AbstractResponse {
                             + retLogoutResponse.relayState);
                 }
             }
-            
+
             String value = request.getParameter(IFSConstants.VALUE);
             if (value != null){
                 if (FSUtils.debug.messageEnabled()) {
@@ -976,7 +976,7 @@ public class FSLogoutResponse extends AbstractResponse {
                 }
                 throw new FSMsgException("missingElement",null);
             }
-            
+
             FSUtils.debug.message("Returning Logout response Object");
             return retLogoutResponse;
         }

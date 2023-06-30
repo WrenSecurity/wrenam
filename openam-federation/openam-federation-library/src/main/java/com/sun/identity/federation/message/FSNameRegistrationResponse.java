@@ -25,8 +25,8 @@
  * $Id: FSNameRegistrationResponse.java,v 1.3 2008/06/25 05:46:45 qcheng Exp $
  *
  * Portions Copyrighted 2014-2016 ForgeRock AS.
+ * Portions Copyrighted 2023 Wren Security
  */
-
 package com.sun.identity.federation.message;
 
 import static org.forgerock.openam.utils.Time.*;
@@ -72,7 +72,7 @@ public class FSNameRegistrationResponse extends AbstractResponse {
     protected String signatureString        = null;
     protected String id = null;
     protected int minorVersion = 0;
-    
+
     /**
      * Default Constructor.
      */
@@ -85,7 +85,7 @@ public class FSNameRegistrationResponse extends AbstractResponse {
             FSUtils.debug.error("FSNameRegistrationResponse.Constructor", e);
         }
     }
-    
+
     /**
      * Returns the value of <code>RelayState</code> attribute.
      *
@@ -95,7 +95,7 @@ public class FSNameRegistrationResponse extends AbstractResponse {
     public String getRelayState(){
         return relayState;
     }
-    
+
     /**
      * Set the value of <code>RelayState</code> attribute.
      *
@@ -105,18 +105,18 @@ public class FSNameRegistrationResponse extends AbstractResponse {
     public void setRelayState(String relayState){
         this.relayState = relayState;
     }
-    
+
     /**
      * Returns the value of <code>id</code> attribute.
      *
      * @return the value of <code>id</code> attribute.
      * @see #setID(String)
      */
-    
+
     public String getID(){
         return id;
     }
-    
+
     /**
      * Sets the value of <code>id</code> attribute.
      *
@@ -126,7 +126,7 @@ public class FSNameRegistrationResponse extends AbstractResponse {
     public void setID(String id){
         this.id = id;
     }
-    
+
     /**
      * Returns the value of <code>ProviderID</code> attribute.
      *
@@ -136,7 +136,7 @@ public class FSNameRegistrationResponse extends AbstractResponse {
     public String getProviderId(){
         return providerId;
     }
-    
+
     /**
      * Sets the value of providerID attribute.
      *
@@ -146,7 +146,7 @@ public class FSNameRegistrationResponse extends AbstractResponse {
     public void setProviderId(String providerId){
         this.providerId = providerId;
     }
-    
+
     /**
      * Returns signed <code>XML</code> representation of this
      * object.
@@ -157,7 +157,7 @@ public class FSNameRegistrationResponse extends AbstractResponse {
     public String getSignedXMLString(){
         return xmlString;
     }
-    
+
     /**
      * Returns the signed <code>NameRegistrationResponse</code> string.
      *
@@ -167,7 +167,7 @@ public class FSNameRegistrationResponse extends AbstractResponse {
     public String getSignatureString(){
         return signatureString;
     }
-    
+
     /**
      * Constructor creates the <code>FSNameRegistrationResponse</code> object.
      *
@@ -203,7 +203,7 @@ public class FSNameRegistrationResponse extends AbstractResponse {
         this.relayState = relayState;
         setIssueInstant(newDate());
     }
-    
+
     /**
      * Constructor creates the <code>FSNameRegistrationResponse</code> object
      * from Document Element.
@@ -226,9 +226,9 @@ public class FSNameRegistrationResponse extends AbstractResponse {
                     " input.");
             throw new FSMsgException("wrongInput",null);
         }
-        
+
         id = root.getAttribute("id");
-        
+
         // Attribute ResponseID
         responseID = root.getAttribute("ResponseID");
         if ((responseID == null) || (responseID.length() == 0)) {
@@ -237,10 +237,10 @@ public class FSNameRegistrationResponse extends AbstractResponse {
             String[] args = { IFSConstants.RESPONSE_ID };
             throw new FSMsgException("missingAttribute",args);
         }
-        
+
         parseMajorVersion(root.getAttribute("MajorVersion"));
         parseMinorVersion(root.getAttribute("MinorVersion"));
-        
+
         // Attribute InResponseTo
         inResponseTo = root.getAttribute("InResponseTo");
         if (inResponseTo == null) {
@@ -266,7 +266,7 @@ public class FSNameRegistrationResponse extends AbstractResponse {
                 throw new FSMsgException("wrongInput",null);
             }
         }
-        
+
         NodeList nl = root.getChildNodes();
         Node child;
         String childName;
@@ -298,19 +298,19 @@ public class FSNameRegistrationResponse extends AbstractResponse {
                 }
             } // end if childName != null
         } // end for loop
-        
+
         if (status == null) {
             FSUtils.debug.message(
                     "FSNameRegistrationResponse: missing element <Status>.");
             throw new FSMsgException("oneElement",null);
         }
-        
+
         if (providerId == null) {
             FSUtils.debug.message(
                     "FSNameRegistrationResponse: missing element providerId.");
             throw new FSMsgException("oneElement",null);
         }
-        
+
         //check for signature
         List signs = XMLUtils.getElementsByTagNameNS1(root,
                 SAMLConstants.XMLSIG_NAMESPACE_URI,
@@ -327,7 +327,7 @@ public class FSNameRegistrationResponse extends AbstractResponse {
             throw new FSMsgException("moreElement",null);
         }
     }
-    
+
     /**
      * Returns the <code>MinorVersion</code>.
      *
@@ -337,18 +337,18 @@ public class FSNameRegistrationResponse extends AbstractResponse {
     public int getMinorVersion() {
         return minorVersion;
     }
-    
+
     /**
      * Sets the <code>MinorVersion</code>.
      *
      * @param version the <code>MinorVersion</code>.
      * @see #getMinorVersion()
      */
-    
+
     public void setMinorVersion(int version) {
         minorVersion = version;
     }
-    
+
     /**
      * Returns the Response <code>Status</code>.
      *
@@ -358,8 +358,8 @@ public class FSNameRegistrationResponse extends AbstractResponse {
     public Status getStatus() {
         return status;
     }
-    
-    
+
+
     /**
      * Sets the Response <code>Status</code>.
      *
@@ -369,7 +369,7 @@ public class FSNameRegistrationResponse extends AbstractResponse {
     public void setStatus(Status status) {
         this.status=status;
     }
-    
+
     /**
      * Sets the <code>MajorVersion</code> by parsing the version string.
      *
@@ -387,7 +387,7 @@ public class FSNameRegistrationResponse extends AbstractResponse {
             FSUtils.debug.error("Response(Element): invalid MajorVersion", e);
             throw new FSMsgException("wrongInput",null);
         }
-        
+
         if (majorVersion != SAMLConstants.PROTOCOL_MAJOR_VERSION) {
             if (majorVersion > SAMLConstants.PROTOCOL_MAJOR_VERSION) {
                 if (FSUtils.debug.messageEnabled()) {
@@ -406,7 +406,7 @@ public class FSNameRegistrationResponse extends AbstractResponse {
             }
         }
     }
-    
+
     /**
      * Sets the <code>MinorVersion</code> by parsing the version string.
      *
@@ -425,7 +425,7 @@ public class FSNameRegistrationResponse extends AbstractResponse {
             }
             throw new FSMsgException("wrongInput",null);
         }
-        
+
         if (minorVersion > IFSConstants.FF_12_PROTOCOL_MINOR_VERSION) {
             FSUtils.debug.error("FSRegisResp(Element):MinorVersion of"
                     + " the Response is too high.");
@@ -435,9 +435,9 @@ public class FSNameRegistrationResponse extends AbstractResponse {
                     + " the Response is too low.");
             throw new FSMsgException("responseVersionTooLow",null);
         }
-        
+
     }
-    
+
     /**
      * Returns the <code>FSNameRegistrationResponse</code> object.
      *
@@ -459,9 +459,9 @@ public class FSNameRegistrationResponse extends AbstractResponse {
             }
             throw new FSMsgException("parseError", null, ex);
         }
-        
+
     }
-    
+
     /**
      * Returns the string representation of this object.
      * This method translates the response to an XML string.
@@ -472,7 +472,7 @@ public class FSNameRegistrationResponse extends AbstractResponse {
     public String toXMLString()  throws FSMsgException {
         return this.toXMLString(true, true);
     }
-    
+
     /**
      * Returns a String representation of the Logout Response.
      *
@@ -488,7 +488,7 @@ public class FSNameRegistrationResponse extends AbstractResponse {
     throws FSMsgException {
         return toXMLString(includeNS, declareNS, false);
     }
-    
+
     /**
      * Returns a String representation of the Logout Response.
      *
@@ -514,7 +514,7 @@ public class FSNameRegistrationResponse extends AbstractResponse {
         if (includeNS) {
             prefixLIB = IFSConstants.LIB_PREFIX;
         }
-        
+
         if (declareNS) {
             if (minorVersion == IFSConstants.FF_12_PROTOCOL_MINOR_VERSION) {
                 uriLIB = IFSConstants.LIB_12_NAMESPACE_STRING;
@@ -522,16 +522,16 @@ public class FSNameRegistrationResponse extends AbstractResponse {
                 uriLIB = IFSConstants.LIB_NAMESPACE_STRING;
             }
         }
-        
+
         String instantString = DateUtils.toUTCDateFormat(issueInstant);
-        
+
         if ((providerId == null) || (providerId.length() == 0)){
             FSUtils.debug.error("FSNameRegistrationResponse.toXMLString: "
                     + "providerId is null in the response with responseId:"
                     + responseID);
             throw new FSMsgException("nullProviderID",null);
         }
-        
+
         if ((responseID != null) && (inResponseTo != null)){
             xml.append("<").append(prefixLIB).
                     append("RegisterNameIdentifierResponse").append(uriLIB);
@@ -540,7 +540,7 @@ public class FSNameRegistrationResponse extends AbstractResponse {
                 xml.append(" id=\"").append(id).append("\" ");
             }
             xml.append(" ResponseID=\"").append(responseID).append("\" ").
-                    append(" InResponseTo=\"").append(inResponseTo).
+                    append(" InResponseTo=\"").append(XMLUtils.escapeSpecialCharacters(inResponseTo)).
                     append("\" ").
                     append(" MajorVersion=\"").append(majorVersion).
                     append("\" ").
@@ -550,7 +550,7 @@ public class FSNameRegistrationResponse extends AbstractResponse {
                     append("\" ").
                     append(">");
         }
-        
+
         if (signed) {
             if (signatureString != null) {
                 xml.append(signatureString);
@@ -559,30 +559,30 @@ public class FSNameRegistrationResponse extends AbstractResponse {
                 xml.append(signatureString);
             }
         }
-        
+
         if (providerId != null) {
             xml.append("<").append(prefixLIB).append("ProviderID").append(">").
                     append(providerId).
                     append("</").append(prefixLIB).append("ProviderID").
                     append(">");
         }
-        
+
         if (status != null) {
             xml.append(status.toString(includeNS, true));
         }
-        
+
         if (relayState != null) {
             xml.append("<").append(prefixLIB).append("RelayState").
                     append(">").append(relayState).
                     append("</").append(prefixLIB).
                     append("RelayState").append(">");
         }
-        
+
         xml.append("</").append(prefixLIB).
                 append("RegisterNameIdentifierResponse>");
         return xml.toString();
     }
-    
+
     /**
      * Returns <code>FSNameRegistrationResponse</code> object. The object
      * is created by parsing an Base64 encode Name Registration Response
@@ -613,7 +613,7 @@ public class FSNameRegistrationResponse extends AbstractResponse {
             throw new FSMsgException("nullInput",null);
         }
     }
-    
+
     /**
      * Returns a Base64 Encoded String.
      *
@@ -633,7 +633,7 @@ public class FSNameRegistrationResponse extends AbstractResponse {
         }
         return Base64.encode(this.toXMLString().getBytes());
     }
-    
+
     /**
      * Signs the Name Registration Response.
      *
@@ -674,7 +674,7 @@ public class FSNameRegistrationResponse extends AbstractResponse {
             signature =
                     XMLUtils.toDOMDocument(signatureString, FSUtils.debug)
                     .getDocumentElement();
-            
+
             signed = true;
             xmlString = this.toXMLString(true, true);
         }catch(Exception e){
@@ -682,7 +682,7 @@ public class FSNameRegistrationResponse extends AbstractResponse {
                                              "signError",null);
         }
     }
-    
+
     /**
      * Unsupported operation.
      */
@@ -690,7 +690,7 @@ public class FSNameRegistrationResponse extends AbstractResponse {
         throw new SAMLException(FSUtils.BUNDLE_NAME,
                                "unsupportedOperation",null);
     }
-    
+
     /**
      * Sets the Signature.
      *
@@ -701,7 +701,7 @@ public class FSNameRegistrationResponse extends AbstractResponse {
         signatureString = XMLUtils.print(elem);
         return super.setSignature(elem);
     }
-    
+
     /**
      * Returns an URL Encoded String.
      *
@@ -735,7 +735,7 @@ public class FSNameRegistrationResponse extends AbstractResponse {
         urlEncodedAuthnReq.append("InResponseTo=").
                 append(URLEncDec.encode(inResponseTo)).
                 append(IFSConstants.AMPERSAND);
-        
+
         if (issueInstant != null){
             urlEncodedAuthnReq.append("IssueInstant=")
             .append(URLEncDec.encode(
@@ -752,24 +752,24 @@ public class FSNameRegistrationResponse extends AbstractResponse {
                     append(URLEncDec.encode(providerId)).
                     append(IFSConstants.AMPERSAND);
         }
-        
+
         if (relayState != null && relayState.length() > 0) {
             urlEncodedAuthnReq.append("RelayState=").
                     append(URLEncDec.encode(relayState)).
                     append(IFSConstants.AMPERSAND);
         }
-        
+
         if (status != null) {
             urlEncodedAuthnReq.append("Value=");
             urlEncodedAuthnReq.append(
                     URLEncDec.encode(status.getStatusCode().getValue())).
                     append(IFSConstants.AMPERSAND);
         }
-        
+
         return urlEncodedAuthnReq.toString();
     }
-    
-    
+
+
     /**
      * Returns <code>FSNameRegistrationLogoutResponse</code> object. The
      * object is creating by parsing the <code>HttpServletRequest</code>
@@ -794,7 +794,7 @@ public class FSNameRegistrationResponse extends AbstractResponse {
                     "EncodedRequest: version parsing error:" + ex);
             throw new FSMsgException("invalidNumber",null);
         }
-        
+
         if (request.getParameter("ResponseID")!= null) {
             retNameRegistrationResponse.responseID =
                     request.getParameter("ResponseID");
@@ -804,7 +804,7 @@ public class FSNameRegistrationResponse extends AbstractResponse {
             String[] args = { IFSConstants.RESPONSE_ID };
             throw new FSMsgException("missingAttribute",args);
         }
-        
+
         String instantString = request.getParameter("IssueInstant");
         if (instantString == null || instantString.length() == 0) {
             FSUtils.debug.error("FSNameRegistrationResponse.parseURL" +
@@ -828,7 +828,7 @@ public class FSNameRegistrationResponse extends AbstractResponse {
                     "EncodedRequest: Provider ID is null " );
             throw new FSMsgException("missingElement",null);
         }
-        
+
         if (request.getParameter("RelayState")!= null){
             retNameRegistrationResponse.relayState =
                     request.getParameter("RelayState");
@@ -837,7 +837,7 @@ public class FSNameRegistrationResponse extends AbstractResponse {
             retNameRegistrationResponse.inResponseTo =
                     request.getParameter("InResponseTo");
         }
-        
+
         if (request.getParameter("Value") != null){
             FSUtils.debug.message("Status : " + request.getParameter("Value"));
             StatusCode statusCode =
@@ -848,7 +848,7 @@ public class FSNameRegistrationResponse extends AbstractResponse {
                     "EncodedRequest: Status Value is  null " );
             throw new FSMsgException("missingElement",null);
         }
-        
+
         FSUtils.debug.message("Returning registration response Object");
         return retNameRegistrationResponse;
     }

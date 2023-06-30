@@ -25,9 +25,8 @@
  * $Id: FSAssertion.java,v 1.2 2008/06/25 05:46:43 qcheng Exp $
  *
  * Portions Copyrighted 2014-2016 ForgeRock AS.
+ * Portions Copyrighted 2023 Wren Security
  */
-
-
 package com.sun.identity.federation.message;
 
 import static org.forgerock.openam.utils.Time.*;
@@ -69,39 +68,39 @@ import org.w3c.dom.NodeList;
  */
 @Deprecated
 public class FSAssertion extends Assertion {
-    
+
     /**
      * The Document Element of this object.
      */
     private Element domElement;
-    
+
     /**
      * The <code>SAMLConstants</code> object.
      */
     static SAMLConstants sc;
-    
+
     /**
      * The value of the <code>id</code> attribute in the <code>Assertion</code>.
      */
     protected String id;
-    
+
     /**
      * The value of the <code>MinorVersion</Version> attribute in
      * the <code>Assertion</code>.
      */
     protected int minorVersion = IFSConstants.FF_11_ASSERTION_MINOR_VERSION;
-    
+
     /**
      * List of Security <code>Assertions</code>.
      */
     private List securityAssertions;
-    
+
     /**
      * The value of the <code>InResponseTo</code> attribute in the
      * <code>Assertion</code>.
      */
     protected String inResponseTo ;
-    
+
     /**
      * Constructor to create an <code>FSAssertion</code> object
      * from the Document Element.
@@ -296,7 +295,7 @@ public class FSAssertion extends Assertion {
         }
         FSUtils.debug.message("FSAssertion(Element): leaving");
     }
-    
+
     /**
      * Constructor to create <code>FSAssertion</code> object.
      *
@@ -318,7 +317,7 @@ public class FSAssertion extends Assertion {
         super(assertionID, issuer, issueInstant, statements);
         this.inResponseTo = inResponseTo;
     }
-    
+
     /**
      * Constructor to create <code>FSAssertion</code> object.
      *
@@ -341,7 +340,7 @@ public class FSAssertion extends Assertion {
         super(assertionID, issuer, issueInstant, conditions, statements);
         this.inResponseTo = inResponseTo;
     }
-    
+
     /**
      * Constructor to create an <code>FSAssertion</code> object.
      *
@@ -366,7 +365,7 @@ public class FSAssertion extends Assertion {
         super(assertionID, issuer, issueInstant,conditions, advice, statements);
         this.inResponseTo = inResponseTo;
     }
-    
+
     /**
      * Returns value of <code>id</code> attribute.
      *
@@ -376,7 +375,7 @@ public class FSAssertion extends Assertion {
     public String getID(){
         return id;
     }
-    
+
     /**
      * Sets  value of <code>id<code> attribute.
      *
@@ -386,7 +385,7 @@ public class FSAssertion extends Assertion {
     public void setID(String id){
         this.id = id;
     }
-    
+
     /**
      * Returns the <code>MinorVersion</code> attribute.
      *
@@ -396,7 +395,7 @@ public class FSAssertion extends Assertion {
     public int getMinorVersion() {
         return minorVersion;
     }
-    
+
     /**
      * Sets the <code>MinorVersion</code> attribute.
      *
@@ -406,7 +405,7 @@ public class FSAssertion extends Assertion {
     public void setMinorVersion(int version) {
         minorVersion = version;
     }
-    
+
     /**
      * Returns the Document Element for this object.
      *
@@ -415,7 +414,7 @@ public class FSAssertion extends Assertion {
     public Element getDOMElement() {
         return domElement;
     }
-    
+
     /**
      * Returns the value of <code>InResponseTo</code> attribute.
      *
@@ -425,7 +424,7 @@ public class FSAssertion extends Assertion {
     public String getInResponseTo() {
         return inResponseTo;
     }
-    
+
     /**
      * Sets the value of <code>InResponseTo</code> attribute.
      *
@@ -435,7 +434,7 @@ public class FSAssertion extends Assertion {
     public void setInResponseTo(String inResponseTo) {
         this.inResponseTo = inResponseTo;
     }
-    
+
     /**
      * Returns Signed XML String.
      *
@@ -444,7 +443,7 @@ public class FSAssertion extends Assertion {
     public String getSignedXMLString(){
         return xmlString;
     }
-    
+
     /**
      * Returns the <code>Signature</code> string.
      *
@@ -453,7 +452,7 @@ public class FSAssertion extends Assertion {
     public String getSignatureString(){
         return signatureString;
     }
-    
+
     /**
      * Checks validity of time in the assertion.
      *
@@ -468,7 +467,7 @@ public class FSAssertion extends Assertion {
         }
         return isTimeValid;
     }
-    
+
     /**
      * Adds the <code>Statement</code> object to the
      * Statment's object Set.
@@ -484,7 +483,7 @@ public class FSAssertion extends Assertion {
         }
         return addedStmt;
     }
-    
+
     /**
      * Returns a <code>XML</code> String representation of this object.
      *
@@ -492,11 +491,11 @@ public class FSAssertion extends Assertion {
      * @throws FSMsgException if there is an error creating
      *         the <code>XML</code> string.
      */
-    
+
     public String toXMLString() throws FSMsgException {
         return this.toXMLString(true, true);
     }
-    
+
     /**
      * Returns a <code>XML</code> String representation of this object.
      *
@@ -508,7 +507,7 @@ public class FSAssertion extends Assertion {
      * @throws FSMsgException if there is an error creating
      *         the <code>XML</code> string.
      */
-    
+
     public java.lang.String toXMLString(boolean includeNS,boolean declareNS)
     throws FSMsgException {
         StringBuffer xml = new StringBuffer(3000);
@@ -542,7 +541,7 @@ public class FSAssertion extends Assertion {
         .append(NS).append(IFSConstants.SPACE).append(uriXSI)
         .append(IFSConstants.SPACE).append(libNS)
         .append(IFSConstants.SPACE);
-        
+
         if (minorVersion == IFSConstants.FF_11_ASSERTION_MINOR_VERSION &&
                 id != null && !(id.length() == 0)) {
             xml.append(IFSConstants.SPACE).append(IFSConstants.ID)
@@ -567,21 +566,21 @@ public class FSAssertion extends Assertion {
         .append(dateStr).append(IFSConstants.QUOTE)
         .append(IFSConstants.SPACE).append(IFSConstants.IN_RESPONSE_TO)
         .append(IFSConstants.EQUAL_TO).append(IFSConstants.QUOTE)
-        .append(inResponseTo).append(IFSConstants.QUOTE)
+        .append(XMLUtils.escapeSpecialCharacters(inResponseTo)).append(IFSConstants.QUOTE)
         .append(IFSConstants.SPACE)
         .append(IFSConstants.XSI_TYPE)
         .append(IFSConstants.EQUAL_TO).append(IFSConstants.QUOTE)
         .append(libAppendNS)
         .append(IFSConstants.ASSERTION_TYPE).append(IFSConstants.QUOTE)
         .append(IFSConstants.RIGHT_ANGLE).append(sc.NL);
-        
+
         if (getConditions() != null) {
             xml.append(getConditions().toString(includeNS, false));
         }
         if (getAdvice() != null) {
             xml.append(getAdvice().toString(includeNS, false));
         }
-        
+
         Iterator i = getStatement().iterator();
         while (i.hasNext()) {
             Statement st = (Statement)i.next();
@@ -604,10 +603,10 @@ public class FSAssertion extends Assertion {
         .append(appendNS).append(IFSConstants.ASSERTION)
         .append(IFSConstants.RIGHT_ANGLE)
         .append(IFSConstants.NL);
-        
+
         return xml.toString();
     }
-    
+
     /**
      * Signs the <code>Assertion</code>.
      *
@@ -629,7 +628,7 @@ public class FSAssertion extends Assertion {
             throw new SAMLResponderException(FSUtils.BUNDLE_NAME,
                     "cannotFindCertAlias",null);
         }
-        
+
         try {
             XMLSignatureManager manager = XMLSignatureManager.getInstance();
             if (minorVersion == IFSConstants.FF_11_ASSERTION_MINOR_VERSION) {
@@ -660,7 +659,7 @@ public class FSAssertion extends Assertion {
             throw new SAMLResponderException(e);
         }
     }
-    
+
     /**
      * Sets the <code>Element's</code> signature.
      *
@@ -671,7 +670,7 @@ public class FSAssertion extends Assertion {
         signatureString = XMLUtils.print(elem);
         return super.setSignature(elem);
     }
-    
+
     /**
      * Parses the advice element to extract the Security <code>Assertion</code>.
      *
@@ -703,7 +702,7 @@ public class FSAssertion extends Assertion {
             _advice = new Advice(null, securityAssertions, null);
         }
     }
-    
+
     /**
      * Returns the discovery service credentials from the boot strap.
      *

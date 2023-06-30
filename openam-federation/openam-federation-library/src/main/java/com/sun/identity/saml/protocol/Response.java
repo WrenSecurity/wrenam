@@ -25,13 +25,14 @@
  * $Id: Response.java,v 1.3 2009/02/13 04:05:10 bina Exp $
  *
  * Portions Copyrighted 2014-2016 ForgeRock AS.
+ * Portions Copyrighted 2023 Wren Security
  */
 package com.sun.identity.saml.protocol;
 
 import static org.forgerock.openam.utils.Time.*;
 
 import com.sun.identity.common.SystemConfigurationUtil;
-import com.sun.identity.shared.xml.XMLUtils; 
+import com.sun.identity.shared.xml.XMLUtils;
 
 import com.sun.identity.shared.DateUtils;
 
@@ -76,26 +77,26 @@ public class Response extends AbstractResponse {
     protected List	assertions	= Collections.EMPTY_LIST;
     protected String	xmlString	= null;
     protected String	signatureString	= null;
-    protected String    issuer 		= null; 
+    protected String    issuer 		= null;
 
     // Response ID attribute name
     private static final String RESPONSE_ID_ATTRIBUTE = "ResponseID";
 
     /** default constructor */
     protected Response() {}
-    
+
      /**
      * Return whether the signature on the object is valid or not.
      * @return true if the signature on the object is valid; false otherwise.
      */
     public boolean isSignatureValid() {
         if (signed & ! validationDone) {
-	    valid = SAMLUtils.checkSignatureValid(
-	    	xmlString, RESPONSE_ID_ATTRIBUTE, issuer); 
-	     	
+        valid = SAMLUtils.checkSignatureValid(
+            xmlString, RESPONSE_ID_ATTRIBUTE, issuer);
+
             validationDone = true;
         }
-	return valid; 
+    return valid;
     }
 
     /**
@@ -104,26 +105,26 @@ public class Response extends AbstractResponse {
      * @exception SAMLException if could not sign the Response.
      */
     public void signXML() throws SAMLException {
-	if (signed) {
-	    if (SAMLUtils.debug.messageEnabled()) {
-		SAMLUtils.debug.message("Response.signXML: the response is "
-		    + "already signed.");
-	    }
-	    throw new SAMLException(
-		SAMLUtils.bundle.getString("alreadySigned"));
-	}
-        String certAlias =    
+    if (signed) {
+        if (SAMLUtils.debug.messageEnabled()) {
+        SAMLUtils.debug.message("Response.signXML: the response is "
+            + "already signed.");
+        }
+        throw new SAMLException(
+        SAMLUtils.bundle.getString("alreadySigned"));
+    }
+        String certAlias =
             SystemConfigurationUtil.getProperty(
             "com.sun.identity.saml.xmlsig.certalias");
-	if (certAlias == null) {
-	    if (SAMLUtils.debug.messageEnabled()) {
-		SAMLUtils.debug.message("Response.signXML: couldn't obtain "
-		    + "this site's cert alias.");
-	    }
-	    throw new SAMLResponderException(
-		SAMLUtils.bundle.getString("cannotFindCertAlias"));
-	}
-	XMLSignatureManager manager = XMLSignatureManager.getInstance();
+    if (certAlias == null) {
+        if (SAMLUtils.debug.messageEnabled()) {
+        SAMLUtils.debug.message("Response.signXML: couldn't obtain "
+            + "this site's cert alias.");
+        }
+        throw new SAMLResponderException(
+        SAMLUtils.bundle.getString("cannotFindCertAlias"));
+    }
+    XMLSignatureManager manager = XMLSignatureManager.getInstance();
         if ((majorVersion == 1) && (minorVersion == 0)) {
             SAMLUtils.debug.message("Request.signXML: sign with version 1.0");
             signatureString = manager.signXML(this.toString(true, true),
@@ -141,56 +142,56 @@ public class Response extends AbstractResponse {
                 RESPONSE_ID_ATTRIBUTE, getResponseID(), true, null);
             signatureString = XMLUtils.print(signature);
         }
-	signed = true;
-	xmlString = this.toString(true, true);
+    signed = true;
+    xmlString = this.toString(true, true);
     }
 
     private void buildResponse(String responseID,
-		    String inResponseTo,
-		    Status status,
-		    String recipient,
-		    List contents) throws SAMLException
+            String inResponseTo,
+            Status status,
+            String recipient,
+            List contents) throws SAMLException
     {
-	if ((responseID == null) || (responseID.length() == 0)) {
-	    // generate one
-	    this.responseID = SAMLUtils.generateID();
-	    if (this.responseID == null) {
-		throw new SAMLRequesterException(
-			SAMLUtils.bundle.getString("errorGenerateID"));
-	    }
-	} else {
-	    this.responseID = responseID;
-	}
+    if ((responseID == null) || (responseID.length() == 0)) {
+        // generate one
+        this.responseID = SAMLUtils.generateID();
+        if (this.responseID == null) {
+        throw new SAMLRequesterException(
+            SAMLUtils.bundle.getString("errorGenerateID"));
+        }
+    } else {
+        this.responseID = responseID;
+    }
 
-	this.inResponseTo = inResponseTo;
+    this.inResponseTo = inResponseTo;
 
-	this.recipient = recipient;
+    this.recipient = recipient;
 
-		issueInstant = newDate();
+        issueInstant = newDate();
 
-	if (status == null) {
-	    SAMLUtils.debug.message("Response: missing <Status>.");
-	    throw new SAMLRequesterException(
-			SAMLUtils.bundle.getString("missingElement"));
-	}
-	this.status = status;
+    if (status == null) {
+        SAMLUtils.debug.message("Response: missing <Status>.");
+        throw new SAMLRequesterException(
+            SAMLUtils.bundle.getString("missingElement"));
+    }
+    this.status = status;
 
-	if ((contents != null) &&
-	    (contents != Collections.EMPTY_LIST)) {
-	    int length = contents.size();
-	    for (int i = 0; i < length; i++) {
-		Object temp = contents.get(i);
-		if (!(temp instanceof Assertion)) {
-		    if (SAMLUtils.debug.messageEnabled()) {
-			SAMLUtils.debug.message("Response: Wrong input "
-				+ "for Assertion.");
-		    }
-		    throw new SAMLRequesterException(
-				SAMLUtils.bundle.getString("wrongInput"));
-		}
-	    }
-	    assertions = contents;
-	}
+    if ((contents != null) &&
+        (contents != Collections.EMPTY_LIST)) {
+        int length = contents.size();
+        for (int i = 0; i < length; i++) {
+        Object temp = contents.get(i);
+        if (!(temp instanceof Assertion)) {
+            if (SAMLUtils.debug.messageEnabled()) {
+            SAMLUtils.debug.message("Response: Wrong input "
+                + "for Assertion.");
+            }
+            throw new SAMLRequesterException(
+                SAMLUtils.bundle.getString("wrongInput"));
+        }
+        }
+        assertions = contents;
+    }
     }
 
     /**
@@ -209,11 +210,11 @@ public class Response extends AbstractResponse {
      * @throws SAMLException if error occurs.
      */
     public Response(String responseID,
-		    String inResponseTo,
-		    Status status,
-		    List contents) throws SAMLException
+            String inResponseTo,
+            Status status,
+            List contents) throws SAMLException
     {
-	buildResponse(responseID, inResponseTo, status, null, contents);
+    buildResponse(responseID, inResponseTo, status, null, contents);
     }
 
     /**
@@ -234,12 +235,12 @@ public class Response extends AbstractResponse {
      * @throws SAMLException if error occurs.
      */
     public Response(String responseID,
-		    String inResponseTo,
-		    Status status,
-		    String recipient,
-		    List contents) throws SAMLException
+            String inResponseTo,
+            Status status,
+            String recipient,
+            List contents) throws SAMLException
     {
-	buildResponse(responseID, inResponseTo, status, recipient, contents);
+    buildResponse(responseID, inResponseTo, status, recipient, contents);
     }
 
     /**
@@ -258,11 +259,11 @@ public class Response extends AbstractResponse {
      * @throws SAMLException if error occurs.
      */
     public Response(String responseID,
-		    Status status,
-		    String recipient,
-		    List contents) throws SAMLException
+            Status status,
+            String recipient,
+            List contents) throws SAMLException
     {
-	buildResponse(responseID, null, status, recipient, contents);
+    buildResponse(responseID, null, status, recipient, contents);
     }
 
     /**
@@ -279,10 +280,10 @@ public class Response extends AbstractResponse {
      * @throws SAMLException if error occurs.
      */
     public Response(String responseID,
-		    Status status,
-		    List contents) throws SAMLException
+            Status status,
+            List contents) throws SAMLException
     {
-	buildResponse(responseID, null, status, null, contents);
+    buildResponse(responseID, null, status, null, contents);
     }
 
     /**
@@ -297,11 +298,11 @@ public class Response extends AbstractResponse {
      * @exception SAMLException if XML parsing failed
      */
     public static Response parseXML(String xml) throws SAMLException {
-	// parse the xml string
-	Document doc = XMLUtils.toDOMDocument(xml, SAMLUtils.debug);
-	Element root = doc.getDocumentElement();
+    // parse the xml string
+    Document doc = XMLUtils.toDOMDocument(xml, SAMLUtils.debug);
+    Element root = doc.getDocumentElement();
 
-	return new Response(root);
+    return new Response(root);
     }
 
     /**
@@ -310,17 +311,17 @@ public class Response extends AbstractResponse {
      * document is describe above.
      *
      * @param is The Response XML <code>InputStream</code>.
-     *         NOTE: The <code>InputStream</code> contains a complete 
+     *         NOTE: The <code>InputStream</code> contains a complete
      *         SAML response with
      *         <code>ResponseID</code>, <code>MajorVersion</code>, etc.
      * @return Response object based on the XML document received from server.
      * @exception SAMLException if XML parsing failed
      */
     public static Response parseXML(InputStream is) throws SAMLException {
-	Document doc = XMLUtils.toDOMDocument(is, SAMLUtils.debug);
-	Element root = doc.getDocumentElement();
+    Document doc = XMLUtils.toDOMDocument(is, SAMLUtils.debug);
+    Element root = doc.getDocumentElement();
 
-	return new Response(root);
+    return new Response(root);
     }
 
     /**
@@ -330,101 +331,101 @@ public class Response extends AbstractResponse {
      * @throws SAMLException if error occurs.
      */
     public Response(Element root) throws SAMLException {
-	// Make sure this is a Response
-	if (root == null) {
-	    SAMLUtils.debug.message("Response(Element): null input.");
-	    throw new SAMLRequesterException(
-		SAMLUtils.bundle.getString("nullInput"));
-	}
-	String tag = null;
-	if (((tag = root.getLocalName()) == null) ||
-	    (!tag.equals("Response"))) {
-	    SAMLUtils.debug.message("Response(Element): wrong input.");
-	    throw new SAMLRequesterException(
-		SAMLUtils.bundle.getString("wrongInput"));
-	}
+    // Make sure this is a Response
+    if (root == null) {
+        SAMLUtils.debug.message("Response(Element): null input.");
+        throw new SAMLRequesterException(
+        SAMLUtils.bundle.getString("nullInput"));
+    }
+    String tag = null;
+    if (((tag = root.getLocalName()) == null) ||
+        (!tag.equals("Response"))) {
+        SAMLUtils.debug.message("Response(Element): wrong input.");
+        throw new SAMLRequesterException(
+        SAMLUtils.bundle.getString("wrongInput"));
+    }
 
-	List signs = XMLUtils.getElementsByTagNameNS1(root,
-					SAMLConstants.XMLSIG_NAMESPACE_URI,
-					SAMLConstants.XMLSIG_ELEMENT_NAME);
-	int signsSize = signs.size();
-	if (signsSize == 1) {
-	    xmlString = XMLUtils.print(root);
-	    signed = true;
-	} else if (signsSize != 0) {
-	    if (SAMLUtils.debug.messageEnabled()) {
-		SAMLUtils.debug.message("Response(Element): included more than"
-		    + " one Signature element.");
-	    }
-	    throw new SAMLRequesterException(
-		SAMLUtils.bundle.getString("moreElement"));
-	}
+    List signs = XMLUtils.getElementsByTagNameNS1(root,
+                    SAMLConstants.XMLSIG_NAMESPACE_URI,
+                    SAMLConstants.XMLSIG_ELEMENT_NAME);
+    int signsSize = signs.size();
+    if (signsSize == 1) {
+        xmlString = XMLUtils.print(root);
+        signed = true;
+    } else if (signsSize != 0) {
+        if (SAMLUtils.debug.messageEnabled()) {
+        SAMLUtils.debug.message("Response(Element): included more than"
+            + " one Signature element.");
+        }
+        throw new SAMLRequesterException(
+        SAMLUtils.bundle.getString("moreElement"));
+    }
 
-	// Attribute ResponseID
-	responseID = root.getAttribute("ResponseID");
-	if ((responseID == null) || (responseID.length() == 0)) {
-	    if (SAMLUtils.debug.messageEnabled()) {
-		SAMLUtils.debug.message("Response.parseXML: "
-				+ "Reponse doesn't have ResponseID.");
-	    }
-	    throw new SAMLRequesterException(
-		SAMLUtils.bundle.getString("missingAttribute"));
-	}
+    // Attribute ResponseID
+    responseID = root.getAttribute("ResponseID");
+    if ((responseID == null) || (responseID.length() == 0)) {
+        if (SAMLUtils.debug.messageEnabled()) {
+        SAMLUtils.debug.message("Response.parseXML: "
+                + "Reponse doesn't have ResponseID.");
+        }
+        throw new SAMLRequesterException(
+        SAMLUtils.bundle.getString("missingAttribute"));
+    }
 
-	// Attribute InResponseTo
-	if (root.hasAttribute("InResponseTo")) {
-	    inResponseTo = root.getAttribute("InResponseTo");
-	}
+    // Attribute InResponseTo
+    if (root.hasAttribute("InResponseTo")) {
+        inResponseTo = root.getAttribute("InResponseTo");
+    }
 
-	// Attribute MajorVersion
-	parseMajorVersion(root.getAttribute("MajorVersion"));
+    // Attribute MajorVersion
+    parseMajorVersion(root.getAttribute("MajorVersion"));
 
-	parseMinorVersion(root.getAttribute("MinorVersion"));
+    parseMinorVersion(root.getAttribute("MinorVersion"));
 
-	if (root.hasAttribute("Recipient")) {
-	    recipient = root.getAttribute("Recipient");
-	}
+    if (root.hasAttribute("Recipient")) {
+        recipient = root.getAttribute("Recipient");
+    }
 
-	// Attribute IssueInstant
-	String instantString = root.getAttribute("IssueInstant");
-	if ((instantString == null) || (instantString.length() == 0)) {
-	    SAMLUtils.debug.message("Response(Element): missing IssueInstant");
-	    throw new SAMLRequesterException(
-		SAMLUtils.bundle.getString("missingAttribute"));
-	} else {
-	    try {
-		issueInstant = DateUtils.stringToDate(instantString);
-	    } catch (ParseException e) {
-		SAMLUtils.debug.message(
-		    "Resposne(Element): could not parse IssueInstant", e);
-		throw new SAMLRequesterException(SAMLUtils.bundle.getString(
-			"wrongInput"));
-	    }
-	}
+    // Attribute IssueInstant
+    String instantString = root.getAttribute("IssueInstant");
+    if ((instantString == null) || (instantString.length() == 0)) {
+        SAMLUtils.debug.message("Response(Element): missing IssueInstant");
+        throw new SAMLRequesterException(
+        SAMLUtils.bundle.getString("missingAttribute"));
+    } else {
+        try {
+        issueInstant = DateUtils.stringToDate(instantString);
+        } catch (ParseException e) {
+        SAMLUtils.debug.message(
+            "Resposne(Element): could not parse IssueInstant", e);
+        throw new SAMLRequesterException(SAMLUtils.bundle.getString(
+            "wrongInput"));
+        }
+    }
 
-	NodeList nl = root.getChildNodes();
-	Node child;
-	String childName;
-	int length = nl.getLength();
-	for (int i = 0; i < length; i++) {
-	    child = nl.item(i);
-	    if ((childName = child.getLocalName()) != null) {
-		if (childName.equals("Signature")) {
-		    signature = (Element) child;
-		} else if (childName.equals("Status")) {
-		    if (status != null) {
-			if (SAMLUtils.debug.messageEnabled()) {
-			    SAMLUtils.debug.message("Response: included more"
-				+ " than one <Status>");
-			}
-			throw new SAMLRequesterException(
-			    SAMLUtils.bundle.getString("moreElement"));
-		    }
-		    status = new Status((Element) child);
-		} else if (childName.equals("Assertion")) {
+    NodeList nl = root.getChildNodes();
+    Node child;
+    String childName;
+    int length = nl.getLength();
+    for (int i = 0; i < length; i++) {
+        child = nl.item(i);
+        if ((childName = child.getLocalName()) != null) {
+        if (childName.equals("Signature")) {
+            signature = (Element) child;
+        } else if (childName.equals("Status")) {
+            if (status != null) {
+            if (SAMLUtils.debug.messageEnabled()) {
+                SAMLUtils.debug.message("Response: included more"
+                + " than one <Status>");
+            }
+            throw new SAMLRequesterException(
+                SAMLUtils.bundle.getString("moreElement"));
+            }
+            status = new Status((Element) child);
+        } else if (childName.equals("Assertion")) {
                     if (assertions == Collections.EMPTY_LIST) {
-		        assertions = new ArrayList();
-		    }
+                assertions = new ArrayList();
+            }
                     Element canoEle = SAMLUtils.getCanonicalElement(child);
                     if (canoEle == null) {
                         throw new SAMLRequesterException(
@@ -432,24 +433,24 @@ public class Response extends AbstractResponse {
                     }
 
                     Assertion oneAssertion= new Assertion(canoEle);
-		    issuer = oneAssertion.getIssuer(); 
-		    assertions.add(oneAssertion);
-		} else {
-		    if (SAMLUtils.debug.messageEnabled()) {
-			SAMLUtils.debug.message("Response: included wrong "
-			    + "element:" + childName);
-		    }
-		    throw new SAMLRequesterException(
-			SAMLUtils.bundle.getString("wrongInput"));
-		}
-	    } // end if childName != null
-	} // end for loop
+            issuer = oneAssertion.getIssuer();
+            assertions.add(oneAssertion);
+        } else {
+            if (SAMLUtils.debug.messageEnabled()) {
+            SAMLUtils.debug.message("Response: included wrong "
+                + "element:" + childName);
+            }
+            throw new SAMLRequesterException(
+            SAMLUtils.bundle.getString("wrongInput"));
+        }
+        } // end if childName != null
+    } // end for loop
 
-	if (status == null) {
-	    SAMLUtils.debug.message("Response: missing element <Status>.");
-	    throw new SAMLRequesterException(
-		SAMLUtils.bundle.getString("oneElement"));
-	}
+    if (status == null) {
+        SAMLUtils.debug.message("Response: missing element <Status>.");
+        throw new SAMLRequesterException(
+        SAMLUtils.bundle.getString("oneElement"));
+    }
     }
 
     /**
@@ -458,34 +459,34 @@ public class Response extends AbstractResponse {
      * @exception SAMLException when the version mismatchs.
      */
     private void parseMajorVersion(String majorVer) throws SAMLException {
-	try {
-	    majorVersion = Integer.parseInt(majorVer);
-	} catch (NumberFormatException e) {
-	    if (SAMLUtils.debug.messageEnabled()) {
-		SAMLUtils.debug.message("Response(Element): invalid "
-		    + "MajorVersion", e);
-	    }
-	    throw new SAMLRequesterException(
-		SAMLUtils.bundle.getString("wrongInput"));
-	}
+    try {
+        majorVersion = Integer.parseInt(majorVer);
+    } catch (NumberFormatException e) {
+        if (SAMLUtils.debug.messageEnabled()) {
+        SAMLUtils.debug.message("Response(Element): invalid "
+            + "MajorVersion", e);
+        }
+        throw new SAMLRequesterException(
+        SAMLUtils.bundle.getString("wrongInput"));
+    }
 
-	if (majorVersion != SAMLConstants.PROTOCOL_MAJOR_VERSION) {
-	    if (majorVersion > SAMLConstants.PROTOCOL_MAJOR_VERSION) {
-		if (SAMLUtils.debug.messageEnabled()) {
-		    SAMLUtils.debug.message("Response(Element):MajorVersion of"
-			+ " the Response is too high.");
-		}
-		throw new SAMLVersionMismatchException(
-		    SAMLUtils.bundle.getString("responseVersionTooHigh"));
-	    } else {
-		if (SAMLUtils.debug.messageEnabled()) {
-		    SAMLUtils.debug.message("Response(Element):MajorVersion of"
-			+ " the Response is too low.");
-		}
-		throw new SAMLVersionMismatchException(
-		    SAMLUtils.bundle.getString("responseVersionTooLow"));
-	    }
-	}
+    if (majorVersion != SAMLConstants.PROTOCOL_MAJOR_VERSION) {
+        if (majorVersion > SAMLConstants.PROTOCOL_MAJOR_VERSION) {
+        if (SAMLUtils.debug.messageEnabled()) {
+            SAMLUtils.debug.message("Response(Element):MajorVersion of"
+            + " the Response is too high.");
+        }
+        throw new SAMLVersionMismatchException(
+            SAMLUtils.bundle.getString("responseVersionTooHigh"));
+        } else {
+        if (SAMLUtils.debug.messageEnabled()) {
+            SAMLUtils.debug.message("Response(Element):MajorVersion of"
+            + " the Response is too low.");
+        }
+        throw new SAMLVersionMismatchException(
+            SAMLUtils.bundle.getString("responseVersionTooLow"));
+        }
+    }
     }
 
     /**
@@ -494,35 +495,35 @@ public class Response extends AbstractResponse {
      * @exception SAMLException when the version mismatchs.
      */
     private void parseMinorVersion(String minorVer) throws SAMLException {
-	try {
-	    minorVersion = Integer.parseInt(minorVer);
-	} catch (NumberFormatException e) {
-	    if (SAMLUtils.debug.messageEnabled()) {
-		SAMLUtils.debug.message("Response(Element): invalid "
-		    + "MinorVersion", e);
-	    }
-	    throw new SAMLRequesterException(
-		SAMLUtils.bundle.getString("wrongInput"));
-	}
+    try {
+        minorVersion = Integer.parseInt(minorVer);
+    } catch (NumberFormatException e) {
+        if (SAMLUtils.debug.messageEnabled()) {
+        SAMLUtils.debug.message("Response(Element): invalid "
+            + "MinorVersion", e);
+        }
+        throw new SAMLRequesterException(
+        SAMLUtils.bundle.getString("wrongInput"));
+    }
 
-	if (minorVersion > SAMLConstants.PROTOCOL_MINOR_VERSION_ONE) {
+    if (minorVersion > SAMLConstants.PROTOCOL_MINOR_VERSION_ONE) {
             if (SAMLUtils.debug.messageEnabled()) {
-	        SAMLUtils.debug.message("Response(Element): MinorVersion"
-				+ " of the Response is too high.");
+            SAMLUtils.debug.message("Response(Element): MinorVersion"
+                + " of the Response is too high.");
             }
             throw new SAMLRequestVersionTooHighException(
-			 SAMLUtils.bundle.getString("responseVersionTooHigh"));    
-        } else if (minorVersion < SAMLConstants.PROTOCOL_MINOR_VERSION_ZERO) { 
+             SAMLUtils.bundle.getString("responseVersionTooHigh"));
+        } else if (minorVersion < SAMLConstants.PROTOCOL_MINOR_VERSION_ZERO) {
             if (SAMLUtils.debug.messageEnabled()) {
-	        SAMLUtils.debug.message("Response(Element): MinorVersion"
-				+ " of the Response is too low.");
+            SAMLUtils.debug.message("Response(Element): MinorVersion"
+                + " of the Response is too low.");
             }
-            throw new SAMLRequestVersionTooLowException( 
-			 SAMLUtils.bundle.getString("responseVersionTooLow"));
+            throw new SAMLRequestVersionTooLowException(
+             SAMLUtils.bundle.getString("responseVersionTooLow"));
         }
     }
 
-    /** 
+    /**
      * This method returns the set of Assertions that is the content of
      * the response.
      * @return The set of Assertions that is the content of the response.
@@ -530,7 +531,7 @@ public class Response extends AbstractResponse {
      *		in the response.
      */
     public List getAssertion() {
-	return assertions;
+    return assertions;
     }
 
     /**
@@ -540,17 +541,17 @@ public class Response extends AbstractResponse {
      *		false otherwise.
      */
     public boolean addAssertion(Assertion assertion) {
-	if (signed) {
-	    return false;
-	}
-	if (assertion == null) {
-	    return false;
-	}
-	if ((assertions == null) || (assertions == Collections.EMPTY_LIST)) {
-	    assertions = new ArrayList();
-	}
-	assertions.add(assertion);
-	return true;
+    if (signed) {
+        return false;
+    }
+    if (assertion == null) {
+        return false;
+    }
+    if ((assertions == null) || (assertions == Collections.EMPTY_LIST)) {
+        assertions = new ArrayList();
+    }
+    assertions.add(assertion);
+    return true;
     }
 
     /**
@@ -558,7 +559,7 @@ public class Response extends AbstractResponse {
      * @return The Status of the response.
      */
     public Status getStatus() {
-	return status;
+    return status;
     }
 
     /**
@@ -568,14 +569,14 @@ public class Response extends AbstractResponse {
      * @return true if the operation is successful.
      */
     public boolean setStatus(Status status) {
-	if (signed) {
-	    return false;
-	}
-	if (status == null) {
-	    return false;
-	}
-	this.status = status;
-	return true;
+    if (signed) {
+        return false;
+    }
+    if (status == null) {
+        return false;
+    }
+    this.status = status;
+    return true;
     }
 
     /**
@@ -584,10 +585,10 @@ public class Response extends AbstractResponse {
      * @return A boolean value: true if the operation succeeds; false otherwise.
      */
     public boolean setSignature(Element elem) {
-        signatureString = XMLUtils.print(elem); 
-        return super.setSignature(elem); 
+        signatureString = XMLUtils.print(elem);
+        return super.setSignature(elem);
     }
-    
+
     /**
      * This method translates the response to an XML document String based on
      * the Response schema described above.
@@ -596,7 +597,7 @@ public class Response extends AbstractResponse {
      *		<code>MajorVersion</code>, etc.
      */
     public String toString() {
-	return this.toString(true, true);
+    return this.toString(true, true);
     }
 
     /**
@@ -608,9 +609,9 @@ public class Response extends AbstractResponse {
      * @param declareNS Determines whether or not the namespace is declared
      *        within the Element.
      * @return A string containing the valid XML for this element
-     */   
+     */
     public String toString(boolean includeNS, boolean declareNS) {
-	return toString(includeNS, declareNS, false);
+    return toString(includeNS, declareNS, false);
     }
 
     /**
@@ -624,62 +625,62 @@ public class Response extends AbstractResponse {
      * @param includeHeader Determines whether the output include the XML
      *	      declaration header.
      * @return A string containing the valid XML for this element
-     */   
+     */
     public String toString(boolean includeNS,
-			boolean declareNS,
-			boolean includeHeader) {
-	if (signed && (xmlString != null)) {
-	    return xmlString;
-	}
+            boolean declareNS,
+            boolean includeHeader) {
+    if (signed && (xmlString != null)) {
+        return xmlString;
+    }
 
-	StringBuffer xml = new StringBuffer(300);
-	if (includeHeader) {
-	    xml.append("<?xml version=\"1.0\" encoding=\"").
-		append(SAMLConstants.DEFAULT_ENCODING).append("\" ?>\n");
-	}
-	String prefix = "";
-	String uri = "";
-	if (includeNS) {
-	    prefix = SAMLConstants.PROTOCOL_PREFIX;
-	}
+    StringBuffer xml = new StringBuffer(300);
+    if (includeHeader) {
+        xml.append("<?xml version=\"1.0\" encoding=\"").
+        append(SAMLConstants.DEFAULT_ENCODING).append("\" ?>\n");
+    }
+    String prefix = "";
+    String uri = "";
+    if (includeNS) {
+        prefix = SAMLConstants.PROTOCOL_PREFIX;
+    }
 
-	if (declareNS) {
-	    uri = SAMLConstants.PROTOCOL_NAMESPACE_STRING;
-	}
+    if (declareNS) {
+        uri = SAMLConstants.PROTOCOL_NAMESPACE_STRING;
+    }
 
-	String instantString = DateUtils.toUTCDateFormat(issueInstant);
+    String instantString = DateUtils.toUTCDateFormat(issueInstant);
 
-	xml.append("<").append(prefix).append("Response").append(uri).
-	    append(" ResponseID=\"").append(responseID).append("\"");
-	if (inResponseTo != null) {
-	    xml.append(" InResponseTo=\"").append(inResponseTo).append("\"");
-	}
-	xml.append(" MajorVersion=\"").append(majorVersion).append("\"").
-	    append(" MinorVersion=\"").append(minorVersion).append("\"").
-	    append(" IssueInstant=\"").append(instantString).append("\"");
-	if (recipient != null) {
-	    xml.append(" Recipient=\"").append(XMLUtils.escapeSpecialCharacters(recipient)).append("\"");
-	}
-	xml.append(">\n");
+    xml.append("<").append(prefix).append("Response").append(uri).
+        append(" ResponseID=\"").append(responseID).append("\"");
+    if (inResponseTo != null) {
+        xml.append(" InResponseTo=\"").append(XMLUtils.escapeSpecialCharacters(inResponseTo)).append("\"");
+    }
+    xml.append(" MajorVersion=\"").append(majorVersion).append("\"").
+        append(" MinorVersion=\"").append(minorVersion).append("\"").
+        append(" IssueInstant=\"").append(instantString).append("\"");
+    if (recipient != null) {
+        xml.append(" Recipient=\"").append(XMLUtils.escapeSpecialCharacters(recipient)).append("\"");
+    }
+    xml.append(">\n");
 
-	if (signed) {
-	    if (signatureString != null) {
-		xml.append(signatureString);
-	    } else if (signature != null) {
-		signatureString = XMLUtils.print(signature);
-		xml.append(signatureString);
-	    }
-	}
+    if (signed) {
+        if (signatureString != null) {
+        xml.append(signatureString);
+        } else if (signature != null) {
+        signatureString = XMLUtils.print(signature);
+        xml.append(signatureString);
+        }
+    }
 
-	xml.append(status.toString(includeNS, false));
-	if ((assertions != null) && (assertions != Collections.EMPTY_LIST)) {
-	    Iterator j = assertions.iterator();
-	    while (j.hasNext()) {
-		xml.append(((Assertion) j.next()).toString(true, true));
-	    }
-	}
+    xml.append(status.toString(includeNS, false));
+    if ((assertions != null) && (assertions != Collections.EMPTY_LIST)) {
+        Iterator j = assertions.iterator();
+        while (j.hasNext()) {
+        xml.append(((Assertion) j.next()).toString(true, true));
+        }
+    }
 
-	xml.append("</").append(prefix).append("Response>\n");
-	return xml.toString();
+    xml.append("</").append(prefix).append("Response>\n");
+    return xml.toString();
     }
 }

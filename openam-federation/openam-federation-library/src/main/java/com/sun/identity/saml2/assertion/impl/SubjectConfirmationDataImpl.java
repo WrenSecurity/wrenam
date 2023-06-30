@@ -24,9 +24,8 @@
  *
  * $Id: SubjectConfirmationDataImpl.java,v 1.5 2008/11/10 22:57:01 veiming Exp $
  *
+ * Portions Copyrighted 2023 Wren Security
  */
-
-
 package com.sun.identity.saml2.assertion.impl;
 
 import java.util.ArrayList;
@@ -56,7 +55,7 @@ import com.sun.identity.saml2.common.SAML2SDKUtils;
  *  that allows the subject to be confirmed or constrains the circumstances
  *  under which the act of subject confirmation can take place. Subejct
  *  confirmation takes place when a relying party seeks to verify the
- *  relationship between an entity presenting the assertion and the 
+ *  relationship between an entity presenting the assertion and the
  *  subject of the assertion's claims.
  */
 public class SubjectConfirmationDataImpl implements SubjectConfirmationData {
@@ -98,7 +97,7 @@ public class SubjectConfirmationDataImpl implements SubjectConfirmationData {
             throw new SAML2Exception(
                       SAML2SDKUtils.bundle.getString("nullInput"));
         }
-        
+
         // Make sure this is an SubjectConfirmationData.
         String tag = element.getLocalName();
         if ((tag == null) || (!tag.equals(elementName))) {
@@ -115,13 +114,13 @@ public class SubjectConfirmationDataImpl implements SubjectConfirmationData {
         parseAttributes(attrs);
         parseContent(element);
     }
-    
+
     /**
-     *  Parse and sets content values 
+     *  Parse and sets content values
      *
-     *  @param element Element for this class object 
+     *  @param element Element for this class object
      */
-    protected void parseContent(Element element) 
+    protected void parseContent(Element element)
     throws SAML2Exception
     {
         if (element == null) {
@@ -145,11 +144,11 @@ public class SubjectConfirmationDataImpl implements SubjectConfirmationData {
     }
 
     /**
-     *  Sets all the attribute values 
+     *  Sets all the attribute values
      *
-     *  @param attrs Map table has attribute name and value pairs 
+     *  @param attrs Map table has attribute name and value pairs
      */
-    protected void parseAttributes(NamedNodeMap attrs) 
+    protected void parseAttributes(NamedNodeMap attrs)
     throws SAML2Exception
     {
         if (attrs == null) {
@@ -173,7 +172,7 @@ public class SubjectConfirmationDataImpl implements SubjectConfirmationData {
                 } else if (attrName.equals("Recipient")) {
                     recipient = attrValue;
                 } else if (attrName.equals("xsi:type")) {
-                    contentType = attrValue;    
+                    contentType = attrValue;
                 } else {
                     continue;
                 }
@@ -187,7 +186,7 @@ public class SubjectConfirmationDataImpl implements SubjectConfirmationData {
                       SAML2SDKUtils.bundle.getString("wrongInput"));
         }
     }
-    
+
     /**
      * Returns the time instant at which the subject can no longer be
      * confirmed
@@ -217,7 +216,7 @@ public class SubjectConfirmationDataImpl implements SubjectConfirmationData {
         }
         notOnOrAfter = value;
     }
-    
+
 
     /**
      *  Returns the ID of a SAML protocol message in response to which
@@ -251,10 +250,10 @@ public class SubjectConfirmationDataImpl implements SubjectConfirmationData {
     }
 
     /**
-     * Returns a list of arbitrary XML elements to be added to this 
+     * Returns a list of arbitrary XML elements to be added to this
      * <code>SubejctConfirmationData</code> object.
      *
-     * @return a list of arbitrary XML elements to be added to this 
+     * @return a list of arbitrary XML elements to be added to this
      * <code>SubejctConfirmationData</code> object.
      * @see #setContent(List)
      */
@@ -267,10 +266,10 @@ public class SubjectConfirmationDataImpl implements SubjectConfirmationData {
     }
 
     /**
-     * Sets a list of arbitrary XML elements to be added to this 
+     * Sets a list of arbitrary XML elements to be added to this
      * <code>SubejctConfirmationData</code> object.
      *
-     * @param value a list of arbitrary XML elements to be added to this 
+     * @param value a list of arbitrary XML elements to be added to this
      * <code>SubejctConfirmationData</code> object.
      * @exception SAML2Exception if the object is immutable
      * @see #getContent()
@@ -287,10 +286,10 @@ public class SubjectConfirmationDataImpl implements SubjectConfirmationData {
 
     /**
      *  Returns the URI specifying the entity or location to which an
-     *  attesting entity can present the assertion 
+     *  attesting entity can present the assertion
      *
      *  @return the URI specifying the entity or location to which an
-     *  attesting entity can present the assertion 
+     *  attesting entity can present the assertion
      *  @see #setRecipient(String)
      */
     public String getRecipient()
@@ -300,10 +299,10 @@ public class SubjectConfirmationDataImpl implements SubjectConfirmationData {
 
     /**
      *  Sets the URI specifying the entity or location to which an
-     *  attesting entity can present the assertion 
+     *  attesting entity can present the assertion
      *
      *  @param value the URI specifying the entity or location to which an
-     *  attesting entity can present the assertion 
+     *  attesting entity can present the assertion
      *  @exception SAML2Exception if the object is immutable
      *  @see #getRecipient
      */
@@ -346,11 +345,11 @@ public class SubjectConfirmationDataImpl implements SubjectConfirmationData {
     }
 
     /**
-     *  Returns the network address/location from which an attesting 
-     *  entity can present the assertion 
+     *  Returns the network address/location from which an attesting
+     *  entity can present the assertion
      *
-     *  @return the network address/location from which an attesting 
-     *  entity can present the assertion 
+     *  @return the network address/location from which an attesting
+     *  entity can present the assertion
      *  @see #setAddress(String)
      */
     public String getAddress()
@@ -359,11 +358,11 @@ public class SubjectConfirmationDataImpl implements SubjectConfirmationData {
     }
 
     /**
-     *  Sets the network address/location from which an attesting 
-     *  entity can present the assertion 
+     *  Sets the network address/location from which an attesting
+     *  entity can present the assertion
      *
-     *  @param value the network address/location from which an attesting 
-     *  entity can present the assertion 
+     *  @param value the network address/location from which an attesting
+     *  entity can present the assertion
      *  @exception SAML2Exception if the object is immutable
      *  @see #getAddress
      */
@@ -376,22 +375,22 @@ public class SubjectConfirmationDataImpl implements SubjectConfirmationData {
 
         address = value;
     }
-    
+
     /**
-     *  Returns the content type attribute     
+     *  Returns the content type attribute
      *
-     *  @return the content type attribute     
+     *  @return the content type attribute
      *  @see #setContentType(String)
      */
     public String getContentType()
     {
         return contentType;
     }
-    
+
     /**
      *  Sets the content type attribute.
      *
-     *  @param attribute attribute type value for the content that will be 
+     *  @param attribute attribute type value for the content that will be
      *         added
      *  @throws SAML2Exception if the object is immutable
      */
@@ -430,7 +429,7 @@ public class SubjectConfirmationDataImpl implements SubjectConfirmationData {
 
         String NS="";
         String appendNS="";
-            
+
         if (declareNS) {
             NS = SAML2Constants.ASSERTION_DECLARE_STR;
         }
@@ -443,9 +442,9 @@ public class SubjectConfirmationDataImpl implements SubjectConfirmationData {
         xml.append(getElementValue(includeNSPrefix, declareNS));
         xml.append("</").append(appendNS).append(elementName).append(">");
 
-        return xml.toString();    
+        return xml.toString();
      }
-    
+
     /**
      * Returns a String representation of the element value
      * @param includeNSPrefix Determines whether the namespace qualifier is
@@ -462,56 +461,56 @@ public class SubjectConfirmationDataImpl implements SubjectConfirmationData {
 
         if (notOnOrAfter != null) {
             xml.append("NotOnOrAfter=\"");
-            xml.append(DateUtils.toUTCDateFormat(notOnOrAfter));        
-            xml.append("\" ");        
+            xml.append(DateUtils.toUTCDateFormat(notOnOrAfter));
+            xml.append("\" ");
         }
-        
+
         if (inResponseTo != null) {
             xml.append("InResponseTo=\"");
-            xml.append(inResponseTo);        
-            xml.append("\" ");        
+            xml.append(XMLUtils.escapeSpecialCharacters(inResponseTo));
+            xml.append("\" ");
         }
-        
+
         if (recipient != null) {
             xml.append("Recipient=\"");
-            xml.append(recipient);        
-            xml.append("\" ");        
+            xml.append(recipient);
+            xml.append("\" ");
         }
-        
+
         if (notBefore != null) {
             xml.append("NotBefore=\"");
-            xml.append(DateUtils.toUTCDateFormat(notBefore));        
-            xml.append("\" ");        
+            xml.append(DateUtils.toUTCDateFormat(notBefore));
+            xml.append("\" ");
         }
-        
+
         if (address != null) {
             xml.append("Address=\"");
-            xml.append(address);        
-            xml.append("\" ");        
+            xml.append(address);
+            xml.append("\" ");
         }
-        
+
         if(contentType != null) {
             xml.append(SAML2Constants.XSI_DECLARE_STR).append(" ")
                .append("xsi:type=\"")
                .append(contentType)
                .append("\" ");
         }
-        
+
         xml.append(">");
-        
+
         if (!getContent().isEmpty()) {
             Iterator it = getContent().iterator();
             while (it.hasNext()){
                 Object obj = it.next();
                 if(obj instanceof Element) {
-                   xml.append(XMLUtils.print((Element)obj)).append(" ");                   
+                   xml.append(XMLUtils.print((Element)obj)).append(" ");
                 } else if(obj instanceof String) {
                     xml.append((String)obj);
                 }
             }
         }
-                
-        return xml.toString();    
+
+        return xml.toString();
      }
 
    /**

@@ -24,10 +24,8 @@
  *
  * $Id: ArtifactResponseImpl.java,v 1.2 2008/06/25 05:47:59 qcheng Exp $
  *
+ * Portions Copyrighted 2023 Wren Security
  */
-
-
-
 package com.sun.identity.saml2.protocol.impl;
 
 import java.security.PublicKey;
@@ -71,9 +69,9 @@ import com.sun.identity.saml2.protocol.ArtifactResponse;
  * </pre>
  */
 public class ArtifactResponseImpl extends StatusResponseImpl
-	implements ArtifactResponse {
+    implements ArtifactResponse {
     private String anyString = null;
-    
+
     private void parseElement(Element element)
         throws SAML2Exception {
         // make sure that the input xml block is not null
@@ -137,8 +135,8 @@ public class ArtifactResponseImpl extends StatusResponseImpl
                     if (issuer != null) {
                         if (SAML2SDKUtils.debug.messageEnabled()) {
                             SAML2SDKUtils.debug.message("ArtifactResponseImpl."
-				+ "parseElement: included more than one "
-				+ "Issuer.");
+                + "parseElement: included more than one "
+                + "Issuer.");
                         }
                         throw new SAML2Exception(
                             SAML2SDKUtils.bundle.getString("moreElement"));
@@ -146,11 +144,11 @@ public class ArtifactResponseImpl extends StatusResponseImpl
                     if (signatureString != null ||
                         extensions != null ||
                         status != null ||
-			anyString != null)
+            anyString != null)
                     {
                         if (SAML2SDKUtils.debug.messageEnabled()) {
                             SAML2SDKUtils.debug.message("ArtifactResponseImpl."
-				+ "parseElement:wrong sequence.");
+                + "parseElement:wrong sequence.");
                         }
                         throw new SAML2Exception(
                             SAML2SDKUtils.bundle.getString("schemaViolation"));
@@ -161,18 +159,18 @@ public class ArtifactResponseImpl extends StatusResponseImpl
                     if (signatureString != null) {
                         if (SAML2SDKUtils.debug.messageEnabled()) {
                             SAML2SDKUtils.debug.message("ArtifactResponseImpl."
-				+ "parseElement:included more than one "
-				+ "Signature.");
+                + "parseElement:included more than one "
+                + "Signature.");
                         }
                         throw new SAML2Exception(
                             SAML2SDKUtils.bundle.getString("moreElement"));
                     }
                     if (extensions != null || status != null ||
-			anyString != null)
-		    {
+            anyString != null)
+            {
                         if (SAML2SDKUtils.debug.messageEnabled()) {
                             SAML2SDKUtils.debug.message("ArtifactResponseImpl."
-				+ "parseElement:wrong sequence.");
+                + "parseElement:wrong sequence.");
                         }
                         throw new SAML2Exception(
                             SAML2SDKUtils.bundle.getString("schemaViolation"));
@@ -183,17 +181,17 @@ public class ArtifactResponseImpl extends StatusResponseImpl
                     if (extensions != null) {
                         if (SAML2SDKUtils.debug.messageEnabled()) {
                             SAML2SDKUtils.debug.message("ArtifactResponseImpl."
-				+ "parseElement:included more than one "
-				+ "Extensions.");
+                + "parseElement:included more than one "
+                + "Extensions.");
                         }
                         throw new SAML2Exception(
                             SAML2SDKUtils.bundle.getString("moreElement"));
                     }
                     if (status != null || anyString != null)
-		    {
+            {
                         if (SAML2SDKUtils.debug.messageEnabled()) {
                             SAML2SDKUtils.debug.message("ArtifactResponseImpl."
-				+ "parseElement:wrong sequence.");
+                + "parseElement:wrong sequence.");
                         }
                         throw new SAML2Exception(
                             SAML2SDKUtils.bundle.getString("schemaViolation"));
@@ -204,40 +202,40 @@ public class ArtifactResponseImpl extends StatusResponseImpl
                     if (status != null) {
                         if (SAML2SDKUtils.debug.messageEnabled()) {
                             SAML2SDKUtils.debug.message("ArtifactResponseImpl."
-				+ "parseElement: included more than one "
-				+ "Status.");
+                + "parseElement: included more than one "
+                + "Status.");
                         }
                         throw new SAML2Exception(
                             SAML2SDKUtils.bundle.getString("moreElement"));
                     }
-		    if (anyString != null) {
-			 if (SAML2SDKUtils.debug.messageEnabled()) {
+            if (anyString != null) {
+             if (SAML2SDKUtils.debug.messageEnabled()) {
                             SAML2SDKUtils.debug.message("ResponseImpl.parse"
                                 + "Element:wrong sequence.");
                         }
                         throw new SAML2Exception(
                             SAML2SDKUtils.bundle.getString("schemaViolation"));
-		    }
+            }
                     status = ProtocolFactory.getInstance().createStatus(
                         (Element) child);
                 } else {
-		    if (anyString != null) {
+            if (anyString != null) {
                         if (SAML2SDKUtils.debug.messageEnabled()) {
                             SAML2SDKUtils.debug.message("ArtifactResponseImpl."
-				+ "parseElement: included more than one "
-				+ "any element.");
+                + "parseElement: included more than one "
+                + "any element.");
                         }
                         throw new SAML2Exception(
                             SAML2SDKUtils.bundle.getString("moreElement"));
-	
-		    }
-		    anyString = XMLUtils.print((Element) child);
+
+            }
+            anyString = XMLUtils.print((Element) child);
                 }
             }
         }
 
         super.validateData();
-	isMutable = false;
+    isMutable = false;
     }
 
     /**
@@ -264,7 +262,7 @@ public class ArtifactResponseImpl extends StatusResponseImpl
     }
 
     /**
-     * Constructor with <code>ArtifactResponse</code> in xml string 
+     * Constructor with <code>ArtifactResponse</code> in xml string
      * format.
      */
     public ArtifactResponseImpl(String xmlString)
@@ -287,7 +285,7 @@ public class ArtifactResponseImpl extends StatusResponseImpl
      * @see #setAny(String)
      */
     public String getAny() {
-	return anyString;
+    return anyString;
     }
 
     /**
@@ -299,12 +297,12 @@ public class ArtifactResponseImpl extends StatusResponseImpl
      */
     public void setAny(String value)
         throws SAML2Exception {
-	if (isMutable) {
-	    anyString = value;
-	} else {
-	    throw new SAML2Exception(
-		SAML2SDKUtils.bundle.getString("objectImmutable"));
-	}
+    if (isMutable) {
+        anyString = value;
+    } else {
+        throw new SAML2Exception(
+        SAML2SDKUtils.bundle.getString("objectImmutable"));
+    }
     }
 
     /**
@@ -314,7 +312,7 @@ public class ArtifactResponseImpl extends StatusResponseImpl
      * @throws SAML2Exception if it could not create String object
      */
     public String toXMLString() throws SAML2Exception {
-	return this.toXMLString(true, false);
+    return this.toXMLString(true, false);
     }
 
     /**
@@ -327,12 +325,11 @@ public class ArtifactResponseImpl extends StatusResponseImpl
      * @throws SAML2Exception if it could not create String object.
      * @return a String representation of this Object.
      **/
-    public String toXMLString(boolean includeNSPrefix, boolean declareNS)
-	throws SAML2Exception {
-	if (isSigned && signedXMLString != null) {
-	    return signedXMLString;
-	}
-	this.validateData();
+    public String toXMLString(boolean includeNSPrefix, boolean declareNS) throws SAML2Exception {
+        if (isSigned && signedXMLString != null) {
+            return signedXMLString;
+        }
+        this.validateData();
         StringBuffer result = new StringBuffer(1000);
         String prefix = "";
         String uri = "";
@@ -345,10 +342,12 @@ public class ArtifactResponseImpl extends StatusResponseImpl
 
         result.append("<").append(prefix).append("ArtifactResponse").
                 append(uri).append(" ID=\"").append(responseId).append("\"");
-	if (inResponseTo != null && inResponseTo.trim().length() != 0) {
-	    result.append(" InResponseTo=\"").append(inResponseTo).append("\"");
-	}
-	
+        if (inResponseTo != null && inResponseTo.trim().length() != 0) {
+            result.append(" InResponseTo=\"")
+                    .append(XMLUtils.escapeSpecialCharacters(inResponseTo))
+                    .append("\"");
+        }
+
         result.append(" Version=\"").append(version).append("\"").
                 append(" IssueInstant=\"").
                 append(DateUtils.toUTCDateFormat(issueInstant)).append("\"");
@@ -369,10 +368,10 @@ public class ArtifactResponseImpl extends StatusResponseImpl
         if (extensions != null) {
             result.append(extensions.toXMLString(includeNSPrefix, declareNS));
         }
-	result.append(status.toXMLString(includeNSPrefix, declareNS));
-	if (anyString != null && anyString.trim().length() != 0) {
-	    result.append(anyString);
-	}
+        result.append(status.toXMLString(includeNSPrefix, declareNS));
+        if (anyString != null && anyString.trim().length() != 0) {
+            result.append(anyString);
+        }
         result.append("</").append(prefix).append("ArtifactResponse>");
         return result.toString();
     }
