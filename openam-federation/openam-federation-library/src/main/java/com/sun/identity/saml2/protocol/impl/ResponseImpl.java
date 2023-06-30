@@ -24,10 +24,8 @@
  *
  * $Id: ResponseImpl.java,v 1.4 2009/12/16 05:26:39 ericow Exp $
  *
+ * Portions Copyrighted 2023 Wren Security
  */
-
-
-
 package com.sun.identity.saml2.protocol.impl;
 
 import java.security.PublicKey;
@@ -85,7 +83,7 @@ public class ResponseImpl extends StatusResponseImpl implements Response {
 
     private List assertions = null;
     private List encAssertions = null;
-    
+
     private void parseElement(Element element)
         throws SAML2Exception {
         // make sure that the input xml block is not null
@@ -157,8 +155,8 @@ public class ResponseImpl extends StatusResponseImpl implements Response {
                     if (signatureString != null ||
                         extensions != null ||
                         status != null ||
-			assertions != null ||
-			encAssertions != null)
+            assertions != null ||
+            encAssertions != null)
                     {
                         if (SAML2SDKUtils.debug.messageEnabled()) {
                             SAML2SDKUtils.debug.message("ResponseImpl.parse"
@@ -179,8 +177,8 @@ public class ResponseImpl extends StatusResponseImpl implements Response {
                             SAML2SDKUtils.bundle.getString("moreElement"));
                     }
                     if (extensions != null || status != null ||
-			assertions != null || encAssertions != null)
-		    {
+            assertions != null || encAssertions != null)
+            {
                         if (SAML2SDKUtils.debug.messageEnabled()) {
                             SAML2SDKUtils.debug.message("ResponseImpl.parse"
                                 + "Element:wrong sequence.");
@@ -188,8 +186,8 @@ public class ResponseImpl extends StatusResponseImpl implements Response {
                         throw new SAML2Exception(
                             SAML2SDKUtils.bundle.getString("schemaViolation"));
                     }
-                    signatureString = XMLUtils.print((Element) child, 
-                        "UTF-8");  
+                    signatureString = XMLUtils.print((Element) child,
+                        "UTF-8");
                     isSigned = true;
                 } else if (childName.equals("Extensions")) {
                     if (extensions != null) {
@@ -201,8 +199,8 @@ public class ResponseImpl extends StatusResponseImpl implements Response {
                             SAML2SDKUtils.bundle.getString("moreElement"));
                     }
                     if (status != null || assertions != null ||
-			encAssertions != null)
-		    {
+            encAssertions != null)
+            {
                         if (SAML2SDKUtils.debug.messageEnabled()) {
                             SAML2SDKUtils.debug.message("ResponseImpl.parse"
                                 + "Element:wrong sequence.");
@@ -222,7 +220,7 @@ public class ResponseImpl extends StatusResponseImpl implements Response {
                             SAML2SDKUtils.bundle.getString("moreElement"));
                     }
                     if (assertions != null || encAssertions != null)
-		    {
+            {
                         if (SAML2SDKUtils.debug.messageEnabled()) {
                             SAML2SDKUtils.debug.message("ResponseImpl.parse"
                                 + "Element:wrong sequence.");
@@ -233,9 +231,9 @@ public class ResponseImpl extends StatusResponseImpl implements Response {
                     status = ProtocolFactory.getInstance().createStatus(
                         (Element) child);
                 } else if (childName.equals("Assertion")) {
-		    if (assertions == null) {
-			assertions = new ArrayList();
-		    }
+            if (assertions == null) {
+            assertions = new ArrayList();
+            }
                     Element canoEle = SAMLUtils.getCanonicalElement(child);
                     if (canoEle == null) {
                         throw new SAML2Exception(
@@ -245,11 +243,11 @@ public class ResponseImpl extends StatusResponseImpl implements Response {
                     assertions.add(AssertionFactory.getInstance().
                         createAssertion(canoEle));
                 } else if (childName.equals("EncryptedAssertion")) {
-		    if (encAssertions == null) {
-			encAssertions = new ArrayList();
-		    }
-		    encAssertions.add(AssertionFactory.getInstance().
-			createEncryptedAssertion((Element) child));
+            if (encAssertions == null) {
+            encAssertions = new ArrayList();
+            }
+            encAssertions.add(AssertionFactory.getInstance().
+            createEncryptedAssertion((Element) child));
                 } else {
                     if (SAML2SDKUtils.debug.messageEnabled()) {
                         SAML2SDKUtils.debug.message("ResponseImpl.parse"
@@ -262,17 +260,17 @@ public class ResponseImpl extends StatusResponseImpl implements Response {
         }
 
         super.validateData();
-	if (assertions != null) {
-	    Iterator iter = assertions.iterator();
-	    while (iter.hasNext()) {
-		((Assertion) iter.next()).makeImmutable();
-	    }
-	    assertions = Collections.unmodifiableList(assertions);
-	}
-	if (encAssertions != null) {
-	    encAssertions = Collections.unmodifiableList(encAssertions);
-	}
-	isMutable = false;
+    if (assertions != null) {
+        Iterator iter = assertions.iterator();
+        while (iter.hasNext()) {
+        ((Assertion) iter.next()).makeImmutable();
+        }
+        assertions = Collections.unmodifiableList(assertions);
+    }
+    if (encAssertions != null) {
+        encAssertions = Collections.unmodifiableList(encAssertions);
+    }
+    isMutable = false;
     }
     /**
      * Class constructor. Caller may need to call setters to populate the
@@ -319,13 +317,13 @@ public class ResponseImpl extends StatusResponseImpl implements Response {
     }
 
     /**
-     * Returns <code>Assertion</code>(s) of the response. 
+     * Returns <code>Assertion</code>(s) of the response.
      *
      * @return List of <code>Assertion</code>(s) in the response.
      * @see #setAssertion(List)
      */
     public List getAssertion() {
-	return assertions;
+    return assertions;
     }
 
     /**
@@ -336,9 +334,9 @@ public class ResponseImpl extends StatusResponseImpl implements Response {
      * @see #getAssertion()
      */
     public void setAssertion(List value)
-	throws SAML2Exception
+    throws SAML2Exception
     {
-	 if (isMutable) {
+     if (isMutable) {
             this.assertions = value;
         } else {
             throw new SAML2Exception(
@@ -347,13 +345,13 @@ public class ResponseImpl extends StatusResponseImpl implements Response {
     }
 
     /**
-     * Returns <code>EncryptedAssertion</code>(s) of the response. 
+     * Returns <code>EncryptedAssertion</code>(s) of the response.
      *
      * @return List of <code>EncryptedAssertion</code>(s) in the response.
      * @see #setEncryptedAssertion(List)
      */
     public List getEncryptedAssertion() {
-	return encAssertions;
+    return encAssertions;
     }
 
     /**
@@ -364,9 +362,9 @@ public class ResponseImpl extends StatusResponseImpl implements Response {
      * @see #getEncryptedAssertion()
      */
     public void setEncryptedAssertion(List value)
-	throws SAML2Exception
+    throws SAML2Exception
     {
- 	if (isMutable) {
+     if (isMutable) {
             this.encAssertions = value;
         } else {
             throw new SAML2Exception(
@@ -379,17 +377,17 @@ public class ResponseImpl extends StatusResponseImpl implements Response {
      */
     public void makeImmutable() {
         if (isMutable) {
-	    if (assertions != null) {
-		Iterator iter = assertions.iterator();
-		while (iter.hasNext()) {
-		    ((Assertion) iter.next()).makeImmutable();
-		}
-		assertions = Collections.unmodifiableList(assertions);
-	    }
-	    if (encAssertions != null) {
-		encAssertions = Collections.unmodifiableList(encAssertions);
-	    }
-	    super.makeImmutable();
+        if (assertions != null) {
+        Iterator iter = assertions.iterator();
+        while (iter.hasNext()) {
+            ((Assertion) iter.next()).makeImmutable();
+        }
+        assertions = Collections.unmodifiableList(assertions);
+        }
+        if (encAssertions != null) {
+        encAssertions = Collections.unmodifiableList(encAssertions);
+        }
+        super.makeImmutable();
         }
     }
 
@@ -400,7 +398,7 @@ public class ResponseImpl extends StatusResponseImpl implements Response {
      * @throws SAML2Exception if it could not create String object
      */
     public String toXMLString() throws SAML2Exception {
-	return this.toXMLString(true, false);
+    return this.toXMLString(true, false);
     }
 
     /**
@@ -414,11 +412,11 @@ public class ResponseImpl extends StatusResponseImpl implements Response {
      * @return a String representation of this Object.
      **/
     public String toXMLString(boolean includeNSPrefix, boolean declareNS)
-	throws SAML2Exception {
-	if (isSigned && signedXMLString != null) {
-	    return signedXMLString;
-	}
-	this.validateData();
+    throws SAML2Exception {
+    if (isSigned && signedXMLString != null) {
+        return signedXMLString;
+    }
+    this.validateData();
         StringBuffer result = new StringBuffer(1000);
         String prefix = "";
         String uri = "";
@@ -431,10 +429,12 @@ public class ResponseImpl extends StatusResponseImpl implements Response {
 
         result.append("<").append(prefix).append("Response").
                 append(uri).append(" ID=\"").append(responseId).append("\"");
-	if (inResponseTo != null && inResponseTo.trim().length() != 0) {
-	    result.append(" InResponseTo=\"").append(inResponseTo).append("\"");
-	}
-	
+        if (inResponseTo != null && inResponseTo.trim().length() != 0) {
+            result.append(" InResponseTo=\"")
+                    .append(XMLUtils.escapeSpecialCharacters(inResponseTo))
+                    .append("\"");
+        }
+
         result.append(" Version=\"").append(version).append("\"").
                 append(" IssueInstant=\"").
                 append(DateUtils.toUTCDateFormat(issueInstant)).append("\"");
@@ -455,21 +455,21 @@ public class ResponseImpl extends StatusResponseImpl implements Response {
         if (extensions != null) {
             result.append(extensions.toXMLString(includeNSPrefix, declareNS));
         }
-	result.append(status.toXMLString(includeNSPrefix, declareNS));
-	if (assertions != null) {
-	    Iterator iter = assertions.iterator();
-	    while (iter.hasNext()) {
-		result.append(((Assertion) iter.next()).toXMLString(
-			includeNSPrefix, declareNS));
-	    }
-	}
-	if (encAssertions != null) {
-	    Iterator iter1 = encAssertions.iterator();
-	    while (iter1.hasNext()) {
-		result.append(((EncryptedAssertion) iter1.next()).toXMLString(
-			includeNSPrefix, declareNS));
-	    }
-	}
+    result.append(status.toXMLString(includeNSPrefix, declareNS));
+    if (assertions != null) {
+        Iterator iter = assertions.iterator();
+        while (iter.hasNext()) {
+        result.append(((Assertion) iter.next()).toXMLString(
+            includeNSPrefix, declareNS));
+        }
+    }
+    if (encAssertions != null) {
+        Iterator iter1 = encAssertions.iterator();
+        while (iter1.hasNext()) {
+        result.append(((EncryptedAssertion) iter1.next()).toXMLString(
+            includeNSPrefix, declareNS));
+        }
+    }
         result.append("</").append(prefix).append("Response>");
         return result.toString();
     }

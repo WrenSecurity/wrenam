@@ -24,8 +24,8 @@
  *
  * $Id: FSResponse.java,v 1.2 2008/06/25 05:46:45 qcheng Exp $
  * Portions Copyrighted 2014 ForgeRock AS
+ * Portions Copyrighted 2023 Wren Security
  */
-
 package com.sun.identity.federation.message;
 
 import java.text.ParseException;
@@ -66,7 +66,7 @@ import com.sun.identity.federation.common.IFSConstants;
 @Deprecated
 public class FSResponse extends Response {
     protected String id = null;
-    
+
     /**
      * Returns the value of <code>id</code> attribute.
      *
@@ -76,7 +76,7 @@ public class FSResponse extends Response {
     public String getID() {
         return id;
     }
-    
+
     /**
      * Sets the value of <code>id</code> attribute.
      *
@@ -86,7 +86,7 @@ public class FSResponse extends Response {
     public void setID(String id) {
         this.id = id;
     }
-    
+
     /**
      * Returns the signed <code>XML</code> string.
      *
@@ -95,18 +95,18 @@ public class FSResponse extends Response {
     public String getSignatureString(){
         return signatureString;
     }
-    
+
     /**
      * Returns the <code>MinorVersion</code>.
      *
      * @return the <code>MinorVersion</code>.
      * @see #setMinorVersion(int)
      */
-    
+
     public int getMinorVersion() {
         return minorVersion;
     }
-    
+
     /**
      * Sets the <code>MinorVersion</code>.
      *
@@ -116,7 +116,7 @@ public class FSResponse extends Response {
     public void setMinorVersion(int version) {
         minorVersion = version;
     }
-    
+
     /**
      * Constructor creates <code>FSResponse</code> object.
      *
@@ -133,7 +133,7 @@ public class FSResponse extends Response {
             List contents) throws SAMLException, FSMsgException {
         super( responseID, inResponseTo, status, contents);
     }
-    
+
     public static FSResponse parseResponseXML(
             String xml
             ) throws SAMLException, FSMsgException {
@@ -149,7 +149,7 @@ public class FSResponse extends Response {
         root = doc.getDocumentElement();
         return new FSResponse(root);
     }
-    
+
     /**
      * Constructor creates <code>FSResponse</code> object form
      * a Document Element.
@@ -182,7 +182,7 @@ public class FSResponse extends Response {
             String[] args = { IFSConstants.RESPONSE_ID };
             throw new FSMsgException("missingAttribute",args);
         }
-        
+
         inResponseTo = root.getAttribute("InResponseTo");
         if (inResponseTo == null) {
             if (FSUtils.debug.messageEnabled()) {
@@ -192,7 +192,7 @@ public class FSResponse extends Response {
             String[] args = { IFSConstants.IN_RESPONSE_TO };
             throw new FSMsgException("missingAttribute",args);
         }
-        
+
         // Attribute IssueInstant
         String instantString = root.getAttribute("IssueInstant");
         if ((instantString == null) || (instantString.length() == 0)) {
@@ -245,13 +245,13 @@ public class FSResponse extends Response {
                 }
             } // end if childName != null
         } // end for loop
-        
+
         if (status == null) {
             FSUtils.debug.message(
                     "FSResponse(Element): missing element <Status>.");
             throw new FSMsgException("missingElement",null);
         }
-        
+
         //check for signature
         List signs = XMLUtils.getElementsByTagNameNS1(root,
                 SAMLConstants.XMLSIG_NAMESPACE_URI,
@@ -271,7 +271,7 @@ public class FSResponse extends Response {
         }
         //end check for signature
     }
-    
+
     /**
      * Sets the <code>MajorVersion</code> by parsing the version string.
      *
@@ -291,7 +291,7 @@ public class FSResponse extends Response {
             }
             throw new FSMsgException("wrongInput",null);
         }
-        
+
         if (majorVersion != SAMLConstants.PROTOCOL_MAJOR_VERSION) {
             if (majorVersion > SAMLConstants.PROTOCOL_MAJOR_VERSION) {
                 if (FSUtils.debug.messageEnabled()) {
@@ -310,7 +310,7 @@ public class FSResponse extends Response {
             }
         }
     }
-    
+
     /**
      * Sets the <code>MinorVersion</code> by parsing the version string.
      *
@@ -331,7 +331,7 @@ public class FSResponse extends Response {
             }
             throw new FSMsgException("wrongInput",null);
         }
-        
+
         if (minorVersion > IFSConstants.FF_12_SAML_PROTOCOL_MINOR_VERSION) {
             FSUtils.debug.error("FSResponse(Element):MinorVersion of"
                     + " the Response is too high.");
@@ -345,7 +345,7 @@ public class FSResponse extends Response {
                     "responseVersionTooLow",null);
         }
     }
-    
+
     /**
      * Returns a String representation of the Logout Response.
      *
@@ -356,7 +356,7 @@ public class FSResponse extends Response {
     public String toXMLString() throws FSMsgException {
         return this.toXMLString(true, true);
     }
-    
+
     /**
      * Returns a String representation of the Logout Response.
      *
@@ -368,12 +368,12 @@ public class FSResponse extends Response {
      * @throws FSMsgException if there is an error converting
      *         this object ot a string.
      */
-    
+
     public String toXMLString(boolean includeNS, boolean declareNS)
     throws FSMsgException {
         return toXMLString(includeNS, declareNS, false);
     }
-    
+
     public String toXMLString(boolean includeNS,boolean declareNS,
             boolean includeHeader)  throws FSMsgException {
         FSUtils.debug.message("FSResponse.toXMLString(3): Called");
@@ -390,7 +390,7 @@ public class FSResponse extends Response {
         String uriLIB = "";
         String uriDS="";
         String uriXSI="";
-        
+
         if (includeNS) {
             prefixLIB = IFSConstants.LIB_PREFIX;
             prefixSAML = IFSConstants.ASSERTION_PREFIX;
@@ -407,9 +407,9 @@ public class FSResponse extends Response {
             uriDS = IFSConstants.DSSAMLNameSpace;
             uriXSI = IFSConstants.XSI_NAMESPACE_STRING;
         }
-        
+
         String instantString = DateUtils.toUTCDateFormat(issueInstant);
-        
+
         if((responseID != null) && (inResponseTo != null)){
             xml.append("<").append(prefixSAML_PROTOCOL).append("Response").
                     append(uriLIB).
@@ -418,8 +418,9 @@ public class FSResponse extends Response {
                     append(" ").append(uriXSI).append(" ResponseID=\"").
                     append(responseID).append("\" ");
             if ((inResponseTo != null) && (inResponseTo.length() != 0)) {
-                xml.append(" InResponseTo=\"").append(inResponseTo).
-                        append("\" ");
+                xml.append(" InResponseTo=\"")
+                        .append(XMLUtils.escapeSpecialCharacters(inResponseTo))
+                        .append("\" ");
             }
             if (minorVersion == IFSConstants.FF_11_PROTOCOL_MINOR_VERSION &&
                     id != null && !(id.length() == 0)){
@@ -436,7 +437,7 @@ public class FSResponse extends Response {
             }
             xml.append(">");
         }
-        
+
         if (signed) {
             if (signatureString != null) {
                 xml.append(signatureString);
@@ -445,10 +446,10 @@ public class FSResponse extends Response {
                 xml.append(signatureString);
             }
         }
-        
+
         if(status != null)
             xml.append(status.toString(includeNS, false));
-        
+
         if ((assertions != null) && (assertions != Collections.EMPTY_LIST)) {
             Iterator j = assertions.iterator();
             while (j.hasNext()) {
@@ -456,11 +457,11 @@ public class FSResponse extends Response {
                         toXMLString(true,declareNS));
             }
         }
-        
+
         xml.append("</").append(prefixSAML_PROTOCOL).append("Response>");
         return xml.toString();
     }
-    
+
     /**
      * Returns <code>FSResponse</code> object. The object
      * is created by parsing an Base64 encoded response string.
@@ -490,7 +491,7 @@ public class FSResponse extends Response {
             throw new FSMsgException("nullInput",null);
         }
     }
-    
+
     /**
      * Returns a Base64 Encoded String.
      *
@@ -509,7 +510,7 @@ public class FSResponse extends Response {
         }
         return Base64.encode(this.toXMLString().getBytes());
     }
-    
+
     /**
      * Signs the Response.
      *
@@ -551,11 +552,11 @@ public class FSResponse extends Response {
                     FSUtils.debug.message("invalid minor version.");
                 }
             }
-            
+
             signature =
                     XMLUtils.toDOMDocument(signatureString, FSUtils.debug)
                     .getDocumentElement();
-            
+
             signed = true;
             xmlString = this.toXMLString(true, true);
         } catch(Exception e){
@@ -563,7 +564,7 @@ public class FSResponse extends Response {
                     "signFailed",null);
         }
     }
-    
+
     /**
      * Unsupported operation.
      */

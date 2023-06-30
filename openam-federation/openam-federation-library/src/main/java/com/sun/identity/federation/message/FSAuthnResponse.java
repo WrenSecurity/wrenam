@@ -25,9 +25,8 @@
  * $Id: FSAuthnResponse.java,v 1.2 2008/06/25 05:46:43 qcheng Exp $
  *
  * Portions Copyrighted 2014-2016 ForgeRock AS.
+ * Portions Copyrighted 2023 Wren Security
  */
-
-
 package com.sun.identity.federation.message;
 
 import static org.forgerock.openam.utils.Time.*;
@@ -72,9 +71,9 @@ public class FSAuthnResponse extends Response {
     protected String    relayState      = null;
     protected String consentURI = null;
     protected int minorVersion = 0;
-    protected String id = null; 
+    protected String id = null;
     protected Element domElement = null;
-    
+
 
    /**
     * Constructor to create <code>FSAuthnResponse</code> object.
@@ -164,9 +163,9 @@ public class FSAuthnResponse extends Response {
             if (FSUtils.debug.messageEnabled()) {
                 FSUtils.debug.message("FSAuthnResponse(Element): "
                     + "AuthnResponse doesn't have InResponseTo attribute");
-            }            
+            }
         }
-        
+
         // Attribute IssueInstant
         String instantString = root.getAttribute(IFSConstants.ISSUE_INSTANT);
 
@@ -187,9 +186,9 @@ public class FSAuthnResponse extends Response {
 
         parseMajorVersion(root.getAttribute(IFSConstants.MAJOR_VERSION));
         parseMinorVersion(root.getAttribute(IFSConstants.MINOR_VERSION));
-        
+
         setRecipient(root.getAttribute(IFSConstants.RECIPIENT));
- 
+
         NodeList nl = root.getChildNodes();
         Node child;
         String childName;
@@ -217,7 +216,7 @@ public class FSAuthnResponse extends Response {
                         if (FSUtils.debug.messageEnabled()) {
                             FSUtils.debug.message("FSAuthnResponse(Element): "
                                 + "should contain only one RelayState.");
-                        } 
+                        }
                         throw new FSMsgException("wrongInput",null);
                     }
                     relayState = XMLUtils.getElementValue((Element) child);
@@ -226,7 +225,7 @@ public class FSAuthnResponse extends Response {
                         if (FSUtils.debug.messageEnabled()) {
                             FSUtils.debug.message("FSAuthnResponse(Element): "
                                 + "should contain only one ProviderID.");
-                        } 
+                        }
                         throw new FSMsgException("wrongInput",null);
                     }
                     providerId = XMLUtils.getElementValue((Element) child);
@@ -261,7 +260,7 @@ public class FSAuthnResponse extends Response {
                     + "included more than one Signature element.");
             }
             throw new FSMsgException("moreElement",null);
-        }        
+        }
         //end check for signature
     }
 
@@ -274,7 +273,7 @@ public class FSAuthnResponse extends Response {
     public String getID() {
         return id;
     }
-    
+
     /**
      * Sets the value of the <code>id</code> attribute.
      *
@@ -283,8 +282,8 @@ public class FSAuthnResponse extends Response {
      */
     public void setID(String id) {
         this.id = id;
-    }    
-    
+    }
+
    /**
     * Returns the <code>ProviderID</code> attribute value.
     *
@@ -294,7 +293,7 @@ public class FSAuthnResponse extends Response {
     public String getProviderId() {
        return providerId;
     }
-   
+
     /**
      * Sets the <code>ProviderID</code> attribute value.
      *
@@ -304,7 +303,7 @@ public class FSAuthnResponse extends Response {
     public void setProviderId(String provId) {
        providerId = provId;
     }
-   
+
    /**
     * Returns a signed XML Representation of this object.
     *
@@ -313,7 +312,7 @@ public class FSAuthnResponse extends Response {
     public String getSignedXMLString(){
        return xmlString;
     }
-   
+
    /**
     * Returns the Signature string.
     *
@@ -380,7 +379,7 @@ public class FSAuthnResponse extends Response {
      * @throws FSMsgException on error.
      * @throws SAMLException if the version is incorrect.
      */
-    private void parseMajorVersion(String majorVer) 
+    private void parseMajorVersion(String majorVer)
                  throws SAMLException, FSMsgException {
         try {
             majorVersion = Integer.parseInt(majorVer);
@@ -477,8 +476,8 @@ public class FSAuthnResponse extends Response {
      * @param declareNS : Determines whether or not the namespace is declared
      *          within the Element.
      * @return A string containing the valid XML for this element
-     */   
-    public String toXMLString(boolean includeNS, boolean declareNS) 
+     */
+    public String toXMLString(boolean includeNS, boolean declareNS)
            throws FSMsgException {
         return toXMLString(includeNS, declareNS, false);
     }
@@ -493,18 +492,18 @@ public class FSAuthnResponse extends Response {
      * @param includeHeader  Determines whether the output include the xml
      *                declaration header.
      * @return A string containing the valid XML for this element
-     */   
+     */
     public String toXMLString(boolean includeNS,
                         boolean declareNS,
                         boolean includeHeader)  throws FSMsgException {
         FSUtils.debug.message("FSAuthnResponse.toXMLString(3): Called");
-        
+
         if((providerId == null) || (providerId.length() == 0)){
             FSUtils.debug.error("FSAuthnResponse.toXMLString: "
                 + "providerId is null ");
                 throw new FSMsgException("nullProviderID",null);
         }
-        
+
         StringBuffer xml = new StringBuffer(300);
         if (includeHeader) {
             xml.append(IFSConstants.XML_PREFIX)
@@ -522,14 +521,14 @@ public class FSAuthnResponse extends Response {
         String uriLIB = "";
         String uriDS="";
         String uriXSI="";
-        
+
         if (includeNS) {
             prefixLIB = IFSConstants.LIB_PREFIX;
             prefixSAML = IFSConstants.ASSERTION_PREFIX;
-            prefixSAML_PROTOCOL = IFSConstants.PROTOCOL_PREFIX; 
+            prefixSAML_PROTOCOL = IFSConstants.PROTOCOL_PREFIX;
         }
         if (declareNS) {
-            if(minorVersion == IFSConstants.FF_12_PROTOCOL_MINOR_VERSION) { 
+            if(minorVersion == IFSConstants.FF_12_PROTOCOL_MINOR_VERSION) {
                uriLIB = IFSConstants.LIB_12_NAMESPACE_STRING;
             } else {
                uriLIB = IFSConstants.LIB_NAMESPACE_STRING;
@@ -560,16 +559,16 @@ public class FSAuthnResponse extends Response {
                .append(responseID)
                .append(IFSConstants.QUOTE)
                .append(IFSConstants.SPACE);
-               
+
                 if ((inResponseTo != null) && (inResponseTo.length() != 0)) {
                     xml.append(IFSConstants.SPACE)
                        .append(IFSConstants.IN_RESPONSE_TO)
                        .append(IFSConstants.EQUAL_TO)
                        .append(IFSConstants.QUOTE)
-                       .append(inResponseTo)
+                       .append(XMLUtils.escapeSpecialCharacters(inResponseTo))
                        .append(IFSConstants.QUOTE);
                 }
-                if (minorVersion == IFSConstants.FF_11_PROTOCOL_MINOR_VERSION && 
+                if (minorVersion == IFSConstants.FF_11_PROTOCOL_MINOR_VERSION &&
                     id != null && (id.length() > 0)) {
                         xml.append(IFSConstants.SPACE)
                            .append(IFSConstants.ID)
@@ -579,13 +578,13 @@ public class FSAuthnResponse extends Response {
                            .append(IFSConstants.QUOTE);
                 }
                 xml.append(IFSConstants.SPACE)
-                   .append(IFSConstants.MAJOR_VERSION) 
+                   .append(IFSConstants.MAJOR_VERSION)
                    .append(IFSConstants.EQUAL_TO)
                    .append(IFSConstants.QUOTE)
                    .append(majorVersion)
                    .append(IFSConstants.QUOTE)
                    .append(IFSConstants.SPACE)
-                   .append(IFSConstants.MINOR_VERSION) 
+                   .append(IFSConstants.MINOR_VERSION)
                    .append(IFSConstants.EQUAL_TO)
                    .append(IFSConstants.QUOTE)
                    .append(minorVersion)
@@ -626,11 +625,11 @@ public class FSAuthnResponse extends Response {
                 xml.append(signatureString);
             }
         }
-        
+
         if (status != null) {
             xml.append(status.toString(includeNS, false));
         }
-        
+
         if ((assertions != null) && (assertions != Collections.EMPTY_LIST)) {
             Iterator j = assertions.iterator();
             while (j.hasNext()) {
@@ -638,7 +637,7 @@ public class FSAuthnResponse extends Response {
                                 .toXMLString(true,declareNS));
             }
         }
-        
+
         xml.append(IFSConstants.LEFT_ANGLE)
            .append(prefixLIB)
            .append(IFSConstants.PROVIDER_ID)
@@ -648,7 +647,7 @@ public class FSAuthnResponse extends Response {
            .append(prefixLIB)
            .append(IFSConstants.PROVIDER_ID)
            .append(IFSConstants.RIGHT_ANGLE);
-        
+
         if (relayState != null && relayState.length() != 0) {
             xml.append(IFSConstants.LEFT_ANGLE)
                .append(prefixLIB)
@@ -659,7 +658,7 @@ public class FSAuthnResponse extends Response {
                .append(prefixLIB)
                .append(IFSConstants.RELAY_STATE)
                .append(IFSConstants.RIGHT_ANGLE);
-        }     
+        }
 
         xml.append(IFSConstants.START_END_ELEMENT)
            .append(prefixLIB)
@@ -669,9 +668,9 @@ public class FSAuthnResponse extends Response {
 
         return xml.toString();
     }
-    
+
    /**
-    * Returns <code>FSAutnResponse</code> object by parsing a 
+    * Returns <code>FSAutnResponse</code> object by parsing a
     * <code>Base64</code> encoding XML string.
     *
     *
@@ -681,7 +680,7 @@ public class FSAuthnResponse extends Response {
     *         the <code>Base64</code> encoded string.
     * @throws SAMLException if there is an error creating
     *         the <code>FSAuthnResponse</code> object.
-    */    
+    */
     public static FSAuthnResponse parseBASE64EncodedString(String encodedRes)
                                   throws FSMsgException, SAMLException {
         FSUtils.debug.message(
@@ -704,7 +703,7 @@ public class FSAuthnResponse extends Response {
                 throw new FSMsgException("nullInput",null);
         }
     }
-    
+
    /**
     * Returns a <code>Base64</code> encoded string representing this
     * object.
@@ -725,8 +724,8 @@ public class FSAuthnResponse extends Response {
             }
         }
         return Base64.encode(this.toXMLString(true, true).getBytes());
-    } 
-    
+    }
+
     /**
      * Signs the <code>Response</code>.
      *
@@ -752,33 +751,33 @@ public class FSAuthnResponse extends Response {
         try{
             XMLSignatureManager manager = XMLSignatureManager.getInstance();
             if (minorVersion == IFSConstants.FF_11_PROTOCOL_MINOR_VERSION) {
-                signatureString = manager.signXML(this.toXMLString(true, true), 
-                                          certAlias, 
-                                          IFSConstants.DEF_SIG_ALGO, 
-                                          IFSConstants.ID, 
+                signatureString = manager.signXML(this.toXMLString(true, true),
+                                          certAlias,
+                                          IFSConstants.DEF_SIG_ALGO,
+                                          IFSConstants.ID,
                                           this.id, false);
-            } else if (minorVersion == 
+            } else if (minorVersion ==
                           IFSConstants.FF_12_PROTOCOL_MINOR_VERSION) {
                   signatureString = manager.signXML(
-                                         this.toXMLString(true, true), 
+                                         this.toXMLString(true, true),
                                          certAlias, IFSConstants.DEF_SIG_ALGO,
-                                         IFSConstants.RESPONSE_ID, 
+                                         IFSConstants.RESPONSE_ID,
                                          this.getResponseID(), false);
-            } else { 
-                if (FSUtils.debug.messageEnabled()) { 
-                    FSUtils.debug.message("invalid minor version.");                 
+            } else {
+                if (FSUtils.debug.messageEnabled()) {
+                    FSUtils.debug.message("invalid minor version.");
                 }
-            }  
+            }
             signature = XMLUtils.toDOMDocument(signatureString, FSUtils.debug)
                                                .getDocumentElement();
             signed = true;
-            xmlString = this.toXMLString(true, true);      
+            xmlString = this.toXMLString(true, true);
         } catch(Exception e) {
             throw new SAMLResponderException(FSUtils.BUNDLE_NAME,
                                              "signFailed",null);
         }
     }
-    
+
    /**
     * Sets the <code>Element</code> signature.
     *
@@ -786,7 +785,7 @@ public class FSAuthnResponse extends Response {
     * @return true if signature is set otherwise false
     */
     public boolean setSignature(Element elem) {
-        signatureString = XMLUtils.print(elem); 
-        return super.setSignature(elem); 
+        signatureString = XMLUtils.print(elem);
+        return super.setSignature(elem);
     }
 }

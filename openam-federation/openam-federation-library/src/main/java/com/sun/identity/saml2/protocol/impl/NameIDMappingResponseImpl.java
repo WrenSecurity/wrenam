@@ -24,8 +24,8 @@
  *
  * $Id: NameIDMappingResponseImpl.java,v 1.2 2008/06/25 05:48:00 qcheng Exp $
  *
+ * Portions Copyrighted 2023 Wren Security
  */
-
 package com.sun.identity.saml2.protocol.impl;
 
 import org.w3c.dom.Document;
@@ -54,14 +54,14 @@ public class NameIDMappingResponseImpl extends StatusResponseImpl
     EncryptedID encryptedID = null;
 
     /**
-     * Constructor to create <code>ManageNameIDResponse</code> Object. 
+     * Constructor to create <code>ManageNameIDResponse</code> Object.
      */
     public NameIDMappingResponseImpl() {
         isMutable = true;
     }
 
     /**
-     * Constructor to create <code>ManageNameIDResponse</code> Object. 
+     * Constructor to create <code>ManageNameIDResponse</code> Object.
      *
      * @param element Document Element of <code>ManageNameIDRequest<code>
      *     object.
@@ -77,7 +77,7 @@ public class NameIDMappingResponseImpl extends StatusResponseImpl
     }
 
     /**
-     * Constructor to create <code>ManageNameIDResponse</code> Object. 
+     * Constructor to create <code>ManageNameIDResponse</code> Object.
      *
      * @param xmlString XML representation of the
      *     <code>ManageNameIDRequest<code> object.
@@ -99,7 +99,7 @@ public class NameIDMappingResponseImpl extends StatusResponseImpl
     private void parseElement(Element element) throws SAML2Exception {
         AssertionFactory af = AssertionFactory.getInstance();
         ProtocolFactory pf = ProtocolFactory.getInstance();
-        
+
         // make sure that the input xml block is not null
         if (element == null) {
             if (SAML2SDKUtils.debug.messageEnabled()) {
@@ -124,13 +124,13 @@ public class NameIDMappingResponseImpl extends StatusResponseImpl
 
         responseId = element.getAttribute("ID");
         validateID(responseId);
-            
+
         version = element.getAttribute("Version");
         validateVersion(version);
 
         String issueInstantStr = element.getAttribute("IssueInstant");
         validateIssueInstant(issueInstantStr);
-            
+
         destination = element.getAttribute("Destination");
         consent = element.getAttribute("Consent");
         inResponseTo = element.getAttribute("InResponseTo");
@@ -147,7 +147,7 @@ public class NameIDMappingResponseImpl extends StatusResponseImpl
                     } else if (cName.equals("Signature")) {
                         signatureString =
                             XMLUtils.getElementString((Element)childNode);
-                        isSigned = true; 
+                        isSigned = true;
                     } else if (cName.equals("Extensions")) {
                         extensions = pf.createExtensions((Element)childNode);
                     } else if (cName.equals("NameID")) {
@@ -156,7 +156,7 @@ public class NameIDMappingResponseImpl extends StatusResponseImpl
                         encryptedID = af.createEncryptedID((Element)childNode);
                     } else if (cName.equals("Status")) {
                         status = pf.createStatus((Element)childNode);
-                    } 
+                    }
                 }
             }
         }
@@ -173,7 +173,7 @@ public class NameIDMappingResponseImpl extends StatusResponseImpl
     public String toXMLString() throws SAML2Exception {
         return toXMLString(true, false);
     }
-    
+
     /**
      * Returns the <code>ManageNameIDResponse</code> in an XML document String
      * format based on the <code>ManageNameIDResponse</code> schema described
@@ -199,20 +199,22 @@ public class NameIDMappingResponseImpl extends StatusResponseImpl
         String NS="";
         String NSP="";
         String uri="";
-            
+
         if (declareNS) {
             NS = SAML2Constants.PROTOCOL_DECLARE_STR;
             uri=NS;
         }
-            
+
         if (includeNSPrefix) {
             NSP = SAML2Constants.PROTOCOL_PREFIX;
         }
-        
+
         result.append("<").append(NSP).append("NameIDMappingResponse")
               .append(uri).append(" ID=\"").append(responseId).append("\"");
         if (inResponseTo != null && inResponseTo.trim().length() != 0) {
-            result.append(" InResponseTo=\"").append(inResponseTo).append("\"");
+            result.append(" InResponseTo=\"")
+                    .append(XMLUtils.escapeSpecialCharacters(inResponseTo))
+                    .append("\"");
         }
 
         result.append(" Version=\"").append(version).append("\"")
@@ -241,12 +243,12 @@ public class NameIDMappingResponseImpl extends StatusResponseImpl
         if (encryptedID != null) {
             result.append(encryptedID.toXMLString(includeNSPrefix,declareNS));
         }
-        
+
         result.append(status.toXMLString(includeNSPrefix, declareNS));
 
         result.append("</").append(NSP).append(elementName).append(">");
-        
-        return result.toString();    
+
+        return result.toString();
     }
 
     /**

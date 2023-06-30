@@ -25,6 +25,7 @@
  * $Id: StatusResponseImpl.java,v 1.4 2008/06/25 05:48:01 qcheng Exp $
  *
  * Portions Copyrighted 2015-2016 ForgeRock AS.
+ * Portions Copyrighted 2023 Wren Security
  */
 package com.sun.identity.saml2.protocol.impl;
 
@@ -56,7 +57,7 @@ import org.w3c.dom.Element;
  */
 
 public abstract class StatusResponseImpl implements StatusResponse {
-    
+
     protected String version = null;
     protected Date issueInstant = null;
     protected String destination = null;
@@ -82,7 +83,7 @@ public abstract class StatusResponseImpl implements StatusResponse {
     public java.lang.String getVersion() {
         return version;
     }
-    
+
     /**
      * Sets the value of the version property.
      *
@@ -98,7 +99,7 @@ public abstract class StatusResponseImpl implements StatusResponse {
             SAML2SDKUtils.bundle.getString("objectImmutable"));
         }
     }
-    
+
     /**
      * Returns the value of the issueInstant property.
      *
@@ -108,7 +109,7 @@ public abstract class StatusResponseImpl implements StatusResponse {
     public java.util.Date getIssueInstant() {
         return issueInstant;
     }
-    
+
     /**
      * Sets the value of the issueInstant property.
      *
@@ -124,7 +125,7 @@ public abstract class StatusResponseImpl implements StatusResponse {
             SAML2SDKUtils.bundle.getString("objectImmutable"));
         }
     }
-    
+
     /**
      * Returns the value of the destination property.
      *
@@ -134,7 +135,7 @@ public abstract class StatusResponseImpl implements StatusResponse {
     public java.lang.String getDestination() {
         return destination;
     }
-    
+
     /**
      * Sets the value of the destination property.
      *
@@ -150,7 +151,7 @@ public abstract class StatusResponseImpl implements StatusResponse {
             SAML2SDKUtils.bundle.getString("objectImmutable"));
         }
     }
-    
+
     /**
      * Returns the signature element, the <code>StatusResponse</code> contains
      * as <code>String</code>.
@@ -162,7 +163,7 @@ public abstract class StatusResponseImpl implements StatusResponse {
     public String getSignature() {
         return signatureString;
     }
-    
+
     /** Signs the StatusResponse
      *
      * @param privateKey Signing key
@@ -196,7 +197,7 @@ public abstract class StatusResponseImpl implements StatusResponse {
     public Extensions getExtensions() {
         return extensions;
     }
-    
+
     /**
      * Sets the value of the extensions property.
      *
@@ -212,7 +213,7 @@ public abstract class StatusResponseImpl implements StatusResponse {
             SAML2SDKUtils.bundle.getString("objectImmutable"));
         }
     }
-    
+
     /**
      * Returns the value of the consent property.
      *
@@ -222,7 +223,7 @@ public abstract class StatusResponseImpl implements StatusResponse {
     public java.lang.String getConsent() {
         return consent;
     }
-    
+
     /**
      * Sets the value of the consent property.
      *
@@ -238,7 +239,7 @@ public abstract class StatusResponseImpl implements StatusResponse {
             SAML2SDKUtils.bundle.getString("objectImmutable"));
         }
     }
-    
+
     /**
      * Returns the value of the inResponseTo property.
      *
@@ -248,7 +249,7 @@ public abstract class StatusResponseImpl implements StatusResponse {
     public java.lang.String getInResponseTo() {
         return inResponseTo;
     }
-    
+
     /**
      * Sets the value of the inResponseTo property.
      *
@@ -264,7 +265,7 @@ public abstract class StatusResponseImpl implements StatusResponse {
             SAML2SDKUtils.bundle.getString("objectImmutable"));
         }
     }
-    
+
     /**
      * Returns the value of the status property.
      *
@@ -274,7 +275,7 @@ public abstract class StatusResponseImpl implements StatusResponse {
     public com.sun.identity.saml2.protocol.Status getStatus() {
         return status;
     }
-    
+
     /**
      * Sets the value of the status property.
      *
@@ -291,7 +292,7 @@ public abstract class StatusResponseImpl implements StatusResponse {
             SAML2SDKUtils.bundle.getString("objectImmutable"));
         }
     }
-    
+
     /**
      * Returns the value of the id property.
      *
@@ -301,7 +302,7 @@ public abstract class StatusResponseImpl implements StatusResponse {
     public java.lang.String getID() {
         return responseId;
     }
-    
+
     /**
      * Sets the value of the id property.
      *
@@ -317,7 +318,7 @@ public abstract class StatusResponseImpl implements StatusResponse {
             SAML2SDKUtils.bundle.getString("objectImmutable"));
         }
     }
-    
+
     /**
      * Returns the value of the issuer property.
      *
@@ -327,7 +328,7 @@ public abstract class StatusResponseImpl implements StatusResponse {
     public Issuer getIssuer() {
         return issuer;
     }
-    
+
     /**
      * Sets the value of the issuer property.
      *
@@ -344,7 +345,7 @@ public abstract class StatusResponseImpl implements StatusResponse {
             SAML2SDKUtils.bundle.getString("objectImmutable"));
         }
     }
-    
+
     /**
      * Returns whether the <code>StatusResponse</code> is signed or not.
      *
@@ -356,13 +357,13 @@ public abstract class StatusResponseImpl implements StatusResponse {
 
     @Override
     public boolean isSignatureValid(Set<X509Certificate> verificationCerts)
-        throws SAML2Exception { 	
+        throws SAML2Exception {
         if (isSignatureValid == null) {
              isSignatureValid = SigManager.getSigInstance().verify(signedXMLString, getID(), verificationCerts);
          }
          return isSignatureValid.booleanValue();
-    }   
-    
+    }
+
     /**
      * Returns the <code>StatusResponse</code> in an XML document String format
      * based on the <code>StatusResponse</code> schema described above.
@@ -374,7 +375,7 @@ public abstract class StatusResponseImpl implements StatusResponse {
     public String toXMLString() throws SAML2Exception {
         return toXMLString(true,false);
     }
-    
+
     /**
      * Returns the <code>StatusResponse</code> in an XML document String format
      * based on the <code>StatusResponse</code> schema described above.
@@ -389,15 +390,15 @@ public abstract class StatusResponseImpl implements StatusResponse {
      */
     public String toXMLString(boolean includeNSPrefix,
     boolean declareNS) throws SAML2Exception {
-        
+
         StringBuffer xmlString = new StringBuffer(1000);
-        
+
         if (declareNS) {
             xmlString.append(SAML2Constants.PROTOCOL_DECLARE_STR)
             .append(SAML2Constants.NEWLINE);
-            
+
         }
-        
+
         xmlString.append(SAML2Constants.ID).append(SAML2Constants.EQUAL)
         .append(SAML2Constants.QUOTE)
         .append(responseId).append(SAML2Constants.QUOTE)
@@ -411,7 +412,7 @@ public abstract class StatusResponseImpl implements StatusResponse {
         .append(SAML2Constants.QUOTE)
         .append(DateUtils.toUTCDateFormat(issueInstant))
         .append(SAML2Constants.QUOTE);
-        
+
         if ((destination != null) && (destination.length() > 0)) {
             xmlString.append(SAML2Constants.SPACE)
             .append(SAML2Constants.DESTINATION)
@@ -420,7 +421,7 @@ public abstract class StatusResponseImpl implements StatusResponse {
             .append(destination)
             .append(SAML2Constants.QUOTE);
         }
-        
+
         if ((consent != null) && (consent.length() > 0)) {
             xmlString.append(SAML2Constants.SPACE)
             .append(SAML2Constants.CONSENT)
@@ -429,18 +430,18 @@ public abstract class StatusResponseImpl implements StatusResponse {
             .append(consent)
             .append(SAML2Constants.QUOTE);
         }
-        
+
         if ((inResponseTo != null) && (inResponseTo.length() > 0)) {
             xmlString.append(SAML2Constants.SPACE)
             .append(SAML2Constants.INRESPONSETO)
             .append(SAML2Constants.EQUAL)
             .append(SAML2Constants.QUOTE)
-            .append(inResponseTo)
+            .append(XMLUtils.escapeSpecialCharacters(inResponseTo))
             .append(SAML2Constants.QUOTE);
         }
-        
+
         xmlString.append(SAML2Constants.END_TAG);
-        
+
         if (issuer != null) {
             String issuerString = issuer.toXMLString(includeNSPrefix,declareNS);
             xmlString.append(SAML2Constants.NEWLINE).append(issuerString);
@@ -456,10 +457,10 @@ public abstract class StatusResponseImpl implements StatusResponse {
             xmlString.append(SAML2Constants.NEWLINE)
             .append(status.toXMLString(includeNSPrefix,declareNS));
         }
-        
+
         return xmlString.toString();
     }
-    
+
     /**
      * Makes this object immutable.
      */
@@ -477,7 +478,7 @@ public abstract class StatusResponseImpl implements StatusResponse {
             isMutable = false;
         }
     }
-    
+
     /**
      * Returns true if object is mutable.
      *
@@ -486,7 +487,7 @@ public abstract class StatusResponseImpl implements StatusResponse {
     public boolean isMutable() {
         return isMutable;
     }
-    
+
    /* Validates the responseId in the SAML Response. */
     protected void validateID(String responseId) throws SAML2Exception {
         if ((responseId == null) || (responseId.length() == 0 )) {
@@ -495,8 +496,8 @@ public abstract class StatusResponseImpl implements StatusResponse {
             SAML2SDKUtils.bundle.getString("missingIDAttr"));
         }
     }
-    
-    
+
+
    /* Validates the version in the SAML Response. */
     protected void validateVersion(String version) throws SAML2Exception {
         if ((version == null) || (version.length() == 0) ) {
@@ -507,7 +508,7 @@ public abstract class StatusResponseImpl implements StatusResponse {
             "incorrectVersion"));
         }
     }
-    
+
    /* Validates the IssueInstant attribute in the SAML Response. */
     protected void validateIssueInstant(String issueInstantStr)
     throws SAML2Exception {
@@ -524,7 +525,7 @@ public abstract class StatusResponseImpl implements StatusResponse {
             }
         }
     }
-    
+
     /* Validates the Status element in the SAML Response. */
     protected void validateStatus()
     throws SAML2Exception {
@@ -532,8 +533,8 @@ public abstract class StatusResponseImpl implements StatusResponse {
             throw new SAML2Exception(
             SAML2SDKUtils.bundle.getString("missingStatus"));
         }
-    }    
-    
+    }
+
    /* Validates the required elements in the SAML Response. */
     protected void validateData() throws SAML2Exception {
         validateID(responseId);
@@ -543,6 +544,6 @@ public abstract class StatusResponseImpl implements StatusResponse {
             SAML2SDKUtils.bundle.getString("incorrectIssueInstant"));
         }
         validateIssueInstant(DateUtils.dateToString(issueInstant));
-        validateStatus();        
+        validateStatus();
     }
 }
