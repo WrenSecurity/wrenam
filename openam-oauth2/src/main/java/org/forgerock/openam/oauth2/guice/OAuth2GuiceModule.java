@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014-2016 ForgeRock AS.
+ * Portions Copyright 2023 Wren Security.
  */
 package org.forgerock.openam.oauth2.guice;
 
@@ -26,7 +27,6 @@ import static org.forgerock.oauth2.core.TokenStore.REALM_AGNOSTIC_TOKEN_STORE;
 import static org.forgerock.openam.oauth2.OAuth2Constants.TokenEndpoint.AUTHORIZATION_CODE;
 import static org.forgerock.openam.oauth2.OAuth2Constants.TokenEndpoint.CLIENT_CREDENTIALS;
 import static org.forgerock.openam.oauth2.OAuth2Constants.TokenEndpoint.DEVICE_CODE;
-import static org.forgerock.openam.oauth2.OAuth2Constants.TokenEndpoint.JWT_BEARER;
 import static org.forgerock.openam.oauth2.OAuth2Constants.TokenEndpoint.PASSWORD;
 import static org.forgerock.openam.rest.service.RestletUtils.wrap;
 
@@ -63,7 +63,6 @@ import org.forgerock.oauth2.core.ClientRegistrationStore;
 import org.forgerock.oauth2.core.DeviceCodeGrantTypeHandler;
 import org.forgerock.oauth2.core.DuplicateRequestParameterValidator;
 import org.forgerock.oauth2.core.GrantTypeHandler;
-import org.forgerock.oauth2.core.JwtBearerGrantTypeHandler;
 import org.forgerock.oauth2.core.OAuth2ProviderSettings;
 import org.forgerock.oauth2.core.OAuth2ProviderSettingsFactory;
 import org.forgerock.oauth2.core.OAuth2Request;
@@ -218,7 +217,6 @@ public class OAuth2GuiceModule extends AbstractModule {
         grantTypeHandlers.addBinding(PASSWORD).to(PasswordCredentialsGrantTypeHandler.class);
         grantTypeHandlers.addBinding(AUTHORIZATION_CODE).to(AuthorizationCodeGrantTypeHandler.class);
         grantTypeHandlers.addBinding(DEVICE_CODE).to(DeviceCodeGrantTypeHandler.class);
-        grantTypeHandlers.addBinding(JWT_BEARER).to(JwtBearerGrantTypeHandler.class);
 
         final Multibinder<AuthorizeRequestHook> authorizeRequestHooks = Multibinder.newSetBinder(
                 binder(), AuthorizeRequestHook.class);

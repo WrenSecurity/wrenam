@@ -13,6 +13,7 @@
  *
  * Copyright 2012-2016 ForgeRock AS.
  * Portions Copyrighted 2015 Nomura Research Institute, Ltd.
+ * Portions Copyright 2023 Wren Security.
  */
 
 package org.forgerock.openam.oauth2;
@@ -53,7 +54,7 @@ public class OAuth2Constants {
 
     /*
      * public static final Set<String> params;
-     * 
+     *
      * static { Set<String> paramSet = new HashSet<String>();
      * paramSet.add(Params.ACCESS_TOKEN); paramSet.add(Params.CLIENT_ID);
      * paramSet.add(Params.CLIENT_SECRET); paramSet.add(Params.CODE);
@@ -151,7 +152,7 @@ public class OAuth2Constants {
          * @see <a href="http://openid.net/specs/openid-connect-core-1_0.html#AuthRequest">3.1.2.1 Authentication Request</a>
          */
         public static final String ACR_VALUES = "acr_values";
-        
+
         /** Parameter usage location: OpenId Connect request. */
         public static final String LOGIN_HINT = "login_hint";
 
@@ -270,8 +271,6 @@ public class OAuth2Constants {
          */
         public static final String SAML2_BEARER = "urn:ietf:params:oauth:grant-type:saml2-bearer";
 
-        public static final String JWT_BEARER = "urn:ietf:params:oauth:grant-type:jwt-bearer";
-
         public static final String DEVICE_CODE = "http://oauth.net/grant_type/device/1.0";
     }
 
@@ -383,7 +382,7 @@ public class OAuth2Constants {
 
         /*
          * 8.1.1. Registration Template
-         * 
+         *
          * Algorithm name: The name requested (e.g., "example"). Body hash
          * algorithm: The corresponding algorithm used to calculate the payload
          * body hash. Change controller: For standards-track RFCs, state "IETF".
@@ -393,63 +392,63 @@ public class OAuth2Constants {
          * specifies the algorithm, preferably including a URI that can be used
          * to retrieve a copy of the document. An indication of the relevant
          * sections may also be included, but is not required.
-         * 
+         *
          * 8.1.2. Initial Registry Contents
-         * 
+         *
          * The HTTP MAC authentication scheme algorithm registry's initial
          * contents are:
-         * 
-         * 
-         * 
+         *
+         *
+         *
          * Hammer-Lahav, et al. Expires November 12, 2011 [Page 22]
-         * 
+         *
          * Internet-Draft MAC Authentication May 2011
-         * 
-         * 
+         *
+         *
          * o Algorithm name: hmac-sha-1 o Body hash algorithm: sha-1 o Change
          * controller: IETF o Specification document(s): [[ this document ]]
-         * 
+         *
          * o Algorithm name: hmac-sha-256 o Body hash algorithm: sha-256 o
          * Change controller: IETF o Specification document(s): [[ this document
          * ]]
-         * 
+         *
          * 8.2. OAuth Access Token Type Registration
-         * 
+         *
          * This specification registers the following access token type in the
          * OAuth Access Token Type Registry.
-         * 
+         *
          * 8.2.1. The "mac" OAuth Access Token Type
-         * 
+         *
          * Type name: mac Additional Token Endpoint Response Parameters: secret,
          * algorithm HTTP Authentication Scheme(s): MAC Change controller: IETF
          * Specification document(s): [[ this document ]]
-         * 
+         *
          * 8.3. OAuth Parameters Registration
-         * 
+         *
          * This specification registers the following parameters in the OAuth
          * Parameters Registry established by [I-D.ietf-oauth-v2].
-         * 
+         *
          * 8.3.1. The "mac_key" OAuth Parameter
-         * 
+         *
          * Parameter name: mac_key Parameter usage location: authorization
          * response, token response Change controller: IETF Specification
          * document(s): [[ this document ]] Related information: None
-         * 
+         *
          * 8.3.2. The "mac_algorithm" OAuth Parameter
-         * 
+         *
          * Parameter name: mac_algorithm
-         * 
-         * 
-         * 
-         * 
-         * 
-         * 
-         * 
+         *
+         *
+         *
+         *
+         *
+         *
+         *
          * Hammer-Lahav, et al. Expires November 12, 2011 [Page 23]
-         * 
+         *
          * Internet-Draft MAC Authentication May 2011
-         * 
-         * 
+         *
+         *
          * Parameter usage location: authorization response, token response
          * Change controller: IETF Specification document(s): [[ this document
          * ]] Related information: None
