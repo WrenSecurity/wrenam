@@ -25,6 +25,7 @@
  * $Id: SAMLUtils.java,v 1.16 2010/01/09 19:41:06 qcheng Exp $
  *
  * Portions Copyrighted 2012-2016 ForgeRock AS.
+ * Portions Copyrighted 2023 Wren Security
  */
 
 package com.sun.identity.saml.common;
@@ -99,6 +100,7 @@ import com.sun.identity.federation.common.FSUtils;
 import javax.xml.parsers.DocumentBuilder;
 
 import org.apache.xml.security.c14n.Canonicalizer;
+import org.owasp.esapi.ESAPI;
 
 /**
  * This class contains some utility methods for processing SAML protocols.
@@ -126,13 +128,13 @@ public class SAMLUtils  extends SAMLUtilsCommon {
     String.valueOf(defaultMaxLength);
 
     private static final String ERROR_JSP = "/saml2/jsp/autosubmittingerror.jsp";
-    
+
     private static int maxContentLength = 0;
     private static Map idTimeMap = Collections.synchronizedMap(new HashMap());
     private static TaskRunnable cGoThrough = null;
     private static TaskRunnable cPeriodic = null;
     private static Object ssoToken;
- 
+
     static {
         org.apache.xml.security.Init.init();
         if (SystemConfigurationUtil.isServerMode()) {
@@ -163,15 +165,15 @@ public class SAMLUtils  extends SAMLUtilsCommon {
             maxContentLength=  SAMLUtils.defaultMaxLength;
         }
     }
-    
+
     /**
      * Constructor
      * iPlanet-PRIVATE-DEFAULT-CONSTRUCTOR
      */
     private SAMLUtils() {
     }
-    
-    
+
+
     /**
      * Generates an ID String with length of SAMLConstants.ID_LENGTH.
      * @return string the ID String; or null if it fails.
@@ -181,7 +183,7 @@ public class SAMLUtils  extends SAMLUtilsCommon {
         if (encodedID == null) {
             return null;
         }
-        
+
         String id = null;
         try {
             id = SystemConfigurationUtil.getServerID(
@@ -201,7 +203,7 @@ public class SAMLUtils  extends SAMLUtilsCommon {
             return (encodedID + id);
         }
     }
-    
+
     /**
      * Verifies if an element is a type of a specific query.
      * Currently, this method is used by class AuthenticationQuery,
@@ -240,7 +242,7 @@ public class SAMLUtils  extends SAMLUtilsCommon {
         }
         return true;
     }
-    
+
     /**
      * Generates sourceID of a site.
      * @param siteURL a String that uniquely identifies a site.
@@ -352,7 +354,7 @@ public class SAMLUtils  extends SAMLUtilsCommon {
         }
         return encodedID;
     }
-    
+
     /**
      * Gets sourceSite corresponding to an issuer from the partner URL list.
      * @param issuer The issuer string.
@@ -370,7 +372,7 @@ public class SAMLUtils  extends SAMLUtilsCommon {
             + "list is null.");
             return null;
         }
-        
+
         Iterator entryIter = entries.values().iterator();
         boolean found = false;
         SAMLServiceManager.SOAPEntry srcSite = null;
@@ -390,7 +392,7 @@ public class SAMLUtils  extends SAMLUtilsCommon {
             return null;
         }
     }
-    
+
     /**
      * Returns site ID based on the host name. The site ID
      * will be in Base64 encoded format. This method will print out site ID
@@ -398,15 +400,15 @@ public class SAMLUtils  extends SAMLUtilsCommon {
      * @param args host name
      */
     public static void main(String args[]) {
-        
+
         if (args.length != 1) {
             System.out.println("usage : java SAMLUtils <host_name>");
             return;
         }
-        
+
         System.out.println(generateSourceID(args[0]));
     }
-    
+
     /**
      * Checks if a <code>SubjectConfirmation</code> is correct.
      * @param sc <code>SubjectConfirmation</code> instance to be checked.
@@ -419,7 +421,7 @@ public class SAMLUtils  extends SAMLUtilsCommon {
         if (sc == null) {
             return false;
         }
-        
+
         Set cmSet = sc.getConfirmationMethod();
         if ((cmSet == null) || (cmSet.size() != 1)) {
             if (SAMLUtils.debug.messageEnabled()) {
@@ -428,7 +430,7 @@ public class SAMLUtils  extends SAMLUtilsCommon {
             }
             return false;
         }
-        
+
         String conMethod = (String) cmSet.iterator().next();
         if ((conMethod == null) ||
         (!conMethod.equals(SAMLConstants.CONFIRMATION_METHOD_IS))) {
@@ -438,10 +440,10 @@ public class SAMLUtils  extends SAMLUtilsCommon {
             }
             return false;
         }
-        
+
         return true;
     }
-    
+
     /**
      * Returns true if the assertion is valid both time wise and
      * signature wise, and contains at least one AuthenticationStatement.
@@ -453,11 +455,11 @@ public class SAMLUtils  extends SAMLUtilsCommon {
         if (assertion == null) {
             return false;
         }
-        
+
         if ((!assertion.isTimeValid()) || (!assertion.isSignatureValid())) {
             return false;
         }
-        
+
         Set statements = assertion.getStatement();
         Statement statement = null;
         Iterator iterator = statements.iterator();
@@ -470,7 +472,7 @@ public class SAMLUtils  extends SAMLUtilsCommon {
         } // loop through statements
         return false;
     }
- 
+
     /**
      * Converts a string to a byte array.
      * @param input a String to be converted.
@@ -484,7 +486,7 @@ public class SAMLUtils  extends SAMLUtilsCommon {
         }
         return bytes;
     }
- 
+
 
     /**
      * Returns server ID.
@@ -505,7 +507,7 @@ public class SAMLUtils  extends SAMLUtilsCommon {
             return null;
         }
     }
-    
+
     /**
      * Returns server url of a site.
      * @param str Server ID.
@@ -516,11 +518,11 @@ public class SAMLUtils  extends SAMLUtilsCommon {
         if (id == null) {
             return null;
         }
-        
+
         if (SAMLUtils.debug.messageEnabled()) {
             SAMLUtils.debug.message("SAMLUtils.getServerURL: id=" + id);
         }
-        
+
         String remoteUrl = null;
         try {
             remoteUrl = SystemConfigurationUtil.getServerFromID(id);
@@ -543,7 +545,7 @@ public class SAMLUtils  extends SAMLUtilsCommon {
             return remoteUrl;
         }
     }
-    
+
     /**
      * Returns full service url.
      * @param shortUrl short URL of the service.
@@ -573,7 +575,7 @@ public class SAMLUtils  extends SAMLUtilsCommon {
     /**
      * Returns attributes included in <code>AttributeStatement</code> of the
      * assertion.
-     * @param envParameters return map which includes name value pairs of 
+     * @param envParameters return map which includes name value pairs of
      *   attributes included in <code>AttributeStatement</code> of the assertion
      * @param assertion an <code>Assertion</code> object which contains
      *   <code>AttributeStatement</code>
@@ -606,7 +608,7 @@ public class SAMLUtils  extends SAMLUtilsCommon {
                     ((AttributeStatement)statement).getSubject())) {
                         continue;
                     }
-                    
+
                     attrs = ((AttributeStatement) statement).getAttribute();
                     attrIter = attrs.iterator();
                     while (attrIter.hasNext()) {
@@ -673,11 +675,11 @@ public class SAMLUtils  extends SAMLUtilsCommon {
     public static int getMaxContentLength() {
         return maxContentLength;
     }
-    
+
     // ************************************************************************
     // Methods used by SAML Servlets
     // ************************************************************************
- 
+
     /**
      * Checks content length of a http request to avoid dos attack.
      * In case SAML inter-op with other SAML vendor who may not provide content
@@ -705,12 +707,12 @@ public class SAMLUtils  extends SAMLUtilsCommon {
             }
         }
     }
-    
+
     /**
      * Post assertions and attributes to the target url.
      * This method opens a URL connection to the target specified and POSTs
      * assertions to it using the passed HttpServletResponse object. It POSTs
-     * multiple parameter names "assertion" with value being each of the 
+     * multiple parameter names "assertion" with value being each of the
      * <code>Assertion</code> in the passed Set.
      * @param response <code>HttpServletResponse</code> object
      * @param out The print writer which for content is to be written too.
@@ -744,7 +746,7 @@ public class SAMLUtils  extends SAMLUtilsCommon {
             }
             out.println("</P>\n");
         }
-        out.println("<FORM METHOD=\"POST\" ACTION=\"" + targeturl + "\">");
+        out.println("<FORM METHOD=\"POST\" ACTION=\"" + ESAPI.encoder().encodeForHTMLAttribute(targeturl) + "\">");
         if (assertion != null) {
             it = assertion.iterator();
             while (it.hasNext()) {
@@ -776,7 +778,7 @@ public class SAMLUtils  extends SAMLUtilsCommon {
         out.println("</BODY></HTML>");
         out.close();
     }
-    
+
     /**
      * Returns true of false based on whether the target passed as parameter
      * accepts form POST.
@@ -814,9 +816,9 @@ public class SAMLUtils  extends SAMLUtilsCommon {
             return false;
         }
     }
-    
+
     /**
-     * Replaces every occurence of ch with 
+     * Replaces every occurence of ch with
      * "&#&lt;ascii code of ch>;"
      * @param srcStr orginal string to to be encoded.
      * @param ch the charactor needs to be encoded.
@@ -826,18 +828,18 @@ public class SAMLUtils  extends SAMLUtilsCommon {
         if (srcStr == null) {
             return null;
         }
-        
+
         int fromIndex = 0;
         int toIndex;
         StringBuffer dstSB = new StringBuffer();
-        
+
         while((toIndex = srcStr.indexOf(ch, fromIndex)) != -1) {
             dstSB.append(srcStr.substring(fromIndex, toIndex))
             .append("&#" + (int)ch + ";");
             fromIndex = toIndex + 1;
         }
         dstSB.append(srcStr.substring(fromIndex));
-        
+
         return dstSB.toString();
     }
 
@@ -852,7 +854,7 @@ public class SAMLUtils  extends SAMLUtilsCommon {
         debug.message("In displayXML ");
         StringCharacterIterator iter = new StringCharacterIterator(input);
         StringBuffer buf = new StringBuffer();
-        
+
         for(char c = iter.first();c != CharacterIterator.DONE;c = iter.next()) {
             if (c=='>') {
                 buf.append("&gt;");
@@ -866,7 +868,7 @@ public class SAMLUtils  extends SAMLUtilsCommon {
         }
         return buf.toString();
     }
-    
+
     /**
      * Gets the list of <code>Assertion</code> objects from a list of
      * 'String' assertions.
@@ -896,8 +898,8 @@ public class SAMLUtils  extends SAMLUtilsCommon {
         }
         return returnAssertions;
     }
-    
-    
+
+
     // ************************************************************************
     // Methods used / shared by SAML Authentication Module and SAML Servlets
     // ************************************************************************
@@ -923,7 +925,7 @@ public class SAMLUtils  extends SAMLUtilsCommon {
         }
         return ret;
     }
- 
+
     /**
      * Returns <code>Response</code> object from byte array.
      * @param bytes byte array
@@ -964,17 +966,17 @@ public class SAMLUtils  extends SAMLUtilsCommon {
             debug.error("verifyResponse : Incorrect Recipient.");
             return false;
         }
-        
+
         // check status of the Response
         if (!response.getStatus().getStatusCode().getValue().endsWith(
         SAMLConstants.STATUS_CODE_SUCCESS_NO_PREFIX)) {
             debug.error("verifyResponse : Incorrect StatusCode value.");
             return false;
         }
-        
+
         return true;
     }
-    
+
     private static String getLBURL(String requestUrl,
                                  HttpServletRequest request)
     {
@@ -997,13 +999,13 @@ public class SAMLUtils  extends SAMLUtilsCommon {
         }
         return sb.toString().trim();
     }
-    
+
     // ************************************************************************
     // Methods used by SAML Authentication Module
     // ************************************************************************
-    
+
     /**
-     * Gets List of assertions in String format from a list of 
+     * Gets List of assertions in String format from a list of
      * <code>Assertion</code> objects.
      * @param assertions List of <code>Assertion</code> objects.
      * @return List of assertions in String format
@@ -1019,7 +1021,7 @@ public class SAMLUtils  extends SAMLUtilsCommon {
         }
         return returnAssertions;
     }
-    
+
     /**
      * Verifies Signature for Post response.
      * @param samlResponse <code>Response</code> object from post profile.
@@ -1032,7 +1034,7 @@ public class SAMLUtils  extends SAMLUtilsCommon {
         }
         return true;
     }
-    
+
     /**
      * Gets Attribute Map to be set in the Session.
      * @param partnerdest <code>SOAPEntry</code> object
@@ -1053,14 +1055,14 @@ public class SAMLUtils  extends SAMLUtilsCommon {
         String org = null;
         Map attrMap = new HashMap();
         PartnerAccountMapper paMapper = partnerdest.getPartnerAccountMapper();
-        
+
         if (paMapper != null) {
             Map map = paMapper.getUser(assertions, srcID, target);
             name = (String) map.get(PartnerAccountMapper.NAME);
             org =  (String) map.get(PartnerAccountMapper.ORG);
             attrMap = (Map) map.get(PartnerAccountMapper.ATTRIBUTE);
         }
-        
+
         if (attrMap == null) {
             attrMap = new HashMap();
         }
@@ -1070,15 +1072,15 @@ public class SAMLUtils  extends SAMLUtilsCommon {
         } else {
             attrMap.put(SessionProvider.REALM, "/");
         }
-        
+
         if (debug.messageEnabled()) {
             debug.message("getAttributeMap : " + "name = " +
             name + ", realm=" + org + ", attrMap = " + attrMap);
         }
-        
+
         return attrMap;
     }
-    
+
     /**
      * Checks response and get back a Map of relevant data including,
      * Subject, SOAPEntry for the partner and the List of Assertions.
@@ -1111,7 +1113,7 @@ public class SAMLUtils  extends SAMLUtilsCommon {
                 + "AndGetSSMap: Assertion: " + aIDString + " is used.");
                 return null;
             }
-            
+
             // check issuer of the assertions
             issuer = assertion.getIssuer();
             if ((srcSite = SAMLUtils.getSourceSite(issuer)) == null) {
@@ -1119,25 +1121,25 @@ public class SAMLUtils  extends SAMLUtilsCommon {
                 + "onAndGetSSMap: issuer is not on the Partner list.");
                 return null;
             }
-            
+
             if (!assertion.isSignatureValid()) {
                 debug.error("verifyAssertion "
                 + "AndGetSSMap: assertion's signature is not valid.");
                 return null;
             }
-            
+
             // must be valid (timewise)
             if (!assertion.isTimeValid()) {
                 debug.error("verifyAssertion "
                 + "AndGetSSMap: assertion's time is not valid.");
                 return null;
             }
-            
+
             // TODO: IssuerInstant of the assertion is within a few minutes
             // This is a MAY in spec. Which number to use for the few minutes?
-            
+
             // TODO: check AudienceRestrictionCondition
-            
+
             //for each assertion, loop to check each statement
             stmtIter = assertion.getStatement().iterator();
             while (stmtIter.hasNext()) {
@@ -1147,7 +1149,7 @@ public class SAMLUtils  extends SAMLUtilsCommon {
                 (stmtType == Statement.ATTRIBUTE_STATEMENT) ||
                 (stmtType == Statement.AUTHORIZATION_DECISION_STATEMENT)) {
                     sub = ((SubjectStatement)statement).getSubject();
-                    
+
                     // ConfirmationMethod of each subject must be set to bearer
                     if (((subConf = sub.getSubjectConfirmation()) == null) ||
                     ((confMethods = subConf.getConfirmationMethod())
@@ -1166,9 +1168,9 @@ public class SAMLUtils  extends SAMLUtilsCommon {
                         + "AssertionAndGetSSMap:wrong ConfirmationMethod.");
                         return null;
                     }
-                    
+
                     //TODO: must contain same Subject for all statements?
-                    
+
                     if (stmtType == Statement.AUTHENTICATION_STATEMENT) {
                         //TODO: if it has SubjectLocality,its IP must == sender
                         // browser IP. This is a MAY item in the spec.
@@ -1178,7 +1180,7 @@ public class SAMLUtils  extends SAMLUtilsCommon {
                     }
                 }
             }
-            
+
             // add the assertion to idTimeMap
             if (debug.messageEnabled()) {
                 debug.message("Adding " + aIDString + " to idTimeMap.");
@@ -1193,7 +1195,7 @@ public class SAMLUtils  extends SAMLUtilsCommon {
                 idTimeMap.put(aIDString, aIDString);
             }
         }
-        
+
         // must have at least one SSO assertion
         if ((subject == null) || (srcSite == null)) {
             debug.error("verifyAssertion AndGetSSMap: couldn't find Subject.");
@@ -1205,7 +1207,7 @@ public class SAMLUtils  extends SAMLUtilsCommon {
         ssMap.put(SAMLConstants.POST_ASSERTION, assertions);
         return ssMap;
     }
-    
+
     /**
      * Checks if the Assertion is time valid and
      * if the Assertion is allowed by AudienceRestrictionCondition.
@@ -1253,7 +1255,7 @@ public class SAMLUtils  extends SAMLUtilsCommon {
         }
         return true;
     }
-    
+
     /**
      * Determines if there is a valid SSO Assertion
      * inside of SAML Response.
@@ -1270,19 +1272,19 @@ public class SAMLUtils  extends SAMLUtilsCommon {
         boolean validation = false;
         com.sun.identity.saml.assertion.Subject subject = null;
         Iterator iter = assertions.iterator();
-        
+
         while (iter.hasNext()) {
             Assertion assertion = (Assertion)iter.next();
-            
+
             if (!checkCondition(assertion)) {
                 return null;
             }
             debug.message("Passed checking Conditions!");
-            
+
             // exam the Statement inside the Assertion
             Set statements = new HashSet();
             statements = assertion.getStatement();
-            
+
             if (statements == null || statements.isEmpty()) {
                 debug.error(bundle.getString("noStatement"));
                 return null;
@@ -1324,7 +1326,7 @@ public class SAMLUtils  extends SAMLUtilsCommon {
                 }
             }  // end of  while (iterator.hasNext()) for Statements
         } // end of while (iter.hasNext()) for Assertions
-        
+
         if (!validation) {
             debug.error(bundle.getString("noSSOAssertion"));
             return null;
@@ -1334,17 +1336,17 @@ public class SAMLUtils  extends SAMLUtilsCommon {
 
     /**
      * Return whether the signature on the object is valid or not.
-     * @param xmlString input XML String 
+     * @param xmlString input XML String
      * @param idAttribute ASSERTION_ID_ATTRIBUTE or RESPONSE_ID_ATTRIBUTE
-     * @param issuer the issuer of the Assertion 
+     * @param issuer the issuer of the Assertion
      * @return true if the signature on the object is valid; false otherwise.
      */
-    public static boolean checkSignatureValid(String xmlString, 
-                                                  String idAttribute, 
+    public static boolean checkSignatureValid(String xmlString,
+                                                  String idAttribute,
                                                   String issuer)
     {
             String certAlias = null;
-            boolean valid = true; 
+            boolean valid = true;
             Map entries = (Map) SAMLServiceManager.getAttribute(
                                 SAMLConstants.PARTNER_URLS);
         if (entries != null) {
@@ -1354,11 +1356,11 @@ public class SAMLUtils  extends SAMLUtilsCommon {
                 certAlias = srcSite.getCertAlias();
             }
         }
-      
+
         try {
             SAMLUtils.debug.message("SAMLUtils.checkSignatureValid for certAlias {}", certAlias);
             XMLSignatureManager manager = XMLSignatureManager.getInstance();
-            valid = manager.verifyXMLSignature(xmlString, 
+            valid = manager.verifyXMLSignature(xmlString,
                                    idAttribute, certAlias);
         } catch (Exception e) {
             SAMLUtils.debug.warning("SAMLUtils.checkSignatureValid:"+
@@ -1383,7 +1385,7 @@ public class SAMLUtils  extends SAMLUtilsCommon {
      */
     public static void setMimeHeaders(
          MimeHeaders headers, HttpServletResponse response) {
-        
+
          if(headers == null || response == null) {
             debug.message("SAMLUtils.setMimeHeaders : null input");
             return;
@@ -1408,7 +1410,7 @@ public class SAMLUtils  extends SAMLUtilsCommon {
               }
 
          }
-         return; 
+         return;
     }
 
     /**
@@ -1439,9 +1441,9 @@ public class SAMLUtils  extends SAMLUtilsCommon {
              }
          }
 
-         return headers; 
+         return headers;
     }
-     
+
     /**
      * Returns the authenticaion login url with goto parameter
      * in the given <code>HttpServletRequest</code> object.
@@ -1452,23 +1454,23 @@ public class SAMLUtils  extends SAMLUtilsCommon {
     public static String getLoginRedirectURL(HttpServletRequest req) {
         String qs = req.getQueryString();
         String gotoUrl = req.getRequestURL().toString();
-        String key = null; 
+        String key = null;
         if (qs != null && qs.length() > 0) {
             gotoUrl = gotoUrl + "?" + qs;
             int startIdx = -1;
-            int endIdx = -1; 
-            StringBuffer result = new StringBuffer(); 
+            int endIdx = -1;
+            StringBuffer result = new StringBuffer();
             if ((startIdx = qs.indexOf((String) SAMLServiceManager.
                 getAttribute(SAMLConstants.TARGET_SPECIFIER))) > 0) {
-                result.append(qs.substring(0, startIdx - 1)); 
-            }    
+                result.append(qs.substring(0, startIdx - 1));
+            }
             if ((endIdx = qs.indexOf("&", startIdx)) != -1) {
                 if (startIdx == 0) {
-                    result.append(qs.substring(endIdx + 1)); 
+                    result.append(qs.substring(endIdx + 1));
                 } else {
                     result.append(qs.substring(endIdx));
-                }    
-            } 
+                }
+            }
             key = result.toString();
         }
 
@@ -1476,40 +1478,40 @@ public class SAMLUtils  extends SAMLUtilsCommon {
             req.getServerPort() + req.getContextPath();
         String redirectUrl = null;
         if (key == null || key.equals("")) {
-            redirectUrl = reqUrl +"/UI/Login?goto=" +  
+            redirectUrl = reqUrl +"/UI/Login?goto=" +
                 URLEncDec.encode(gotoUrl);
         } else {
-            redirectUrl = reqUrl +"/UI/Login?" + key + "&goto="+ 
+            redirectUrl = reqUrl +"/UI/Login?" + key + "&goto="+
                 URLEncDec.encode(gotoUrl);
         }
         if (SAMLUtils.debug.messageEnabled()) {
             SAMLUtils.debug.message("Redirect to auth login via:" +
                 redirectUrl);
-        }    
-        return redirectUrl; 
-    }    
-    
-      
-    /** 
+        }
+        return redirectUrl;
+    }
+
+
+    /**
      * Processes SAML Artifact
      * @param artifact SAML Artifact
-     * @param target Target URL 
+     * @param target Target URL
      * @return Attribute Map
      * @exception SAMLException if failed to get the Assertions or
      *     Attribute Map.
      */
-    public static Map processArtifact(String[] artifact, String target) 
+    public static Map processArtifact(String[] artifact, String target)
         throws SAMLException {
-        List assts = null;  
-        Subject assertionSubject = null; 
-        AssertionArtifact firstArtifact = null;  
-        Map sessMap = null; 
+        List assts = null;
+        Subject assertionSubject = null;
+        AssertionArtifact firstArtifact = null;
+        Map sessMap = null;
         // Call SAMLClient to do the Single-sign-on
         try {
             assts = SAMLClient.artifactQueryHandler(artifact, (String) null);
             //exam the SAML response
             if ((assertionSubject = examAssertions(assts)) == null) {
-                return null; 
+                return null;
             }
             firstArtifact = new AssertionArtifact(artifact[0]);
             String sid = firstArtifact.getSourceID();
@@ -1519,47 +1521,47 @@ public class SAMLUtils  extends SAMLUtilsCommon {
                 throw new SAMLException(bundle.getString
                     ("nullPartnerUrl"));
             }
-            SAMLServiceManager.SOAPEntry partnerdest = 
+            SAMLServiceManager.SOAPEntry partnerdest =
                 (SAMLServiceManager.SOAPEntry) partner.get(sid);
             if (partnerdest == null) {
                 throw new SAMLException(bundle.getString
                     ("failedAccountMapping"));
             }
             sessMap = getAttributeMap(partnerdest, assts,
-                assertionSubject, target); 
+                assertionSubject, target);
         } catch (Exception se) {
             debug.error("SAMLUtils.processArtifact :" , se);
             throw new SAMLException(
                 bundle.getString("failProcessArtifact"));
-        }    
-        return sessMap;   
+        }
+        return sessMap;
     }
-    
+
     /**
-     * Creates Session 
+     * Creates Session
      * @param request HttpServletRequest
      * @param response HttpServletResponse
-     * @param attrMap Attribute Map 
+     * @param attrMap Attribute Map
      * @exception if failed to create Session
      */
     public static Object generateSession(HttpServletRequest request,
-        HttpServletResponse response, 
-        Map attrMap) throws SAMLException {  
+        HttpServletResponse response,
+        Map attrMap) throws SAMLException {
         Map sessionInfoMap = new HashMap();
         String realm = (String) attrMap.get(SessionProvider.REALM);
         if ((realm == null) || (realm.length() == 0)) {
             realm = "/";
-        } 
+        }
         sessionInfoMap.put(SessionProvider.REALM, realm);
-        String principalName = 
+        String principalName =
             (String) attrMap.get(SessionProvider.PRINCIPAL_NAME);
         if (principalName == null) {
             principalName = (String) attrMap.get(SAMLConstants.USER_NAME);
         }
         sessionInfoMap.put(SessionProvider.PRINCIPAL_NAME, principalName);
         //TODO: sessionInfoMap.put(SessionProvider.AUTH_LEVEL, "0");
-        Object session = null;  
-        try {  
+        Object session = null;
+        try {
             SessionProvider sessionProvider = SessionManager.getProvider();
             session = sessionProvider.createSession(
                 sessionInfoMap, request, response, null);
@@ -1572,17 +1574,17 @@ public class SAMLUtils  extends SAMLUtilsCommon {
         }
         return session;
     }
-    
+
     /**
      * Processes SAML Response
      * @param samlResponse SAML Response object
-     * @param target Target URL 
+     * @param target Target URL
      * @return Attribute Map
      * @exception SAMLException if failed to get Attribute Map.
      */
-    public static Map processResponse(Response samlResponse, String target) 
+    public static Map processResponse(Response samlResponse, String target)
         throws SAMLException {
-        List assertions = null;    
+        List assertions = null;
         SAMLServiceManager.SOAPEntry partnerdest = null;
         Subject assertionSubject = null;
         if (samlResponse.isSigned()) {
@@ -1598,7 +1600,7 @@ public class SAMLUtils  extends SAMLUtilsCommon {
         if (debug.messageEnabled()) {
             debug.message("processResponse: ssMap = " + ssMap);
         }
-        
+
         if (ssMap == null) {
             throw new SAMLException(bundle.getString("invalidAssertion"));
         }
@@ -1607,18 +1609,18 @@ public class SAMLUtils  extends SAMLUtilsCommon {
         if (assertionSubject == null) {
             throw new SAMLException(bundle.getString("nullSubject"));
         }
-        
+
         partnerdest = (SAMLServiceManager.SOAPEntry)ssMap
             .get(SAMLConstants.SOURCE_SITE_SOAP_ENTRY);
         if (partnerdest == null) {
             throw new SAMLException(bundle.getString("failedAccountMapping"));
         }
-        
+
         assertions = (List)ssMap.get(SAMLConstants.POST_ASSERTION);
         Map sessMap = null;
-        try { 
+        try {
             sessMap = getAttributeMap(partnerdest, assertions,
-                assertionSubject, target); 
+                assertionSubject, target);
         } catch (Exception se) {
             debug.error("SAMLUtils.processResponse :" , se);
             throw new SAMLException(
@@ -1626,14 +1628,14 @@ public class SAMLUtils  extends SAMLUtilsCommon {
         }
         return sessMap;
     }
-    
+
     /**
      *Sets the attribute map in the session
      *
      *@param attrMap, the Attribute Map
      *@param session, the valid session object
-     *@exception SessionException if failed to set Attribute in the 
-     *    Session.  
+     *@exception SessionException if failed to set Attribute in the
+     *    Session.
      */
     private static void setAttrMapInSession(
         SessionProvider sessionProvider,
@@ -1653,7 +1655,7 @@ public class SAMLUtils  extends SAMLUtilsCommon {
                 } else if (attrName.equals(SessionProvider.REALM) ||
                     attrName.equals(SessionProvider.AUTH_LEVEL)) {
                     // ignore
-                    continue; 
+                    continue;
                 } else {
                     attrValues = (String[])entry.getValue();
                 }
@@ -1663,7 +1665,7 @@ public class SAMLUtils  extends SAMLUtilsCommon {
                         attrName);
                 }
             }
-        } 
+        }
     }
 
     /**
@@ -1713,7 +1715,7 @@ public class SAMLUtils  extends SAMLUtilsCommon {
               Canonicalizer c14n = Canonicalizer.getInstance(
                   "http://www.w3.org/TR/2001/REC-xml-c14n-20010315");
               byte outputBytes[] = c14n.canonicalizeSubtree(node);
-              DocumentBuilder documentBuilder = 
+              DocumentBuilder documentBuilder =
                  XMLUtils.getSafeDocumentBuilder(false);
               Document doc = documentBuilder.parse(
                   new ByteArrayInputStream(outputBytes));
@@ -1726,7 +1728,7 @@ public class SAMLUtils  extends SAMLUtilsCommon {
               return null;
           }
       }
-      
+
      /**
       * Sends to error page URL for SAML protocols. If the error page is
       * hosted in the same web application, forward is used with
