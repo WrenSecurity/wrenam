@@ -6,11 +6,11 @@
         {{#if error.uri}}
             <a href="{{{error.uri}}}">{{{error.message}}}</a>
         {{else}}
-            {{{error.message}}}
+            {{error.message}}
         {{/if}}
         </strong>
         {{#if error.description}}
-            {{{error.description}}}
+            {{error.description}}
         {{/if}}
     </div>
     {{else}}
