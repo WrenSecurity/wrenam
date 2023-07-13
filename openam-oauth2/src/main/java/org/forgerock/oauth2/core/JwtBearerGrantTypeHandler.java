@@ -39,6 +39,7 @@ import org.forgerock.openam.oauth2.OAuth2UrisFactory;
 /**
  * Implementation of the JwtBearerGrantTypeHandler for the JWT Bearer grant.
  *
+ * @deprecated Implementation contains critical security issue (AM SA #201801-01) and should be rewritten.
  * @since 12.0.0
  */
 public class JwtBearerGrantTypeHandler extends GrantTypeHandler {
@@ -56,7 +57,7 @@ public class JwtBearerGrantTypeHandler extends GrantTypeHandler {
     public AccessToken handle(OAuth2Request request, ClientRegistration clientRegistration,
             OAuth2ProviderSettings providerSettings) throws RedirectUriMismatchException,
             InvalidRequestException, InvalidGrantException, InvalidCodeException,
-            ServerException, UnauthorizedClientException, InvalidScopeException, 
+            ServerException, UnauthorizedClientException, InvalidScopeException,
             InvalidClientException, NotFoundException {
 
         final String jwtParameter = request.getParameter(OAuth2Constants.SAML20.ASSERTION);
