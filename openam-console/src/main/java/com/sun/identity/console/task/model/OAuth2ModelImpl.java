@@ -24,6 +24,7 @@ import java.util.TreeSet;
 import com.sun.identity.console.base.model.AMConsoleException;
 import com.sun.identity.console.base.model.AMModelBase;
 import org.forgerock.openam.utils.StringUtils;
+import org.owasp.esapi.ESAPI;
 
 /**
  * Default implementation of the OAuth2 profiles model.
@@ -37,7 +38,7 @@ public class OAuth2ModelImpl extends AMModelBase implements OAuth2Model {
 
     public OAuth2ModelImpl(final HttpServletRequest req, final Map map) {
         super(req, map);
-        this.type = req.getParameter("type");
+        this.type = ESAPI.encoder().encodeForHTML(req.getParameter("type"));
     }
 
     @Override
