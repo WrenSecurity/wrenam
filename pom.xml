@@ -195,8 +195,8 @@
         <java-ipv6.version>0.14</java-ipv6.version>
         <json.version>20090211</json.version>
         <hikaricp.version>2.4.1</hikaricp.version>
-        <h2database.version>1.4.188</h2database.version>
-        <activemq.version>5.13.3</activemq.version>
+        <h2database.version>2.2.220</h2database.version>
+        <activemq.version>5.18.2</activemq.version>
         <javax.inject.version>1_2</javax.inject.version>
         <fastinfoset.version>1.2.13</fastinfoset.version>
         <jetty.jspc.version>9.4.0.M0</jetty.jspc.version>

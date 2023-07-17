@@ -23,9 +23,9 @@
         <artifactId>wrenam-project</artifactId>
         <version>15.0.0-M6-SNAPSHOT</version>
     </parent>
-    
+
     <properties>
-        <logback.version>1.1.3</logback.version>
+        <logback.version>1.4.8</logback.version>
     </properties>
 
     <artifactId>openam-radius</artifactId>
@@ -38,7 +38,7 @@
         <module>openam-radius-common</module>
         <module>openam-radius-server</module>
     </modules>
-    
+
    <dependencies>
        <dependency>
            <groupId>ch.qos.logback</groupId>
@@ -46,5 +46,5 @@
            <version>${logback.version}</version>
            <scope>test</scope>
        </dependency>
-   </dependencies>    
+   </dependencies>
 </project>
