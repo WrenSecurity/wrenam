@@ -28,7 +28,7 @@
 
     <groupId>org.wrensecurity.wrenam</groupId>
     <artifactId>wrenam-project</artifactId>
-    <version>15.0.0-M5</version>
+    <version>15.0.0-M6-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Wren:AM - Parent</name>
@@ -137,7 +137,7 @@
         <!-- XXX END Configuration under consideration -->
 
         <!-- https://maven.apache.org/guides/mini/guide-reproducible-builds.html -->
-        <project.build.outputTimestamp>2023-07-17T13:55:07Z</project.build.outputTimestamp>
+        <project.build.outputTimestamp>2023-07-17T14:14:20Z</project.build.outputTimestamp>
 
         <!-- Wren Security Dependencies -->
         <wrends.version>5.0.0</wrends.version>
