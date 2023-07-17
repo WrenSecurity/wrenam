@@ -98,7 +98,7 @@
 
     <properties>
         <pgpVerifyKeysVersion>1.7.4</pgpVerifyKeysVersion>
-        <wrenBuildToolsVersion>1.1.1-SNAPSHOT</wrenBuildToolsVersion>
+        <wrenBuildToolsVersion>1.2.0</wrenBuildToolsVersion>
 
         <!-- Source code has to be Java 8 compliant (code base is not JPMS ready) -->
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -1300,9 +1300,7 @@
                 <artifactId>maven-release-plugin</artifactId>
 
                 <configuration>
-                    <autoVersionSubmodules>true</autoVersionSubmodules>
                     <updateBranchVersions>true</updateBranchVersions>
-                    <goals>install javadoc:aggregate-jar deploy</goals>
                 </configuration>
             </plugin>
 
