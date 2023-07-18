@@ -97,7 +97,7 @@
     </repositories>
 
     <properties>
-        <pgpVerifyKeysVersion>1.7.4</pgpVerifyKeysVersion>
+        <pgpVerifyKeysVersion>1.7.5</pgpVerifyKeysVersion>
         <wrenBuildToolsVersion>1.2.0</wrenBuildToolsVersion>
 
         <!-- Source code has to be Java 8 compliant (code base is not JPMS ready) -->
