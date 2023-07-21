@@ -76,7 +76,7 @@ public class NonExpiringSessionManagerTest extends AbstractMockBasedTest {
     public void shouldSetUpSessionCorrectly() {
         nonExpiringSessionManager.addNonExpiringSession(mockInternalSession);
         verify(mockInternalSession).setMaxSessionTime(InternalSession.NON_EXPIRING_SESSION_LENGTH_MINUTES);
-        verify(mockInternalSession).setMaxIdleTime(10);
+        verify(mockInternalSession).setMaxIdleTime(25);
         verify(mockInternalSession).setLatestAccessTime();
     }
 

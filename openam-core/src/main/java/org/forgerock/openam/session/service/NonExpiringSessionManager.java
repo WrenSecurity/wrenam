@@ -12,21 +12,22 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions Copyright 2023 Wren Security.
  */
 
 package org.forgerock.openam.session.service;
 
 import static com.iplanet.dpro.session.service.InternalSession.NON_EXPIRING_SESSION_LENGTH_MINUTES;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
-import org.forgerock.openam.shared.concurrency.ThreadMonitor;
-
 import com.iplanet.dpro.session.SessionID;
 import com.iplanet.dpro.session.service.InternalSession;
+import com.sun.identity.shared.debug.Debug;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import org.forgerock.openam.session.SessionConstants;
+import org.forgerock.openam.shared.concurrency.ThreadMonitor;
 
 /**
  * This class tracks sessions created by this server which are not set to expire. It achieves this by periodically
@@ -36,9 +37,15 @@ import com.iplanet.dpro.session.service.InternalSession;
  */
 class NonExpiringSessionManager {
 
-    private static final long refreshPeriodInMinutes = 5;
+    private static final Debug DEBUG = Debug.getInstance(SessionConstants.SESSION_DEBUG);
 
-    private final Set<SessionID> nonExpiringSessions = new HashSet<>();
+    // Internal (in minutes) to periodically refresh non-expiring session validity
+    private static final long SESSION_REFRESH_INTERVAL = 5;
+
+    // Maximum non-expiring session idle time
+    private static final long SESSION_MAX_IDLE_TIME = SESSION_REFRESH_INTERVAL * 5;
+
+    private final Set<SessionID> nonExpiringSessions = new CopyOnWriteArraySet<>();
 
     private final SessionAccessManager sessionAccessManager;
 
@@ -53,7 +60,7 @@ class NonExpiringSessionManager {
         this.sessionAccessManager = sessionAccessManager;
 
         NonExpiringSessionUpdater sessionUpdater = new NonExpiringSessionUpdater();
-        threadMonitor.watchScheduledThread(scheduler, sessionUpdater, 0, refreshPeriodInMinutes, TimeUnit.MINUTES);
+        threadMonitor.watchScheduledThread(scheduler, sessionUpdater, 0, SESSION_REFRESH_INTERVAL, TimeUnit.MINUTES);
     }
 
     /**
@@ -65,8 +72,9 @@ class NonExpiringSessionManager {
             throw new IllegalStateException("Tried to add session which would expire to NonExpiringSessionManager");
         }
         session.setMaxSessionTime(NON_EXPIRING_SESSION_LENGTH_MINUTES);
-        session.setMaxIdleTime(refreshPeriodInMinutes * 2);
+        session.setMaxIdleTime(SESSION_MAX_IDLE_TIME);
         updateSession(session);
+        DEBUG.message("Registering non-expiring session for '{}'", session.getUUID());
         nonExpiringSessions.add(session.getID());
     }
 
