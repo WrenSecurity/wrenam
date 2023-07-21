@@ -13,7 +13,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Portions copyright 2022 Wren Security
+ * Portions copyright 2022-2023 Wren Security
  */
 package org.forgerock.openam.cts.api.tokens;
 
@@ -58,6 +58,9 @@ import com.sun.identity.shared.encode.Base64;
 @Title(CORE_TOKEN_RESOURCE + "resource.schema." + TITLE)
 @Description(CORE_TOKEN_RESOURCE + "resource.schema." + DESCRIPTION)
 public class Token {
+
+    // Maximum allowed value of token validity
+    private static final String MAX_ALLOWED_DATETIME = "99991231235959.000Z";
 
     /**
      * Note: This map stores all data for the Token. It is intentionally using a String to Object mapping
@@ -315,7 +318,11 @@ public class Token {
             } else if (CoreTokenField.TOKEN_TYPE.equals(field)) {
                 s = ((TokenType) value).name();
             } else if (CoreTokenFieldTypes.isCalendar(field)) {
-                s = GeneralizedTime.valueOf((Calendar) value).toString();
+                if (((Calendar) value).get(Calendar.YEAR) > 9999) {
+                    s = MAX_ALLOWED_DATETIME;
+                } else {
+                    s = GeneralizedTime.valueOf((Calendar) value).toString();
+                }
             } else if (CoreTokenFieldTypes.isByteArray(field)) {
                 s = Base64.encode((byte[]) value);
             } else if (CoreTokenFieldTypes.isInteger(field)) {
