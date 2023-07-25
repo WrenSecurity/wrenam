@@ -178,13 +178,12 @@ public class AdminTokenAction implements PrivilegedAction<SSOToken> {
     }
 
     private void resetInstance() {
-        if (appSSOToken != null) {
-            // XXX Temporarily disabled to workaround unavailable CTS token store issue (see https://github.com/WrenSecurity/wrenam/issues/63)
-            // try {
-            //     getInstance().tokenManager.destroyToken(appSSOToken);
-            // } catch (SSOException ssoe) {
-            //     debug.error("AdminTokenAction.reset: cannot destroy appSSOToken.", ssoe);
-            // }
+        if (appSSOToken != null && !SystemProperties.isServerMode()) {
+             try {
+                 getInstance().tokenManager.destroyToken(appSSOToken);
+             } catch (SSOException ssoe) {
+                 debug.error("AdminTokenAction.reset: cannot destroy appSSOToken.", ssoe);
+             }
             appSSOToken = null;
         }
         internalAppSSOToken = null;

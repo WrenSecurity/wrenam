@@ -28,6 +28,7 @@
 
 /**
  * Portions copyright 2013-2016 ForgeRock AS.
+ * Portions Copyright 2023 Wren Security.
  */
 package com.iplanet.sso.providers.dpro;
 
@@ -340,7 +341,7 @@ public final class SSOProviderImpl implements SSOProvider {
             SSOTokenID tokenid = token.getTokenID();
             String id = tokenid.toString();
             SessionID sessid = new SessionID(id);
-            Session session = sessionCache.getSession(sessid);
+            Session session = sessionCache.getSession(sessid, true);
             session.destroySession(session);
         } catch (Exception e) {
             if (debug.messageEnabled()) {
