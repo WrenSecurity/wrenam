@@ -5254,7 +5254,7 @@ public class LoginState {
         if ((stateless && !restriction.isRestricted(getUserDN()) || isNoSession())) {
             return;
         }
-        authenticationSessionStore.promoteSession(sessionReference);
+        authenticationSessionStore.promoteSession(sessionReference, AdminTokenAction.isActiveLogin());
     }
 
     /**

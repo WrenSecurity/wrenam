@@ -102,7 +102,7 @@ public class AuthSessionFactory {
         String id = "id=" + rdnValueFromDn(clientID) + ",ou=user," + ServiceManager.getBaseDN();
         session.putProperty(UNIVERSAL_IDENTIFIER, id);
 
-        authenticationSessionStore.promoteSession(session.getSessionID());
+        authenticationSessionStore.promoteSession(session.getSessionID(), true);
 
         return session;
     }

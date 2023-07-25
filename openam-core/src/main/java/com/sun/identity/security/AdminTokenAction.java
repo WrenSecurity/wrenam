@@ -93,6 +93,14 @@ public class AdminTokenAction implements PrivilegedAction<SSOToken> {
      */
     private static volatile AdminTokenAction instance;
 
+    /**
+     * Flag indicating that the class is currently performing admin login.
+     * <p>
+     * This flag is used by the session persistence layer to distinguish local vs remote
+     * administrator login.
+     */
+    private static final ThreadLocal<Boolean> activeLogin = new ThreadLocal<Boolean>();
+
     private final SSOTokenManager tokenManager;
     private SSOToken appSSOToken;
     private SSOToken internalAppSSOToken;
@@ -299,7 +307,12 @@ public class AdminTokenAction implements PrivilegedAction<SSOToken> {
                     }
 
                     // Obtain SSOToken using AuthN service
-                    ssoAuthToken = new SystemAppTokenProvider(adminDN, adminPassword).getAppSSOToken();
+                    try {
+                        activeLogin.set(true);
+                        ssoAuthToken = new SystemAppTokenProvider(adminDN, adminPassword).getAppSSOToken();
+                    } finally {
+                        activeLogin.set(false);
+                    }
 
                     // Restore the authentication state
                     if (authInit && ssoAuthToken != null) {
@@ -315,4 +328,12 @@ public class AdminTokenAction implements PrivilegedAction<SSOToken> {
         }
         return ssoAuthToken;
     }
+
+    /**
+     * This is for internal use only.
+     */
+    public static boolean isActiveLogin() {
+        return Boolean.TRUE.equals(activeLogin.get());
+    }
+
 }

@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions Copyright 2023 Wren Security.
  */
 
 package com.iplanet.dpro.session.service;
@@ -87,12 +88,27 @@ public class AuthenticationSessionStore {
      * @throws IllegalStateException if session not found in the store.
      */
     public void promoteSession(SessionID sessionID) {
+        promoteSession(sessionID, false);
+    }
+
+    /**
+     * Moves the specified session out of this store and into the persistent store.
+     *
+     * @param sessionID Non null sessionID for the session to be promoted.
+     * @param trackNonExpiring Whether to automatically extend validity of non-expiring sessions.
+     * @throws IllegalStateException if session not found in the store.
+     */
+    public void promoteSession(SessionID sessionID, boolean trackNonExpiring) {
         InternalSession session = removeSession(sessionID);
         if (session == null) {
             throw new IllegalStateException("Attempted to promote non existent session");
         }
 
         sessionAccessManager.persistInternalSession(session);
+
+        if (!session.willExpire() && trackNonExpiring) {
+            sessionAccessManager.trackNonExpiringSession(session);
+        }
     }
 
     private void cullExpiredSessions() {
