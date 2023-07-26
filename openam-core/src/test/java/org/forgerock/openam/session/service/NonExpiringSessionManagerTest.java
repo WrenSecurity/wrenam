@@ -12,7 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
- * Portions Copyright 2021 Wren Security.
+ * Portions Copyright 2021-2023 Wren Security.
  */
 
 package org.forgerock.openam.session.service;
@@ -27,10 +27,8 @@ import static org.mockito.Mockito.verify;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import org.forgerock.openam.session.service.NonExpiringSessionManager;
 import org.forgerock.openam.shared.concurrency.ThreadMonitor;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.testng.annotations.BeforeMethod;
@@ -75,8 +73,6 @@ public class NonExpiringSessionManagerTest extends AbstractMockBasedTest {
     @Test
     public void shouldSetUpSessionCorrectly() {
         nonExpiringSessionManager.addNonExpiringSession(mockInternalSession);
-        verify(mockInternalSession).setMaxSessionTime(InternalSession.NON_EXPIRING_SESSION_LENGTH_MINUTES);
-        verify(mockInternalSession).setMaxIdleTime(25);
         verify(mockInternalSession).setLatestAccessTime();
     }
 

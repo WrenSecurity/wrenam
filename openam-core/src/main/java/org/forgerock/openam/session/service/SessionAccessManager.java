@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions Copyright 2023 Wren Security.
  */
 package org.forgerock.openam.session.service;
 
@@ -127,16 +128,19 @@ public class SessionAccessManager {
      * @param session The session to persist.
      */
     public void persistInternalSession(InternalSession session) {
-
         try {
             internalSessionStore.store(session);
         } catch (SessionPersistenceException e) {
             throw new RuntimeException(e);
         }
+    }
 
-        if (!session.willExpire()) {
-            nonExpiringSessionManager.addNonExpiringSession(session);
-        }
+    /**
+     * Track and keep alive non-expiring local session.
+     * @param session The session to keep alive.
+     */
+    public void trackNonExpiringSession(InternalSession session) {
+        nonExpiringSessionManager.addNonExpiringSession(session);
     }
 
     /**

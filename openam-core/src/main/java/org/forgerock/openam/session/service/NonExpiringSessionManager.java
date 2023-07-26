@@ -17,8 +17,6 @@
 
 package org.forgerock.openam.session.service;
 
-import static com.iplanet.dpro.session.service.InternalSession.NON_EXPIRING_SESSION_LENGTH_MINUTES;
-
 import com.iplanet.dpro.session.SessionID;
 import com.iplanet.dpro.session.service.InternalSession;
 import com.sun.identity.shared.debug.Debug;
@@ -30,20 +28,18 @@ import org.forgerock.openam.session.SessionConstants;
 import org.forgerock.openam.shared.concurrency.ThreadMonitor;
 
 /**
- * This class tracks sessions created by this server which are not set to expire. It achieves this by periodically
- * setting the max session time to a large number, and the idle time to double the refresh period. Then, every refresh,
- * it updates the latest access time of the session.
- * This means that if a server goes offline, the sessions created for it will eventually be removed.
+ * This class tracks sessions created by this server which are not set to expire and updates it to keep idle time
+ * bellow allowed limit. If the server goes offline, the sessions created for it will eventually be removed.
  */
 class NonExpiringSessionManager {
 
     private static final Debug DEBUG = Debug.getInstance(SessionConstants.SESSION_DEBUG);
 
-    // Internal (in minutes) to periodically refresh non-expiring session validity
+    /**
+     * Internal (in minutes) to periodically refresh non-expiring session validity
+     * This has to be less than {@link InternalSession#NON_EXPIRING_SESSION_MAX_IDLE_TIME}.
+     */
     private static final long SESSION_REFRESH_INTERVAL = 5;
-
-    // Maximum non-expiring session idle time
-    private static final long SESSION_MAX_IDLE_TIME = SESSION_REFRESH_INTERVAL * 5;
 
     private final Set<SessionID> nonExpiringSessions = new CopyOnWriteArraySet<>();
 
@@ -71,8 +67,6 @@ class NonExpiringSessionManager {
         if (session.willExpire()) {
             throw new IllegalStateException("Tried to add session which would expire to NonExpiringSessionManager");
         }
-        session.setMaxSessionTime(NON_EXPIRING_SESSION_LENGTH_MINUTES);
-        session.setMaxIdleTime(SESSION_MAX_IDLE_TIME);
         updateSession(session);
         DEBUG.message("Registering non-expiring session for '{}'", session.getUUID());
         nonExpiringSessions.add(session.getID());
