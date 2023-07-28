@@ -338,6 +338,10 @@ public class InternalSession implements Serializable, AMSession, SessionPersiste
      *            Maximum Session Time
      */
     public void setMaxSessionTime(long maxSessionTimeInMinutes) {
+        if (maxSessionTimeInMinutes > NON_EXPIRING_SESSION_LENGTH_MINUTES) {
+            debug.warning("Setting maxSessionTimeInMinutes to a very large value that can lead to overflow: "
+                    + maxSessionTimeInMinutes);
+        }
         if (this.maxSessionTimeInMinutes != maxSessionTimeInMinutes) {
             this.maxSessionTimeInMinutes = maxSessionTimeInMinutes;
             notifyPersistenceManager();
@@ -358,6 +362,10 @@ public class InternalSession implements Serializable, AMSession, SessionPersiste
      * @param maxIdleTimeInMinutes
      */
     public void setMaxIdleTime(long maxIdleTimeInMinutes) {
+        if (maxIdleTimeInMinutes > NON_EXPIRING_SESSION_LENGTH_MINUTES) {
+            debug.warning("Setting maxIdleTimeInMinutes to a very large value that can lead to overflow: "
+                    + maxIdleTimeInMinutes);
+        }
         this.maxIdleTimeInMinutes = maxIdleTimeInMinutes;
         notifyPersistenceManager();
     }
@@ -374,11 +382,15 @@ public class InternalSession implements Serializable, AMSession, SessionPersiste
     /**
      * Sets the maximum caching time(in minutes) for the Internal Session.
      *
-     * @param t
+     * @param maxCachingTimeInMinutes
      *        Maximum Caching Time
      */
-    public void setMaxCachingTime(long t) {
-        maxCachingTimeInMinutes = t;
+    public void setMaxCachingTime(long maxCachingTimeInMinutes) {
+        if (maxCachingTimeInMinutes > NON_EXPIRING_SESSION_LENGTH_MINUTES) {
+            debug.warning("Setting maxCachingTimeInMinutes to a very large value that can lead to overflow: "
+                    + maxCachingTimeInMinutes);
+        }
+        this.maxCachingTimeInMinutes = maxCachingTimeInMinutes;
         notifyPersistenceManager();
     }
 
