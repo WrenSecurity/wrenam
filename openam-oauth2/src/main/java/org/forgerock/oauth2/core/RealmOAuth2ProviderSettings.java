@@ -320,8 +320,6 @@ public class RealmOAuth2ProviderSettings implements OAuth2ProviderSettings {
                         }
                     }
                 }
-            } else {
-                logger.error("Can't save consent as it is not configured properly for the realm:" + realm);
             }
         } catch (Exception e) {
             logger.error("There was a problem getting the saved consent from the attribute: "
