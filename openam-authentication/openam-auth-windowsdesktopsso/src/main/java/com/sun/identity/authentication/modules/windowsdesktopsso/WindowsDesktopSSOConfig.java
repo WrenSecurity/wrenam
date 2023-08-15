@@ -24,6 +24,7 @@
  *
  * $Id: WindowsDesktopSSOConfig.java,v 1.3 2009/04/07 22:55:13 beomsuk Exp $
  *
+ * Portions Copyrighted 2023 Wren Security
  */
 
 
@@ -34,17 +35,18 @@ import javax.security.auth.login.AppConfigurationEntry;
 import javax.security.auth.login.Configuration;
 
 import com.iplanet.am.util.SystemProperties;
+import com.sun.identity.authentication.config.AMConfiguration;
 import com.sun.identity.shared.Constants;
 
-public class WindowsDesktopSSOConfig extends Configuration {
-    public static final String defaultAppName = 
+public class WindowsDesktopSSOConfig extends AMConfiguration {
+    public static final String defaultAppName =
         "com.sun.identity.authentication.windowsdesktopsso";
-    private static final String kerberosModuleName = 
-        SystemProperties.get(Constants.KRB5_LOGINMODULE, 
-            Constants.DEFAULT_KRB5_LOGINMODULE);    
-    private static final String credsType = 
+    private static final String kerberosModuleName =
+        SystemProperties.get(Constants.KRB5_LOGINMODULE,
+            Constants.DEFAULT_KRB5_LOGINMODULE);
+    private static final String credsType =
         SystemProperties.get(Constants.KRB5_CREDENTIAL_TYPE, "acceptor");
-                    
+
     private Configuration config = null;
     private String servicePrincipal = null;
     private String keytab = null;
@@ -56,6 +58,7 @@ public class WindowsDesktopSSOConfig extends Configuration {
      * @param config
      */
     public WindowsDesktopSSOConfig(Configuration config) {
+        super(config);
         this.config = config;
     }
 
@@ -117,11 +120,11 @@ public class WindowsDesktopSSOConfig extends Configuration {
         return config.getAppConfigurationEntry(appName);
     }
 
-    /**
-     * TODO-JAVADOC
-     */
+    @Override
     public void refresh() {
+        super.refresh();
         config.refresh();
     }
+
 }
 
