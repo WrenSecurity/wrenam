@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014-2017 ForgeRock AS.
+ * Portions copyright 2023 Wren Security
  */
 
 package org.forgerock.openidconnect;
@@ -101,6 +102,7 @@ public class OpenIDConnectProviderConfiguration {
         configuration.put("claims_parameter_supported", providerSettings.getClaimsParameterSupported());
         configuration.put("token_endpoint_auth_methods_supported", providerSettings.getEndpointAuthMethodsSupported());
         configuration.put("introspection_endpoint", uris.getIntrospectionEndpoint());
+        configuration.put("revocation_endpoint", uris.getRevocationEndpoint());
 
         return new JsonValue(configuration);
     }

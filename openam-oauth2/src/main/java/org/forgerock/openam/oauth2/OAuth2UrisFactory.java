@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014-2016 ForgeRock AS.
+ * Portions copyright 2023 Wren Security
  */
 
 package org.forgerock.openam.oauth2;
@@ -167,6 +168,11 @@ public class OAuth2UrisFactory {
         @Override
         public String getResourceSetRegistrationEndpoint() {
             return baseUrl + "/resource_set";
+        }
+
+        @Override
+        public String getRevocationEndpoint() {
+            return baseUrl + "/token/revoke";
         }
 
         @Override

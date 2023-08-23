@@ -13,6 +13,7 @@
  *
  * Copyright 2014-2015 ForgeRock AS.
  * Portions Copyrighted 2015 Nomura Research Institute, Ltd.
+ * Portions Copyrighted 2023 Wren Security
  */
 
 package org.forgerock.oauth2.core;
@@ -106,5 +107,12 @@ public interface OAuth2Uris {
      * @return The URL.
      */
     String getResourceSetRegistrationEndpoint();
+
+    /**
+     * Gets the URI for the OAuth2 token revocation endpoint.
+     *
+     * @return The URL.
+     */
+    String getRevocationEndpoint();
 
 }
