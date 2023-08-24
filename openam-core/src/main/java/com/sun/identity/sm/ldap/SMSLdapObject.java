@@ -25,11 +25,12 @@
  * $Id: SMSLdapObject.java,v 1.27 2009/11/20 23:52:56 ww203982 Exp $
  *
  * Portions Copyrighted 2011-2016 ForgeRock AS.
- * Portions Copyrighted 2017 Wren Security
+ * Portions Copyrighted 2017-2023 Wren Security
  */
 
 package com.sun.identity.sm.ldap;
 
+import com.google.inject.ConfigurationException;
 import com.iplanet.am.util.SystemProperties;
 import com.iplanet.sso.SSOException;
 import com.iplanet.sso.SSOToken;
@@ -37,6 +38,8 @@ import com.iplanet.ums.DataLayer;
 import com.iplanet.ums.IUMSConstants;
 import com.sun.identity.authentication.internal.AuthPrincipal;
 import com.sun.identity.security.AdminDNAction;
+import com.sun.identity.security.AdminTokenAction;
+import com.sun.identity.setup.AMSetupServlet;
 import com.sun.identity.shared.debug.Debug;
 import com.sun.identity.shared.locale.AMResourceBundleCache;
 import com.sun.identity.sm.SMSDataEntry;
@@ -46,7 +49,6 @@ import com.sun.identity.sm.SMSNotificationManager;
 import com.sun.identity.sm.SMSObjectDB;
 import com.sun.identity.sm.SMSObjectListener;
 import com.sun.identity.sm.SMSUtils;
-
 import java.security.AccessController;
 import java.security.Principal;
 import java.text.MessageFormat;
@@ -63,7 +65,8 @@ import javax.naming.NamingException;
 import javax.naming.directory.Attribute;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.ModificationItem;
-
+import org.forgerock.guice.core.InjectorHolder;
+import org.forgerock.openam.auditors.SMSAuditor;
 import org.forgerock.openam.ldap.LDAPRequests;
 import org.forgerock.openam.ldap.LDAPUtils;
 import org.forgerock.opendj.ldap.Connection;
@@ -143,6 +146,8 @@ public class SMSLdapObject extends SMSObjectDB implements SMSObjectListener {
     // Admin SSOToken
     static Principal adminPrincipal;
 
+    private ConfigAuditorFactory auditorFactory;
+
     /**
      * Public constructor for SMSLdapObject
      */
@@ -157,6 +162,11 @@ public class SMSLdapObject extends SMSObjectDB implements SMSObjectListener {
     private synchronized void initialize() throws SMSException {
         if (initialized) {
             return;
+        }
+        try {
+            auditorFactory = InjectorHolder.getInstance(ConfigAuditorFactory.class);
+        } catch (ConfigurationException e) {
+            // No audit factory registered - ignore
         }
         // Obtain the I18N resource bundle & Debug
         debug = Debug.getInstance("amSMSLdap");
@@ -217,7 +227,8 @@ public class SMSLdapObject extends SMSObjectDB implements SMSObjectListener {
                 attrValues.add(SMSEntry.OC_TOP);
                 attrValues.add(SMSEntry.OC_ORG_UNIT);
                 attrs.put(SMSEntry.ATTR_OBJECTCLASS, attrValues);
-                create(adminPrincipal, serviceDN, attrs);
+                SSOToken token = AccessController.doPrivileged(AdminTokenAction.getInstance());
+                create(token, serviceDN, attrs);
             }
         } catch (Exception e) {
             // Unable to initialize (trouble!!)
@@ -313,25 +324,18 @@ public class SMSLdapObject extends SMSObjectDB implements SMSObjectListener {
      */
     public void create(SSOToken token, String dn, Map attrs)
             throws SMSException, SSOException {
-        // Call the private method that takes the principal name
-        create(token.getPrincipal(), dn, attrs);
-        // Update entryPresent cache
-        objectChanged(dn, ADD);
-    }
-
-    /**
-     * Create an entry in the directory using the principal name
-     */
-    private static void create(Principal p, String dn, Map attrs)
-            throws SMSException, SSOException {
         int retry = 0;
+        SMSAuditor auditor = newAuditor(token, dn, null);
         Entry entry = copyMapToEntry(attrs).setName(dn);
         while (retry <= connNumRetry) {
             debug.message("SMSLdapObject.create() retry: {}", retry);
 
-            try (Connection conn = getConnection(p)) {
+            try (Connection conn = getConnection(token.getPrincipal())) {
                 conn.add(LDAPRequests.newAddRequest(entry));
                 debug.message("SMSLdapObject.create Successfully created entry: {}", dn);
+                if (auditor != null) {
+                    auditor.auditCreate(attrs);
+                }
                 break;
             } catch (LdapException e) {
                 ResultCode errorCode = e.getResult().getResultCode();
@@ -344,7 +348,8 @@ public class SMSLdapObject extends SMSObjectDB implements SMSObjectListener {
                 }
 
                 if (!retryErrorCodes.contains(errorCode) || retry >= connNumRetry) {
-                    debug.error("SMSLdapObject.create() Error in creating: {} By Principal: {}", dn, p.getName(), e);
+                    debug.error("SMSLdapObject.create() Error in creating: {} By Principal: {}", dn,
+                            token.getPrincipal().getName(), e);
                     throw new SMSException(e, "sms-entry-cannot-create");
                 }
                 retry++;
@@ -355,15 +360,18 @@ public class SMSLdapObject extends SMSObjectDB implements SMSObjectListener {
                 }
             }
         }
+        // Update entryPresent cache
+        objectChanged(dn, ADD);
     }
 
     /**
      * Save the entry using the token provided. The principal provided will be
      * used to get the proxy connection.
      */
-    public void modify(SSOToken token, String dn, ModificationItem mods[])
+    public void modify(SSOToken token, String dn, ModificationItem[] mods)
             throws SMSException, SSOException {
         int retry = 0;
+        SMSAuditor auditor = newAuditor(token, dn, readCurrentState(dn));
         ModifyRequest request = copyModItemsToModifyRequest(DN.valueOf(dn), mods);
         while (retry <= connNumRetry) {
             debug.message("SMSLdapObject.modify() retry: {}", retry);
@@ -371,6 +379,9 @@ public class SMSLdapObject extends SMSObjectDB implements SMSObjectListener {
             try (Connection conn = getConnection(token.getPrincipal())) {
                 conn.modify(request);
                 debug.message("SMSLdapObject.modify(): Successfully modified entry: {}", dn);
+                if (auditor != null) {
+                    auditor.auditModify(mods);
+                }
                 break;
             } catch (LdapException e) {
                 ResultCode errorCode = e.getResult().getResultCode();
@@ -394,6 +405,7 @@ public class SMSLdapObject extends SMSObjectDB implements SMSObjectListener {
      */
     public void delete(SSOToken token, String dn) throws SMSException,
             SSOException {
+        SMSAuditor auditor = newAuditor(token, dn, readCurrentState(dn));
         // Check if there are sub-entries, delete if present
         for (String entry : subEntries(token, dn, "*", 0, false, false)) {
             debug.message("SMSLdapObject: deleting sub-entry: {}", entry);
@@ -413,6 +425,10 @@ public class SMSLdapObject extends SMSObjectDB implements SMSObjectListener {
         delete(token.getPrincipal(), dn);
         // Update entriesPresent cache
         objectChanged(dn, DELETE);
+        // Log changes
+        if (auditor != null) {
+            auditor.auditDelete();
+        }
     }
 
     private static void delete(Principal p, String dn)
@@ -1111,4 +1127,32 @@ public class SMSLdapObject extends SMSObjectDB implements SMSObjectListener {
                 dn, answer);
         return answer;
     }
+
+    private SMSAuditor newAuditor(SSOToken token, String dn, Map initialState) {
+        if (auditorFactory == null || !AMSetupServlet.isCurrentConfigurationValid()) {
+            return null;
+        }
+        String realm = SMSAuditor.getRealmFromDN(dn);
+
+        if (initialState == null) {
+            initialState = new HashMap<>();
+        }
+
+        return auditorFactory.create(token, realm, dn, initialState);
+    }
+
+    /**
+     * Read the specified value using an admin token
+     *
+     * @param dn The distinguished name
+     * @return The map if the read was successful, null otherwise
+     */
+    private Map<String, Set<String>> readCurrentState(String dn) {
+        try {
+            return read(AccessController.doPrivileged(AdminTokenAction.getInstance()), dn);
+        } catch (SMSException | SSOException e) {
+            return null;
+        }
+    }
+
 }
