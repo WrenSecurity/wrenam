@@ -319,7 +319,9 @@ public class AMKeyProvider implements KeyProvider {
                 return (SecretKey) key;
             }
 
-            logger.error("Expected a key of type javax.crypto.SecretKey but got " + key.getClass().getName());
+            if (key != null) {
+                logger.error("Expected a key of type javax.crypto.SecretKey but got " + key.getClass().getName());
+            }
         } catch (KeyStoreException | NoSuchAlgorithmException | UnrecoverableKeyException e) {
             logger.error("Unable to get the secret key for certificate alias " + certAlias, e);
         }
