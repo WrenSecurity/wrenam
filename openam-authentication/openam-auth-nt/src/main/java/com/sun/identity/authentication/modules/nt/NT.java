@@ -28,24 +28,22 @@
 
 /*
  * Portions Copyrighted [2011] [ForgeRock AS]
+ * Portions Copyrighted [2023] [Wren Security]
  */
 package com.sun.identity.authentication.modules.nt;
 
 import com.iplanet.am.util.SystemProperties;
-import com.sun.identity.shared.Constants;
-import com.sun.identity.shared.datastruct.CollectionHelper;
 import com.sun.identity.authentication.spi.AMLoginModule;
 import com.sun.identity.authentication.spi.AuthLoginException;
 import com.sun.identity.authentication.util.ISAuthConstants;
-
+import com.sun.identity.shared.Constants;
+import com.sun.identity.shared.datastruct.CollectionHelper;
+import com.sun.identity.shared.debug.Debug;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
 import java.security.Principal;
-import java.util.ResourceBundle;
 import java.util.Map;
 import javax.security.auth.Subject;
 import javax.security.auth.callback.Callback;
@@ -53,15 +51,14 @@ import javax.security.auth.callback.NameCallback;
 import javax.security.auth.callback.PasswordCallback;
 
 public class NT extends AMLoginModule {
+
     private static boolean hasInitialized = false;
     private static String baseDir;
-    private static com.sun.identity.shared.debug.Debug debug = null;
+    private static Debug debug = null;
     private static String smbPath;
     private static final String charSet = "ISO8859_1";
     private static final String amAuthNT = "amAuthNT";
 
-    private ResourceBundle bundle = null;
-    private Map options;
     private Map sharedState;
     private String host;
     private String domain;
@@ -81,14 +78,12 @@ public class NT extends AMLoginModule {
      */
     public void init(Subject subject, Map sharedState, Map options) {
         java.util.Locale locale = getLoginLocale();
-        bundle = amCache.getResBundle(amAuthNT, locale);
-        
+
         if (debug.messageEnabled()) {
             debug.message("NT resbundle locale="+locale);
         }
 
         this.sharedState = sharedState;
-        this.options = options;
 
         if (options != null) {
             host = CollectionHelper.getServerMapAttr(
@@ -110,21 +105,20 @@ public class NT extends AMLoginModule {
     }
 
     static {
-        if (debug == null) {
-            debug =  com.sun.identity.shared.debug.Debug.getInstance(amAuthNT);
-            debug.message("NT constructor called");
-        }
+        debug = Debug.getInstance(amAuthNT);
+        debug.message("NT constructor called");
         String base = SystemProperties.get(SystemProperties.CONFIG_PATH);
         String deployURL = SystemProperties.get(
             Constants.AM_SERVICES_DEPLOYMENT_DESCRIPTOR);
         baseDir = base + "/" + deployURL;
         smbPath = baseDir + "/bin/smbclient";
         File file = new File (smbPath);
-        if(!file.exists()) {
+        if (file.exists()) {
+            hasInitialized = true;
+        } else {
             debug.error ("smbclient file not found");
-             hasInitialized = false;
+            hasInitialized = false;
         }
-        hasInitialized = true;
     }
 
     /**
@@ -218,35 +212,28 @@ public class NT extends AMLoginModule {
         }
         File tmpFile = null;
         try {
-            // Create the tmpFile
-            tmpFile = File.createTempFile(userName,"pwd");
-            FileOutputStream fw = new FileOutputStream(tmpFile);
-            OutputStreamWriter dos = new OutputStreamWriter(fw, "ISO-8859-1");
-            dos.write("username = " + userName + "\n");
-            dos.write("password = " + userPassword);
-            dos.flush();
-            dos.close();
-            fw.close();
-            
             Runtime rt = Runtime.getRuntime();
             int c;
             StringBuilder buftxt = new StringBuilder(80);
 
             String[] progarr = null;
             if ((smbConfFileName != null) && (smbConfFileName.length() > 0)) {
-                    progarr = new String[9];
+                    progarr = new String[12];
                 progarr[7] = "-s";
                 progarr[8] = smbConfFileName; 
             } else {
-                progarr = new String[7];
+                progarr = new String[10];
             }
             progarr[0] = smbPath;
             progarr[1] = "-W";
             progarr[2] = domain;
             progarr[3] = "-L";
             progarr[4] = host;
-            progarr[5] = "-A";
-            progarr[6] = tmpFile.getAbsolutePath();
+            progarr[5] = "-U";
+            progarr[6] = userName;
+            progarr[7] = "-N";
+            progarr[8] = "--password";
+            progarr[9] = userPassword;
 
             Process smbconn = rt.exec(progarr);
 
@@ -366,8 +353,6 @@ public class NT extends AMLoginModule {
      * TODO-JAVADOC
      */
     public void nullifyUsedVars() {
-        bundle = null;
-        options = null;
         sharedState = null;
         host = null;
         domain = null;
