@@ -12,7 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
- * Portions copyright 2022 Wren Security
+ * Portions copyright 2022-2023 Wren Security
  */
 package org.forgerock.openam.core.rest.docs.api;
 
@@ -43,10 +43,11 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.AttributesBuilder;
-import org.asciidoctor.OptionsBuilder;
+import org.asciidoctor.Attributes;
+import org.asciidoctor.Options;
 import org.asciidoctor.Placement;
 import org.asciidoctor.SafeMode;
+import org.asciidoctor.jruby.AsciidoctorJRuby;
 import org.forgerock.api.markup.ApiDocGenerator;
 import org.forgerock.api.models.ApiDescription;
 import org.wrensecurity.guava.common.base.Joiner;
@@ -143,7 +144,7 @@ public class ApiDocsService implements Describable.Listener {
         if (gemPaths.isEmpty()) {
             return Asciidoctor.Factory.create();
         } else {
-            return Asciidoctor.Factory.create(Joiner.on(":").join(gemPaths));
+            return AsciidoctorJRuby.Factory.create(Joiner.on(":").join(gemPaths));
         }
     }
 
@@ -182,18 +183,18 @@ public class ApiDocsService implements Describable.Listener {
         File docs = File.createTempFile("openam-api.", ".html");
         docs.deleteOnExit();
         try (Reader reader = new FileReader(asciidoc); Writer writer = new FileWriter(docs)) {
-            asciidoctor.render(
+            asciidoctor.convert(
                     reader,
                     writer,
-                    OptionsBuilder.options()
-                            .attributes(AttributesBuilder.attributes()
+                    Options.builder()
+                            .attributes(Attributes.builder()
                                     .tableOfContents(Placement.LEFT)
                                     .sectNumLevels(SECTION_NUMBERING_DEPTH)
                                     .attribute("toclevels", TOC_LEVELS)
-                                    .get())
+                                    .build())
                             .safe(SafeMode.SAFE)
-                            .headerFooter(true)
-                            .get());
+                            .standalone(false)
+                            .build());
         }
         return docs;
     }

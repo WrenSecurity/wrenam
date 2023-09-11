@@ -97,7 +97,7 @@
     </repositories>
 
     <properties>
-        <pgpVerifyKeysVersion>1.7.5</pgpVerifyKeysVersion>
+        <pgpVerifyKeysVersion>1.7.6</pgpVerifyKeysVersion>
         <wrenBuildToolsVersion>1.2.0</wrenBuildToolsVersion>
 
         <!-- Source code has to be Java 8 compliant (code base is not JPMS ready) -->
@@ -1005,7 +1005,7 @@
             <dependency>
                 <groupId>org.asciidoctor</groupId>
                 <artifactId>asciidoctorj</artifactId>
-                <version>1.5.4</version>
+                <version>2.5.10</version>
                 <exclusions>
                     <exclusion>
                         <groupId>com.beust</groupId>
