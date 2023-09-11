@@ -25,6 +25,7 @@
  * $Id: OfflineResolver.java,v 1.2 2008/06/25 05:47:38 qcheng Exp $
  *
  * Portions Copyrighted 2014-2016 ForgeRock AS.
+ * Portions Copyrighted 2023 Wren Security
  */
 
 package com.sun.identity.saml.xmlsig;
@@ -38,7 +39,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import org.w3c.dom.Attr;
-
+import org.apache.xml.security.utils.resolver.ResourceResolverContext;
 import org.apache.xml.security.utils.resolver.ResourceResolverException;
 import org.apache.xml.security.signature.XMLSignatureInput;
 import org.apache.xml.security.utils.resolver.ResourceResolverSpi;
@@ -50,6 +51,16 @@ import org.apache.xml.security.utils.resolver.ResourceResolverSpi;
  * @author $Author: qcheng $
  */
 public class OfflineResolver extends ResourceResolverSpi {
+
+    @Override
+    public XMLSignatureInput engineResolveURI(ResourceResolverContext context) throws ResourceResolverException {
+        return engineResolve(context.attr, context.baseUri);
+    }
+
+    @Override
+    public boolean engineCanResolveURI(ResourceResolverContext context) {
+        return engineCanResolve(context.attr, context.baseUri);
+    }
 
    /**
     * Method engineResolve
@@ -80,12 +91,10 @@ public class OfflineResolver extends ResourceResolverSpi {
             Object exArgs[] = {
                "The URI " + URI + " is not configured for offline work" };
 
-            throw new ResourceResolverException("generic.EmptyMessage", exArgs,
-                                                uri, BaseURI);
+            throw new ResourceResolverException("generic.EmptyMessage", exArgs, uri.getNodeValue(), BaseURI);
          }
       } catch (IOException ex) {
-         throw new ResourceResolverException("generic.EmptyMessage", ex, uri,
-                                             BaseURI);
+         throw new ResourceResolverException(ex, uri.getNodeValue(), BaseURI, "generic.EmptyMessage");
       }
    }
 
@@ -170,4 +179,5 @@ public class OfflineResolver extends ResourceResolverSpi {
          "http://xmldsig.pothole.com/xml-stylesheet.txt",
          "data/com/pothole/xmldsig/xml-stylesheet.txt", "text/xml");
    }
+
 }

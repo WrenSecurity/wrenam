@@ -68,7 +68,7 @@ import com.sun.identity.saml.xmlsig.XMLSignatureManager;
 
 import com.sun.identity.saml2.jaxb.entityconfig.AttributeType;
 import com.sun.identity.saml2.jaxb.entityconfig.BaseConfigType;
-import com.sun.identity.saml2.jaxb.entityconfig.EntityConfigElement; 
+import com.sun.identity.saml2.jaxb.entityconfig.EntityConfigElement;
 import com.sun.identity.saml2.jaxb.entityconfig.IDPSSOConfigElement;
 import com.sun.identity.saml2.jaxb.entityconfig.ObjectFactory;
 import com.sun.identity.saml2.jaxb.entityconfig.SPSSOConfigElement;
@@ -161,7 +161,7 @@ public final class SAML2MetaSecurityUtils {
      * @param descriptor The entity descriptor.
      * @return Signed <code>Document</code> for the entity descriptor or null if no metadata signing key is found in
      * the configuration.
-     * @throws SAML2MetaException if unable to sign the entity descriptor. 
+     * @throws SAML2MetaException if unable to sign the entity descriptor.
      * @throws JAXBException if the entity descriptor is invalid.
      */
     public static Document sign(String realm, EntityDescriptorElement descriptor)
@@ -230,19 +230,18 @@ public final class SAML2MetaSecurityUtils {
     }
 
     /**
-     * Verifies signatures in entity descriptor represented by the 
+     * Verifies signatures in entity descriptor represented by the
      * <code>Document</code>.
      * @param doc The document.
-     * @throws SAML2MetaException if unable to verify the entity descriptor. 
+     * @throws SAML2MetaException if unable to verify the entity descriptor.
      */
     public static void verifySignature(Document doc)
         throws SAML2MetaException
     {
         NodeList sigElements = null;
         try {
-            Element nscontext =
-                    org.apache.xml.security.utils.XMLUtils
-                            .createDSctx (doc,"ds", Constants.SignatureSpecNS);
+            Element nscontext = com.sun.identity.saml2.common.XmlUtils.createNamespaceElement(
+                    doc, "ds", Constants.SignatureSpecNS);
             sigElements =
                     XPathAPI.selectNodeList(doc, "//ds:Signature", nscontext);
         } catch (Exception ex) {
@@ -302,7 +301,7 @@ public final class SAML2MetaSecurityUtils {
                                    "\" and namespace-uri()=\"" + NS_META +
                                    "\"]";
                     Node node = XPathAPI.selectSingleNode(sigElement, xpath);
-                
+
                     if (node != null) {
                         Element kd = (Element)node;
                         String use = kd.getAttributeNS(null, ATTR_USE);
@@ -366,7 +365,7 @@ public final class SAML2MetaSecurityUtils {
     }
 
 
-    /** 
+    /**
      * Restores Base64 encoded format.
      * JAXB will change
      *      <ds:X509Data>
@@ -444,29 +443,29 @@ public final class SAML2MetaSecurityUtils {
     }
 
     /**
-     * Updates signing or encryption key info for SP or IDP. 
+     * Updates signing or encryption key info for SP or IDP.
      * This will update both signing/encryption alias on extended metadata and
-     * certificates in standard metadata. 
+     * certificates in standard metadata.
      * @param realm Realm the entity resides.
-     * @param entityID ID of the entity to be updated.  
+     * @param entityID ID of the entity to be updated.
      * @param certAliases The set of certificate aliases to be set for the entity. If null or empty, existing key
      *                    information will be removed from the SP or IDP.
-     * @param isSigning true if this is signing certificate alias, false if 
+     * @param isSigning true if this is signing certificate alias, false if
      *        this is encryption certification alias.
      * @param isIDP true if this is for IDP signing/encryption alias, false
      *        if this is for SP signing/encryption alias
      * @param encAlgo Encryption algorithm URI, this is applicable for
      *        encryption cert only.
      * @param keySize Encryption key size, this is applicable for
-     *        encryption cert only. 
-     * @throws SAML2MetaException if failed to update the certificate alias 
+     *        encryption cert only.
+     * @throws SAML2MetaException if failed to update the certificate alias
      *        for the entity.
      */
     public static void updateProviderKeyInfo(String realm,
         String entityID, Set<String> certAliases, boolean isSigning, boolean isIDP,
-        String encAlgo, int keySize) throws SAML2MetaException { 
+        String encAlgo, int keySize) throws SAML2MetaException {
         SAML2MetaManager metaManager = new SAML2MetaManager();
-        EntityConfigElement config = 
+        EntityConfigElement config =
             metaManager.getEntityConfig(realm, entityID);
         if (!config.isHosted()) {
             String[] args = {entityID, realm};
@@ -542,13 +541,13 @@ public final class SAML2MetaSecurityUtils {
             if (isSigningUse) {
                 keyUse = "signing";
             }
-            if ((key.getUse() != null) && 
+            if ((key.getUse() != null) &&
                 key.getUse().equalsIgnoreCase(keyUse)) {
                 iter.remove();
             }
         }
     }
-  
+
     private static void setExtendedAttributeValue(
         BaseConfigType config,
         String attrName, Set attrVal) throws SAML2MetaException {
@@ -557,7 +556,7 @@ public final class SAML2MetaSecurityUtils {
             for(Iterator iter = attributes.iterator(); iter.hasNext();) {
                 AttributeType avp = (AttributeType)iter.next();
                 if (avp.getName().trim().equalsIgnoreCase(attrName)) {
-                     iter.remove(); 
+                     iter.remove();
                 }
             }
             if (attrVal != null) {
@@ -573,11 +572,11 @@ public final class SAML2MetaSecurityUtils {
     }
 
     private static KeyDescriptorElement getKeyDescriptor(
-        String certAlias, boolean isSigning, String encAlgo, int keySize) 
+        String certAlias, boolean isSigning, String encAlgo, int keySize)
         throws SAML2MetaException {
-     
+
         try {
-            String certString = 
+            String certString =
                 SAML2MetaSecurityUtils.buildX509Certificate(certAlias);
             StringBuilder sb = new StringBuilder(4000);
             sb.append("<KeyDescriptor xmlns=\"urn:oasis:names:tc:SAML:2.0:metadata\" use=\"");
@@ -602,7 +601,7 @@ public final class SAML2MetaSecurityUtils {
                   .append("</EncryptionMethod>");
             }
             sb.append("</KeyDescriptor>");
-            return (KeyDescriptorElement) 
+            return (KeyDescriptorElement)
                 SAML2MetaUtils.convertStringToJAXB(sb.toString());
         } catch (JAXBException e) {
             throw new SAML2MetaException(e);
