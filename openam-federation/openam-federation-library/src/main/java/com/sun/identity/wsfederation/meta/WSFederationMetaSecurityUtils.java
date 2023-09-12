@@ -25,6 +25,7 @@
  * $Id: WSFederationMetaSecurityUtils.java,v 1.6 2009/10/28 23:58:59 exu Exp $
  *
  * Portions Copyrighted 2011-2016 ForgeRock AS
+ * Portions Copyrighted 2023 Wren Security
  */
 package com.sun.identity.wsfederation.meta;
 
@@ -70,7 +71,7 @@ import com.sun.identity.wsfederation.jaxb.wsfederation.TokenSigningKeyInfoElemen
 import com.sun.identity.wsfederation.jaxb.entityconfig.BaseConfigType;
 
 /**
- * The <code>WSFederationMetaUtils</code> provides metadata security related 
+ * The <code>WSFederationMetaUtils</code> provides metadata security related
  * utility methods.
  */
 public final class WSFederationMetaSecurityUtils {
@@ -112,7 +113,7 @@ public final class WSFederationMetaSecurityUtils {
 
         try {
             String valCert =
-                SystemPropertiesManager.get("com.sun.identity.saml.checkcert", 
+                SystemPropertiesManager.get("com.sun.identity.saml.checkcert",
                 "on");
 
             checkCert = valCert.trim().equalsIgnoreCase("on");
@@ -133,8 +134,8 @@ public final class WSFederationMetaSecurityUtils {
      * @param idpconfig The identity provider config.
      * @return Signed <code>Document</code> for the entity descriptor or null
      *         if both cert aliases are not found.
-     * @throws WSFederationMetaException if unable to sign the entity 
-     * descriptor. 
+     * @throws WSFederationMetaException if unable to sign the entity
+     * descriptor.
      * @throws JAXBException if the entity descriptor is invalid.
      */
     public static Document sign(
@@ -155,7 +156,7 @@ public final class WSFederationMetaSecurityUtils {
             if (list != null && !list.isEmpty()) {
                 spCertAlias = ((String)list.get(0)).trim();
                 if (spCertAlias.length() > 0) {
-                    SPSSODescriptorElement spDesc = 
+                    SPSSODescriptorElement spDesc =
                         WSFederationMetaUtils.getSPSSODescriptor(descriptor);
                     if (spDesc != null) {
                         spId = SAMLUtils.generateID();
@@ -171,7 +172,7 @@ public final class WSFederationMetaSecurityUtils {
             if (list != null && !list.isEmpty()) {
                 idpCertAlias = ((String)list.get(0)).trim();
                 if (idpCertAlias.length() > 0) {
-                    IDPSSODescriptorElement idpDesc = 
+                    IDPSSODescriptorElement idpDesc =
                         WSFederationMetaUtils.getIDPSSODescriptor(descriptor);
                     if (idpDesc != null) {
                         idpId = SAMLUtils.generateID();
@@ -229,22 +230,21 @@ public final class WSFederationMetaSecurityUtils {
     }
 
     /**
-     * Verifies signatures in entity descriptor represented by the 
+     * Verifies signatures in entity descriptor represented by the
      * <code>Document</code>.
      * @param doc The document.
-     * @throws WSFederationMetaException if unable to verify the entity 
-     * descriptor. 
+     * @throws WSFederationMetaException if unable to verify the entity
+     * descriptor.
      */
     public static void verifySignature(Document doc)
         throws WSFederationMetaException
     {
         String classMethod = "WSFederationMetaSecurityUtils.verifySignature: ";
-        
+
         NodeList sigElements = null;
         try {
-            Element nscontext =
-                    org.apache.xml.security.utils.XMLUtils
-                            .createDSctx (doc,"ds", Constants.SignatureSpecNS);
+            Element nscontext = com.sun.identity.saml2.common.XmlUtils.createNamespaceElement(
+                    doc, "ds", Constants.SignatureSpecNS);
             sigElements =
                     XPathAPI.selectNodeList(doc, "//ds:Signature", nscontext);
         } catch (Exception ex) {
@@ -267,7 +267,7 @@ public final class WSFederationMetaSecurityUtils {
             String sigParentName = sigElement.getParentNode().getLocalName();
             Object[] objs = { sigParentName };
             if (debug.messageEnabled()) {
-                debug.message(classMethod + "verifying signature under " + 
+                debug.message(classMethod + "verifying signature under " +
                     sigParentName);
             }
 
@@ -297,7 +297,7 @@ public final class WSFederationMetaSecurityUtils {
                                    "\" and namespace-uri()=\"" + NS_META +
                                    "\"]";
                     Node node = XPathAPI.selectSingleNode(sigElement, xpath);
-                
+
                     if (node != null) {
                         Element kd = (Element)node;
                         String use = kd.getAttributeNS(null, ATTR_USE);
@@ -361,7 +361,7 @@ public final class WSFederationMetaSecurityUtils {
     }
 
 
-    /** 
+    /**
      * Restores Base64 encoded format.
      * JAXB will change
      *      <ds:X509Data>
@@ -423,7 +423,7 @@ public final class WSFederationMetaSecurityUtils {
     {
         String classMethod = "WSFederationMetaSecurityUtils." +
             "buildX509Certificate: ";
-        
+
         if ((certAlias == null) || (certAlias.trim().length() == 0)) {
             return null;
         }
@@ -444,7 +444,7 @@ public final class WSFederationMetaSecurityUtils {
         Object[] objs = { certAlias };
         throw new WSFederationMetaException("invalid_cert_alias", objs);
     }
-    
+
 
     /**
      * Updates signing or encryption key info for SP or IDP.
@@ -456,7 +456,7 @@ public final class WSFederationMetaSecurityUtils {
      *        null, will remove existing key information from the SP or IDP.
      * @param isIDP true if this is for IDP signing/encryption alias, false
      *        if this is for SP signing/encryption alias
-     * @throws WSFederationMetaException if failed to update the certificate 
+     * @throws WSFederationMetaException if failed to update the certificate
      *        alias for the entity.
      */
     public static void updateProviderKeyInfo(String realm,
@@ -469,7 +469,7 @@ public final class WSFederationMetaSecurityUtils {
             String[] args = {entityID, realm};
             throw new WSFederationMetaException("entityNotHosted", args);
         }
-        FederationElement desp = 
+        FederationElement desp =
             metaManager.getEntityDescriptor(realm, entityID);
         if (isIDP) {
             IDPSSOConfigElement idpConfig =
@@ -522,7 +522,7 @@ public final class WSFederationMetaSecurityUtils {
 
     private static void updateKeyDescriptor(FederationElement desp,
         TokenSigningKeyInfoElement newKey) {
-        // NOTE : we only support one signing and one encryption key right now 
+        // NOTE : we only support one signing and one encryption key right now
         // the code need to be change if we need to support multiple signing
         // and/or encryption keys in one entity
         List objList = desp.getAny();
@@ -536,7 +536,7 @@ public final class WSFederationMetaSecurityUtils {
     }
 
     private static void removeKeyDescriptor(FederationElement desp) {
-        // NOTE : we only support one signing and one encryption key right now 
+        // NOTE : we only support one signing and one encryption key right now
         // the code need to be change if we need to support multiple signing
         // and/or encryption keys in one entity
         List objList = desp.getAny();

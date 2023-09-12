@@ -50,7 +50,7 @@ import java.io.UnsupportedEncodingException;
 import java.io.PrintWriter;
 import java.io.IOException;
 import java.io.ByteArrayInputStream;
-
+import java.io.ByteArrayOutputStream;
 import java.security.MessageDigest;
 
 import java.net.URL;
@@ -1711,14 +1711,14 @@ public class SAMLUtils  extends SAMLUtilsCommon {
        *     Otherwise, return null.
        */
       public static Element getCanonicalElement(Node node) {
-          try {
+          try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
               Canonicalizer c14n = Canonicalizer.getInstance(
                   "http://www.w3.org/TR/2001/REC-xml-c14n-20010315");
-              byte outputBytes[] = c14n.canonicalizeSubtree(node);
+              c14n.canonicalizeSubtree(node, out);
               DocumentBuilder documentBuilder =
                  XMLUtils.getSafeDocumentBuilder(false);
               Document doc = documentBuilder.parse(
-                  new ByteArrayInputStream(outputBytes));
+                  new ByteArrayInputStream(out.toByteArray()));
               Element result = doc.getDocumentElement();
               return result;
           } catch (Exception e) {
