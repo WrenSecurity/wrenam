@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions Copyright 2023 Wren Security.
  */
 
 package org.forgerock.openam.core.rest.sms;
@@ -55,6 +56,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -154,6 +156,13 @@ public class SmsServerPropertiesResource implements Describable<ApiDescription, 
     private static final String EMPTY_SELECTION = "[Empty]";
     private static final Schema ADVANCED_SCHEMA
             = fromResource("SmsServerPropertiesResource.advanced.schema.json", SmsServerPropertiesResource.class);
+    private static final List<String> PASSWORD_ATTRIBUTES = Arrays.asList(
+            "com.sun.identity.crl.cache.directory.password",
+            "org.forgerock.services.cts.store.password",
+            "org.forgerock.services.umaaudit.store.password",
+            "org.forgerock.services.uma.labels.store.password",
+            "org.forgerock.services.uma.pendingrequests.store.password",
+            "org.forgerock.services.resourcesets.store.password");
 
     static {
         syntaxRawToReal.put("true,false", "boolean");
@@ -1021,7 +1030,9 @@ public class SmsServerPropertiesResource implements Describable<ApiDescription, 
 
     private void addAttributeValues(JsonValue attributes, Map<String, String> attributeValues) {
         for (String attributeName : attributes.keys()) {
-            attributeValues.put(attributeName, valueOf(attributes.get(attributeName).getObject()));
+            String value = valueOf(attributes.get(attributeName).getObject());
+            attributeValues.put(attributeName, PASSWORD_ATTRIBUTES.contains(attributeName)
+                    ? Crypt.encode(value) : value);
         }
     }
 
@@ -1036,7 +1047,9 @@ public class SmsServerPropertiesResource implements Describable<ApiDescription, 
             if (attribute.get("inherited").asBoolean()) {
                 inheritedAttributeNames.add(attributeName);
             } else {
-                attributeValues.put(attributeName, valueOf(attribute.get("value").getObject()));
+                String value = valueOf(attribute.get("value").getObject());
+                attributeValues.put(attributeName, PASSWORD_ATTRIBUTES.contains(attributeName)
+                        ? Crypt.encode(value) : value);
             }
         }
     }
