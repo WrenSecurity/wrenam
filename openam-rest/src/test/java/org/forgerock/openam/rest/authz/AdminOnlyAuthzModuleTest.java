@@ -12,6 +12,7 @@
 * information: "Portions copyright [year] [name of copyright owner]".
 *
 * Copyright 2014-2015 ForgeRock AS.
+* Portions Copyright 2023 Wren Security
 */
 package org.forgerock.openam.rest.authz;
 
@@ -29,6 +30,8 @@ import org.forgerock.json.resource.ResourceException;
 import org.forgerock.openam.rest.resource.SSOTokenContext;
 import org.forgerock.openam.utils.Config;
 import org.forgerock.util.promise.Promise;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
@@ -36,6 +39,7 @@ public class AdminOnlyAuthzModuleTest {
 
     Config<SessionService> mockConfig = mock(Config.class);
     SessionService mockService = mock(SessionService.class);
+    private SSOTokenContext mockSSOTokenContext;
 
     public AdminOnlyAuthzModule testModule = new AdminOnlyAuthzModule(mockConfig, mock(Debug.class));
 
@@ -44,11 +48,21 @@ public class AdminOnlyAuthzModuleTest {
         given(mockConfig.get()).willReturn(mockService);
     }
 
+    @BeforeMethod
+    public void setup() {
+        mockSSOTokenContext = mock(SSOTokenContext.class);
+        given(mockSSOTokenContext.asContext(SSOTokenContext.class)).willReturn(mockSSOTokenContext);
+    }
+
+    @AfterMethod
+    public void cleanup() {
+        mockSSOTokenContext = null;
+    }
+
     @Test
     public void shouldAuthorizeValidContext() throws Exception {
 
         //given
-        SSOTokenContext mockSSOTokenContext = mock(SSOTokenContext.class);
         SSOToken mockSSOToken = mock(SSOToken.class);
 
         given(mockSSOTokenContext.getCallerSSOToken()).willReturn(mockSSOToken);
@@ -67,7 +81,6 @@ public class AdminOnlyAuthzModuleTest {
     public void shouldFailNonSuperUser() throws Exception {
 
         //given
-        SSOTokenContext mockSSOTokenContext = mock(SSOTokenContext.class);
         SSOToken mockSSOToken = mock(SSOToken.class);
 
         given(mockSSOTokenContext.getCallerSSOToken()).willReturn(mockSSOToken);
@@ -86,7 +99,6 @@ public class AdminOnlyAuthzModuleTest {
     public void shouldErrorInvalidContext() throws Exception {
 
         //given
-        SSOTokenContext mockSSOTokenContext = mock(SSOTokenContext.class);
         SSOToken mockSSOToken = mock(SSOToken.class);
 
         given(mockSSOTokenContext.getCallerSSOToken()).willReturn(mockSSOToken);

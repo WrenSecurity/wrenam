@@ -12,22 +12,34 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2013-2017 ForgeRock AS.
+ * Portions Copyright 2023 Wren Security
  */
 
 package org.forgerock.openam.idrepo.ldap;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.when;
 
+import com.google.inject.AbstractModule;
+import com.google.inject.Module;
+import com.google.inject.assistedinject.Assisted;
+import com.iplanet.services.naming.WebtopNaming;
+import com.iplanet.sso.SSOToken;
+import com.sun.identity.idm.IdRepoBundle;
+import com.sun.identity.idm.IdRepoException;
+import com.sun.identity.idm.IdRepoListener;
+import com.sun.identity.sm.ldap.ConfigAuditorFactory;
 import java.lang.annotation.Annotation;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
-
 import javax.annotation.Nullable;
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.NameCallback;
 import javax.security.auth.callback.PasswordCallback;
-
 import org.forgerock.audit.events.AuditEventBuilder;
 import org.forgerock.guice.core.GuiceModuleLoader;
 import org.forgerock.guice.core.InjectorConfiguration;
@@ -46,25 +58,12 @@ import org.forgerock.opendj.ldap.RequestHandler;
 import org.forgerock.opendj.ldap.schema.Schema;
 import org.forgerock.opendj.ldif.LDIFEntryReader;
 import org.forgerock.util.promise.Promise;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.testng.PowerMockTestCase;
+import org.mockito.MockedStatic;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Module;
-import com.google.inject.assistedinject.Assisted;
-import com.iplanet.services.naming.WebtopNaming;
-import com.iplanet.sso.SSOToken;
-import com.sun.identity.idm.IdRepoBundle;
-import com.sun.identity.idm.IdRepoException;
-import com.sun.identity.idm.IdRepoListener;
-import com.sun.identity.sm.ldap.ConfigAuditorFactory;
-
-@PrepareForTest(value = {IdRepoListener.class, WebtopNaming.class})
-public abstract class IdRepoTestBase extends PowerMockTestCase {
+public abstract class IdRepoTestBase {
 
     protected static final String TEST1_GROUP = "test1";
     protected static final String TEST1_GROUP_DN = "cn=test1,ou=groups,dc=openam,dc=forgerock,dc=org";
@@ -87,6 +86,8 @@ public abstract class IdRepoTestBase extends PowerMockTestCase {
             return Schema.getCoreSchema().asStrictSchema();
         }
     };
+
+    private MockedStatic<WebtopNaming> webtopNaming;
 
     public static class TestGuiceModule extends AbstractModule {
 
@@ -112,12 +113,17 @@ public abstract class IdRepoTestBase extends PowerMockTestCase {
                 return Collections.<Class<? extends Module>>singleton(TestGuiceModule.class);
             }
         });
-        PowerMockito.mockStatic(WebtopNaming.class);
-        idRepoListener = PowerMockito.mock(IdRepoListener.class);
+        this.webtopNaming = mockStatic(WebtopNaming.class);
+        idRepoListener = mock(IdRepoListener.class);
         when(WebtopNaming.getAMServerID()).thenReturn("01");
         when(WebtopNaming.getSiteID(eq("01"))).thenReturn("02");
         memoryBackend = decorateBackend(new MemoryBackend(
                 new LDIFEntryReader(getClass().getResourceAsStream(getLDIFPath()))));
+    }
+
+    @AfterClass
+    public void cleanup() throws Exception {
+        this.webtopNaming.close();
     }
 
     protected RequestHandler<RequestContext> decorateBackend(MemoryBackend memoryBackend) {

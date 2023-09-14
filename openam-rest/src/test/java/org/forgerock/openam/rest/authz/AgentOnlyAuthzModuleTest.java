@@ -12,6 +12,7 @@
  * information: "Portions Copyrighted [year] [name of copyright owner]".
  *
  * Copyright 2015 ForgeRock AS.
+ * Portions Copyright 2023 Wren Security
  */
 package org.forgerock.openam.rest.authz;
 
@@ -72,6 +73,7 @@ public class AgentOnlyAuthzModuleTest {
         MockitoAnnotations.initMocks(this);
         authzModule = new AgentOnlyAuthzModule(mockAgentIdentity, mockDebug);
         given(mockSSOTokenContext.getCallerSSOToken()).willReturn(mockSSOToken);
+        given(mockSSOTokenContext.asContext(SSOTokenContext.class)).willReturn(mockSSOTokenContext);
         given(mockSSOToken.getPrincipal()).willReturn(mockPrincipal);
         given(mockPrincipal.getName()).willReturn("irrelevant");
     }

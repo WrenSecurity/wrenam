@@ -12,7 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2013-2016 ForgeRock AS.
- * Portions Copyright 2021 Wren Security.
+ * Portions Copyright 2021-2023 Wren Security.
  */
 package org.forgerock.openam.sm.datalayer.impl.ldap;
 
@@ -23,6 +23,7 @@ import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 
@@ -31,9 +32,8 @@ import java.util.Set;
 import org.forgerock.openam.cts.api.CoreTokenConstants;
 import org.forgerock.openam.cts.impl.CTSDataLayerConfiguration;
 import org.forgerock.openam.ldap.LDAPURL;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.testng.PowerMockTestCase;
+import org.mockito.MockedStatic;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -41,40 +41,42 @@ import com.iplanet.am.util.SystemProperties;
 import com.iplanet.services.naming.WebtopNaming;
 import com.sun.identity.shared.debug.Debug;
 
-@PrepareForTest({ SystemProperties.class, WebtopNaming.class })
-public class ExternalLdapConfigTest extends PowerMockTestCase {
+public class ExternalLdapConfigTest {
 
     private Debug debug;
     private LdapDataLayerConfiguration dataLayerConfiguration;
+    private MockedStatic<SystemProperties> systemProperties;
+    private MockedStatic<WebtopNaming> webtopNaming;
 
     @BeforeMethod
     public void setup() {
         this.debug = mock(Debug.class);
         this.dataLayerConfiguration = spy(new CTSDataLayerConfiguration("ou=root-dn"));
+        this.systemProperties = mockStatic(SystemProperties.class);
+        this.webtopNaming = mockStatic(WebtopNaming.class);
+    }
+
+    @AfterMethod
+    public void cleanup() {
+        this.systemProperties.close();
+        this.webtopNaming.close();
     }
 
     @Test
     public void shouldUseSystemPropertiesWrapperForNotifyChanges() throws Exception {
         // Given
-        PowerMockito.mockStatic(SystemProperties.class);
         ExternalLdapConfig config = new ExternalLdapConfig(debug);
         // When
         config.update(dataLayerConfiguration);
         // Then
-        PowerMockito.verifyStatic(SystemProperties.class, times(3));
-        SystemProperties.get(anyString());
-
-        PowerMockito.verifyStatic(SystemProperties.class, times(2));
-        SystemProperties.getAsBoolean(anyString(), anyBoolean());
-
-        PowerMockito.verifyStatic(SystemProperties.class);
-        SystemProperties.getAsInt(anyString(), eq(-1));
+        systemProperties.verify(() -> SystemProperties.get(anyString()), times(3));
+        systemProperties.verify(() -> SystemProperties.getAsBoolean(anyString(), anyBoolean()), times(2));
+        systemProperties.verify(() -> SystemProperties.getAsInt(anyString(), eq(-1)));
     }
 
     @Test
     public void shouldIndicateHasChanged() {
-        PowerMockito.mockStatic(SystemProperties.class);
-        given(SystemProperties.get(eq(CoreTokenConstants.CTS_STORE_HOSTNAME))).willReturn("badger");
+        systemProperties.when(() -> SystemProperties.get(CoreTokenConstants.CTS_STORE_HOSTNAME)).thenReturn("badger");
 
         ExternalLdapConfig config = new ExternalLdapConfig(debug);
         // When
@@ -85,8 +87,7 @@ public class ExternalLdapConfigTest extends PowerMockTestCase {
 
     @Test
     public void shouldBeNullForNullPassword() {
-        PowerMockito.mockStatic(SystemProperties.class);
-        given(SystemProperties.get(eq(CoreTokenConstants.CTS_STORE_PASSWORD))).willReturn(null);
+        systemProperties.when(() -> SystemProperties.get(CoreTokenConstants.CTS_STORE_PASSWORD)).thenReturn(null);
 
         ExternalLdapConfig config = new ExternalLdapConfig(debug);
         config.update(dataLayerConfiguration);
@@ -100,13 +101,12 @@ public class ExternalLdapConfigTest extends PowerMockTestCase {
     @Test
     public void shouldPrioritizeServerList() throws Exception {
         // Given
-        PowerMockito.mockStatic(SystemProperties.class);
-        given(SystemProperties.get(eq(CoreTokenConstants.CTS_STORE_HOSTNAME)))
-                .willReturn("test1.com:389|03,test2.com|02,test3.com|01");
-        given(SystemProperties.getAsBoolean(CoreTokenConstants.CTS_STORE_SSL_ENABLED, false)).willReturn(true);
-        PowerMockito.mockStatic(WebtopNaming.class);
-        given(WebtopNaming.getAMServerID()).willReturn("01");
-        given(WebtopNaming.getSiteID("01")).willReturn("02");
+        systemProperties.when(() -> SystemProperties.get(CoreTokenConstants.CTS_STORE_HOSTNAME))
+                .thenReturn("test1.com:389|03,test2.com|02,test3.com|01");
+        systemProperties.when(() -> SystemProperties.getAsBoolean(CoreTokenConstants.CTS_STORE_SSL_ENABLED, false)).thenReturn(true);
+
+        webtopNaming.when(WebtopNaming::getAMServerID).thenReturn("01");
+        webtopNaming.when(() -> WebtopNaming.getSiteID("01")).thenReturn("02");
 
         ExternalLdapConfig config = new ExternalLdapConfig(debug);
         config.update(dataLayerConfiguration);

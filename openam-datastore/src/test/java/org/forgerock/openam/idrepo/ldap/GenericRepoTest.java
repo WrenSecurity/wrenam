@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2013-2016 ForgeRock AS.
+ * Portions Copyright 2023 Wren Security
  */
 package org.forgerock.openam.idrepo.ldap;
 
@@ -34,7 +35,6 @@ import org.forgerock.openam.utils.MapHelper;
 import org.forgerock.opendj.ldap.Filter;
 import org.forgerock.opendj.ldap.ResultCode;
 import org.mockito.ArgumentCaptor;
-import org.powermock.api.mockito.PowerMockito;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -679,7 +679,7 @@ public class GenericRepoTest extends IdRepoTestBase {
 
     @ Test (expectedExceptions = IllegalStateException.class)
     public void shouldThrowExceptionIfListenerAlreadyExists() {
-        IdRepoListener newIdRepoListener = PowerMockito.mock(IdRepoListener.class);
+        IdRepoListener newIdRepoListener = mock(IdRepoListener.class);
         idrepo.addListener(null, newIdRepoListener);
     }
 

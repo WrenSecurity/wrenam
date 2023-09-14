@@ -12,7 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014-2016 ForgeRock AS.
- * Portions Copyright 2021 Wren Security.
+ * Portions Copyright 2021-2023 Wren Security.
  */
 
 package org.forgerock.oauth2.core;
@@ -70,6 +70,8 @@ public class AuthorizationCodeGrantTypeHandlerTest {
 
         uris = mock(OAuth2Uris.class);
         given(urisFactory.get(any(OAuth2Request.class))).willReturn(uris);
+        given(tokenStore.createAccessToken(anyString(), anyString(), anyString(), anyString(), anyString(), anyString(),
+                anySet(), any(), anyString(), anyString(), any())).willReturn(spy(AccessToken.class));
     }
 
     @Test (expectedExceptions = InvalidRequestException.class)
@@ -173,7 +175,7 @@ public class AuthorizationCodeGrantTypeHandlerTest {
         OAuth2Request request = mock(OAuth2Request.class);
         given(request.getParameter("code")).willReturn("abc123");
         ClientRegistration clientRegistration = mock(ClientRegistration.class);
-        AuthorizationCode authorizationCode = mock(AuthorizationCode.class);
+        AuthorizationCode authorizationCode = spy(new AuthorizationCode(null));
 
         given(uris.getTokenEndpoint()).willReturn("Token Endpoint");
         given(clientAuthenticator.authenticate(request, "Token Endpoint")).willReturn(clientRegistration);

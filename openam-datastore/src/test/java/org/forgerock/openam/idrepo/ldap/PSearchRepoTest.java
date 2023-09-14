@@ -12,17 +12,17 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions Copyright 2023 Wren Security
  */
 package org.forgerock.openam.idrepo.ldap;
 
+import static org.fest.assertions.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+
 import com.sun.identity.idm.IdRepoListener;
 import org.forgerock.openam.utils.MapHelper;
-import org.powermock.api.mockito.PowerMockito;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.testng.Assert.fail;
 
 
 public class PSearchRepoTest  extends IdRepoTestBase {
@@ -48,7 +48,7 @@ public class PSearchRepoTest  extends IdRepoTestBase {
 
     @Test(dependsOnMethods = "addListenerNoPSearch", expectedExceptions = IllegalStateException.class)
     public void exceptionListenerAlreadyExists() {
-        IdRepoListener newIdRepoListener = PowerMockito.mock(IdRepoListener.class);
+        IdRepoListener newIdRepoListener = mock(IdRepoListener.class);
         idrepo.addListener(null, newIdRepoListener);
     }
 

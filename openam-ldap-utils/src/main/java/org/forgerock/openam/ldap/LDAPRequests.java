@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions Copyright 2023 Wren Security
  */
 
 package org.forgerock.openam.ldap;
@@ -239,7 +240,7 @@ public final class LDAPRequests {
      *
      * @see Requests#newModifyDNRequest(String, String)
      * @param name the DN of the entry to modify.
-     * @param newName the new DN of the entry.
+     * @param newName the new RDN of the entry.
      * @return the modify DN request.
      */
     public static ModifyDNRequest newModifyDNRequest(final String name, final String newName) {

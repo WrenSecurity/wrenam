@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2013-2016 ForgeRock AS.
+ * Portions Copyright 2023 Wren Security
  */
 package org.forgerock.openam.cts.worker.process;
 
@@ -19,6 +20,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.verify;
 import static org.mockito.ArgumentMatchers.anyCollection;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 
 import java.util.Arrays;
@@ -44,7 +46,7 @@ public class CTSWorkerBaseProcessTest {
     public void setUp() throws Exception {
         mockQuery = mock(CTSWorkerQuery.class);
         mockFilter = mock(CTSWorkerFilter.class);
-        mockProcess = mock(CTSWorkerBaseProcess.class);
+        mockProcess = spy(CTSWorkerBaseProcess.class);
     }
 
     @AfterMethod
