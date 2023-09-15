@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015 ForgeRock AS.
+ * Portions Copyright 2023 Wren Security
  */
 package org.forgerock.openam.rest.authz;
 
@@ -28,6 +29,8 @@ import org.forgerock.openam.forgerockrest.utils.SpecialUserIdentity;
 import org.forgerock.openam.rest.resource.SSOTokenContext;
 import org.forgerock.openam.utils.Config;
 import org.forgerock.util.promise.Promise;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
@@ -44,6 +47,7 @@ public class SpecialOrAdminOrAgentAuthzModuleTest {
     public SpecialOrAdminOrAgentAuthzModule testModule;
     private AgentIdentity mockAgentIdentity;
     private SpecialUserIdentity mockSpecialUserIdentity;
+    private SSOTokenContext mockSSOTokenContext;
 
     @BeforeTest
     public void beforeTest() {
@@ -55,11 +59,21 @@ public class SpecialOrAdminOrAgentAuthzModuleTest {
                 mock(Debug.class));
     }
 
+    @BeforeMethod
+    public void setup() {
+        mockSSOTokenContext = mock(SSOTokenContext.class);
+        given(mockSSOTokenContext.asContext(SSOTokenContext.class)).willReturn(mockSSOTokenContext);
+    }
+
+    @AfterMethod
+    public void cleanup() {
+        mockSSOTokenContext = null;
+    }
+
     @Test
     public void shouldAuthorizeAdmin() throws Exception {
 
         //given
-        SSOTokenContext mockSSOTokenContext = mock(SSOTokenContext.class);
         SSOToken mockSSOToken = mock(SSOToken.class);
         Principal principal = mock(Principal.class);
         given(mockSSOToken.getPrincipal()).willReturn(principal);
@@ -82,7 +96,6 @@ public class SpecialOrAdminOrAgentAuthzModuleTest {
     public void shouldAuthorizeAgent() throws Exception {
 
         //given
-        SSOTokenContext mockSSOTokenContext = mock(SSOTokenContext.class);
         SSOToken mockSSOToken = mock(SSOToken.class);
         Principal principal = mock(Principal.class);
         given(mockSSOToken.getPrincipal()).willReturn(principal);
@@ -105,7 +118,6 @@ public class SpecialOrAdminOrAgentAuthzModuleTest {
     public void shouldAuthorizeSpecialUser() throws Exception {
 
         //given
-        SSOTokenContext mockSSOTokenContext = mock(SSOTokenContext.class);
         SSOToken mockSSOToken = mock(SSOToken.class);
         Principal principal = mock(Principal.class);
         given(mockSSOToken.getPrincipal()).willReturn(principal);
@@ -128,7 +140,6 @@ public class SpecialOrAdminOrAgentAuthzModuleTest {
     public void shouldFailNonAgentNonSuperUser() throws Exception {
 
         //given
-        SSOTokenContext mockSSOTokenContext = mock(SSOTokenContext.class);
         SSOToken mockSSOToken = mock(SSOToken.class);
         Principal principal = mock(Principal.class);
         given(mockSSOToken.getPrincipal()).willReturn(principal);
@@ -150,7 +161,6 @@ public class SpecialOrAdminOrAgentAuthzModuleTest {
     @Test
     public void shouldErrorInvalidContext() throws Exception {
         //given
-        SSOTokenContext mockSSOTokenContext = mock(SSOTokenContext.class);
         SSOToken mockSSOToken = mock(SSOToken.class);
         Principal principal = mock(Principal.class);
         given(mockSSOToken.getPrincipal()).willReturn(principal);

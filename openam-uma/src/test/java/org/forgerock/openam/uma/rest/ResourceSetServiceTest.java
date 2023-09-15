@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions Copyright 2023 Wren Security
  */
 
 package org.forgerock.openam.uma.rest;
@@ -155,6 +156,7 @@ public class ResourceSetServiceTest {
     private Context mockContext(String realmName) {
         Realm realm = realmTestHelper.mockRealm(realmName.substring(1));
         RealmContext realmContext = mock(RealmContext.class);
+        given(realmContext.asContext(RealmContext.class)).willReturn(realmContext);
         given(realmContext.getRealm()).willReturn(realm);
         return realmContext;
     }

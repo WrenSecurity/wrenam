@@ -20,6 +20,7 @@
  * "Portions copyright [year] [name of copyright owner]"
  *
  * Copyright 2013-2015 ForgeRock AS.
+ * Portions Copyright 2023 Wren Security.
  */
 
 package org.forgerock.openam.services.email;
@@ -29,10 +30,7 @@ import com.sun.identity.shared.debug.Debug;
 import com.sun.identity.sm.ServiceConfig;
 import com.sun.identity.sm.ServiceConfigManager;
 import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.modules.testng.PowerMockTestCase;
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import javax.mail.MessagingException;
@@ -45,10 +43,11 @@ import java.util.Set;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-public class MailServerImplTest extends PowerMockTestCase {
+public class MailServerImplTest {
 
     private MailServerImpl mailServerMock;
     private AMSendMail sendMailMock;
@@ -90,10 +89,10 @@ public class MailServerImplTest extends PowerMockTestCase {
 
     @BeforeMethod
     public void setup(){
-        ServiceConfigManager serviceConfigManagerMock = PowerMockito.mock(ServiceConfigManager.class);
-        ServiceConfig serviceConfigMock = PowerMockito.mock(ServiceConfig.class);
-        Debug debugMock = PowerMockito.mock(Debug.class);
-        sendMailMock = PowerMockito.mock(AMSendMail.class);
+        ServiceConfigManager serviceConfigManagerMock = mock(ServiceConfigManager.class);
+        ServiceConfig serviceConfigMock = mock(ServiceConfig.class);
+        Debug debugMock = mock(Debug.class);
+        sendMailMock = mock(AMSendMail.class);
         Map<String, Set<String>> options = createOptionsMap();
         try{
             Mockito.doNothing().when(sendMailMock).postMail(eq(recipients), anyString(), anyString(), anyString());

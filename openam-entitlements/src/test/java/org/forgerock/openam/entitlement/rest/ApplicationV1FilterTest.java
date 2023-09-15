@@ -13,16 +13,19 @@
 *
 * Copyright 2015 ForgeRock AS.
 * Portions Copyrighted 2015 Nomura Research Institute, Ltd.
+* Portions Copyright 2023 Wren Security
 */
 package org.forgerock.openam.entitlement.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.forgerock.json.JsonValue.array;
+import static org.forgerock.json.JsonValue.field;
+import static org.forgerock.json.JsonValue.json;
+import static org.forgerock.json.JsonValue.object;
 import static org.forgerock.json.test.assertj.AssertJJsonValueAssert.assertThat;
-import static org.forgerock.json.JsonValue.*;
-import static org.mockito.BDDMockito.any;
-import static org.mockito.BDDMockito.anyCollectionOf;
-import static org.mockito.BDDMockito.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -34,7 +37,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import javax.security.auth.Subject;
-import org.forgerock.services.context.Context;
 import org.forgerock.json.JsonValue;
 import org.forgerock.json.resource.BadRequestException;
 import org.forgerock.json.resource.CreateRequest;
@@ -51,18 +53,16 @@ import org.forgerock.json.resource.UpdateRequest;
 import org.forgerock.openam.entitlement.ResourceType;
 import org.forgerock.openam.entitlement.configuration.SmsAttribute;
 import org.forgerock.openam.entitlement.guice.EntitlementRestGuiceModule;
-import org.forgerock.openam.entitlement.rest.ApplicationV1Filter;
-import org.forgerock.openam.entitlement.rest.ApplicationV1FilterTransformer;
-import org.forgerock.openam.entitlement.rest.EntitlementsExceptionMappingHandler;
 import org.forgerock.openam.entitlement.service.ApplicationService;
 import org.forgerock.openam.entitlement.service.ApplicationServiceFactory;
 import org.forgerock.openam.entitlement.service.ResourceTypeService;
-import org.forgerock.openam.forgerockrest.guice.ForgerockRestGuiceModule;
 import org.forgerock.openam.rest.resource.ContextHelper;
 import org.forgerock.openam.utils.CollectionUtils;
+import org.forgerock.services.context.Context;
 import org.forgerock.util.promise.Promise;
 import org.forgerock.util.query.QueryFilter;
 import org.mockito.ArgumentCaptor;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -468,7 +468,7 @@ public class ApplicationV1FilterTest {
         // Then
         verify(requestHandler).handleQuery(eq(context), eq(queryRequest), queryResultHandlerCaptor.capture());
         verify(applicationTransformer).transform(eq(mockQueryResponse), eq(context), eq(queryRequest), eq(queryResultHandler),
-                anyCollectionOf(ResourceResponse.class));
+                ArgumentMatchers.<ResourceResponse>anyCollection());
     }
 
     /**

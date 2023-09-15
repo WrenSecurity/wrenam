@@ -12,9 +12,17 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014-2015 ForgeRock AS.
+ * Portions Copyright 2023 Wren Security
  */
 
 package org.forgerock.openam.forgerockrest.utils;
+
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNull;
 
 import com.sun.identity.log.Logger;
 import com.sun.identity.log.messageid.LogMessageProvider;
@@ -24,14 +32,9 @@ import java.util.Collections;
 import java.util.HashSet;
 import javax.security.auth.Subject;
 import org.forgerock.json.resource.ResourceException;
-import org.forgerock.services.context.Context;
 import org.forgerock.openam.rest.resource.SSOTokenContext;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNull;
+import org.forgerock.openam.rest.resource.SubjectContext;
+import org.forgerock.services.context.Context;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -132,6 +135,8 @@ public class RestLogTest {
         Subject subject = new Subject(false, princes, Collections.EMPTY_SET, Collections.EMPTY_SET);
 
         when(tokenContext.getCallerSubject()).thenReturn(subject);
+        when(tokenContext.containsContext(SubjectContext.class)).thenReturn(true);
+        when(tokenContext.asContext(SubjectContext.class)).thenReturn(tokenContext);
 
         return tokenContext;
     }

@@ -12,6 +12,7 @@
 * information: "Portions copyright [year] [name of copyright owner]".
 *
 * Copyright 2014-2015 ForgeRock AS.
+* Portions Copyright 2023 Wren Security
 */
 
 package org.forgerock.openam.entitlement.rest;
@@ -42,8 +43,6 @@ import org.forgerock.openam.entitlement.rest.model.json.PolicyRequest;
 import org.forgerock.openam.rest.RealmContext;
 import org.forgerock.openam.rest.resource.SubjectContext;
 import org.forgerock.util.promise.Promise;
-import org.hamcrest.BaseMatcher;
-import org.hamcrest.Description;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.testng.annotations.AfterMethod;
@@ -227,31 +226,4 @@ public class PolicyResourceEvaluationTest {
         return ClientContext.newInternalClientContext(new RealmContext(subjectContext, realm));
     }
 
-    /**
-     * Given a resource exception verifies that the code matches the expected code.
-     */
-    private final static class ResourceExceptionMatcher extends BaseMatcher<ResourceException> {
-
-        private final int expectedCode;
-
-        public ResourceExceptionMatcher(final int expectedCode) {
-            this.expectedCode = expectedCode;
-        }
-
-        @Override
-        public boolean matches(final Object o) {
-            if (!(o instanceof ResourceException)) {
-                return false;
-            }
-
-            ResourceException exception = (ResourceException)o;
-            return exception.getCode() == expectedCode;
-        }
-
-        @Override
-        public void describeTo(final Description description) {
-            description.appendText("Expected resource exception code was " + expectedCode);
-        }
-
-    }
 }

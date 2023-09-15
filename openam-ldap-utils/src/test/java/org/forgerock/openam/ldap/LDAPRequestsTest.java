@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions Copyright 2023 Wren Security
  */
 
 package org.forgerock.openam.ldap;
@@ -74,7 +75,7 @@ public class LDAPRequestsTest {
                 { LDAPRequests.newAddRequest(Entries.makeEntry("dn: " + dn)) },
                 { LDAPRequests.newDeleteRequest(dn) },
                 { LDAPRequests.newDeleteRequest(DN.valueOf(dn)) },
-                { LDAPRequests.newModifyDNRequest(dn, "uid=test2,dc=example,dc=com") }
+                { LDAPRequests.newModifyDNRequest(dn, "uid=test2") }
         };
     }
 

@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions Copyright 2023 Wren Security
  */
 
 package org.forgerock.openam.core.rest.session;
@@ -104,6 +105,7 @@ public class SessionResourceV2Test {
         };
         sessionResource = new SessionResourceV2(ssoTokenManager, authUtilsWrapper,
                 sessionResourceUtil, sessionPropertyWhitelist, sessionService, partialSessionFactory);
+        given(mockContext.asContext(SSOTokenContext.class)).willReturn(mockContext);
         given(mockContext.getCallerSSOToken()).willReturn(ssoToken);
     }
 

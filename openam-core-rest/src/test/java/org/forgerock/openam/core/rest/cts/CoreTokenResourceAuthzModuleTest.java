@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014-2016 ForgeRock AS.
+ * Portions Copyright 2023 Wren Security
  */
 
 package org.forgerock.openam.core.rest.cts;
@@ -26,6 +27,8 @@ import org.forgerock.openam.cts.CoreTokenConfig;
 import org.forgerock.openam.rest.resource.SSOTokenContext;
 import org.forgerock.openam.utils.Config;
 import org.forgerock.util.promise.Promise;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
@@ -40,10 +43,22 @@ public class CoreTokenResourceAuthzModuleTest {
     SessionService mockService = mock(SessionService.class);
     CoreTokenConfig mockCoreTokenConfig = mock(CoreTokenConfig.class);
     Debug mockDebug = mock(Debug.class);
+    private SSOTokenContext mockSSOTokenContext;
 
     @BeforeTest
     public void beforeTest() {
         given(mockConfig.get()).willReturn(mockService);
+    }
+
+    @BeforeMethod
+    public void setup() {
+        mockSSOTokenContext = mock(SSOTokenContext.class);
+        given(mockSSOTokenContext.asContext(SSOTokenContext.class)).willReturn(mockSSOTokenContext);
+    }
+
+    @AfterMethod
+    public void cleanup() {
+        mockSSOTokenContext = null;
     }
 
     @Test
@@ -53,7 +68,6 @@ public class CoreTokenResourceAuthzModuleTest {
         given(mockCoreTokenConfig.isCoreTokenResourceEnabled()).willReturn(false);
         CoreTokenResourceAuthzModule testModule = new CoreTokenResourceAuthzModule(mockConfig, mockDebug,
                 mockCoreTokenConfig);
-        SSOTokenContext mockSSOTokenContext = mock(SSOTokenContext.class);
 
         //when
         Promise<AuthorizationResult, ResourceException> result = testModule.authorize(mockSSOTokenContext);
@@ -71,7 +85,6 @@ public class CoreTokenResourceAuthzModuleTest {
 
         CoreTokenResourceAuthzModule testModule = new CoreTokenResourceAuthzModule(mockConfig, mockDebug,
                 mockCoreTokenConfig);
-        SSOTokenContext mockSSOTokenContext = mock(SSOTokenContext.class);
         SSOToken mockSSOToken = mock(SSOToken.class);
 
         given(mockSSOTokenContext.getCallerSSOToken()).willReturn(mockSSOToken);
@@ -93,7 +106,6 @@ public class CoreTokenResourceAuthzModuleTest {
         given(mockCoreTokenConfig.isCoreTokenResourceEnabled()).willReturn(true);
         CoreTokenResourceAuthzModule testModule = new CoreTokenResourceAuthzModule(mockConfig, mockDebug,
                 mockCoreTokenConfig);
-        SSOTokenContext mockSSOTokenContext = mock(SSOTokenContext.class);
         SSOToken mockSSOToken = mock(SSOToken.class);
 
         given(mockSSOTokenContext.getCallerSSOToken()).willReturn(mockSSOToken);

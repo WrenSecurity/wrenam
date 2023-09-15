@@ -38,15 +38,9 @@ import org.forgerock.openam.rest.representations.JacksonRepresentationFactory;
 import org.forgerock.openam.utils.JsonValueBuilder;
 import org.forgerock.openam.xacml.v3.DiffStatus;
 import org.forgerock.openam.xacml.v3.ImportStep;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.data.Disposition;
@@ -55,7 +49,8 @@ import org.restlet.data.Status;
 import org.restlet.ext.jackson.JacksonRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
-
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iplanet.sso.SSOException;
 import com.iplanet.sso.SSOToken;
@@ -69,8 +64,6 @@ import com.sun.identity.security.AdminTokenAction;
 import com.sun.identity.shared.Constants;
 import com.sun.identity.shared.debug.Debug;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({RestLog.class})
 public class XacmlServiceTest  {
 
     private static final ConcurrentMap<String, Object> REQUEST_ATTRIBUTES = new ConcurrentHashMap<String, Object>() {{
@@ -96,7 +89,7 @@ public class XacmlServiceTest  {
     private JacksonRepresentationFactory jacksonRepresentationFactory =
             new JacksonRepresentationFactory(new ObjectMapper());
 
-    @Before
+    @BeforeMethod
     public void setup() throws Exception {
         this.importExport = mock(XACMLExportImport.class);
         this.debug = mock(Debug.class);
@@ -353,7 +346,7 @@ public class XacmlServiceTest  {
 
     @Test
     public void testPermissionsCheckSuccess() {
-        RestLog restLog = PowerMockito.mock(RestLog.class);
+        RestLog restLog = mock(RestLog.class);
 
         DelegationEvaluator evaluator = mock(DelegationEvaluator.class);
         XacmlService xacmlService = new XacmlService(importExport, adminTokenAction, this.debug, restLog, evaluator,
@@ -385,7 +378,7 @@ public class XacmlServiceTest  {
 
     @Test
     public void testPermissionsCheckFail() {
-        RestLog restLog = PowerMockito.mock(RestLog.class);
+        RestLog restLog = mock(RestLog.class);
 
         DelegationEvaluator evaluator = mock(DelegationEvaluator.class);
         XacmlService xacmlService = new XacmlService(importExport, adminTokenAction, this.debug, restLog, evaluator,
