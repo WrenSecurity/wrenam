@@ -42,7 +42,6 @@
                         WEB-INF/lib/jaxb-api-1.0.6.jar,
                         WEB-INF/lib/jaxb-libs-1.0.6.jar,
                         WEB-INF/lib/jaxb-xjc-1.0.6.jar,
-                        WEB-INF/lib/jdom-2.0.1.jar,
                     </packagingExcludes>
 
                     <archive>
