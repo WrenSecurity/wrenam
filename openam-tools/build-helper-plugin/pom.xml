@@ -68,14 +68,13 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.apache.maven.plugin-tools</groupId>
-            <artifactId>maven-plugin-annotations</artifactId>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-core</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.wrensecurity.wrenam</groupId>
-            <artifactId>openam-cli-definitions</artifactId>
-            <version>${project.version}</version>
+            <groupId>org.apache.maven.plugin-tools</groupId>
+            <artifactId>maven-plugin-annotations</artifactId>
         </dependency>
 
         <dependency>
@@ -84,13 +83,14 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.maven</groupId>
-            <artifactId>maven-project</artifactId>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
+            <groupId>org.wrensecurity.wrenam</groupId>
+            <artifactId>openam-cli-definitions</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>

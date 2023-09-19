@@ -29,55 +29,73 @@
     <name>Wren:AM - Liberty Schema</name>
     <description>Wren:AM Liberty Schema Components</description>
 
-    <build>
-        <plugins>
-<!--
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>jaxb2-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>xjc-liberty</id>
-                        <goals>
-                            <goal>xjc</goal>
-                        </goals>
-                    </execution>
-               </executions>
-               <configuration>
-                    <extension>true</extension>
-                    <nv>true</nv>
-                    <schemaFiles>
-						lib-id-sis-pp.xsd,
-						lib-arch-metadata.xsd,
-						idff-entity-config-schema.xsd,
-						lib-arch-disco-svc.xsd,
-						lib-arch-interact-svc.xsd,
-						lib-arch-paos.xsd,
-						lib-arch-soap-binding.xsd,
-						lib-arch-security-fmwk.xsd,
-						secext.xsd,
-						discoentry.xsd,
-						ppextension.xsd,
-						lib-idwsf-authn-svc.xsd,
-						liberty-idwsf-disco-svc-v1.1.xsd,
-						liberty-idwsf-soap-binding-v1.1.xsd
-                    </schemaFiles>
-               </configuration>
-           </plugin>
--->
-        </plugins>
-    </build>
+<!--    <build>-->
+<!--        <plugins>-->
+<!--            <plugin>-->
+<!--                <groupId>org.codehaus.mojo</groupId>-->
+<!--                <artifactId>jaxb2-maven-plugin</artifactId>-->
 
-    
+<!--                <dependencies>-->
+<!--                     https://github.com/eclipse-ee4j/jaxb-ri/issues/1287 -->
+<!--                    <dependency>-->
+<!--                        <groupId>com.sun.xml.bind</groupId>-->
+<!--                        <artifactId>jaxb-impl</artifactId>-->
+<!--                        <version>${jaxb-impl.version}</version>-->
+<!--                    </dependency>-->
+
+<!--                    <dependency>-->
+<!--                        <groupId>org.glassfish.jaxb</groupId>-->
+<!--                        <artifactId>jaxb-jxc</artifactId>-->
+<!--                        <version>2.3.8</version>-->
+<!--                    </dependency>-->
+
+<!--                    <dependency>-->
+<!--                        <groupId>org.glassfish.jaxb</groupId>-->
+<!--                        <artifactId>jaxb-xjc</artifactId>-->
+<!--                        <version>2.3.8</version>-->
+<!--                    </dependency>-->
+<!--                </dependencies>-->
+
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>xjc-saml2</id>-->
+
+<!--                        <goals>-->
+<!--                            <goal>xjc</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+
+<!--                <configuration>-->
+<!--                    <extension>true</extension>-->
+<!--                    <laxSchemaValidation>true</laxSchemaValidation>-->
+
+<!--                    <sources>-->
+<!--                        <source>src/main/xsd/lib-id-sis-pp.xsd</source>-->
+<!--                        <source>src/main/xsd/lib-arch-metadata.xsd</source>-->
+<!--                        <source>src/main/xsd/idff-entity-config-schema.xsd</source>-->
+<!--                        <source>src/main/xsd/lib-arch-disco-svc.xsd</source>-->
+<!--                        <source>src/main/xsd/lib-arch-interact-svc.xsd</source>-->
+<!--                        <source>src/main/xsd/lib-arch-paos.xsd</source>-->
+<!--                        <source>src/main/xsd/lib-arch-soap-binding.xsd</source>-->
+<!--                        <source>src/main/xsd/lib-arch-security-fmwk.xsd</source>-->
+<!--                        <source>src/main/xsd/secext.xsd</source>-->
+<!--                        <source>src/main/xsd/discoentry.xsd</source>-->
+<!--                        <source>src/main/xsd/ppextension.xsd</source>-->
+<!--                        <source>src/main/xsd/lib-idwsf-authn-svc.xsd</source>-->
+<!--                        <source>src/main/xsd/liberty-idwsf-disco-svc-v1.1.xsd</source>-->
+<!--                        <source>src/main/xsd/liberty-idwsf-soap-binding-v1.1.xsd</source>-->
+<!--                        <source>src/main/xsd/liberty-idwsf-soap-binding-v1.1.xsd</source>-->
+<!--                    </sources>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
+<!--        </plugins>-->
+<!--    </build>-->
+
     <dependencies>
         <dependency>
-            <groupId>org.wrensecurity.wrenam</groupId>
-            <artifactId>openam-shared</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>javax.xml.bind</groupId>
-            <artifactId>jaxb-api</artifactId>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
         </dependency>
 
         <dependency>
@@ -86,13 +104,13 @@
         </dependency>
 
         <dependency>
-            <groupId>com.sun.xml.bind</groupId>
-            <artifactId>jaxb-impl</artifactId>
+            <groupId>com.sun.msv.datatype.xsd</groupId>
+            <artifactId>xsdlib</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>com.sun.msv.datatype.xsd</groupId>
-            <artifactId>xsdlib</artifactId>
+            <groupId>org.wrensecurity.wrenam</groupId>
+            <artifactId>openam-shared</artifactId>
         </dependency>
     </dependencies>
 </project>

@@ -132,13 +132,13 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.wrensecurity.wrenam</groupId>
-            <artifactId>openam-shared</artifactId>
+            <groupId>external</groupId>
+            <artifactId>jdmkrt</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>external</groupId>
-            <artifactId>jdmkrt</artifactId>
+            <groupId>org.wrensecurity.wrenam</groupId>
+            <artifactId>openam-shared</artifactId>
         </dependency>
     </dependencies>
 </project>

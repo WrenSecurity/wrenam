@@ -46,15 +46,14 @@
         </dependency>
 
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <scope>provided</scope>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
         </dependency>
 
         <dependency>
             <groupId>org.wrensecurity.commons.guava</groupId>
             <artifactId>wrensec-guava-eventbus</artifactId>
-        </dependency>      
+        </dependency>
     </dependencies>
 
     <build>
@@ -105,7 +104,7 @@
                          </configuration>
                      </execution>
                  </executions>
-             </plugin>         
+             </plugin>
         </plugins>
     </build>
 </project>

@@ -68,7 +68,7 @@ public class CLIDefinitionGenerator extends AbstractMojo {
     @Parameter(required = true)
     private String outputDir;
 
-    @Parameter(defaultValue = "${project}",required = true, readonly = true)
+    @Parameter(defaultValue = "${project}", required = true, readonly = true)
     protected MavenProject project = new MavenProject();
 
     @Override
