@@ -21,7 +21,7 @@
     <parent>
         <artifactId>wrenam-project</artifactId>
         <groupId>org.wrensecurity.wrenam</groupId>
-        <version>15.0.0-RC2-SNAPSHOT</version>
+        <version>15.0.0-RC2</version>
     </parent>
 
     <artifactId>openam-upgrade</artifactId>
