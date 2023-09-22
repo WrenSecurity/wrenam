@@ -176,14 +176,6 @@
                 <artifactId>maven-war-plugin</artifactId>
 
                 <configuration>
-                    <packagingExcludes>
-                        WEB-INF/lib/jersey-core-1.1.5.2.jar,
-                        WEB-INF/lib/jaxb-api-1.0.6.jar,
-                        WEB-INF/lib/jaxb-libs-1.0.6.jar,
-                        WEB-INF/lib/jaxb-xjc-1.0.6.jar,
-                        WEB-INF/lib/jaxp-api-1.4.2.jar,
-                    </packagingExcludes>
-
                     <archive>
                         <manifestEntries>
                             <Specification-Title>Wren:AM Server</Specification-Title>
@@ -1015,14 +1007,13 @@
         </dependency>
 
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <scope>provided</scope>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>javax.servlet.jsp</groupId>
-            <artifactId>jsp-api</artifactId>
+            <groupId>jakarta.servlet.jsp</groupId>
+            <artifactId>jakarta.servlet.jsp-api</artifactId>
         </dependency>
     </dependencies>
 </project>

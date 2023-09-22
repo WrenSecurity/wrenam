@@ -108,9 +108,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.wrensecurity.wrenam</groupId>
-            <artifactId>openam-federation-library</artifactId>
-            <version>${project.version}</version>
+            <groupId>com.sun.xml.rpc</groupId>
+            <artifactId>jaxrpc-impl</artifactId>
         </dependency>
 
         <dependency>
@@ -119,23 +118,9 @@
         </dependency>
 
         <dependency>
-            <groupId>javax.xml.bind</groupId>
-            <artifactId>jaxb-api</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.sun.xml.bind</groupId>
-            <artifactId>jaxb1-impl</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>javax.xml</groupId>
-            <artifactId>jaxrpc-api</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.sun.xml.rpc</groupId>
-            <artifactId>jaxrpc-impl</artifactId>
+            <groupId>org.wrensecurity.wrenam</groupId>
+            <artifactId>openam-federation-library</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 </project>

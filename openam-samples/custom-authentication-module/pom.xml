@@ -35,16 +35,16 @@
             <artifactId>openam-core</artifactId>
             <version>${openam.version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-shared</artifactId>
             <version>${openam.version}</version>
         </dependency>
+
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
-            <version>2.5</version>
-            <scope>provided</scope>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
         </dependency>
     </dependencies>
 

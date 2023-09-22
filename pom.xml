@@ -97,7 +97,7 @@
     </repositories>
 
     <properties>
-        <pgpVerifyKeysVersion>1.7.7</pgpVerifyKeysVersion>
+        <pgpVerifyKeysVersion>1.7.8</pgpVerifyKeysVersion>
         <wrenBuildToolsVersion>1.2.0</wrenBuildToolsVersion>
 
         <!-- Source code has to be Java 8 compliant (code base is not JPMS ready) -->
@@ -145,65 +145,90 @@
         <wrensec-guava.version>18.0.5</wrensec-guava.version>
         <wrensec-ui.version>22.1.2</wrensec-ui.version>
 
+        <!-- Test Dependencies -->
         <mockito.version>5.5.0</mockito.version>
+
+        <!-- Build Dependencies -->
         <ant.contrib.version>1.0b3</ant.contrib.version>
-        <guice.version>3.0</guice.version>
-        <restlet.version>2.3.4</restlet.version>
-        <slf4j.version>1.7.21</slf4j.version>
-        <santuario.xmlsec.version>3.0.2</santuario.xmlsec.version>
-        <click.version>2.3.0</click.version>
-        <commons-beanutils.version>1.8.3</commons-beanutils.version>
-        <commons-codec.version>1.6</commons-codec.version>
+
+        <!-- Common Runtime Dependencies -->
+        <commons-beanutils.version>1.9.4</commons-beanutils.version>
+        <commons-codec.version>1.16.0</commons-codec.version>
         <commons-collections.version>3.2.2</commons-collections.version>
         <commons-digester.version>2.1</commons-digester.version>
         <commons-fileupload.version>1.5</commons-fileupload.version>
-        <commons-io.version>2.3</commons-io.version>
+        <commons-io.version>2.13.0</commons-io.version>
         <commons-lang.version>2.6</commons-lang.version>
-        <commons-logging.version>1.1.3</commons-logging.version>
+        <commons-logging.version>1.2</commons-logging.version>
         <commons-logging-api.version>1.1</commons-logging-api.version>
-        <esapiport.version>2013-12-04</esapiport.version>
-        <geoip.version>2.0.0</geoip.version>
-        <groovy.version>2.4.6</groovy.version>
-        <groovy-sandbox.version>1.6</groovy-sandbox.version>
-        <jaxb-api.version>2.3.1</jaxb-api.version>
-        <jaxb.version>2.3.7</jaxb.version>
-        <jaxb1.version>2.2.5-1</jaxb1.version>
-        <jaxrpc-api.version>1.1</jaxrpc-api.version>
-        <jaxrpc-impl.version>1.1.4_01-wren1</jaxrpc-impl.version>
-        <jaxrpc-spi.version>1.1.4_01-wren1</jaxrpc-spi.version>
-        <jersey-bundle.version>1.1.1-ea</jersey-bundle.version>
-        <jato.version>2005-05-04</jato.version>
-        <cc-ui.version>2008-08-08</cc-ui.version>
-        <jsr311-api.version>1.1.1</jsr311-api.version>
-        <jstl.version>1.1.2</jstl.version>
-        <mail.version>1.5.1</mail.version>
-        <jersey-oauth.version>1.1.5.2</jersey-oauth.version>
-        <relaxngDatatype.version>20020414</relaxngDatatype.version>
-        <rhino.version>1.7R4</rhino.version>
-        <saaj-api.version>1.3.4</saaj-api.version>
-        <saaj-impl.version>1.3.19</saaj-impl.version>
-        <jsp-api.version>2.1</jsp-api.version>
-        <xsdlib.version>20060615</xsdlib.version>
-        <authapi.version>2005-08-12</authapi.version>
-        <FastInfoset.version>2006-26-09</FastInfoset.version>
-        <jdmk.version>2007-01-10</jdmk.version>
-        <jsr173_api.version>2004-30-01</jsr173_api.version>
-        <javax.security.auth.message.version>3.1</javax.security.auth.message.version>
-        <freemarker.version>2.3.19</freemarker.version>
-        <java-ipv6.version>0.14</java-ipv6.version>
-        <json.version>20090211</json.version>
-        <hikaricp.version>2.4.1</hikaricp.version>
-        <h2database.version>2.2.220</h2database.version>
-        <activemq.version>5.18.2</activemq.version>
-        <javax.inject.version>1_2</javax.inject.version>
-        <fastinfoset.version>1.2.13</fastinfoset.version>
-        <jetty.jspc.version>9.4.0.M0</jetty.jspc.version>
-        <amazon.sns.version>1.10.72</amazon.sns.version>
-        <javax.websocket-api.version>1.1</javax.websocket-api.version>
+        <freemarker.version>2.3.32</freemarker.version>
+        <guice.version>3.0</guice.version>
+        <jackson.version>2.15.2</jackson.version>
+        <jakarta.activation-api.version>1.2.2</jakarta.activation-api.version>
         <jakarta.annotation-api.version>1.3.5</jakarta.annotation-api.version>
+        <jakarta.security.message-api.version>1.1.3</jakarta.security.message-api.version>
+        <jakarta.inject-api.version>1.0.5</jakarta.inject-api.version>
+        <jakarta.mail-api.version>1.6.7</jakarta.mail-api.version>
+        <jakarta.mail-impl.version>1.6.7</jakarta.mail-impl.version>
+        <jakarta.servlet-api.version>4.0.4</jakarta.servlet-api.version>
+        <jakarta.servlet.jsp-api.version>2.3.6</jakarta.servlet.jsp-api.version>
+        <jakarta.servlet.jstl-api.version>1.2.7</jakarta.servlet.jstl-api.version>
+        <jakarta.validation-api.version>2.0.2</jakarta.validation-api.version>
+        <jakarta.websocket-api.version>1.1.2</jakarta.websocket-api.version>
+        <jakarta.ws.rs-api.version>2.1.5</jakarta.ws.rs-api.version>
+        <jakarta.xml.rpc-api.version>1.1.4</jakarta.xml.rpc-api.version>
+        <jakarta.xml.bind-api.version>2.3.3</jakarta.xml.bind-api.version>
         <jakarta.xml.soap-api.version>1.4.2</jakarta.xml.soap-api.version>
         <jakarta.xml.ws-api.version>2.3.3</jakarta.xml.ws-api.version>
-        <snakeyaml.version>2.0</snakeyaml.version>
+        <java-ipv6.version>0.17</java-ipv6.version>
+        <javassist.version>3.29.1-GA</javassist.version>
+        <restlet.version>2.4.3</restlet.version>
+        <slf4j.version>1.7.36</slf4j.version>
+        <snakeyaml.version>2.2</snakeyaml.version>
+
+        <!-- WS / RS Related Dependencies -->
+        <fastinfoset.version>1.2.18</fastinfoset.version>
+        <jaxb-impl.version>2.3.8</jaxb-impl.version>
+        <jaxb1-impl.version>2.2.5-1</jaxb1-impl.version>
+        <jaxrpc-impl.version>1.1.6</jaxrpc-impl.version>
+        <jaxrpc-spi.version>1.1.6</jaxrpc-spi.version>
+        <jersey-bundle.version>1.19.1</jersey-bundle.version>
+        <jersey-oauth.version>1.19.4</jersey-oauth.version>
+        <saaj-impl.version>1.5.3</saaj-impl.version>
+        <xmlsec.version>2.3.3</xmlsec.version>
+
+        <!-- Database Related Dependencies -->
+        <hikaricp.version>2.4.1</hikaricp.version>
+        <h2database.version>2.2.220</h2database.version>
+
+        <!-- JSP Related Dependencies -->
+        <jetty.jspc.version>9.4.0.M0</jetty.jspc.version>
+
+        <!-- Scripting Support Dependencies -->
+        <groovy.version>2.4.6</groovy.version>
+        <groovy-sandbox.version>1.6</groovy-sandbox.version>
+        <rhino.version>1.7.14</rhino.version>
+
+        <!-- Other Specialized Dependencies -->
+        <activemq.version>5.18.2</activemq.version>
+        <amazon.sns.version>1.10.72</amazon.sns.version>
+        <asciidoctorj.version>2.5.10</asciidoctorj.version>
+        <geoip.version>2.0.0</geoip.version>
+        <json.version>20090211</json.version>
+        <mail.version>1.5.1</mail.version>
+
+        <!-- Deprecated Dependencies (TBD) -->
+        <authapi.version>2005-08-12</authapi.version>
+        <cc-ui.version>2008-08-08</cc-ui.version>
+        <click.version>2.3.0</click.version>
+        <esapiport.version>2013-12-04</esapiport.version>
+        <FastInfoset.version>2006-26-09</FastInfoset.version>
+        <jato.version>2005-05-04</jato.version>
+        <jdmk.version>2007-01-10</jdmk.version>
+        <jsr173_api.version>2004-30-01</jsr173_api.version>
+        <relaxngDatatype.version>20020414</relaxngDatatype.version>
+        <xsdlib.version>20060615</xsdlib.version>
+        <fest-assert.version>1.4</fest-assert.version>
     </properties>
 
     <modules>
@@ -258,6 +283,8 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- BOM Imports -->
+
             <dependency>
                 <groupId>org.wrensecurity.commons</groupId>
                 <artifactId>commons-bom</artifactId>
@@ -267,11 +294,177 @@
             </dependency>
 
             <dependency>
-                <groupId>org.mockito</groupId>
-                <artifactId>mockito-core</artifactId>
-                <version>${mockito.version}</version>
-                <scope>test</scope>
+                <groupId>com.fasterxml.jackson</groupId>
+                <artifactId>jackson-bom</artifactId>
+                <version>${jackson.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
             </dependency>
+
+            <!-- Commons Exclusions -->
+
+            <dependency>
+                <groupId>org.wrensecurity.commons</groupId>
+                <artifactId>api-descriptor</artifactId>
+                <version>${wrensec-commons.version}</version>
+
+                <exclusions>
+                    <!-- Replaced by Jakarta -->
+                    <exclusion>
+                        <groupId>com.sun.xml.bind</groupId>
+                        <artifactId>jaxb-osgi</artifactId>
+                    </exclusion>
+
+                    <exclusion>
+                        <groupId>javax.validation</groupId>
+                        <artifactId>validation-api</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.wrensecurity.commons</groupId>
+                <artifactId>forgerock-audit-core</artifactId>
+                <version>${wrensec-commons.version}</version>
+
+                <exclusions>
+                    <!-- Replaced by Jakarta -->
+                    <exclusion>
+                        <groupId>org.apache.servicemix.bundles</groupId>
+                        <artifactId>org.apache.servicemix.bundles.javax-inject</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.wrensecurity.commons</groupId>
+                <artifactId>forgerock-audit-json</artifactId>
+                <version>${wrensec-commons.version}</version>
+
+                <exclusions>
+                    <!-- Replaced by Jakarta -->
+                    <exclusion>
+                        <groupId>javax.validation</groupId>
+                        <artifactId>validation-api</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.wrensecurity.commons</groupId>
+                <artifactId>forgerock-audit-handler-elasticsearch</artifactId>
+                <version>${wrensec-commons.version}</version>
+
+                <exclusions>
+                    <!-- Replaced by Jakarta -->
+                    <exclusion>
+                        <groupId>org.apache.servicemix.bundles</groupId>
+                        <artifactId>org.apache.servicemix.bundles.javax-inject</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.wrensecurity.commons</groupId>
+                <artifactId>forgerock-audit-handler-json</artifactId>
+                <version>${wrensec-commons.version}</version>
+
+                <exclusions>
+                    <!-- Replaced by Jakarta -->
+                    <exclusion>
+                        <groupId>org.apache.servicemix.bundles</groupId>
+                        <artifactId>org.apache.servicemix.bundles.javax-inject</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.wrensecurity.commons</groupId>
+                <artifactId>forgerock-selfservice-core</artifactId>
+                <version>${wrensec-commons.version}</version>
+
+                <exclusions>
+                    <!-- Replaced by Jakarta -->
+                    <exclusion>
+                        <groupId>com.sun.xml.bind</groupId>
+                        <artifactId>jaxb-osgi</artifactId>
+                    </exclusion>
+
+                    <exclusion>
+                        <groupId>org.apache.servicemix.bundles</groupId>
+                        <artifactId>org.apache.servicemix.bundles.javax-inject</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.wrensecurity.commons</groupId>
+                <artifactId>json-resource</artifactId>
+                <version>${wrensec-commons.version}</version>
+
+                <exclusions>
+                    <!-- Replaced by Jakarta -->
+                    <exclusion>
+                        <groupId>com.sun.xml.bind</groupId>
+                        <artifactId>jaxb-osgi</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.wrensecurity.commons</groupId>
+                <artifactId>json-resource-http</artifactId>
+                <version>${wrensec-commons.version}</version>
+
+                <exclusions>
+                    <!-- Replaced by Jakarta -->
+                    <exclusion>
+                        <groupId>com.sun.mail</groupId>
+                        <artifactId>javax.mail</artifactId>
+                    </exclusion>
+
+                    <exclusion>
+                        <groupId>com.sun.xml.bind</groupId>
+                        <artifactId>jaxb-osgi</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+
+            <dependency>
+                <groupId>org.wrensecurity.commons</groupId>
+                <artifactId>json-resource-http</artifactId>
+                <version>${wrensec-commons.version}</version>
+
+                <exclusions>
+                    <!-- Replaced by Jakarta -->
+                    <exclusion>
+                        <groupId>com.sun.mail</groupId>
+                        <artifactId>javax.mail</artifactId>
+                    </exclusion>
+
+                    <exclusion>
+                        <groupId>com.sun.xml.bind</groupId>
+                        <artifactId>jaxb-osgi</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.wrensecurity.commons</groupId>
+                <artifactId>json-web-token</artifactId>
+                <version>${wrensec-commons.version}</version>
+
+                <exclusions>
+                    <!-- Replaced by Jakarta -->
+                    <exclusion>
+                        <groupId>com.sun.xml.bind</groupId>
+                        <artifactId>jaxb-osgi</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <!-- Module Dependencies -->
 
             <dependency>
                 <groupId>org.wrensecurity.wrenam</groupId>
@@ -346,15 +539,151 @@
             </dependency>
 
             <dependency>
-                <groupId>org.apache.click</groupId>
-                <artifactId>click-extras</artifactId>
-                <version>${click.version}</version>
+                <groupId>org.wrensecurity.wrenam</groupId>
+                <artifactId>openam-test-utils</artifactId>
+                <version>${project.version}</version>
+                <scope>test</scope>
             </dependency>
 
             <dependency>
-                <groupId>org.apache.click</groupId>
-                <artifactId>click-nodeps</artifactId>
-                <version>${click.version}</version>
+                <groupId>org.wrensecurity.wrenam</groupId>
+                <artifactId>openam-time-travel</artifactId>
+                <version>${project.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <!-- Standard Dependencies -->
+
+            <!-- TODO upgrade and verify exclusions -->
+            <dependency>
+                <groupId>com.amazonaws</groupId>
+                <artifactId>aws-java-sdk-sns</artifactId>
+                <version>${amazon.sns.version}</version>
+
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.httpcomponents</groupId>
+                        <artifactId>httpcore</artifactId>
+                    </exclusion>
+
+                    <exclusion>
+                        <groupId>org.apache.httpcomponents</groupId>
+                        <artifactId>httpclient</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <!-- TODO upgrade version -->
+            <dependency>
+                <groupId>com.googlecode.java-ipv6</groupId>
+                <artifactId>java-ipv6</artifactId>
+                <version>${java-ipv6.version}</version>
+            </dependency>
+
+            <!-- TODO upgrade version -->
+            <dependency>
+                <groupId>com.h2database</groupId>
+                <artifactId>h2</artifactId>
+                <version>${h2database.version}</version>
+            </dependency>
+
+            <!-- TODO upgrade and verify exclusions -->
+            <dependency>
+                <groupId>com.maxmind.geoip2</groupId>
+                <artifactId>geoip2</artifactId>
+                <version>${geoip.version}</version>
+
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.httpcomponents</groupId>
+                        <artifactId>httpcore</artifactId>
+                    </exclusion>
+
+                    <exclusion>
+                        <groupId>org.apache.httpcomponents</groupId>
+                        <artifactId>httpclient</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>com.sun.jersey</groupId>
+                <artifactId>jersey-bundle</artifactId>
+                <version>${jersey-bundle.version}</version>
+
+                <exclusions>
+                    <exclusion>
+                        <!-- Replaced by Jakarta -->
+                        <groupId>javax.ws.rs</groupId>
+                        <artifactId>jsr311-api</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>com.sun.jersey.contribs.jersey-oauth</groupId>
+                <artifactId>oauth-client</artifactId>
+                <version>${jersey-oauth.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.sun.jersey.contribs.jersey-oauth</groupId>
+                <artifactId>oauth-server</artifactId>
+                <version>${jersey-oauth.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.sun.jersey.contribs.jersey-oauth</groupId>
+                <artifactId>oauth-signature</artifactId>
+                <version>${jersey-oauth.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.sun.mail</groupId>
+                <artifactId>jakarta.mail</artifactId>
+                <version>${jakarta.mail-impl.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.sun.xml.bind</groupId>
+                <artifactId>jaxb1-impl</artifactId>
+                <version>${jaxb1-impl.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.sun.xml.bind</groupId>
+                <artifactId>jaxb-impl</artifactId>
+                <version>${jaxb-impl.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.sun.xml.fastinfoset</groupId>
+                <artifactId>FastInfoset</artifactId>
+                <version>${fastinfoset.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.sun.xml.messaging.saaj</groupId>
+                <artifactId>saaj-impl</artifactId>
+                <version>${saaj-impl.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.sun.xml.rpc</groupId>
+                <artifactId>jaxrpc-impl</artifactId>
+                <version>${jaxrpc-impl.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.sun.xml.rpc</groupId>
+                <artifactId>jaxrpc-spi</artifactId>
+                <version>${jaxrpc-spi.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.zaxxer</groupId>
+                <artifactId>HikariCP</artifactId>
+                <version>${hikaricp.version}</version>
             </dependency>
 
             <dependency>
@@ -412,132 +741,83 @@
             </dependency>
 
             <dependency>
-                <groupId>org.mozilla</groupId>
-                <artifactId>rhino</artifactId>
-                <version>${rhino.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.codehaus.groovy</groupId>
-                <artifactId>groovy-jsr223</artifactId>
-                <version>${groovy.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.codehaus.groovy</groupId>
-                <artifactId>groovy-json</artifactId>
-                <version>${groovy.version}</version>
-            </dependency>
-
-            <!-- FIXME Do we need this dependency? -->
-            <dependency>
-                <!-- MIT licensed: http://groovy-sandbox.kohsuke.org/license.html -->
-                <groupId>org.kohsuke</groupId>
-                <artifactId>groovy-sandbox</artifactId>
-                <version>${groovy-sandbox.version}</version>
-                <!-- Groovy-sandbox depends on Groovy 1.8.5, so ignore that in favour of our version. -->
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.codehaus.groovy</groupId>
-                        <artifactId>groovy</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-
-            <!-- FIXME Do we need this dependency? -->
-            <dependency>
-                <groupId>external</groupId>
-                <artifactId>esapiport</artifactId>
-                <version>${esapiport.version}</version>
-            </dependency>
-
-            <!--
-            <dependency>
-                <groupId>org.owasp.esapi</groupId>
-                <artifactId>esapi</artifactId>
-                <version>2.0.1</version>
-            </dependency>
-            -->
-
-            <dependency>
-                <groupId>com.maxmind.geoip2</groupId>
-                <artifactId>geoip2</artifactId>
-                <version>${geoip.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.apache.httpcomponents</groupId>
-                        <artifactId>httpcore</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.apache.httpcomponents</groupId>
-                        <artifactId>httpclient</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-
-            <dependency>
-                <groupId>com.amazonaws</groupId>
-                <artifactId>aws-java-sdk-sns</artifactId>
-                <version>${amazon.sns.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.apache.httpcomponents</groupId>
-                        <artifactId>httpcore</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.apache.httpcomponents</groupId>
-                        <artifactId>httpclient</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-
-            <dependency>
-                <groupId>javax.websocket</groupId>
-                <artifactId>javax.websocket-api</artifactId>
-                <version>${javax.websocket-api.version}</version>
-                <scope>provided</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>javax.xml.bind</groupId>
-                <artifactId>jaxb-api</artifactId>
-                <version>${jaxb-api.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.sun.xml.bind</groupId>
-                <artifactId>jaxb1-impl</artifactId>
-                <version>${jaxb1.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.sun.xml.bind</groupId>
-                <artifactId>jaxb-impl</artifactId>
-                <version>${jaxb.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>javax.xml</groupId>
-                <artifactId>jaxrpc-api</artifactId>
-                <version>${jaxrpc-api.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.sun.xml.rpc</groupId>
-                <artifactId>jaxrpc-impl</artifactId>
-                <version>${jaxrpc-impl.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.sun.xml.rpc</groupId>
-                <artifactId>jaxrpc-spi</artifactId>
-                <version>${jaxrpc-spi.version}</version>
+                <groupId>jakarta.activation</groupId>
+                <artifactId>jakarta.activation-api</artifactId>
+                <version>${jakarta.activation-api.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>jakarta.annotation</groupId>
                 <artifactId>jakarta.annotation-api</artifactId>
                 <version>${jakarta.annotation-api.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>jakarta.inject</groupId>
+                <artifactId>jakarta.inject-api</artifactId>
+                <version>${jakarta.inject-api.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>jakarta.mail</groupId>
+                <artifactId>jakarta.mail-api</artifactId>
+                <version>${jakarta.mail-api.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>jakarta.security.auth.message</groupId>
+                <artifactId>jakarta.security.auth.message-api</artifactId>
+                <version>${jakarta.security.message-api.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>jakarta.servlet</groupId>
+                <artifactId>jakarta.servlet-api</artifactId>
+                <version>${jakarta.servlet-api.version}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>jakarta.servlet.jsp</groupId>
+                <artifactId>jakarta.servlet.jsp-api</artifactId>
+                <version>${jakarta.servlet.jsp-api.version}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>jakarta.servlet.jsp.jstl</groupId>
+                <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
+                <version>${jakarta.servlet.jstl-api.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>jakarta.validation</groupId>
+                <artifactId>jakarta.validation-api</artifactId>
+                <version>${jakarta.validation-api.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>jakarta.websocket</groupId>
+                <artifactId>jakarta.websocket-api</artifactId>
+                <version>${jakarta.websocket-api.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>jakarta.ws.rs</groupId>
+                <artifactId>jakarta.ws.rs-api</artifactId>
+                <version>${jakarta.ws.rs-api.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>jakarta.xml.bind</groupId>
+                <artifactId>jakarta.xml.bind-api</artifactId>
+                <version>${jakarta.xml.bind-api.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>jakarta.xml.rpc</groupId>
+                <artifactId>jakarta.xml.rpc-api</artifactId>
+                <version>${jakarta.xml.rpc-api.version}</version>
             </dependency>
 
             <dependency>
@@ -553,15 +833,352 @@
             </dependency>
 
             <dependency>
-                <groupId>com.sun.jersey</groupId>
-                <artifactId>jersey-bundle</artifactId>
-                <version>${jersey-bundle.version}</version>
+                <groupId>org.apache.activemq</groupId>
+                <artifactId>activemq-client</artifactId>
+                <version>${activemq.version}</version>
+                <scope>test</scope>
             </dependency>
+
+            <dependency>
+                <!-- License: legal/CC-Public-Domain.txt -->
+                <groupId>org.hdrhistogram</groupId>
+                <artifactId>HdrHistogram</artifactId>
+                <version>2.1.9</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.santuario</groupId>
+                <artifactId>xmlsec</artifactId>
+                <version>${xmlsec.version}</version>
+            </dependency>
+
+            <!-- TODO upgrade version and check exclusions -->
+            <dependency>
+                <groupId>org.asciidoctor</groupId>
+                <artifactId>asciidoctorj</artifactId>
+                <version>${asciidoctorj.version}</version>
+
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.beust</groupId>
+                        <artifactId>jcommander</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.codehaus.groovy</groupId>
+                <artifactId>groovy-jsr223</artifactId>
+                <version>${groovy.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.codehaus.groovy</groupId>
+                <artifactId>groovy-json</artifactId>
+                <version>${groovy.version}</version>
+            </dependency>
+
+            <!-- TODO upgrade version -->
+            <dependency>
+                <groupId>org.freemarker</groupId>
+                <artifactId>freemarker</artifactId>
+                <version>${freemarker.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.javassist</groupId>
+                <artifactId>javassist</artifactId>
+                <version>${javassist.version}</version>
+            </dependency>
+
+            <!-- TODO upgrade version -->
+            <dependency>
+                <groupId>org.jgrapht</groupId>
+                <artifactId>jgrapht-core</artifactId>
+                <version>0.9.1</version>
+            </dependency>
+
+            <!-- TODO upgrade version -->
+            <dependency>
+                <groupId>org.json</groupId>
+                <artifactId>json</artifactId>
+                <version>${json.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
+                <version>${mockito.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.mozilla</groupId>
+                <artifactId>rhino</artifactId>
+                <version>${rhino.version}</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>org.restlet.jee</groupId>
+                <artifactId>org.restlet</artifactId>
+                <version>${restlet.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.restlet.jee</groupId>
+                <artifactId>org.restlet.ext.crypto</artifactId>
+                <version>${restlet.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.restlet.jee</groupId>
+                <artifactId>org.restlet.ext.freemarker</artifactId>
+                <version>${restlet.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.restlet.jee</groupId>
+                <artifactId>org.restlet.ext.httpclient</artifactId>
+                <version>${restlet.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.restlet.jee</groupId>
+                <artifactId>org.restlet.ext.jackson</artifactId>
+                <version>${restlet.version}</version>
+
+                <exclusions>
+                    <!-- Replaced by Jakarta -->
+                    <exclusion>
+                        <groupId>javax.validation</groupId>
+                        <artifactId>validation-api</artifactId>
+                    </exclusion>
+
+                    <!-- TODO check exclusions -->
+                    <exclusion>
+                        <groupId>javax.xml.stream</groupId>
+                        <artifactId>stax-api</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.restlet.jee</groupId>
+                <artifactId>org.restlet.ext.json</artifactId>
+                <version>${restlet.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.restlet.jee</groupId>
+                <artifactId>org.restlet.ext.net</artifactId>
+                <version>${restlet.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.restlet.jee</groupId>
+                <artifactId>org.restlet.ext.servlet</artifactId>
+                <version>${restlet.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.restlet.jee</groupId>
+                <artifactId>org.restlet.ext.simple</artifactId>
+                <version>${restlet.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.restlet.jee</groupId>
+                <artifactId>org.restlet.ext.slf4j</artifactId>
+                <version>${restlet.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.restlet.jee</groupId>
+                <artifactId>org.restlet.ext.ssl</artifactId>
+                <version>${restlet.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.restlet.jee</groupId>
+                <artifactId>org.restlet.ext.xml</artifactId>
+                <version>${restlet.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-nop</artifactId>
+                <version>${slf4j.version}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.wrensecurity.commons</groupId>
+                <artifactId>forgerock-bloomfilter-core</artifactId>
+                <version>${wrensec-commons.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.wrensecurity.commons</groupId>
+                <artifactId>forgerock-bloomfilter-monitoring</artifactId>
+                <version>${wrensec-commons.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.wrensecurity.commons</groupId>
+                <artifactId>wrensec-guice-core</artifactId>
+                <version>${wrensec-commons.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.wrensecurity.commons</groupId>
+                <artifactId>wrensec-guice-servlet</artifactId>
+                <version>${wrensec-commons.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.wrensecurity.commons</groupId>
+                <artifactId>wrensec-guice-test</artifactId>
+                <version>${wrensec-commons.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.wrensecurity.wrends</groupId>
+                <artifactId>opendj-core</artifactId>
+                <version>${wrends.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.wrensecurity.wrends</groupId>
+                <artifactId>opendj-grizzly</artifactId>
+                <version>${wrends.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.wrensecurity.wrends</groupId>
+                <artifactId>opendj-server</artifactId>
+                <version>${wrends.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.wrensecurity.wrends</groupId>
+                <artifactId>opendj-server-legacy</artifactId>
+                <version>${wrends.version}</version>
+
+                <exclusions>
+                    <exclusion>
+                        <!-- Replaced by Jakarta -->
+                        <groupId>com.sun.mail</groupId>
+                        <artifactId>javax.mail</artifactId>
+                    </exclusion>
+
+                    <exclusion>
+                        <!-- Replaced by Jakarta -->
+                        <groupId>javax.ws.rs</groupId>
+                        <artifactId>jsr311-api</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <!-- FIXME Needed to override version from org.restlet.ext.jackson -->
+            <dependency>
+                <groupId>org.yaml</groupId>
+                <artifactId>snakeyaml</artifactId>
+                <version>${snakeyaml.version}</version>
+            </dependency>
+
+           <!-- Maven Plugin Dependencies -->
+
+            <dependency>
+                <groupId>org.apache.maven</groupId>
+                <artifactId>maven-core</artifactId>
+                <version>3.9.4</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.maven</groupId>
+                <artifactId>maven-plugin-api</artifactId>
+                <version>3.9.4</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.maven.plugin-tools</groupId>
+                <artifactId>maven-plugin-annotations</artifactId>
+                <version>3.9.0</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <!-- Legacy / Deprecated Dependencies -->
 
             <dependency>
                 <groupId>com.iplanet.jato</groupId>
                 <artifactId>jato</artifactId>
                 <version>${jato.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.code.findbugs</groupId>
+                <artifactId>jsr305</artifactId>
+                <version>3.0.2</version>
+            </dependency>
+
+            <!-- FIXME do we need this dependency? -->
+            <!-- TODO Upgrade and review exclusion list -->
+            <dependency>
+                <groupId>com.google.inject</groupId>
+                <artifactId>guice</artifactId>
+                <version>${guice.version}</version>
+                <!-- Exclude aopalliance dependency due to ambiguous licensing terms. -->
+                <classifier>no_aop</classifier>
+
+                <exclusions>
+                    <exclusion>
+                        <groupId>aopalliance</groupId>
+                        <artifactId>aopalliance</artifactId>
+                    </exclusion>
+
+                    <!-- Exclude javax.inject in favour of servicemix OSGi-compatible version -->
+                    <exclusion>
+                        <groupId>javax.inject</groupId>
+                        <artifactId>javax.inject</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.inject.extensions</groupId>
+                <artifactId>guice-assistedinject</artifactId>
+                <version>${guice.version}</version>
+
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.google.inject</groupId>
+                        <artifactId>guice</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.inject.extensions</groupId>
+                <artifactId>guice-multibindings</artifactId>
+                <version>${guice.version}</version>
+
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.google.inject</groupId>
+                        <artifactId>guice</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>com.sun.msv.datatype.xsd</groupId>
+                <artifactId>xsdlib</artifactId>
+                <version>${xsdlib.version}</version>
             </dependency>
 
             <dependency>
@@ -648,455 +1265,82 @@
             </dependency>
 
             <dependency>
-                <groupId>javax.ws.rs</groupId>
-                <artifactId>jsr311-api</artifactId>
-                <version>${jsr311-api.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>javax.servlet</groupId>
-                <artifactId>jstl</artifactId>
-                <version>${jstl.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-nop</artifactId>
-                <version>${slf4j.version}</version>
-                <scope>provided</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>com.sun.mail</groupId>
-                <artifactId>javax.mail</artifactId>
-                <version>${mail.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.sun.jersey.contribs.jersey-oauth</groupId>
-                <artifactId>oauth-client</artifactId>
-                <version>${jersey-oauth.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.sun.jersey.contribs.jersey-oauth</groupId>
-                <artifactId>oauth-server</artifactId>
-                <version>${jersey-oauth.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.sun.jersey.contribs.jersey-oauth</groupId>
-                <artifactId>oauth-signature</artifactId>
-                <version>${jersey-oauth.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>relaxngDatatype</groupId>
-                <artifactId>relaxngDatatype</artifactId>
-                <version>${relaxngDatatype.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>javax.xml.soap</groupId>
-                <artifactId>saaj-api</artifactId>
-                <version>${saaj-api.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.sun.xml.messaging.saaj</groupId>
-                <artifactId>saaj-impl</artifactId>
-                <version>${saaj-impl.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.sun.xml.fastinfoset</groupId>
-                <artifactId>FastInfoset</artifactId>
-                <version>${fastinfoset.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>javax.servlet.jsp</groupId>
-                <artifactId>jsp-api</artifactId>
-                <version>${jsp-api.version}</version>
-                <scope>provided</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>com.sun.msv.datatype.xsd</groupId>
-                <artifactId>xsdlib</artifactId>
-                <version>${xsdlib.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.wrensecurity.wrends</groupId>
-                <artifactId>opendj-core</artifactId>
-                <version>${wrends.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.wrensecurity.wrends</groupId>
-                <artifactId>opendj-grizzly</artifactId>
-                <version>${wrends.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.wrensecurity.wrends</groupId>
-                <artifactId>opendj-server</artifactId>
-                <version>${wrends.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.wrensecurity.wrends</groupId>
-                <artifactId>opendj-server-legacy</artifactId>
-                <version>${wrends.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.slf4j</groupId>
-                        <artifactId>slf4j-jdk14</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>javax.servlet</groupId>
-                        <artifactId>javax.servlet-api</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-
-            <!-- Legacy External Libraries for Wren:AM -->
-            <!-- We need to eventually ween off of these -->
-
-            <!-- Dependencies for the Build Helper Maven Plugin -->
-            <dependency>
-                <groupId>org.apache.maven</groupId>
-                <artifactId>maven-plugin-api</artifactId>
-                <version>3.0.5</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.maven</groupId>
-                <artifactId>maven-project</artifactId>
-                <version>3.0-alpha-2</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.maven.plugin-tools</groupId>
-                <artifactId>maven-plugin-annotations</artifactId>
-                <version>3.3</version>
-                <scope>provided</scope>
-            </dependency>
-
-            <dependency>
                 <groupId>external</groupId>
                 <artifactId>authapi</artifactId>
                 <version>${authapi.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>external</groupId>
                 <artifactId>FastInfoset</artifactId>
                 <version>${FastInfoset.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>external</groupId>
                 <artifactId>jdmkrt</artifactId>
                 <version>${jdmk.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>external</groupId>
                 <artifactId>jdmktk</artifactId>
                 <version>${jdmk.version}</version>
                 <scope>compile</scope>
             </dependency>
+
+            <!-- FIXME Do we need this dependency? -->
+            <dependency>
+                <groupId>external</groupId>
+                <artifactId>esapiport</artifactId>
+                <version>${esapiport.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>external</groupId>
                 <artifactId>jsr173_api</artifactId>
                 <version>${jsr173_api.version}</version>
             </dependency>
 
-            <!-- Session HA Module Dependencies-->
             <dependency>
-                <groupId>org.restlet.jee</groupId>
-                <artifactId>org.restlet</artifactId>
-                <version>${restlet.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.restlet.jee</groupId>
-                <artifactId>org.restlet.ext.jackson</artifactId>
-                <version>${restlet.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>javax.xml.stream</groupId>
-                        <artifactId>stax-api</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.restlet.jee</groupId>
-                <artifactId>org.restlet.ext.json</artifactId>
-                <version>${restlet.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.restlet.jee</groupId>
-                <artifactId>org.restlet.ext.xml</artifactId>
-                <version>${restlet.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.restlet.jee</groupId>
-                <artifactId>org.restlet.ext.servlet</artifactId>
-                <version>${restlet.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.restlet.jee</groupId>
-                <artifactId>org.restlet.ext.freemarker</artifactId>
-                <version>${restlet.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.restlet.jee</groupId>
-                <artifactId>org.restlet.ext.ssl</artifactId>
-                <version>${restlet.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.restlet.jee</groupId>
-                <artifactId>org.restlet.ext.simple</artifactId>
-                <version>${restlet.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.restlet.jee</groupId>
-                <artifactId>org.restlet.ext.crypto</artifactId>
-                <version>${restlet.version}</version>
+                <groupId>org.apache.click</groupId>
+                <artifactId>click-extras</artifactId>
+                <version>${click.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>org.restlet.jee</groupId>
-                <artifactId>org.restlet.ext.httpclient</artifactId>
-                <version>${restlet.version}</version>
+                <groupId>org.apache.click</groupId>
+                <artifactId>click-nodeps</artifactId>
+                <version>${click.version}</version>
             </dependency>
 
-            <dependency>
-                <groupId>org.restlet.jee</groupId>
-                <artifactId>org.restlet.ext.net</artifactId>
-                <version>${restlet.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.restlet.jee</groupId>
-                <artifactId>org.restlet.ext.slf4j</artifactId>
-                <version>${restlet.version}</version>
-            </dependency>
-
-            <!-- Commons Dependencies -->
-            <dependency>
-                <groupId>org.wrensecurity.commons</groupId>
-                <artifactId>forgerock-bloomfilter-core</artifactId>
-                <version>${wrensec-commons.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wrensecurity.commons</groupId>
-                <artifactId>forgerock-bloomfilter-monitoring</artifactId>
-                <version>${wrensec-commons.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.google.code.findbugs</groupId>
-                <artifactId>jsr305</artifactId>
-                <version>3.0.0</version>
-            </dependency>
-
-            <!-- JASPIC -->
-            <dependency>
-                <groupId>org.glassfish</groupId>
-                <artifactId>javax.security.auth.message</artifactId>
-                <version>${javax.security.auth.message.version}</version>
-            </dependency>
-
-            <!-- DevicePrint -->
-            <dependency>
-                <groupId>org.freemarker</groupId>
-                <artifactId>freemarker</artifactId>
-                <version>${freemarker.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.googlecode.java-ipv6</groupId>
-                <artifactId>java-ipv6</artifactId>
-                <version>${java-ipv6.version}</version>
-            </dependency>
-            <!-- Native Json Manipulation -->
-            <dependency>
-                <groupId>org.json</groupId>
-                <artifactId>json</artifactId>
-                <version>${json.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.google.inject</groupId>
-                <artifactId>guice</artifactId>
-                <version>${guice.version}</version>
-                <!-- Exclude aopalliance dependency due to ambiguous licensing terms. -->
-                <classifier>no_aop</classifier>
-                <exclusions>
-                    <exclusion>
-                        <groupId>aopalliance</groupId>
-                        <artifactId>aopalliance</artifactId>
-                    </exclusion>
-                    <!-- Exclude javax.inject in favour of servicemix OSGi-compatible version -->
-                    <exclusion>
-                        <groupId>javax.inject</groupId>
-                        <artifactId>javax.inject</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>com.google.inject.extensions</groupId>
-                <artifactId>guice-multibindings</artifactId>
-                <version>${guice.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>com.google.inject</groupId>
-                        <artifactId>guice</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>com.google.inject.extensions</groupId>
-                <artifactId>guice-assistedinject</artifactId>
-                <version>${guice.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>com.google.inject</groupId>
-                        <artifactId>guice</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.wrensecurity.commons</groupId>
-                <artifactId>wrensec-guice-core</artifactId>
-                <version>${wrensec-commons.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wrensecurity.commons</groupId>
-                <artifactId>wrensec-guice-servlet</artifactId>
-                <version>${wrensec-commons.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wrensecurity.commons</groupId>
-                <artifactId>wrensec-guice-test</artifactId>
-                <version>${wrensec-commons.version}</version>
-                <scope>test</scope>
-            </dependency>
-
-            <dependency>
-                <!-- Use OSGi-compatible javax.inject to satisfy commons dependencies -->
-                <groupId>org.apache.servicemix.bundles</groupId>
-                <artifactId>org.apache.servicemix.bundles.javax-inject</artifactId>
-                <version>${javax.inject.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.jgrapht</groupId>
-                <artifactId>jgrapht-core</artifactId>
-                <version>0.9.1</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.asciidoctor</groupId>
-                <artifactId>asciidoctorj</artifactId>
-                <version>2.5.10</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>com.beust</groupId>
-                        <artifactId>jcommander</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-
-            <!--
-              required by the STS and SAML libraries
-              -->
-            <dependency>
-                <groupId>org.apache.santuario</groupId>
-                <artifactId>xmlsec</artifactId>
-                <version>${santuario.xmlsec.version}</version>
-            </dependency>
-
-            <!-- Test dependency -->
-            <dependency>
-                <groupId>org.codehaus.jstestrunner</groupId>
-                <artifactId>jstestrunner-junit</artifactId>
-                <version>1.0.1</version>
-                <scope>test</scope>
-            </dependency>
             <dependency>
                 <groupId>org.easytesting</groupId>
                 <artifactId>fest-assert</artifactId>
-                <version>1.4</version>
+                <version>${fest-assert.version}</version>
                 <scope>test</scope>
             </dependency>
+
+            <!-- FIXME Do we need this dependency? -->
             <dependency>
-                <groupId>org.easymock</groupId>
-                <artifactId>easymock</artifactId>
-                <version>3.2</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>httpunit</groupId>
-                <artifactId>httpunit</artifactId>
-                <version>1.7</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.mortbay.jetty</groupId>
-                <artifactId>jetty-servlet-tester</artifactId>
-                <version>7.0.0.pre5</version>
-                <scope>test</scope>
+                <!-- MIT licensed: http://groovy-sandbox.kohsuke.org/license.html -->
+                <groupId>org.kohsuke</groupId>
+                <artifactId>groovy-sandbox</artifactId>
+                <version>${groovy-sandbox.version}</version>
+
+                <!-- Groovy-sandbox depends on Groovy 1.8.5, so ignore that in favour of our version. -->
                 <exclusions>
                     <exclusion>
-                        <groupId>org.mortbay.jetty</groupId>
-                        <artifactId>servlet-api</artifactId>
+                        <groupId>org.codehaus.groovy</groupId>
+                        <artifactId>groovy</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
+
             <dependency>
-                <groupId>javassist</groupId>
-                <artifactId>javassist</artifactId>
-                <version>3.12.1.GA</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>com.h2database</groupId>
-                <artifactId>h2</artifactId>
-                <version>${h2database.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.activemq</groupId>
-                <artifactId>activemq-client</artifactId>
-                <version>${activemq.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.wrensecurity.wrenam</groupId>
-                <artifactId>openam-test-utils</artifactId>
-                <version>${project.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <!-- License: legal/CC-Public-Domain.txt -->
-                <groupId>org.hdrhistogram</groupId>
-                <artifactId>HdrHistogram</artifactId>
-                <version>2.1.4</version>
-            </dependency>
-            <dependency>
-                <groupId>com.zaxxer</groupId>
-                <artifactId>HikariCP</artifactId>
-                <version>${hikaricp.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wrensecurity.wrenam</groupId>
-                <artifactId>openam-time-travel</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <!-- Needed to override version from org.restlet.ext.jackson -->
-            <dependency>
-                <groupId>org.yaml</groupId>
-                <artifactId>snakeyaml</artifactId>
-                <version>${snakeyaml.version}</version>
+                <groupId>relaxngDatatype</groupId>
+                <artifactId>relaxngDatatype</artifactId>
+                <version>${relaxngDatatype.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -1106,10 +1350,12 @@
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
@@ -1120,79 +1366,104 @@
         <pluginManagement>
             <plugins>
                 <plugin>
-                    <groupId>com.github.searls</groupId>
-                    <artifactId>jasmine-maven-plugin</artifactId>
-                    <version>2.0-alpha-01</version>
-                </plugin>
-                <plugin>
                     <groupId>${project.groupId}</groupId>
                     <artifactId>build-helper-plugin</artifactId>
                     <version>${project.version}</version>
                 </plugin>
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>jaxb2-maven-plugin</artifactId>
-                    <version>1.3.1</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>build-helper-maven-plugin</artifactId>
-                    <version>1.8</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.portals.jetspeed-2</groupId>
-                    <artifactId>jetspeed-unpack-maven-plugin</artifactId>
-                    <version>2.2.2</version>
-                </plugin>
-                <plugin>
-                    <groupId>net.ju-n.maven.plugins</groupId>
-                    <artifactId>checksum-maven-plugin</artifactId>
-                    <version>1.2</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>buildnumber-maven-plugin</artifactId>
-                    <version>3.0.0</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.bsc.maven</groupId>
-                    <artifactId>maven-processor-plugin</artifactId>
-                    <version>2.2.4</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>xml-maven-plugin</artifactId>
-                    <version>1.0</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>jslint-maven-plugin</artifactId>
-                    <version>1.0.1</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>webminifier-maven-plugin</artifactId>
-                    <version>1.0.1</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.mortbay.jetty</groupId>
-                    <artifactId>jetty-maven-plugin</artifactId>
-                    <version>8.1.12.v20130726</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>js-import-maven-plugin</artifactId>
-                    <version>1.0.1</version>
-                </plugin>
+
+                <!-- TODO drop -->
                 <plugin>
                     <groupId>com.github.mcheely</groupId>
                     <artifactId>requirejs-maven-plugin</artifactId>
                     <version>2.0.0</version>
                 </plugin>
+
+                <!-- TODO upgrade or drop -->
+                <plugin>
+                    <groupId>com.github.searls</groupId>
+                    <artifactId>jasmine-maven-plugin</artifactId>
+                    <version>2.0-alpha-01</version>
+                </plugin>
+
+                <!-- TODO upgrade or drop -->
+                <plugin>
+                    <groupId>net.ju-n.maven.plugins</groupId>
+                    <artifactId>checksum-maven-plugin</artifactId>
+                    <version>1.2</version>
+                </plugin>
+
+                <!-- TODO upgrade or drop -->
+                <plugin>
+                    <groupId>org.apache.portals.jetspeed-2</groupId>
+                    <artifactId>jetspeed-unpack-maven-plugin</artifactId>
+                    <version>2.2.2</version>
+                </plugin>
+
+                <!-- TODO drop plugin -->
+                <plugin>
+                    <groupId>org.bsc.maven</groupId>
+                    <artifactId>maven-processor-plugin</artifactId>
+                    <version>2.2.4</version>
+                </plugin>
+
+                <!-- TODO upgrade -->
                 <plugin>
                     <groupId>org.codehaus.cargo</groupId>
                     <artifactId>cargo-maven3-plugin</artifactId>
                     <version>1.9.13</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>build-helper-maven-plugin</artifactId>
+                    <version>3.4.0</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>buildnumber-maven-plugin</artifactId>
+                    <version>3.1.0</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>jaxb2-maven-plugin</artifactId>
+                    <version>2.5.0</version>
+                </plugin>
+
+                <!-- TODO drop -->
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>js-import-maven-plugin</artifactId>
+                    <version>1.0.1</version>
+                </plugin>
+
+                <!-- TODO drop -->
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>jslint-maven-plugin</artifactId>
+                    <version>1.0.1</version>
+                </plugin>
+
+                <!-- TODO drop -->
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>webminifier-maven-plugin</artifactId>
+                    <version>1.0.1</version>
+                </plugin>
+
+                <!-- TODO drop? -->
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>xml-maven-plugin</artifactId>
+                    <version>1.1.0</version>
+                </plugin>
+
+                <!-- TODO drop? -->
+                <plugin>
+                    <groupId>org.mortbay.jetty</groupId>
+                    <artifactId>jetty-maven-plugin</artifactId>
+                    <version>8.1.12.v20130726</version>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -1298,6 +1569,7 @@
                 <configuration>
                     <escapeString>\</escapeString>
                     <encoding>UTF-8</encoding>
+
                     <nonFilteredFileExtensions>
                         <!-- Exclude any binary files based upon File Types. -->
                         <nonFilteredFileExtension>bin</nonFilteredFileExtension>
@@ -1333,7 +1605,9 @@
                         <nonFilteredFileExtension>ttf</nonFilteredFileExtension>
                         <!-- See: http://en.wikipedia.org/wiki/List_of_file_formats -->
                     </nonFilteredFileExtensions>
+
                     <useDefaultDelimiters>false</useDefaultDelimiters>
+
                     <delimiters>
                         <delimiter>${*}</delimiter>
                     </delimiters>
@@ -1343,9 +1617,11 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
+
                 <configuration>
                     <archive>
                         <index>true</index>
+
                         <manifestEntries>
                             <Specification-Title>${project.name}</Specification-Title>
                             <Specification-Version>${project.version} - ${buildNumber}</Specification-Version>
@@ -1377,11 +1653,13 @@
 
                 <configuration>
                     <doclint>all,-missing,-html</doclint>
+
                     <tags>
                         <tag>
                             <name>supported.all.api</name>
                             <placement>a</placement>
                         </tag>
+
                         <tag>
                             <name>supported.api</name>
                             <placement>a</placement>
@@ -1393,6 +1671,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
+
                 <reportSets>
                     <reportSet>
                         <reports>

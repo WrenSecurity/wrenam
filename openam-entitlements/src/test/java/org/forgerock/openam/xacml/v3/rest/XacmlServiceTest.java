@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions Copyright 2023 Wren Security
  */
 
 package org.forgerock.openam.xacml.v3.rest;
@@ -230,7 +231,7 @@ public class XacmlServiceTest  {
             fail("Expect exception");
         } catch (ResourceException e) {
             assertThat(e.getStatus().getCode()).isEqualTo(BAD_REQUEST);
-            assertThat(e.getMessage()).isEqualTo("No policies found in XACML document");
+            assertThat(e.getMessage()).startsWith("No policies found in XACML document");
         }
     }
 
@@ -251,7 +252,7 @@ public class XacmlServiceTest  {
             fail("Expect exception");
         } catch (ResourceException e) {
             assertThat(e.getStatus().getCode()).isEqualTo(BAD_REQUEST);
-            assertThat(e.getMessage()).isEqualTo("JSON Exception.");
+            assertThat(e.getMessage()).startsWith("JSON Exception.");
         }
     }
 
@@ -340,7 +341,7 @@ public class XacmlServiceTest  {
             fail("Expect exception");
         } catch (ResourceException e) {
             assertThat(e.getStatus().getCode()).isEqualTo(INTERNAL_ERROR);
-            assertThat(e.getMessage()).isEqualTo("JSON Exception.");
+            assertThat(e.getMessage()).startsWith("JSON Exception.");
         }
     }
 

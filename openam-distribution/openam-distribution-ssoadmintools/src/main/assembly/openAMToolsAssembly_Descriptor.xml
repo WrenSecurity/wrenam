@@ -22,7 +22,7 @@
 * your own identifying information:
 * "Portions Copyrighted [year] [name of copyright owner]"
 *
-* Portions Copyrighted 2022 Wren Security
+* Portions Copyrighted 2022-2023 Wren Security
 -->
 <assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0"
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -62,12 +62,12 @@
                 <include>org.wrensecurity.wrenam:openam-ldap-utils</include>
                 <include>org.wrensecurity.wrenam:openam-audit-context</include>
                 <include>org.forgerock.commons:json-resource</include>
-                <include>javax.inject:javax.inject</include>
+                <include>jakarta.inject:jakarta.inject-api</include>
                 <include>com.google.inject:guice:jar:no_aop</include>
                 <include>com.google.inject.extensions:guice-assistedinject</include>
                 <include>commons-lang:commons-lang</include>
                 <include>commons-collections:commons-collections</include>
-                <include>javax.xml:jaxrpc-api</include>
+                <include>jakarta.xml.rpc:jakarta.xml.rpc-api</include>
                 <include>external:jaxrpc-impl</include>
                 <include>com.sun.xml.rpc:jaxrpc-spi</include>
                 <include>org.json:json</include>
@@ -75,7 +75,7 @@
                 <include>org.codehaus.jackson:jackson-mapper-asl</include>
                 <include>org.codehaus.jackson:jackson-databind</include>
                 <include>external:jsr173_api</include>
-                <include>javax.mail:mail</include>
+                <include>jakarta.mail:jakarta.mail-api</include>
                 <include>relaxngDatatype:relaxngDatatype</include>
                 <include>external:webservices-api</include>
                 <include>external:webservices-rt</include>
@@ -99,7 +99,7 @@
             <outputDirectory>lib</outputDirectory>
             <scope>provided</scope>
             <includes>
-                <include>javax.servlet:servlet-api</include>
+                <include>jakarta.servlet:jakarta.servlet-api</include>
             </includes>
         </dependencySet>
     </dependencySets>
