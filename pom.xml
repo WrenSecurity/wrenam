@@ -97,7 +97,7 @@
     </repositories>
 
     <properties>
-        <pgpVerifyKeysVersion>1.7.8</pgpVerifyKeysVersion>
+        <pgpVerifyKeysVersion>1.7.9</pgpVerifyKeysVersion>
         <wrenBuildToolsVersion>1.2.0</wrenBuildToolsVersion>
 
         <!-- Source code has to be Java 8 compliant (code base is not JPMS ready) -->
@@ -205,7 +205,7 @@
         <jetty.jspc.version>9.4.0.M0</jetty.jspc.version>
 
         <!-- Scripting Support Dependencies -->
-        <groovy.version>2.4.6</groovy.version>
+        <groovy.version>2.4.21</groovy.version>
         <groovy-sandbox.version>1.6</groovy-sandbox.version>
         <rhino.version>1.7.14</rhino.version>
 
@@ -214,7 +214,7 @@
         <amazon.sns.version>1.10.72</amazon.sns.version>
         <asciidoctorj.version>2.5.10</asciidoctorj.version>
         <geoip.version>2.0.0</geoip.version>
-        <json.version>20090211</json.version>
+        <json.version>20230618</json.version>
         <mail.version>1.5.1</mail.version>
 
         <!-- Deprecated Dependencies (TBD) -->
@@ -899,7 +899,6 @@
                 <version>0.9.1</version>
             </dependency>
 
-            <!-- TODO upgrade version -->
             <dependency>
                 <groupId>org.json</groupId>
                 <artifactId>json</artifactId>

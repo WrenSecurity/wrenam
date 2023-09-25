@@ -23,6 +23,7 @@
  * "Portions Copyrighted [year] [name of copyright owner]"
  *
  * $Id: JSONUtils.java,v 1.1 2009/09/21 18:33:44 dillidorai Exp $
+ * Portions Copyrighted 2023 Wren Security
  */
 
 package com.sun.identity.shared;
@@ -113,11 +114,6 @@ public class JSONUtils {
             return 0;
         }
 
-        String str = json.getString(key);
-        try {
-            return Long.parseLong(str);
-        } catch (NumberFormatException e) {
-            return 0;
-        }
+        return json.getLong(key);
     }
 }
