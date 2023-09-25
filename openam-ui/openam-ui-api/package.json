@@ -12,7 +12,6 @@
     "grunt-contrib-copy": "1.0.0"
   },
   "dependencies": {
-    "swagger-ui": "2.2.4",
-    "swagger-ui-themes": "2.0.1"
+    "swagger-ui-dist": "5.7.2"
   }
 }
