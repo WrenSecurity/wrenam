@@ -8,8 +8,7 @@
       "name": "openam-ui-api",
       "version": "14.0.0",
       "dependencies": {
-        "swagger-ui": "2.2.4",
-        "swagger-ui-themes": "2.0.1"
+        "swagger-ui-dist": "5.7.2"
       },
       "devDependencies": {
         "grunt": "1.6.1",
@@ -1099,19 +1098,10 @@
         "node": ">= 0.4"
       }
     },
-    "node_modules/swagger-ui": {
-      "version": "2.2.4",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/swagger-ui/-/swagger-ui-2.2.4.tgz",
-      "integrity": "sha512-d4b9HM9vIGZSUGoSzBHjuS2U/h0e6IjyqtLMN77j+4gGPeR0HpN/gjHu7azxdVHzR8HCol7UkjMOCMdz1kZPFw==",
-      "deprecated": "No longer maintained, please upgrade to swagger-ui@3."
-    },
-    "node_modules/swagger-ui-themes": {
-      "version": "2.0.1",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/swagger-ui-themes/-/swagger-ui-themes-2.0.1.tgz",
-      "integrity": "sha512-KjtMRyjuRELffHLRW712OqBGKVSaIhapYQ31DBvDmDY9DbFYv5wO0ikf/WbFWdvAPFAiacGN1avy+Jh4waTTeQ==",
-      "engines": {
-        "node": ">=0.10.3"
-      }
+    "node_modules/swagger-ui-dist": {
+      "version": "5.7.2",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/swagger-ui-dist/-/swagger-ui-dist-5.7.2.tgz",
+      "integrity": "sha512-mVZc9QVQ6pTCV5crli3+Ng+DoMPwdtMHK8QLk2oX8Mtamp4D/hV+uYdC3lV0JZrDgpNEcjs0RrWTqMwwosuLPQ=="
     },
     "node_modules/to-regex-range": {
       "version": "5.0.1",
