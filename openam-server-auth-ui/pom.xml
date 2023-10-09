@@ -21,7 +21,7 @@
     <parent>
         <groupId>org.wrensecurity.wrenam</groupId>
         <artifactId>wrenam-project</artifactId>
-        <version>15.0.0-RC3-SNAPSHOT</version>
+        <version>15.0.0</version>
     </parent>
 
     <artifactId>openam-server-auth-ui</artifactId>
