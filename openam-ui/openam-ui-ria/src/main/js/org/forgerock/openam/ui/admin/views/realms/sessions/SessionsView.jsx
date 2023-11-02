@@ -22,8 +22,8 @@ import Select from "react-select";
 import {
     getByUserIdAndRealm,
     invalidateByHandles
-} from "org/forgerock/openam/ui/admin/services/global/SessionsService";
-import { getByIdStartsWith } from "org/forgerock/openam/ui/admin/services/global/UsersService";
+} from "org/forgerock/openam/ui/admin/services/realm/SessionsService";
+import { getByIdStartsWith } from "org/forgerock/openam/ui/admin/services/realm/UsersService";
 import CallToAction from "components/CallToAction";
 import PageDescription from "components/PageDescription";
 import SessionsTable from "./SessionsTable";
@@ -31,11 +31,11 @@ import SimplePageHeader from "components/SimplePageHeader";
 import withRouter from "org/forgerock/commons/ui/common/components/hoc/withRouter";
 import withRouterPropType from "org/forgerock/commons/ui/common/components/hoc/withRouterPropType";
 
-const fetchUsersByPartialId = _.debounce((userId, callback) => {
+const fetchUsersByPartialId = _.debounce((userId, realm, callback) => {
     if (_.isEmpty(userId)) {
         callback(null, { options: [] });
     } else {
-        getByIdStartsWith(userId).then((response) => {
+        getByIdStartsWith(userId, realm).then((response) => {
             callback(null, {
                 options: _.map(response, (user) => ({ label: user, value: user }))
             });
@@ -108,7 +108,7 @@ class SessionsView extends Component {
                             id: "findAUser"
                         } }
                         isLoading
-                        loadOptions={ fetchUsersByPartialId }
+                        loadOptions={ (userId, cb) => fetchUsersByPartialId(userId, this.props.router.params[0], cb) }
                         noResultsText={ t("console.sessions.search.noResults") }
                         onChange={ this.handleSelectAsyncOnChange }
                         placeholder={ t("console.sessions.search.placeholder") }

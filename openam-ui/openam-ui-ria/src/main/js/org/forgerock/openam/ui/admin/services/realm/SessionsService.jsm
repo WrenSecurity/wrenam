@@ -12,10 +12,11 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions copyright 2023 Wren Security
  */
 
 /**
- * @module org/forgerock/openam/ui/admin/services/global/SessionsService
+ * @module org/forgerock/openam/ui/admin/services/realm/SessionsService
  */
 
 import AbstractDelegate from "org/forgerock/commons/ui/common/main/AbstractDelegate";
