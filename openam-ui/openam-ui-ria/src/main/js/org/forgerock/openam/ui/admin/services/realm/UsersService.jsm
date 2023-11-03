@@ -12,10 +12,11 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions copyright 2023 Wren Security
  */
 
 /**
- * @module org/forgerock/openam/ui/admin/services/global/UsersService
+ * @module org/forgerock/openam/ui/admin/services/realm/UsersService
  */
 
 import AbstractDelegate from "org/forgerock/commons/ui/common/main/AbstractDelegate";
@@ -24,9 +25,16 @@ import fetchUrl from "org/forgerock/openam/ui/common/services/fetchUrl";
 
 const obj = new AbstractDelegate(`${Constants.host}/${Constants.context}/json`);
 
-export function getByIdStartsWith (id) {
+/**
+ * Fetch a list of users from the realm that start with the prefix.
+ *
+ * @param {string} id User ID prefix.
+ * @param {(string|boolean)} [realm=false] Realm.
+ * @returns {Promise<Array.<string>>} Promise with list of users.
+ */
+export function getByIdStartsWith (id, realm = false) {
     return obj.serviceCall({
-        url: fetchUrl(`/users?_queryId=${id}*`, { realm: false }),
+        url: fetchUrl(`/users?_queryId=${id}*`, { realm }),
         headers: { "Accept-API-Version": "protocol=1.0,resource=1.0" }
     }).then((response) => response.result);
 }
