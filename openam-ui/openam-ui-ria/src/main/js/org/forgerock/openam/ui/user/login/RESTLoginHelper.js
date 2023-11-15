@@ -128,7 +128,7 @@ define([
         const promise = $.Deferred();
         let context = "";
 
-        const goto = query.parseParameters(URIUtils.getCurrentFragmentQueryString()).goto;
+        const goto = query.parseParameters(URIUtils.getCurrentCompositeQueryString()).goto;
 
         if (goto) {
             AuthNService.validateGotoUrl(goto).then((data) => {
