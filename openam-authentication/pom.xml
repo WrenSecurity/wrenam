@@ -57,6 +57,7 @@
         <module>openam-auth-saml2</module>
         <module>openam-auth-scripted</module>
         <module>openam-auth-windowsdesktopsso</module>
+        <module>wrenam-auth-duo</module>
     </modules>
 
     <dependencies>

@@ -733,14 +733,14 @@
         </dependency>
 
         <dependency>
-        	<groupId>org.wrensecurity.wrenam</groupId>
-        	<artifactId>openam-radius-common</artifactId>
+            <groupId>org.wrensecurity.wrenam</groupId>
+            <artifactId>openam-radius-common</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <dependency>
-        	<groupId>org.wrensecurity.wrenam</groupId>
-        	<artifactId>openam-radius-server</artifactId>
+            <groupId>org.wrensecurity.wrenam</groupId>
+            <artifactId>openam-radius-server</artifactId>
             <version>${project.version}</version>
         </dependency>
 
@@ -934,6 +934,12 @@
         <dependency>
             <artifactId>openam-auth-oidc</artifactId>
             <groupId>org.wrensecurity.wrenam</groupId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.wrensecurity.wrenam</groupId>
+            <artifactId>wrenam-auth-duo</artifactId>
             <version>${project.version}</version>
         </dependency>
 
