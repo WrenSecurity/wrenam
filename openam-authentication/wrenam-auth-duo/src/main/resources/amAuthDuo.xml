@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<!--
+ * The contents of this file are subject to the terms of the Common Development and
+ * Distribution License (the License). You may not use this file except in compliance with the
+ * License.
+ *
+ * You can obtain a copy of the License at legal/CDDLv1.1.txt. See the License for the
+ * specific language governing permission and limitations under the License.
+ *
+ * When distributing Covered Software, include this CDDL Header Notice in each file and include
+ * the License file at legal/CDDLv1.1.txt. If applicable, add the following below the CDDL
+ * Header, with the fields enclosed by brackets [] replaced by your own identifying
+ * information: "Portions copyright [year] [name of copyright owner]".
+ *
+ * Copyright 2023 Wren Security
+-->
+<!DOCTYPE ServicesConfiguration
+        PUBLIC "=//sun//Service Management Services (SMS) 1.0 DTD//EN"
+        "jar://com/sun/identity/sm/sms.dtd">
+
+<ServicesConfiguration>
+    <Service name="sunAMAuthDuoService" version="1.0">
+        <Schema serviceHierarchy="/DSAMEConfig/authentication/sunAMAuthDuoService"
+                i18nFileName="amAuthDuo" i18nKey="duo-service-description"
+                resourceName="duo">
+
+            <Organization>
+                <AttributeSchema name="duo-auth-level"
+                        type="single" syntax="number_range" rangeStart="0" rangeEnd="2147483647"
+                        i18nKey="a500" order="100" resourceName="authenticationLevel">
+                    <DefaultValues>
+                        <Value>0</Value>
+                    </DefaultValues>
+                </AttributeSchema>
+                <AttributeSchema name="duo-client-api-base-url"
+                        type="single" i18nKey="a501" order="200" resourceName="apiBaseUrl">
+                    <DefaultValues>
+                        <Value></Value>
+                    </DefaultValues>
+                </AttributeSchema>
+                <AttributeSchema name="duo-client-integration-key"
+                        type="single" syntax="password" i18nKey="a502" order="300" resourceName="integrationKey">
+                    <DefaultValues>
+                        <Value></Value>
+                    </DefaultValues>
+                </AttributeSchema>
+                <AttributeSchema name="duo-client-secret-key"
+                        type="single" syntax="password" i18nKey="a503" order="400" resourceName="secretKey">
+                    <DefaultValues>
+                        <Value></Value>
+                    </DefaultValues>
+                </AttributeSchema>
+                <SubSchema name="serverconfig" inheritance="multiple" resourceName="USE-PARENT">
+                    <AttributeSchema name="sun-am-auth-duo-auth-level"
+                            type="single" syntax="number_range" rangeStart="0" rangeEnd="2147483647"
+                            i18nKey="a500" order="100" resourceName="authenticationLevel">
+                        <DefaultValues>
+                            <Value>0</Value>
+                        </DefaultValues>
+                    </AttributeSchema>
+                    <AttributeSchema name="duo-client-api-base-url"
+                            type="single" i18nKey="a501" order="200" resourceName="apiBaseUrl">
+                        <DefaultValues>
+                            <Value></Value>
+                        </DefaultValues>
+                    </AttributeSchema>
+                    <AttributeSchema name="duo-client-integration-key"
+                            type="single" syntax="password" i18nKey="a502" order="300" resourceName="integrationKey">
+                        <DefaultValues>
+                            <Value></Value>
+                        </DefaultValues>
+                    </AttributeSchema>
+                    <AttributeSchema name="duo-client-secret-key"
+                            type="single" syntax="password" i18nKey="a503" order="400" resourceName="secretKey">
+                        <DefaultValues>
+                            <Value></Value>
+                        </DefaultValues>
+                    </AttributeSchema>
+                </SubSchema>
+            </Organization>
+        </Schema>
+    </Service>
+</ServicesConfiguration>
