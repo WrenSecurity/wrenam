@@ -28,6 +28,11 @@
 
 package com.sun.identity.console.realm;
 
+import static com.sun.identity.console.XuiRedirectHelper.getAdministeredRealm;
+import static com.sun.identity.console.XuiRedirectHelper.getAuthenticationRealm;
+import static com.sun.identity.console.XuiRedirectHelper.isXuiAdminConsoleEnabled;
+import static com.sun.identity.console.XuiRedirectHelper.redirectToXui;
+
 import com.iplanet.jato.RequestContext;
 import com.iplanet.jato.RequestManager;
 import com.iplanet.jato.model.ModelControlException;
@@ -56,6 +61,8 @@ import java.util.Map;
 import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 
+import org.forgerock.http.util.Uris;
+
 public class IDRepoViewBean
     extends RealmPropertiesBase
 {
@@ -74,7 +81,7 @@ public class IDRepoViewBean
 
     private static final String TBL_COL_TYPE = "tblColType";
     private static final String TBL_DATA_TYPE = "tblDataType";
-    
+
     private CCActionTableModel tblModel = null;
 
     /**
@@ -119,10 +126,17 @@ public class IDRepoViewBean
     public void beginDisplay(DisplayEvent event)
         throws ModelControlException
     {
-        super.beginDisplay(event);
-        resetButtonState(TBL_BUTTON_DELETE);
-        getIDRepoNames();
-        setPageTitle(getModel(), "page.title.realms.idrepo");
+        if (isXuiAdminConsoleEnabled()) {
+            String redirectRealm = getAdministeredRealm(this);
+            String authenticationRealm = getAuthenticationRealm(this);
+            redirectToXui(getRequestContext().getRequest(), redirectRealm, authenticationRealm,
+                    "realms/" + Uris.urlEncodePathElement(redirectRealm) + "/dataStores");
+        } else {
+            super.beginDisplay(event);
+            resetButtonState(TBL_BUTTON_DELETE);
+            getIDRepoNames();
+            setPageTitle(getModel(), "page.title.realms.idrepo");
+        }
     }
 
     protected AMModel getModelInternal() {
@@ -206,7 +220,7 @@ public class IDRepoViewBean
                     tblModel.setValue(TBL_DATA_TYPE, "");
                 }
 
-                tblModel.setValue(TBL_DATA_ACTION_HREF, 
+                tblModel.setValue(TBL_DATA_ACTION_HREF,
                     stringToHex(name));
                 cache.add(name);
             }
@@ -228,8 +242,8 @@ public class IDRepoViewBean
 
 /*
  * This causes the first step of the New Data Store wizard to be skipped
- * when only one Data Store type is available. The ideal fix is to modify the 
- * second step page to act as a single page. This is only a temporary fix 
+ * when only one Data Store type is available. The ideal fix is to modify the
+ * second step page to act as a single page. This is only a temporary fix
  * until the page two work can be done.
  */
              /********

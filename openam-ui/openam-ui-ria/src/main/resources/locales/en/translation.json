@@ -942,6 +942,29 @@
                 "callToAction": "No secondary configurations found"
             }
         },
+        "dataStores": {
+            "edit": {
+                "title": "Data Store",
+                "titleNew": "New Data Store",
+                "dataStoreId": "Data Store ID",
+                "dataStoreTypes": "Data Store types",
+                "unavaliable": "No data stores available to add",
+                "unavaliableAlert": "No data stores to add. To view a list of the existing data stores, click Cancel.",
+                "dataStoreIdValidationError": "Spaces are not allowed in a data store's ID"
+            },
+            "list": {
+                "dataStore": "Data Store",
+                "title": "Data Stores",
+                "description": "Configure connections to data stores.",
+                "addDataStore": "Add a Data Store",
+                "addDataStorePrompt": "No data stores found",
+                "grid": {
+                    "header": ["Name", "Type"]
+                },
+                "confirmDeleteSelected": "Are you sure you want to delete the selected data store?",
+                "confirmDeleteSelectd_plural": "Are you sure you want to delete the selected data stores?"
+            }
+        },
         "realms": {
             "title": "Realms",
             "description" : "Use realms to organize subjects and configuration data. Within each realm you can configure data stores, administration privileges, authentication chains, authorization policies, and other realm-specific settings.",

@@ -81,7 +81,7 @@ define([
     }, {
         title: "console.common.navigation.dataStores",
         icon: "fa-database",
-        event: "main.navigation.EVENT_REDIRECT_TO_JATO_DATASTORES"
+        route: "realmsDataStores"
     }, {
         title: "console.common.navigation.privileges",
         icon: "fa-check-square-o",

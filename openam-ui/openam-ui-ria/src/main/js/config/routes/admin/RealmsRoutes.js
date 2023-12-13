@@ -162,6 +162,33 @@ define(function () {
                 navGroup: "admin",
                 forceUpdate: true
             },
+            "realmsDataStores": {
+                view: "org/forgerock/openam/ui/admin/views/realms/RealmTreeNavigationView",
+                page: "org/forgerock/openam/ui/admin/views/realms/dataStores/DataStoresView",
+                url: scopedByRealm("dataStores/?"),
+                pattern: "realms/?/dataStores",
+                role: "ui-realm-admin",
+                navGroup: "admin",
+                forceUpdate: true
+            },
+            "realmsDataStoreEdit": {
+                view: "org/forgerock/openam/ui/admin/views/realms/RealmTreeNavigationView",
+                page: "org/forgerock/openam/ui/admin/views/realms/dataStores/EditDataStoreView",
+                url: scopedByRealm("dataStores/([^/]+)/edit/([^/]+)"),
+                pattern: "realms/?/dataStores/?/edit/?",
+                role: "ui-realm-admin",
+                navGroup: "admin",
+                forceUpdate: true
+            },
+            "realmsDataStoreNew": {
+                view: "org/forgerock/openam/ui/admin/views/realms/RealmTreeNavigationView",
+                page: "org/forgerock/openam/ui/admin/views/realms/dataStores/NewDataStoreView",
+                url: scopedByRealm("dataStores/new"),
+                pattern: "realms/?/dataStores/new",
+                role: "ui-realm-admin",
+                navGroup: "admin",
+                forceUpdate: true
+            },
             "realmsSessions": {
                 view: "org/forgerock/openam/ui/admin/views/realms/RealmTreeNavigationView",
                 page: "org/forgerock/openam/ui/admin/views/realms/sessions/SessionsView",

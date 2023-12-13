@@ -67,7 +67,6 @@ define([
     };
 
     obj.realm = {
-        dataStores    : realmsRedirector(14),
         privileges    : realmsRedirector(15),
         subjects      : realmsRedirector(17),
         sts           : realmsRedirector(19),
