@@ -127,8 +127,6 @@ define([
 
         onDeleteClick (e) {
             e.preventDefault();
-            if ($(e.currentTarget).hasClass("disabled")) { return false; }
-
             FormHelper.showConfirmationBeforeDeleting({ type: $.t("console.authentication.modules.chain") },
                 _.bind(this.deleteChain, this));
         },
@@ -189,7 +187,7 @@ define([
                                 $.t("console.authentication.editChains.deleteBtnTooltip.defaultOrgAuthChain");
                         }
                         // popover doesn't work in case button has disabled attribute
-                        self.$el.find("[data-delete]").addClass("disabled").popover(popoverOpt);
+                        self.$el.find("[data-delete]").prop("disabled", true).popover(popoverOpt);
                     }
 
                     if (self.data.form.chainData.authChainConfiguration.length > 0) {

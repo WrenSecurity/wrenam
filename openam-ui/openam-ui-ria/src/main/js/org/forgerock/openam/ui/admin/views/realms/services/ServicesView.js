@@ -89,7 +89,7 @@ define([
             if (!_.isEmpty(creatables)) {
                 return;
             }
-            this.$el.find("[data-add-service]").addClass("disabled").popover({
+            this.$el.find("[data-add-service]").prop("disabled", true).popover({
                 trigger : "hover",
                 container : "body",
                 placement : "top",
