@@ -30,12 +30,19 @@ define([
     const basePath = "/realm-config/services/id-repos";
     const baseHeaders = { "Accept-API-Version": "protocol=1.0,resource=1.0" };
 
-    const getServiceSchema = (realm, type) => (
+    const getDataStoreSchema = (realm, type) => (
         obj.serviceCall({
             url: fetchUrl.default(`${basePath}/${type}?_action=schema`, { realm }),
             headers: baseHeaders,
             type: "POST"
-        }).then((response) => new JSONSchema(response))
+        }).then((response) => {
+            // Filter out attributes that are not nested in a section to match openam-console behaviour
+            const properties = Object.entries(response.properties).filter((p) => p[1].type === "object");
+            return new JSONSchema({
+                ...response,
+                properties: Object.fromEntries(properties)
+            });
+        })
     );
 
     obj.getAll = (realm) => (
@@ -54,7 +61,7 @@ define([
             })
         );
 
-        return Promise.all([getServiceSchema(realm, type), getInstance()]).then((response) => ({
+        return Promise.all([getDataStoreSchema(realm, type), getInstance()]).then((response) => ({
             name: response[1][0]._type.name,
             schema: response[0],
             values: new JSONValues(response[1][0])
@@ -70,7 +77,7 @@ define([
             }).then((response) => new JSONValues(response))
         );
 
-        return Promise.all([getServiceSchema(realm, type), getTemplate()]).then((response) => ({
+        return Promise.all([getDataStoreSchema(realm, type), getTemplate()]).then((response) => ({
             schema: response[0],
             values: response[1]
         }));

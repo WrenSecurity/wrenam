@@ -20,6 +20,7 @@ import $ from "jquery";
 
 import AbstractView from "org/forgerock/commons/ui/common/main/AbstractView";
 import FlatJSONSchemaView from "org/forgerock/openam/ui/common/views/jsonSchema/FlatJSONSchemaView";
+import GroupedJSONSchemaView from "org/forgerock/openam/ui/common/views/jsonSchema/GroupedJSONSchemaView";
 import Messages from "org/forgerock/commons/ui/common/components/Messages";
 import Router from "org/forgerock/commons/ui/common/main/Router";
 import DataStoresService from "org/forgerock/openam/ui/admin/services/realm/DataStoresService";
@@ -80,12 +81,19 @@ class NewDataStoreView extends AbstractView {
             this.data.type = dataStore;
 
             DataStoresService.getInitialState(this.data.realmPath, this.data.type).then((response) => {
-                this.jsonSchemaView = new FlatJSONSchemaView({
+                const options = {
                     schema: response.schema,
                     values: response.values,
                     showOnlyRequiredAndEmpty: true,
                     onRendered: () => this.validateDataStoreProps.call(this)
-                });
+                };
+
+                if (response.schema.isCollection()) {
+                    this.jsonSchemaView = new GroupedJSONSchemaView(options);
+                } else {
+                    this.jsonSchemaView = new FlatJSONSchemaView(options);
+                }
+
                 $(this.jsonSchemaView.render().el).appendTo(this.$el.find("[data-json-form]"));
             }, () => {
                 toggleCreateDisabled(this.$el, true);
