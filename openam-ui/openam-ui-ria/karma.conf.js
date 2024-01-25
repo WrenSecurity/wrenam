@@ -19,8 +19,13 @@ module.exports = function (config) {
         },
         babelPreprocessor: {
             options: {
-                ignore: ["libs/"],
-                presets: ["es2015"]
+                ignore: ["target/test-classes/libs/"],
+                presets: [
+                    [
+                        "@babel/preset-env",
+                        { "targets": "last 2 versions, not dead, > 0.2%" }
+                    ]
+                ]
             }
         },
         reporters: ["notify", "nyan"],

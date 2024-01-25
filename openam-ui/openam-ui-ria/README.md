@@ -57,7 +57,7 @@ $ npm start
 Grunt will then start watching the source and sync any changed files over to your server's webapp directory.
 
 ### ES6 Support
-ES6 is supported via [Babel](https://babeljs.io) transpiling. All `.js` and `.jsm` files are transpiled *except* for `libs` and any commons source (layer on afterwards at build time).
+ES6 is supported via [Babel](https://babeljs.io) transpiling. All `.js`, `.jsm` and `.jsx` files are transpiled *except* for `libs` and any commons source (layer on afterwards at build time).
 
 Ensure you have `Enable JavaScript source maps` enabled in Chrome or your preferred browser so see the original source before it was transpiled.
 

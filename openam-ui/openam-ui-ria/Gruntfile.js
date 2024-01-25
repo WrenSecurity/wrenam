@@ -130,10 +130,8 @@ module.exports = function (grunt) {
                     }
                 },
                 ignore: ["libs/"],
-                presets: ["es2015", "react"],
                 plugins: [
-                    ["transform-es2015-classes", { "loose": true }],
-                    "transform-object-rest-spread"
+                    ["@babel/plugin-transform-classes", { "loose": true }]
                 ]
             },
             transpileJS: {
@@ -150,12 +148,14 @@ module.exports = function (grunt) {
                     cwd: compositionDirectory,
                     src: ["**/*.jsm", "**/*.jsx"],
                     dest: transpiledDirectory,
-                    rename: function (dest, src) {
-                        return dest + "/" + src.replace(".jsm", ".js").replace(".jsx", ".js");
+                    rename (dest, src) {
+                        return `${dest}/${src.replace(".jsm", ".js").replace(".jsx", ".js")}`;
                     }
                 }],
                 options: {
-                    plugins: ["transform-es2015-modules-amd"]
+                    plugins: [
+                        "@babel/plugin-transform-modules-amd"
+                    ]
                 }
             }
         },
@@ -217,11 +217,11 @@ module.exports = function (grunt) {
              */
             lint: {
                 src: [
-                    "." + mavenSrcPath + "/**/*.js",
-                    "." + mavenSrcPath + "/**/*.jsm",
-                    "." + mavenSrcPath + "/**/*.jsx",
-                    "!." + mavenSrcPath + "/libs/**/*.js",
-                    "." + mavenTestPath + "/**/*.js"
+                    `.${mavenSrcPath}/**/*.js`,
+                    `.${mavenSrcPath}/**/*.jsm`,
+                    `.${mavenSrcPath}/**/*.jsx`,
+                    `!.${mavenSrcPath}/libs/**/*.js`,
+                    `.${mavenTestPath}/**/*.js`
                 ],
                 options: {
                     format: require.resolve("eslint-formatter-warning-summary")

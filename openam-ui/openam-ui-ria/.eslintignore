@@ -1,1 +1,2 @@
-**/*.jsx
+src/main/js/libs/**/*.js
+target/
