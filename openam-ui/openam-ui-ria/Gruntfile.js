@@ -132,7 +132,6 @@ module.exports = function (grunt) {
                         sourceMaps: true
                     }
                 },
-                ignore: ["libs/"],
                 plugins: [
                     ["@babel/plugin-transform-classes", { "loose": true }]
                 ]
@@ -141,7 +140,7 @@ module.exports = function (grunt) {
                 files: [{
                     expand: true,
                     cwd: compositionDirectory,
-                    src: ["**/*.js"],
+                    src: ["**/*.js", "!libs/**/*.js"],
                     dest: transpiledDirectory
                 }]
             },
@@ -156,9 +155,7 @@ module.exports = function (grunt) {
                     }
                 }],
                 options: {
-                    plugins: [
-                        "@babel/plugin-transform-modules-amd"
-                    ]
+                    plugins: ["@babel/plugin-transform-modules-amd"]
                 }
             }
         },
@@ -188,7 +185,7 @@ module.exports = function (grunt) {
             /**
              * Copy files that do not need to be compiled into the compiled directory.
              */
-            compiled: {
+            nonCompiled: {
                 files: [{
                     expand: true,
                     cwd: compositionDirectory,
@@ -211,6 +208,20 @@ module.exports = function (grunt) {
                         "!main.js" // Output by r.js
                     ],
                     dest: compiledDirectory
+                }]
+            },
+            /**
+             * Copy libs that have not been transpiled into the transpiled directory.
+             *
+             * grunt-babel does not copy ignored files anymore since 8.0.0, therefore we have to do it ourselves.
+             * See https://github.com/babel/grunt-babel/pull/106 for more details.
+             */
+            nonTranspiled: {
+                files: [{
+                    expand: true,
+                    cwd: compositionDirectory,
+                    src: ["libs/**/*.js"],
+                    dest: transpiledDirectory
                 }]
             }
         },
@@ -326,7 +337,7 @@ module.exports = function (grunt) {
              * Note that this also copies main.js because the requirejs step is not being performed when watching (it
              * is too slow).
              */
-            compiled: {
+            nonCompiled: {
                 files: [{
                     cwd: compositionDirectory,
                     src: nonCompiledFiles.concat([
@@ -408,9 +419,10 @@ module.exports = function (grunt) {
         "copy:libs",
         "sync:compose",
         "newer:babel",
+        "copy:nonTranspiled",
         "less",
         "replace",
-        "sync:compiled",
+        "sync:nonCompiled",
         "sync:transpiled",
         "sync:test",
         "sync:server"
@@ -424,10 +436,11 @@ module.exports = function (grunt) {
         "copy:compose",
         "eslint",
         "babel",
+        "copy:nonTranspiled",
         "requirejs",
         "less",
         "replace",
-        "copy:compiled",
+        "copy:nonCompiled",
         "copy:transpiled",
         "karma:build"
     ]);
