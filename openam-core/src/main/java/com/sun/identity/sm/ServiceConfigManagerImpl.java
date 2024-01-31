@@ -84,7 +84,7 @@ class ServiceConfigManagerImpl implements SMSObjectListener {
     // LRU caches for global and org configs
     Cache globalConfigs;
     Cache orgConfigs;
-    
+
     // Validity of this object
     private boolean valid = true;
 
@@ -165,11 +165,10 @@ class ServiceConfigManagerImpl implements SMSObjectListener {
         // Get group name
     	String groupName = SMSUtils.DEFAULT;
         if ((instanceName != null) && !instanceName.equals(SMSUtils.DEFAULT)) {
-            groupName = ServiceInstanceImpl.getInstance(token, 
+            groupName = ServiceInstanceImpl.getInstance(token,
             		serviceName, version,instanceName, null).getGroup();
         }
-        
-        
+
         String cacheName = null;
         ServiceConfigImpl answer = null;
         // Check the cache
@@ -187,7 +186,7 @@ class ServiceConfigManagerImpl implements SMSObjectListener {
             }
 
         }
-        
+
         // Not in cache, check global schema
         if ((ssm == null) || !ssm.isValid()) {
             // Get the ServiceSchemaManagerImpl
@@ -219,7 +218,7 @@ class ServiceConfigManagerImpl implements SMSObjectListener {
         // Construct the group name
     	String groupName = SMSUtils.DEFAULT;
         if ((instanceName != null) && !instanceName.equals(SMSUtils.DEFAULT)) {
-            groupName = ServiceInstanceImpl.getInstance(token, 
+            groupName = ServiceInstanceImpl.getInstance(token,
             		serviceName, version, instanceName, orgName).getGroup();
         }
         String cacheName = null;
@@ -239,7 +238,7 @@ class ServiceConfigManagerImpl implements SMSObjectListener {
                 answer = null;
             }
         }
-        
+
         // Not in cache, check organization schema
         if ((ssm == null) || !ssm.isValid()) {
             // Get the ServiceSchemaManagerImpl
@@ -250,7 +249,7 @@ class ServiceConfigManagerImpl implements SMSObjectListener {
         if (ss == null) {
             return (null);
         }
-        
+
         // Construct org config
         String orgDN = constructServiceConfigDN(groupName,
                 CreateServiceConfig.ORG_CONFIG_NODE, orgdn);
@@ -305,7 +304,7 @@ class ServiceConfigManagerImpl implements SMSObjectListener {
         }
         return (id);
     }
-    
+
     private synchronized void registerListener(SSOToken token) {
         if (listenerId == null) {
             // Regsiter for notifications
@@ -321,7 +320,7 @@ class ServiceConfigManagerImpl implements SMSObjectListener {
                 "," + SMSEntry.getRootSuffix();
             schemaNotificationSearchString = sdn + "," +
                 SMSEntry.getRootSuffix();
-            
+
             // Initialize instance variables
             listenerObjects = new HashMap();
         }
@@ -345,8 +344,8 @@ class ServiceConfigManagerImpl implements SMSObjectListener {
             }
         }
     }
-    
-    private synchronized void deregisterListener() { 
+
+    private synchronized void deregisterListener() {
         if (listenerId != null) {
             SMSNotificationManager.getInstance().removeCallbackHandler(
                 listenerId);
@@ -364,7 +363,7 @@ class ServiceConfigManagerImpl implements SMSObjectListener {
         }
         return (groups.contains(token, groupName));
     }
-    
+
     // Implementations for SMSObjectListener
     public void allObjectsChanged() {
         // Ignore, do nothing
@@ -390,8 +389,8 @@ class ServiceConfigManagerImpl implements SMSObjectListener {
         boolean globalConfig = false;
         boolean orgConfig = false;
         int index = 0, orgIndex = 0;
-        dn = DNUtils.normalizeDN(dn);
-        if ((index = dn.indexOf(orgNotificationSearchString)) != -1) {
+        String normalizedDn = DNUtils.normalizeDN(dn);
+        if ((index = normalizedDn.indexOf(orgNotificationSearchString)) != -1) {
             orgConfig = true;
             if (index == 0) {
                 // Organization config node is created
@@ -399,14 +398,14 @@ class ServiceConfigManagerImpl implements SMSObjectListener {
                 return;
             }
             orgIndex = orgNotificationSearchString.length();
-        } else if ((index = dn.indexOf(glbNotificationSearchString)) != -1) {
+        } else if ((index = normalizedDn.indexOf(glbNotificationSearchString)) != -1) {
             globalConfig = true;
-        } else if ((index = dn.indexOf(schemaNotificationSearchString)) != -1) {
+        } else if ((index = normalizedDn.indexOf(schemaNotificationSearchString)) != -1) {
             // Global schema changes, resulting in config change
             globalConfig = true;
             orgConfig = true;
         } else if (serviceName.equalsIgnoreCase("sunidentityrepositoryservice")
-                && (dn.startsWith(SMSEntry.ORG_PLACEHOLDER_RDN) || dn
+                && (normalizedDn.startsWith(SMSEntry.ORG_PLACEHOLDER_RDN) || normalizedDn
                         .equalsIgnoreCase(DNMapper.serviceDN))) {
             // Since sunIdentityRepositoryService has realm creation
             // attributes, we need to send notification
@@ -420,7 +419,7 @@ class ServiceConfigManagerImpl implements SMSObjectListener {
         String groupName = "";
         String compName = "";
         if (index > 1) {
-            DN compDn = DN.valueOf(dn.substring(0, index - 1));
+            DN compDn = DN.valueOf(LDAPUtils.newDN(dn).toString().substring(0, index - 1));
             List<RDN> rdns = new ArrayList<>();
             for (RDN rdn : compDn) {
                 rdns.add(rdn);
@@ -444,13 +443,13 @@ class ServiceConfigManagerImpl implements SMSObjectListener {
         }
 
         // Get organization name
-        String orgName = dn;
+        String orgName = normalizedDn;
         if (globalConfig && orgConfig) {
             // Schema change, use base DN
             orgName = ServiceManager.getBaseDN();
         } else if ((index >= 0) && orgConfig) {
             // Get org name
-            orgName = dn.substring(index + orgIndex + 1);
+            orgName = normalizedDn.substring(index + orgIndex + 1);
         }
         if (globalConfig) {
             notifyGlobalConfigChange(groupName, compName, type);
@@ -458,7 +457,7 @@ class ServiceConfigManagerImpl implements SMSObjectListener {
                 SMSEntry.eventDebug.message(
                     "ServiceConfigManagerImpl(" + serviceName +
                     "):entryChanged Sending global config change " +
-                    "notifications for DN "+ dn);
+                    "notifications for DN "+ normalizedDn);
             }
         }
         if (orgConfig) {
@@ -467,7 +466,7 @@ class ServiceConfigManagerImpl implements SMSObjectListener {
                 SMSEntry.eventDebug.message(
                     "ServiceConfigManagerImpl(" + serviceName +
                     "):entryChanged Sending org config change " +
-                    "notifications for DN " + dn);
+                    "notifications for DN " + normalizedDn);
             }
         }
     }
@@ -495,7 +494,7 @@ class ServiceConfigManagerImpl implements SMSObjectListener {
     void notifyOrgConfigChange(String orgName, String groupName, String comp,
         int type) {
         HashSet lObject = new HashSet();
-        synchronized (listenerObjects) {        
+        synchronized (listenerObjects) {
             lObject.addAll(listenerObjects.values());
         }
         Iterator items = lObject.iterator();
@@ -535,11 +534,11 @@ class ServiceConfigManagerImpl implements SMSObjectListener {
         sb.append(orgName);
         return (sb.toString());
     }
-    
+
     protected boolean isValid() {
         return (valid);
     }
-    
+
     /**
      * Clears instance cache and deregisters listeners
      */
@@ -556,7 +555,7 @@ class ServiceConfigManagerImpl implements SMSObjectListener {
             globalConfigs.clear();
         }
     }
-    
+
     // @Override
     public int hashCode() {
         int hash = 4;
@@ -569,7 +568,7 @@ class ServiceConfigManagerImpl implements SMSObjectListener {
 
     /**
      * Compares this object with the given object.
-     * 
+     *
      * @param o
      *            object for comparison.
      * @return true if objects are equals.
@@ -587,7 +586,7 @@ class ServiceConfigManagerImpl implements SMSObjectListener {
 
     /**
      * Returns String representation of the service's name and version.
-     * 
+     *
      * @return String representation of the service's name and version
      */
     public String toString() {
@@ -613,12 +612,12 @@ class ServiceConfigManagerImpl implements SMSObjectListener {
         if (answer != null) {
             return (answer);
         }
-            
+
         // Not in cache, need to construct the entry and add to cache
         // Check if user has permissions to this object. This call will
         // throw an exception if the user does not have permissions
         checkAndUpdatePermission(cName, serviceName, version, token);
-        
+
         // User has permissions,
         // Construct ServiceConfigManagerImpl and add to cache
         synchronized (configMgrImpls) {
@@ -676,7 +675,7 @@ class ServiceConfigManagerImpl implements SMSObjectListener {
         } else {
             SMSEntry.getDelegationPermission(t, dn, SMSEntry.readActionSet);
         }
-        
+
         // User has permissions, add principal to cache
         synchronized (userPrincipals) {
             Set sudoPrincipals = (Set) userPrincipals.get(cacheName);
@@ -716,7 +715,7 @@ class ServiceConfigManagerImpl implements SMSObjectListener {
 
     private static Map userPrincipals = Collections.synchronizedMap(
         new HashMap());
-    
+
     private static int PRINCIPALS_CACHE_SIZE = 20;
 
     private static Debug debug = SMSEntry.debug;
