@@ -38,8 +38,8 @@
         <Schema
             i18nFileName="amIdRepoService"
             revisionNumber="30"
-            i18nKey="">
-
+            i18nKey=""
+            resourceName="id-repos">
             <Global>
                 <AttributeSchema name="coexistenceMode"
                     type="single" syntax="string">

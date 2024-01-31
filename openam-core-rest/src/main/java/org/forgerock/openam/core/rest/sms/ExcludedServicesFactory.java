@@ -65,6 +65,8 @@ public class ExcludedServicesFactory {
                     SmsServiceHandlerFunction.SAML2_METADATA_SERVICE,
                     SmsServiceHandlerFunction.WS_METADATA_SERVICE
             ));
+        } else if (type == SchemaType.ORGANIZATION) {
+            excludedServices.remove("sunIdentityRepositoryService");
         }
 
         return excludedServices;
