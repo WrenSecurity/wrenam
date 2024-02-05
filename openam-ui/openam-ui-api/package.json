@@ -1,15 +1,14 @@
 {
-  "name": "openam-ui-api",
-  "version": "14.0.0",
+  "name": "@wrensecurity/wrenam-ui-api",
+  "description": "Wren:AM API UI",
   "private": true,
   "scripts": {
-    "build:production": "grunt build:prod",
-    "start": "grunt"
+    "build": "gulp prod",
+    "start": "gulp dev"
   },
   "devDependencies": {
-    "grunt": "1.6.1",
-    "grunt-cli": "1.4.3",
-    "grunt-contrib-copy": "1.0.0"
+    "@wrensecurity/commons-ui-build": "file:target/ui-libs/wrensecurity-commons-ui-build-0.0.0.tgz",
+    "gulp": "^4.0.2"
   },
   "dependencies": {
     "swagger-ui-dist": "5.7.2"

@@ -42,22 +42,22 @@ class ListRealmsView extends AbstractView {
     deleteRealm (event) {
         event.preventDefault();
 
-        var self = this,
-            realm = this.getRealmFromEvent(event),
-            buttons = [{
-                label: $.t("common.form.cancel"),
-                action: (dialog) => {
+        const self = this;
+        const realm = this.getRealmFromEvent(event);
+        const buttons = [{
+            label: $.t("common.form.cancel"),
+            action: (dialog) => {
+                dialog.close();
+            }
+        }, {
+            label: $.t("common.form.delete"),
+            cssClass: "btn-danger",
+            action: (dialog) => {
+                self.performDeleteRealm(realm.path).always(() => {
                     dialog.close();
-                }
-            }, {
-                label: $.t("common.form.delete"),
-                cssClass: "btn-danger",
-                action: (dialog) => {
-                    self.performDeleteRealm(realm.path).always(function () {
-                        dialog.close();
-                    });
-                }
-            }];
+                });
+            }
+        }];
 
         if (realm.isTopLevelRealm) {
             return false;
@@ -68,12 +68,12 @@ class ListRealmsView extends AbstractView {
                 label: $.t("common.form.deactivate"),
                 action: (dialog) => {
                     realm.active = false;
-                    RealmsService.realms.update(realm).then(null, function (response) {
+                    RealmsService.realms.update(realm).then(null, (response) => {
                         Messages.addMessage({
                             type: Messages.TYPE_DANGER,
                             response
                         });
-                    }).always(function () {
+                    }).always(() => {
                         self.render();
                         dialog.close();
                     });
@@ -90,15 +90,15 @@ class ListRealmsView extends AbstractView {
         });
     }
     getRealmFromEvent (event) {
-        var path = $(event.currentTarget).closest("div[data-realm-path]").data("realm-path"),
-            realm = _.find(this.data.realms, { path });
+        const path = $(event.currentTarget).closest("div[data-realm-path]").data("realm-path");
+        const realm = _.find(this.data.realms, { path });
         return realm;
     }
     getRealmFromList (path) {
         return _.find(this.data.realms, { path });
     }
     performDeleteRealm (path) {
-        var self = this;
+        const self = this;
 
         return RealmsService.realms.remove(path).then(() => self.render(), (response) => {
             if (response && response.status === 409) {
@@ -118,10 +118,10 @@ class ListRealmsView extends AbstractView {
         return name === "/";
     }
     render (args, callback) {
-        var self = this;
+        const self = this;
 
         RealmsService.realms.all().then((data) => {
-            var result = _.find(data.result, { name: "/" });
+            const result = _.find(data.result, { name: "/" });
 
             if (result) {
                 result.name = $.t("console.common.topLevelRealm");
@@ -184,8 +184,8 @@ class ListRealmsView extends AbstractView {
     }
     toggleRealmActive (event) {
         event.preventDefault();
-        var self = this,
-            realm = this.getRealmFromEvent(event);
+        const self = this;
+        const realm = this.getRealmFromEvent(event);
 
         if (realm.isTopLevelRealm) {
             return false;

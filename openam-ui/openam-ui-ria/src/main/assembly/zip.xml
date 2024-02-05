@@ -33,7 +33,7 @@
     </formats>
     <fileSets>
         <fileSet>
-            <directory>target/compiled</directory>
+            <directory>target/www</directory>
             <outputDirectory>/</outputDirectory>
         </fileSet>
     </fileSets>

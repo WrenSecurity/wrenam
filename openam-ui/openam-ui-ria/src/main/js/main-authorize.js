@@ -32,20 +32,16 @@ require.config({
         }
     },
     paths: {
-        "handlebars": "libs/handlebars-4.0.5",
-        "i18next": "libs/i18next-1.7.3-min",
-        "jquery": "libs/jquery-2.1.1-min",
-        "lodash": "libs/lodash-3.10.1-min",
-        "redux": "libs/redux-3.5.2-min",
-        "text": "libs/text-2.0.15"
+        "handlebars": "libs/handlebars",
+        "i18next": "libs/i18next",
+        "jquery": "libs/jquery",
+        "lodash": "libs/lodash",
+        "redux": "libs/redux",
+        "text": "libs/text"
     },
     shim: {
         "handlebars": {
             exports: "handlebars"
-        },
-        "i18next": {
-            deps: ["jquery", "handlebars"],
-            exports: "i18n"
         },
         "lodash": {
             exports: "_"

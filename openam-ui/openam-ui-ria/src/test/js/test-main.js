@@ -21,7 +21,7 @@
         });
 
     require.config({
-        baseUrl: "/base/target/compiled",
+        baseUrl: "/base/target/www",
 
         map: {
             "*": {
@@ -30,17 +30,17 @@
             }
         },
         paths: {
-            "backbone": "/base/target/dependencies-expanded/forgerock-ui-user/libs/backbone-1.1.2-min",
+            "backbone": "/base/target/ui-compose/libs/backbone",
+            "handlebars": "/base/target/ui-compose/libs/handlebars",
+            "jquery": "/base/target/ui-compose/libs/jquery",
+            "lodash": "/base/target/ui-compose/libs/lodash",
+            "moment": "/base/target/ui-compose/libs/moment",
+            "i18next": "/base/target/ui-compose/libs/i18next",
+            "redux": "/base/target/www/libs/redux",
             "chai": "/base/node_modules/chai/chai",
-            "handlebars": "/base/target/dependencies-expanded/forgerock-ui-user/libs/handlebars-4.0.5",
-            "jquery": "/base/target/dependencies-expanded/forgerock-ui-user/libs/jquery-2.1.1-min",
-            "lodash": "/base/target/dependencies-expanded/forgerock-ui-user/libs/lodash-3.10.1-min",
-            "moment": "/base/target/dependencies-expanded/forgerock-ui-user/libs/moment-2.8.1-min",
-            "i18next": "/base/target/dependencies-expanded/forgerock-ui-user/libs/i18next-1.7.3-min",
-            "redux": "/base/target/dependencies/libs/redux-3.5.2-min",
             "sinon-chai": "/base/node_modules/sinon-chai/lib/sinon-chai",
-            "sinon": "/base/target/test-classes/libs/sinon-1.15.4",
-            "squire": "/base/target/test-classes/libs/squire-0.2.0"
+            "sinon": "/base/target/test/libs/sinon",
+            "squire": "/base/target/test/libs/squire"
         },
         shim: {
             "lodash": {
