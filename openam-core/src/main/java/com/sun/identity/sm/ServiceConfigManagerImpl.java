@@ -25,6 +25,7 @@
  * $Id: ServiceConfigManagerImpl.java,v 1.13 2009/01/28 05:35:03 ww203982 Exp $
  *
  * Portions Copyrighted 2010-2017 ForgeRock AS.
+ * Portions Copyrighted 2024 Wren Security.
  */
 package com.sun.identity.sm;
 

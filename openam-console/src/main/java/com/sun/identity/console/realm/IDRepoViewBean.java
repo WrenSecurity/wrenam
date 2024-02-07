@@ -24,6 +24,7 @@
  *
  * $Id: IDRepoViewBean.java,v 1.3 2008/07/07 20:39:20 veiming Exp $
  *
+ * Portions Copyrighted 2024 Wren Security.
  */
 
 package com.sun.identity.console.realm;
