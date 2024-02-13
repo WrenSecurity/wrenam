@@ -28,7 +28,7 @@ define([
     "org/forgerock/openam/ui/common/util/RealmHelper",
     "org/forgerock/commons/ui/common/backgrid/extension/ThemeablePaginator"
 ], function ($, AbstractView, Backbone, BackbonePaginator, Backgrid, BackgridFilter,
-            BackgridUtils, CommonShare, Configuration, Constants, RealmHelper) {
+        BackgridUtils, CommonShare, Configuration, Constants, RealmHelper) {
     var BasePage = AbstractView.extend({
         createCollection (url, queryFilters) {
             var self = this;
@@ -62,7 +62,7 @@ define([
             return this.createCollection(
                 RealmHelper.decorateURIWithRealm(`/${Constants.context}/json/__subrealm__/users/${
                     Configuration.loggedUser.get("username")
-                    }/oauth2/resources/sets`),
+                }/oauth2/resources/sets`),
                 filters
             );
         },
@@ -76,7 +76,7 @@ define([
             return this.createCollection(
                 RealmHelper.decorateURIWithRealm(`/${Constants.context}/json/__subrealm__/users/${
                     Configuration.loggedUser.get("username")
-                    }/oauth2/resources/sets`),
+                }/oauth2/resources/sets`),
                 filters
             );
         },

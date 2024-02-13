@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Portions copyright 2011-2016 ForgeRock AS.
+ * Portions copyright 2024 Wren Security.
  */
 define([
     "jquery",
@@ -28,9 +29,8 @@ define([
     "store/actions/creators",
     "store/index",
     "org/forgerock/openam/ui/common/util/uri/query"
-
 ], ($, _, Messages, AbstractDelegate, Configuration, EventManager, URIUtils, fetchUrl, Constants, AuthenticationToken,
-    SessionToken, creators, store, query) => {
+        SessionToken, creators, store, query) => {
     const obj = new AbstractDelegate(`${Constants.host}/${Constants.context}/json`);
     let requirementList = [];
     // to be used to keep track of the attributes associated with whatever requirementList contains
@@ -88,11 +88,12 @@ define([
                 // if the error body contains an authId, then we might be able to
                 // continue on after this error to the next module in the chain
                 if (errorBody.hasOwnProperty("authId")) {
-                    return obj.submitRequirements(errorBody)
-                        .then((requirements) => {
+                    return obj.submitRequirements(errorBody).then(
+                        (requirements) => {
                             obj.resetProcess();
                             return requirements;
-                        }, () => errorBody
+                        },
+                        () => errorBody
                     );
                 } else if (errorBody.code && errorBody.code === 400) {
                     return {
@@ -235,9 +236,9 @@ define([
         if (AuthenticationToken.get()) {
             return obj.submitRequirements(_.extend({ authId: AuthenticationToken.get() },
                 Configuration.globalData.auth.urlParams)).done(() => {
-                    knownAuth = _.clone(Configuration.globalData.auth);
-                    AuthenticationToken.remove();
-                });
+                knownAuth = _.clone(Configuration.globalData.auth);
+                AuthenticationToken.remove();
+            });
         } else if (requirementList.length === 0 || hasRealmChanged() || hasAuthIndexChanged()) {
             obj.resetProcess();
             return obj.begin(args)

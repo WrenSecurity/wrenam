@@ -37,8 +37,8 @@ define([
     "popoverclickaway",
     "selectize"
 ], ($, _, Handlebars, Messages, AbstractView, EventManager, Router, Constants, RealmsService,
-    GlobalAuthenticationService, RealmAuthenticationService, FormHelper, Backlink, JSONSchema, JSONValues,
-    FlatJSONSchemaView, Promise) => {
+        GlobalAuthenticationService, RealmAuthenticationService, FormHelper, Backlink, JSONSchema, JSONValues,
+        FlatJSONSchemaView, Promise) => {
     function setAutofocus () {
         $("input[type=\"text\"]:not(:disabled):first").prop("autofocus", true);
     }
@@ -141,7 +141,7 @@ define([
                     }
 
                     const generalPropertyPath = this.data.newEntity ? "schema.properties.defaults.properties.general"
-                                                                    : "schema.properties.general";
+                        : "schema.properties.general";
 
                     this.subviews = [
                         new FlatJSONSchemaView({
@@ -150,7 +150,7 @@ define([
                         }),
                         new FlatJSONSchemaView({
                             schema: new JSONSchema(_.get(response[2], generalPropertyPath))
-                                        .addDefaultProperties(["statelessSessionsEnabled"]),
+                                .addDefaultProperties(["statelessSessionsEnabled"]),
                             values: new JSONValues(_.get(response[2], "values.general"))
                         })
                     ];
@@ -189,7 +189,7 @@ define([
             const values = this.subviews[0].getData();
             const statelessSessionsValues = this.subviews[1].getData();
             const savePromise = this.data.newEntity ? RealmsService.realms.create(values)
-                                                    : RealmsService.realms.update(values);
+                : RealmsService.realms.update(values);
 
             savePromise.then((realm) => {
                 const isRootRealm = realm.name === "/";

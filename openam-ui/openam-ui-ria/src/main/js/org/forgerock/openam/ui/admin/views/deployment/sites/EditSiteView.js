@@ -30,7 +30,7 @@ define([
     // jquery dependencies
     "bootstrap-tabdrop"
 ], ($, _, Messages, AbstractView, EventManager, Router, Constants, SitesService, FlatJSONSchemaView, FormHelper,
-    Backlink) => {
+        Backlink) => {
     function toggleSave (el, enable) {
         el.find("[data-save]").prop("disabled", !enable);
     }

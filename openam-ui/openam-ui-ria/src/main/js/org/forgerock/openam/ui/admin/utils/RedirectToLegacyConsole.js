@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions copyright 2024 Wren Security.
  */
 
 define([
@@ -35,7 +36,7 @@ define([
                 if (session) {
                     window.location.href = `/${Constants.context}/task/Home?Home.tabCommon.TabHref=${
                         tabIndex
-                        }&jato.pageSession=${session}&requester=XUI`;
+                    }&jato.pageSession=${session}&requester=XUI`;
                 } else {
                     window.location.href = `/${Constants.context}/UI/Login?service=adminconsoleservice`;
                 }
@@ -46,9 +47,9 @@ define([
                 if (session) {
                     window.location.href = `/${
                         Constants.context
-                        }/service/SCConfigAuth?SCConfigAuth.tabCommon.TabHref=445&jato.pageSession=${
+                    }/service/SCConfigAuth?SCConfigAuth.tabCommon.TabHref=445&jato.pageSession=${
                         session
-                        }&requester=XUI`;
+                    }&requester=XUI`;
                 } else {
                     window.location.href = `/${Constants.context}/UI/Login?service=adminconsoleservice`;
                 }
@@ -75,7 +76,7 @@ define([
                 if (session) {
                     window.location.href = `/${Constants.context}/realm/RealmProperties?RMRealm.tblDataActionHref=${
                         realm
-                        }&RealmProperties.tabCommon.TabHref=${tabIndex}&jato.pageSession=${session}&requester=XUI`;
+                    }&RealmProperties.tabCommon.TabHref=${tabIndex}&jato.pageSession=${session}&requester=XUI`;
                 } else {
                     window.location.href = `/${Constants.context}/UI/Login?service=adminconsoleservice`;
                 }
@@ -91,8 +92,10 @@ define([
             obj.getJATOPageSession(realm).done((session) => {
                 if (session) {
                     window.location.href = `/${
-                        Constants.context}/agentconfig/Agents?Agents.tabCommon.TabHref=${
-                            tabIndex}&jato.pageSession=${session}&requester=XUI`;
+                        Constants.context
+                    }/agentconfig/Agents?Agents.tabCommon.TabHref=${
+                        tabIndex
+                    }&jato.pageSession=${session}&requester=XUI`;
                 } else {
                     window.location.href = `/${Constants.context}/UI/Login?service=adminconsoleservice`;
                 }

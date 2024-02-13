@@ -63,7 +63,7 @@ export default class SelectComponent extends View {
      * @param {String} [placeholderText] - A string to display when no value has been selected.
      */
     initialize ({ options, searchFields, labelField, selectedOption, onChange, itemComponent, optionComponent,
-            placeholderText = $.t("common.form.select") }) {
+        placeholderText = $.t("common.form.select") }) {
         requiredField(options, "options");
         requiredField(options, "searchFields");
         if (itemComponent == null || optionComponent == null) {

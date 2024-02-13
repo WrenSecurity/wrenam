@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016-2017 ForgeRock AS.
+ * Portions copyright 2024 Wren Security.
  */
 
 import _ from "lodash";
@@ -25,12 +26,13 @@ const SessionsTableRow = ({ checked, data, onDelete, onSelect, sessionHandle }) 
     const handleSelect = (event) => onSelect(data, event.target.checked);
     const selectId = _.uniqueId("select");
     const rowActions = data.sessionHandle !== sessionHandle
-        ? <ButtonGroup className="pull-right">
-            <Button bsStyle="link" onClick={ handleDelete } title={ t("console.sessions.invalidate") }>
-                <i className="fa fa-close" />
-            </Button>
-        </ButtonGroup>
-        : <Badge>{ t("console.sessions.yourSession") }</Badge>;
+        ? (
+            <ButtonGroup className="pull-right">
+                <Button bsStyle="link" onClick={ handleDelete } title={ t("console.sessions.invalidate") }>
+                    <i className="fa fa-close" />
+                </Button>
+            </ButtonGroup>
+        ) : <Badge>{ t("console.sessions.yourSession") }</Badge>;
 
     return (
         <tr className={ checked ? "selected" : undefined } >

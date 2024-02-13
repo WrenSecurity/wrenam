@@ -35,8 +35,8 @@ define([
     "org/forgerock/openam/ui/admin/services/global/ScriptsService",
     "org/forgerock/openam/ui/admin/utils/FormHelper"
 ], function ($, _, Backbone, BackbonePaginator, BackgridFilter, Backgrid, ThemeablePaginator, ThemeableSelectAllCell,
-             Messages, AbstractView, EventManager, Router, Constants, UIUtils, URLHelper, BackgridUtils, Script,
-             ScriptsService, FormHelper) {
+        Messages, AbstractView, EventManager, Router, Constants, UIUtils, URLHelper, BackgridUtils, Script,
+        ScriptsService, FormHelper) {
     return AbstractView.extend({
         template: "templates/admin/views/realms/scripts/ScriptsTemplate.html",
         toolbarTemplate: "templates/admin/views/realms/scripts/ScriptsToolbarTemplate.html",

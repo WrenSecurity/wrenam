@@ -35,7 +35,7 @@ define([
     // jquery dependencies
     "selectize"
 ], function ($, _, AbstractView, Backbone, Backgrid, BackgridUtils, BootstrapDialog, CommonShare, Constants,
-             EventManager, LabelTreeNavigationView, Messages, Router, UIUtils, UMAService, UMAResourceSetWithPolicy) {
+        EventManager, LabelTreeNavigationView, Messages, Router, UIUtils, UMAService, UMAResourceSetWithPolicy) {
     function isUserLabel (label) {
         return label.type === "USER";
     }
@@ -87,7 +87,7 @@ define([
         onModelError (model, response) {
             console.error(`Unrecoverable load failure UMAResourceSetWithPolicy. ${response.responseJSON.code} (${
                 response.responseJSON.reason
-                })${response.responseJSON.message}`);
+            })${response.responseJSON.message}`);
         },
         onModelChange (model) {
             this.render([undefined, model.get("_id")]);

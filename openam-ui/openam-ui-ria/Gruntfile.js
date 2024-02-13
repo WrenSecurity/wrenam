@@ -12,9 +12,10 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2017 ForgeRock AS.
+ * Portions copyright 2024 Wren Security.
  */
 
-/* global module, require, process */
+/* global module, process */
 
 var _ = require("lodash"),
     mavenSrcPath = "/src/main/js",
@@ -76,6 +77,7 @@ module.exports = function (grunt) {
             "themes/**/*.*"
         ],
         copyLibs = [
+            /* eslint-disable max-len */
             // JS - npm
             { src: "node_modules/requirejs-text/text.js", dest: "target/dependencies/libs/text-2.0.15.js" },
             { src: "node_modules/selectize/dist/js/selectize.min.js", dest: "target/dependencies/libs/selectize-non-standalone-0.12.1-min.js" },
@@ -118,6 +120,7 @@ module.exports = function (grunt) {
             { src: "node_modules/codemirror/mode/javascript/javascript.js", dest: "target/dependencies/libs/codemirror/mode/javascript/javascript.js" },
             { src: "node_modules/codemirror/addon/display/fullscreen.css", dest: "target/dependencies/css/codemirror/addon/display/fullscreen.css" },
             { src: "node_modules/codemirror/lib/codemirror.css", dest: "target/dependencies/css/codemirror/lib/codemirror.css" }
+            /* eslint-enable max-len */
         ],
         serverDeployDirectory = process.env.OPENAM_HOME + "/XUI";
 

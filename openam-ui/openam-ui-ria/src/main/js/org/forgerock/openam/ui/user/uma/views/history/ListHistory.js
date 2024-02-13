@@ -28,7 +28,7 @@ define([
     "org/forgerock/openam/ui/common/services/fetchUrl",
     "org/forgerock/openam/ui/common/util/BackgridUtils"
 ], function ($, _, Backbone, BackbonePaginator, BackgridFilter, Backgrid, ThemeablePaginator, AbstractView,
-             Configuration, Constants, fetchUrl, BackgridUtils) {
+        Configuration, Constants, fetchUrl, BackgridUtils) {
     var HistoryView = AbstractView.extend({
         template: "templates/user/uma/views/history/ListHistory.html",
         baseTemplate: "templates/common/DefaultBaseTemplate.html",

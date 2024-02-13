@@ -32,7 +32,7 @@ define([
     "org/forgerock/openam/ui/common/util/Promise",
     "org/forgerock/openam/ui/common/views/jsonSchema/FlatJSONSchemaView"
 ], ($, _, Messages, AbstractView, EventManager, Constants, ServersService, PanelComponent, PartialBasedView,
-    TabComponent, TabSearch, InlineEditTable, JSONSchema, JSONValues, Promise, FlatJSONSchemaView) => {
+        TabComponent, TabSearch, InlineEditTable, JSONSchema, JSONValues, Promise, FlatJSONSchemaView) => {
     function createTabs (schema) {
         return _(schema.raw.properties)
             .map((value, key) => ({ id: key, order: value.propertyOrder, title: value.title }))
@@ -129,14 +129,14 @@ define([
             }
             this.updateData();
             ServersService.servers.update(this.sectionId, this.values.raw, this.serverId)
-            .then(() => {
-                EventManager.sendEvent(Constants.EVENT_DISPLAY_MESSAGE_REQUEST, "changesSaved");
-            }, (response) => {
-                Messages.addMessage({
-                    response,
-                    type: Messages.TYPE_DANGER
+                .then(() => {
+                    EventManager.sendEvent(Constants.EVENT_DISPLAY_MESSAGE_REQUEST, "changesSaved");
+                }, (response) => {
+                    Messages.addMessage({
+                        response,
+                        type: Messages.TYPE_DANGER
+                    });
                 });
-            });
         },
         toggleInheritance (event) {
             const target = event.currentTarget;

@@ -31,7 +31,7 @@ define([
     "bootstrap-tabdrop",
     "selectize"
 ], function ($, _, PolicySetModel, StripedListView, PoliciesView, PoliciesService, FormHelper, Messages, AbstractView,
-             EventManager, Router, Constants, UIUtils) {
+        EventManager, Router, Constants, UIUtils) {
     return AbstractView.extend({
         partials: [
             "partials/util/_HelpLink.html"
@@ -145,7 +145,7 @@ define([
             } else {
                 // Fill in the necessary information about application
                 $.when(this.appTypePromise, this.envConditionsPromise, this.subjConditionsPromise,
-                        this.decisionCombinersPromise, this.resourceTypesPromise)
+                    this.decisionCombinersPromise, this.resourceTypesPromise)
                     .done(function (appType, envConditions, subjConditions, decisionCombiners, resourceTypes) {
                         self.data.entity.applicationType = self.APPLICATION_TYPE;
                         self.processConditions(self.data, envConditions[0].result, subjConditions[0].result);

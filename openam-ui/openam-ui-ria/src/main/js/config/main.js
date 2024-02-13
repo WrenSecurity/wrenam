@@ -27,7 +27,7 @@ define("config/main", [
     "./validators/CommonValidators",
     "./validators/AMValidators",
 
-    "./routes/CommonRoutesConfig",  // In FR-Commons
+    "./routes/CommonRoutesConfig", // In FR-Commons
     "./routes/AMRoutesConfig",
     "./routes/UserRoutesConfig", // In FR-Commons
     "./routes/admin/RealmsRoutes",

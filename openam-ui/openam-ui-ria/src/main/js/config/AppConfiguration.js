@@ -63,7 +63,7 @@ define([
                 defaultHandlers: {
                 },
                 loader: [
-                        { "defaultHandlers": "config/errorhandlers/CommonErrorHandlers" }
+                    { "defaultHandlers": "config/errorhandlers/CommonErrorHandlers" }
                 ]
             }
         }, {
@@ -112,8 +112,8 @@ define([
             configuration: {
                 validators: { },
                 loader: [
-                     { "validators": "config/validators/CommonValidators" },
-                     { "validators": "config/validators/AMValidators" }
+                    { "validators": "config/validators/CommonValidators" },
+                    { "validators": "config/validators/AMValidators" }
                 ]
             }
         }, {

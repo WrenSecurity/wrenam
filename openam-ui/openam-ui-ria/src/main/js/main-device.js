@@ -59,7 +59,7 @@ require([
     "ThemeManager",
     "Router"
 ], function ($, HandleBars, Configuration, Constants, DeviceTemplate, DeviceDoneTemplate,
-            LoginBaseTemplate, FooterTemplate, LoginHeaderTemplate, i18nManager, ThemeManager, Router) {
+        LoginBaseTemplate, FooterTemplate, LoginHeaderTemplate, i18nManager, ThemeManager, Router) {
     var data = window.pageData,
         template = data.done ? DeviceDoneTemplate : DeviceTemplate;
 

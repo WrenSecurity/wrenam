@@ -26,7 +26,7 @@ define([
                 var realm = AdministeredRealmsHelper.getCurrentRealm(),
                     apiUrlBase = `${Constants.host}/${Constants.context}/json${
                         (realm === "/" ? "" : RealmHelper.encodeRealm(realm))
-                        }`;
+                    }`;
 
                 return url.replace("__api__", apiUrlBase)
                     .replace("__host__", Constants.host)

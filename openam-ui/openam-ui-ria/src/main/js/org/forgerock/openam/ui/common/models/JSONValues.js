@@ -14,7 +14,7 @@
  * Copyright 2016 ForgeRock AS.
  */
 
- /**
+/**
  * Refer to the following naming convention, when adding new functions to this class:
  * <p/>
  * <h2>Function naming conventions</h2>
@@ -62,12 +62,12 @@ define([
     }
 
     /**
-    * Ungroups collection properties, moving them one level up.
-    *
-    * @param   {Object} raw Values
-    * @param   {string} groupKey Group key of the property value object
-    * @returns {JSONValues} JSONValues object with new value set
-    */
+     * Ungroups collection properties, moving them one level up.
+     *
+     * @param   {Object} raw Values
+     * @param   {string} groupKey Group key of the property value object
+     * @returns {JSONValues} JSONValues object with new value set
+     */
     function ungroupCollectionProperties (raw, groupKey) {
         const collectionProperties = _.pick(raw[groupKey], (value) => {
             return _.isObject(value) && !_.isArray(value);

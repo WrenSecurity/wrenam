@@ -38,8 +38,8 @@ define([
     "org/forgerock/openam/ui/common/util/uri/query",
     "store/index"
 ], ($, _, AbstractView, AuthNService, BootstrapDialog, Configuration, Constants, CookieHelper, EventManager, Form2js,
-    Handlebars, i18nManager, Messages, RESTLoginHelper, isRealmChanged, Router, SessionManager, UIUtils,
-    URIUtils, logout, query, store) => {
+        Handlebars, i18nManager, Messages, RESTLoginHelper, isRealmChanged, Router, SessionManager, UIUtils,
+        URIUtils, logout, query, store) => {
     isRealmChanged = isRealmChanged.default;
 
     function hasSsoRedirectOrPost (goto) {

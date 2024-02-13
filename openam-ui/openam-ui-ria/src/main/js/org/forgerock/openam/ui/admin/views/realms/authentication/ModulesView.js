@@ -30,14 +30,15 @@ define([
     // jquery dependencies
     "selectize"
 ], function ($, _, AbstractView, arrayify, Configuration, EditModuleDialog, Form, FormHelper, Messages,
-             Promise, AuthenticationService) {
+        Promise, AuthenticationService) {
     function getModuleInfoFromElement (element) {
         return $(element).closest("tr").data();
     }
     function performDeleteModules (realmPath, moduleInfos) {
         return Promise.all(arrayify(moduleInfos).map(function (moduleInfo) {
             return AuthenticationService.authentication.modules.remove(realmPath, moduleInfo.moduleName,
-                                                                  moduleInfo.moduleType);
+                moduleInfo.moduleType
+            );
         }));
     }
 

@@ -32,8 +32,8 @@ define([
     "org/forgerock/openam/ui/admin/models/authorization/PolicyModel",
     "org/forgerock/openam/ui/admin/views/realms/authorization/common/AbstractListView"
 ], function ($, _, Backbone, BackbonePaginator, BackgridFilter, Backgrid, ThemeablePaginator, Configuration,
-             EventManager, Router, Constants, BackgridUtils, URLHelper, PoliciesService, PolicyModel,
-             AbstractListView) {
+        EventManager, Router, Constants, BackgridUtils, URLHelper, PoliciesService, PolicyModel,
+        AbstractListView) {
     var PoliciesView = AbstractListView.extend({
         element: "#policiesPanel",
         template: "templates/admin/views/realms/authorization/policies/PoliciesTemplate.html",
@@ -133,7 +133,7 @@ define([
                                     EventManager.sendEvent(Constants.EVENT_CHANGE_VIEW, {
                                         route: Router.currentRoute,
                                         args: _.map([self.data.realmPath, self.data.policySetModel.id],
-                                                encodeURIComponent)
+                                            encodeURIComponent)
                                     });
                                 }
                             );

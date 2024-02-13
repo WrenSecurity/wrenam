@@ -29,7 +29,7 @@ define([
     "org/forgerock/openam/ui/user/uma/services/UMAService",
     "org/forgerock/openam/ui/user/uma/views/backgrid/cells/PermissionsCell"
 ], function ($, Backbone, BackbonePaginator, BackgridFilter, Backgrid, ThemeablePaginator, AbstractView, Configuration,
-             Constants, fetchUrl, BackgridUtils, UMAService, PermissionsCell) {
+        Constants, fetchUrl, BackgridUtils, UMAService, PermissionsCell) {
     var ListRequest = AbstractView.extend({
         template: "templates/user/uma/views/request/ListRequestTemplate.html",
 
@@ -104,9 +104,9 @@ define([
                     },
                     allow () {
                         UMAService.approveRequest(this.model.get("_id"), this.model.get("permissions"))
-                        .done(function () {
-                            self.data.requests.fetch({ reset: true, processData: false }); // TODO: DRY
-                        });
+                            .done(function () {
+                                self.data.requests.fetch({ reset: true, processData: false }); // TODO: DRY
+                            });
                     },
                     deny () {
                         UMAService.denyRequest(this.model.get("_id")).done(function () {

@@ -33,7 +33,7 @@ define([
     // jquery dependencies
     "selectize"
 ], function ($, _, AbstractView, Backgrid, BackgridUtils, BootstrapDialog, Constants, EventManager, ShareCounter,
-             UMAPolicy, UMAPolicyPermission, UMAPolicyPermissionScope, UMAResourceSetWithPolicy, RealmHelper) {
+        UMAPolicy, UMAPolicyPermission, UMAPolicyPermissionScope, UMAResourceSetWithPolicy, RealmHelper) {
     var CommonShare,
         realmRegex = /[?&]realm=/,
         resourcesetsRegex = /\/json\/users\/[^/]+\/uma\/policies/,
@@ -63,7 +63,7 @@ define([
         onParentModelError (model, response) {
             console.error(`Unrecoverable load failure UMAResourceSetWithPolicy. ${response.responseJSON.code} (${
                 response.responseJSON.reason
-                }) ${response.responseJSON.message}`);
+            }) ${response.responseJSON.message}`);
             // TODO : Fire and event message
         },
         onParentModelSync (model) {

@@ -96,7 +96,7 @@ define([
             var subRealm = conf.globalData.auth.subRealm || "/";
             window.location.href = `/${Constants.context}/realm/RMRealm?RMRealm.tblDataActionHref=${
                 encodeURIComponent(subRealm)
-                }`;
+            }`;
         }
     }, {
         startEvent: Constants.EVENT_REDIRECT_TO_JATO_FEDERATION,
@@ -213,14 +213,14 @@ define([
             "org/forgerock/openam/ui/user/login/tokens/SessionToken"
         ],
         processDescription (
-            event,
-            Configuration,
-            RealmsService,
-            ServicesService,
-            SessionValidator,
-            MaxIdleTimeLeftStrategy,
-            NavigationHelper,
-            SessionToken) {
+                event,
+                Configuration,
+                RealmsService,
+                ServicesService,
+                SessionValidator,
+                MaxIdleTimeLeftStrategy,
+                NavigationHelper,
+                SessionToken) {
             var queueName = "loginDialogAuthCallbacks",
                 authenticatedCallback,
                 sessionToken;
@@ -285,7 +285,7 @@ define([
                  * User may have sensetive information on screen so we exit them from the system when their session
                  * has expired with a message telling them as such
                  */
-                 // TODO move the logout logic to the Sesion Expiry view
+                // TODO move the logout logic to the Sesion Expiry view
                 return logout.default().then(() => {
                     Router.routeTo(Router.configuration.routes.sessionExpired, { trigger: true });
                 });

@@ -14,9 +14,9 @@
  * Copyright 2016 ForgeRock AS.
  */
 
- /**
-  * @module org/forgerock/openam/ui/admin/views/common/schema/SubSchemaListComponent
-  */
+/**
+ * @module org/forgerock/openam/ui/admin/views/common/schema/SubSchemaListComponent
+ */
 define("org/forgerock/openam/ui/admin/views/common/schema/SubSchemaListComponent", [
     "jquery",
     "lodash",
@@ -38,7 +38,7 @@ define("org/forgerock/openam/ui/admin/views/common/schema/SubSchemaListComponent
         getSubSchemaCreatableTypes,
         getSubSchemaInstances,
         deleteSubSchemaInstance
-     }) {
+    }) {
         this.data = data;
         this.subSchemaTemplate = subSchemaTemplate;
         this.getSubSchemaCreatableTypes = getSubSchemaCreatableTypes;

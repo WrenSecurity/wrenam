@@ -25,7 +25,7 @@ define([
     "org/forgerock/openam/ui/admin/views/common/navigation/createBreadcrumbs",
     "org/forgerock/openam/ui/admin/views/common/navigation/createTreeNavigation"
 ], ($, _, Constants, EventManager, Router, RealmsService, TreeNavigation, createBreadcrumbs,
-    createTreeNavigation) => {
+        createTreeNavigation) => {
     const navData = [{
         title: "console.common.navigation.dashboard",
         icon: "fa-dashboard",

@@ -33,7 +33,7 @@ define([
     "org/forgerock/openam/ui/common/util/RealmHelper",
     "org/forgerock/openam/ui/common/util/URLHelper"
 ], ($, _, Backbone, BackbonePaginator, BackgridFilter, Backgrid, ThemeablePaginator, Configuration, EventManager,
-    Router, Constants, PolicySetModel, AbstractListView, PoliciesService, BackgridUtils, RealmHelper, URLHelper) =>
+        Router, Constants, PolicySetModel, AbstractListView, PoliciesService, BackgridUtils, RealmHelper, URLHelper) =>
     AbstractListView.extend({
         template: "templates/admin/views/realms/authorization/policySets/PolicySetsTemplate.html",
         // Used in AbstractListView

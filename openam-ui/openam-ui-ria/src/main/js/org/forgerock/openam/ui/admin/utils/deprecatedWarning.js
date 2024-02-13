@@ -14,12 +14,12 @@
  * Copyright 2016 ForgeRock AS.
  */
 
- /**
-  * @module org/forgerock/openam/ui/admin/utils/deprecatedWarning
-  */
- define([
- ], () =>
-     function deprecatedWarning (deprecated, replacement) {
-         console.warn(`${deprecated} is marked as deprecated. \nPlease use ${replacement}`);
-     }
+/**
+ * @module org/forgerock/openam/ui/admin/utils/deprecatedWarning
+ */
+define([
+], () =>
+    function deprecatedWarning (deprecated, replacement) {
+        console.warn(`${deprecated} is marked as deprecated. \nPlease use ${replacement}`);
+    }
 );

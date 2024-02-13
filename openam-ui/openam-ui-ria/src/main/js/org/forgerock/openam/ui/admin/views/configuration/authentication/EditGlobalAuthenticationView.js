@@ -14,9 +14,9 @@
  * Copyright 2016 ForgeRock AS.
  */
 
- /**
-  * @module org/forgerock/openam/ui/admin/views/configuration/authentication/EditGlobalAuthenticationView
-  */
+/**
+ * @module org/forgerock/openam/ui/admin/views/configuration/authentication/EditGlobalAuthenticationView
+ */
 define([
     "org/forgerock/commons/ui/common/main/AbstractView",
     "org/forgerock/commons/ui/common/util/UIUtils",

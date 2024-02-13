@@ -59,7 +59,7 @@ define([
     };
 
     obj.instance = {
-        getAll () {  // TODO this is the only difference in GLOBAL and REALM service rest calls
+        getAll () { // TODO this is the only difference in GLOBAL and REALM service rest calls
             return obj.serviceCall({
                 url: fetchUrl.default("/global-config/services?_action=nextdescendents", { realm: false }),
                 type: "POST",
@@ -187,7 +187,7 @@ define([
                             }
 
                             return Promise.all([getServiceSubSubSchema(serviceType, subSchemaType, subSchemaInstance,
-                                    subSubSchemaType), getInstance()])
+                                subSubSchemaType), getInstance()])
                                 .then((response) => ({
                                     schema: response[0],
                                     values: response[1]

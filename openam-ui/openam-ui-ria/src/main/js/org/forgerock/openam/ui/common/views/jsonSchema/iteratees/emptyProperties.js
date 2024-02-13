@@ -14,9 +14,9 @@
  * Copyright 2016 ForgeRock AS.
  */
 
- /**
-  * @module org/forgerock/openam/ui/common/views/jsonSchema/iteratees/emptyProperties
-  */
+/**
+ * @module org/forgerock/openam/ui/common/views/jsonSchema/iteratees/emptyProperties
+ */
 define([
     "lodash"
 ], (_) => (schemaValuePair) => _.isEmpty(schemaValuePair.schema.raw.defaultProperties));

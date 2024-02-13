@@ -40,8 +40,8 @@ define([
     "org/forgerock/openam/ui/common/util/Promise",
     "org/forgerock/openam/ui/common/views/jsonSchema/FlatJSONSchemaView"
 ], ($, _, Backbone, Messages, AbstractView, EventManager, ReactAdapterView, Router, Constants, UIUtils, FormHelper,
-    TabSearch, SubSchemaListComponent, ScriptsList, PanelComponent, PartialBasedView, TabComponent, JSONSchema,
-    JSONValues, Promise, FlatJSONSchemaView) => {
+        TabSearch, SubSchemaListComponent, ScriptsList, PanelComponent, PartialBasedView, TabComponent, JSONSchema,
+        JSONValues, Promise, FlatJSONSchemaView) => {
     ScriptsList = ScriptsList.default;
 
     const PSEUDO_TAB = { id: _.uniqueId("pseudo_tab_"), title: $.t("console.common.configuration") };
@@ -160,9 +160,9 @@ define([
         render () {
             const serviceCalls =
                 _([this.getInstance, this.getSubSchemaTypes])
-                .compact()
-                .map((serviceCall) => serviceCall())
-                .value();
+                    .compact()
+                    .map((serviceCall) => serviceCall())
+                    .value();
 
             Promise.all(serviceCalls).then((response) => {
                 const instance = response[0];

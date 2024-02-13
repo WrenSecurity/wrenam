@@ -37,7 +37,7 @@ const logout = () => {
                 return $.Deferred().resolve();
             }
         })
-        .then(removeSessionToken, removeSessionToken);
+            .then(removeSessionToken, removeSessionToken);
     } else {
         return $.Deferred().resolve();
     }

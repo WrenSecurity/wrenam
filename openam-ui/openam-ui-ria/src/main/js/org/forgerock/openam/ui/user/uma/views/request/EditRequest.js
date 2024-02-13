@@ -27,7 +27,7 @@ define([
     "org/forgerock/openam/ui/user/uma/services/UMAService",
     "org/forgerock/openam/ui/user/uma/views/backgrid/cells/PermissionsCell"
 ], function ($, Backbone, Backgrid, AbstractView, Configuration, Router, Constants, fetchUrl, BackgridUtils,
-             UMAService, PermissionsCell) {
+        UMAService, PermissionsCell) {
     var EditRequest = AbstractView.extend({
         template: "templates/user/uma/views/request/EditRequestTemplate.html",
         events: {

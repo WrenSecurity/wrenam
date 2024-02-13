@@ -24,7 +24,7 @@ define([
     "org/forgerock/openam/ui/user/login/RESTLoginView",
     "org/forgerock/openam/ui/user/login/tokens/SessionToken"
 ], (_, Constants, AnonymousProcessView, SelfRegistrationView, KBAView, Configuration, RESTLoginView,
-    SessionToken) => {
+        SessionToken) => {
     function shouldRouteToLoginView (response, destination) {
         return response.type === "selfRegistration" && response.tag === "end" && destination === "login";
     }
