@@ -23,7 +23,7 @@ import FlatJSONSchemaView from "org/forgerock/openam/ui/common/views/jsonSchema/
 import GroupedJSONSchemaView from "org/forgerock/openam/ui/common/views/jsonSchema/GroupedJSONSchemaView";
 import Messages from "org/forgerock/commons/ui/common/components/Messages";
 import Router from "org/forgerock/commons/ui/common/main/Router";
-import DataStoresService from "org/forgerock/openam/ui/admin/services/realm/DataStoresService";
+import { getCreatables, getInitialState, create } from "org/forgerock/openam/ui/admin/services/realm/DataStoresService";
 import SelectComponent from "org/forgerock/openam/ui/common/components/SelectComponent";
 
 function toggleCreateDisabled (el, value) {
@@ -48,7 +48,7 @@ class NewDataStoreView extends AbstractView {
         this.data.realmPath = args[0];
         this.data.id = "";
 
-        DataStoresService.getCreatables(this.data.realmPath).then((creatableTypes) => {
+        getCreatables(this.data.realmPath).then((creatableTypes) => {
             this.data.creatableTypes = creatableTypes;
 
             this.parentRender(() => {
@@ -80,7 +80,7 @@ class NewDataStoreView extends AbstractView {
         if (!_.isEmpty(dataStore)) {
             this.data.type = dataStore;
 
-            DataStoresService.getInitialState(this.data.realmPath, this.data.type).then((response) => {
+            getInitialState(this.data.realmPath, this.data.type).then((response) => {
                 const options = {
                     schema: response.schema,
                     values: response.values,
@@ -119,7 +119,7 @@ class NewDataStoreView extends AbstractView {
         toggleCreateDisabled(this.$el, !isValid);
     }
     onCreateClick () {
-        DataStoresService.create(
+        create(
             this.data.realmPath,
             this.data.type,
             Object.assign({}, this.jsonSchemaView.getData(), { _id: this.data.id })

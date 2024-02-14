@@ -14,12 +14,12 @@
  * Copyright 2024 Wren Security.
  */
 
-define([
-    "org/forgerock/commons/ui/common/main/AbstractView",
-    "org/forgerock/commons/ui/common/main/Router",
-    "org/forgerock/openam/ui/admin/services/realm/DataStoresService",
-    "org/forgerock/openam/ui/admin/views/common/schema/EditSchemaComponent"
-], (AbstractView, Router, DataStoresService, EditSchemaComponent) => AbstractView.extend({
+import AbstractView from "org/forgerock/commons/ui/common/main/AbstractView";
+import Router from "org/forgerock/commons/ui/common/main/Router";
+import { get, update, remove } from "org/forgerock/openam/ui/admin/services/realm/DataStoresService";
+import EditSchemaComponent from "org/forgerock/openam/ui/admin/views/common/schema/EditSchemaComponent";
+
+class EditDataStoreView extends AbstractView {
     render ([realmPath, type, id]) {
         const editComponent = new EditSchemaComponent({
             data: {
@@ -34,11 +34,13 @@ define([
             listRouteArgs: [encodeURIComponent(realmPath)],
             template: "templates/admin/views/realms/dataStores/EditDataStoreTemplate.html",
 
-            getInstance: () => DataStoresService.get(realmPath, type, id),
-            updateInstance: (values) => DataStoresService.update(realmPath, type, id, values),
-            deleteInstance: () => DataStoresService.remove(realmPath, [[type, id]])
+            getInstance: () => get(realmPath, type, id),
+            updateInstance: (values) => update(realmPath, type, id, values),
+            deleteInstance: () => remove(realmPath, [[type, id]])
         });
 
         this.parentRender(() => { this.$el.append(editComponent.render().$el); });
     }
-}));
+}
+
+export default EditDataStoreView;
