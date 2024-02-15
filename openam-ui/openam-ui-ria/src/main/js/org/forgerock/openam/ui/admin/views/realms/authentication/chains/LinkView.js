@@ -73,7 +73,7 @@ define([
             var html = Handlebars.compile(
                 `{{> templates/admin/views/realms/authentication/chains/_CriteriaFooter type='${
                     this.data.linkConfig.criteria
-                    }'}}`);
+                }'}}`);
 
             this.$el.find(".criteria-view").html(html);
         },

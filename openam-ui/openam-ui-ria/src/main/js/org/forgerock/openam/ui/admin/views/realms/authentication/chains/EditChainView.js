@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions copyright 2024 Wren Security.
  */
 
 define([
@@ -31,23 +32,23 @@ define([
     // jquery dependencies
     "sortable"
 ], function ($, _, AbstractView, Constants, EventManager, EditLinkView, FormHelper, Handlebars, LinkView, Messages,
-             PostProcessView, Router, AuthenticationService) {
+        PostProcessView, Router, AuthenticationService) {
     var createLinkView = function (index, view) {
             var linkView = new LinkView();
 
-             /**
-              * A new list item is being dynamically created and added to the current EditChainView as a child View.
-              * In order to do this we must create the element here, parent and pass it to the child so that it has
-              * something to render inside of.
-              */
+            /**
+             * A new list item is being dynamically created and added to the current EditChainView as a child View.
+             * In order to do this we must create the element here, parent and pass it to the child so that it has
+             * something to render inside of.
+             */
             linkView.el = $("<li class='chain-link' />");
             linkView.element = linkView.el;
             linkView.parent = view;
 
             linkView.data = {
-                 // Each linkview instance requires allCriteria and allModules to render. These values are never changed
-                 // Because multiple instances require this same data, I grab it only in this parent view, then pass it
-                 // on to to all the child linkview instances.
+                // Each linkview instance requires allCriteria and allModules to render. These values are never changed
+                // Because multiple instances require this same data, I grab it only in this parent view, then pass it
+                // on to to all the child linkview instances.
                 typeDescription : "",
                 allModules : view.data.allModules,
                 linkConfig : view.data.form.chainData.authChainConfiguration[index],
@@ -137,22 +138,23 @@ define([
 
             AuthenticationService.authentication.chains.remove(
                 self.data.realmPath,
-                self.data.form.chainData._id)
-            .then(() => {
-                Messages.addMessage({
-                    type: Messages.TYPE_INFO,
-                    message: $.t("console.authentication.editChains.deletedChain")
+                self.data.form.chainData._id
+            )
+                .then(() => {
+                    Messages.addMessage({
+                        type: Messages.TYPE_INFO,
+                        message: $.t("console.authentication.editChains.deletedChain")
+                    });
+                    Router.routeTo(Router.configuration.routes.realmsAuthenticationChains, {
+                        args: [encodeURIComponent(self.data.realmPath)],
+                        trigger: true
+                    });
+                }, (response) => {
+                    Messages.addMessage({
+                        type: Messages.TYPE_DANGER,
+                        response
+                    });
                 });
-                Router.routeTo(Router.configuration.routes.realmsAuthenticationChains, {
-                    args: [encodeURIComponent(self.data.realmPath)],
-                    trigger: true
-                });
-            }, (response) => {
-                Messages.addMessage({
-                    type: Messages.TYPE_DANGER,
-                    response
-                });
-            });
         },
 
         render (args) {
@@ -226,14 +228,14 @@ define([
                 };
 
                 AuthenticationService.authentication.chains.update(self.data.realmPath, chainData._id, savedData)
-                .then(() => {
-                    EventManager.sendEvent(Constants.EVENT_DISPLAY_MESSAGE_REQUEST, "changesSaved");
-                }, (response) => {
-                    Messages.addMessage({
-                        type: Messages.TYPE_DANGER,
-                        response
+                    .then(() => {
+                        EventManager.sendEvent(Constants.EVENT_DISPLAY_MESSAGE_REQUEST, "changesSaved");
+                    }, (response) => {
+                        Messages.addMessage({
+                            type: Messages.TYPE_DANGER,
+                            response
+                        });
                     });
-                });
             });
         },
 
@@ -244,14 +246,14 @@ define([
                 };
 
             AuthenticationService.authentication.chains.update(this.data.realmPath, chainData._id, savedData)
-            .then(() => {
-                EventManager.sendEvent(Constants.EVENT_DISPLAY_MESSAGE_REQUEST, "changesSaved");
-            }, (response) => {
-                Messages.addMessage({
-                    type: Messages.TYPE_DANGER,
-                    response
+                .then(() => {
+                    EventManager.sendEvent(Constants.EVENT_DISPLAY_MESSAGE_REQUEST, "changesSaved");
+                }, (response) => {
+                    Messages.addMessage({
+                        type: Messages.TYPE_DANGER,
+                        response
+                    });
                 });
-            });
         },
 
         sortChainData (from, to) {

@@ -67,13 +67,14 @@ define([
                 message: $.t("console.services.subSchema.confirmDeleteSelected")
             }, () => {
                 deleteSubSchema(this.options.realmPath,
-                                this.options.type,
-                                subSchemaType,
-                                subSchemaInstance)
-                .then(() => {
-                    EventManager.sendEvent(Constants.EVENT_DISPLAY_MESSAGE_REQUEST, "changesSaved");
-                    this.render();
-                }, (response) => Messages.addMessage({ response, type: Messages.TYPE_DANGER }));
+                    this.options.type,
+                    subSchemaType,
+                    subSchemaInstance
+                )
+                    .then(() => {
+                        EventManager.sendEvent(Constants.EVENT_DISPLAY_MESSAGE_REQUEST, "changesSaved");
+                        this.render();
+                    }, (response) => Messages.addMessage({ response, type: Messages.TYPE_DANGER }));
             });
         }
     });

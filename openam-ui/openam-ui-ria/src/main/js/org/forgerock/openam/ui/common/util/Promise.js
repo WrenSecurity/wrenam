@@ -14,9 +14,9 @@
  * Copyright 2015-2016 ForgeRock AS.
  */
 
- /**
-  * @module org/forgerock/openam/ui/common/util/Promise
-  */
+/**
+ * @module org/forgerock/openam/ui/common/util/Promise
+ */
 define([
     "jquery",
     "lodash"

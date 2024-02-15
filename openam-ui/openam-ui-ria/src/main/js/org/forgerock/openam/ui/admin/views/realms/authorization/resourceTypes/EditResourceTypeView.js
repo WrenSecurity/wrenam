@@ -29,7 +29,7 @@ define([
     "org/forgerock/openam/ui/admin/utils/FormHelper",
     "bootstrap-tabdrop"
 ], function ($, _, Messages, AbstractView, EventManager, Router, Constants, UIUtils, ResourceTypeModel,
-             ResourceTypePatternsView, ResourceTypeActionsView, FormHelper) {
+        ResourceTypePatternsView, ResourceTypeActionsView, FormHelper) {
     return AbstractView.extend({
         partials: [
             "partials/util/_HelpLink.html"

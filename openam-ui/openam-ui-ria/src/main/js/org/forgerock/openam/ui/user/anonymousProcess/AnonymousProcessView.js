@@ -26,7 +26,7 @@ define([
     "org/forgerock/openam/ui/common/util/uri/query",
     "store/index"
 ], (_, EventManager, Router, URIUtils, AnonymousProcessView, AnonymousProcessDelegate, fetchUrl, Constants, query,
-    store) => {
+        store) => {
     function getFragmentParamString () {
         const params = URIUtils.getCurrentFragmentQueryString();
         return _.isEmpty(params) ? "" : `&${params}`;

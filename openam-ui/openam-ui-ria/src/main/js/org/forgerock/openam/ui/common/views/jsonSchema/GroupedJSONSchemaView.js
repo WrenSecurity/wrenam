@@ -46,7 +46,7 @@ define([
     "org/forgerock/openam/ui/common/views/jsonSchema/iteratees/setDefaultPropertiesToRequiredAndEmpty",
     "org/forgerock/openam/ui/common/views/jsonSchema/iteratees/showEnablePropertyIfAllPropertiesHidden"
 ], ($, _, Backbone, JSONSchema, JSONValues, createJSONEditorView, emptyProperties,
-    setDefaultPropertiesToRequiredAndEmpty, showEnablePropertyIfAllPropertiesHidden) => {
+        setDefaultPropertiesToRequiredAndEmpty, showEnablePropertyIfAllPropertiesHidden) => {
     /**
      * There is no reliable method of knowing if the form rendered by the JSON Editor has finished being added to the
      * DOM. We do however wish to signal when render is complete so views can perform actions (e.g. enabling buttons

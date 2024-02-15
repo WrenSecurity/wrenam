@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Portions copyright 2014-2016 ForgeRock AS.
+ * Portions copyright 2024 Wren Security.
  */
 
 define([
@@ -37,9 +38,10 @@ define([
     "bootstrap-tabdrop",
     "selectize"
 ], ($, _, Backbone, Messages, AbstractView, EventManager, Router, Constants, PolicyModel, PolicySetModel,
-    PoliciesService, CreatedResourcesView, PolicyActionsView, StaticResponseAttributesView,
-    SubjectResponseAttributesView, CustomResponseAttributesView, ManageSubjectsView, ManageEnvironmentsView,
-    FormHelper) => AbstractView.extend({
+        PoliciesService, CreatedResourcesView, PolicyActionsView, StaticResponseAttributesView,
+        SubjectResponseAttributesView, CustomResponseAttributesView, ManageSubjectsView, ManageEnvironmentsView,
+        FormHelper) =>
+    AbstractView.extend({
         partials: [
             "partials/util/_HelpLink.html"
         ],
@@ -53,7 +55,8 @@ define([
             this.model.attributes.resourceAttributes = _.union(
                 this.staticAttrsView.getGroupedData(),
                 SubjectResponseAttributesView.getAttrs(),
-                CustomResponseAttributesView.getAttrs());
+                CustomResponseAttributesView.getAttrs()
+            );
         },
 
         tabs: [
@@ -147,9 +150,9 @@ define([
                     self.allUserAttributes = _.sortBy(allUserAttributes[0].result);
 
                     self.data.options.availableEnvironments =
-                        _.findByValues(allEnvironments[0].result, "title", policySet.conditions);
+                            _.findByValues(allEnvironments[0].result, "title", policySet.conditions);
                     self.data.options.availableSubjects =
-                        _.findByValues(allSubjects[0].result, "title", policySet.subjects);
+                            _.findByValues(allSubjects[0].result, "title", policySet.subjects);
 
                     const resourceType = _.find(self.data.options.availableResourceTypes, {
                         uuid: self.model.attributes.resourceTypeUuid

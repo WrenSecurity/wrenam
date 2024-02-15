@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions copyright 2024 Wren Security.
  */
 
 import _ from "lodash";
@@ -57,8 +58,8 @@ class SessionsTable extends Component {
     handleSelectAll (e) {
         this.setState({
             checked: e.target.checked
-            ? _.without(this.props.data, this.state.ownSession)
-            : []
+                ? _.without(this.props.data, this.state.ownSession)
+                : []
         });
     }
 
@@ -106,15 +107,17 @@ class SessionsTable extends Component {
                                 </tr>
                             </thead>
                             <tbody>
-                                { _.map(this.props.data, (session) =>
-                                    <SessionsTableRow
-                                        checked={ isChecked(session) }
-                                        data={ session }
-                                        onDelete={ this.handleDeleteRow }
-                                        onSelect={ this.handleSelectRow }
-                                        sessionHandle={ store.getState().session.sessionHandle }
-                                    />
-                                ) }
+                                {
+                                    _.map(this.props.data, (session) => (
+                                        <SessionsTableRow
+                                            checked={ isChecked(session) }
+                                            data={ session }
+                                            onDelete={ this.handleDeleteRow }
+                                            onSelect={ this.handleSelectRow }
+                                            sessionHandle={ store.getState().session.sessionHandle }
+                                        />
+                                    ))
+                                }
                             </tbody>
                         </Table>
                     </Block>

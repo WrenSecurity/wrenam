@@ -56,13 +56,13 @@ define([
             };
 
             injector.mock("org/forgerock/commons/ui/common/main/Configuration", Configuration)
-                    .mock("org/forgerock/commons/ui/common/main/EventManager", EventManager)
-                    .mock("org/forgerock/commons/ui/common/main/Router", Router)
-                    .mock("org/forgerock/commons/ui/common/main/SessionManager", SessionManager)
-                    .require(["org/forgerock/openam/ui/common/RouteTo"], (subject) => {
-                        RouteTo = subject;
-                        done();
-                    });
+                .mock("org/forgerock/commons/ui/common/main/EventManager", EventManager)
+                .mock("org/forgerock/commons/ui/common/main/Router", Router)
+                .mock("org/forgerock/commons/ui/common/main/SessionManager", SessionManager)
+                .require(["org/forgerock/openam/ui/common/RouteTo"], (subject) => {
+                    RouteTo = subject;
+                    done();
+                });
         });
 
         describe("#setGoToUrlProperty", () => {

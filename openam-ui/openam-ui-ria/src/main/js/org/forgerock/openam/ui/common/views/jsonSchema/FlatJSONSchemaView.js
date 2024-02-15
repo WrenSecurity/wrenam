@@ -14,22 +14,22 @@
  * Copyright 2016-2017 ForgeRock AS.
  */
 
- /**
-  * View that takes <code>JSONSchema</code> and <code>JSONValue</code> objects and renders them in a flat structure.
-  * <p/>
-  * This view only supports JSONSchema objects which <strong>are not collections</strong> (determined by
-  * <code>#isCollection</code> upon <code>JSONSchema</code>) and outputs a simple list of input fields related to the
-  * specification of the JSON Schema.
-  * <p/>
-  * e.g.<br>
-  * <code>
-  * <hr/>
-  * Label 1 | &lt;input here&gt; |<br>
-  * Label 2 | &lt;input here&gt; |<br>
-  * <hr/>
-  * </code>
-  * @module org/forgerock/openam/ui/common/views/jsonSchema/FlatJSONSchemaView
-  */
+/**
+ * View that takes <code>JSONSchema</code> and <code>JSONValue</code> objects and renders them in a flat structure.
+ * <p/>
+ * This view only supports JSONSchema objects which <strong>are not collections</strong> (determined by
+ * <code>#isCollection</code> upon <code>JSONSchema</code>) and outputs a simple list of input fields related to the
+ * specification of the JSON Schema.
+ * <p/>
+ * e.g.<br>
+ * <code>
+ * <hr/>
+ * Label 1 | &lt;input here&gt; |<br>
+ * Label 2 | &lt;input here&gt; |<br>
+ * <hr/>
+ * </code>
+ * @module org/forgerock/openam/ui/common/views/jsonSchema/FlatJSONSchemaView
+ */
 define([
     "jquery",
     "lodash",

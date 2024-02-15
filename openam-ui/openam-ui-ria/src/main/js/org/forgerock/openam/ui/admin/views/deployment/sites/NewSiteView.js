@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions copyright 2024 Wren Security.
  */
 
 define([
@@ -48,9 +49,10 @@ define([
             values["_id"] = siteId;
 
             SitesService.sites.create(values)
-                .then(() => { Router.routeTo(Router.configuration.routes.listSites, { args: [], trigger: true }); },
-                (response) => { Messages.addMessage({ response, type: Messages.TYPE_DANGER }); }
-            );
+                .then(
+                    () => { Router.routeTo(Router.configuration.routes.listSites, { args: [], trigger: true }); },
+                    (response) => { Messages.addMessage({ response, type: Messages.TYPE_DANGER }); }
+                );
         },
 
         onValidateProps (event) {

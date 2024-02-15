@@ -29,7 +29,7 @@ define([
     // jquery dependencies
     "sortable"
 ], ($, _, AbstractView, EventManager, Constants, UIUtils, EditEnvironmentView, EditSubjectView, OperatorRulesView,
-    LegacyListItemView) => {
+        LegacyListItemView) => {
     return AbstractView.extend({
         template: "templates/admin/views/realms/authorization/policies/conditions/ManageRulesTemplate.html",
         noBaseTemplate: true,

@@ -38,7 +38,7 @@ define([
     // jquery dependencies
     "selectize"
 ], function ($, _, BootstrapDialog, CodeMirror, ChangesPending, Messages, AbstractView, EventManager, Router, Base64,
-             Constants, UIUtils, Script, RealmScriptsService, GlobalScriptsService, FormHelper, Promise) {
+        Constants, UIUtils, Script, RealmScriptsService, GlobalScriptsService, FormHelper, Promise) {
     return AbstractView.extend({
         initialize () {
             AbstractView.prototype.initialize.call(this);
@@ -119,12 +119,12 @@ define([
             } else {
                 Promise.all([self.contextsPromise, self.defaultContextPromise, self.contextSchemaPromise,
                     self.languageSchemaPromise]).done(function (results) {
-                        self.data.contexts = results[0][0].result;
-                        self.data.defaultContext = results[1][0].defaultContext;
-                        self.addContextNames(self.data.contexts, results[2][0]);
-                        self.langSchema = results[3][0];
-                        self.renderScript();
-                    });
+                    self.data.contexts = results[0][0].result;
+                    self.data.defaultContext = results[1][0].defaultContext;
+                    self.addContextNames(self.data.contexts, results[2][0]);
+                    self.langSchema = results[3][0];
+                    self.renderScript();
+                });
             }
         },
 

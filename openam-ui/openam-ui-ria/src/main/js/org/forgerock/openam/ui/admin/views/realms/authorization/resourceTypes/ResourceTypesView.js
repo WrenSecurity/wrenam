@@ -32,7 +32,7 @@ define([
     "org/forgerock/openam/ui/admin/models/authorization/ResourceTypeModel",
     "org/forgerock/openam/ui/common/util/BackgridUtils"
 ], ($, _, Backbone, BackbonePaginator, BackgridFilter, Backgrid, ThemeablePaginator, Messages, EventManager, Router,
-    Constants, UIUtils, URLHelper, AbstractListView, ResourceTypeModel, BackgridUtils) =>
+        Constants, UIUtils, URLHelper, AbstractListView, ResourceTypeModel, BackgridUtils) =>
     AbstractListView.extend({
         template: "templates/admin/views/realms/authorization/resourceTypes/ResourceTypesTemplate.html",
         // Used in AbstractListView

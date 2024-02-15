@@ -14,9 +14,9 @@
  * Copyright 2015-2016 ForgeRock AS.
  */
 
- /**
-  * @module org/forgerock/openam/ui/common/util/object/flattenValues
-  */
+/**
+ * @module org/forgerock/openam/ui/common/util/object/flattenValues
+ */
 define([
     "lodash"
 ], function (_) {

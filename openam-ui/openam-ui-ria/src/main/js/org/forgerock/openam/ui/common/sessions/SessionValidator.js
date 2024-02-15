@@ -14,9 +14,9 @@
  * Copyright 2015-2016 ForgeRock AS.
  */
 
- /**
-  * @module org/forgerock/openam/ui/common/sessions/SessionValidator
-  */
+/**
+ * @module org/forgerock/openam/ui/common/sessions/SessionValidator
+ */
 define([
     "org/forgerock/commons/ui/common/main/Router",
     "org/forgerock/openam/ui/user/login/logout"

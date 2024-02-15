@@ -67,7 +67,7 @@ define([
                         for (i = 0; i < data.aaData.length; i++) {
                             data.aaData[i].selector = `<input name="selector" id="${
                                 data.aaData[i].id
-                                }" type="checkbox" />`;
+                            }" type="checkbox" />`;
 
                             if (typeof data.aaData[i].scope === "undefined") {
                                 cleanScope = "-";
@@ -118,7 +118,7 @@ define([
                 "fnInitComplete": () => {
                     $(".deleteSelected").html(`<input type="submit" class="button orange floatRight" value="${
                         $.t("common.form.deleteSelected")
-                        }" >`);
+                    }" >`);
                 },
                 "fnRowCallback": (row, data) => {
                     $(row).children().not(":first").click(function () {
@@ -130,28 +130,28 @@ define([
                                 'style="padding:25px;">';
                             if (tokenInfo.realm) {
                                 output += `<tr><td>${$.t("templates.oauth.realm")}</td><td>${
-                                        tokenInfo.realm
-                                    }</td></tr>`;
+                                    tokenInfo.realm
+                                }</td></tr>`;
                             }
                             if (tokenInfo.refreshToken) {
                                 output += `<tr><td>${$.t("templates.oauth.refreshToken")}</td><td>${
-                                          tokenInfo.refreshToken
-                                    }</td></tr>`;
+                                    tokenInfo.refreshToken
+                                }</td></tr>`;
                             }
                             if (tokenInfo.redirectURI) {
                                 output += `<tr><td>${$.t("templates.oauth.redirectURI")}</td><td>${
-                                          tokenInfo.redirectURI
-                                    }</td></tr>`;
+                                    tokenInfo.redirectURI
+                                }</td></tr>`;
                             }
                             if (tokenInfo.userName) {
                                 output += `<tr><td>${$.t("templates.oauth.username")}</td><td>${
-                                          tokenInfo.userName
-                                    }</td></tr>`;
+                                    tokenInfo.userName
+                                }</td></tr>`;
                             }
                             if (tokenInfo.parent) {
                                 output += `<tr><td>${$.t("templates.oauth.parent")}</td><td>${
-                                        tokenInfo.parent
-                                    }</td></tr>`;
+                                    tokenInfo.parent
+                                }</td></tr>`;
                             }
                             output += "</table>";
 

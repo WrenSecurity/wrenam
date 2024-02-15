@@ -12,9 +12,10 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2017 ForgeRock AS.
+ * Portions copyright 2024 Wren Security.
  */
 
-/* global module, require, process */
+/* global module, process */
 
 var _ = require("lodash"),
     mavenSrcPath = "/src/main/js",
@@ -76,6 +77,7 @@ module.exports = function (grunt) {
             "themes/**/*.*"
         ],
         copyLibs = [
+            /* eslint-disable max-len */
             // JS - npm
             { src: "node_modules/requirejs-text/text.js", dest: "target/dependencies/libs/text-2.0.15.js" },
             { src: "node_modules/selectize/dist/js/selectize.min.js", dest: "target/dependencies/libs/selectize-non-standalone-0.12.1-min.js" },
@@ -118,6 +120,7 @@ module.exports = function (grunt) {
             { src: "node_modules/codemirror/mode/javascript/javascript.js", dest: "target/dependencies/libs/codemirror/mode/javascript/javascript.js" },
             { src: "node_modules/codemirror/addon/display/fullscreen.css", dest: "target/dependencies/css/codemirror/addon/display/fullscreen.css" },
             { src: "node_modules/codemirror/lib/codemirror.css", dest: "target/dependencies/css/codemirror/lib/codemirror.css" }
+            /* eslint-enable max-len */
         ],
         serverDeployDirectory = process.env.OPENAM_HOME + "/XUI";
 
@@ -129,18 +132,15 @@ module.exports = function (grunt) {
                         sourceMaps: true
                     }
                 },
-                ignore: ["libs/"],
-                presets: ["es2015", "react"],
                 plugins: [
-                    ["transform-es2015-classes", { "loose": true }],
-                    "transform-object-rest-spread"
+                    ["@babel/plugin-transform-classes", { "loose": true }]
                 ]
             },
             transpileJS: {
                 files: [{
                     expand: true,
                     cwd: compositionDirectory,
-                    src: ["**/*.js"],
+                    src: ["**/*.js", "!libs/**/*.js"],
                     dest: transpiledDirectory
                 }]
             },
@@ -150,12 +150,12 @@ module.exports = function (grunt) {
                     cwd: compositionDirectory,
                     src: ["**/*.jsm", "**/*.jsx"],
                     dest: transpiledDirectory,
-                    rename: function (dest, src) {
-                        return dest + "/" + src.replace(".jsm", ".js").replace(".jsx", ".js");
+                    rename (dest, src) {
+                        return `${dest}/${src.replace(".jsm", ".js").replace(".jsx", ".js")}`;
                     }
                 }],
                 options: {
-                    plugins: ["transform-es2015-modules-amd"]
+                    plugins: ["@babel/plugin-transform-modules-amd"]
                 }
             }
         },
@@ -185,7 +185,7 @@ module.exports = function (grunt) {
             /**
              * Copy files that do not need to be compiled into the compiled directory.
              */
-            compiled: {
+            nonCompiled: {
                 files: [{
                     expand: true,
                     cwd: compositionDirectory,
@@ -209,6 +209,20 @@ module.exports = function (grunt) {
                     ],
                     dest: compiledDirectory
                 }]
+            },
+            /**
+             * Copy libs that have not been transpiled into the transpiled directory.
+             *
+             * grunt-babel does not copy ignored files anymore since 8.0.0, therefore we have to do it ourselves.
+             * See https://github.com/babel/grunt-babel/pull/106 for more details.
+             */
+            nonTranspiled: {
+                files: [{
+                    expand: true,
+                    cwd: compositionDirectory,
+                    src: ["libs/**/*.js"],
+                    dest: transpiledDirectory
+                }]
             }
         },
         eslint: {
@@ -217,11 +231,11 @@ module.exports = function (grunt) {
              */
             lint: {
                 src: [
-                    "." + mavenSrcPath + "/**/*.js",
-                    "." + mavenSrcPath + "/**/*.jsm",
-                    "." + mavenSrcPath + "/**/*.jsx",
-                    "!." + mavenSrcPath + "/libs/**/*.js",
-                    "." + mavenTestPath + "/**/*.js"
+                    `.${mavenSrcPath}/**/*.js`,
+                    `.${mavenSrcPath}/**/*.jsm`,
+                    `.${mavenSrcPath}/**/*.jsx`,
+                    `!.${mavenSrcPath}/libs/**/*.js`,
+                    `.${mavenTestPath}/**/*.js`
                 ],
                 options: {
                     format: require.resolve("eslint-formatter-warning-summary")
@@ -323,7 +337,7 @@ module.exports = function (grunt) {
              * Note that this also copies main.js because the requirejs step is not being performed when watching (it
              * is too slow).
              */
-            compiled: {
+            nonCompiled: {
                 files: [{
                     cwd: compositionDirectory,
                     src: nonCompiledFiles.concat([
@@ -405,9 +419,10 @@ module.exports = function (grunt) {
         "copy:libs",
         "sync:compose",
         "newer:babel",
+        "copy:nonTranspiled",
         "less",
         "replace",
-        "sync:compiled",
+        "sync:nonCompiled",
         "sync:transpiled",
         "sync:test",
         "sync:server"
@@ -421,10 +436,11 @@ module.exports = function (grunt) {
         "copy:compose",
         "eslint",
         "babel",
+        "copy:nonTranspiled",
         "requirejs",
         "less",
         "replace",
-        "copy:compiled",
+        "copy:nonCompiled",
         "copy:transpiled",
         "karma:build"
     ]);

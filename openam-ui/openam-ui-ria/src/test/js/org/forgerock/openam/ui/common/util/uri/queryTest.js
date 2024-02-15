@@ -29,10 +29,10 @@ define([
         };
 
         injector.mock("org/forgerock/commons/ui/common/util/URIUtils", URIUtils)
-        .require(["org/forgerock/openam/ui/common/util/uri/query"], (obj) => {
-            query = obj;
-            done();
-        });
+            .require(["org/forgerock/openam/ui/common/util/uri/query"], (obj) => {
+                query = obj;
+                done();
+            });
     });
 
     describe("org/forgerock/openam/ui/common/uri/query", () => {

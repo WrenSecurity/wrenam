@@ -27,7 +27,7 @@ define([
     "org/forgerock/openam/ui/common/util/object/flattenValues",
     "org/forgerock/openam/ui/common/services/fetchUrl"
 ], ($, _, AbstractModel, arrayify, Configuration, Constants, Messages, Router, ServiceInvoker, flattenValues,
-    fetchUrl) => {
+        fetchUrl) => {
     var baseUrl = `${Constants.host}/${Constants.context}/json`,
         UserModel = AbstractModel.extend({
             idAttribute: "id",

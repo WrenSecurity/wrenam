@@ -1,19 +1,25 @@
+/* global module */
+
 module.exports = {
     root: true,
-    extends: [
-        "forgerock",
-        "forgerock/react"
+    "extends": [
+        "@wrensecurity/eslint-config",
+        "@wrensecurity/eslint-config/react"
     ],
+    parser: "@babel/eslint-parser",
     parserOptions: {
         ecmaVersion: 6,
-        sourceType: "module",
-        ecmaFeatures: {
-            experimentalObjectRestSpread: true
-        }
+        sourceType: "module"
     },
     env: {
         amd: true,
-        browser: true
+        browser: true,
+        es6: true
+    },
+    settings: {
+        react: {
+            version: "15.2.1"
+        }
     },
     rules: {
         /*
@@ -41,10 +47,15 @@ module.exports = {
         "eol-last": 2,
         "guard-for-in": 2,
         "indent": [2, 4, {
+            "FunctionDeclaration": {
+                "parameters": 2
+            },
+            "FunctionExpression": {
+                "parameters": 2
+            },
             "SwitchCase": 1,
             "VariableDeclarator": 1
         }],
-        "keyword-spacing": 2,
         "max-len": [2, 120, 4, {
             "ignoreComments": true
         }],
@@ -55,19 +66,12 @@ module.exports = {
         "no-alert": 2,
         "no-bitwise": 2,
         "no-catch-shadow": 2,
-        "no-class-assign": 2,
         "no-confusing-arrow": 2,
-        "no-constant-condition": 2,
         "no-continue": 2,
-        "no-dupe-class-members": 2,
-        "no-duplicate-case": 2,
         "no-empty-character-class": 2,
         "no-empty-pattern": 2,
         "no-extend-native": 2,
         "no-implicit-globals": 2,
-        "no-invalid-regexp": 2,
-        "no-irregular-whitespace": 2,
-        "no-labels": 2,
         "no-lonely-if": 2,
         "no-mixed-spaces-and-tabs": 2,
         "no-multiple-empty-lines": 2,
@@ -77,7 +81,6 @@ module.exports = {
         "no-self-assign": 2,
         "no-trailing-spaces": 2,
         "no-unmodified-loop-condition": 2,
-        "no-unused-vars": 2,
         "no-useless-escape": 2,
         "no-void": 2,
         "no-whitespace-before-property": 2,
@@ -118,23 +121,10 @@ module.exports = {
          */
         "no-var": 1,
         "prefer-arrow-callback": 1,
-        "prefer-spread": 1,
+        "prefer-spread": 1
 
         // TODO: Need an abstraction for logging before we can enable this.
         //"no-console": 0
         //"no-param-reassign": 0
-
-        /**
-         * Disabled rules
-         */
-        "arrow-body-style": 0,
-        "sort-imports": 0,
-
-        /**
-         * Disabled because these rules aren't available in ESLint 2.0.
-         * TODO: Remove them from eslint-config-forgerock
-         */
-        "no-empty-label": 0,
-        "space-return-throw-case": 0
     }
 };

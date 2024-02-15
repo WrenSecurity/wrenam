@@ -87,17 +87,17 @@ define([
                     });
                 } else {
                     authenticationModules.create(self.data.realmPath, { _id: moduleName }, moduleType)
-                    .then(function () {
-                        Router.routeTo(Router.configuration.routes.realmsAuthenticationModuleEdit, {
-                            args: _.map([self.data.realmPath, moduleType, moduleName], encodeURIComponent),
-                            trigger: true
+                        .then(function () {
+                            Router.routeTo(Router.configuration.routes.realmsAuthenticationModuleEdit, {
+                                args: _.map([self.data.realmPath, moduleType, moduleName], encodeURIComponent),
+                                trigger: true
+                            });
+                        }, function (response) {
+                            Messages.addMessage({
+                                type: Messages.TYPE_DANGER,
+                                response
+                            });
                         });
-                    }, function (response) {
-                        Messages.addMessage({
-                            type: Messages.TYPE_DANGER,
-                            response
-                        });
-                    });
                 }
             }, function (response) {
                 Messages.addMessage({

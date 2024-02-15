@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions copyright 2024 Wren Security.
  */
 
 import { Grid, Panel, Row, Col } from "react-bootstrap";
@@ -46,13 +47,13 @@ class ListApiView extends Component {
         });
     }
     render () {
-        const groups = _.map(this.state.items, (item) =>
+        const groups = _.map(this.state.items, (item) => (
             <SideNavGroupItem
                 activeItem={ this.state.activeItem }
                 group={ item }
                 onItemClick={ this.handleSelectItem }
             />
-        );
+        ));
 
         return (
             <Grid className="api-section">

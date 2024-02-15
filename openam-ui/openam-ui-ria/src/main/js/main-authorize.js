@@ -134,7 +134,7 @@ require([
             });
 
             require(templatePaths, function (AuthorizeTemplate, LoginBaseTemplate, FooterTemplate,
-                                             LoginHeaderTemplate) {
+                    LoginHeaderTemplate) {
                 data.theme = theme;
                 baseTemplate = HandleBars.compile(LoginBaseTemplate);
                 formTemplate = HandleBars.compile(AuthorizeTemplate);

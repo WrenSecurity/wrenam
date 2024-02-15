@@ -35,11 +35,12 @@ define([
             injector
                 .mock("org/forgerock/openam/ui/user/services/SessionService", SessionService)
                 .require(
-                    ["org/forgerock/openam/ui/common/sessions/strategies/MaxIdleTimeLeftStrategy"]
-                , (subject) => {
-                    MaxIdleTimeLeftStrategy = subject;
-                    done();
-                });
+                    ["org/forgerock/openam/ui/common/sessions/strategies/MaxIdleTimeLeftStrategy"],
+                    (subject) => {
+                        MaxIdleTimeLeftStrategy = subject;
+                        done();
+                    }
+                );
         });
 
         it("returns a promise", () => {

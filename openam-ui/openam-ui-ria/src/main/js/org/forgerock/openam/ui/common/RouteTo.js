@@ -14,11 +14,11 @@
  * Copyright 2015-2016 ForgeRock AS.
  */
 
- /**
-  * Provides functions to navigate the application to commonly required routes.
-  *
-  * @module org/forgerock/openam/ui/common/RouteTo
-  */
+/**
+ * Provides functions to navigate the application to commonly required routes.
+ *
+ * @module org/forgerock/openam/ui/common/RouteTo
+ */
 define([
     "org/forgerock/openam/ui/common/util/Constants",
     "org/forgerock/commons/ui/common/main/EventManager",

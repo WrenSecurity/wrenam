@@ -30,7 +30,7 @@ define([
     "org/forgerock/openam/ui/admin/views/realms/authorization/policies/conditions/ConditionAttrDateView",
     "handlebars"
 ], function ($, _, AbstractView, UIUtils, PoliciesService, BooleanAttr, ArrayAttr, StringAttr, ObjectAttr, EnumAttr,
-             TimeAttr, DayAttr, DateAttr, Handlebars) {
+        TimeAttr, DayAttr, DateAttr, Handlebars) {
     return AbstractView.extend({
         template: "templates/admin/views/realms/authorization/policies/conditions/EditEnvironmentTemplate.html",
         events: {

@@ -45,7 +45,7 @@ define([
     "org/forgerock/openam/ui/common/models/schemaTransforms/transformEnumTypeToString",
     "org/forgerock/openam/ui/common/models/schemaTransforms/warnOnInferredPasswordWithoutFormat"
 ], (i18next, _, transformBooleanTypeToCheckboxFormat, transformEnumTypeToString,
-    warnOnInferredPasswordWithoutFormat) => {
+        warnOnInferredPasswordWithoutFormat) => {
     /**
      * Determines whether the specified object is of type <code>object</code>
      * @param   {Object}  object Object to determine the type of

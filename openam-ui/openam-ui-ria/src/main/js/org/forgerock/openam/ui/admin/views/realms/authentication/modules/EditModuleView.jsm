@@ -15,7 +15,7 @@
  */
 
 import $ from "jquery";
-import "bootstrap-tabdrop";  // jquery dependency
+import "bootstrap-tabdrop"; // jquery dependency
 
 import AbstractView from "org/forgerock/commons/ui/common/main/AbstractView";
 import AuthenticationService from "org/forgerock/openam/ui/admin/services/realm/AuthenticationService";

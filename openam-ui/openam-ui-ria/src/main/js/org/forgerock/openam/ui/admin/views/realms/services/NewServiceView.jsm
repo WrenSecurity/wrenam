@@ -98,17 +98,17 @@ class NewServiceView extends AbstractView {
     }
     onCreateClick () {
         ServicesService.instance.create(this.data.realmPath, this.data.type, this.jsonSchemaView.getData())
-        .then(() => {
-            Router.routeTo(Router.configuration.routes.realmsServiceEdit, {
-                args: _.map([this.data.realmPath, this.data.type], encodeURIComponent),
-                trigger: true
+            .then(() => {
+                Router.routeTo(Router.configuration.routes.realmsServiceEdit, {
+                    args: _.map([this.data.realmPath, this.data.type], encodeURIComponent),
+                    trigger: true
+                });
+            }, (response) => {
+                Messages.addMessage({
+                    response,
+                    type: Messages.TYPE_DANGER
+                });
             });
-        }, (response) => {
-            Messages.addMessage({
-                response,
-                type: Messages.TYPE_DANGER
-            });
-        });
     }
 }
 

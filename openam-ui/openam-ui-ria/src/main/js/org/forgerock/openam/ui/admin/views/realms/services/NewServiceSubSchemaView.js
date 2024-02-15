@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions copyright 2024 Wren Security.
  */
 
 define([
@@ -41,9 +42,11 @@ define([
             template: "templates/admin/views/common/schema/NewServiceSubSchemaTemplate.html",
 
             getInitialState: () => ServicesService.type.subSchema.instance.getInitialState(
-                    realmPath, serviceInstance, subSchemaType),
+                realmPath, serviceInstance, subSchemaType
+            ),
             createInstance: (values) => ServicesService.type.subSchema.instance.create(
-                    realmPath, serviceInstance, subSchemaType, values)
+                realmPath, serviceInstance, subSchemaType, values
+            )
         });
 
         this.parentRender(() => { this.$el.append(newSchemaComponent.render().$el); });

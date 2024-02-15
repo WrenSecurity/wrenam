@@ -31,7 +31,7 @@ define([
     "org/forgerock/openam/ui/user/login/logout",
     "org/forgerock/openam/ui/common/util/uri/query"
 ], ($, _, AbstractConfigurationAware, Configuration, ServiceInvoker, ViewManager, Constants, URIUtils,
-    fetchUrl, SessionToken, AuthNService, SessionService, UserModel, logout, query) => {
+        fetchUrl, SessionToken, AuthNService, SessionService, UserModel, logout, query) => {
     var obj = new AbstractConfigurationAware();
 
     obj.login = function (params, successCallback, errorCallback) {
