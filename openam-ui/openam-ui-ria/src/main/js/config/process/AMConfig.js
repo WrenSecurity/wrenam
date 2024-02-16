@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Portions copyright 2011-2016 ForgeRock AS.
+ * Portions copyright 2024 Wren Security.
  */
 
 define([
@@ -106,15 +107,6 @@ define([
         ],
         processDescription (event, RedirectToLegacyConsole) {
             RedirectToLegacyConsole.global.federation();
-        }
-    }, {
-        startEvent: Constants.EVENT_REDIRECT_TO_JATO_DATASTORE,
-        description: "",
-        dependencies: [
-            "org/forgerock/openam/ui/admin/utils/RedirectToLegacyConsole"
-        ],
-        processDescription (event, RedirectToLegacyConsole) {
-            RedirectToLegacyConsole.realm.dataStores(event);
         }
     }, {
         startEvent: Constants.EVENT_REDIRECT_TO_JATO_PRIVILEGES,

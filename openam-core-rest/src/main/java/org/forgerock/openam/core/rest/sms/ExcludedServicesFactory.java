@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015 ForgeRock AS.
+ * Portions copyright 2024 Wren Security.
  */
 
 package org.forgerock.openam.core.rest.sms;
@@ -65,6 +66,8 @@ public class ExcludedServicesFactory {
                     SmsServiceHandlerFunction.SAML2_METADATA_SERVICE,
                     SmsServiceHandlerFunction.WS_METADATA_SERVICE
             ));
+        } else if (type == SchemaType.ORGANIZATION) {
+            excludedServices.remove("sunIdentityRepositoryService");
         }
 
         return excludedServices;

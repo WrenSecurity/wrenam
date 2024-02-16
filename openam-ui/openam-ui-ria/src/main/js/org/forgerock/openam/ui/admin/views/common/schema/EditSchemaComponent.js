@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions copyright 2024 Wren Security.
  */
 
 /**
@@ -22,25 +23,23 @@ define([
     "lodash",
     "backbone",
     "org/forgerock/commons/ui/common/components/Messages",
-    "org/forgerock/commons/ui/common/main/AbstractView",
     "org/forgerock/commons/ui/common/main/EventManager",
     "org/forgerock/commons/ui/common/main/ReactAdapterView",
     "org/forgerock/commons/ui/common/main/Router",
     "org/forgerock/commons/ui/common/util/Constants",
     "org/forgerock/commons/ui/common/util/UIUtils",
-    "org/forgerock/openam/ui/admin/utils/FormHelper",
+    "org/forgerock/openam/ui/admin/utils/form/showConfirmationBeforeAction",
     "org/forgerock/openam/ui/admin/views/common/TabSearch",
     "org/forgerock/openam/ui/admin/views/common/schema/SubSchemaListComponent",
     "org/forgerock/openam/ui/admin/views/configuration/global/scripting/ScriptsList",
-    "org/forgerock/openam/ui/common/components/PanelComponent",
     "org/forgerock/openam/ui/common/components/PartialBasedView",
     "org/forgerock/openam/ui/common/components/TabComponent",
     "org/forgerock/openam/ui/common/models/JSONSchema",
     "org/forgerock/openam/ui/common/models/JSONValues",
     "org/forgerock/openam/ui/common/util/Promise",
     "org/forgerock/openam/ui/common/views/jsonSchema/FlatJSONSchemaView"
-], ($, _, Backbone, Messages, AbstractView, EventManager, ReactAdapterView, Router, Constants, UIUtils, FormHelper,
-        TabSearch, SubSchemaListComponent, ScriptsList, PanelComponent, PartialBasedView, TabComponent, JSONSchema,
+], ($, _, Backbone, Messages, EventManager, ReactAdapterView, Router, Constants, UIUtils, showConfirmationBeforeAction,
+        TabSearch, SubSchemaListComponent, ScriptsList, PartialBasedView, TabComponent, JSONSchema,
         JSONValues, Promise, FlatJSONSchemaView) => {
     ScriptsList = ScriptsList.default;
 
@@ -238,7 +237,7 @@ define([
         onDelete (e) {
             e.preventDefault();
 
-            FormHelper.showConfirmationBeforeDeleting({
+            showConfirmationBeforeAction.default({
                 message: $.t("console.common.confirmDeleteSelected")
             }, () => {
                 this.deleteInstance().then(() => {

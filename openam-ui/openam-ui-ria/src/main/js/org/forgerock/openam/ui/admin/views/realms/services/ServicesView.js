@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions copyright 2024 Wren Security.
  */
 
 define([
@@ -89,7 +90,7 @@ define([
             if (!_.isEmpty(creatables)) {
                 return;
             }
-            this.$el.find("[data-add-service]").addClass("disabled").popover({
+            this.$el.find("[data-add-service]").prop("disabled", true).popover({
                 trigger : "hover",
                 container : "body",
                 placement : "top",

@@ -27,6 +27,7 @@
    $Id: idRepoService.xml,v 1.37 2009/11/10 01:50:57 hengming Exp $
 
    Portions Copyrighted 2012-2016 ForgeRock AS.
+   Portions copyright 2024 Wren Security.
 -->
 <!DOCTYPE ServicesConfiguration
     PUBLIC "=//iplanet//Service Management Services (SMS) 1.0 DTD//EN"
@@ -38,8 +39,8 @@
         <Schema
             i18nFileName="amIdRepoService"
             revisionNumber="30"
-            i18nKey="">
-
+            i18nKey=""
+            resourceName="id-repos">
             <Global>
                 <AttributeSchema name="coexistenceMode"
                     type="single" syntax="string">
