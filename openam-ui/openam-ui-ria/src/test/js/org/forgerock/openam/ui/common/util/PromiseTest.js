@@ -48,97 +48,118 @@ define([
                 });
                 context("of 1 promise", () => {
                     let d;
-                    let p;
+                    let all;
                     let resolvedSpy;
                     let rejectedSpy;
 
                     beforeEach(() => {
                         d = $.Deferred();
-                        p = Promise.all([d.promise()]);
                         resolvedSpy = sinon.spy();
                         rejectedSpy = sinon.spy();
-                        p.then(resolvedSpy, rejectedSpy);
+                        all = Promise.all([d.promise()]).then(resolvedSpy, rejectedSpy);
                     });
                     it("returns a pending promise while the passed in promise is pending", () => {
                         expect(resolvedSpy).to.not.be.called;
                         expect(rejectedSpy).to.not.be.called;
                     });
-                    it("resolves the returned promise when the passed in promise is resolved", () => {
+                    it("resolves the returned promise when the passed in promise is resolved", async () => {
                         d.resolve();
+
+                        await all;
                         expect(resolvedSpy).to.be.called;
                         expect(rejectedSpy).to.not.be.called;
                     });
-                    it("rejects the returned promise when the passed in promise is rejected", () => {
-                        d.reject();
+                    it("rejects the returned promise when the passed in promise is rejected", async () => {
+                        d.reject(new Error());
+
+                        await all;
                         expect(resolvedSpy).to.not.be.called;
                         expect(rejectedSpy).to.be.called;
                     });
-                    it("resolves the promise with an array containing the value of the resolved promise", () => {
+                    it("resolves the promise with an array containing the value of the resolved promise", async () => {
                         d.resolve(1);
+
+                        await all;
                         expect(resolvedSpy).to.be.calledWith([1]);
                     });
-                    it("groups multiple resolved values into an array", () => {
+                    it("groups multiple resolved values into an array", async () => {
                         d.resolve(1, 2, 3);
+
+                        await all;
                         expect(resolvedSpy).to.be.calledWith([[1, 2, 3]]);
-                    });
-                    it("rejects the returned promise if the passed in promise is rejected", () => {
-                        d.reject();
-                        expect(resolvedSpy).to.not.be.called;
-                        expect(rejectedSpy).to.be.called;
                     });
                 });
                 context("of 2 promises", () => {
                     let d1;
                     let d2;
-                    let p;
+                    let all;
                     let resolvedSpy;
                     let rejectedSpy;
 
                     beforeEach(() => {
                         d1 = $.Deferred();
                         d2 = $.Deferred();
-                        p = Promise.all([d1.promise(), d2.promise()]);
                         resolvedSpy = sinon.spy();
                         rejectedSpy = sinon.spy();
-                        p.then(resolvedSpy, rejectedSpy);
+                        all = Promise.all([d1.promise(), d2.promise()]).then(resolvedSpy, rejectedSpy);
                     });
                     it("doesn't resolve the returned promise if neither of the promises are resolved", () => {
                         expect(resolvedSpy).to.not.be.called;
                         expect(rejectedSpy).to.not.be.called;
                     });
-                    it("doesn't resolve the returned promise if only the first promise is resolved", () => {
+                    // eslint-disable-next-line max-len
+                    it("doesn't resolve the returned promise if only the first promise is resolved", (done) => {
                         d1.resolve();
-                        expect(resolvedSpy).to.not.be.called;
-                        expect(rejectedSpy).to.not.be.called;
+
+                        setTimeout(() => {
+                            expect(resolvedSpy).to.not.be.called;
+                            expect(rejectedSpy).to.not.be.called;
+                            done();
+                        }, 1);
                     });
-                    it("doesn't resolve the returned promise if only the second promise is resolved", () => {
+                    // eslint-disable-next-line max-len
+                    it("doesn't resolve the returned promise if only the second promise is resolved", (done) => {
                         d2.resolve();
-                        expect(resolvedSpy).to.not.be.called;
-                        expect(rejectedSpy).to.not.be.called;
+
+                        setTimeout(() => {
+                            expect(resolvedSpy).to.not.be.called;
+                            expect(rejectedSpy).to.not.be.called;
+                            done();
+                        }, 1);
                     });
-                    it("resolves the returned promise when both of the promises are resolved", () => {
+                    it("resolves the returned promise when both of the promises are resolved", async () => {
                         d1.resolve();
                         d2.resolve();
+
+                        await all;
                         expect(resolvedSpy).to.be.called;
                         expect(rejectedSpy).to.not.be.called;
                     });
-                    it("resolves the promise with an array containing the value of the resolved promise", () => {
+                    it("resolves the promise with an array containing the value of the resolved promise", async () => {
                         d1.resolve(1);
                         d2.resolve(2);
+
+                        await all;
                         expect(resolvedSpy).to.be.calledWith([1, 2]);
                     });
-                    it("groups multiple resolved values into an array", () => {
+                    it("groups multiple resolved values into an array", async () => {
                         d1.resolve(1, 2, 3);
                         d2.resolve(4);
+
+                        await all;
                         expect(resolvedSpy).to.be.calledWith([[1, 2, 3], 4]);
                     });
-                    it("rejects the returned promise if the first promise is rejected", () => {
+                    it("rejects the returned promise if the first promise is rejected", async () => {
                         d1.reject();
+
+                        await all;
                         expect(resolvedSpy).to.not.be.called;
                         expect(rejectedSpy).to.be.called;
                     });
-                    it("rejects the returned promise if the second promise is rejected", () => {
+                    it("rejects the returned promise if the second promise is rejected", async () => {
                         d2.reject();
+
+                        await all;
                         expect(resolvedSpy).to.not.be.called;
                         expect(rejectedSpy).to.be.called;
                     });
