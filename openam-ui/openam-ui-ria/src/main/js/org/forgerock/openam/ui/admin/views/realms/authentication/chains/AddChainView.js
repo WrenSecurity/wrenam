@@ -26,7 +26,7 @@ define([
             nameExists,
             isValid;
 
-        nameExists = _.findWhere(this.data.chainsData, { _id:name });
+        nameExists = _.find(this.data.chainsData, { _id:name });
         if (nameExists) {
             Messages.addMessage({
                 type: Messages.TYPE_DANGER,

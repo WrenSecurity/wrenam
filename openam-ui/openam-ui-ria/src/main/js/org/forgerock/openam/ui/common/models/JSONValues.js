@@ -42,7 +42,7 @@ define([
 ], (_) => {
     function groupTopLevelSimpleValues (raw) {
         const collectionProperties = _(raw)
-            .pick((property) => _.isObject(property) && !_.isArray(property))
+            .pickBy((property) => _.isObject(property) && !_.isArray(property))
             .keys()
             .value();
 
@@ -69,7 +69,7 @@ define([
      * @returns {JSONValues} JSONValues object with new value set
      */
     function ungroupCollectionProperties (raw, groupKey) {
-        const collectionProperties = _.pick(raw[groupKey], (value) => {
+        const collectionProperties = _.pickBy(raw[groupKey], (value) => {
             return _.isObject(value) && !_.isArray(value);
         });
 
@@ -151,10 +151,14 @@ define([
             return keys;
         }
         omit (predicate) {
-            return new JSONValues(_.omit(this.raw, predicate));
+            return new JSONValues(
+                typeof predicate === "function" ? _.omitBy(this.raw, predicate) : _.omit(this.raw, predicate)
+            );
         }
         pick (predicate) {
-            return new JSONValues(_.pick(this.raw, predicate));
+            return new JSONValues(
+                typeof predicate === "function" ? _.pickBy(this.raw, predicate) : _.pick(this.raw, predicate)
+            );
         }
         removeInheritance () {
             return new JSONValues(_.mapValues(this.raw, "value"));

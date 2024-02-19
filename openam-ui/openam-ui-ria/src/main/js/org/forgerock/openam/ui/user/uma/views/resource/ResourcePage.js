@@ -154,7 +154,7 @@ define([
             starButton.attr("disabled", true);
 
             self.model.save().always(function () {
-                var isStarred = _.contains(self.model.get("labels"), starredLabelId);
+                var isStarred = _.includes(self.model.get("labels"), starredLabelId);
                 starButton.attr("disabled", false);
                 starIcon.removeClass("fa-refresh fa-spin");
                 starIcon.addClass(isStarred ? "fa-star" : "fa-star-o");
@@ -191,7 +191,7 @@ define([
                     .map(_.partial(getLabelForId, this.allLabels))
                     .filter(isUserLabel)
                     .sortBy("name")
-                    .pluck("name")
+                    .map("name")
                     .value();
             labelsSelectize.clearOptions();
             labelsSelectize.addOption(userLabels);
@@ -376,7 +376,7 @@ define([
                     });
 
                     var starredLabel = _.find(this.allLabels, { type: "STAR" }),
-                        isStarred = _.contains(this.model.get("labels"), starredLabel._id);
+                        isStarred = _.includes(this.model.get("labels"), starredLabel._id);
 
                     if (isStarred) {
                         self.$el.find("#starred i").toggleClass("fa-star-o fa-star");
@@ -423,17 +423,17 @@ define([
                 labelsSelectize = this.getLabelSelectize(),
                 selectedUserLabelNames = labelsSelectize.getValue(),
                 userLabels = _.filter(this.allLabels, isUserLabel),
-                userLabelNames = _.pluck(userLabels, "name"),
+                userLabelNames = _.map(userLabels, "name"),
                 newUserLabelNames = _.difference(selectedUserLabelNames, userLabelNames),
                 existingUserLabelNames = _.intersection(selectedUserLabelNames, userLabelNames),
                 existingUserLabelIds = _(existingUserLabelNames)
                     .map(_.partial(getLabelForName, userLabels))
-                    .pluck("_id")
+                    .map("_id")
                     .value(),
                 existingNonUserLabelIds = _(self.model.get("labels"))
                     .map(_.partial(getLabelForId, this.allLabels))
                     .reject(isUserLabel)
-                    .pluck("_id")
+                    .map("_id")
                     .value(),
                 existingLabelIds = existingUserLabelIds.concat(existingNonUserLabelIds);
 

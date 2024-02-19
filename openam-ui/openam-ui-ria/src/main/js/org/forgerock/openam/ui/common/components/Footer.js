@@ -21,7 +21,7 @@ define([
     "org/forgerock/openam/ui/common/services/ServerService"
 ], function (_, Configuration, Footer, ServerService) {
     function isAdmin () {
-        return Configuration.loggedUser && _.contains(Configuration.loggedUser.uiroles, "ui-realm-admin");
+        return Configuration.loggedUser && _.includes(Configuration.loggedUser.uiroles, "ui-realm-admin");
     }
 
     var Component = Footer.extend({

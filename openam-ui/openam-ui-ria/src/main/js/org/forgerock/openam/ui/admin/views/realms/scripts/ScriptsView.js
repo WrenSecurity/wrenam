@@ -206,7 +206,7 @@ define([
 
         onRowSelect (model, selected) {
             if (selected) {
-                if (!_.contains(this.data.selectedUUIDs, model.id)) {
+                if (!_.includes(this.data.selectedUUIDs, model.id)) {
                     this.data.selectedUUIDs.push(model.id);
                 }
             } else {

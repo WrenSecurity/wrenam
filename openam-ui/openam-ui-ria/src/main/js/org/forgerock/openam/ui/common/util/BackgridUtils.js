@@ -303,7 +303,7 @@ define([
         }
 
         _.forIn(options.data, function (val, key) {
-            if (_.include(includeList, key)) {
+            if (_.includes(includeList, key)) {
                 params.push(`${key}=${val}`);
             }
         });

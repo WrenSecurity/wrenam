@@ -132,7 +132,7 @@ define([
                 ["login", "passwordReset", "continuePasswordReset", "register", "continueRegister"],
             subRealm;
 
-        if (page && _.include(subRealmSpecifiablePages, page)) {
+        if (page && _.includes(subRealmSpecifiablePages, page)) {
             subRealm = subRealmSplit.join("/").split("&")[0];
             subRealm = subRealm.slice(-1) === "/" ? subRealm.slice(0, -1) : subRealm;
         } else if (Configuration.globalData.auth.subRealm) {

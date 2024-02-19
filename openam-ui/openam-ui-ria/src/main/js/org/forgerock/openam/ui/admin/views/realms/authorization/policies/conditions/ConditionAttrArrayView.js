@@ -99,7 +99,7 @@ define([
                                     view.data.itemData.enforcementTimeZone = value ? value : view.DEFAULT_TIME_ZONE;
                                 }
                             });
-                        } else if (_.contains(view.IDENTITY_TYPES, type)) {
+                        } else if (_.includes(view.IDENTITY_TYPES, type)) {
                             _.extend(options, {
                                 placeholder: $.t(view.IDENTITY_PLACEHOLDER),
                                 sortField: "value",

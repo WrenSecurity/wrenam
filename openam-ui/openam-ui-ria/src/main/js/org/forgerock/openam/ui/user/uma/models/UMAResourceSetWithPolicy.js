@@ -65,7 +65,7 @@ define([
             parse: true
         }],
         toggleStarred (starredLabelId) {
-            var isStarred = _.contains(this.get("labels"), starredLabelId);
+            var isStarred = _.includes(this.get("labels"), starredLabelId);
 
             if (isStarred) {
                 this.set("labels", _.reject(this.get("labels"), function (label) {

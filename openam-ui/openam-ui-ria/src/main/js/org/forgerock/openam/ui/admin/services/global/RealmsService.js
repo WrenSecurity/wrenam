@@ -59,8 +59,9 @@ define([
                 url: fetchUrl.default("/global-config/realms?_queryFilter=true", { realm: false }),
                 headers: { "Accept-API-Version": "protocol=1.0,resource=1.0" }
             }).done((data) => {
-                data.result = _(data.result).each((realm) => {
+                data.result = _(data.result).map((realm) => {
                     realm.path = getRealmPath(realm);
+                    return realm;
                 }).sortBy("path").value();
             });
         },

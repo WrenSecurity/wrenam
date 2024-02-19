@@ -27,9 +27,7 @@ require.config({
             "NavigationFilter"  : "org/forgerock/openam/ui/common/components/navigation/filters/RouteNavGroupFilter",
             "Router"            : "org/forgerock/commons/ui/common/main/Router",
             "RegisterView"      : "org/forgerock/openam/ui/user/anonymousProcess/SelfRegistrationView",
-            "KBADelegate"       : "org/forgerock/openam/ui/user/services/KBADelegate",
-            // TODO: Remove this when there are no longer any references to the "underscore" dependency
-            "underscore"        : "lodash"
+            "KBADelegate"       : "org/forgerock/openam/ui/user/services/KBADelegate"
         }
     },
     paths: {
@@ -74,6 +72,7 @@ require.config({
         "sortable"         : "libs/jquery-nestingSortable",
         "spin"             : "libs/spin",
         "text"             : "libs/text",
+        "underscore"       : "libs/underscore",
         "xdate"            : "libs/xdate"
     },
     shim: {
@@ -82,7 +81,7 @@ require.config({
             exports: "autosizeInput"
         },
         "backbone": {
-            deps: ["lodash"],
+            deps: ["underscore"],
             exports: "Backbone"
         },
         "backbone.paginator": {
@@ -93,7 +92,7 @@ require.config({
         },
 
         "backgrid": {
-            deps: ["jquery", "lodash", "backbone"],
+            deps: ["jquery", "underscore", "backbone"],
             exports: "Backgrid"
         },
         "backgrid-filter": {
@@ -110,7 +109,7 @@ require.config({
             deps: ["jquery"]
         },
         "bootstrap-dialog": {
-            deps: ["jquery", "lodash", "backbone", "bootstrap"]
+            deps: ["jquery", "underscore", "backbone", "bootstrap"]
         },
         "bootstrap-tabdrop": {
             deps: ["jquery", "bootstrap"]

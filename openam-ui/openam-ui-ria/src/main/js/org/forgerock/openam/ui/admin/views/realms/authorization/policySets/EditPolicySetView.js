@@ -126,7 +126,7 @@ define([
 
                     options.allResourceTypes = resourceTypes;
                     options.availableResourceTypes = _.filter(resourceTypes, function (item) {
-                        return !_.contains(self.data.entity.resourceTypeUuids, item.uuid);
+                        return !_.includes(self.data.entity.resourceTypeUuids, item.uuid);
                     });
 
                     options.selectedResourceTypes = _.findByValues(options.allResourceTypes, "uuid",

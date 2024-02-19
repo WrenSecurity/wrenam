@@ -169,7 +169,7 @@ define([
              * @returns {Boolean}      Whether this model has any of the roles specified
              */
             hasRole (roles) {
-                return _.spread(_.partial(_.contains, this.uiroles))(arrayify(roles));
+                return _.spread(_.partial(_.includes, this.uiroles))(arrayify(roles));
             }
         });
     return new UserModel();

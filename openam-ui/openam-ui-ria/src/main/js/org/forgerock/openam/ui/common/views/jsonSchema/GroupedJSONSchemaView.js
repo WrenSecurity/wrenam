@@ -92,15 +92,14 @@ define([
                 orderedSchemaValuePairs = _(orderedSchemaValuePairs)
                     .map(setDefaultPropertiesToRequiredAndEmpty)
                     .map(showEnablePropertyIfAllPropertiesHidden)
-                    .omit(emptyProperties)
+                    .omitBy(emptyProperties)
                     .value();
             }
 
             this.subviews = _(orderedSchemaValuePairs)
                 .map(createJSONEditorView)
-                .invoke("render")
-                .each((view) => { view.$el.appendTo(this.$el); })
-                .value();
+                .invokeMap("render")
+                .each((view) => { view.$el.appendTo(this.$el); });
 
             invokeOnRenderedAfterTimeout(this.options.onRendered);
 

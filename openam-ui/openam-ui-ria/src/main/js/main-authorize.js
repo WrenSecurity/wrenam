@@ -26,9 +26,7 @@ require.config({
     map: {
         "*" : {
             "ThemeManager" : "org/forgerock/openam/ui/common/util/ThemeManager",
-            "Router": "org/forgerock/openam/ui/common/SingleRouteRouter",
-            // TODO: Remove this when there are no longer any references to the "underscore" dependency
-            "underscore"   : "lodash"
+            "Router": "org/forgerock/openam/ui/common/SingleRouteRouter"
         }
     },
     paths: {
@@ -37,7 +35,8 @@ require.config({
         "jquery": "libs/jquery",
         "lodash": "libs/lodash",
         "redux": "libs/redux",
-        "text": "libs/text"
+        "text": "libs/text",
+        "underscore": "libs/underscore"
     },
     shim: {
         "handlebars": {

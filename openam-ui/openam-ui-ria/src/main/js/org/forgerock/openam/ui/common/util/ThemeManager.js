@@ -105,7 +105,7 @@ define([
         },
 
         makeUrlsRelativeToEntryPoint = function (theme) {
-            theme = _.clone(theme, true);
+            theme = _.cloneDeep(theme);
             if (theme.settings) {
                 if (theme.settings.logo) {
                     theme.settings.logo.src = require.toUrl(theme.settings.logo.src);
@@ -118,7 +118,7 @@ define([
         },
 
         extendTheme = function (theme, parentTheme) {
-            return _.merge({}, parentTheme, theme, function (objectValue, sourceValue) {
+            return _.mergeWith({}, parentTheme, theme, function (objectValue, sourceValue) {
                 // We don't want to merge arrays. If a theme has specified an array, it should be used verbatim.
                 if (_.isArray(sourceValue)) {
                     return sourceValue;

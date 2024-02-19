@@ -23,12 +23,6 @@
     require.config({
         baseUrl: "/base/target/www",
 
-        map: {
-            "*": {
-                // TODO: Remove this when there are no longer any references to the "underscore" dependency
-                "underscore": "lodash"
-            }
-        },
         paths: {
             "backbone": "/base/target/ui-compose/libs/backbone",
             "handlebars": "/base/target/ui-compose/libs/handlebars",
@@ -36,6 +30,7 @@
             "lodash": "/base/target/ui-compose/libs/lodash",
             "moment": "/base/target/ui-compose/libs/moment",
             "i18next": "/base/target/ui-compose/libs/i18next",
+            "underscore" : "/base/target/ui-compose/libs/underscore",
             "redux": "/base/target/www/libs/redux",
             "chai": "/base/node_modules/chai/chai",
             "sinon-chai": "/base/node_modules/sinon-chai/lib/sinon-chai",
