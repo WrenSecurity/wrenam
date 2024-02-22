@@ -6,9 +6,13 @@
     "": {
       "name": "@wrensecurity/wrenam-ui-ria",
       "dependencies": {
+        "@codemirror/lang-javascript": "^6.2.2",
+        "@codemirror/language": "^6.10.1",
+        "@codemirror/legacy-modes": "^6.3.3",
+        "@codemirror/state": "^6.4.1",
         "backbone.paginator": "^2.0.2",
         "classnames": "2.2.5",
-        "codemirror": "4.10",
+        "codemirror": "^6.0.1",
         "handlebars": "3.0.3",
         "json-editor": "0.7.9",
         "microplugin": "0.0.3",
@@ -26,7 +30,6 @@
         "@wrensecurity/commons-ui-build": "file:target/ui-libs/wrensecurity-commons-ui-build-0.0.0.tgz",
         "@wrensecurity/eslint-config": "^0.3.0",
         "chai": "3.5.0",
-        "eslint-formatter-warning-summary": "1.0.1",
         "gulp": "^4.0.2",
         "gulp-replace": "^1.1.4",
         "jsdoc": "3.4.3",
@@ -1842,6 +1845,104 @@
         "node": ">=6.9.0"
       }
     },
+    "node_modules/@codemirror/autocomplete": {
+      "version": "6.12.0",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/@codemirror/autocomplete/-/autocomplete-6.12.0.tgz",
+      "integrity": "sha512-r4IjdYFthwbCQyvqnSlx0WBHRHi8nBvU+WjJxFUij81qsBfhNudf/XKKmmC2j3m0LaOYUQTf3qiEK1J8lO1sdg==",
+      "dependencies": {
+        "@codemirror/language": "^6.0.0",
+        "@codemirror/state": "^6.0.0",
+        "@codemirror/view": "^6.17.0",
+        "@lezer/common": "^1.0.0"
+      },
+      "peerDependencies": {
+        "@codemirror/language": "^6.0.0",
+        "@codemirror/state": "^6.0.0",
+        "@codemirror/view": "^6.0.0",
+        "@lezer/common": "^1.0.0"
+      }
+    },
+    "node_modules/@codemirror/commands": {
+      "version": "6.3.3",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/@codemirror/commands/-/commands-6.3.3.tgz",
+      "integrity": "sha512-dO4hcF0fGT9tu1Pj1D2PvGvxjeGkbC6RGcZw6Qs74TH+Ed1gw98jmUgd2axWvIZEqTeTuFrg1lEB1KV6cK9h1A==",
+      "dependencies": {
+        "@codemirror/language": "^6.0.0",
+        "@codemirror/state": "^6.4.0",
+        "@codemirror/view": "^6.0.0",
+        "@lezer/common": "^1.1.0"
+      }
+    },
+    "node_modules/@codemirror/lang-javascript": {
+      "version": "6.2.2",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/@codemirror/lang-javascript/-/lang-javascript-6.2.2.tgz",
+      "integrity": "sha512-VGQfY+FCc285AhWuwjYxQyUQcYurWlxdKYT4bqwr3Twnd5wP5WSeu52t4tvvuWmljT4EmgEgZCqSieokhtY8hg==",
+      "dependencies": {
+        "@codemirror/autocomplete": "^6.0.0",
+        "@codemirror/language": "^6.6.0",
+        "@codemirror/lint": "^6.0.0",
+        "@codemirror/state": "^6.0.0",
+        "@codemirror/view": "^6.17.0",
+        "@lezer/common": "^1.0.0",
+        "@lezer/javascript": "^1.0.0"
+      }
+    },
+    "node_modules/@codemirror/language": {
+      "version": "6.10.1",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/@codemirror/language/-/language-6.10.1.tgz",
+      "integrity": "sha512-5GrXzrhq6k+gL5fjkAwt90nYDmjlzTIJV8THnxNFtNKWotMIlzzN+CpqxqwXOECnUdOndmSeWntVrVcv5axWRQ==",
+      "dependencies": {
+        "@codemirror/state": "^6.0.0",
+        "@codemirror/view": "^6.23.0",
+        "@lezer/common": "^1.1.0",
+        "@lezer/highlight": "^1.0.0",
+        "@lezer/lr": "^1.0.0",
+        "style-mod": "^4.0.0"
+      }
+    },
+    "node_modules/@codemirror/legacy-modes": {
+      "version": "6.3.3",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/@codemirror/legacy-modes/-/legacy-modes-6.3.3.tgz",
+      "integrity": "sha512-X0Z48odJ0KIoh/HY8Ltz75/4tDYc9msQf1E/2trlxFaFFhgjpVHjZ/BCXe1Lk7s4Gd67LL/CeEEHNI+xHOiESg==",
+      "dependencies": {
+        "@codemirror/language": "^6.0.0"
+      }
+    },
+    "node_modules/@codemirror/lint": {
+      "version": "6.5.0",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/@codemirror/lint/-/lint-6.5.0.tgz",
+      "integrity": "sha512-+5YyicIaaAZKU8K43IQi8TBy6mF6giGeWAH7N96Z5LC30Wm5JMjqxOYIE9mxwMG1NbhT2mA3l9hA4uuKUM3E5g==",
+      "dependencies": {
+        "@codemirror/state": "^6.0.0",
+        "@codemirror/view": "^6.0.0",
+        "crelt": "^1.0.5"
+      }
+    },
+    "node_modules/@codemirror/search": {
+      "version": "6.5.6",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/@codemirror/search/-/search-6.5.6.tgz",
+      "integrity": "sha512-rpMgcsh7o0GuCDUXKPvww+muLA1pDJaFrpq/CCHtpQJYz8xopu4D1hPcKRoDD0YlF8gZaqTNIRa4VRBWyhyy7Q==",
+      "dependencies": {
+        "@codemirror/state": "^6.0.0",
+        "@codemirror/view": "^6.0.0",
+        "crelt": "^1.0.5"
+      }
+    },
+    "node_modules/@codemirror/state": {
+      "version": "6.4.1",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/@codemirror/state/-/state-6.4.1.tgz",
+      "integrity": "sha512-QkEyUiLhsJoZkbumGZlswmAhA7CBU02Wrz7zvH4SrcifbsqwlXShVXg65f3v/ts57W3dqyamEriMhij1Z3Zz4A=="
+    },
+    "node_modules/@codemirror/view": {
+      "version": "6.24.1",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/@codemirror/view/-/view-6.24.1.tgz",
+      "integrity": "sha512-sBfP4rniPBRQzNakwuQEqjEuiJDWJyF2kqLLqij4WXRoVwPPJfjx966Eq3F7+OPQxDtMt/Q9MWLoZLWjeveBlg==",
+      "dependencies": {
+        "@codemirror/state": "^6.4.0",
+        "style-mod": "^4.1.0",
+        "w3c-keyname": "^2.2.4"
+      }
+    },
     "node_modules/@colors/colors": {
       "version": "1.5.0",
       "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/@colors/colors/-/colors-1.5.0.tgz",
@@ -2122,6 +2223,37 @@
       "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/lodash/-/lodash-4.17.21.tgz",
       "integrity": "sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==",
       "dev": true
+    },
+    "node_modules/@lezer/common": {
+      "version": "1.2.1",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/@lezer/common/-/common-1.2.1.tgz",
+      "integrity": "sha512-yemX0ZD2xS/73llMZIK6KplkjIjf2EvAHcinDi/TfJ9hS25G0388+ClHt6/3but0oOxinTcQHJLDXh6w1crzFQ=="
+    },
+    "node_modules/@lezer/highlight": {
+      "version": "1.2.0",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/@lezer/highlight/-/highlight-1.2.0.tgz",
+      "integrity": "sha512-WrS5Mw51sGrpqjlh3d4/fOwpEV2Hd3YOkp9DBt4k8XZQcoTHZFB7sx030A6OcahF4J1nDQAa3jXlTVVYH50IFA==",
+      "dependencies": {
+        "@lezer/common": "^1.0.0"
+      }
+    },
+    "node_modules/@lezer/javascript": {
+      "version": "1.4.13",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/@lezer/javascript/-/javascript-1.4.13.tgz",
+      "integrity": "sha512-5IBr8LIO3xJdJH1e9aj/ZNLE4LSbdsx25wFmGRAZsj2zSmwAYjx26JyU/BYOCpRQlu1jcv1z3vy4NB9+UkfRow==",
+      "dependencies": {
+        "@lezer/common": "^1.2.0",
+        "@lezer/highlight": "^1.1.3",
+        "@lezer/lr": "^1.3.0"
+      }
+    },
+    "node_modules/@lezer/lr": {
+      "version": "1.4.0",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/@lezer/lr/-/lr-1.4.0.tgz",
+      "integrity": "sha512-Wst46p51km8gH0ZUmeNrtpRYmdlRHUpN1DQd3GFAyKANi8WVz8c2jHYTf1CVScFaCjQw1iO3ZZdqGDxQPRErTg==",
+      "dependencies": {
+        "@lezer/common": "^1.0.0"
+      }
     },
     "node_modules/@nicolo-ribaudo/eslint-scope-5-internals": {
       "version": "5.1.1-v1",
@@ -2643,7 +2775,7 @@
     "node_modules/@wrensecurity/commons-ui-build": {
       "version": "0.0.0",
       "resolved": "file:target/ui-libs/wrensecurity-commons-ui-build-0.0.0.tgz",
-      "integrity": "sha512-HDottmilySlwBXvPTpgWJya9a5aP1u311v4YDJ/sIg51U7QgS6C0zWhCj2nHJ9WmPlgWha1dhLXJJjxaULVsVw==",
+      "integrity": "sha512-aUCK1kKuflzv6vDwgeANE+sdEi1DoWeLQPVX2drnGAxd8dbQkLXITSnYNdqh9D/hlkFNUKU7takFVVfVnEmyzA==",
       "dev": true,
       "dependencies": {
         "@babel/core": "^7.23.3",
@@ -4102,9 +4234,18 @@
       }
     },
     "node_modules/codemirror": {
-      "version": "4.10.0",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/codemirror/-/codemirror-4.10.0.tgz",
-      "integrity": "sha512-VYlZQk7BRRDmnDz9Lbq1rcSVBx1pNYj1eVdCJgeLqrkXnr/hpAKnI1BZFOM8FEkyv8Qoka9x+6pwF4zjKTJumw=="
+      "version": "6.0.1",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/codemirror/-/codemirror-6.0.1.tgz",
+      "integrity": "sha512-J8j+nZ+CdWmIeFIGXEFbFPtpiYacFMDR8GlHK3IyHQJMCaVRfGx9NT+Hxivv1ckLWPvNdZqndbr/7lVhrf/Svg==",
+      "dependencies": {
+        "@codemirror/autocomplete": "^6.0.0",
+        "@codemirror/commands": "^6.0.0",
+        "@codemirror/language": "^6.0.0",
+        "@codemirror/lint": "^6.0.0",
+        "@codemirror/search": "^6.0.0",
+        "@codemirror/state": "^6.0.0",
+        "@codemirror/view": "^6.0.0"
+      }
     },
     "node_modules/collection-map": {
       "version": "1.0.0",
@@ -4368,6 +4509,11 @@
         "loose-envify": "^1.3.1",
         "object-assign": "^4.1.1"
       }
+    },
+    "node_modules/crelt": {
+      "version": "1.0.6",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/crelt/-/crelt-1.0.6.tgz",
+      "integrity": "sha512-VQ2MBenTq1fWZUH9DJNGti7kKv6EeAuYr3cLwxUWhIu1baTaXh4Ib5W2CqHVqib4/MqbYGJqiL3Zb8GJZr3l4g=="
     },
     "node_modules/cross-fetch": {
       "version": "3.1.5",
@@ -5109,72 +5255,6 @@
       },
       "engines": {
         "node": "^12.22.0 || ^14.17.0 || >=16.0.0"
-      }
-    },
-    "node_modules/eslint-formatter-warning-summary": {
-      "version": "1.0.1",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/eslint-formatter-warning-summary/-/eslint-formatter-warning-summary-1.0.1.tgz",
-      "integrity": "sha512-It9E09tL46m+razTxoZnzItO7Ir5Dem1PCr+AIaThuDKI4GdyIY1pO5mDjE6t5xivuzRlA71/eOO4hGNrN7ktw==",
-      "deprecated": "this package has been deprecated",
-      "dev": true,
-      "dependencies": {
-        "chalk": "^1.1.1",
-        "text-table": "^0.2.0"
-      }
-    },
-    "node_modules/eslint-formatter-warning-summary/node_modules/ansi-regex": {
-      "version": "2.1.1",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/ansi-regex/-/ansi-regex-2.1.1.tgz",
-      "integrity": "sha512-TIGnTpdo+E3+pCyAluZvtED5p5wCqLdezCyhPZzKPcxvFplEt4i+W7OONCKgeZFT3+y5NZZfOOS/Bdcanm1MYA==",
-      "dev": true,
-      "engines": {
-        "node": ">=0.10.0"
-      }
-    },
-    "node_modules/eslint-formatter-warning-summary/node_modules/ansi-styles": {
-      "version": "2.2.1",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/ansi-styles/-/ansi-styles-2.2.1.tgz",
-      "integrity": "sha512-kmCevFghRiWM7HB5zTPULl4r9bVFSWjz62MhqizDGUrq2NWuNMQyuv4tHHoKJHs69M/MF64lEcHdYIocrdWQYA==",
-      "dev": true,
-      "engines": {
-        "node": ">=0.10.0"
-      }
-    },
-    "node_modules/eslint-formatter-warning-summary/node_modules/chalk": {
-      "version": "1.1.3",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/chalk/-/chalk-1.1.3.tgz",
-      "integrity": "sha512-U3lRVLMSlsCfjqYPbLyVv11M9CPW4I728d6TCKMAOJueEeB9/8o+eSsMnxPJD+Q+K909sdESg7C+tIkoH6on1A==",
-      "dev": true,
-      "dependencies": {
-        "ansi-styles": "^2.2.1",
-        "escape-string-regexp": "^1.0.2",
-        "has-ansi": "^2.0.0",
-        "strip-ansi": "^3.0.0",
-        "supports-color": "^2.0.0"
-      },
-      "engines": {
-        "node": ">=0.10.0"
-      }
-    },
-    "node_modules/eslint-formatter-warning-summary/node_modules/strip-ansi": {
-      "version": "3.0.1",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/strip-ansi/-/strip-ansi-3.0.1.tgz",
-      "integrity": "sha512-VhumSSbBqDTP8p2ZLKj40UjBCV4+v8bUSEpUb4KjRgWk9pbqGF4REFj6KEagidb2f/M6AzC0EmFyDNGaw9OCzg==",
-      "dev": true,
-      "dependencies": {
-        "ansi-regex": "^2.0.0"
-      },
-      "engines": {
-        "node": ">=0.10.0"
-      }
-    },
-    "node_modules/eslint-formatter-warning-summary/node_modules/supports-color": {
-      "version": "2.0.0",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/supports-color/-/supports-color-2.0.0.tgz",
-      "integrity": "sha512-KKNVtd6pCYgPIKU4cp2733HWYCpplQhddZLBUryaAHou723x+FRzQ5Df824Fj+IyyuiQTRoub4SnIFfIcrp70g==",
-      "dev": true,
-      "engines": {
-        "node": ">=0.8.0"
       }
     },
     "node_modules/eslint-plugin-react": {
@@ -12416,6 +12496,11 @@
         "node": ">=8"
       }
     },
+    "node_modules/style-mod": {
+      "version": "4.1.0",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/style-mod/-/style-mod-4.1.0.tgz",
+      "integrity": "sha512-Ca5ib8HrFn+f+0n4N4ScTIA9iTOQ7MaGS1ylHcoVqW9J7w2w8PzN6g9gKmTYgGEBH8e120+RCmhpje6jC5uGWA=="
+    },
     "node_modules/supports-color": {
       "version": "5.5.0",
       "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/supports-color/-/supports-color-5.5.0.tgz",
@@ -13621,6 +13706,11 @@
       "engines": {
         "node": ">=0.10.0"
       }
+    },
+    "node_modules/w3c-keyname": {
+      "version": "2.2.8",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/w3c-keyname/-/w3c-keyname-2.2.8.tgz",
+      "integrity": "sha512-dpojBhNsCNN7T82Tm7k26A6G9ML3NkhDsnw9n/eoxSRlVBB4CEtIQ/KTCLI2Fwf3ataSXRhYFkQi3SlnFwPvPQ=="
     },
     "node_modules/warning": {
       "version": "3.0.0",
@@ -15183,6 +15273,98 @@
         "to-fast-properties": "^2.0.0"
       }
     },
+    "@codemirror/autocomplete": {
+      "version": "6.12.0",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/@codemirror/autocomplete/-/autocomplete-6.12.0.tgz",
+      "integrity": "sha512-r4IjdYFthwbCQyvqnSlx0WBHRHi8nBvU+WjJxFUij81qsBfhNudf/XKKmmC2j3m0LaOYUQTf3qiEK1J8lO1sdg==",
+      "requires": {
+        "@codemirror/language": "^6.0.0",
+        "@codemirror/state": "^6.0.0",
+        "@codemirror/view": "^6.17.0",
+        "@lezer/common": "^1.0.0"
+      }
+    },
+    "@codemirror/commands": {
+      "version": "6.3.3",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/@codemirror/commands/-/commands-6.3.3.tgz",
+      "integrity": "sha512-dO4hcF0fGT9tu1Pj1D2PvGvxjeGkbC6RGcZw6Qs74TH+Ed1gw98jmUgd2axWvIZEqTeTuFrg1lEB1KV6cK9h1A==",
+      "requires": {
+        "@codemirror/language": "^6.0.0",
+        "@codemirror/state": "^6.4.0",
+        "@codemirror/view": "^6.0.0",
+        "@lezer/common": "^1.1.0"
+      }
+    },
+    "@codemirror/lang-javascript": {
+      "version": "6.2.2",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/@codemirror/lang-javascript/-/lang-javascript-6.2.2.tgz",
+      "integrity": "sha512-VGQfY+FCc285AhWuwjYxQyUQcYurWlxdKYT4bqwr3Twnd5wP5WSeu52t4tvvuWmljT4EmgEgZCqSieokhtY8hg==",
+      "requires": {
+        "@codemirror/autocomplete": "^6.0.0",
+        "@codemirror/language": "^6.6.0",
+        "@codemirror/lint": "^6.0.0",
+        "@codemirror/state": "^6.0.0",
+        "@codemirror/view": "^6.17.0",
+        "@lezer/common": "^1.0.0",
+        "@lezer/javascript": "^1.0.0"
+      }
+    },
+    "@codemirror/language": {
+      "version": "6.10.1",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/@codemirror/language/-/language-6.10.1.tgz",
+      "integrity": "sha512-5GrXzrhq6k+gL5fjkAwt90nYDmjlzTIJV8THnxNFtNKWotMIlzzN+CpqxqwXOECnUdOndmSeWntVrVcv5axWRQ==",
+      "requires": {
+        "@codemirror/state": "^6.0.0",
+        "@codemirror/view": "^6.23.0",
+        "@lezer/common": "^1.1.0",
+        "@lezer/highlight": "^1.0.0",
+        "@lezer/lr": "^1.0.0",
+        "style-mod": "^4.0.0"
+      }
+    },
+    "@codemirror/legacy-modes": {
+      "version": "6.3.3",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/@codemirror/legacy-modes/-/legacy-modes-6.3.3.tgz",
+      "integrity": "sha512-X0Z48odJ0KIoh/HY8Ltz75/4tDYc9msQf1E/2trlxFaFFhgjpVHjZ/BCXe1Lk7s4Gd67LL/CeEEHNI+xHOiESg==",
+      "requires": {
+        "@codemirror/language": "^6.0.0"
+      }
+    },
+    "@codemirror/lint": {
+      "version": "6.5.0",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/@codemirror/lint/-/lint-6.5.0.tgz",
+      "integrity": "sha512-+5YyicIaaAZKU8K43IQi8TBy6mF6giGeWAH7N96Z5LC30Wm5JMjqxOYIE9mxwMG1NbhT2mA3l9hA4uuKUM3E5g==",
+      "requires": {
+        "@codemirror/state": "^6.0.0",
+        "@codemirror/view": "^6.0.0",
+        "crelt": "^1.0.5"
+      }
+    },
+    "@codemirror/search": {
+      "version": "6.5.6",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/@codemirror/search/-/search-6.5.6.tgz",
+      "integrity": "sha512-rpMgcsh7o0GuCDUXKPvww+muLA1pDJaFrpq/CCHtpQJYz8xopu4D1hPcKRoDD0YlF8gZaqTNIRa4VRBWyhyy7Q==",
+      "requires": {
+        "@codemirror/state": "^6.0.0",
+        "@codemirror/view": "^6.0.0",
+        "crelt": "^1.0.5"
+      }
+    },
+    "@codemirror/state": {
+      "version": "6.4.1",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/@codemirror/state/-/state-6.4.1.tgz",
+      "integrity": "sha512-QkEyUiLhsJoZkbumGZlswmAhA7CBU02Wrz7zvH4SrcifbsqwlXShVXg65f3v/ts57W3dqyamEriMhij1Z3Zz4A=="
+    },
+    "@codemirror/view": {
+      "version": "6.24.1",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/@codemirror/view/-/view-6.24.1.tgz",
+      "integrity": "sha512-sBfP4rniPBRQzNakwuQEqjEuiJDWJyF2kqLLqij4WXRoVwPPJfjx966Eq3F7+OPQxDtMt/Q9MWLoZLWjeveBlg==",
+      "requires": {
+        "@codemirror/state": "^6.4.0",
+        "style-mod": "^4.1.0",
+        "w3c-keyname": "^2.2.4"
+      }
+    },
     "@colors/colors": {
       "version": "1.5.0",
       "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/@colors/colors/-/colors-1.5.0.tgz",
@@ -15407,6 +15589,37 @@
           "integrity": "sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==",
           "dev": true
         }
+      }
+    },
+    "@lezer/common": {
+      "version": "1.2.1",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/@lezer/common/-/common-1.2.1.tgz",
+      "integrity": "sha512-yemX0ZD2xS/73llMZIK6KplkjIjf2EvAHcinDi/TfJ9hS25G0388+ClHt6/3but0oOxinTcQHJLDXh6w1crzFQ=="
+    },
+    "@lezer/highlight": {
+      "version": "1.2.0",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/@lezer/highlight/-/highlight-1.2.0.tgz",
+      "integrity": "sha512-WrS5Mw51sGrpqjlh3d4/fOwpEV2Hd3YOkp9DBt4k8XZQcoTHZFB7sx030A6OcahF4J1nDQAa3jXlTVVYH50IFA==",
+      "requires": {
+        "@lezer/common": "^1.0.0"
+      }
+    },
+    "@lezer/javascript": {
+      "version": "1.4.13",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/@lezer/javascript/-/javascript-1.4.13.tgz",
+      "integrity": "sha512-5IBr8LIO3xJdJH1e9aj/ZNLE4LSbdsx25wFmGRAZsj2zSmwAYjx26JyU/BYOCpRQlu1jcv1z3vy4NB9+UkfRow==",
+      "requires": {
+        "@lezer/common": "^1.2.0",
+        "@lezer/highlight": "^1.1.3",
+        "@lezer/lr": "^1.3.0"
+      }
+    },
+    "@lezer/lr": {
+      "version": "1.4.0",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/@lezer/lr/-/lr-1.4.0.tgz",
+      "integrity": "sha512-Wst46p51km8gH0ZUmeNrtpRYmdlRHUpN1DQd3GFAyKANi8WVz8c2jHYTf1CVScFaCjQw1iO3ZZdqGDxQPRErTg==",
+      "requires": {
+        "@lezer/common": "^1.0.0"
       }
     },
     "@nicolo-ribaudo/eslint-scope-5-internals": {
@@ -15757,7 +15970,7 @@
     },
     "@wrensecurity/commons-ui-build": {
       "version": "file:target/ui-libs/wrensecurity-commons-ui-build-0.0.0.tgz",
-      "integrity": "sha512-HDottmilySlwBXvPTpgWJya9a5aP1u311v4YDJ/sIg51U7QgS6C0zWhCj2nHJ9WmPlgWha1dhLXJJjxaULVsVw==",
+      "integrity": "sha512-aUCK1kKuflzv6vDwgeANE+sdEi1DoWeLQPVX2drnGAxd8dbQkLXITSnYNdqh9D/hlkFNUKU7takFVVfVnEmyzA==",
       "dev": true,
       "requires": {
         "@babel/core": "^7.23.3",
@@ -16940,9 +17153,18 @@
       "dev": true
     },
     "codemirror": {
-      "version": "4.10.0",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/codemirror/-/codemirror-4.10.0.tgz",
-      "integrity": "sha512-VYlZQk7BRRDmnDz9Lbq1rcSVBx1pNYj1eVdCJgeLqrkXnr/hpAKnI1BZFOM8FEkyv8Qoka9x+6pwF4zjKTJumw=="
+      "version": "6.0.1",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/codemirror/-/codemirror-6.0.1.tgz",
+      "integrity": "sha512-J8j+nZ+CdWmIeFIGXEFbFPtpiYacFMDR8GlHK3IyHQJMCaVRfGx9NT+Hxivv1ckLWPvNdZqndbr/7lVhrf/Svg==",
+      "requires": {
+        "@codemirror/autocomplete": "^6.0.0",
+        "@codemirror/commands": "^6.0.0",
+        "@codemirror/language": "^6.0.0",
+        "@codemirror/lint": "^6.0.0",
+        "@codemirror/search": "^6.0.0",
+        "@codemirror/state": "^6.0.0",
+        "@codemirror/view": "^6.0.0"
+      }
     },
     "collection-map": {
       "version": "1.0.0",
@@ -17179,6 +17401,11 @@
         "loose-envify": "^1.3.1",
         "object-assign": "^4.1.1"
       }
+    },
+    "crelt": {
+      "version": "1.0.6",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/crelt/-/crelt-1.0.6.tgz",
+      "integrity": "sha512-VQ2MBenTq1fWZUH9DJNGti7kKv6EeAuYr3cLwxUWhIu1baTaXh4Ib5W2CqHVqib4/MqbYGJqiL3Zb8GJZr3l4g=="
     },
     "cross-fetch": {
       "version": "3.1.5",
@@ -17895,58 +18122,6 @@
           "requires": {
             "has-flag": "^4.0.0"
           }
-        }
-      }
-    },
-    "eslint-formatter-warning-summary": {
-      "version": "1.0.1",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/eslint-formatter-warning-summary/-/eslint-formatter-warning-summary-1.0.1.tgz",
-      "integrity": "sha512-It9E09tL46m+razTxoZnzItO7Ir5Dem1PCr+AIaThuDKI4GdyIY1pO5mDjE6t5xivuzRlA71/eOO4hGNrN7ktw==",
-      "dev": true,
-      "requires": {
-        "chalk": "^1.1.1",
-        "text-table": "^0.2.0"
-      },
-      "dependencies": {
-        "ansi-regex": {
-          "version": "2.1.1",
-          "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/ansi-regex/-/ansi-regex-2.1.1.tgz",
-          "integrity": "sha512-TIGnTpdo+E3+pCyAluZvtED5p5wCqLdezCyhPZzKPcxvFplEt4i+W7OONCKgeZFT3+y5NZZfOOS/Bdcanm1MYA==",
-          "dev": true
-        },
-        "ansi-styles": {
-          "version": "2.2.1",
-          "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/ansi-styles/-/ansi-styles-2.2.1.tgz",
-          "integrity": "sha512-kmCevFghRiWM7HB5zTPULl4r9bVFSWjz62MhqizDGUrq2NWuNMQyuv4tHHoKJHs69M/MF64lEcHdYIocrdWQYA==",
-          "dev": true
-        },
-        "chalk": {
-          "version": "1.1.3",
-          "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/chalk/-/chalk-1.1.3.tgz",
-          "integrity": "sha512-U3lRVLMSlsCfjqYPbLyVv11M9CPW4I728d6TCKMAOJueEeB9/8o+eSsMnxPJD+Q+K909sdESg7C+tIkoH6on1A==",
-          "dev": true,
-          "requires": {
-            "ansi-styles": "^2.2.1",
-            "escape-string-regexp": "^1.0.2",
-            "has-ansi": "^2.0.0",
-            "strip-ansi": "^3.0.0",
-            "supports-color": "^2.0.0"
-          }
-        },
-        "strip-ansi": {
-          "version": "3.0.1",
-          "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/strip-ansi/-/strip-ansi-3.0.1.tgz",
-          "integrity": "sha512-VhumSSbBqDTP8p2ZLKj40UjBCV4+v8bUSEpUb4KjRgWk9pbqGF4REFj6KEagidb2f/M6AzC0EmFyDNGaw9OCzg==",
-          "dev": true,
-          "requires": {
-            "ansi-regex": "^2.0.0"
-          }
-        },
-        "supports-color": {
-          "version": "2.0.0",
-          "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/supports-color/-/supports-color-2.0.0.tgz",
-          "integrity": "sha512-KKNVtd6pCYgPIKU4cp2733HWYCpplQhddZLBUryaAHou723x+FRzQ5Df824Fj+IyyuiQTRoub4SnIFfIcrp70g==",
-          "dev": true
         }
       }
     },
@@ -23866,6 +24041,11 @@
       "integrity": "sha512-6fPc+R4ihwqP6N/aIv2f1gMH8lOVtWQHoqC4yK6oSDVVocumAsfCqjkXnqiYMhmMwS/mEHLp7Vehlt3ql6lEig==",
       "dev": true
     },
+    "style-mod": {
+      "version": "4.1.0",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/style-mod/-/style-mod-4.1.0.tgz",
+      "integrity": "sha512-Ca5ib8HrFn+f+0n4N4ScTIA9iTOQ7MaGS1ylHcoVqW9J7w2w8PzN6g9gKmTYgGEBH8e120+RCmhpje6jC5uGWA=="
+    },
     "supports-color": {
       "version": "5.5.0",
       "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/supports-color/-/supports-color-5.5.0.tgz",
@@ -24899,6 +25079,11 @@
       "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/void-elements/-/void-elements-2.0.1.tgz",
       "integrity": "sha512-qZKX4RnBzH2ugr8Lxa7x+0V6XD9Sb/ouARtiasEQCHB1EVU4NXtmHsDDrx1dO4ne5fc3J6EW05BP1Dl0z0iung==",
       "dev": true
+    },
+    "w3c-keyname": {
+      "version": "2.2.8",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/w3c-keyname/-/w3c-keyname-2.2.8.tgz",
+      "integrity": "sha512-dpojBhNsCNN7T82Tm7k26A6G9ML3NkhDsnw9n/eoxSRlVBB4CEtIQ/KTCLI2Fwf3ataSXRhYFkQi3SlnFwPvPQ=="
     },
     "warning": {
       "version": "3.0.0",

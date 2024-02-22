@@ -22,7 +22,6 @@
     "@wrensecurity/commons-ui-build": "file:target/ui-libs/wrensecurity-commons-ui-build-0.0.0.tgz",
     "@wrensecurity/eslint-config": "^0.3.0",
     "chai": "3.5.0",
-    "eslint-formatter-warning-summary": "1.0.1",
     "gulp": "^4.0.2",
     "gulp-replace": "^1.1.4",
     "jsdoc": "3.4.3",
@@ -44,9 +43,13 @@
     "yargs": "^17.7.2"
   },
   "dependencies": {
+    "@codemirror/lang-javascript": "^6.2.2",
+    "@codemirror/language": "^6.10.1",
+    "@codemirror/legacy-modes": "^6.3.3",
+    "@codemirror/state": "^6.4.1",
     "backbone.paginator": "^2.0.2",
     "classnames": "2.2.5",
-    "codemirror": "4.10",
+    "codemirror": "^6.0.1",
     "handlebars": "3.0.3",
     "json-editor": "0.7.9",
     "microplugin": "0.0.3",

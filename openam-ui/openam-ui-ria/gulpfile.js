@@ -47,15 +47,7 @@ const MODULE_RESOURCES = {
     "react-select/dist/react-select.min.js": "libs/react-select.js",
     "react-select/dist/react-select.min.css": "css/react-select.css",
     "backbone.paginator/lib/backbone.paginator.min.js": "libs/backbone.paginator.js",
-    "handlebars/dist/handlebars.amd.min.js": "libs/handlebars.js",
-
-    //~ Code mirror resources
-    "codemirror/addon/display/fullscreen.js": "libs/codemirror/addon/display/fullscreen.js",
-    "codemirror/lib/codemirror.js": "libs/codemirror/lib/codemirror.js",
-    "codemirror/mode/groovy/groovy.js": "libs/codemirror/mode/groovy/groovy.js",
-    "codemirror/mode/javascript/javascript.js": "libs/codemirror/mode/javascript/javascript.js",
-    "codemirror/addon/display/fullscreen.css": "css/codemirror/addon/display/fullscreen.css",
-    "codemirror/lib/codemirror.css": "css/codemirror/lib/codemirror.css"
+    "handlebars/dist/handlebars.amd.min.js": "libs/handlebars.js"
 };
 
 const LOCAL_RESOURCES = {
@@ -125,6 +117,12 @@ gulp.task("build:bundle", useBuildRequire({
     ]
 }));
 
+gulp.task("build:editor", useBuildModule({
+    id: "org/forgerock/openam/ui/admin/utils/CodeMirror",
+    src: "src/main/js/org/forgerock/openam/ui/admin/utils/CodeMirror.jsm",
+    dest: join(TARGET_PATH, "org/forgerock/openam/ui/admin/utils/CodeMirror.js")
+}));
+
 /**
  * Include the version of AM in the index file.
  *
@@ -154,6 +152,7 @@ gulp.task("build", gulp.series(
         "build:scripts",
         "build:scriptsJSM",
         "build:compose",
+        "build:editor",
         "build:libs"
     ),
     gulp.parallel(
@@ -180,8 +179,12 @@ gulp.task("watch", () => {
         gulp.series("build:scripts", "deploy")
     );
     gulp.watch(
-        "src/main/js/**/*.{jsm,jsx}",
+        ["src/main/js/**/*.{jsm,jsx}", "!src/main/js/org/forgerock/openam/ui/admin/utils/CodeMirror.jsm"],
         gulp.series("build:scriptsJSM", "deploy")
+    );
+    gulp.watch(
+        "src/main/js/org/forgerock/openam/ui/admin/utils/CodeMirror.jsm",
+        gulp.series("build:editor", "deploy")
     );
 });
 

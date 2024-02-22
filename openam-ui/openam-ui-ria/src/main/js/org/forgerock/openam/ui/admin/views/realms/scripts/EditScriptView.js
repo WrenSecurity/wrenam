@@ -18,7 +18,6 @@ define([
     "jquery",
     "lodash",
     "org/forgerock/commons/ui/common/components/BootstrapDialog",
-    "libs/codemirror/lib/codemirror",
     "org/forgerock/commons/ui/common/components/ChangesPending",
     "org/forgerock/commons/ui/common/components/Messages",
     "org/forgerock/commons/ui/common/main/AbstractView",
@@ -27,18 +26,16 @@ define([
     "org/forgerock/commons/ui/common/util/Base64",
     "org/forgerock/commons/ui/common/util/Constants",
     "org/forgerock/commons/ui/common/util/UIUtils",
+    "org/forgerock/openam/ui/admin/utils/CodeMirror",
     "org/forgerock/openam/ui/admin/models/scripts/ScriptModel",
     "org/forgerock/openam/ui/admin/services/realm/ScriptsService",
     "org/forgerock/openam/ui/admin/services/global/ScriptsService",
     "org/forgerock/openam/ui/admin/utils/FormHelper",
     "org/forgerock/openam/ui/common/util/Promise",
-    "libs/codemirror/mode/groovy/groovy",
-    "libs/codemirror/mode/javascript/javascript",
-    "libs/codemirror/addon/display/fullscreen",
     // jquery dependencies
     "selectize"
-], function ($, _, BootstrapDialog, CodeMirror, ChangesPending, Messages, AbstractView, EventManager, Router, Base64,
-        Constants, UIUtils, Script, RealmScriptsService, GlobalScriptsService, FormHelper, Promise) {
+], function ($, _, BootstrapDialog, ChangesPending, Messages, AbstractView, EventManager, Router, Base64,
+        Constants, UIUtils, CodeMirror, Script, RealmScriptsService, GlobalScriptsService, FormHelper, Promise) {
     return AbstractView.extend({
         initialize () {
             AbstractView.prototype.initialize.call(this);
@@ -396,15 +393,11 @@ define([
         },
 
         initScriptEditor () {
-            this.scriptEditor = CodeMirror.fromTextArea(this.$el.find("#script")[0], {
-                lineNumbers: true,
-                autofocus: true,
-                viewportMargin: Infinity,
+            this.scriptEditor = CodeMirror(this.$el.find("#script")[0], {
                 mode: this.data.entity.language.toLowerCase(),
-                theme: "forgerock"
+                value: this.data.entity.script,
+                updateCallbacks: [() => this.checkChanges()]
             });
-
-            this.scriptEditor.on("update", _.bind(this.checkChanges, this));
         },
 
         onChangeLanguage (e) {
@@ -413,7 +406,7 @@ define([
 
         changeLanguage (lang) {
             this.data.entity.language = lang;
-            this.scriptEditor.setOption("mode", lang.toLowerCase());
+            this.scriptEditor.setLanguage(lang.toLowerCase());
         },
 
         showUploadButton () {
@@ -499,8 +492,7 @@ define([
         },
 
         toggleFullScreen (fullScreen) {
-            this.scriptEditor.setOption("fullScreen", fullScreen);
-            this.$el.find(".full-screen-bar").toggle(fullScreen);
+            this.scriptEditor.toggleFullScreen(fullScreen, this.$el.find(".code-mirror-full-screen-bar"));
         },
 
         toggleSaveButton (flag) {

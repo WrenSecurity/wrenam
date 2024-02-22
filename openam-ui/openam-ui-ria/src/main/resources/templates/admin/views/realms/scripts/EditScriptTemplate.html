@@ -62,7 +62,7 @@
 
             <div class="col-sm-9">
                 <div class="script-area">
-                    <textarea id="script">{{entity.script}}</textarea>
+                    <div id="script"></div>
                 </div>
 
                 <input type="button" class="btn btn-default script-upload" id="upload" value="{{t 'common.form.upload'}}" data-upload-script>
@@ -86,7 +86,7 @@
         </button>
     </div>
 
-    <div class="full-screen-bar">
+    <div class="code-mirror-full-screen-bar">
         <button type="button" class="btn btn-link pull-right" data-exit-fullscreen>
             <i class="fa fa-compress"></i> {{t "console.common.exitFullScreen"}}
         </button>
