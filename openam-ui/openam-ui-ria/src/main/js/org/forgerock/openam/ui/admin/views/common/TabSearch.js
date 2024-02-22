@@ -50,7 +50,7 @@ define([
                     return `<div>${item.text}</div>`;
                 },
                 option (item) {
-                    return `<div><div>${item.text}</div><span class="text-muted small"><em>${
+                    return `<div class="option"><div>${item.text}</div><span class="text-muted small"><em>${
                         item.value}</em></span></div></div>`;
                 },
                 optgroup_header (item) { // eslint-disable-line camelcase
