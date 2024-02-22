@@ -415,7 +415,7 @@ define([
             //       Opera 11.5; Safari (WebKit) 6.0
             // FileReader: Firefox (Gecko) 3.6 (1.9.2);	Chrome 7; Internet Explorer 10; Opera 12.02; Safari 6.0.2
             if (window.File && window.FileReader && window.FileList) {
-                this.$el.find("[data-upload-scripts]").show();
+                this.$el.find("[data-upload-script]").show();
             }
         },
 
