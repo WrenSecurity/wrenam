@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Portions copyright 2015-2017 ForgeRock AS.
+ * Portions copyright 2024 Wren Security.
  */
 
 define([
