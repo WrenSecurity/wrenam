@@ -102,6 +102,7 @@
                                     <type>zip</type>
                                     <classifier>user</classifier>
                                     <outputDirectory>${project.build.directory}/ui-compose</outputDirectory>
+                                    <excludes>locales/</excludes>
                                 </artifactItem>
 
                                 <artifactItem>

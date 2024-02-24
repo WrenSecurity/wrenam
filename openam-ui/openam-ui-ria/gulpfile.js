@@ -104,7 +104,7 @@ gulp.task("build:scripts", useBuildScripts({
 
 gulp.task("build:scriptsJSM", useBuildScripts(
     {
-        src: "src/main/js/**/*.{jsm,jsx}",
+        src: ["src/main/js/**/*.{jsm,jsx}", "!src/main/js/org/forgerock/openam/ui/admin/utils/CodeMirror.jsm"],
         dest: TARGET_PATH,
         presets: babelConfig.presets,
         plugins: [
