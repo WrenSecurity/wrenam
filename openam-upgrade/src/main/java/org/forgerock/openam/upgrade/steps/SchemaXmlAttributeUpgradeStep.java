@@ -63,7 +63,7 @@ import com.sun.identity.sm.ServiceSchemaManager;
 public class SchemaXmlAttributeUpgradeStep extends AbstractUpgradeStep {
 
     private static final String PROGRESS = "upgrade.schema.xml.attributes.progress";
-    private static final String AM_14 = "14.0.0";
+    private static final String UPGRADE_VERSION = "15.1.0";
 
     private Map<String, Function<Document, Boolean, XPathExpressionException>> serviceModifications;
     private XPath xpath = XPathFactory.newInstance().newXPath();
@@ -80,7 +80,7 @@ public class SchemaXmlAttributeUpgradeStep extends AbstractUpgradeStep {
 
     @Override
     public void initialize() throws UpgradeException {
-        if (!VersionUtils.isCurrentVersionLessThan(AM_14, true)) {
+        if (!VersionUtils.isCurrentVersionLessThan(UPGRADE_VERSION, true)) {
             return;
         }
 
