@@ -59,7 +59,7 @@ require([
     var data = window.pageData,
         template = data.done ? DeviceDoneTemplate : DeviceTemplate;
 
-    i18nManager.init({
+    const i18nReady = i18nManager.init({
         paramLang: {
             locale: data.locale
         },
@@ -75,9 +75,11 @@ require([
     ThemeManager.getTheme().always(function (theme) {
         data.theme = theme;
 
-        $("#wrapper").html(HandleBars.compile(LoginBaseTemplate)(data));
-        $("#footer").html(HandleBars.compile(FooterTemplate)(data));
-        $("#loginBaseLogo").html(HandleBars.compile(LoginHeaderTemplate)(data));
-        $("#content").html(HandleBars.compile(template)(data));
+        i18nReady.then(() => {
+            $("#wrapper").html(HandleBars.compile(LoginBaseTemplate)(data));
+            $("#footer").html(HandleBars.compile(FooterTemplate)(data));
+            $("#loginBaseLogo").html(HandleBars.compile(LoginHeaderTemplate)(data));
+            $("#content").html(HandleBars.compile(template)(data));
+        });
     });
 });

@@ -80,7 +80,7 @@ require([
         KEY_CODE_SPACE = 32,
         dataReady = $.Deferred();
 
-    i18nManager.init({
+    const i18nReady = i18nManager.init({
         paramLang: {
             locale: data.locale || Constants.DEFAULT_LANGUAGE
         },
@@ -133,21 +133,24 @@ require([
             require(templatePaths, function (AuthorizeTemplate, LoginBaseTemplate, FooterTemplate,
                     LoginHeaderTemplate) {
                 data.theme = theme;
-                baseTemplate = HandleBars.compile(LoginBaseTemplate);
-                formTemplate = HandleBars.compile(AuthorizeTemplate);
-                footerTemplate = HandleBars.compile(FooterTemplate);
-                loginHeaderTemplate = HandleBars.compile(LoginHeaderTemplate);
 
-                $("#wrapper").html(baseTemplate(data));
-                $("#footer").html(footerTemplate(data));
-                $("#loginBaseLogo").html(loginHeaderTemplate(data));
-                $("#content").html(formTemplate(data)).find(".panel-heading").bind("click keyup", function (e) {
-                    // keyup is required so that the collapsed panel can be opened with the keyboard alone,
-                    // and without relying on a mouse click event.
-                    if (e.type === "keyup" && e.keyCode !== KEY_CODE_ENTER && e.keyCode !== KEY_CODE_SPACE) {
-                        return;
-                    }
-                    $(this).toggleClass("expanded").next(".panel-collapse").slideToggle();
+                i18nReady.then(() => {
+                    baseTemplate = HandleBars.compile(LoginBaseTemplate);
+                    formTemplate = HandleBars.compile(AuthorizeTemplate);
+                    footerTemplate = HandleBars.compile(FooterTemplate);
+                    loginHeaderTemplate = HandleBars.compile(LoginHeaderTemplate);
+
+                    $("#wrapper").html(baseTemplate(data));
+                    $("#footer").html(footerTemplate(data));
+                    $("#loginBaseLogo").html(loginHeaderTemplate(data));
+                    $("#content").html(formTemplate(data)).find(".panel-heading").bind("click keyup", function (e) {
+                        // keyup is required so that the collapsed panel can be opened with the keyboard alone,
+                        // and without relying on a mouse click event.
+                        if (e.type === "keyup" && e.keyCode !== KEY_CODE_ENTER && e.keyCode !== KEY_CODE_SPACE) {
+                            return;
+                        }
+                        $(this).toggleClass("expanded").next(".panel-collapse").slideToggle();
+                    });
                 });
             });
         });
