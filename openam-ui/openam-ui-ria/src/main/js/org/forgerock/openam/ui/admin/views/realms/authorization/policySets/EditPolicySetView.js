@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Portions copyright 2014-2016 ForgeRock AS.
+ * Portions copyright 2024 Wren Security.
  */
 
 define([
@@ -126,7 +127,7 @@ define([
 
                     options.allResourceTypes = resourceTypes;
                     options.availableResourceTypes = _.filter(resourceTypes, function (item) {
-                        return !_.contains(self.data.entity.resourceTypeUuids, item.uuid);
+                        return !_.includes(self.data.entity.resourceTypeUuids, item.uuid);
                     });
 
                     options.selectedResourceTypes = _.findByValues(options.allResourceTypes, "uuid",

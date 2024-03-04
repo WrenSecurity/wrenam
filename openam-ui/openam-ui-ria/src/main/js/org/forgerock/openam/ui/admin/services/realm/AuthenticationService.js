@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions copyright 2024 Wren Security.
  */
 
 /**
@@ -202,7 +203,7 @@ define([
                 get (realm, type) {
                     // TODO: change this to a proper server-side call when OPENAM-7242 is implemented
                     return obj.authentication.modules.types.all(realm).then(function (data) {
-                        return _.findWhere(data.result, { "_id": type });
+                        return _.find(data.result, { "_id": type });
                     });
                 }
             },

@@ -13,7 +13,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2017 ForgeRock AS.
- * Portions Copyright 2018-2023 Wren Security
+ * Portions Copyright 2018-2024 Wren Security.
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
@@ -35,13 +35,20 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.forgerock.commons.ui</groupId>
-            <artifactId>forgerock-ui-user</artifactId>
+            <groupId>org.wrensecurity.commons</groupId>
+            <artifactId>wrensec-ui-commons</artifactId>
             <version>${wrensec-ui.version}</version>
             <type>zip</type>
-            <classifier>www</classifier>
+            <classifier>user</classifier>
         </dependency>
 
+        <dependency>
+            <groupId>org.wrensecurity.commons</groupId>
+            <artifactId>wrensec-ui-commons</artifactId>
+            <version>${wrensec-ui.version}</version>
+            <type>zip</type>
+            <classifier>build</classifier>
+        </dependency>
         <dependency>
             <groupId>org.mozilla</groupId>
             <artifactId>rhino</artifactId>
@@ -49,27 +56,6 @@
     </dependencies>
 
     <build>
-        <resources>
-            <resource>
-                <directory>${basedir}/src/main/js</directory>
-            </resource>
-
-            <resource>
-                <directory>${basedir}/src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
-
-        <testResources>
-            <testResource>
-                <directory>${basedir}/src/test/js</directory>
-            </testResource>
-
-            <testResource>
-                <directory>${basedir}/src/test/resources</directory>
-            </testResource>
-        </testResources>
-
         <plugins>
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
@@ -101,22 +87,31 @@
 
                 <executions>
                     <execution>
-                        <id>unpack-forgerock-ui-user</id>
-                        <phase>process-resources</phase>
+                        <id>unpack</id>
+                        <phase>initialize</phase>
                         <goals>
                             <goal>unpack</goal>
                         </goals>
 
                         <configuration>
-                            <outputDirectory>target/dependencies-expanded/forgerock-ui-user</outputDirectory>
-
                             <artifactItems>
                                 <artifactItem>
-                                    <groupId>org.forgerock.commons.ui</groupId>
-                                    <artifactId>forgerock-ui-user</artifactId>
-                                    <version>${forgerock.ui.version}</version>
+                                    <groupId>org.wrensecurity.commons</groupId>
+                                    <artifactId>wrensec-ui-commons</artifactId>
+                                    <version>${wrensec-ui.version}</version>
                                     <type>zip</type>
-                                    <classifier>www</classifier>
+                                    <classifier>user</classifier>
+                                    <outputDirectory>${project.build.directory}/ui-compose</outputDirectory>
+                                    <excludes>locales/</excludes>
+                                </artifactItem>
+
+                                <artifactItem>
+                                    <groupId>org.wrensecurity.commons</groupId>
+                                    <artifactId>wrensec-ui-commons</artifactId>
+                                    <version>${wrensec-ui.version}</version>
+                                    <type>zip</type>
+                                    <classifier>build</classifier>
+                                    <outputDirectory>${project.build.directory}/ui-libs</outputDirectory>
                                 </artifactItem>
                             </artifactItems>
                         </configuration>
@@ -127,10 +122,14 @@
             <plugin>
                 <groupId>com.github.eirslett</groupId>
                 <artifactId>frontend-maven-plugin</artifactId>
-                <version>1.12.0</version>
+                <version>1.14.2</version>
 
                 <configuration>
-                    <installDirectory>${node.install.directory}</installDirectory>
+                    <installDirectory>${project.parent.basedir}</installDirectory>
+                    <nodeVersion>v18.16.0</nodeVersion>
+                    <npmVersion>8.19.4</npmVersion>
+                    <nodeDownloadRoot>https://nodejs.org/dist/</nodeDownloadRoot>
+                    <npmDownloadRoot>https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/npm/-/</npmDownloadRoot>
                 </configuration>
 
                 <executions>
@@ -141,13 +140,6 @@
                         <goals>
                             <goal>install-node-and-npm</goal>
                         </goals>
-
-                        <configuration>
-                            <nodeVersion>v18.16.0</nodeVersion>
-                            <npmVersion>8.19.4</npmVersion>
-                            <nodeDownloadRoot>https://nodejs.org/dist/</nodeDownloadRoot>
-                            <npmDownloadRoot>https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/npm/-/</npmDownloadRoot>
-                        </configuration>
                     </execution>
 
                     <execution>
@@ -161,14 +153,14 @@
 
                     <execution>
                         <id>npm-build</id>
-                        <phase>compile</phase>
+                        <phase>process-resources</phase>
 
                         <goals>
                             <goal>npm</goal>
                         </goals>
 
                         <configuration>
-                            <arguments>run build:production -- --target-version=${project.version}</arguments>
+                            <arguments>run build -- --target-version=${project.version}</arguments>
                         </configuration>
                     </execution>
                 </executions>

@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Portions copyright 2011-2016 ForgeRock AS.
+ * Portions copyright 2024 Wren Security.
  */
 
 require.config({
@@ -27,54 +28,53 @@ require.config({
             "NavigationFilter"  : "org/forgerock/openam/ui/common/components/navigation/filters/RouteNavGroupFilter",
             "Router"            : "org/forgerock/commons/ui/common/main/Router",
             "RegisterView"      : "org/forgerock/openam/ui/user/anonymousProcess/SelfRegistrationView",
-            "KBADelegate"       : "org/forgerock/openam/ui/user/services/KBADelegate",
-            // TODO: Remove this when there are no longer any references to the "underscore" dependency
-            "underscore"        : "lodash"
+            "KBADelegate"       : "org/forgerock/openam/ui/user/services/KBADelegate"
         }
     },
     paths: {
-        "autosizeInput": "libs/jquery.autosize.input.min",
+        "autosizeInput": "libs/jquery.autosize.input",
 
-        "backbone"           : "libs/backbone-1.1.2-min",
-        "backbone.paginator" : "libs/backbone.paginator.min-2.0.2-min",
-        "backbone-relational": "libs/backbone-relational-0.9.0-min",
+        "backbone"           : "libs/backbone",
+        "backbone.paginator" : "libs/backbone.paginator",
+        "backbone-relational": "libs/backbone-relational",
 
-        "backgrid"          : "libs/backgrid.min-0.3.5-min",
-        "backgrid-filter"   : "libs/backgrid-filter.min-0.3.5-min",
-        "backgrid.paginator": "libs/backgrid-paginator-0.3.5-custom.min",
-        "backgrid-selectall": "libs/backgrid-select-all-0.3.5-min",
+        "backgrid"          : "libs/backgrid",
+        "backgrid-filter"   : "libs/backgrid-filter",
+        "backgrid.paginator": "libs/backgrid-paginator",
+        "backgrid-selectall": "libs/backgrid-select-all",
 
-        "bootstrap"               : "libs/bootstrap-3.3.5-custom",
-        "bootstrap-datetimepicker": "libs/bootstrap-datetimepicker-4.14.30-min",
-        "bootstrap-dialog"        : "libs/bootstrap-dialog-1.34.4-min",
-        "bootstrap-tabdrop"       : "libs/bootstrap-tabdrop-1.0",
+        "bootstrap"               : "libs/bootstrap",
+        "bootstrap-datetimepicker": "libs/bootstrap-datetimepicker",
+        "bootstrap-dialog"        : "libs/bootstrap-dialog",
+        "bootstrap-tabdrop"       : "libs/bootstrap-tabdrop",
 
-        "classnames"       : "libs/classnames-2.2.5",
-        "clockPicker"      : "libs/bootstrap-clockpicker-0.0.7-min",
-        "doTimeout"        : "libs/jquery.ba-dotimeout-1.0-min",
-        "form2js"          : "libs/form2js-2.0-769718a",
-        "handlebars"       : "libs/handlebars-4.0.5",
-        "i18next"          : "libs/i18next-1.7.3-min",
-        "jquery"           : "libs/jquery-2.1.1-min",
-        "js2form"          : "libs/js2form-2.0-769718a",
-        "jsonEditor"       : "libs/jsoneditor-0.7.23-custom",
-        "lodash"           : "libs/lodash-3.10.1-min",
-        "microplugin"      : "libs/microplugin-0.0.3",
-        "moment"           : "libs/moment-2.8.1-min",
+        "classnames"       : "libs/classnames",
+        "clockPicker"      : "libs/bootstrap-clockpicker",
+        "doTimeout"        : "libs/jquery.ba-dotimeout",
+        "form2js"          : "libs/form2js",
+        "handlebars"       : "libs/handlebars",
+        "i18next"          : "libs/i18next",
+        "jquery"           : "libs/jquery",
+        "js2form"          : "libs/js2form",
+        "jsonEditor"       : "libs/jsoneditor",
+        "lodash"           : "libs/lodash",
+        "microplugin"      : "libs/microplugin",
+        "moment"           : "libs/moment",
         "popoverclickaway" : "libs/popover-clickaway",
-        "qrcode"           : "libs/qrcode-1.0.0-min",
-        "react-bootstrap"  : "libs/react-bootstrap-0.30.1-min",
-        "react-dom"        : "libs/react-dom-15.2.1-min",
-        "react"            : "libs/react-15.2.1-min",
-        "react-input-autosize": "libs/react-input-autosize-1.1.0-min",
-        "react-select"     : "libs/react-select-1.0.0-rc.2-min",
-        "redux"            : "libs/redux-3.5.2-min",
-        "selectize"        : "libs/selectize-non-standalone-0.12.1-min",
-        "sifter"           : "libs/sifter-0.4.1-min",
-        "sortable"         : "libs/jquery-nestingSortable-0.9.12",
-        "spin"             : "libs/spin-2.0.1-min",
-        "text"             : "libs/text-2.0.15",
-        "xdate"            : "libs/xdate-0.8-min"
+        "qrcode"           : "libs/qrcode",
+        "react-bootstrap"  : "libs/react-bootstrap",
+        "react-dom"        : "libs/react-dom",
+        "react"            : "libs/react",
+        "react-input-autosize": "libs/react-input-autosize",
+        "react-select"     : "libs/react-select",
+        "redux"            : "libs/redux",
+        "selectize"        : "libs/selectize-non-standalone",
+        "sifter"           : "libs/sifter",
+        "sortable"         : "libs/jquery-nestingSortable",
+        "spin"             : "libs/spin",
+        "text"             : "libs/text",
+        "underscore"       : "libs/underscore",
+        "xdate"            : "libs/xdate"
     },
     shim: {
         "autosizeInput": {
@@ -82,7 +82,7 @@ require.config({
             exports: "autosizeInput"
         },
         "backbone": {
-            deps: ["lodash"],
+            deps: ["underscore"],
             exports: "Backbone"
         },
         "backbone.paginator": {
@@ -93,7 +93,7 @@ require.config({
         },
 
         "backgrid": {
-            deps: ["jquery", "lodash", "backbone"],
+            deps: ["jquery", "underscore", "backbone"],
             exports: "Backgrid"
         },
         "backgrid-filter": {
@@ -110,7 +110,7 @@ require.config({
             deps: ["jquery"]
         },
         "bootstrap-dialog": {
-            deps: ["jquery", "lodash", "backbone", "bootstrap"]
+            deps: ["jquery", "underscore", "backbone", "bootstrap"]
         },
         "bootstrap-tabdrop": {
             deps: ["jquery", "bootstrap"]
@@ -126,10 +126,6 @@ require.config({
         },
         "form2js": {
             exports: "form2js"
-        },
-        "i18next": {
-            deps: ["jquery", "handlebars"],
-            exports: "i18n"
         },
         "js2form": {
             exports: "js2form"

@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions copyright 2024 Wren Security.
  */
 
 /**
@@ -50,7 +51,7 @@ export const populateRealmsDropdown = (data) => {
     // remains intact and we just call Navigation.reset() when a users session ends or a new one begins.
     if (_.has(Navigation.configuration, "links.admin.urls.realms.urls")) {
         Navigation.configuration.links.admin.urls.realms.urls = _.reject(
-            Navigation.configuration.links.admin.urls.realms.urls, "dynamicLink", true);
+            Navigation.configuration.links.admin.urls.realms.urls, ["dynamicLink", true]);
     }
 
     _(data.result).filter("active").sortBy("path").take(maxRealms).forEach((realm) => {
@@ -62,7 +63,7 @@ export const populateRealmsDropdown = (data) => {
             "cssClass": "dropdown-sub",
             "dynamicLink": true
         }, "admin", "realms");
-    }).run();
+    });
 
     Navigation.addLink({
         "url": `#${Router.getLink(Router.configuration.routes.realms)}`,

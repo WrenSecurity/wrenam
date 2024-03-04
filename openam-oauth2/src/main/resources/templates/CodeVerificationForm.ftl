@@ -13,6 +13,7 @@
 ~ information: "Portions copyright [year] [name of copyright owner]".
 ~
 ~ Copyright 2015 ForgeRock AS.
+~ Portions copyright 2024 Wren Security.
 -->
 <html lang="en">
 <head>
@@ -34,6 +35,6 @@
       baseUrl : "${baseUrl?js_string}/XUI"
   };
 </script>
-<script data-main="${baseUrl?html}/XUI/main-device" src="${baseUrl?html}/XUI/libs/requirejs-2.1.14-min.js"></script>
+<script data-main="${baseUrl?html}/XUI/main-device" src="${baseUrl?html}/XUI/libs/requirejs.js"></script>
 </body>
 </html>

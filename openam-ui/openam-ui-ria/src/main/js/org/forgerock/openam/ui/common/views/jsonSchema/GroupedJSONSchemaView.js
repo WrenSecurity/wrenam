@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions copyright 2024 Wren Security.
  */
 
 /**
@@ -92,15 +93,14 @@ define([
                 orderedSchemaValuePairs = _(orderedSchemaValuePairs)
                     .map(setDefaultPropertiesToRequiredAndEmpty)
                     .map(showEnablePropertyIfAllPropertiesHidden)
-                    .omit(emptyProperties)
+                    .omitBy(emptyProperties)
                     .value();
             }
 
             this.subviews = _(orderedSchemaValuePairs)
                 .map(createJSONEditorView)
-                .invoke("render")
-                .each((view) => { view.$el.appendTo(this.$el); })
-                .value();
+                .invokeMap("render")
+                .each((view) => { view.$el.appendTo(this.$el); });
 
             invokeOnRenderedAfterTimeout(this.options.onRendered);
 

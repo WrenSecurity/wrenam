@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions copyright 2024 Wren Security.
  */
 
 define([
@@ -65,7 +66,7 @@ define([
             parse: true
         }],
         toggleStarred (starredLabelId) {
-            var isStarred = _.contains(this.get("labels"), starredLabelId);
+            var isStarred = _.includes(this.get("labels"), starredLabelId);
 
             if (isStarred) {
                 this.set("labels", _.reject(this.get("labels"), function (label) {

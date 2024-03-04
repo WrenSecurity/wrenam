@@ -23,6 +23,7 @@
   ~ "Portions Copyrighted [year] [name of copyright owner]"
   ~
   ~ Portions Copyrighted 2014 Nomura Research Institute, Ltd
+  ~ Portions copyright 2024 Wren Security.
   -->
 <html lang="en">
 <head>
@@ -53,6 +54,6 @@
             }
         </#if>
     </script>
-    <script data-main="${baseUrl?html}/XUI/main-authorize" src="${baseUrl?html}/XUI/libs/requirejs-2.1.14-min.js"></script>
+    <script data-main="${baseUrl?html}/XUI/main-authorize" src="${baseUrl?html}/XUI/libs/requirejs.js"></script>
 </body>
 </html>

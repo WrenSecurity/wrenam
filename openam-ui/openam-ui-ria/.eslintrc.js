@@ -108,23 +108,21 @@ module.exports = {
             },
             "requireReturn": false
         }],
-        "yoda": [2, "never"],
-
-        /*
-         * --------------------------------------------------------------------------------
-         * WARNING RULES
-         *
-         * These are rules that we want to turn into errors but can't yet because there are
-         * too many violations. As we fix the violations, we will transition them into
-         * error rules.
-         * --------------------------------------------------------------------------------
-         */
-        "no-var": 1,
-        "prefer-arrow-callback": 1,
-        "prefer-spread": 1
+        "yoda": [2, "never"]
 
         // TODO: Need an abstraction for logging before we can enable this.
         //"no-console": 0
         //"no-param-reassign": 0
-    }
+    },
+    overrides: [
+        {
+            // ESM specific rules
+            files: ["*.jsm", "*.jsx"],
+            rules: {
+                "no-var": 2,
+                "prefer-arrow-callback": 2,
+                "prefer-spread": 2
+            }
+        }
+    ]
 };

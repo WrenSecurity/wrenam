@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions copyright 2024 Wren Security.
  */
 
 /**
@@ -57,7 +58,7 @@ define([
 
     function groupTopLevelSimpleProperties (raw) {
         const collectionProperties = _(raw.properties)
-            .pick((property) => _.has(property, "properties"))
+            .pickBy((property) => _.has(property, "properties"))
             .keys()
             .value();
 
@@ -97,7 +98,7 @@ define([
     * @returns {JSONSchema} JSONSchema new JSONSchema object
     */
     function ungroupCollectionProperties (raw, groupKey) {
-        const collectionProperties = _.pick(raw.properties[groupKey].properties, (value) => {
+        const collectionProperties = _.pickBy(raw.properties[groupKey].properties, (value) => {
             return value.type === "object" && _.has(value, "properties");
         });
 
@@ -197,7 +198,7 @@ define([
             }
         }
         getPasswordKeys () {
-            const passwordProperties = _.pick(this.raw.properties, _.matches({ format: "password" }));
+            const passwordProperties = _.pickBy(this.raw.properties, _.matches({ format: "password" }));
 
             return _.keys(passwordProperties);
         }
@@ -205,7 +206,7 @@ define([
             return _.mapValues(this.raw.properties, (property) => new JSONSchema(property));
         }
         getRequiredPropertyKeys () {
-            return _.keys(_.pick(this.raw.properties, _.matches({ required: true })));
+            return _.keys(_.pickBy(this.raw.properties, _.matches({ required: true })));
         }
         hasEnableProperty () {
             return !_.isUndefined(this.raw.properties[`${_.camelCase(this.raw.title)}Enabled`]);
@@ -227,14 +228,17 @@ define([
         }
         pick (predicate) {
             const schema = _.cloneDeep(this.raw);
-            schema.properties = _.pick(this.raw.properties, predicate);
+            schema.properties = typeof predicate === "function"
+                ? _.pickBy(this.raw.properties, predicate)
+                : _.pick(this.raw.properties, predicate);
 
             return new JSONSchema(schema);
         }
         omit (predicate) {
             const schema = _.cloneDeep(this.raw);
-            schema.properties = _.omit(this.raw.properties, predicate);
-
+            schema.properties = typeof predicate === "function"
+                ? _.omitBy(this.raw.properties, predicate)
+                : _.omit(this.raw.properties, predicate);
             return new JSONSchema(schema);
         }
         /**

@@ -12,14 +12,16 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions copyright 2024 Wren Security.
  */
 
 define([
     "jquery",
     "squire",
     "sinon",
+    "chai",
     "org/forgerock/openam/ui/common/util/Constants"
-], ($, Squire, sinon, Constants) => {
+], ($, Squire, sinon, chai, Constants) => {
     let Configuration;
     let EventManager;
     let Router;
@@ -123,20 +125,20 @@ define([
             });
 
             context("when logout is successful", () => {
-                it("sends EVENT_AUTHENTICATION_DATA_CHANGED event", () => {
+                it("sends EVENT_AUTHENTICATION_DATA_CHANGED event", async () => {
                     promise.resolve();
 
-                    RouteTo.logout();
+                    await RouteTo.logout();
 
                     expect(EventManager.sendEvent).to.be.calledWith(Constants.EVENT_AUTHENTICATION_DATA_CHANGED, {
                         anonymousMode: true
                     });
                 });
 
-                it("sends EVENT_CHANGE_VIEW event", () => {
+                it("sends EVENT_CHANGE_VIEW event", async () => {
                     promise.resolve();
 
-                    RouteTo.logout();
+                    await RouteTo.logout();
 
                     expect(EventManager.sendEvent).to.be.calledWith(Constants.EVENT_CHANGE_VIEW, {
                         route: Router.configuration.routes.login
@@ -145,12 +147,21 @@ define([
             });
 
             context("when logout is unsuccessful", () => {
-                it("sends no events", () => {
-                    promise.fail();
+                it("sends no events", async () => {
+                    promise.reject(new Error());
 
-                    RouteTo.logout();
+                    let error = false;
 
-                    expect(EventManager.sendEvent).to.not.be.called;
+                    try {
+                        await RouteTo.logout();
+                    } catch {
+                        error = true;
+                        expect(EventManager.sendEvent).to.not.be.called;
+                    }
+
+                    if (!error) {
+                        chai.assert.fail();
+                    }
                 });
             });
         });

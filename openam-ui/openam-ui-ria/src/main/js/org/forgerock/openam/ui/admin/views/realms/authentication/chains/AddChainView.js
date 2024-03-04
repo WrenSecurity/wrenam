@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions copyright 2024 Wren Security.
  */
 define([
     "jquery",
@@ -26,7 +27,7 @@ define([
             nameExists,
             isValid;
 
-        nameExists = _.findWhere(this.data.chainsData, { _id:name });
+        nameExists = _.find(this.data.chainsData, { _id:name });
         if (nameExists) {
             Messages.addMessage({
                 type: Messages.TYPE_DANGER,

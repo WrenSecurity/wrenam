@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions copyright 2024 Wren Security.
  */
 
 define([
@@ -23,7 +24,7 @@ define([
     // jquery dependencies
     "bootstrap-tabdrop"
 ], ($, _, Backbone, UIUtils) => {
-    function has (attribute, tab) {
+    function has (tab, attribute) {
         if (!tab[attribute]) {
             throw new TypeError(`[TabComponent] Expected all items within 'tabs' to have a '${attribute}' attribute.`);
         }
@@ -47,10 +48,10 @@ define([
             if (_.isEmpty(options.tabs)) {
                 throw new TypeError("[TabComponent] \"tabs\" argument is an empty Array.");
             }
-            _(options.tabs)
-                .each(_.partial(has, "id"))
-                .each(_.partial(has, "title"))
-                .value();
+            _(options.tabs).each(function (tab) {
+                has(tab, "id");
+                has(tab, "title");
+            });
 
             this.options = options;
         },

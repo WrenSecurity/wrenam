@@ -40,7 +40,7 @@ class SessionsTable extends Component {
     }
 
     componentWillReceiveProps (nextProps) {
-        const updated = _.findByValues(nextProps.data, "sessionHandle", _.pluck(this.state.checked, "sessionHandle"));
+        const updated = _.findByValues(nextProps.data, "sessionHandle", _.map(this.state.checked, "sessionHandle"));
         this.setState({
             checked: updated,
             ownSession: findOwnSession(nextProps.data)

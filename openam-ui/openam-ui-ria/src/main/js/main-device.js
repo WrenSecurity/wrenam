@@ -12,32 +12,28 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions copyright 2024 Wren Security.
  */
 
 require.config({
     map: {
         "*" : {
             "ThemeManager" : "org/forgerock/openam/ui/common/util/ThemeManager",
-            "Router": "org/forgerock/openam/ui/common/SingleRouteRouter",
-            // TODO: Remove this when there are no longer any references to the "underscore" dependency
-            "underscore"   : "lodash"
+            "Router": "org/forgerock/openam/ui/common/SingleRouteRouter"
         }
     },
     paths: {
-        "handlebars": "libs/handlebars-4.0.5",
-        "i18next": "libs/i18next-1.7.3-min",
-        "jquery": "libs/jquery-2.1.1-min",
-        "lodash": "libs/lodash-3.10.1-min",
-        "redux": "libs/redux-3.5.2-min",
-        "text": "libs/text-2.0.15"
+        "handlebars": "libs/handlebars",
+        "i18next": "libs/i18next",
+        "jquery": "libs/jquery",
+        "lodash": "libs/lodash",
+        "redux": "libs/redux",
+        "text": "libs/text",
+        "underscore": "libs/underscore"
     },
     shim: {
         "handlebars": {
             exports: "handlebars"
-        },
-        "i18next": {
-            deps: ["jquery", "handlebars"],
-            exports: "i18n"
         },
         "lodash": {
             exports: "_"
@@ -63,7 +59,7 @@ require([
     var data = window.pageData,
         template = data.done ? DeviceDoneTemplate : DeviceTemplate;
 
-    i18nManager.init({
+    const i18nReady = i18nManager.init({
         paramLang: {
             locale: data.locale
         },
@@ -79,9 +75,11 @@ require([
     ThemeManager.getTheme().always(function (theme) {
         data.theme = theme;
 
-        $("#wrapper").html(HandleBars.compile(LoginBaseTemplate)(data));
-        $("#footer").html(HandleBars.compile(FooterTemplate)(data));
-        $("#loginBaseLogo").html(HandleBars.compile(LoginHeaderTemplate)(data));
-        $("#content").html(HandleBars.compile(template)(data));
+        i18nReady.then(() => {
+            $("#wrapper").html(HandleBars.compile(LoginBaseTemplate)(data));
+            $("#footer").html(HandleBars.compile(FooterTemplate)(data));
+            $("#loginBaseLogo").html(HandleBars.compile(LoginHeaderTemplate)(data));
+            $("#content").html(HandleBars.compile(template)(data));
+        });
     });
 });

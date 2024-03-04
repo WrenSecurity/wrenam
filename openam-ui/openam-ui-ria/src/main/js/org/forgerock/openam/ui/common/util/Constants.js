@@ -20,6 +20,8 @@
  * with the fields enclosed by brackets [] replaced by
  * your own identifying information:
  * "Portions Copyrighted [year] [name of copyright owner]"
+ *
+ * Portions copyright 2024 Wren Security.
  */
 
 define([
@@ -55,7 +57,7 @@ define([
     Constants.INTEGER_PATTERN = "\\d+";
 
     // Theme
-    Constants.DEFAULT_STYLESHEETS = ["css/bootstrap-3.3.5-custom.css", "css/styles-admin.css"];
+    Constants.DEFAULT_STYLESHEETS = ["css/bootstrap.css", "css/styles-admin.css"];
     Constants.EVENT_THEME_CHANGED = "main.EVENT_THEME_CHANGED";
 
     Constants.EVENT_REDIRECT_TO_JATO_FEDERATION = "main.navigation.EVENT_REDIRECT_TO_JATO_FEDERATION";

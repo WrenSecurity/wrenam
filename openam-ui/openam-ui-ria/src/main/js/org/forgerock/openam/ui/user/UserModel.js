@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Portions copyright 2015-2017 ForgeRock AS.
+ * Portions copyright 2024 Wren Security.
  */
 
 define([
@@ -169,7 +170,7 @@ define([
              * @returns {Boolean}      Whether this model has any of the roles specified
              */
             hasRole (roles) {
-                return _.spread(_.partial(_.contains, this.uiroles))(arrayify(roles));
+                return _.spread(_.partial(_.includes, this.uiroles))(arrayify(roles));
             }
         });
     return new UserModel();

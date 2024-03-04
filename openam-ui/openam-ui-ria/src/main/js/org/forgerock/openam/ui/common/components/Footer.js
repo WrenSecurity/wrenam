@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions copyright 2024 Wren Security.
  */
 
 define([
@@ -21,7 +22,7 @@ define([
     "org/forgerock/openam/ui/common/services/ServerService"
 ], function (_, Configuration, Footer, ServerService) {
     function isAdmin () {
-        return Configuration.loggedUser && _.contains(Configuration.loggedUser.uiroles, "ui-realm-admin");
+        return Configuration.loggedUser && _.includes(Configuration.loggedUser.uiroles, "ui-realm-admin");
     }
 
     var Component = Footer.extend({

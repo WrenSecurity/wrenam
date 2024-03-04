@@ -7,21 +7,20 @@ module.exports = function (config) {
         basePath: ".",
         frameworks: ["mocha", "requirejs"],
         files: [
-            { pattern: "target/test-classes/test-main.js" },
-            { pattern: "target/test-classes/**/*.js", included: false },
-            { pattern: "target/compiled/**/*.js", included: false },
-            { pattern: "target/dependencies/libs/**/*.js", included: false },
-            { pattern: "target/dependencies-expanded/forgerock-ui-user/libs/**/*.js", included: false },
+            { pattern: "target/test/test-main.js" },
+            { pattern: "target/test/**/*.js", included: false },
+            { pattern: "target/www/**/*.js", included: false },
+            { pattern: "target/ui-compose/libs/**/*.js", included: false },
             { pattern: "node_modules/chai/chai.js", included: false },
             { pattern: "node_modules/sinon-chai/lib/sinon-chai.js", included: false }
         ],
         exclude: [],
         preprocessors: {
-            "target/test-classes/**/*.js": ["babel"]
+            "target/test/**/*.js": ["babel"]
         },
         babelPreprocessor: {
             options: {
-                ignore: ["target/test-classes/libs/"],
+                ignore: ["target/test/libs/"],
                 presets: [
                     [
                         "@babel/preset-env",

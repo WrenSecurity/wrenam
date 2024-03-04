@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions copyright 2024 Wren Security.
  */
 
 import _ from "lodash";
@@ -56,7 +57,7 @@ class SessionsView extends Component {
     }
 
     handleInvalidateSessions (sessions) {
-        const handles = _.pluck(sessions, "sessionHandle");
+        const handles = _.map(sessions, "sessionHandle");
         invalidateByHandles(handles).then(() =>
             this.fetchSessionsByUserIdAndRealm(this.state.userId, this.props.router.params[0]));
     }

@@ -20,32 +20,29 @@
  * with the fields enclosed by brackets [] replaced by
  * your own identifying information:
  * "Portions Copyrighted [year] [name of copyright owner]"
+ *
+ * Portions copyright 2024 Wren Security.
  */
 
 require.config({
     map: {
         "*" : {
             "ThemeManager" : "org/forgerock/openam/ui/common/util/ThemeManager",
-            "Router": "org/forgerock/openam/ui/common/SingleRouteRouter",
-            // TODO: Remove this when there are no longer any references to the "underscore" dependency
-            "underscore"   : "lodash"
+            "Router": "org/forgerock/openam/ui/common/SingleRouteRouter"
         }
     },
     paths: {
-        "handlebars": "libs/handlebars-4.0.5",
-        "i18next": "libs/i18next-1.7.3-min",
-        "jquery": "libs/jquery-2.1.1-min",
-        "lodash": "libs/lodash-3.10.1-min",
-        "redux": "libs/redux-3.5.2-min",
-        "text": "libs/text-2.0.15"
+        "handlebars": "libs/handlebars",
+        "i18next": "libs/i18next",
+        "jquery": "libs/jquery",
+        "lodash": "libs/lodash",
+        "redux": "libs/redux",
+        "text": "libs/text",
+        "underscore": "libs/underscore"
     },
     shim: {
         "handlebars": {
             exports: "handlebars"
-        },
-        "i18next": {
-            deps: ["jquery", "handlebars"],
-            exports: "i18n"
         },
         "lodash": {
             exports: "_"
@@ -83,7 +80,7 @@ require([
         KEY_CODE_SPACE = 32,
         dataReady = $.Deferred();
 
-    i18nManager.init({
+    const i18nReady = i18nManager.init({
         paramLang: {
             locale: data.locale || Constants.DEFAULT_LANGUAGE
         },
@@ -136,21 +133,24 @@ require([
             require(templatePaths, function (AuthorizeTemplate, LoginBaseTemplate, FooterTemplate,
                     LoginHeaderTemplate) {
                 data.theme = theme;
-                baseTemplate = HandleBars.compile(LoginBaseTemplate);
-                formTemplate = HandleBars.compile(AuthorizeTemplate);
-                footerTemplate = HandleBars.compile(FooterTemplate);
-                loginHeaderTemplate = HandleBars.compile(LoginHeaderTemplate);
 
-                $("#wrapper").html(baseTemplate(data));
-                $("#footer").html(footerTemplate(data));
-                $("#loginBaseLogo").html(loginHeaderTemplate(data));
-                $("#content").html(formTemplate(data)).find(".panel-heading").bind("click keyup", function (e) {
-                    // keyup is required so that the collapsed panel can be opened with the keyboard alone,
-                    // and without relying on a mouse click event.
-                    if (e.type === "keyup" && e.keyCode !== KEY_CODE_ENTER && e.keyCode !== KEY_CODE_SPACE) {
-                        return;
-                    }
-                    $(this).toggleClass("expanded").next(".panel-collapse").slideToggle();
+                i18nReady.then(() => {
+                    baseTemplate = HandleBars.compile(LoginBaseTemplate);
+                    formTemplate = HandleBars.compile(AuthorizeTemplate);
+                    footerTemplate = HandleBars.compile(FooterTemplate);
+                    loginHeaderTemplate = HandleBars.compile(LoginHeaderTemplate);
+
+                    $("#wrapper").html(baseTemplate(data));
+                    $("#footer").html(footerTemplate(data));
+                    $("#loginBaseLogo").html(loginHeaderTemplate(data));
+                    $("#content").html(formTemplate(data)).find(".panel-heading").bind("click keyup", function (e) {
+                        // keyup is required so that the collapsed panel can be opened with the keyboard alone,
+                        // and without relying on a mouse click event.
+                        if (e.type === "keyup" && e.keyCode !== KEY_CODE_ENTER && e.keyCode !== KEY_CODE_SPACE) {
+                            return;
+                        }
+                        $(this).toggleClass("expanded").next(".panel-collapse").slideToggle();
+                    });
                 });
             });
         });

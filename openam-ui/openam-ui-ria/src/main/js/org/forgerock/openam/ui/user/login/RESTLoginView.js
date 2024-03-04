@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Portions copyright 2011-2016 ForgeRock AS.
+ * Portions copyright 2024 Wren Security.
  */
 
 define([
@@ -105,7 +106,7 @@ define([
      * @returns {Boolean} if the "PollingWaitCallback" is present on the current stage
      */
     function hasPollingCallback (requirements) {
-        return _.some(requirements.callbacks, "type", "PollingWaitCallback");
+        return _.some(requirements.callbacks, ["type", "PollingWaitCallback"]);
     }
 
     /**
@@ -114,7 +115,7 @@ define([
      * @returns {Boolean} if the "ConfirmationCallback" is present on the current stage
      */
     function hasConfirmationCallback (requirements) {
-        return _.some(requirements.callbacks, "type", "ConfirmationCallback");
+        return _.some(requirements.callbacks, ["type", "ConfirmationCallback"]);
     }
 
     function getFragmentParamString () {
@@ -304,7 +305,7 @@ define([
                 template,
                 self = this;
 
-            this.userNamePasswordStage = _.contains(usernamePasswordStages, reqs.stage);
+            this.userNamePasswordStage = _.includes(usernamePasswordStages, reqs.stage);
 
             requirements.callbacks = [];
 
@@ -313,7 +314,7 @@ define([
                 let redirectCallback;
 
                 if (element.type === "RedirectCallback") {
-                    redirectCallback = _.object(_.map(element.output, (o) => {
+                    redirectCallback = _.fromPairs(_.map(element.output, (o) => {
                         return [o.name, o.value];
                     }));
 

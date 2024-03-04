@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions copyright 2024 Wren Security.
  */
 
 define([
@@ -52,8 +53,8 @@ define([
             const nextRoute = getNextRoute(this.endpoint);
             const endpoint = fetchUrl.default(`/${this.endpoint}`, { realm: store.default.getState().server.realm });
 
-            if (!this.delegate || Router.currentRoute !== nextRoute) {
-                this.setDelegate(`json${endpoint}`, fragmentParams.token);
+            if (!this.processDelegate || Router.currentRoute !== nextRoute) {
+                this.setProcessDelegate(`json${endpoint}`, fragmentParams.token);
             }
 
             if (isFromEmailLink(fragmentParams)) {
@@ -71,7 +72,7 @@ define([
 
         restartProcess (e) {
             e.preventDefault();
-            delete this.delegate;
+            delete this.processDelegate;
             delete this.stateData;
 
             EventManager.sendEvent(Constants.EVENT_CHANGE_VIEW, {
