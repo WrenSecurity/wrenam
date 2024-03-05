@@ -32,6 +32,16 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.wrensecurity.commons</groupId>
+            <artifactId>wrensec-ui-commons</artifactId>
+            <version>${wrensec-ui.version}</version>
+            <type>zip</type>
+            <classifier>build</classifier>
+        </dependency>
+    </dependencies>
+
     <build>
         <resources>
             <resource>
@@ -45,6 +55,35 @@
         </resources>
 
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+
+                <executions>
+                    <execution>
+                        <id>unpack</id>
+                        <phase>initialize</phase>
+
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.wrensecurity.commons</groupId>
+                                    <artifactId>wrensec-ui-commons</artifactId>
+                                    <version>${wrensec-ui.version}</version>
+                                    <type>zip</type>
+                                    <classifier>build</classifier>
+                                    <outputDirectory>${project.build.directory}/ui-libs</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
             <plugin>
                 <groupId>com.github.eirslett</groupId>
                 <artifactId>frontend-maven-plugin</artifactId>
