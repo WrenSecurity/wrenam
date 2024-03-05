@@ -143,7 +143,7 @@
         <wrends.version>5.0.0</wrends.version>
         <wrensec-commons.version>22.6.0</wrensec-commons.version>
         <wrensec-guava.version>18.0.5</wrensec-guava.version>
-        <wrensec-ui.version>23.0.1</wrensec-ui.version>
+        <wrensec-ui.version>23.1.0</wrensec-ui.version>
 
         <!-- Test Dependencies -->
         <mockito.version>5.5.0</mockito.version>

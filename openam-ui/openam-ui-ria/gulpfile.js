@@ -120,7 +120,8 @@ gulp.task("build:bundle", useBuildRequire({
 gulp.task("build:editor", useBuildModule({
     id: "org/forgerock/openam/ui/admin/utils/CodeMirror",
     src: "src/main/js/org/forgerock/openam/ui/admin/utils/CodeMirror.jsm",
-    dest: join(TARGET_PATH, "org/forgerock/openam/ui/admin/utils/CodeMirror.js")
+    dest: join(TARGET_PATH, "org/forgerock/openam/ui/admin/utils/CodeMirror.js"),
+    external: ["jquery"]
 }));
 
 /**
