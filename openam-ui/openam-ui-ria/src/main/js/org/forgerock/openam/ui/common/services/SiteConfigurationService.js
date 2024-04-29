@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Portions copyright 2014-2016 ForgeRock AS.
+ * Portions copyright 2024 Wren Security.
  */
 
 define([
@@ -55,7 +56,7 @@ define([
         const sessionToken = SessionToken.get();
 
         if (sessionToken) {
-            return SessionService.updateSessionInfo(sessionToken).then(() => {
+            return SessionService.updateSessionInfo().then(() => {
                 if (isRealmChanged()) {
                     location.href = "#confirmLogin/";
                 }

@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions copyright 2024 Wren Security.
  */
 
 /**
@@ -30,9 +31,9 @@ const logout = () => {
     Configuration.setProperty("loggedUser", null);
 
     if (sessionToken) {
-        return isSessionValid(sessionToken).then((isValid) => {
+        return isSessionValid().then((isValid) => {
             if (isValid) {
-                return serviceLogout(sessionToken);
+                return serviceLogout();
             } else {
                 return $.Deferred().resolve();
             }
