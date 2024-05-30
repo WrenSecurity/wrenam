@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions copyright 2024 Wren Security.
  */
 
 /**
@@ -31,7 +32,7 @@
 define([
     "org/forgerock/openam/ui/user/services/SessionService"
 ], (SessionService) => {
-    return function (token) {
-        return SessionService.getTimeLeft(token);
+    return function () {
+        return SessionService.getTimeLeft();
     };
 });

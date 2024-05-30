@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Portions copyright 2011-2017 ForgeRock AS.
+ * Portions copyright 2024 Wren Security.
  */
 
 define([
@@ -108,7 +109,7 @@ define([
         const suppressError = { errorsHandlers : { "Unauthorized": { status: 401 } } };
 
         if (sessionToken) {
-            return SessionService.updateSessionInfo(sessionToken, suppressError).then((data) => {
+            return SessionService.updateSessionInfo(suppressError).then((data) => {
                 return UserModel.fetchById(data.username).then(successCallback);
             }, noSessionHandler);
         } else {
