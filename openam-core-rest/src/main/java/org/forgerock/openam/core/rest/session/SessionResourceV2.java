@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions copyright 2024 Wren Security.
  */
 package org.forgerock.openam.core.rest.session;
 
@@ -24,15 +25,12 @@ import static org.forgerock.util.promise.Promises.newResultPromise;
 
 import javax.inject.Inject;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
-import com.iplanet.am.util.SystemProperties;
 import com.iplanet.dpro.session.SessionException;
 import com.iplanet.dpro.session.service.SessionService;
 import com.iplanet.sso.SSOTokenManager;
 import com.sun.identity.common.CaseInsensitiveHashMap;
-import com.sun.identity.shared.Constants;
 import com.sun.identity.shared.debug.Debug;
 import org.forgerock.api.annotations.Action;
 import org.forgerock.api.annotations.Actions;
@@ -45,7 +43,6 @@ import org.forgerock.api.annotations.Query;
 import org.forgerock.api.annotations.Schema;
 import org.forgerock.api.enums.ParameterSource;
 import org.forgerock.api.enums.QueryType;
-import org.forgerock.http.header.CookieHeader;
 import org.forgerock.json.resource.ActionRequest;
 import org.forgerock.json.resource.ActionResponse;
 import org.forgerock.json.resource.BadRequestException;
@@ -120,10 +117,7 @@ public class SessionResourceV2 implements CollectionResourceProvider {
     public static final String UPDATE_SESSION_PROPERTIES_ACTION_ID = "updateSessionProperties";
     public static final String LOGOUT_BY_HANDLE_ACTION_ID = "logoutByHandle";
 
-    private final SessionPropertyWhitelist sessionPropertyWhitelist;
-
     private final Map<String, ActionHandler> actionHandlers;
-    private final SessionResourceUtil sessionResourceUtil;
     private final SessionService sessionService;
 
     /**
@@ -138,8 +132,6 @@ public class SessionResourceV2 implements CollectionResourceProvider {
     public SessionResourceV2(final SSOTokenManager ssoTokenManager, AuthUtilsWrapper authUtilsWrapper,
             final SessionResourceUtil sessionResourceUtil, SessionPropertyWhitelist sessionPropertyWhitelist,
             SessionService sessionService, PartialSessionFactory partialSessionFactory) {
-        this.sessionResourceUtil = sessionResourceUtil;
-        this.sessionPropertyWhitelist = sessionPropertyWhitelist;
         this.sessionService = sessionService;
         actionHandlers = new CaseInsensitiveHashMap<>();
         actionHandlers.put(REFRESH_ACTION_ID,
@@ -265,19 +257,8 @@ public class SessionResourceV2 implements CollectionResourceProvider {
     })
     @Override
     public Promise<ActionResponse, ResourceException> actionCollection(Context context, ActionRequest request) {
-        final String cookieName = SystemProperties.get(Constants.AM_COOKIE_NAME, "iPlanetDirectoryPro");
-        String tokenId = getTokenIdFromUrlParam(request);
+        String tokenId = SessionResourceUtil.getTokenId(context.asContext(HttpContext.class), request);
 
-        if (tokenId == null) {
-            tokenId = getTokenIdFromHeader(context, cookieName);
-        }
-
-        if (tokenId == null) {
-            tokenId = getTokenIdFromCookie(context, cookieName);
-        }
-
-        // Should any of these actions in the future be allowed to function without an SSO token, this
-        // code will have to be moved/changed.
         if (tokenId == null) {
             final BadRequestException e = new BadRequestException("iPlanetDirectoryCookie not set on request");
             LOGGER.message("SessionResource.handleNullSSOToken :: iPlanetDirectoryCookie not set on request", e);
@@ -285,31 +266,6 @@ public class SessionResourceV2 implements CollectionResourceProvider {
         }
 
         return internalHandleAction(tokenId, context, request);
-    }
-
-    protected String getTokenIdFromUrlParam(ActionRequest request) {
-        return request.getAdditionalParameter("tokenId");
-    }
-
-    protected String getTokenIdFromCookie(Context context, String cookieName) {
-        final List<String> header = context.asContext(HttpContext.class).getHeader(cookieName.toLowerCase());
-        if (!header.isEmpty()) {
-            return header.get(0);
-        }
-        return null;
-    }
-
-    protected String getTokenIdFromHeader(Context context, String cookieName) {
-        final List<String> headers = context.asContext(HttpContext.class).getHeader("cookie");
-
-        for (String header : headers) {
-            for (org.forgerock.http.protocol.Cookie cookie : CookieHeader.valueOf(header).getCookies()) {
-                if (cookie.getName().equalsIgnoreCase(cookieName)) {
-                    return cookie.getValue();
-                }
-            }
-        }
-        return null;
     }
 
     /**

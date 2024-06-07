@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions copyright 2024 Wren Security.
  */
 
 package org.forgerock.openam.core.rest.session;
@@ -24,7 +25,6 @@ import com.iplanet.sso.SSOException;
 import com.iplanet.sso.SSOToken;
 import com.iplanet.sso.SSOTokenManager;
 import com.sun.identity.shared.Constants;
-import org.apache.commons.lang.StringUtils;
 import org.forgerock.authz.filter.api.AuthorizationResult;
 import org.forgerock.authz.filter.crest.api.CrestAuthorizationModule;
 import org.forgerock.json.resource.ActionRequest;
@@ -37,6 +37,7 @@ import org.forgerock.json.resource.ReadRequest;
 import org.forgerock.json.resource.Request;
 import org.forgerock.json.resource.ResourceException;
 import org.forgerock.json.resource.UpdateRequest;
+import org.forgerock.json.resource.http.HttpContext;
 import org.forgerock.openam.rest.resource.SSOTokenContext;
 import org.forgerock.services.context.Context;
 import org.forgerock.util.Reject;
@@ -64,23 +65,19 @@ public class TokenOwnerAuthzModule implements CrestAuthorizationModule {
 
     private final SSOTokenManager ssoTokenManager;
     private final Set<String> allowedActions;
-    private final String tokenIdParameter;
 
     /**
      * Creates an authz module that will verify that a tokenId provided by the user (via query params)
      * is the same user (via universal identifier) as the user requesting the action.
      *
-     * @param tokenIdParameter The tokenId query parameter. May not be null.
      * @param ssoTokenManager An instance of the SSOTokenManager.
      * @param allowedActions A list of allowed actions. Will be matched ignoring case.
      */
-    public TokenOwnerAuthzModule(String tokenIdParameter, SSOTokenManager ssoTokenManager, String... allowedActions) {
+    public TokenOwnerAuthzModule(SSOTokenManager ssoTokenManager, String... allowedActions) {
         Reject.ifNull(allowedActions);
-        Reject.ifTrue(StringUtils.isEmpty(tokenIdParameter));
 
         this.ssoTokenManager = ssoTokenManager;
         this.allowedActions = new HashSet<>(Arrays.asList(allowedActions));
-        this.tokenIdParameter = tokenIdParameter;
     }
 
     @Override
@@ -136,12 +133,7 @@ public class TokenOwnerAuthzModule implements CrestAuthorizationModule {
 
     boolean isTokenOwner(Context context, Request request) throws ResourceException, SSOException {
         String loggedInUserId = getUserId(context);
-
-        String tokenId =  request.getResourcePath(); // infer from the token from resource path
-        if (StringUtils.isEmpty(tokenId)) {
-            //if there's no tokenId then is it supplied as additional parameter
-            tokenId = request.getAdditionalParameter(tokenIdParameter);
-        }
+        String tokenId = SessionResourceUtil.getTokenId(context.asContext(HttpContext.class), request);
 
         final String queryUsername = ssoTokenManager.createSSOToken(tokenId).getProperty(Constants.UNIVERSAL_IDENTIFIER);
         return queryUsername.equalsIgnoreCase(loggedInUserId);

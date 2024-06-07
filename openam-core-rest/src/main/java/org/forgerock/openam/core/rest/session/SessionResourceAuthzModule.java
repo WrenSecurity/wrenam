@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions copyright 2024 Wren Security.
  */
 
 package org.forgerock.openam.core.rest.session;
@@ -39,7 +40,7 @@ public class SessionResourceAuthzModule extends TokenOwnerAuthzModule {
 
     @Inject
     public SessionResourceAuthzModule(SSOTokenManager ssoTokenManager) {
-        super("tokenId", ssoTokenManager,
+        super(ssoTokenManager,
                 SessionResource.DELETE_PROPERTY_ACTION_ID, SessionResource.GET_PROPERTY_ACTION_ID,
                 SessionResource.GET_PROPERTY_NAMES_ACTION_ID, SessionResource.SET_PROPERTY_ACTION_ID,
                 SessionResource.GET_TIME_LEFT_ACTION_ID, SessionResource.GET_MAX_IDLE_ACTION_ID,

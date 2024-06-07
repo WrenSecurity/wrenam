@@ -12,18 +12,17 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions copyright 2024 Wren Security.
  */
 
 package org.forgerock.openam.core.rest.session;
 
-import static org.forgerock.json.JsonValue.*;
-
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
+import static org.forgerock.json.JsonValue.field;
+import static org.forgerock.json.JsonValue.json;
+import static org.forgerock.json.JsonValue.object;
 
 import com.google.inject.Inject;
+import com.iplanet.am.util.SystemProperties;
 import com.iplanet.dpro.session.share.SessionInfo;
 import com.iplanet.services.naming.WebtopNamingQuery;
 import com.iplanet.sso.SSOException;
@@ -31,9 +30,17 @@ import com.iplanet.sso.SSOToken;
 import com.iplanet.sso.SSOTokenManager;
 import com.sun.identity.idm.AMIdentity;
 import com.sun.identity.idm.IdRepoException;
+import com.sun.identity.shared.Constants;
 import com.sun.identity.shared.debug.Debug;
 import com.sun.identity.sm.DNMapper;
+import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import org.forgerock.http.header.CookieHeader;
+import org.forgerock.http.protocol.Cookie;
 import org.forgerock.json.JsonValue;
+import org.forgerock.json.resource.Request;
+import org.forgerock.json.resource.http.HttpContext;
 import org.forgerock.openam.core.rest.session.query.SessionQueryManager;
 import org.forgerock.openam.session.SessionConstants;
 import org.forgerock.openam.utils.StringUtils;
@@ -74,6 +81,67 @@ public class SessionResourceUtil {
         this.ssoTokenManager = ssoTokenManager;
         this.queryManager = sessionQueryManager;
         this.webtopNamingQuery = webtopNamingQuery;
+    }
+
+    /**
+     * Retrieves the token ID from the given context and request. The method attempts to extract the token ID
+     * from various sources in the following order:
+     * <ol>
+     *     <li>Path of the request</li>
+     *     <li>URL parameters of the request</li>
+     *     <li>Cookies</li>
+     *     <li>HTTP headers</li>
+     * </ol>
+     * If the token ID is not found in any of these sources, the method returns {@code null}.
+     *
+     *  @return The token ID if found; {@code null} otherwise.
+     */
+    static String getTokenId(HttpContext context, Request request) {
+        String cookieName = SystemProperties.get(Constants.AM_COOKIE_NAME, "iPlanetDirectoryPro");
+
+        String tokenId = getTokenIdFromPath(request);
+
+        if (StringUtils.isEmpty(tokenId)) {
+            tokenId = getTokenIdFromUrlParam(request);
+        }
+
+        if (StringUtils.isEmpty(tokenId)) {
+            tokenId = getTokenIdFromCookie(context, cookieName);
+        }
+
+        if (StringUtils.isEmpty(tokenId)) {
+            tokenId = getTokenIdFromHeader(context, cookieName);
+        }
+
+        return StringUtils.isEmpty(tokenId) ? null : tokenId;
+    }
+
+    private static String getTokenIdFromPath(Request request) {
+        return request.getResourcePath();
+    }
+
+    private static String getTokenIdFromUrlParam(Request request) {
+        return request.getAdditionalParameter("tokenId");
+    }
+
+    private static String getTokenIdFromCookie(HttpContext context, String cookieName) {
+        final List<String> headers = context.getHeader("cookie");
+        for (String header : headers) {
+            for (Cookie cookie : CookieHeader.valueOf(header).getCookies()) {
+                if (cookie.getName().equalsIgnoreCase(cookieName)) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
+    }
+
+    private static String getTokenIdFromHeader(HttpContext context, String headerName) {
+        final List<String> header = context.getHeader(headerName);
+        if (!header.isEmpty()) {
+            return header.get(0);
+        }
+        return null;
     }
 
     /**
@@ -124,7 +192,7 @@ public class SessionResourceUtil {
      * @return A non null collection of SessionInfos from the named server.
      */
     public Collection<SessionInfo> generateNamedServerSession(String serverId) {
-        List<String> serverList = Arrays.asList(new String[]{serverId});
+        List<String> serverList = List.of(serverId);
         Collection<SessionInfo> sessions = queryManager.getAllSessions(serverList);
         if (LOGGER.messageEnabled()) {
             LOGGER.message("SessionResource.generateNmaedServerSession :: retrieved session list for server, " +
