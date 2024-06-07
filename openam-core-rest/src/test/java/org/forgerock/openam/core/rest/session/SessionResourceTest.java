@@ -12,7 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2013-2015 ForgeRock AS.
- * Portions Copyright 2021 Wren Security.
+ * Portions Copyright 2021-2024 Wren Security.
  */
 
 package org.forgerock.openam.core.rest.session;
@@ -70,6 +70,7 @@ import org.forgerock.json.resource.NotSupportedException;
 import org.forgerock.json.resource.QueryRequest;
 import org.forgerock.json.resource.QueryResourceHandler;
 import org.forgerock.json.resource.ResourceException;
+import org.forgerock.json.resource.http.HttpContext;
 import org.forgerock.openam.authentication.service.AuthUtilsWrapper;
 import org.forgerock.openam.core.realms.Realm;
 import org.forgerock.openam.core.realms.RealmTestHelper;
@@ -82,7 +83,6 @@ import org.forgerock.opendj.ldap.DN;
 import org.forgerock.services.context.AttributesContext;
 import org.forgerock.services.context.ClientContext;
 import org.forgerock.services.context.Context;
-import org.forgerock.services.context.RootContext;
 import org.forgerock.services.context.SecurityContext;
 import org.forgerock.util.promise.Promise;
 import org.testng.annotations.AfterMethod;
@@ -115,12 +115,6 @@ public class SessionResourceTest {
 
     private AMIdentity amIdentity;
 
-    private String headerResponse;
-    private String urlResponse;
-    private String cookieResponse;
-
-
-
     @BeforeMethod
     public void setUp() throws Exception {
         SessionQueryManager sessionQueryManager = mock(SessionQueryManager.class);
@@ -128,9 +122,6 @@ public class SessionResourceTest {
         authUtilsWrapper = mock(AuthUtilsWrapper.class);
         propertyWhitelist = mock(SessionPropertyWhitelist.class);
         webtopNamingQuery = mock(WebtopNamingQuery.class);
-        headerResponse = null;
-        urlResponse = null;
-        cookieResponse = null;
 
         given(mockContext.getCallerSSOToken()).willReturn(ssoToken);
 
@@ -164,25 +155,7 @@ public class SessionResourceTest {
             }
         });
 
-        sessionResource = new SessionResource(ssoTokenManager, authUtilsWrapper,
-                propertyWhitelist, sessionResourceUtil) {
-
-            @Override
-            protected String getTokenIdFromHeader(Context context, String cookieName) {
-                return headerResponse;
-            }
-
-            @Override
-            protected String getTokenIdFromUrlParam(ActionRequest request) {
-                return urlResponse;
-            }
-
-            @Override
-            protected String getTokenIdFromCookie(Context context, String cookieName) {
-                return cookieResponse;
-            }
-
-        };
+        sessionResource = new SessionResource(ssoTokenManager, authUtilsWrapper, propertyWhitelist, sessionResourceUtil);
     }
 
     @AfterMethod
@@ -251,10 +224,11 @@ public class SessionResourceTest {
     @Test
     public void actionCollectionShouldFailToValidateSessionWhenSSOTokenIdNotSet() {
         //Given
-        final SSOTokenContext tokenContext = mock(SSOTokenContext.class);
-        final Context context = ClientContext.newInternalClientContext(tokenContext);
+        final HttpContext httpContext = mock(HttpContext.class);
+        final Context context = mock(ClientContext.class);
         final ActionRequest request = mock(ActionRequest.class);
 
+        given(context.asContext(HttpContext.class)).willReturn(httpContext);
         given(request.getAction()).willReturn(VALIDATE_ACTION_ID);
 
         //When
@@ -267,13 +241,15 @@ public class SessionResourceTest {
     @Test
     public void actionCollectionShouldValidateSessionAndReturnTrueWhenSSOTokenValid() throws SSOException {
         //Given
-        cookieResponse = "SSO_TOKEN_ID";
         final SSOTokenContext tokenContext = mock(SSOTokenContext.class);
-        final Context context = ClientContext.newInternalClientContext(tokenContext);
+        final HttpContext httpContext = mock(HttpContext.class);
+        final Context context = mock(ClientContext.class);
         final ActionRequest request = mock(ActionRequest.class);
         final SSOToken ssoToken = mock(SSOToken.class);
         final SSOTokenID ssoTokenId = mock(SSOTokenID.class);
 
+        given(context.asContext(HttpContext.class)).willReturn(httpContext);
+        given(httpContext.getHeader("cookie")).willReturn(List.of("iPlanetDirectoryPro=SSO_TOKEN_ID"));
         given(request.getAction()).willReturn(VALIDATE_ACTION_ID);
         given(tokenContext.getCallerSSOToken()).willReturn(ssoToken);
         given(ssoTokenManager.isValidToken(ssoToken)).willReturn(true);
@@ -294,14 +270,15 @@ public class SessionResourceTest {
     @Test
     public void actionCollectionShouldLogoutSessionAndReturnEmptyJsonObjectWhenSSOTokenValid() throws SSOException {
         //Given
-        cookieResponse = "SSO_TOKEN_ID";
-        final AttributesContext attrContext = new AttributesContext(new SessionContext(new RootContext(), mock(Session.class)));
-        final AdviceContext adviceContext = new AdviceContext(attrContext, Collections.<String>emptySet());
+        final HttpContext httpContext = mock(HttpContext.class);
+        final AttributesContext attrContext = new AttributesContext(new SessionContext(httpContext, mock(Session.class)));
+        final AdviceContext adviceContext = new AdviceContext(attrContext, Collections.emptySet());
         final SecurityContext securityContext = new SecurityContext(adviceContext, null, null);
         final Context context = ClientContext.newInternalClientContext(new SSOTokenContext(mock(Debug.class), null, securityContext));
         final ActionRequest request = mock(ActionRequest.class);
         final SSOTokenID ssoTokenId = mock(SSOTokenID.class);
 
+        given(request.getAdditionalParameter("tokenId")).willReturn("SSO_TOKEN_ID");
         given(request.getAction()).willReturn(LOGOUT_ACTION_ID);
         given(authUtilsWrapper.logout(ssoTokenId.toString(), null, null)).willReturn(true);
 

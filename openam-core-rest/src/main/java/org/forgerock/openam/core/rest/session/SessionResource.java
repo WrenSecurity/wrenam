@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2013-2016 ForgeRock AS.
+ * Portions copyright 2024 Wren Security.
  */
 
 package org.forgerock.openam.core.rest.session;
@@ -32,12 +33,14 @@ import static org.forgerock.openam.i18n.apidescriptor.ApiDescriptorConstants.TIT
 import static org.forgerock.openam.utils.Time.currentTimeMillis;
 import static org.forgerock.util.promise.Promises.newResultPromise;
 
+import com.iplanet.dpro.session.share.SessionInfo;
+import com.iplanet.services.naming.WebtopNaming;
+import com.iplanet.sso.SSOTokenManager;
+import com.sun.identity.common.CaseInsensitiveHashMap;
+import com.sun.identity.shared.debug.Debug;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
-
 import javax.inject.Inject;
-
 import org.forgerock.api.annotations.Action;
 import org.forgerock.api.annotations.Actions;
 import org.forgerock.api.annotations.ApiError;
@@ -49,7 +52,6 @@ import org.forgerock.api.annotations.Queries;
 import org.forgerock.api.annotations.Query;
 import org.forgerock.api.annotations.Schema;
 import org.forgerock.api.enums.QueryType;
-import org.forgerock.http.header.CookieHeader;
 import org.forgerock.json.JsonValue;
 import org.forgerock.json.resource.ActionRequest;
 import org.forgerock.json.resource.ActionResponse;
@@ -85,14 +87,6 @@ import org.forgerock.openam.session.SessionConstants;
 import org.forgerock.openam.session.SessionPropertyWhitelist;
 import org.forgerock.services.context.Context;
 import org.forgerock.util.promise.Promise;
-
-import com.iplanet.am.util.SystemProperties;
-import com.iplanet.dpro.session.share.SessionInfo;
-import com.iplanet.services.naming.WebtopNaming;
-import com.iplanet.sso.SSOTokenManager;
-import com.sun.identity.common.CaseInsensitiveHashMap;
-import com.sun.identity.shared.Constants;
-import com.sun.identity.shared.debug.Debug;
 
 /**
  * Represents Sessions that can queried via a REST interface.
@@ -416,20 +410,8 @@ public class SessionResource implements CollectionResourceProvider {
         )
     })
     public Promise<ActionResponse, ResourceException> actionCollection(Context context, ActionRequest request) {
-        final String cookieName = SystemProperties.get(Constants.AM_COOKIE_NAME, "iPlanetDirectoryPro");
+        String tokenId = SessionResourceUtil.getTokenId(context.asContext(HttpContext.class), request);
 
-        String tokenId = getTokenIdFromUrlParam(request);
-
-        if (tokenId == null) {
-            tokenId = getTokenIdFromHeader(context, cookieName);
-        }
-
-        if (tokenId == null) {
-            tokenId = getTokenIdFromCookie(context, cookieName);
-        }
-
-        // Should any of these actions in the future be allowed to function without an SSO token, this
-        // code will have to be moved/changed.
         if (tokenId == null) {
             final BadRequestException e = new BadRequestException("iPlanetDirectoryCookie not set on request");
             LOGGER.message("SessionResource.handleNullSSOToken :: iPlanetDirectoryCookie not set on request", e);
@@ -437,31 +419,6 @@ public class SessionResource implements CollectionResourceProvider {
         }
 
         return internalHandleAction(tokenId, context, request);
-    }
-
-    protected String getTokenIdFromUrlParam(ActionRequest request) {
-        return request.getAdditionalParameter("tokenId");
-    }
-
-    protected String getTokenIdFromCookie(Context context, String cookieName) {
-        final List<String> header = context.asContext(HttpContext.class).getHeader(cookieName.toLowerCase());
-        if (!header.isEmpty()) {
-            return header.get(0);
-        }
-        return null;
-    }
-
-    protected String getTokenIdFromHeader(Context context, String cookieName) {
-        final List<String> headers = context.asContext(HttpContext.class).getHeader("cookie");
-
-        for (String header : headers) {
-            for (org.forgerock.http.protocol.Cookie cookie : CookieHeader.valueOf(header).getCookies()) {
-                if (cookie.getName().equalsIgnoreCase(cookieName)) {
-                    return cookie.getValue();
-                }
-            }
-        }
-        return null;
     }
 
     /**
