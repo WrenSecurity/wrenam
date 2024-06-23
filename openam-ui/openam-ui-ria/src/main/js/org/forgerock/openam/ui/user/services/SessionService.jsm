@@ -15,6 +15,7 @@
  * Portions copyright 2024 Wren Security.
  */
 
+import $ from "jquery";
 import _ from "lodash";
 
 import { sessionAddInfo } from "store/actions/creators";
@@ -37,11 +38,25 @@ const getSessionInfo = (options) => {
 };
 
 export const getTimeLeft = () => {
-    return getSessionInfo({ suppressSpinner: true }).then((sessionInfo) => {
-        const idleExpiration = moment(sessionInfo.maxIdleExpirationTime).diff(moment(), "seconds");
-        const maxExpiration = moment(sessionInfo.maxSessionExpirationTime).diff(moment(), "seconds");
-        return _.min([idleExpiration, maxExpiration]);
-    });
+    // Number of seconds to indicate in case of network error (see WrenSecurity/wrenam#176)
+    const NETWORK_ERROR_EXPIRATION_SECONDS = 30;
+
+    return getSessionInfo({
+        suppressEvents: true,
+        suppressSpinner: true
+    }).then(
+        (sessionInfo) => {
+            const idleExpiration = moment(sessionInfo.maxIdleExpirationTime).diff(moment(), "seconds");
+            const maxExpiration = moment(sessionInfo.maxSessionExpirationTime).diff(moment(), "seconds");
+            return _.min([idleExpiration, maxExpiration]);
+        },
+        (jqXhr, textStatus, errorThrown) => {
+            if (jqXhr.status === 0) { // ignore network error
+                return $.Deferred().resolve(NETWORK_ERROR_EXPIRATION_SECONDS);
+            }
+            return $.Deferred().reject(jqXhr, textStatus, errorThrown);
+        }
+    );
 };
 
 export const updateSessionInfo = (options) => {
