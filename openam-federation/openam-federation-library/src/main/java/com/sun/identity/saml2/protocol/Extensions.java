@@ -25,8 +25,8 @@
  * $Id: Extensions.java,v 1.2 2008/06/25 05:47:56 qcheng Exp $
  *
  * Portions Copyrighted 2016 ForgeRock AS.
+ * Portions Copyrighted 2024 Wren Security.
  */
-
 
 package com.sun.identity.saml2.protocol;
 
@@ -35,7 +35,7 @@ import com.sun.identity.saml2.common.SAML2Exception;
 import com.sun.identity.saml2.protocol.impl.ExtensionsImpl;
 import java.util.List;
 
-/** 
+/**
  *  The interface <code>Extensions</code> defines methods for
  *  adding protcol message extension elements.
  *
@@ -45,33 +45,33 @@ import java.util.List;
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS,
         defaultImpl = ExtensionsImpl.class)
 public interface Extensions {
-    
-    /** 
+
+    /**
      * Sets the <code>Extensions</code> object.
      *
      * @param value List of Document Elements <code>Extensions</code> objects
      * @throws SAML2Exception if the object is immutable.
      * @see #getAny
      */
-    public void setAny(List value) throws SAML2Exception;
-    
-    /** 
+    public void setAny(List<Object> value) throws SAML2Exception;
+
+    /**
      * Returns the list of <code>Extensions</code> object.
      *
      * @return a List of Document Elements <code>Extensions</code> objects.
      * @see #setAny(List)
      */
-    public List getAny() ;
-    
-    /** 
+    public List<Object> getAny() ;
+
+    /**
      * Returns a String representation of this object.
      *
      * @return a  String representation of this object.
      * @throws SAML2Exception if cannot convert to String.
      */
     public String toXMLString() throws SAML2Exception;
-    
-    /** 
+
+    /**
      * Returns a String representation of this object.
      *
      * @param includeNSPrefix determines whether or not the namespace
@@ -81,17 +81,17 @@ public interface Extensions {
      * @return the String representation of this Object.
      * @throws SAML2Exception if cannot convert to String.
      **/
-    
+
     public String toXMLString(boolean includeNSPrefix,
             boolean declareNS) throws SAML2Exception;
-    
-    /** 
-     * Makes this object immutable. 
+
+    /**
+     * Makes this object immutable.
      *
      */
     public void makeImmutable() ;
-    
-    /** 
+
+    /**
      * Returns value true if object is mutable.
      *
      * @return true if object is mutable.
