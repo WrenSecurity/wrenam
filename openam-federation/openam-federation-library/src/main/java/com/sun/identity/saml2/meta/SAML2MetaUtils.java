@@ -25,6 +25,7 @@
  * $Id: SAML2MetaUtils.java,v 1.9 2009/09/21 17:28:12 exu Exp $
  *
  * Portions Copyrighted 2010-2015 ForgeRock AS.
+ * Portions Copyrighted 2024 Wren Security.
  */
 package com.sun.identity.saml2.meta;
 
@@ -81,14 +82,12 @@ public final class SAML2MetaUtils {
         "com.sun.identity.saml2.jaxb.xmlsig:" +
         "com.sun.identity.saml2.jaxb.assertion:" +
         "com.sun.identity.saml2.jaxb.metadata:" +
-	"com.sun.identity.saml2.jaxb.metadataattr:" +
+        "com.sun.identity.saml2.jaxb.metadataattr:" +
         "com.sun.identity.saml2.jaxb.entityconfig:" +
         "com.sun.identity.saml2.jaxb.schema";
     private static final String JAXB_PACKAGE_LIST_PROP =
         "com.sun.identity.liberty.ws.jaxb.packageList";
     private static JAXBContext jaxbContext = null;
-    private static final String PROP_JAXB_FORMATTED_OUTPUT =
-                                        "jaxb.formatted.output";
     private static final String PROP_NAMESPACE_PREFIX_MAPPER =
                                     "com.sun.xml.bind.namespacePrefixMapper";
 
@@ -172,17 +171,30 @@ public final class SAML2MetaUtils {
     }
 
     /**
+     * See {@link #convertJAXBToString(Object, boolean)}.
+     */
+    public static String convertJAXBToString(Object jaxbObj) throws JAXBException {
+        return convertJAXBToString(jaxbObj, true, false);
+    }
+
+    /**
      * Converts a JAXB object to a <code>String</code> object.
      * @param jaxbObj a JAXB object
+     * @param format flag indicating whether the output XML should be formatted.
+     * @param fragment flag indicating whether the specified JAXB object is the fragment.
      * @return a <code>String</code> representing the JAXB object.
      * @exception JAXBException if an error occurs while converting JAXB object
      */
-    public static String convertJAXBToString(Object jaxbObj)
-        throws JAXBException {
-
+    public static String convertJAXBToString(Object jaxbObj, boolean format, boolean fragment) throws JAXBException {
         StringWriter sw = new StringWriter();
         Marshaller marshaller = jaxbContext.createMarshaller();
-        marshaller.setProperty(PROP_JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+        if (format) {
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+        }
+        if (fragment) {
+            marshaller.setProperty(Marshaller.JAXB_FRAGMENT, Boolean.TRUE);
+            marshaller.setProperty("com.sun.xml.bind.xmlDeclaration", Boolean.FALSE);
+        }
         marshaller.setProperty(PROP_NAMESPACE_PREFIX_MAPPER, nsPrefixMapper);
         marshaller.marshal(jaxbObj, sw);
         return sw.toString();
@@ -194,12 +206,9 @@ public final class SAML2MetaUtils {
      * @param os an <code>OutputStream</code> object
      * @exception JAXBException if an error occurs while converting JAXB object
      */
-    public static void convertJAXBToOutputStream(Object jaxbObj,
-                                                 OutputStream os)
-        throws JAXBException {
-
+    public static void convertJAXBToOutputStream(Object jaxbObj, OutputStream os) throws JAXBException {
         Marshaller marshaller = jaxbContext.createMarshaller();
-        marshaller.setProperty(PROP_JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
         marshaller.setProperty(PROP_NAMESPACE_PREFIX_MAPPER, nsPrefixMapper);
         marshaller.marshal(jaxbObj, os);
     }
@@ -573,36 +582,32 @@ public final class SAML2MetaUtils {
         return null;
     }
 
-    public static String exportStandardMeta(String realm, String entityID,
-	boolean sign)
-	throws SAML2MetaException {
+    public static String exportStandardMeta(String realm, String entityID, boolean sign) throws SAML2MetaException {
+        try {
+            SAML2MetaManager metaManager = new SAML2MetaManager();
+            EntityDescriptorElement descriptor =
+            metaManager.getEntityDescriptor(realm, entityID);
 
-	try {
-	    SAML2MetaManager metaManager = new SAML2MetaManager();
-	    EntityDescriptorElement descriptor =
-		metaManager.getEntityDescriptor(realm, entityID);
+            String xmlstr = null;
+            if (descriptor == null) {
+                return null;
+            }
 
-	    String xmlstr = null;
-	    if (descriptor == null) {
-		return null;
-	    }
-
-	    if (sign) {
-		Document doc = SAML2MetaSecurityUtils.sign(realm, descriptor);
-		if (doc != null) {
+            if (sign) {
+                Document doc = SAML2MetaSecurityUtils.sign(realm, descriptor);
+                if (doc != null) {
                     xmlstr = XMLUtils.print(doc);
-		}
+                }
             }
             if (xmlstr == null) {
-		xmlstr = convertJAXBToString(descriptor);
-		xmlstr = SAML2MetaSecurityUtils.formatBase64BinaryElement(
-                    xmlstr);
+                xmlstr = convertJAXBToString(descriptor);
+                xmlstr = SAML2MetaSecurityUtils.formatBase64BinaryElement(xmlstr);
             }
             xmlstr = workaroundAbstractRoleDescriptor(xmlstr);
             return xmlstr;
-	} catch (JAXBException e) {
+        } catch (JAXBException e) {
             throw new SAML2MetaException(e.getMessage());
-	}
+        }
     }
 
     /**
@@ -734,7 +739,7 @@ public final class SAML2MetaUtils {
 
         return result;
     }
-    
+
     private static Object workaroundJAXBBug(Object obj) throws JAXBException {
 
         String metadata = convertJAXBToString(obj);
@@ -787,28 +792,28 @@ public final class SAML2MetaUtils {
     }
 
     private static String workaroundAbstractRoleDescriptor(String xmlstr) {
-	int index =
-	    xmlstr.indexOf(":" +SAML2MetaConstants.ATTRIBUTE_QUERY_DESCRIPTOR);
-	if (index == -1) {
-            return xmlstr;
-	}
+        int index =
+            xmlstr.indexOf(":" +SAML2MetaConstants.ATTRIBUTE_QUERY_DESCRIPTOR);
+        if (index == -1) {
+                return xmlstr;
+        }
 
         int index2 = xmlstr.lastIndexOf("<", index);
-	if (index2 == -1) {
-            return xmlstr;
-	}
+        if (index2 == -1) {
+                return xmlstr;
+        }
 
-        String prefix = xmlstr.substring(index2 + 1, index);
-	String type =  prefix + ":" +
-            SAML2MetaConstants.ATTRIBUTE_QUERY_DESCRIPTOR_TYPE;
+            String prefix = xmlstr.substring(index2 + 1, index);
+        String type =  prefix + ":" +
+                SAML2MetaConstants.ATTRIBUTE_QUERY_DESCRIPTOR_TYPE;
 
-	xmlstr = xmlstr.replaceAll("<" + prefix + ":" +
-            SAML2MetaConstants.ATTRIBUTE_QUERY_DESCRIPTOR,
-            "<" + SAML2MetaConstants.ROLE_DESCRIPTOR + " " +
-            SAML2Constants.XSI_DECLARE_STR + " xsi:type=\"" + type + "\"");
-	xmlstr = xmlstr.replaceAll("</" + prefix + ":" +
-           SAML2MetaConstants.ATTRIBUTE_QUERY_DESCRIPTOR,
-            "</" + SAML2MetaConstants.ROLE_DESCRIPTOR);
-	return xmlstr;
+        xmlstr = xmlstr.replaceAll("<" + prefix + ":" +
+                SAML2MetaConstants.ATTRIBUTE_QUERY_DESCRIPTOR,
+                "<" + SAML2MetaConstants.ROLE_DESCRIPTOR + " " +
+                SAML2Constants.XSI_DECLARE_STR + " xsi:type=\"" + type + "\"");
+        xmlstr = xmlstr.replaceAll("</" + prefix + ":" +
+               SAML2MetaConstants.ATTRIBUTE_QUERY_DESCRIPTOR,
+                "</" + SAML2MetaConstants.ROLE_DESCRIPTOR);
+        return xmlstr;
     }
 }

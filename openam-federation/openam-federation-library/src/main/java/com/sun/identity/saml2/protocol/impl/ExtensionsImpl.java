@@ -22,42 +22,37 @@
  * your own identifying information:
  * "Portions Copyrighted [year] [name of copyright owner]"
  *
- * $Id: ExtensionsImpl.java,v 1.2 2008/06/25 05:47:59 qcheng Exp $
- *
+ * Portions Copyrighted 2024 Wren Security.
  */
-
 
 package com.sun.identity.saml2.protocol.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
+import javax.xml.bind.JAXBException;
 import com.sun.identity.shared.xml.XMLUtils;
+import com.sun.xml.bind.JAXBObject;
 import com.sun.identity.saml2.common.SAML2Constants;
 import com.sun.identity.saml2.common.SAML2Exception;
 import com.sun.identity.saml2.common.SAML2SDKUtils;
+import com.sun.identity.saml2.meta.SAML2MetaUtils;
 import com.sun.identity.saml2.protocol.Extensions;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-/** 
- * The class defines methods for adding protcol message extension elements.
+/**
+ * The class defines methods for adding protocol message extension elements.
  */
-
 public class ExtensionsImpl implements Extensions {
-    
-    private boolean isMutable=false;
-    private List extensionsList=null;
 
-    /**
-     * Constructor to create the <code>Extensions</code> Object.
-     *
-     */
+    private boolean isMutable = false;
+    private List<Object> extensionsList = null;
+
     public ExtensionsImpl() {
-	isMutable=true;	
+        isMutable = true;
     }
 
     /**
@@ -66,9 +61,8 @@ public class ExtensionsImpl implements Extensions {
      * @param element the Document Element of <code>Extensions</code> object.
      * @throws SAML2Exception if <code>Extensions</code> cannot be created.
      */
-
     public ExtensionsImpl(Element element) throws SAML2Exception {
-	parseElement(element);
+        parseElement(element);
     }
 
     /**
@@ -78,52 +72,49 @@ public class ExtensionsImpl implements Extensions {
      * @throws SAML2Exception if <code>Extensions</code> cannot be created.
      */
     public ExtensionsImpl(String xmlString) throws SAML2Exception {
-	Document xmlDocument =
-                   XMLUtils.toDOMDocument(xmlString,SAML2SDKUtils.debug);
-	if (xmlDocument == null) {
-            throw new SAML2Exception(
-		    SAML2SDKUtils.bundle.getString("errorObtainingElement"));
-	}
+        Document xmlDocument = XMLUtils.toDOMDocument(xmlString,SAML2SDKUtils.debug);
+        if (xmlDocument == null) {
+            throw new SAML2Exception(SAML2SDKUtils.bundle.getString("errorObtainingElement"));
+        }
         parseElement(xmlDocument.getDocumentElement());
     }
 
-    /** 
+    /**
      * Sets the <code>Extensions</code> object.
      *
      * @param value List of XML Strings <code>Extensions</code> objects
      * @throws SAML2Exception if the object is immutable.
      * @see #getAny()
      */
-    public void setAny(List value) throws SAML2Exception {
-	if (isMutable) {
-	    extensionsList = value;
-	} else {
-	    throw new SAML2Exception(
-		    SAML2SDKUtils.bundle.getString("objectImmutable"));
-	}
+    public void setAny(List<Object> value) throws SAML2Exception {
+        if (isMutable) {
+            extensionsList = value;
+        } else {
+            throw new SAML2Exception(SAML2SDKUtils.bundle.getString("objectImmutable"));
+        }
     }
-		
-    /** 
+
+    /**
      * Returns the list of <code>Extensions</code> object.
      *
      * @return a List of XML Strings <code>Extensions</code> objects.
      * @see #setAny(List)
      */
-    public List getAny() {
-	return extensionsList;
+    public List<Object> getAny() {
+        return extensionsList;
     }
-    
-    /** 
+
+    /**
      * Returns a String representation of this object.
      *
      * @return a String representation of this object.
      * @throws SAML2Exception if cannot convert to String.
      */
     public String toXMLString() throws SAML2Exception {
-	return toXMLString(true,false);
+        return toXMLString(true,false);
     }
-    
-    /** 
+
+    /**
      * Returns a String representation of this object.
      *
      * @param includeNSPrefix determines whether or not the namespace
@@ -133,72 +124,90 @@ public class ExtensionsImpl implements Extensions {
      * @return the String representation of this Object.
      * @throws SAML2Exception if cannot convert to String.
      */
-    
-    public String toXMLString(boolean includeNSPrefix,
-            boolean declareNS) throws SAML2Exception {
-        String xmlStr = null;
-	if ((extensionsList != null) && (!extensionsList.isEmpty())) {
-	    StringBuffer xmlString = new StringBuffer(500);
-	    xmlString.append(SAML2Constants.START_TAG);
-	    if (includeNSPrefix) {
-		xmlString.append(SAML2Constants.PROTOCOL_PREFIX);
-	    }
-	    xmlString.append(SAML2Constants.EXTENSIONS);
-	    if (declareNS) {
-		xmlString.append(SAML2Constants.PROTOCOL_DECLARE_STR);
-	    }
-	    xmlString.append(SAML2Constants.END_TAG);
-
-	    Iterator extIterator = extensionsList.iterator();
-	    while (extIterator.hasNext()) {
-		String extString = (String) extIterator.next();
-	        xmlString.append(SAML2Constants.NEWLINE)
-		         .append(extString);
-	    }
-	    xmlString.append(SAML2Constants.NEWLINE)
-		     .append(SAML2Constants.SAML2_END_TAG)
-		     .append(SAML2Constants.EXTENSIONS)
-		     .append(SAML2Constants.END_TAG);
-
-	    xmlStr = xmlString.toString();
-	}
-	return xmlStr;
+    public String toXMLString(boolean includeNSPrefix, boolean declareNS) throws SAML2Exception {
+        if (extensionsList == null || extensionsList.isEmpty()) {
+            return null;
+        }
+        StringBuffer xmlString = new StringBuffer(500);
+        xmlString.append(SAML2Constants.START_TAG);
+        if (includeNSPrefix) {
+            xmlString.append(SAML2Constants.PROTOCOL_PREFIX);
+        }
+        xmlString.append(SAML2Constants.EXTENSIONS);
+        if (declareNS) {
+            xmlString.append(SAML2Constants.PROTOCOL_DECLARE_STR);
+        }
+        xmlString.append(SAML2Constants.END_TAG);
+        for (Object extension : extensionsList) {
+            String content = serializeExtension(extension);
+            if (content != null) {
+                xmlString.append(SAML2Constants.NEWLINE).append(content);
+            }
+        }
+        xmlString.append(SAML2Constants.NEWLINE)
+                .append(SAML2Constants.SAML2_END_TAG)
+                .append(SAML2Constants.EXTENSIONS)
+                .append(SAML2Constants.END_TAG);
+        return xmlString.toString();
     }
-    
-    /** 
-     * Makes this object immutable. 
+
+    /**
+     * Makes this object immutable.
      */
     public void makeImmutable() {
-	if (isMutable) {
-	    isMutable = false;
-	}
+        if (isMutable) {
+            isMutable = false;
+        }
     }
-    
-    /** 
+
+    /**
      * Returns value true if object is mutable.
      *
      * @return true if object is mutable.
      */
     public boolean isMutable() {
-	return isMutable;
+        return isMutable;
     }
 
-    /* Parses the Extensions Element. */
+    /**
+     * Parse the specified Extension DOM element.
+     */
     private void parseElement(Element element) {
-	NodeList nList = element.getChildNodes();
-	if ((extensionsList == null) || (extensionsList.isEmpty())) {
-	    extensionsList = new ArrayList();
-	}
-	if ((nList != null) && (nList.getLength() > 0)) {
-	    for (int i = 0; i < nList.getLength(); i++) {
-		Node childNode = nList.item(i);
-	        if (childNode.getLocalName() != null) {
-		    extensionsList.add(XMLUtils.print(childNode));
-		}
-	    }
-	    if ((extensionsList != null) && (!extensionsList.isEmpty())) {
-		extensionsList = Collections.unmodifiableList(extensionsList);
-	    }
-	}
+        NodeList nList = element.getChildNodes();
+        if (extensionsList == null || extensionsList.isEmpty()) {
+            extensionsList = new ArrayList<>();
+        }
+        if (nList != null && nList.getLength() > 0) {
+            for (int i = 0; i < nList.getLength(); i++) {
+                Node childNode = nList.item(i);
+                if (childNode.getLocalName() != null) {
+                    extensionsList.add(XMLUtils.print(childNode));
+                }
+            }
+            if (extensionsList != null && !extensionsList.isEmpty()) {
+                extensionsList = Collections.unmodifiableList(extensionsList);
+            }
+        }
     }
+
+    /**
+     * Serialize the specified extension object into string value.
+     */
+    private String serializeExtension(Object extension) {
+        if (extension == null) {
+            return null;
+        }
+        if (extension instanceof String) {
+            return (String) extension;
+        }
+        if (extension instanceof JAXBObject) {
+            try {
+                return SAML2MetaUtils.convertJAXBToString(extension, false, true);
+            } catch (JAXBException e) {
+                throw new IllegalStateException("Failed to serialize JAXB object.", e);
+            }
+        }
+        return null;
+    }
+
 }
