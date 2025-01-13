@@ -25,17 +25,17 @@
  * $Id: EntitiesViewBean.java,v 1.14 2009/12/11 23:25:19 veiming Exp $
  *
  * Portions Copyright 2015 ForgeRock AS.
+ * Portions Copyright 2025 Wren Security.
  */
 
 package com.sun.identity.console.idm;
 
-import com.iplanet.jato.RequestManager;
 import com.iplanet.jato.RequestContext;
+import com.iplanet.jato.RequestManager;
 import com.iplanet.jato.model.ModelControlException;
 import com.iplanet.jato.view.View;
 import com.iplanet.jato.view.event.DisplayEvent;
 import com.iplanet.jato.view.event.RequestInvocationEvent;
-import com.iplanet.sso.SSOException;
 import com.iplanet.sso.SSOToken;
 import com.sun.identity.console.base.AMViewBeanBase;
 import com.sun.identity.console.base.AMViewConfig;
@@ -44,23 +44,21 @@ import com.sun.identity.console.base.model.AMConsoleException;
 import com.sun.identity.console.base.model.AMFormatUtils;
 import com.sun.identity.console.base.model.AMModel;
 import com.sun.identity.console.components.view.html.SerializedField;
-import com.sun.identity.console.realm.HasEntitiesTabs;
-import com.sun.identity.console.realm.RealmPropertiesBase;
 import com.sun.identity.console.idm.model.EntitiesModel;
 import com.sun.identity.console.idm.model.EntitiesModelImpl;
+import com.sun.identity.console.realm.HasEntitiesTabs;
+import com.sun.identity.console.realm.RealmPropertiesBase;
 import com.sun.identity.idm.AMIdentity;
 import com.sun.identity.idm.IdRepoException;
 import com.sun.identity.idm.IdSearchResults;
 import com.sun.identity.idm.IdUtils;
+import com.sun.web.ui.model.CCActionTableModel;
+import com.sun.web.ui.model.CCPageTitleModel;
 import com.sun.web.ui.view.alert.CCAlert;
 import com.sun.web.ui.view.html.CCButton;
 import com.sun.web.ui.view.html.CCTextField;
 import com.sun.web.ui.view.pagetitle.CCPageTitle;
 import com.sun.web.ui.view.table.CCActionTable;
-import com.sun.web.ui.model.CCActionTableModel;
-import com.sun.web.ui.model.CCPageTitleModel;
-import org.forgerock.openam.ldap.LDAPUtils;
-
 import java.io.Serializable;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -68,9 +66,10 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
+import org.forgerock.openam.ldap.LDAPUtils;
+import org.forgerock.openam.utils.StringUtils;
 
 public class EntitiesViewBean
     extends RealmPropertiesBase
@@ -221,12 +220,11 @@ public class EntitiesViewBean
         EntitiesModel model = (EntitiesModel)getModel();
         String filter = ((String)getDisplayFieldValue(TF_FILTER));
 
-        if ((filter == null) || (filter.length() == 0)) {
-            filter = "*";
-            setDisplayFieldValue(TF_FILTER, "*");
-        } else {
-            filter = filter.trim();
+        if (StringUtils.isBlank(filter)) {
+            return;
         }
+
+        filter = filter.trim();
 
         try {
             String curRealm = (String)getPageSessionAttribute(

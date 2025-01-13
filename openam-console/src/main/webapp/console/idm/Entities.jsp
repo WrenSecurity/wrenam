@@ -24,6 +24,8 @@
 
    $Id: Entities.jsp,v 1.5 2008/09/04 00:03:53 asyhuang Exp $
 
+   Portions Copyrighted 2025 Wren Security.
+
 --%>
 
 
@@ -93,7 +95,7 @@
 <table border="0" cellpadding="0" cellspacing="0">
     <tr>
 	<td><cc:spacer name="spacer" height="1" width="10" newline="false" /></td>
-	<td nowrap><cc:label name ="lblFilter" elementName="tfFilter" /><cc:textfield name="tfFilter" defaultValue="*" onKeyDown="if (event.keyCode == 13) { document.forms['Entities'].submit(); return false;}" /></td>
+	<td nowrap><cc:label name ="lblFilter" elementName="tfFilter" /><cc:textfield name="tfFilter" onKeyDown="if (event.keyCode == 13) { document.forms['Entities'].submit(); return false;}" /></td>
 	<td><cc:spacer name="spacer" height="1" width="3" newline="false" /></td>
 	<td><cc:button name="btnSearch" bundleID="amConsole" defaultValue="button.search" type="primary" onClick="document.forms['Entities'].submit();" /></td>
     </tr>
