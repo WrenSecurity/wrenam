@@ -10,8 +10,6 @@ RUN \
 # Configure headless Chromium for Puppeteer
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
-# Use '--no-sandbox' option for Puppeteer's Chromium because of incompatibility with Docker
-ENV DISABLE_PUPPETEER_SANDBOX=true
 
 # Copy project files
 WORKDIR /project
