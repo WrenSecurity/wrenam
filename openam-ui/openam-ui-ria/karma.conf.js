@@ -37,7 +37,7 @@ module.exports = function (config) {
         colors: true,
         logLevel: config.LOG_INFO,
         autoWatch: true,
-        browsers: [process.env.DISABLE_PUPPETEER_SANDBOX ? "ChromeHeadlessNoSandbox" : "ChromeHeadless"],
+        browsers: ["ChromeHeadlessNoSandbox"],
         singleRun: false,
         customLaunchers: {
             ChromeHeadlessNoSandbox: {
