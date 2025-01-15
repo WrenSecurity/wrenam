@@ -25,6 +25,7 @@
  * $Id: ISAccountLockout.java,v 1.15 2009/03/07 08:01:50 veiming Exp $
  *
  * Portions Copyrighted 2011-2017 ForgeRock AS.
+ * Portions Copyrighted 2023 Wren Security
  */
 package com.sun.identity.common;
 
@@ -218,31 +219,29 @@ public class ISAccountLockout {
         }
 
         long now = currentTimeMillis();
-        int fail_count = acInfo.getFailCount();
+        int failCount = acInfo.getFailCount();
         long lastFailTime = acInfo.getLastFailTime();
         long lockedAt = acInfo.getLockoutAt();
         
         if((lastFailTime + failureLockoutTime) > now) {
-            fail_count = fail_count +1;
+            failCount++;
         } else {
-            fail_count = 1;
+            failCount = 1;
         }        
         
-        if (((lastFailTime + failureLockoutTime) > now) &&
-            (fail_count == failureLockoutCount)
-        ) {
+        if ((lastFailTime == 0L && failCount == 1 || (lastFailTime + failureLockoutTime) > now)
+                && failCount == failureLockoutCount) {
             lockedAt = now;
         }
         if (debug.messageEnabled()) {
-            debug.message("ISAccountLockout.invalidPasswd:fail_count:"
-                 +fail_count);
+            debug.message("ISAccountLockout.invalidPasswd:failCount:" + failCount);
         }
        
         if (storeInvalidAttemptsInDS) {
             Map attrMap = new HashMap();
             Set invalidAttempts = new HashSet();
             String invalidXML = createInvalidAttemptsXML(
-                fail_count,now,lockedAt, acInfo.getActualLockoutDuration());
+                    failCount, now, lockedAt, acInfo.getActualLockoutDuration());
             invalidAttempts.add(invalidXML);
             
             if (debug.messageEnabled()) {
@@ -265,14 +264,14 @@ public class ISAccountLockout {
         }
         
         acInfo.setLastFailTime(now);
-        acInfo.setFailCount(fail_count);
+        acInfo.setFailCount(failCount);
         acInfo.setLockoutAt(lockedAt);
         if (lockedAt > 0) {
             acInfo.setLockout(true);
         }
         acInfo.setUserToken(userName);
         
-        if (fail_count == failureLockoutCount) {
+        if (failCount == failureLockoutCount) {
             if (!memoryLocking) {
                 inactivateUserAccount(amIdentity);
             }
@@ -299,7 +298,7 @@ public class ISAccountLockout {
             }
         }
         
-        setWarningCount(fail_count,failureLockoutCount);
+        setWarningCount(failCount,failureLockoutCount);
         return userWarningCount;
     }
     
