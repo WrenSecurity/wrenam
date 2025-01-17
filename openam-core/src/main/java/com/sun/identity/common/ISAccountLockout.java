@@ -25,22 +25,20 @@
  * $Id: ISAccountLockout.java,v 1.15 2009/03/07 08:01:50 veiming Exp $
  *
  * Portions Copyrighted 2011-2017 ForgeRock AS.
- * Portions Copyrighted 2023 Wren Security
+ * Portions Copyrighted 2023-2025 Wren Security.
  */
 package com.sun.identity.common;
 
-import static org.forgerock.openam.utils.Time.*;
+import static org.forgerock.openam.utils.Time.currentTimeMillis;
 
 import com.iplanet.am.util.AMSendMail;
-import javax.mail.MessagingException;
 import com.iplanet.sso.SSOException;
-import com.sun.identity.authentication.spi.AMAuthCallBackImpl;
 import com.sun.identity.authentication.spi.AMAuthCallBackException;
+import com.sun.identity.authentication.spi.AMAuthCallBackImpl;
 import com.sun.identity.idm.AMIdentity;
 import com.sun.identity.idm.IdRepoException;
 import com.sun.identity.shared.debug.Debug;
 import com.sun.identity.shared.debug.DebugLevel;
-import com.sun.identity.shared.debug.IDebug;
 import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.HashMap;
@@ -50,6 +48,8 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.StringTokenizer;
+import javax.mail.MessagingException;
+import org.forgerock.util.Reject;
 
 public class ISAccountLockout {
     private static final String USER_STATUS_ATTR="inetuserstatus";
@@ -77,6 +77,8 @@ public class ISAccountLockout {
         "<ActualLockoutDuration>";
     private static final String ACTUAL_LOCKOUT_DURATION_END =
         "</ActualLockoutDuration>";
+    private static final String NO_OF_TIMES_LOCKED_BEGIN ="<NoOfTimesLocked>";
+    private static final String NO_OF_TIMES_LOCKED_END ="</NoOfTimesLocked>";
     private static final String END_XML="</InvalidPassword>";
     
     private boolean failureLockoutMode = false;
@@ -229,9 +231,11 @@ public class ISAccountLockout {
             failCount = 1;
         }        
         
-        if ((lastFailTime == 0L && failCount == 1 || (lastFailTime + failureLockoutTime) > now)
-                && failCount == failureLockoutCount) {
+        if (isFailCountExceeded(failCount, lastFailTime, now)) {
             lockedAt = now;
+            acInfo.setActualLockoutDuration(
+                    calculateLockoutDuration(acInfo, failureLockoutDuration, failureLockoutMultiplier));
+            acInfo.setNoOfTimesLocked(acInfo.getNoOfTimesLocked() + 1);
         }
         if (debug.messageEnabled()) {
             debug.message("ISAccountLockout.invalidPasswd:failCount:" + failCount);
@@ -241,7 +245,7 @@ public class ISAccountLockout {
             Map attrMap = new HashMap();
             Set invalidAttempts = new HashSet();
             String invalidXML = createInvalidAttemptsXML(
-                    failCount, now, lockedAt, acInfo.getActualLockoutDuration());
+                    failCount, now, lockedAt, acInfo.getActualLockoutDuration(), acInfo.getNoOfTimesLocked());
             invalidAttempts.add(invalidXML);
             
             if (debug.messageEnabled()) {
@@ -266,7 +270,7 @@ public class ISAccountLockout {
         acInfo.setLastFailTime(now);
         acInfo.setFailCount(failCount);
         acInfo.setLockoutAt(lockedAt);
-        if (lockedAt > 0) {
+        if (acInfo.getLockoutAt() + acInfo.getActualLockoutDuration() > now) {
             acInfo.setLockout(true);
         }
         acInfo.setUserToken(userName);
@@ -301,7 +305,7 @@ public class ISAccountLockout {
         setWarningCount(failCount,failureLockoutCount);
         return userWarningCount;
     }
-    
+
     public AccountLockoutInfo getAcInfo(String userDN, AMIdentity amIdentity) {
         AccountLockoutInfo acInfo = null;
         if (storeInvalidAttemptsInDS) {
@@ -324,6 +328,7 @@ public class ISAccountLockout {
             long last_failed = 0;
             long locked_out_at = 0;
             long actual_lockout_duration = failureLockoutDuration;
+            int noOfTimesLocked = 0;
             
             if ((xmlFromDS != null) && (xmlFromDS.length() !=0) &&
                 (xmlFromDS.indexOf(BEGIN_XML) != -1)
@@ -346,15 +351,18 @@ public class ISAccountLockout {
                 } else {
                     actual_lockout_duration = failureLockoutDuration;
                 }
+                String noOfTimesLockedStr = getElement(xmlFromDS, NO_OF_TIMES_LOCKED_BEGIN, NO_OF_TIMES_LOCKED_END);
+                noOfTimesLocked = Integer.parseInt(noOfTimesLockedStr == null ? "0" : noOfTimesLockedStr);
             }
             
             acInfo.setLastFailTime(last_failed);
             acInfo.setFailCount(invalid_attempts);
             acInfo.setLockoutAt(locked_out_at);
             acInfo.setActualLockoutDuration(actual_lockout_duration);
-            if (locked_out_at > 0) {
+            if (locked_out_at + actual_lockout_duration > currentTimeMillis()) {
                 acInfo.setLockout(true);
             }
+            acInfo.setNoOfTimesLocked(noOfTimesLocked);
             
             setWarningCount(invalid_attempts,failureLockoutCount);
             acInfo.setWarningCount(userWarningCount);
@@ -711,7 +719,7 @@ public class ISAccountLockout {
                     Map attrMap = new HashMap();
                     Set invalidAttempts = new HashSet();
                     String invalidXML = createInvalidAttemptsXML(0,0,0,
-                        actualLockoutDuration);
+                        actualLockoutDuration, 0);
                     invalidAttempts.add(invalidXML);
                     attrMap.put(invalidAttemptsDataAttrName, invalidAttempts);
                     setLockoutObjectClass(amIdentity);
@@ -732,19 +740,35 @@ public class ISAccountLockout {
         acInfo.setActualLockoutDuration(actualLockoutDuration);
         
     }
-    
+
+    /**
+     * Checks whether the given {@code failCount} exceeds the {@link #failureLockoutCount}.
+     * The {@link #failureLockoutTime} interval is taken into account.
+     */
+    private boolean isFailCountExceeded(int failCount, long lastFailTime, long timestamp) {
+        Reject.ifFalse(failureLockoutTime > 0, "Failure lockout time must be greater than 0.");
+        Reject.ifFalse(failureLockoutCount > 0, "Failure lockout count must be greater than 0.");
+
+        if ((lastFailTime == 0L && failCount == 1) || (lastFailTime + failureLockoutTime) > timestamp) {
+            return failCount % failureLockoutCount == 0;
+        }
+        return false;
+    }
+
     /**
      * Returns XML to be stored in data store the format is like this
+     * <pre>
      * &lt;InvalidPassword>
-     *    &lt;InvalidCount>failureLockoutCount&lt;/LockoutCount>
-     *    &lt;LastInvalidAt>failureLockoutDuration&lt;/LockoutDuration>
-     *    &lt;LockedoutAt>failureLockoutTime&lt;/LockoutTime>
-     *  &lt;/InvalidPassword>
-     *
+     *    &lt;InvalidCount>invalidCount&lt;/LockoutCount>
+     *    &lt;LastInvalidAt>lastFailed&lt;/LockoutDuration>
+     *    &lt;LockedoutAt>lockedOutAt&lt;/LockoutTime>
+     *    &lt;ActualLockoutDuration>actualLockoutDuration&lt;/ActualLockoutDuration>
+     *    &lt;NoOfTimesLocked>noOfTimesLocked&lt;/NoOfTimesLocked>
+     * &lt;/InvalidPassword>
      */
     private static String createInvalidAttemptsXML(
         int invalidCount, long lastFailed, long lockedOutAt, 
-        long actualLockoutDuration) {
+        long actualLockoutDuration, int noOfTimesLocked) {
         StringBuilder xmlBuffer = new StringBuilder(150);
         xmlBuffer.append(BEGIN_XML).append(INVALID_PASS_COUNT_BEGIN)
             .append(String.valueOf(invalidCount)).append(INVALID_PASS_COUNT_END)
@@ -754,6 +778,7 @@ public class ISAccountLockout {
             .append(ACTUAL_LOCKOUT_DURATION_BEGIN)
             .append(String.valueOf(actualLockoutDuration))
             .append(ACTUAL_LOCKOUT_DURATION_END)
+            .append(NO_OF_TIMES_LOCKED_BEGIN).append(noOfTimesLocked).append(NO_OF_TIMES_LOCKED_END)
             .append(END_XML);
         return xmlBuffer.toString();
     }
@@ -775,5 +800,14 @@ public class ISAccountLockout {
         }
         return (answer);
     }
-    
+
+    private static long calculateLockoutDuration(AccountLockoutInfo acInfo, long lockoutDuration, int lockoutMultiplier) {
+        if (lockoutMultiplier < 1) {
+            debug.warning("Failure lockout multiplier is lower than 1. Using 1 instead.");
+            lockoutMultiplier = 1;
+        }
+        double durationMultiplier = Math.pow(lockoutMultiplier, acInfo.getNoOfTimesLocked());
+        return (long) durationMultiplier * lockoutDuration;
+    }
+
 }
