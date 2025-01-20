@@ -24,6 +24,7 @@
  *
  * $Id: AccountLockoutInfo.java,v 1.3 2008/06/25 05:42:24 qcheng Exp $
  *
+ * Portions Copyrighted 2025 Wren Security.
  */
 
 package com.sun.identity.common;
@@ -46,6 +47,8 @@ public class AccountLockoutInfo {
     private String userToken = null;
 
     private long actualLockoutDuration=0;
+
+    private int noOfTimesLocked;
 
     /**
      * Returns the current failure count stored in this object.
@@ -177,4 +180,21 @@ public class AccountLockoutInfo {
     public String getUserToken() {
         return userToken;
     }
+
+    /**
+     * Gets the number of times the account was locked.
+     * <p>
+     * This counter has to be reset to 0 after successful login.
+     */
+    public int getNoOfTimesLocked() {
+        return noOfTimesLocked;
+    }
+
+    /**
+     * Sets the number of times the account was locked.
+     */
+    public void setNoOfTimesLocked(int noOfTimesLocked) {
+        this.noOfTimesLocked = noOfTimesLocked;
+    }
+
 }
