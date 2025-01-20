@@ -48,17 +48,13 @@ ENV \
   " \
   CATALINA_OPTS="-server -Xmx2g -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=256m"
 
-# Create wrenam user
 ARG WRENAM_UID=1000
-ARG WRENAM_GID=1000
-RUN addgroup --gid ${WRENAM_GID} wrenam && \
-    adduser --uid ${WRENAM_UID} --gid ${WRENAM_GID} --system --home=${WRENAM_HOME} wrenam
 
 # Deploy wrenam project
 ARG WRENAM_CONTEXT=auth
-COPY --chown=wrenam:root --from=project-build /build/wrenam /usr/local/tomcat/webapps/${WRENAM_CONTEXT}
-COPY --chown=wrenam:root --from=project-build /build/ssoadm /opt/ssoadm
-COPY --chown=wrenam:root --from=project-build /build/ssoconf /opt/ssoconf
+COPY --chown=$WRENAM_UID:root --from=project-build /build/wrenam /usr/local/tomcat/webapps/${WRENAM_CONTEXT}
+COPY --chown=$WRENAM_UID:root --from=project-build /build/ssoadm /opt/ssoadm
+COPY --chown=$WRENAM_UID:root --from=project-build /build/ssoconf /opt/ssoconf
 
 USER ${WRENAM_UID}
 WORKDIR ${WRENAM_HOME}
