@@ -21,7 +21,7 @@
     <parent>
         <groupId>org.wrensecurity.wrenam</groupId>
         <artifactId>openam-tools</artifactId>
-        <version>15.1.3</version>
+        <version>15.1.4-SNAPSHOT</version>
     </parent>
 
     <artifactId>openam-upgrade-tool</artifactId>
