@@ -86,7 +86,7 @@ public class ImportServiceConfiguration extends AuthenticatedCommand {
      * @param rc Request Context.
      * @throws CLIException if the request cannot serviced.
      */
-    public void handleRequest(RequestContext rc) 
+    public void handleRequest(RequestContext rc)
         throws CLIException {
         super.handleRequest(rc);
 
@@ -98,7 +98,7 @@ public class ImportServiceConfiguration extends AuthenticatedCommand {
             //There is no encryptSecret file
         }
         validateEncryptSecret(xmlFile, encryptSecret);
-        
+
         // disable notification
         SystemProperties.initializeProperties(
             Constants.SMS_ENABLE_DB_NOTIFICATION, "true");
@@ -112,11 +112,12 @@ public class ImportServiceConfiguration extends AuthenticatedCommand {
         IOutput outputWriter = getOutputWriter();
         try (Connection ldConnection = getLDAPConnection()) {
             InitializeSystem initSys = CommandManager.initSys;
-   
+
             SSOToken ssoToken = initSys.getSSOToken(getAdminPassword());
 
             DirectoryServerVendor.Vendor vendor = DirectoryServerVendor.getInstance().query(ldConnection);
-            if (!vendor.name.equals(DirectoryServerVendor.OPENDJ)
+            if (!vendor.name.equals(DirectoryServerVendor.WRENDS)
+                    && !vendor.name.equals(DirectoryServerVendor.OPENDJ)
                     && !vendor.name.equals(DirectoryServerVendor.OPENDS)
                     && !vendor.name.equals(DirectoryServerVendor.ODSEE)
                     ) {
@@ -124,13 +125,13 @@ public class ImportServiceConfiguration extends AuthenticatedCommand {
                         "import-service-configuration-unknown-ds"),
                     ExitCodes.REQUEST_CANNOT_BE_PROCESSED);
             }
-            
+
             if (vendor.name.equals(DirectoryServerVendor.ODSEE)) {
                 loadLDIF(vendor, ldConnection);
             }
 
             String ouServices = "ou=services," + initSys.getRootSuffix();
-            
+
             if (this.isOuServicesExists(ssoToken, ouServices)) {
                 System.out.print(getResourceString(
                     "import-service-configuration-prompt-delete") + " ");
@@ -171,15 +172,15 @@ public class ImportServiceConfiguration extends AuthenticatedCommand {
                 "exception-LDAP-login-failed"), ExitCodes.LDAP_LOGIN_FAILED);
         }
     }
-    
+
     private String getEncKey(String xmlFile)
         throws IOException {
         String encKey = null;
         BufferedReader reader = null;
-        
+
         try {
             reader = new BufferedReader(new FileReader(xmlFile));
- 
+
             String line = reader.readLine();
             String prefix = "<Value>" + Constants.ENC_PWD_PROPERTY + "=";
             while ((line != null) && (encKey == null)) {
@@ -206,7 +207,7 @@ public class ImportServiceConfiguration extends AuthenticatedCommand {
         }
         return encKey;
     }
-    
+
     private boolean isOuServicesExists(SSOToken ssoToken, String ouServices)
         throws SMSException, SSOException {
         CachedSubEntries smsEntry = CachedSubEntries.getInstance(
@@ -214,9 +215,9 @@ public class ImportServiceConfiguration extends AuthenticatedCommand {
         Set children = smsEntry.getSubEntries(ssoToken, "*");
         return (children != null) && !children.isEmpty();
     }
-    
+
     private void deleteOuServicesDescendents(
-        SSOToken ssoToken, 
+        SSOToken ssoToken,
         String ouServices
     ) throws SSOException, SMSException {
         CachedSubEntries smsEntry = CachedSubEntries.getInstance(
@@ -251,8 +252,8 @@ public class ImportServiceConfiguration extends AuthenticatedCommand {
     }
 
     private void importData(
-        String xmlFile, 
-        String encryptSecret, 
+        String xmlFile,
+        String encryptSecret,
         SSOToken ssoToken
     ) throws CLIException, SSOException, SMSException, IOException {
         // set the correct password encryption key.
@@ -263,21 +264,21 @@ public class ImportServiceConfiguration extends AuthenticatedCommand {
                 encKey);
             Crypt.reinitialize();
         }
-        IOutput outputWriter = getOutputWriter();        
+        IOutput outputWriter = getOutputWriter();
         FileInputStream fis = null;
 
         try {
             AMEncryption encryptObj = new JCEEncryption();
             ((ConfigurableKey)encryptObj).setPassword(encryptSecret);
-            
+
             ServiceManager ssm = new ServiceManager(ssoToken);
             fis = new FileInputStream(xmlFile);
             ssm.registerServices(fis, encryptObj);
-            
+
             InitializeSystem initSys = CommandManager.initSys;
             String instanceName = initSys.getInstanceName();
             String serverConfigXML = initSys.getServerConfigXML();
-            ServerConfiguration.setServerConfigXML(ssoToken, instanceName, 
+            ServerConfiguration.setServerConfigXML(ssoToken, instanceName,
                 serverConfigXML);
             outputWriter.printlnMessage(getResourceString(
                 "import-service-configuration-succeeded"));
@@ -306,7 +307,7 @@ public class ImportServiceConfiguration extends AuthenticatedCommand {
         if (isVerbose()) {
             outputWriter.printlnMessage(getResourceString("import-service-configuration-connecting-to-ds"));
         }
-        
+
         try {
             Connection conn;
             DSConfigMgr dsCfg = DSConfigMgr.getDSConfigMgr();
@@ -317,7 +318,7 @@ public class ImportServiceConfiguration extends AuthenticatedCommand {
                 throw new CLIException(getResourceString("import-service-configuration-not-connect-to-ds"),
                     ExitCodes.REQUEST_CANNOT_BE_PROCESSED, null);
             }
-           
+
             if (isVerbose()) {
                 outputWriter.printlnMessage(getResourceString("import-service-configuration-connected-to-ds"));
             }
