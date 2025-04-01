@@ -1,4 +1,4 @@
-FROM debian:bullseye-slim AS project-build
+FROM --platform=$BUILDPLATFORM debian:bullseye-slim AS project-build
 
 # Install build dependencies
 RUN \
@@ -16,11 +16,11 @@ WORKDIR /project
 COPY . .
 
 # Perform actual Wren:AM build
-ARG BUILD_ARGS
+ARG MAVEN_BUILD_ARGS
 RUN \
   --mount=type=cache,target=/root/.m2 \
   --mount=type=cache,target=/root/.npm \
-  mvn package ${BUILD_ARGS}
+  mvn package ${MAVEN_BUILD_ARGS}
 
 # Copy built artifacts into target directory
 RUN \
