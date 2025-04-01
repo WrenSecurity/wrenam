@@ -40,13 +40,16 @@ import org.forgerock.opendj.ldap.responses.SearchResultEntry;
 import org.forgerock.opendj.ldif.ConnectionEntryReader;
 
 /**
- * This singleton attempts to query vendor information of a Directory Server. 
+ * This singleton attempts to query vendor information of a Directory Server.
  */
 public class DirectoryServerVendor {
+
     public static String OPENDS = "opends";
     public static String OPENDJ = "opendj";
+    public static String WRENDS = "wrends";
     public static String ODSEE = "odsee";
 
+    private static String VENDOR_WRENDS = "Wren:DS ";
     private static String VENDOR_OPENDJ = "OpenDJ ";
     private static String VENDOR_OPENDS = "OpenDS Directory Server ";
     private static String VENDOR_SUNDS_5 = "Sun-ONE-Directory/";
@@ -54,23 +57,23 @@ public class DirectoryServerVendor {
     private static String VENDOR_SUNDS_7 = "Sun-Directory-Server/";
     private static String VENDOR_ODSEE_11 = "Oracle Directory Server Enterprise Edition";
     private static DirectoryServerVendor instance = new DirectoryServerVendor();
-    
+
     private String[] attrs = {
         "vendorversion", "rootDomainNamingContext", "forestFunctionality"};
     private Vendor unknownVendor = new Vendor("unknown", "unknown");
-    
+
     private DirectoryServerVendor () {
     }
-    
+
     /**
      * Returns an instance of this class.
-     * 
+     *
      * @return an instance of this class.
      */
     public static DirectoryServerVendor getInstance() {
         return instance;
     }
-    
+
     /**
      * Returns the vendor of Directory Server.
      * @param conn LDAP connection to the server.
@@ -106,7 +109,10 @@ public class DirectoryServerVendor {
         Vendor vendor = unknownVendor;
 
         if (result != null) {
-            if (result.startsWith(VENDOR_OPENDJ)) {
+            if (result.startsWith(VENDOR_WRENDS)) {
+                String version = result.substring(VENDOR_WRENDS.length());
+                vendor = new Vendor(WRENDS, version);
+            } else if (result.startsWith(VENDOR_OPENDJ)) {
                 String version = result.substring(VENDOR_OPENDJ.length());
                 vendor = new Vendor(OPENDJ, version);
             } else if (result.startsWith(VENDOR_OPENDS)) {
@@ -129,17 +135,17 @@ public class DirectoryServerVendor {
 
         return vendor;
     }
-    
+
     public class Vendor {
-        
+
         public String name;
         public String version;
-        
+
         public Vendor(String name, String version) {
             this.name = name;
             this.version = version;
         }
-        
+
         public String toString() {
             return name + " " + version;
         }
