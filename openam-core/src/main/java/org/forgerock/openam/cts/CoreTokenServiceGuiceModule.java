@@ -12,10 +12,10 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions copyright 2025 Wren Security.
  */
 package org.forgerock.openam.cts;
 
-import java.io.Closeable;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -55,7 +55,6 @@ import org.forgerock.openam.sm.datalayer.api.DataLayer;
 import org.forgerock.openam.sm.datalayer.api.DataLayerConstants;
 import org.forgerock.openam.sm.datalayer.api.DataLayerException;
 import org.forgerock.openam.sm.datalayer.api.QueueConfiguration;
-import org.forgerock.opendj.ldap.Connection;
 import org.forgerock.util.Option;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -125,7 +124,7 @@ public class CoreTokenServiceGuiceModule extends PrivateModule {
         // Enable monitoring of all CTS operations
         bind(ResultHandlerFactory.class).to(MonitoredResultHandlerFactory.class);
 
-        /**
+        /*
          * Core Token Service bindings are divided into a number of logical groups.
          */
         MapBinder<Option<?>, LdapOptionFunction> optionFunctionMapBinder = MapBinder.newMapBinder(binder(),
@@ -136,9 +135,12 @@ public class CoreTokenServiceGuiceModule extends PrivateModule {
 
         expose(Debug.class).annotatedWith(Names.named(CoreTokenConstants.CTS_DEBUG));
         expose(Debug.class).annotatedWith(Names.named(CoreTokenConstants.CTS_ASYNC_DEBUG));
+        expose(Debug.class).annotatedWith(Names.named(CoreTokenConstants.CTS_MONITOR_DEBUG));
         expose(new TypeLiteral<Map<Option<?>, LdapOptionFunction>>() {});
         expose(CoreTokenConfig.class);
         expose(CTSPersistentStore.class);
+        expose(CTSOperationsMonitoringStore.class);
+        expose(CTSReaperMonitoringStore.class);
         expose(CTSConnectionMonitoringStore.class);
         expose(ExecutorService.class).annotatedWith(Names.named(CoreTokenConstants.CTS_WORKER_POOL));
         expose(ObjectMapper.class).annotatedWith(Names.named(CoreTokenConstants.OBJECT_MAPPER));
