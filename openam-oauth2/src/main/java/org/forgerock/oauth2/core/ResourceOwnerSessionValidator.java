@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014-2016 ForgeRock AS.
+ * Portions Copyright 2023 Wren Security.
  */
 
 package org.forgerock.oauth2.core;
@@ -19,19 +20,34 @@ package org.forgerock.oauth2.core;
 import static com.sun.identity.shared.DateUtils.stringToDate;
 import static org.forgerock.oauth2.core.Utils.isEmpty;
 import static org.forgerock.oauth2.core.Utils.splitResponseType;
-import static org.forgerock.openam.oauth2.OAuth2Constants.Custom.*;
+import static org.forgerock.openam.oauth2.OAuth2Constants.Custom.GOTO;
+import static org.forgerock.openam.oauth2.OAuth2Constants.Custom.LOCALE;
+import static org.forgerock.openam.oauth2.OAuth2Constants.Custom.MODULE;
+import static org.forgerock.openam.oauth2.OAuth2Constants.Custom.PROMPT;
+import static org.forgerock.openam.oauth2.OAuth2Constants.Custom.SERVICE;
+import static org.forgerock.openam.oauth2.OAuth2Constants.Custom.UI_LOCALES;
 import static org.forgerock.openam.oauth2.OAuth2Constants.DeviceCode.USER_CODE;
-import static org.forgerock.openam.oauth2.OAuth2Constants.Params.*;
+import static org.forgerock.openam.oauth2.OAuth2Constants.Params.ACR_VALUES;
+import static org.forgerock.openam.oauth2.OAuth2Constants.Params.GRANT_TYPE;
+import static org.forgerock.openam.oauth2.OAuth2Constants.Params.MAX_AGE;
+import static org.forgerock.openam.oauth2.OAuth2Constants.Params.RESPONSE_TYPE;
 import static org.forgerock.openam.oauth2.OAuth2Constants.UrlLocation.FRAGMENT;
 import static org.forgerock.openam.oauth2.OAuth2Constants.UrlLocation.QUERY;
 import static org.forgerock.openam.utils.Time.currentTimeMillis;
 import static org.forgerock.openidconnect.Client.CONFIRMED_MAX_AGE;
 import static org.forgerock.openidconnect.Client.MIN_DEFAULT_MAX_AGE;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
-import javax.servlet.http.HttpServletRequest;
-
+import com.iplanet.sso.SSOException;
+import com.iplanet.sso.SSOToken;
+import com.iplanet.sso.SSOTokenManager;
+import com.sun.identity.authentication.util.ISAuthConstants;
+import com.sun.identity.idm.AMIdentity;
+import com.sun.identity.idm.IdUtils;
+import com.sun.identity.security.AdminTokenAction;
+import com.sun.identity.shared.Constants;
+import com.sun.identity.shared.debug.Debug;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
@@ -47,20 +63,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-
-import com.iplanet.sso.SSOException;
-import com.iplanet.sso.SSOToken;
-import com.iplanet.sso.SSOTokenManager;
-import com.sun.identity.authentication.util.ISAuthConstants;
-import com.sun.identity.idm.AMIdentity;
-import com.sun.identity.idm.IdUtils;
-import com.sun.identity.security.AdminTokenAction;
-import com.sun.identity.shared.Constants;
-import com.sun.identity.shared.debug.Debug;
-
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
-
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import javax.servlet.http.HttpServletRequest;
 import org.forgerock.oauth2.core.exceptions.AccessDeniedException;
 import org.forgerock.oauth2.core.exceptions.BadRequestException;
 import org.forgerock.oauth2.core.exceptions.InteractionRequiredException;
@@ -349,10 +354,10 @@ public class ResourceOwnerSessionValidator {
         OAuth2ProviderSettings providerSettings = providerSettingsFactory.get(request);
         Template loginUrlTemplate = providerSettings.getCustomLoginUrlTemplate();
 
-        removeLoginPrompt(request.<Request>getRequest());
+        removeLoginPrompt(request.getRequest());
 
-        String gotoUrl = request.<Request>getRequest().getResourceRef().toString();
-        if (request.getParameter(USER_CODE) != null) {
+        String gotoUrl = request.getRequest().getResourceRef().toString();
+        if (request.getParameter(USER_CODE) != null && !gotoUrl.contains(USER_CODE + "=")) {
             gotoUrl += (gotoUrl.indexOf('?') > -1 ? "&" : "?") + USER_CODE + "=" + request.getParameter(USER_CODE);
         }
         String acrValues = request.getParameter(ACR_VALUES);
