@@ -12,7 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
- * Portions copyright 2024 Wren Security.
+ * Portions copyright 2024-2025 Wren Security.
  */
 
 define({
@@ -58,7 +58,7 @@ define({
                 }
             }
         },
-        "fr-dark-theme": {
+        "dark-theme": {
             // An ordered list of URLs to stylesheets that will be applied to every page.
             stylesheets: [
                 "themes/dark/css/bootstrap.css",
@@ -68,8 +68,8 @@ define({
             settings: {
                 loginLogo: {
                     src: "themes/dark/images/login-logo-white.png",
-                    title: "ForgeRock",
-                    alt: "ForgeRock",
+                    title: "Wren Security",
+                    alt: "Wren Security",
                     height: "228px",
                     width: "220px"
                 }
