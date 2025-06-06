@@ -195,7 +195,7 @@
         <jersey-bundle.version>1.19.1</jersey-bundle.version>
         <jersey-oauth.version>1.19.4</jersey-oauth.version>
         <saaj-impl.version>1.5.3</saaj-impl.version>
-        <xmlsec.version>2.3.3</xmlsec.version>
+        <xmlsec.version>2.3.5</xmlsec.version>
 
         <!-- Database Related Dependencies -->
         <hikaricp.version>2.4.1</hikaricp.version>
