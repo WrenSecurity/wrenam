@@ -214,7 +214,7 @@
         <amazon.sns.version>1.10.72</amazon.sns.version>
         <asciidoctorj.version>2.5.10</asciidoctorj.version>
         <geoip.version>2.0.0</geoip.version>
-        <json.version>20230618</json.version>
+        <json.version>20231013</json.version>
         <mail.version>1.5.1</mail.version>
 
         <!-- Deprecated Dependencies (TBD) -->
