@@ -126,8 +126,8 @@
 
                 <configuration>
                     <installDirectory>${project.parent.basedir}</installDirectory>
-                    <nodeVersion>v18.16.0</nodeVersion>
-                    <npmVersion>8.19.4</npmVersion>
+                    <nodeVersion>v22.16.0</nodeVersion>
+                    <npmVersion>11.4.1</npmVersion>
                     <nodeDownloadRoot>https://nodejs.org/dist/</nodeDownloadRoot>
                     <npmDownloadRoot>https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/npm/-/</npmDownloadRoot>
                 </configuration>
