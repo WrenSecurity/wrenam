@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Portions copyright 2014-2016 ForgeRock AS.
+ * Portions copyright 2025 Wren Security.
  */
 
 define([
@@ -46,7 +47,7 @@ define([
         },
         SCRIPT_RESOURCE: "Script",
 
-        render (schema, element, itemID, itemData, callback) {
+        render (schema, element, itemID, itemData, editing = false) {
             var self = this,
                 hiddenData = {};
 
@@ -61,9 +62,13 @@ define([
 
             this.data.conditions = _.sortBy(this.data.conditions, "i18nKey");
 
-            UIUtils.fillTemplateWithData(this.template, this.data, function (tpl) {
+            return UIUtils.compileTemplate(this.template, this.data).then((tpl) => {
                 self.$el.append(tpl);
                 self.setElement(`#environment_${itemID}`);
+
+                if (editing) {
+                    self.$el.addClass("editing");
+                }
 
                 if (itemData) {
                     // Temporary fix, the name attribute is being added by the server after the policy is created.
@@ -83,10 +88,6 @@ define([
                 self.$el.find("select.type-selection:first").focus();
 
                 self.$el.find(".info-button").hide();
-
-                if (callback) {
-                    callback();
-                }
             });
         },
 
@@ -98,47 +99,54 @@ define([
                 mergedData = _.merge({}, itemData, hiddenData),
                 type;
 
-            item.focus(); //  Required to trigger changeInput.
+            item.focus(); // Required to trigger changeInput.
             this.data.conditions = allEnvironments;
+
+            const propertyI18nKey = (type, key) => (
+                `${self.i18n.condition.key}${type}${self.i18n.condition.props}${key}`
+            );
 
             if (mergedData && mergedData.type) {
                 type = mergedData.type;
                 itemToDisplay = {};
                 if (type === self.SCRIPT_RESOURCE) {
-                    itemToDisplay["console.common.type"] = $.t(self.i18n.condition.key + type +
-                        self.i18n.condition.title);
-                    PoliciesService.getScriptById(mergedData.scriptId).done(function (script) {
-                        itemToDisplay[`${self.i18n.condition.key}${type}${self.i18n.condition.props}scriptId`] =
-                            script.name;
-                        self.setListItemHtml(item, itemToDisplay);
-                    });
-                } else {
-                    _.each(mergedData, function (val, key) {
-                        if (key === "type") {
-                            itemToDisplay["console.common.type"] = $.t(self.i18n.condition.key + type +
-                                self.i18n.condition.title);
-                        } else {
-                            itemToDisplay[self.i18n.condition.key + type + self.i18n.condition.props + key] = val;
-                        }
-                    });
-                    this.setListItemHtml(item, itemToDisplay);
+                    // eslint-disable-next-line max-len
+                    itemToDisplay["console.common.type"] = $.t(`${self.i18n.condition.key}${type}${self.i18n.condition.title}`);
+                    const i18nKey = propertyI18nKey(type, "scriptId");
+                    if (mergedData.scriptId) {
+                        return PoliciesService.getScriptById(mergedData.scriptId).done(function (script) {
+                            itemToDisplay[i18nKey] = script.name;
+                            return self.setListItemHtml(item, itemToDisplay);
+                        });
+                    }
+                    itemToDisplay[i18nKey] = "";
+                    return self.setListItemHtml(item, itemToDisplay);
                 }
-            } else {
-                this.setListItemHtml(item, itemToDisplay);
+
+                _.each(mergedData, function (val, key) {
+                    if (key === "type") {
+                        // eslint-disable-next-line max-len
+                        itemToDisplay["console.common.type"] = $.t(`${self.i18n.condition.key}${type}${self.i18n.condition.title}`);
+                    } else {
+                        itemToDisplay[propertyI18nKey(type, key)] = val;
+                    }
+                });
+                return this.setListItemHtml(item, itemToDisplay);
             }
+
+            return this.setListItemHtml(item, itemToDisplay);
         },
 
         setListItemHtml (item, itemToDisplay) {
             var self = this;
 
-            UIUtils.fillTemplateWithData(
-                "templates/admin/views/realms/authorization/policies/conditions/ListItem.html", {
-                    data: itemToDisplay
-                },
-                function (tpl) {
-                    item.find(".item-data").html(tpl);
-                    self.setElement(`#${item.attr("id")}`);
-                });
+            return UIUtils.compileTemplate(
+                "templates/admin/views/realms/authorization/policies/conditions/ListItem.html",
+                { data: itemToDisplay }
+            ).then((tpl) => {
+                item.find(".item-data").html(tpl);
+                self.setElement(`#${item.attr("id")}`);
+            });
         },
 
         changeType (e) {
@@ -218,100 +226,117 @@ define([
                 schemaProps = schema.config.properties,
                 i18nKey,
                 attributesWrapper,
-                htmlBuiltPromise = $.Deferred();
+                htmlBuiltPromises = [];
 
-            function buildScriptAttr () {
+            const renderConditionAttr = (callback) => {
+                const attrBuiltPromise = $.Deferred();
+                callback(attrBuiltPromise.resolve);
+                htmlBuiltPromises.push(attrBuiltPromise);
+            };
+
+            const buildScriptAttr = (resolve) => {
                 new ArrayAttr().render({
                     itemData, hiddenData, data: [hiddenData[itemData.type]],
                     title: "scriptId", dataSource: "scripts", multiple: false,
                     i18nKey: `${self.i18n.condition.key}${schema.title}${self.i18n.condition.props}scriptId`
-                }, itemDataEl, htmlBuiltPromise.resolve);
-            }
+                }, itemDataEl, resolve);
+            };
 
             if (itemData.type === "SimpleTime") {
                 attributesWrapper = '<div class="clearfix clear-left" id="conditionAttrTimeDate"></div>';
-                new TimeAttr().render({ itemData }, itemDataEl);
-                new DayAttr().render({ itemData }, itemDataEl);
-                new DateAttr().render({ itemData }, itemDataEl);
+
+                renderConditionAttr((resolve) => new TimeAttr().render({ itemData }, itemDataEl, resolve));
+                renderConditionAttr((resolve) => new DayAttr().render({ itemData }, itemDataEl, resolve));
+                renderConditionAttr((resolve) => new DateAttr().render({ itemData }, itemDataEl, resolve));
 
                 if (!itemData.enforcementTimeZone) {
                     itemData.enforcementTimeZone = "GMT";
                 }
-                new ArrayAttr().render({
-                    itemData,
-                    data: [itemData.enforcementTimeZone],
-                    title: "enforcementTimeZone",
-                    i18nKey: `${self.i18n.condition.key}${schema.title}${self.i18n.condition.props}enforcementTimeZone`,
-                    dataSource: "enforcementTimeZone",
-                    multiple: false
-                }, itemDataEl);
-                htmlBuiltPromise.resolve();
+                renderConditionAttr((resolve) => {
+                    // eslint-disable-next-line max-len
+                    const i18nKey = `${self.i18n.condition.key}${schema.title}${self.i18n.condition.props}enforcementTimeZone`;
+                    new ArrayAttr().render({
+                        itemData,
+                        data: [itemData.enforcementTimeZone],
+                        title: "enforcementTimeZone",
+                        i18nKey,
+                        dataSource: "enforcementTimeZone",
+                        multiple: false
+                    }, itemDataEl, resolve);
+                });
             } else if (schema.title === self.SCRIPT_RESOURCE) {
                 attributesWrapper = '<div class="no-float"></div>';
                 if (itemData && itemData.scriptId) {
-                    PoliciesService.getScriptById(itemData.scriptId).done(function (script) {
-                        hiddenData[itemData.type] = script.name;
-                        buildScriptAttr();
+                    renderConditionAttr((resolve) => {
+                        PoliciesService.getScriptById(itemData.scriptId).done(function (script) {
+                            hiddenData[itemData.type] = script.name;
+                            buildScriptAttr(resolve);
+                        });
                     });
                 } else {
-                    buildScriptAttr();
+                    renderConditionAttr(buildScriptAttr);
                 }
             } else {
                 attributesWrapper = '<div class="no-float"></div>';
 
                 _.map(schemaProps, function (value, key) {
-                    i18nKey = self.i18n.condition.key + schema.title + self.i18n.condition.props + key;
+                    i18nKey = `${self.i18n.condition.key}${schema.title}${self.i18n.condition.props}${key}`;
 
                     switch (value.type) {
                         case "string": // fall through
                         case "number": // fall through
                         case "integer":
-                            new StringAttr().render({
-                                itemData,
-                                data: itemData[key],
-                                title: key,
-                                i18nKey,
-                                schema,
-                                value
-                            }, itemDataEl);
+                            renderConditionAttr((resolve) => {
+                                new StringAttr().render({
+                                    itemData,
+                                    data: itemData[key],
+                                    title: key,
+                                    i18nKey,
+                                    schema,
+                                    value
+                                }, itemDataEl, resolve);
+                            });
                             break;
                         case "boolean":
-                            new BooleanAttr().render({
-                                itemData,
-                                data: value,
-                                title: key,
-                                i18nKey,
-                                selected: itemData[key]
-                            }, itemDataEl);
+                            renderConditionAttr((resolve) => {
+                                new BooleanAttr().render({
+                                    itemData,
+                                    data: value,
+                                    title: key,
+                                    i18nKey,
+                                    selected: itemData[key]
+                                }, itemDataEl, resolve);
+                            });
                             break;
                         case "array":
-                            new ArrayAttr().render({
-                                itemData,
-                                data: itemData[key],
-                                title: key,
-                                i18nKey
-                            }, itemDataEl);
+                            renderConditionAttr((resolve) => {
+                                new ArrayAttr().render({
+                                    itemData,
+                                    data: itemData[key],
+                                    title: key,
+                                    i18nKey
+                                }, itemDataEl, resolve);
+                            });
                             break;
                         case "object":
-                            new ObjectAttr().render({
-                                itemData,
-                                data: itemData[key],
-                                title: key,
-                                i18nKey
-                            }, itemDataEl);
+                            renderConditionAttr((resolve) => {
+                                new ObjectAttr().render({
+                                    itemData,
+                                    data: itemData[key],
+                                    title: key,
+                                    i18nKey
+                                }, itemDataEl, resolve);
+                            });
                             break;
                         default:
                             break;
                     }
                 });
-                htmlBuiltPromise.resolve();
             }
 
-            htmlBuiltPromise.done(function () {
+            return $.when.apply($, htmlBuiltPromises).done(() => {
                 self.$el.find(".condition-attr").wrapAll(attributesWrapper);
             });
-
-            return htmlBuiltPromise;
         },
 
         setDefaultJsonValues (schema) {

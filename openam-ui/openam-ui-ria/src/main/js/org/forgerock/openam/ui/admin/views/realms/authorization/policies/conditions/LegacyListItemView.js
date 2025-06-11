@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Portions copyright 2014-2016 ForgeRock AS.
+ * Portions copyright 2025 Wren Security.
  */
 
 define([
@@ -23,25 +24,22 @@ define([
     return AbstractView.extend({
         data: {},
         mode: "append",
-        render (itemData, callback, element, itemID) {
+        render (itemData, element, itemID) {
             this.setElement(element);
             this.data.itemID = itemID;
             this.data.itemData = itemData;
 
             var self = this;
 
-            UIUtils.fillTemplateWithData(
+            return UIUtils.compileTemplate(
                 "templates/admin/views/realms/authorization/policies/conditions/LegacyListItem.html",
-                this.data,
-                function () {
-                    self.setElement(`#legacy_${itemID}`);
-                    self.delegateEvents();
+                this.data
+            ).then(() => {
+                self.setElement(`#legacy_${itemID}`);
+                self.delegateEvents();
 
-                    self.$el.data("itemData", itemData);
-                    if (callback) {
-                        callback();
-                    }
-                });
+                self.$el.data("itemData", itemData);
+            });
         }
     });
 });

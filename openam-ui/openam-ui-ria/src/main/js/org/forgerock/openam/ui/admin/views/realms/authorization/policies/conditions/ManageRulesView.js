@@ -12,7 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Portions copyright 2014-2016 ForgeRock AS.
- * Portions copyright 2024 Wren Security.
+ * Portions copyright 2024-2025 Wren Security.
  */
 
 define([
@@ -84,41 +84,55 @@ define([
 
         buildList () {
             var self = this,
-                newRule = null,
                 operators = _.map(this.data.operators, "title"),
                 properties = null;
 
             function buildListItem (data, container) {
+                const itemsRenderedPromises = [];
+
                 if (_.isArray(data) === false) {
                     data = [data];
                 }
 
                 _.each(data, function (item) {
-                    if (item && _.includes(operators, item.type)) {
-                        newRule = new OperatorRulesView();
-                        newRule.render(self.data, container, self.idPrefix + self.idCount, (self.idCount === 0));
-                        newRule.setValue(item.type);
-                        self.idCount++;
-                    } else if (!_.isEmpty(item)) {
-                        if (item.type === Constants.LEGACY) {
-                            newRule = new LegacyListItemView();
-                            newRule.render(item, container, self.idCount);
-                        } else {
-                            newRule = self.getNewRule();
-                            properties = self.getProperties();
-                            newRule.render(properties, container, self.idCount, item);
-                            newRule.createListItem(properties, newRule.$el);
-                        }
-
-                        self.idCount++;
+                    if (_.isEmpty(item)) {
+                        return;
                     }
 
-                    if (item && item[self.properties]) {
-                        buildListItem(item[self.properties], newRule.dropbox, item);
-                    } else if (item && item[self.property]) {
-                        buildListItem(item[self.property], newRule.dropbox, item);
+                    let newRule = null;
+                    const itemRenderedPromise = $.Deferred();
+                    if (_.includes(operators, item.type)) {
+                        newRule = new OperatorRulesView();
+                        newRule.render(self.data, container, self.idPrefix + self.idCount, (self.idCount === 0))
+                            .then(() => {
+                                newRule.setValue(item.type);
+                                itemRenderedPromise.resolve();
+                            });
+                    } else if (item.type === Constants.LEGACY) {
+                        newRule = new LegacyListItemView();
+                        newRule.render(item, container, self.idCount).then(itemRenderedPromise.resolve);
+                    } else {
+                        newRule = self.getNewRule();
+                        properties = self.getProperties();
+                        newRule.render(properties, container, self.idCount, item)
+                            .then(() => newRule.createListItem(properties, newRule.$el))
+                            .then(itemRenderedPromise.resolve);
+                    }
+                    self.idCount++;
+
+                    const nestedProperty = item[self.properties] ?? item[self.property];
+                    if (nestedProperty) {
+                        // Render nested property after current item is rendered, otherwise `dropbox` property wouldn't be available
+                        const nestedPropertyRenderedPromise = itemRenderedPromise
+                            .then(() => buildListItem(nestedProperty, newRule.dropbox));
+                        // Consider this item rendered when its nested property is also rendered
+                        itemsRenderedPromises.push(nestedPropertyRenderedPromise);
+                    } else {
+                        itemsRenderedPromises.push(itemRenderedPromise);
                     }
                 });
+
+                return $.when.apply($, itemsRenderedPromises);
             }
 
             /*
@@ -134,8 +148,7 @@ define([
                 this.localEntity[this.properties] = [properties];
             }
 
-            buildListItem(this.localEntity, this.$el.find("ol#dropOffArea"), null);
-            this.delegateEvents();
+            return buildListItem(this.localEntity, this.$el.find("ol#dropOffArea")).then(() => this.delegateEvents());
         },
 
         initSorting () {
@@ -254,13 +267,14 @@ define([
             var self = this,
                 editRuleView = self.getNewRule(),
                 properties = self.getProperties(),
+                itemData = item.data(),
                 disabledConditions;
-            editRuleView.render(properties, item.parent(), self.idCount, item.data().itemData);
+
+            editRuleView.render(properties, item.parent(), self.idCount, itemData, true).then(() => {
+                item.before(editRuleView.$el);
+            });
 
             self.idCount++;
-
-            editRuleView.$el.addClass("editing");
-            item.before(editRuleView.$el);
 
             this.setInactive(this.buttons.addCondition, true);
             this.setInactive(this.buttons.addOperator, true);
@@ -268,8 +282,6 @@ define([
             disabledConditions = this.$el.find(".rule, .operator").not(".editing");
             disabledConditions.addClass("editing-disabled");
             disabledConditions.find("> select").prop("disabled", true);
-
-            editRuleView.$el.find("select.type-selection:first").focus();
         },
 
         editStop (item) {
@@ -279,14 +291,14 @@ define([
                 properties = this.getProperties(),
                 disabledConditions;
 
-            editRuleView.createListItem(properties, item);
+            editRuleView.createListItem(properties, item).then(() => {
+                item.next().remove();
+                this.save();
 
-            item.next().remove();
-            this.save();
-
-            disabledConditions = this.$el.find(".rule, .operator").not(".editing");
-            disabledConditions.removeClass("editing-disabled");
-            disabledConditions.find("> select").prop("disabled", false);
+                disabledConditions = this.$el.find(".rule, .operator").not(".editing");
+                disabledConditions.removeClass("editing-disabled");
+                disabledConditions.find("> select").prop("disabled", false);
+            });
         },
 
         setInactive (button, state) {
@@ -316,13 +328,11 @@ define([
             var editRuleView = this.getNewRule(),
                 self = this;
 
-            editRuleView.render(this.getProperties(), this.droppableParent, this.idCount, null,
-                function onRuleRender () {
-                    self.editStart(editRuleView.$el);
-                    self.$el.find("ol#dropbox").nestingSortable("refresh");
-                });
-
-            this.idCount++;
+            editRuleView.render(this.getProperties(), this.droppableParent, this.idCount, null).then(() => {
+                self.editStart(editRuleView.$el);
+                self.$el.find("ol#dropbox").nestingSortable("refresh");
+            });
+            self.idCount++;
         },
 
         onSelect (e) {
@@ -402,7 +412,6 @@ define([
 
             var rules = this.$el.find("ol#dropbox").nestingSortable("serialize").get(),
                 operatorData = this.$el.find(`#operator${this.idPrefix}0`).data().itemData;
-
             // Removing any obsolete root logicals.
             if (operatorData[this.properties]) {
                 if (rules.length <= 1) {
@@ -423,8 +432,6 @@ define([
             } else {
                 console.error("This should never be triggered", this.property, operatorData);
             }
-
-            console.log(`\n${this.property}:`, JSON.stringify(this.data.entity[this.property], null, 2));
 
             this.identifyDroppableLogical();
         },

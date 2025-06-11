@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Portions copyright 2014-2016 ForgeRock AS.
+ * Portions copyright 2025 Wren Security.
  */
 
 define([
@@ -35,7 +36,7 @@ define([
         },
         IDENTITY_RESOURCE: "Identity",
 
-        render (schema, element, itemID, itemData, callback) {
+        render (schema, element, itemID, itemData, editing = false) {
             var self = this;
             this.setElement(element);
 
@@ -48,10 +49,13 @@ define([
 
             this.data.subjects = _.sortBy(this.data.subjects, "i18nKey");
 
-            UIUtils.fillTemplateWithData(this.template, this.data, function (tpl) {
+            return UIUtils.compileTemplate(this.template, this.data).then((tpl) => {
                 self.$el.append(tpl);
-
                 self.setElement(`#subject_${itemID}`);
+
+                if (editing) {
+                    self.$el.addClass("editing");
+                }
 
                 if (itemData) {
                     if (itemData.type === self.IDENTITY_RESOURCE) { // client side fix for 'Identity'
@@ -63,26 +67,24 @@ define([
                 }
 
                 self.$el.find("select.type-selection:first").focus();
-
-                if (callback) {
-                    callback();
-                }
             });
         },
 
         createListItem (allSubjects, item) {
             var self = this,
                 itemToDisplay = null,
-                itemData = item.data().itemData,
-                hiddenData = item.data().hiddenData,
+                itemData = item.data(),
+                hiddenData = item.data(),
                 type,
                 list,
-                mergedData;
+                mergedData = _.merge({}, itemData, hiddenData);
 
-            mergedData = _.merge({}, itemData, hiddenData);
-
-            item.focus(); //  Required to trigger changeInput.
+            item.focus(); // Required to trigger changeInput.
             this.data.subjects = allSubjects;
+
+            const propertyI18nKey = (type, key) => (
+                `${self.subjectI18n.key}${type}${self.subjectI18n.props}${key}`
+            );
 
             if (mergedData && mergedData.type) {
                 type = mergedData.type;
@@ -90,8 +92,8 @@ define([
 
                 _.each(mergedData, function (val, key) {
                     if (key === "type") {
-                        itemToDisplay["console.common.type"] = $.t(self.subjectI18n.key + type +
-                            self.subjectI18n.title);
+                        // eslint-disable-next-line max-len
+                        itemToDisplay["console.common.type"] = $.t(`${self.subjectI18n.key}${type}${self.subjectI18n.title}`);
                     } else if (type === self.IDENTITY_RESOURCE) {
                         // Do not display the Identities subject values, but display the merged hidden data instead.
                         if (key !== "subjectValues") {
@@ -100,22 +102,21 @@ define([
                                 list += `${prop} `;
                             });
 
-                            itemToDisplay[self.subjectI18n.key + type + self.subjectI18n.props + key] = list;
+                            itemToDisplay[propertyI18nKey(type, key)] = list;
                         }
                     } else {
-                        itemToDisplay[self.subjectI18n.key + type + self.subjectI18n.props + key] = val;
+                        itemToDisplay[propertyI18nKey(type, key)] = val;
                     }
                 });
             }
 
-            UIUtils.fillTemplateWithData(
-                "templates/admin/views/realms/authorization/policies/conditions/ListItem.html", {
-                    data: itemToDisplay
-                },
-                function (tpl) {
-                    item.find(".item-data").html(tpl);
-                    self.setElement(`#${item.attr("id")}`);
-                });
+            return UIUtils.compileTemplate(
+                "templates/admin/views/realms/authorization/policies/conditions/ListItem.html",
+                { data: itemToDisplay }
+            ).then((tpl) => {
+                item.find(".item-data").html(tpl);
+                self.setElement(`#${item.attr("id")}`);
+            });
         },
 
         changeType (e) {
@@ -159,54 +160,63 @@ define([
                 itemDataEl = this.$el.find(".item-data"),
                 schemaProps = schema.config.properties,
                 i18nKey,
-                htmlBuiltPromise = $.Deferred();
+                htmlBuiltPromises = [];
+
+            const renderConditionAttr = (callback) => {
+                const attrBuiltPromise = $.Deferred();
+                callback(attrBuiltPromise.resolve);
+                htmlBuiltPromises.push(attrBuiltPromise);
+            };
 
             if (schema.title === self.IDENTITY_RESOURCE) {
                 _.each(["users", "groups"], function (identityType) {
-                    new ArrayAttr().render({
-                        itemData,
-                        hiddenData,
-                        data: hiddenData[identityType],
-                        title: identityType,
-                        i18nKey: self.subjectI18n.key + schema.title + self.subjectI18n.props + identityType,
-                        dataSource: identityType
-                    }, itemDataEl, htmlBuiltPromise.resolve);
+                    renderConditionAttr((resolve) => {
+                        new ArrayAttr().render({
+                            itemData,
+                            hiddenData,
+                            data: hiddenData[identityType],
+                            title: identityType,
+                            i18nKey: self.subjectI18n.key + schema.title + self.subjectI18n.props + identityType,
+                            dataSource: identityType
+                        }, itemDataEl, resolve);
+                    });
                 });
             } else {
-                _.map(schemaProps, function (value, key) {
+                _.each(schemaProps, function (value, key) {
                     i18nKey = self.subjectI18n.key + schema.title + self.subjectI18n.props + key;
 
                     switch (value.type) {
                         case "string":
-                            new StringAttr().render({
-                                itemData,
-                                hiddenData,
-                                data: itemData[key],
-                                title: key,
-                                i18nKey
-                            }, itemDataEl);
+                            renderConditionAttr((resolve) => {
+                                new StringAttr().render({
+                                    itemData,
+                                    hiddenData,
+                                    data: itemData[key],
+                                    title: key,
+                                    i18nKey
+                                }, itemDataEl, resolve);
+                            });
                             break;
                         case "array":
-                            new ArrayAttr().render({
-                                itemData,
-                                hiddenData,
-                                data: itemData[key],
-                                title: key,
-                                i18nKey
-                            }, itemDataEl);
+                            renderConditionAttr((resolve) => {
+                                new ArrayAttr().render({
+                                    itemData,
+                                    hiddenData,
+                                    data: itemData[key],
+                                    title: key,
+                                    i18nKey
+                                }, itemDataEl, resolve);
+                            });
                             break;
                         default:
                             break;
                     }
                 });
-                htmlBuiltPromise.resolve();
             }
 
-            htmlBuiltPromise.done(function () {
+            return $.when.apply($, htmlBuiltPromises).done(() => {
                 self.$el.find(".condition-attr").wrapAll("<div class='no-float'></div>");
             });
-
-            return htmlBuiltPromise;
         },
 
         setDefaultJsonValues (schema) {

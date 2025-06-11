@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Portions copyright 2014-2016 ForgeRock AS.
+ * Portions copyright 2025 Wren Security.
  */
 
 define([
@@ -35,7 +36,7 @@ define([
 
         operatorI18nKey: "console.authorization.policies.edit.operators.",
 
-        render (args, element, itemID, firstChild, callback) {
+        render (args, element, itemID, firstChild) {
             var self = this;
 
             this.data = $.extend(true, {}, args);
@@ -48,7 +49,7 @@ define([
 
             this.setElement(element);
 
-            UIUtils.fillTemplateWithData(this.template, this.data, function (tpl) {
+            return UIUtils.compileTemplate(this.template, this.data).then((tpl) => {
                 self.$el.append(tpl);
 
                 self.setElement(`#operator${itemID}`);
@@ -60,10 +61,6 @@ define([
                 self.dropbox = self.$el.find(".dropbox");
 
                 self.$el.find('.fa[data-toggle="popover"]').popover();
-
-                if (callback) {
-                    callback();
-                }
             });
         },
 
