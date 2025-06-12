@@ -19,7 +19,8 @@ import _ from "lodash";
 import { Badge, Button, ButtonGroup, ControlLabel } from "react-bootstrap";
 import { t } from "i18next";
 import moment from "moment";
-import React, { PropTypes } from "react";
+import PropTypes from "prop-types";
+import React from "react";
 
 const SessionsTableRow = ({ checked, data, onDelete, onSelect, sessionHandle }) => {
     const handleDelete = () => onDelete(data);

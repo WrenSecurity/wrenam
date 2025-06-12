@@ -15,6 +15,7 @@
  */
 
 import { ListGroup, ListGroupItem } from "react-bootstrap";
+import PropTypes from "prop-types";
 import React, { Component } from "react";
 
 import ScriptsService from "org/forgerock/openam/ui/admin/services/global/ScriptsService";
@@ -48,7 +49,7 @@ class ScriptsList extends Component {
 }
 
 ScriptsList.propTypes = {
-    subSchemaType: React.PropTypes.string.isRequired
+    subSchemaType: PropTypes.string.isRequired
 };
 
 export default ScriptsList;

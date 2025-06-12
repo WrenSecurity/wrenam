@@ -14,6 +14,7 @@
  * Copyright 2016 ForgeRock AS.
  */
 
+import PropTypes from "prop-types";
 import React from "react";
 
 /**
@@ -37,8 +38,8 @@ const SimplePageHeader = ({ children, title }) => (
 );
 
 SimplePageHeader.propTypes = {
-    children: React.PropTypes.node.isRequired,
-    title: React.PropTypes.string.isRequired
+    children: PropTypes.node.isRequired,
+    title: PropTypes.string.isRequired
 };
 
 export default SimplePageHeader;

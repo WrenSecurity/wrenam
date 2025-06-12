@@ -14,6 +14,7 @@
  * Copyright 2016 ForgeRock AS.
  */
 
+import PropTypes from "prop-types";
 import React from "react";
 
 /**
@@ -39,9 +40,9 @@ const Block = ({ children, header, description }) => {
 };
 
 Block.propTypes = {
-    children: React.PropTypes.arrayOf(React.PropTypes.node).isRequired,
-    description: React.PropTypes.string,
-    header: React.PropTypes.string.isRequired
+    children: PropTypes.arrayOf(PropTypes.node).isRequired,
+    description: PropTypes.string,
+    header: PropTypes.string.isRequired
 };
 
 export default Block;

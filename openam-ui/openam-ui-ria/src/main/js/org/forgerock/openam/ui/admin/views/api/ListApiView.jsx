@@ -12,7 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
- * Portions copyright 2024 Wren Security.
+ * Portions copyright 2024-2025 Wren Security.
  */
 
 import { Grid, Panel, Row, Col } from "react-bootstrap";
@@ -60,11 +60,13 @@ class ListApiView extends Component {
                 <Row >
                     <Col md={ 4 }>
                         <Panel className="list-panel-style">
-                            <nav className="sidenav" >
-                                <ol className="list-unstyled" >
-                                    { groups }
-                                </ol>
-                            </nav>
+                            <Panel.Body>
+                                <nav className="sidenav" >
+                                    <ol className="list-unstyled" >
+                                        { groups }
+                                    </ol>
+                                </nav>
+                            </Panel.Body>
                         </Panel>
                     </Col>
                     <Col md={ 8 }>

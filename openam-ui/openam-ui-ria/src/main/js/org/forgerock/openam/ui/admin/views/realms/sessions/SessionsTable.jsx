@@ -12,14 +12,15 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
- * Portions copyright 2024 Wren Security.
+ * Portions copyright 2024-2025 Wren Security.
  */
 
 import _ from "lodash";
 import { Button, ButtonToolbar, ControlLabel, Panel, Table } from "react-bootstrap";
 import { t } from "i18next";
 import Block from "components/Block";
-import React, { Component, PropTypes } from "react";
+import PropTypes from "prop-types";
+import React, { Component } from "react";
 import SessionsTableRow from "./SessionsTableRow";
 import store from "store/index";
 
@@ -39,7 +40,8 @@ class SessionsTable extends Component {
         };
     }
 
-    componentWillReceiveProps (nextProps) {
+    // eslint-disable-next-line camelcase
+    UNSAFE_componentWillReceiveProps (nextProps) {
         const updated = _.findByValues(nextProps.data, "sessionHandle", _.map(this.state.checked, "sessionHandle"));
         this.setState({
             checked: updated,
@@ -85,42 +87,45 @@ class SessionsTable extends Component {
                 </ButtonToolbar>
 
                 <Panel>
-                    <Block header={ this.props.userId }>
-                        <Table>
-                            <thead>
-                                <tr>
-                                    <th className="select-all-header-cell">
-                                        <ControlLabel htmlFor="selectAll" srOnly>
-                                            { t("common.form.selectAll") }
-                                        </ControlLabel>
-                                        <input
-                                            checked={ isAllChecked() }
-                                            id="selectAll"
-                                            onChange={ this.handleSelectAll }
-                                            type="checkbox"
-                                        />
-                                    </th>
-                                    <th>{ t("console.sessions.table.headers.0") }</th>
-                                    <th>{ t("console.sessions.table.headers.1") }</th>
-                                    <th>{ t("console.sessions.table.headers.2") }</th>
-                                    <th className="fr-col-btn-1" />
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {
-                                    _.map(this.props.data, (session) => (
-                                        <SessionsTableRow
-                                            checked={ isChecked(session) }
-                                            data={ session }
-                                            onDelete={ this.handleDeleteRow }
-                                            onSelect={ this.handleSelectRow }
-                                            sessionHandle={ store.getState().session.sessionHandle }
-                                        />
-                                    ))
-                                }
-                            </tbody>
-                        </Table>
-                    </Block>
+                    <Panel.Body>
+                        <Block header={ this.props.userId }>
+                            <Table>
+                                <thead>
+                                    <tr>
+                                        <th className="select-all-header-cell">
+                                            <ControlLabel htmlFor="selectAll" srOnly>
+                                                { t("common.form.selectAll") }
+                                            </ControlLabel>
+                                            <input
+                                                checked={ isAllChecked() }
+                                                id="selectAll"
+                                                onChange={ this.handleSelectAll }
+                                                type="checkbox"
+                                            />
+                                        </th>
+                                        <th>{ t("console.sessions.table.headers.0") }</th>
+                                        <th>{ t("console.sessions.table.headers.1") }</th>
+                                        <th>{ t("console.sessions.table.headers.2") }</th>
+                                        <th className="fr-col-btn-1" />
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {
+                                        _.map(this.props.data, (session) => (
+                                            <SessionsTableRow
+                                                checked={ isChecked(session) }
+                                                data={ session }
+                                                key={ store.getState().session.sessionHandle }
+                                                onDelete={ this.handleDeleteRow }
+                                                onSelect={ this.handleSelectRow }
+                                                sessionHandle={ store.getState().session.sessionHandle }
+                                            />
+                                        ))
+                                    }
+                                </tbody>
+                            </Table>
+                        </Block>
+                    </Panel.Body>
                 </Panel>
             </div>
         );

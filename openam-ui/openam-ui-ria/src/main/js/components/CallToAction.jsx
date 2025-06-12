@@ -14,6 +14,7 @@
  * Copyright 2016 ForgeRock AS.
  */
 
+import PropTypes from "prop-types";
 import React from "react";
 
 /**
@@ -29,7 +30,7 @@ const CallToAction = ({ children }) => (
 );
 
 CallToAction.propTypes = {
-    children: React.PropTypes.node
+    children: PropTypes.node
 };
 
 export default CallToAction;
