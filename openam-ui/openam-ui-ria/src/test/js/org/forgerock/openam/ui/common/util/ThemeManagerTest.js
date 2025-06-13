@@ -61,9 +61,8 @@ define([
             mock$.appendTo = sinon.spy();
             mock$.Deferred = _.bind($.Deferred, $);
 
-            sandbox = sinon.sandbox.create();
-            sandbox.stub(require, "toUrl", (url) =>
-                baseUrl + url);
+            sandbox = sinon.createSandbox();
+            sandbox.stub(require, "toUrl").callsFake((url) => baseUrl + url);
 
             Configuration = {
                 globalData: {
@@ -316,7 +315,7 @@ define([
             );
             it("doesn't update the page if the theme hasn't changed since the last call", () =>
                 ThemeManager.getTheme().then(() => {
-                    mock$.reset();
+                    mock$.resetHistory();
                     return ThemeManager.getTheme();
                 }).then(() => {
                     expect(mock$).to.not.be.called;

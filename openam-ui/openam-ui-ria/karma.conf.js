@@ -29,7 +29,7 @@ module.exports = function (config) {
                 ]
             }
         },
-        reporters: ["notify", "nyan"],
+        reporters: ["mocha"],
         mochaReporter: {
             output: "autowatch"
         },
@@ -38,7 +38,7 @@ module.exports = function (config) {
         logLevel: config.LOG_INFO,
         autoWatch: true,
         browsers: ["ChromeHeadlessNoSandbox"],
-        singleRun: false,
+        singleRun: true,
         customLaunchers: {
             ChromeHeadlessNoSandbox: {
                 base: "ChromeHeadless",

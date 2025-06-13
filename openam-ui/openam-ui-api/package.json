@@ -8,7 +8,7 @@
   },
   "devDependencies": {
     "@wrensecurity/commons-ui-build": "file:target/ui-libs/wrensecurity-commons-ui-build-0.0.0.tgz",
-    "gulp": "^4.0.2"
+    "gulp": "^5.0.1"
   },
   "dependencies": {
     "swagger-ui-dist": "5.7.2"
