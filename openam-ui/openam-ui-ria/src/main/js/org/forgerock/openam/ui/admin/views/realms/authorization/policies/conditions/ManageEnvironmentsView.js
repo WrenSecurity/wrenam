@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Portions copyright 2014-2016 ForgeRock AS.
+ * Portions copyright 2025 Wren Security.
  */
 
 define([
@@ -23,7 +24,7 @@ define([
     var ManageEnvironmentsView = ManageRulesView.extend({
         element: "#environmentContainer",
         envEvents: {
-            "change .environment-area .operator > select": "onSelect",
+            "change    #dropOffArea .operator > select": "onSelect",
             "mousedown #operatorEnv_0 li.rule:not(.editing)": "setFocus",
             "mousedown #operatorEnv_0 li.operator:not(.editing)": "setFocus",
 
@@ -93,13 +94,14 @@ define([
                     this.buttons.addOperator.hide();
                 }
 
-                this.buildList();
-                this.initSorting();
-                this.identifyDroppableLogical();
+                this.buildList().done(() => {
+                    this.initSorting();
+                    this.identifyDroppableLogical();
 
-                if (callback) {
-                    callback();
-                }
+                    if (callback) {
+                        callback();
+                    }
+                });
             });
         }
     });
