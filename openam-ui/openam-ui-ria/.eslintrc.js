@@ -18,7 +18,7 @@ module.exports = {
     },
     settings: {
         react: {
-            version: "15.2.1"
+            version: "16.9.0"
         }
     },
     rules: {
@@ -122,6 +122,13 @@ module.exports = {
                 "no-var": 2,
                 "prefer-arrow-callback": 2,
                 "prefer-spread": 2
+            }
+        },
+        {
+            // react specific rules
+            files: ["*.jsx"],
+            rules: {
+                "no-class-assign": 0
             }
         }
     ]

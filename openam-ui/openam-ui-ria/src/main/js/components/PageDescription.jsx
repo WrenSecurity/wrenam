@@ -14,6 +14,7 @@
  * Copyright 2016 ForgeRock AS.
  */
 
+import PropTypes from "prop-types";
 import React from "react";
 
 /**
@@ -26,7 +27,7 @@ import React from "react";
 const PageDescription = ({ children }) => <p className="page-description">{ children }</p>;
 
 PageDescription.propTypes = {
-    children: React.PropTypes.node
+    children: PropTypes.node
 };
 
 export default PageDescription;

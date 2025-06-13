@@ -12,6 +12,7 @@
 * information: "Portions copyright [year] [name of copyright owner]".
 *
 * Copyright 2016 ForgeRock AS.
+* Portions copyright 2025 Wren Security.
 */
 
 import { PageHeader, Panel, Clearfix, Col } from "react-bootstrap";
@@ -50,19 +51,6 @@ class SelectAgentView extends Component {
             </Col>
         ));
 
-        const footer = (
-            <Clearfix>
-                <div className="pull-right">
-                    <a
-                        className="btn fr-btn-secondary"
-                        href={ `#realms/${encodeURIComponent(this.props.router.params[0])}/applications-agents` }
-                    >
-                        { t ("common.form.cancel") }
-                    </a>
-                </div>
-            </Clearfix>
-        );
-
         return (
             <div>
                 <PageHeader bsClass="page-header page-header-no-border">
@@ -71,10 +59,25 @@ class SelectAgentView extends Component {
                 <PageDescription>
                     { t("console.applications.agents.select.description") }
                 </PageDescription>
-                <Panel className="panel panel-default" footer={ footer }>
-                    <div className="grid-list">
-                        { creatableTypes }
-                    </div>
+                <Panel className="panel panel-default">
+                    <Panel.Body>
+                        <div className="grid-list">
+                            { creatableTypes }
+                        </div>
+                    </Panel.Body>
+                    <Panel.Footer>
+                        <Clearfix>
+                            <div className="pull-right">
+                                <a
+                                    className="btn fr-btn-secondary"
+                                    // eslint-disable-next-line max-len
+                                    href={ `#realms/${encodeURIComponent(this.props.router.params[0])}/applications-agents` }
+                                >
+                                    { t("common.form.cancel") }
+                                </a>
+                            </div>
+                        </Clearfix>
+                    </Panel.Footer>
                 </Panel>
             </div>
         );

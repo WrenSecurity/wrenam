@@ -286,6 +286,7 @@
             "createdAt" : "Created at",
             "createNew": "Create New",
             "search" : "Search",
+            "searchPrompt": "Type to search",
             "selectAll": "Select all",
             "submit" : "Submit",
             "actions" : "Actions",
@@ -1332,7 +1333,6 @@
                 "intro": "Find sessions by entering a user ID.",
                 "noResults": "No users found",
                 "placeholder": "User ID",
-                "searchPrompt": "Type to search",
                 "title": "User"
             },
             "table": {

@@ -12,7 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Portions copyright 2011-2016 ForgeRock AS.
- * Portions copyright 2024 Wren Security.
+ * Portions copyright 2024-2025 Wren Security.
  */
 
 require.config({
@@ -50,7 +50,9 @@ require.config({
 
         "classnames"       : "libs/classnames",
         "clockPicker"      : "libs/bootstrap-clockpicker",
+        "create-react-class": "libs/create-react-class",
         "doTimeout"        : "libs/jquery.ba-dotimeout",
+        "emotion"          : "libs/emotion",
         "form2js"          : "libs/form2js",
         "handlebars"       : "libs/handlebars",
         "i18next"          : "libs/i18next",
@@ -61,13 +63,16 @@ require.config({
         "microplugin"      : "libs/microplugin",
         "moment"           : "libs/moment",
         "popoverclickaway" : "libs/popover-clickaway",
+        "prop-types"       : "libs/prop-types",
         "qrcode"           : "libs/qrcode",
         "react-bootstrap"  : "libs/react-bootstrap",
         "react-dom"        : "libs/react-dom",
         "react"            : "libs/react",
         "react-input-autosize": "libs/react-input-autosize",
+        "react-redux"      : "libs/react-redux",
         "react-select"     : "libs/react-select",
         "redux"            : "libs/redux",
+        "redux-actions"    : "libs/redux-actions",
         "selectize"        : "libs/selectize-non-standalone",
         "sifter"           : "libs/sifter",
         "sortable"         : "libs/jquery-nestingSortable",
@@ -157,26 +162,8 @@ require.config({
         },
         "sortable": {
             deps: ["jquery"]
-        },
-        "react-input-autosize": {
-            deps: ["reactAutosizeInputDep"]
-        },
-        "react-select": {
-            deps: ["reactSelectDep"]
         }
     }
-});
-
-define("reactAutosizeInputDep", ["react"], (React) => {
-    window.React = React;
-    return {};
-});
-
-define("reactSelectDep", ["react-dom", "react-input-autosize", "classnames"], (ReactDOM, autoSize, classNames) => {
-    window.ReactDOM = ReactDOM;
-    window.classNames = classNames;
-    window.AutosizeInput = autoSize;
-    return {};
 });
 
 require([

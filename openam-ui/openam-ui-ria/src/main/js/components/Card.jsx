@@ -14,6 +14,7 @@
  * Copyright 2016 ForgeRock AS.
  */
 
+import PropTypes from "prop-types";
 import React from "react";
 
 /**
@@ -39,9 +40,9 @@ const Card = ({ href, children, icon }) => (
 );
 
 Card.propTypes = {
-    children: React.PropTypes.node,
-    href: React.PropTypes.string.isRequired,
-    icon: React.PropTypes.string.isRequired
+    children: PropTypes.node,
+    href: PropTypes.string.isRequired,
+    icon: PropTypes.string.isRequired
 };
 
 export default Card;
