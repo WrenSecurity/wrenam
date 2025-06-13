@@ -27,7 +27,7 @@ const {
 } = require("@wrensecurity/commons-ui-build");
 const gulp = require("gulp");
 const { join } = require("path");
-const KarmaServer = require("karma").Server;
+const { Server: KarmaServer, config: KarmaConfig } = require("karma");
 const replace = require("gulp-replace");
 const argv = require("yargs").argv;
 
@@ -149,11 +149,10 @@ gulp.task("test:scripts", useLocalResources({ "src/test/js/**": "" }, { dest: TE
 gulp.task("test:libs", useModuleResources({ "sinon/pkg/sinon.js": "libs/sinon.js" }, { dest: TESTS_PATH }));
 
 gulp.task("test:karma", () => (
-    new KarmaServer({
-        configFile: `${__dirname}/karma.conf.js`,
-        singleRun: true,
-        reporters: ["progress"]
-    }).start()
+    KarmaConfig.parseConfig(`${__dirname}/karma.conf.js`, null, {
+        promiseConfig: true,
+        throwErrors: false
+    }).then(karmaConfig => new KarmaServer(karmaConfig).start())
 ));
 
 gulp.task("build", gulp.series(
