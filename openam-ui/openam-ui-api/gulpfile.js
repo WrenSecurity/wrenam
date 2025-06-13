@@ -32,7 +32,7 @@ gulp.task("build:swagger", () => {
       `${baseDir}/swagger-ui-standalone-preset.{js,js.map}`,
       `${baseDir}/*.css`,
       `${baseDir}/*.{png,gif,jpg,ico,svg,ttf,eot,woff}`,
-  ], { base: baseDir }).pipe(gulp.dest(TARGET_PATH));
+  ], { base: baseDir, encoding: false }).pipe(gulp.dest(TARGET_PATH));
 });
 
 gulp.task("build", gulp.parallel(
@@ -40,7 +40,7 @@ gulp.task("build", gulp.parallel(
   "build:swagger",
 ));
 
-gulp.task("deploy", () => gulp.src(`${TARGET_PATH}/**/*`).pipe(gulp.dest(DEPLOY_DIR)));
+gulp.task("deploy", () => gulp.src(`${TARGET_PATH}/**/*`, { encoding: false }).pipe(gulp.dest(DEPLOY_DIR)));
 
 gulp.task("dev", gulp.series("build", "deploy"));
 gulp.task("prod", gulp.series("build"));

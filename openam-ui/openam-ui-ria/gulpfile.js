@@ -179,7 +179,7 @@ gulp.task("test", gulp.series(
     "test:karma"
 ));
 
-gulp.task("deploy", () => gulp.src(`${TARGET_PATH}/**/*`).pipe(gulp.dest(DEPLOY_DIR)));
+gulp.task("deploy", () => gulp.src(`${TARGET_PATH}/**/*`, { encoding: false }).pipe(gulp.dest(DEPLOY_DIR)));
 
 gulp.task("watch", () => {
     gulp.watch(
