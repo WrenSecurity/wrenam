@@ -32,7 +32,7 @@ package com.sun.identity.saml;
 import java.io.*;
 import java.util.*;
 import java.net.URL;
-import javax.servlet.http.*;
+import jakarta.servlet.http.*;
 import com.sun.identity.common.SystemConfigurationUtil;
 import com.sun.identity.common.SystemConfigurationException;
 import com.sun.identity.plugin.session.SessionException;

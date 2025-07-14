@@ -24,10 +24,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
-import javax.security.auth.message.AuthException;
-import javax.security.auth.message.MessageInfo;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.security.auth.message.AuthException;
+import jakarta.security.auth.message.MessageInfo;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.forgerock.jaspi.modules.session.jwt.JwtSessionModule;
 import org.forgerock.openam.authentication.modules.common.JaspiAuthLoginModulePostAuthenticationPlugin;

@@ -30,7 +30,7 @@ package com.sun.identity.console.service.model;
 
 import com.sun.identity.console.base.model.AMAdminConstants;
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /* - NEED NOT LOG - */
 

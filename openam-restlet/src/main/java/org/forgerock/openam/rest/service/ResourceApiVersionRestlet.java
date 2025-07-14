@@ -18,7 +18,7 @@ package org.forgerock.openam.rest.service;
 
 import static org.forgerock.http.routing.RouteMatchers.resourceApiVersionMatcher;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.forgerock.http.ApiProducer;
 import org.forgerock.services.context.Context;

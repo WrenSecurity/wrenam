@@ -29,9 +29,9 @@
 package com.sun.identity.configuration;
 
 import com.sun.identity.setup.AMSetupServlet;
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
+import jakarta.servlet.ServletConfig;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
 
 
 /**

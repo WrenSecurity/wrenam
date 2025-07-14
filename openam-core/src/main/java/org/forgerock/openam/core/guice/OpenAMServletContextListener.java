@@ -15,8 +15,8 @@
 */
 package org.forgerock.openam.core.guice;
 
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
+import jakarta.servlet.ServletContextEvent;
+import jakarta.servlet.ServletContextListener;
 
 /**
  * Stores the ServletContext into the ServletContextCache for reference

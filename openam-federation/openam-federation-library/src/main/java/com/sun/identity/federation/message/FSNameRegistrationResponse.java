@@ -49,7 +49,7 @@ import com.sun.identity.shared.xml.XMLUtils;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;

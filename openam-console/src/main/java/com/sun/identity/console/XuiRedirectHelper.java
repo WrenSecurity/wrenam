@@ -25,7 +25,7 @@ import org.forgerock.guice.core.InjectorHolder;
 import org.forgerock.openam.services.baseurl.BaseURLProviderFactory;
 import org.forgerock.openam.xui.XUIState;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.text.MessageFormat;
 

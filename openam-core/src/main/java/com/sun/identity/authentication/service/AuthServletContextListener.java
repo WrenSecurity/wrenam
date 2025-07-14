@@ -29,8 +29,8 @@
 
 package com.sun.identity.authentication.service;
 
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
+import jakarta.servlet.ServletContextEvent;
+import jakarta.servlet.ServletContextListener;
 
 /**
  * The <code>AuthServletContextListener</code> class is used to reset the

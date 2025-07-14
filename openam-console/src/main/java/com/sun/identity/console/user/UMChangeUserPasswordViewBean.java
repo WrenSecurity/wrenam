@@ -54,7 +54,7 @@ import org.forgerock.openam.ldap.LDAPUtils;
 
 import java.text.MessageFormat;
 import java.util.Set;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 public class UMChangeUserPasswordViewBean
     extends RMRealmViewBeanBase

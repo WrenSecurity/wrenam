@@ -20,7 +20,7 @@ import com.sun.identity.saml2.plugins.SAML2IdentityProviderAdapter;
 import com.sun.identity.saml2.profile.ClientFaultException;
 import com.sun.identity.saml2.profile.ServerFaultException;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * Responsible for validating and providing a handful of parameters required for

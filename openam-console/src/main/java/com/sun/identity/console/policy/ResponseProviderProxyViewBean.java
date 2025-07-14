@@ -33,7 +33,7 @@ import com.iplanet.jato.view.html.TextField;
 import com.sun.identity.console.base.AMViewBeanBase;
 import com.sun.identity.console.base.model.AMModel;
 import com.sun.identity.console.policy.model.PolicyModelImpl;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 public class ResponseProviderProxyViewBean
     extends AMViewBeanBase

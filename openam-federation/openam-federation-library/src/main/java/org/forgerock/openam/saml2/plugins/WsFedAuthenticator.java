@@ -15,8 +15,8 @@
  */
 package org.forgerock.openam.saml2.plugins;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import javax.xml.soap.SOAPMessage;
 
 import org.forgerock.openam.wsfederation.common.ActiveRequestorException;

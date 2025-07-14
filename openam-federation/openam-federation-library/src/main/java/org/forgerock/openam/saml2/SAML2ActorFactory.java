@@ -16,8 +16,8 @@
 package org.forgerock.openam.saml2;
 
 import com.sun.identity.saml2.common.SAML2Utils;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 
 /**

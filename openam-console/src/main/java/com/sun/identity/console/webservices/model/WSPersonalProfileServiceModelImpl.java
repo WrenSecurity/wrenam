@@ -34,7 +34,7 @@ import com.sun.identity.console.base.model.AMServiceProfileModelImpl;
 import com.sun.identity.console.property.PropertyXMLBuilder;
 import com.sun.identity.liberty.ws.idpp.common.IDPPConstants;
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /* - NEED NOT LOG - */
 

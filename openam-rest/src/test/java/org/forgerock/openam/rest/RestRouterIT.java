@@ -108,7 +108,7 @@ import org.testng.annotations.Test;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.security.auth.Subject;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.lang.annotation.Annotation;
 import java.net.URI;
 import java.net.URISyntaxException;

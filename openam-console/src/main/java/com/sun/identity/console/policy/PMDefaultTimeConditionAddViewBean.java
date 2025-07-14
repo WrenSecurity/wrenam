@@ -35,7 +35,7 @@ import com.sun.identity.console.base.model.AMModel;
 import com.sun.identity.console.policy.model.PolicyModel;
 import com.sun.identity.console.policy.model.TimePolicyModelImpl;
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 public class PMDefaultTimeConditionAddViewBean
     extends ConditionAddViewBean

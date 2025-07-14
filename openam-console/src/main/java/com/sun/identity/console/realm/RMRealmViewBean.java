@@ -30,7 +30,7 @@ package com.sun.identity.console.realm;
 
 import static com.sun.identity.console.XuiRedirectHelper.*;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;

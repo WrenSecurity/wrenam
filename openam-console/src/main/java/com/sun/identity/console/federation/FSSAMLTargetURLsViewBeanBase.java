@@ -45,7 +45,7 @@ import com.sun.web.ui.view.alert.CCAlert;
 import com.sun.web.ui.view.pagetitle.CCPageTitle;
 import java.net.MalformedURLException;
 import java.net.URL;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 public abstract class FSSAMLTargetURLsViewBeanBase
     extends AMPrimaryMastHeadViewBean {

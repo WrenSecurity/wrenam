@@ -16,7 +16,7 @@
 
 package org.forgerock.openam.services.baseurl;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.forgerock.guice.core.InjectorHolder;
 import org.forgerock.json.resource.http.HttpContext;

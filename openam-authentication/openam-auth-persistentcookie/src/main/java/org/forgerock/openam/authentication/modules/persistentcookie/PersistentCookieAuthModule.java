@@ -26,7 +26,7 @@ import java.util.Map;
 import javax.security.auth.Subject;
 import javax.security.auth.callback.Callback;
 import javax.security.auth.login.LoginException;
-import javax.security.auth.message.MessageInfo;
+import jakarta.security.auth.message.MessageInfo;
 
 import org.apache.commons.lang.StringUtils;
 import org.forgerock.caf.authentication.framework.AuthenticationFramework;

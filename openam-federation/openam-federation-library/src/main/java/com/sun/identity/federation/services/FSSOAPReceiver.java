@@ -80,10 +80,10 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.Vector;
 import java.util.logging.Level;
-import javax.servlet.*;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.*;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import javax.xml.soap.MessageFactory;
 import javax.xml.soap.MimeHeaders;
 import javax.xml.soap.SOAPBody;
@@ -137,7 +137,7 @@ public class FSSOAPReceiver extends HttpServlet {
      * @exception ServletException, IOException if error occurrs.
      */
     public void doPost(HttpServletRequest request, HttpServletResponse response)
-        throws javax.servlet.ServletException, java.io.IOException 
+        throws jakarta.servlet.ServletException, java.io.IOException
     {
         FSUtils.debug.message("FSSOAPReceiver.doPost: Called");
 

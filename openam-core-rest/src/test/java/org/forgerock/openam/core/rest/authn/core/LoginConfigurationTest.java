@@ -18,7 +18,7 @@ package org.forgerock.openam.core.rest.authn.core;
 
 import org.testng.annotations.Test;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import static org.mockito.Mockito.*;
 import static org.testng.Assert.*;

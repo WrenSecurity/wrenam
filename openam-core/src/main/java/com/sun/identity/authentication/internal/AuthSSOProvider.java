@@ -31,7 +31,7 @@ package com.sun.identity.authentication.internal;
 
 import java.util.Set;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import com.iplanet.sso.SSOException;
 import com.iplanet.sso.SSOProvider;

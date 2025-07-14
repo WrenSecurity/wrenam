@@ -19,7 +19,7 @@ package org.forgerock.openam.services.baseurl;
 import static org.fest.assertions.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.forgerock.json.resource.http.HttpContext;
 import org.forgerock.openam.utils.OpenAMSettings;

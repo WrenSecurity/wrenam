@@ -16,7 +16,7 @@
 
 package org.forgerock.openam.services.baseurl;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import com.sun.identity.shared.debug.Debug;
 import org.forgerock.json.resource.http.HttpContext;
@@ -27,7 +27,7 @@ import java.net.URISyntaxException;
 
 /**
  * A {@link BaseURLProvider} implementation that uses the scheme, serverName and serverPort properties of
- * the {@link javax.servlet.http.HttpServletRequest}.
+ * the {@link jakarta.servlet.http.HttpServletRequest}.
  */
 public class RequestValuesBaseURLProvider extends BaseURLProvider {
 

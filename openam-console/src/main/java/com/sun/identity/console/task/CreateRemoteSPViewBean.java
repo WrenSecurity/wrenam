@@ -46,7 +46,7 @@ import com.sun.web.ui.view.alert.CCAlert;
 import com.sun.web.ui.view.html.CCDropDownMenu;
 import com.sun.web.ui.view.pagetitle.CCPageTitle;
 import java.util.Set;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * Create remote service provider UI.

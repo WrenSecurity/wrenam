@@ -30,7 +30,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 
 import org.forgerock.openam.core.CoreWrapper;
 import org.forgerock.openam.core.guice.ServletContextCache;

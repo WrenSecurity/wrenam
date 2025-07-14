@@ -28,7 +28,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 
 import org.forgerock.openam.core.guice.ServletContextCache;
 import org.forgerock.openam.sm.datalayer.api.ConnectionFactory;

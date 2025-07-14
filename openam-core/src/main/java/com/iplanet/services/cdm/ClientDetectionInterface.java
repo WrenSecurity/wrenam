@@ -28,7 +28,7 @@
 
 package com.iplanet.services.cdm;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * The <code>ClientDetectionInterface</code> interface needs to be implemented

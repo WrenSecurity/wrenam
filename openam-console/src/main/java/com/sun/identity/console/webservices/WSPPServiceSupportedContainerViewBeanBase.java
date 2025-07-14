@@ -45,7 +45,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.StringTokenizer;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 public abstract class WSPPServiceSupportedContainerViewBeanBase
     extends AMPrimaryMastHeadViewBean

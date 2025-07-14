@@ -50,7 +50,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import com.sun.identity.console.base.model.AMAdminConstants; 
 
 public class SCSAML2SOAPBindingViewBean

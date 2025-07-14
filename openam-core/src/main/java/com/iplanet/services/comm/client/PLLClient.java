@@ -53,7 +53,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.Vector;
-import javax.servlet.http.Cookie;
+import jakarta.servlet.http.Cookie;
 
 import org.forgerock.http.header.TransactionIdHeader;
 import org.forgerock.openam.audit.context.AuditRequestContext;

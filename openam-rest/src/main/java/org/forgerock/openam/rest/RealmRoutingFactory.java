@@ -20,7 +20,7 @@ import static org.forgerock.http.routing.RoutingMode.STARTS_WITH;
 import static org.forgerock.openam.rest.service.RestletRealmRouter.REALM;
 import static org.forgerock.openam.rest.service.RestletRealmRouter.REALM_OBJECT;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.forgerock.http.Filter;
 import org.forgerock.http.Handler;

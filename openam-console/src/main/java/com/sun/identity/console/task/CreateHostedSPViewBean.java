@@ -50,7 +50,7 @@ import com.sun.web.ui.view.html.CCCheckBox;
 import com.sun.web.ui.view.html.CCDropDownMenu;
 import com.sun.web.ui.view.pagetitle.CCPageTitle;
 import java.util.Set;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * Create hosted identity provider UI.

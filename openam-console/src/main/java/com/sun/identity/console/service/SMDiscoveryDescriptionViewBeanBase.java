@@ -52,7 +52,7 @@ import com.sun.web.ui.view.pagetitle.CCPageTitle;
 import java.text.MessageFormat;
 import java.util.HashSet;
 import java.util.Set;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 public abstract class SMDiscoveryDescriptionViewBeanBase
     extends AMPrimaryMastHeadViewBean

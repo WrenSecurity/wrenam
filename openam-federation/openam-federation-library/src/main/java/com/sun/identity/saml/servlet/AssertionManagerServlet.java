@@ -38,9 +38,9 @@ import com.sun.identity.saml.common.SAMLUtils;
 
 import com.sun.xml.rpc.server.http.JAXRPCServlet;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletException;
 
 /**
  * The class provides remote interfaces for the <code>AssertionManager</code>

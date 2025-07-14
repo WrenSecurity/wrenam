@@ -32,7 +32,7 @@ package com.sun.identity.console.authentication;
 
 import static com.sun.identity.console.XuiRedirectHelper.*;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.text.MessageFormat;
 import java.util.HashMap;

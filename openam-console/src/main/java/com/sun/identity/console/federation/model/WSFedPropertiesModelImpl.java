@@ -50,7 +50,7 @@ import com.sun.identity.wsfederation.jaxb.wsfederation.TokenIssuerNameElement;
 import com.sun.identity.wsfederation.jaxb.entityconfig.ObjectFactory;
 import java.util.Set;
 import javax.xml.bind.JAXBException;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;

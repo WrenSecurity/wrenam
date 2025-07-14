@@ -20,7 +20,7 @@ import com.sun.identity.console.base.AMConsoleConfig;
 import com.sun.identity.console.base.model.AMConsoleException;
 import com.sun.identity.console.base.model.AMModelBase;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;

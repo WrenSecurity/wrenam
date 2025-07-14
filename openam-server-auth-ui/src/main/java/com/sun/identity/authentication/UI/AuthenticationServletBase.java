@@ -33,7 +33,7 @@ package com.sun.identity.authentication.UI;
 
 import java.io.IOException;
 
-import javax.servlet.ServletException;
+import jakarta.servlet.ServletException;
 
 import com.iplanet.jato.ApplicationServletBase;
 import com.iplanet.jato.CompleteRequestException;

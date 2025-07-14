@@ -38,7 +38,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 
 /**
  * ResourceLookup is a partial replacement for implementation of FileLookup. It

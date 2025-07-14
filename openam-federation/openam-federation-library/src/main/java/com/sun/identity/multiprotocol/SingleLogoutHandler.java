@@ -29,8 +29,8 @@
 package com.sun.identity.multiprotocol;
 
 import java.util.Set;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * The interface <code>SingleLogoutHandler</code> is used to handle

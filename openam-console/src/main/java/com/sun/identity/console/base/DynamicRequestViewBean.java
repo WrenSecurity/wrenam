@@ -20,7 +20,7 @@ import com.sun.identity.console.base.model.AMPropertySheetModel;
 import com.sun.identity.console.base.model.AMServiceProfileModel;
 import com.sun.identity.shared.datastruct.CollectionHelper;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.text.MessageFormat;
 import java.util.Map;
 import java.util.Set;

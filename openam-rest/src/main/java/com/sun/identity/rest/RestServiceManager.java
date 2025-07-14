@@ -30,8 +30,8 @@
 package com.sun.identity.rest;
 
 import javax.security.auth.Subject;
-import javax.servlet.FilterConfig;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.FilterConfig;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ServiceLoader;

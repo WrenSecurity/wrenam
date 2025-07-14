@@ -45,7 +45,7 @@ import com.sun.web.ui.view.alert.CCAlert;
 import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 public class ServicesAddViewBean
     extends AMServiceProfileViewBeanBase

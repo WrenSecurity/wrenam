@@ -66,7 +66,7 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.concurrent.TimeUnit;
 import javax.net.ssl.SSLContext;
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 
 import org.forgerock.openam.ldap.LDAPRequests;
 import org.forgerock.openam.ldap.LDAPUtils;

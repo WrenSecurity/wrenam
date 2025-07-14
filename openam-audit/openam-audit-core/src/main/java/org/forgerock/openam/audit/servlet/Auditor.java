@@ -25,7 +25,7 @@ import static org.forgerock.openam.audit.AuditConstants.EventName.AM_ACCESS_ATTE
 import static org.forgerock.openam.audit.AuditConstants.EventName.AM_ACCESS_OUTCOME;
 
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.forgerock.audit.events.AuditEvent;
 import org.forgerock.json.JsonValue;

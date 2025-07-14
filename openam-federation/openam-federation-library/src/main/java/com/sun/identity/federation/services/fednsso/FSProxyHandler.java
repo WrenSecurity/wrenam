@@ -35,8 +35,8 @@ import com.sun.identity.federation.jaxb.entityconfig.BaseConfigType;
 import com.sun.identity.liberty.ws.meta.jaxb.SPDescriptorType;
 import com.sun.identity.saml.assertion.NameIdentifier;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * This class <code>FSProxyHandler</code> handles the single sign-on requests

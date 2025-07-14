@@ -30,8 +30,8 @@
 package com.sun.identity.wsfederation.servlet;
 
 import com.sun.identity.saml2.common.SAML2Constants;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.owasp.esapi.ESAPI;
 

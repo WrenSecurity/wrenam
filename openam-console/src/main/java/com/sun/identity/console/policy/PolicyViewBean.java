@@ -40,7 +40,7 @@ import com.sun.identity.console.policy.model.PolicyModelImpl;
 import com.sun.identity.console.realm.HasEntitiesTabs;
 import com.sun.identity.console.realm.RealmPropertiesBase;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.text.MessageFormat;
 
 /**

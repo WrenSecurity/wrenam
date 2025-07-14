@@ -30,8 +30,8 @@
 package com.sun.identity.sae.api;
 
 import org.owasp.esapi.ESAPI;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
 import java.util.Map;

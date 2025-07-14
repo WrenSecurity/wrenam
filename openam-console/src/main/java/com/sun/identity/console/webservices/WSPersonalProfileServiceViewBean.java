@@ -49,7 +49,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 public class WSPersonalProfileServiceViewBean
     extends AMServiceProfileViewBeanBase

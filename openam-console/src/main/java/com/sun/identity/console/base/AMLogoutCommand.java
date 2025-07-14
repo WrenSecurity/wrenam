@@ -32,7 +32,7 @@ import com.iplanet.jato.command.Command;
 import com.iplanet.jato.command.CommandEvent;
 import com.iplanet.jato.command.CommandException;
 import java.io.IOException;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 import com.sun.identity.console.base.model.AMModelBase;
 
 /**

@@ -22,7 +22,7 @@ import org.apache.cxf.transport.servlet.CXFNonSpringServlet;
 import org.forgerock.openam.sts.soap.bootstrap.SoapSTSLifecycle;
 import org.forgerock.openam.sts.soap.config.SoapSTSInjectorHolder;
 
-import javax.servlet.ServletConfig;
+import jakarta.servlet.ServletConfig;
 
 /**
  * This class is the endpoint specified in web.xml as the recipient for all SOAP invocations targeting

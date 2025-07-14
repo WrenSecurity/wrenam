@@ -28,9 +28,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import javax.security.auth.message.MessageInfo;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.security.auth.message.MessageInfo;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.forgerock.caf.authentication.framework.AuthenticationFramework;
 import org.wrensecurity.guava.common.collect.Sets;

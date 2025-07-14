@@ -30,7 +30,7 @@ import com.sun.identity.saml2.profile.ServerFaultException;
 import com.sun.identity.shared.debug.Debug;
 import org.apache.commons.lang.StringUtils;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.logging.Level;
 
 /**

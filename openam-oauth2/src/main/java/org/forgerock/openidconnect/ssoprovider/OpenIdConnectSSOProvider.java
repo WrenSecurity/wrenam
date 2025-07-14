@@ -28,7 +28,7 @@ import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.wrensecurity.guava.common.base.Throwables;
 import org.wrensecurity.guava.common.cache.CacheBuilder;
