@@ -43,7 +43,7 @@ import com.sun.web.ui.view.pagetitle.CCPageTitle;
 import org.forgerock.openam.shared.sts.SharedSTSConstants;
 import org.forgerock.openam.utils.CollectionUtils;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.text.MessageFormat;
 import java.util.Map;
 import java.util.Set;

@@ -71,13 +71,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletInputStream;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletConfig;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletInputStream;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import javax.xml.soap.Detail;
 import javax.xml.soap.MessageFactory;
@@ -1163,7 +1163,7 @@ public class SAMLSOAPReceiver extends HttpServlet {
         if (req.isSecure()) {
             try {
                 allCerts = (java.security.cert.X509Certificate[])
-                    req.getAttribute("javax.servlet.request.X509Certificate");
+                    req.getAttribute("jakarta.servlet.request.X509Certificate");
             } catch (Exception e ) {
                     SAMLUtils.debug.error("SAMLSOAPReceiver: Exception", e);
             }

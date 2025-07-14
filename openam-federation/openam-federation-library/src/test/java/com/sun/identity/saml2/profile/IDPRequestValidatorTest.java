@@ -22,7 +22,7 @@ import org.forgerock.openam.saml2.UtilProxyIDPRequestValidator;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;

@@ -15,7 +15,7 @@
 */
 package org.forgerock.openam.core.guice;
 
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 
 /**
  * Captures our ServletContext via a ServetContextListener.

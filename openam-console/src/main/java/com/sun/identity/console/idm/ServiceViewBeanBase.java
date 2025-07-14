@@ -51,7 +51,7 @@ import com.sun.web.ui.view.pagetitle.CCPageTitle;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 public abstract class ServiceViewBeanBase
     extends AMPrimaryMastHeadViewBean

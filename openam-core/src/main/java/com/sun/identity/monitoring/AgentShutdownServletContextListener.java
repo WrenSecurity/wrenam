@@ -28,8 +28,8 @@
 
 package com.sun.identity.monitoring;
 
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
+import jakarta.servlet.ServletContextEvent;
+import jakarta.servlet.ServletContextListener;
 
 /**
  * The <code>AgentShutdownServletContextListener</code> class is used to

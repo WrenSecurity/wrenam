@@ -49,13 +49,13 @@ import com.sun.identity.shared.encode.URLEncDec;
 import javax.xml.soap.*;
 
 
-import javax.servlet.*;
+import jakarta.servlet.*;
 import java.util.*;
 
 import org.w3c.dom.Document;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * <code>IDP</code> single sign on service handler handles <code>LECP</code>

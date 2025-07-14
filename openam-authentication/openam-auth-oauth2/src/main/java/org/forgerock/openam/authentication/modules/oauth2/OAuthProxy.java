@@ -25,8 +25,8 @@
  */
 package org.forgerock.openam.authentication.modules.oauth2;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.util.Map;
 

@@ -54,7 +54,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.Collections;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 public class ImportEntityViewBean
     extends AMPrimaryMastHeadViewBean

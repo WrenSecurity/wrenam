@@ -20,8 +20,8 @@ import com.iplanet.sso.SSOException;
 import com.sun.identity.authentication.service.AuthUtils;
 import com.sun.identity.authentication.spi.AMPostAuthProcessInterface;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * Wrapper class around AuthUtils to facilitate testing.

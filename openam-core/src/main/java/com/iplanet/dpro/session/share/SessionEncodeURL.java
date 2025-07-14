@@ -34,7 +34,7 @@ import com.sun.identity.shared.debug.Debug;
 import com.sun.identity.shared.encode.URLEncDec;
 import com.sun.identity.session.util.SessionUtils;
 import java.util.Hashtable;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /** 
  * <code>SessionEncodeURL</code> class encodes the </code>URL</code> 
@@ -273,7 +273,7 @@ public class SessionEncodeURL {
 
     /**
      * Encodes the specified URL by including the session ID in it. Similar to
-     * <code>javax.servlet.http.HttpServletResponse.encodeURL()</code>. session
+     * <code>jakarta.servlet.http.HttpServletResponse.encodeURL()</code>. session
      * ID will be only be included if the client needs encoding.
      * 
      * @param url URL to be rewritten with the session ID.

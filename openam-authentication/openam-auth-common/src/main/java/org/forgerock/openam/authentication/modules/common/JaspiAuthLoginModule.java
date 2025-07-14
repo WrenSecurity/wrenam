@@ -21,9 +21,9 @@ import java.util.Map;
 import javax.security.auth.Subject;
 import javax.security.auth.callback.Callback;
 import javax.security.auth.login.LoginException;
-import javax.security.auth.message.AuthException;
-import javax.security.auth.message.AuthStatus;
-import javax.security.auth.message.MessageInfo;
+import jakarta.security.auth.message.AuthException;
+import jakarta.security.auth.message.AuthStatus;
+import jakarta.security.auth.message.MessageInfo;
 
 import com.sun.identity.authentication.spi.AuthLoginException;
 import com.sun.identity.authentication.util.ISAuthConstants;

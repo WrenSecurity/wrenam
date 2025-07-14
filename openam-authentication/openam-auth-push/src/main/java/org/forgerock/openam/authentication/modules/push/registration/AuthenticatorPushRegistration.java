@@ -34,7 +34,7 @@ import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.ConfirmationCallback;
 import javax.security.auth.callback.TextOutputCallback;
 import javax.security.auth.login.LoginException;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.forgerock.guice.core.InjectorHolder;
 import org.forgerock.json.JsonValue;

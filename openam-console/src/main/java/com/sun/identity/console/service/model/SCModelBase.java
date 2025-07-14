@@ -38,7 +38,7 @@ import com.sun.identity.sm.ServiceSchemaManager;
 import com.sun.identity.sm.ServiceSchema;
 import com.sun.identity.sm.SchemaType;
 import com.iplanet.sso.SSOException;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;

@@ -24,7 +24,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import org.forgerock.json.JsonValue;
 import org.forgerock.openam.utils.StringUtils;
 

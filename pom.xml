@@ -97,7 +97,7 @@
     </repositories>
 
     <properties>
-        <pgpVerifyKeysVersion>1.8.3</pgpVerifyKeysVersion>
+        <pgpVerifyKeysVersion>1.8.5-SNAPSHOT</pgpVerifyKeysVersion>
         <wrenBuildToolsVersion>1.2.0</wrenBuildToolsVersion>
 
         <!-- Source code has to be Java 8 compliant (code base is not JPMS ready) -->
@@ -141,7 +141,7 @@
 
         <!-- Wren Security Dependencies -->
         <wrends.version>5.0.0</wrends.version>
-        <wrensec-commons.version>22.6.0</wrensec-commons.version>
+        <wrensec-commons.version>23.0.0-SNAPSHOT</wrensec-commons.version>
         <wrensec-guava.version>18.0.5</wrensec-guava.version>
         <wrensec-ui.version>23.2.2</wrensec-ui.version>
 
@@ -156,7 +156,7 @@
         <commons-codec.version>1.16.0</commons-codec.version>
         <commons-collections.version>3.2.2</commons-collections.version>
         <commons-digester.version>2.1</commons-digester.version>
-        <commons-fileupload.version>1.5</commons-fileupload.version>
+        <commons-fileupload.version>1.5-jakarta1</commons-fileupload.version>
         <commons-io.version>2.13.0</commons-io.version>
         <commons-lang.version>2.6</commons-lang.version>
         <commons-logging.version>1.2</commons-logging.version>
@@ -166,23 +166,23 @@
         <jackson.version>2.15.2</jackson.version>
         <jakarta.activation-api.version>1.2.2</jakarta.activation-api.version>
         <jakarta.annotation-api.version>1.3.5</jakarta.annotation-api.version>
-        <jakarta.security.message-api.version>1.1.3</jakarta.security.message-api.version>
+        <jakarta.security.message-api.version>2.0.0-RC1</jakarta.security.message-api.version>
         <jakarta.inject-api.version>1.0.5</jakarta.inject-api.version>
         <jakarta.mail-api.version>1.6.7</jakarta.mail-api.version>
         <jakarta.mail-impl.version>1.6.7</jakarta.mail-impl.version>
-        <jakarta.servlet-api.version>4.0.4</jakarta.servlet-api.version>
-        <jakarta.servlet.jsp-api.version>2.3.6</jakarta.servlet.jsp-api.version>
-        <jakarta.servlet.jstl-api.version>1.2.7</jakarta.servlet.jstl-api.version>
+        <jakarta.servlet-api.version>5.0.0</jakarta.servlet-api.version>
+        <jakarta.servlet.jsp-api.version>4.0.0</jakarta.servlet.jsp-api.version>
+        <jakarta.servlet.jstl-api.version>3.0.2</jakarta.servlet.jstl-api.version>
         <jakarta.validation-api.version>2.0.2</jakarta.validation-api.version>
         <jakarta.websocket-api.version>1.1.2</jakarta.websocket-api.version>
         <jakarta.ws.rs-api.version>2.1.5</jakarta.ws.rs-api.version>
-        <jakarta.xml.rpc-api.version>1.1.4</jakarta.xml.rpc-api.version>
+        <jakarta.xml.rpc-api.version>1.1.4-jakarta1</jakarta.xml.rpc-api.version>
         <jakarta.xml.bind-api.version>2.3.3</jakarta.xml.bind-api.version>
         <jakarta.xml.soap-api.version>1.4.2</jakarta.xml.soap-api.version>
         <jakarta.xml.ws-api.version>2.3.3</jakarta.xml.ws-api.version>
         <java-ipv6.version>0.17</java-ipv6.version>
         <javassist.version>3.29.1-GA</javassist.version>
-        <restlet.version>2.4.3</restlet.version>
+        <restlet.version>2.6.0</restlet.version>
         <slf4j.version>1.7.36</slf4j.version>
         <snakeyaml.version>2.2</snakeyaml.version>
 
@@ -190,9 +190,9 @@
         <fastinfoset.version>1.2.18</fastinfoset.version>
         <jaxb-impl.version>2.3.8</jaxb-impl.version>
         <jaxb1-impl.version>2.2.5-1</jaxb1-impl.version>
-        <jaxrpc-impl.version>1.1.6</jaxrpc-impl.version>
-        <jaxrpc-spi.version>1.1.6</jaxrpc-spi.version>
-        <jersey-bundle.version>1.19.1</jersey-bundle.version>
+        <jaxrpc-impl.version>1.1.6-jakarta1</jaxrpc-impl.version>
+        <jaxrpc-spi.version>1.1.6-jakarta1</jaxrpc-spi.version>
+        <jersey-bundle.version>1.19.1-jakarta1</jersey-bundle.version>
         <jersey-oauth.version>1.19.4</jersey-oauth.version>
         <saaj-impl.version>1.5.3</saaj-impl.version>
         <xmlsec.version>2.3.5</xmlsec.version>
@@ -220,10 +220,10 @@
         <!-- Deprecated Dependencies (TBD) -->
         <authapi.version>2005-08-12</authapi.version>
         <cc-ui.version>2008-08-08</cc-ui.version>
-        <click.version>2.3.0</click.version>
+        <click.version>2.3.0-jakarta1</click.version>
         <esapiport.version>2013-12-04</esapiport.version>
         <FastInfoset.version>2006-26-09</FastInfoset.version>
-        <jato.version>2005-05-04</jato.version>
+        <jato.version>2005-05-04-jakarta1</jato.version>
         <jdmk.version>2007-01-10</jdmk.version>
         <jsr173_api.version>2004-30-01</jsr173_api.version>
         <relaxngDatatype.version>20020414</relaxngDatatype.version>
@@ -710,6 +710,7 @@
                 <version>${commons-digester.version}</version>
             </dependency>
 
+            <!-- TODO Migrate to commons-fileupload2-jakarta-servlet5 -->
             <dependency>
                 <groupId>commons-fileupload</groupId>
                 <artifactId>commons-fileupload</artifactId>
@@ -920,31 +921,31 @@
 
 
             <dependency>
-                <groupId>org.restlet.jee</groupId>
+                <groupId>org.restlet</groupId>
                 <artifactId>org.restlet</artifactId>
                 <version>${restlet.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>org.restlet.jee</groupId>
+                <groupId>org.restlet</groupId>
                 <artifactId>org.restlet.ext.crypto</artifactId>
                 <version>${restlet.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>org.restlet.jee</groupId>
+                <groupId>org.restlet</groupId>
                 <artifactId>org.restlet.ext.freemarker</artifactId>
                 <version>${restlet.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>org.restlet.jee</groupId>
+                <groupId>org.restlet</groupId>
                 <artifactId>org.restlet.ext.httpclient</artifactId>
                 <version>${restlet.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>org.restlet.jee</groupId>
+                <groupId>org.restlet</groupId>
                 <artifactId>org.restlet.ext.jackson</artifactId>
                 <version>${restlet.version}</version>
 
@@ -964,43 +965,43 @@
             </dependency>
 
             <dependency>
-                <groupId>org.restlet.jee</groupId>
+                <groupId>org.restlet</groupId>
                 <artifactId>org.restlet.ext.json</artifactId>
                 <version>${restlet.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>org.restlet.jee</groupId>
+                <groupId>org.restlet</groupId>
                 <artifactId>org.restlet.ext.net</artifactId>
                 <version>${restlet.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>org.restlet.jee</groupId>
+                <groupId>org.restlet</groupId>
                 <artifactId>org.restlet.ext.servlet</artifactId>
                 <version>${restlet.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>org.restlet.jee</groupId>
+                <groupId>org.restlet</groupId>
                 <artifactId>org.restlet.ext.simple</artifactId>
                 <version>${restlet.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>org.restlet.jee</groupId>
+                <groupId>org.restlet</groupId>
                 <artifactId>org.restlet.ext.slf4j</artifactId>
                 <version>${restlet.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>org.restlet.jee</groupId>
+                <groupId>org.restlet</groupId>
                 <artifactId>org.restlet.ext.ssl</artifactId>
                 <version>${restlet.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>org.restlet.jee</groupId>
+                <groupId>org.restlet</groupId>
                 <artifactId>org.restlet.ext.xml</artifactId>
                 <version>${restlet.version}</version>
             </dependency>
@@ -1188,7 +1189,7 @@
             <dependency>
                 <groupId>com.sun.web.ui</groupId>
                 <artifactId>cc</artifactId>
-                <version>${cc-ui.version}</version>
+                <version>${cc-ui.version}-jakarta1</version>
             </dependency>
 
             <dependency>

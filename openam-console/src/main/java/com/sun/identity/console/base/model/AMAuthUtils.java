@@ -33,7 +33,7 @@ import com.iplanet.sso.SSOToken;
 import com.iplanet.sso.SSOTokenManager;
 import com.sun.identity.shared.Constants;
 import com.sun.identity.shared.debug.Debug;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * This class provides authentication related helper methods.

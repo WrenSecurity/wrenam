@@ -43,8 +43,8 @@ import java.util.StringTokenizer;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.forgerock.guice.core.InjectorHolder;
 import org.forgerock.openam.authentication.service.AuthSessionFactory;

@@ -48,7 +48,7 @@ import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.callback.UnsupportedCallbackException;
 import javax.security.auth.x500.X500Principal;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.forgerock.openam.ldap.LDAPUtils;
 import org.forgerock.opendj.ldap.LDAPUrl;
@@ -394,7 +394,7 @@ public class Cert extends AMLoginModule {
             HttpServletRequest servletRequest = getHttpServletRequest();
             if (servletRequest != null) {
                 allCerts = (X509Certificate[]) servletRequest.
-                   getAttribute("javax.servlet.request.X509Certificate");
+                   getAttribute("jakarta.servlet.request.X509Certificate");
                 if (allCerts == null || allCerts.length == 0) {
                     debug.message(
                           "Certificate: checking for cert passed in the URL.");

@@ -35,8 +35,8 @@ import java.util.Map;
 import java.util.Iterator;
 import java.util.HashMap;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.Cookie;
 import com.sun.identity.authentication.spi.AMLoginModule;
 import com.sun.identity.authentication.spi.AuthLoginException;
 import com.sun.identity.authentication.util.ISAuthConstants;

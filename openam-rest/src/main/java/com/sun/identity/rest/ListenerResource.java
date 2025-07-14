@@ -29,7 +29,7 @@ import com.sun.identity.entitlement.EntitlementListener;
 import com.sun.identity.entitlement.ListenerManager;
 import java.util.List;
 import javax.security.auth.Subject;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.FormParam;

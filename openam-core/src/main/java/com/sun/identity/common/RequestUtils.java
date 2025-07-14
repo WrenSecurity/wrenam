@@ -32,7 +32,7 @@ package com.sun.identity.common;
 
 import java.util.StringTokenizer;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import com.sun.identity.shared.Constants;
 import com.sun.identity.shared.debug.Debug;

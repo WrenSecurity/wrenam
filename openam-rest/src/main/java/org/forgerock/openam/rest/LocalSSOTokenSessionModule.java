@@ -16,7 +16,7 @@
 
 package org.forgerock.openam.rest;
 
-import static javax.security.auth.message.AuthStatus.*;
+import static jakarta.security.auth.message.AuthStatus.*;
 import static org.forgerock.util.promise.Promises.newExceptionPromise;
 import static org.forgerock.util.promise.Promises.newResultPromise;
 
@@ -25,11 +25,11 @@ import javax.security.auth.Subject;
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.callback.UnsupportedCallbackException;
-import javax.security.auth.message.AuthException;
-import javax.security.auth.message.AuthStatus;
-import javax.security.auth.message.MessagePolicy;
-import javax.security.auth.message.callback.CallerPrincipalCallback;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.security.auth.message.AuthException;
+import jakarta.security.auth.message.AuthStatus;
+import jakarta.security.auth.message.MessagePolicy;
+import jakarta.security.auth.message.callback.CallerPrincipalCallback;
+import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;

@@ -39,9 +39,9 @@ import com.sun.identity.console.base.model.AMDisplayType;
 import com.sun.identity.policy.ActionSchema;
 import com.sun.web.ui.common.CCTagClass;
 import com.sun.web.ui.taglib.common.CCTagBase;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.PageContext;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.jsp.JspException;
+import jakarta.servlet.jsp.PageContext;
 
 public class ActionSchemaGUI {
     private static ActionSchemaGUI instance = new ActionSchemaGUI();

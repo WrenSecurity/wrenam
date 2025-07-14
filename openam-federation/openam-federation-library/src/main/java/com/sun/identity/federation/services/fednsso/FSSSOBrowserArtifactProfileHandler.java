@@ -63,8 +63,8 @@ import com.sun.identity.saml.common.SAMLUtils;
 import com.sun.identity.shared.encode.URLEncDec;
 import org.forgerock.openam.utils.ClientUtils;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import javax.xml.soap.SOAPMessage;
 
 import java.security.cert.X509Certificate;

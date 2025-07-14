@@ -16,8 +16,8 @@
 
 package com.sun.identity.saml2.profile;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * Interface to describe an object that can check a cookie and then perform SAML2 Redirect based on the result.

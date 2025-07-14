@@ -50,7 +50,7 @@ import org.forgerock.json.resource.http.HttpContext;
 
 import java.security.AccessController;
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * Sets the locale suitable for the given situation. Each response to end-user

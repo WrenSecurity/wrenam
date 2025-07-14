@@ -40,9 +40,9 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 import javax.security.auth.callback.Callback;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.forgerock.guice.core.InjectorHolder;
 import org.forgerock.openam.session.SessionServiceURLService;

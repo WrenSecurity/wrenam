@@ -30,7 +30,7 @@ import com.sun.identity.coretoken.CoreTokenStoreFactory;
 import com.sun.identity.coretoken.CoreTokenUtils;
 import com.sun.identity.coretoken.TokenLogUtils;
 import java.util.logging.Level;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;

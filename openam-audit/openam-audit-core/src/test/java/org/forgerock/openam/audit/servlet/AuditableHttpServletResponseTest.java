@@ -16,7 +16,7 @@
 
 package org.forgerock.openam.audit.servlet;
 
-import static javax.servlet.http.HttpServletResponse.*;
+import static jakarta.servlet.http.HttpServletResponse.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -25,7 +25,7 @@ import static org.mockito.Mockito.verify;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * @since 13.0.0

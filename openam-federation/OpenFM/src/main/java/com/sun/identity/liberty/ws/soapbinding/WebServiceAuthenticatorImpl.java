@@ -41,7 +41,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.security.auth.Subject;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.forgerock.guice.core.InjectorHolder;
 

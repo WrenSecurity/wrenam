@@ -60,7 +60,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 public abstract class FSSAMLTrustedPartnersViewBeanBase
     extends AMPrimaryMastHeadViewBean {

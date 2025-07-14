@@ -29,9 +29,9 @@
 
 package com.sun.identity.plugin.session.impl;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Cookie;
 import java.util.Map;
 import java.util.HashSet;
 import java.util.Collections;

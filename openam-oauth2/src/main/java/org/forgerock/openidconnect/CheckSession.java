@@ -18,7 +18,7 @@ package org.forgerock.openidconnect;
 
 import static org.forgerock.openam.oauth2.OAuth2Constants.JWTTokenParams.*;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import java.net.URI;
 import java.nio.charset.Charset;

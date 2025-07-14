@@ -27,7 +27,7 @@ import javax.inject.Singleton;
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.NameCallback;
 import javax.security.auth.callback.PasswordCallback;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.forgerock.oauth2.core.exceptions.ClientAuthenticationFailureFactory;
 import org.forgerock.oauth2.core.exceptions.InvalidClientException;

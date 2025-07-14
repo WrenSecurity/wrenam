@@ -16,7 +16,7 @@
 
 package com.sun.identity.setup;
 
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 
 import com.google.inject.PrivateModule;
 import com.sun.identity.setup.AMSetupManager;

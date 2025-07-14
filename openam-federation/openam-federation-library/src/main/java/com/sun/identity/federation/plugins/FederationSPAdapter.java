@@ -38,8 +38,8 @@ import com.sun.identity.federation.message.FSNameRegistrationRequest;
 import com.sun.identity.federation.message.FSNameRegistrationResponse;
 import com.sun.identity.federation.message.FSResponse;
 import java.util.Set;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * The interface <code>FederationSPAdapter</code> could be implemented to 

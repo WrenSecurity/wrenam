@@ -31,7 +31,7 @@ package com.sun.identity.console.base.model;
 
 import static org.forgerock.openam.utils.Time.*;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.security.AccessController;
 import java.text.Collator;

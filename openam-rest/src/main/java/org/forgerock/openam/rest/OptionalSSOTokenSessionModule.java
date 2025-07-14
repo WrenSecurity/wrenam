@@ -16,10 +16,10 @@
 
 package org.forgerock.openam.rest;
 
-import static javax.security.auth.message.AuthStatus.SUCCESS;
+import static jakarta.security.auth.message.AuthStatus.SUCCESS;
 
 import javax.inject.Inject;
-import javax.security.auth.message.AuthStatus;
+import jakarta.security.auth.message.AuthStatus;
 
 import org.forgerock.openam.authentication.service.AuthUtilsWrapper;
 

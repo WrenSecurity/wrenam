@@ -20,7 +20,7 @@ import java.security.AccessController;
 import java.util.Collection;
 import java.util.Set;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import com.iplanet.sso.SSOException;
 import com.iplanet.sso.SSOToken;

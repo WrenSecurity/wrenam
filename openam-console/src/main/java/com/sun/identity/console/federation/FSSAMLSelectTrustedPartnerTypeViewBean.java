@@ -47,7 +47,7 @@ import com.sun.web.ui.view.pagetitle.CCPageTitle;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 public class FSSAMLSelectTrustedPartnerTypeViewBean
     extends AMPrimaryMastHeadViewBean {

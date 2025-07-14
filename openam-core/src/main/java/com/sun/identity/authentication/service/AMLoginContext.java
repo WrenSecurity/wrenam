@@ -54,7 +54,7 @@ import javax.security.auth.login.AppConfigurationEntry;
 import javax.security.auth.login.AppConfigurationEntry.LoginModuleControlFlag;
 import javax.security.auth.login.Configuration;
 import javax.security.auth.login.LoginException;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.forgerock.guice.core.InjectorHolder;
 import org.forgerock.openam.audit.AuditConstants.AuthenticationFailureReason;

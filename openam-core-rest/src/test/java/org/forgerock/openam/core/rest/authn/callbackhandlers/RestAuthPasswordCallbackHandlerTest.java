@@ -25,8 +25,8 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 import javax.security.auth.callback.PasswordCallback;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.forgerock.json.JsonValue;
 import org.forgerock.openam.core.rest.authn.exceptions.RestAuthException;

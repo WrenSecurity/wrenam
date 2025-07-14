@@ -18,7 +18,7 @@ package org.forgerock.openam.services.baseurl;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.forgerock.json.resource.http.HttpContext;
 import org.forgerock.openam.utils.ForwardedHeader;

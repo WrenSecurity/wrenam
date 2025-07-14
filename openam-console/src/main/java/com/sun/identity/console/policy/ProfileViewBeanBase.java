@@ -36,7 +36,7 @@ import com.sun.identity.console.policy.model.CachedPolicy;
 import com.sun.identity.console.policy.model.PolicyCache;
 import com.sun.identity.console.policy.model.PolicyModel;
 import com.sun.identity.console.policy.model.PolicyModelImpl;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 public abstract class ProfileViewBeanBase
     extends AMPrimaryMastHeadViewBean

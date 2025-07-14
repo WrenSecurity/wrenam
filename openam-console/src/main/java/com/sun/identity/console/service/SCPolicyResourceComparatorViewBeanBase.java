@@ -42,7 +42,7 @@ import com.sun.identity.console.service.model.SCPolicyModelImpl;
 import com.sun.web.ui.model.CCPageTitleModel;
 import com.sun.web.ui.view.alert.CCAlert;
 import com.sun.web.ui.view.pagetitle.CCPageTitle;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 public abstract class SCPolicyResourceComparatorViewBeanBase
     extends AMPrimaryMastHeadViewBean

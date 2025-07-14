@@ -35,10 +35,10 @@ import com.sun.identity.saml.common.SAMLUtils;
 import java.io.IOException;
 import java.util.Map; 
 import java.util.HashMap; 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.ServletException;
 import javax.xml.soap.SOAPException;
 
 
