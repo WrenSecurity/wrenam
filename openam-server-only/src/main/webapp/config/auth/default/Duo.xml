@@ -12,14 +12,15 @@
     Header, with the fields enclosed by brackets [] replaced by your own identifying
     information: "Portions copyright [year] [name of copyright owner]".
 
-    Copyright 2023 Wren Security
+    Copyright 2023-2025 Wren Security
 -->
 <!DOCTYPE ModuleProperties PUBLIC "=//iPlanet//Authentication Module Properties XML Interface 1.0 DTD//EN"
         "jar://com/sun/identity/authentication/Auth_Module_Properties.dtd">
 
 <ModuleProperties moduleName="Duo">
     <Callbacks length="0" order="1" timeout="3600" header="#WILL NOT BE SHOWN#" />
-    <Callbacks length="1" order="2" timeout="3600" header="Login" >
+    <Callbacks length="2" order="2" timeout="3600" header="Login" >
         <TextOutputCallback>Please confirm authentication in your Cisco Duo mobile application.</TextOutputCallback>
+        <PollingWaitCallback waitTime="5000" />
     </Callbacks>
 </ModuleProperties>
