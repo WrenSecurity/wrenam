@@ -25,6 +25,7 @@
  * $Id: AMCRLStore.java,v 1.7 2009/01/28 05:35:12 ww203982 Exp $
  *
  * Portions Copyrighted 2013-2016 ForgeRock AS.
+ * Portions Copyrighted 2025 Wren Security
  */
 package com.sun.identity.security.cert;
 
@@ -32,12 +33,13 @@ import static org.forgerock.openam.utils.Time.*;
 
 import com.forgerock.opendj.ldap.controls.TransactionIdControl;
 import com.iplanet.security.x509.CertUtils;
-import com.iplanet.security.x509.IssuingDistributionPointExtension;
 import com.sun.identity.common.HttpURLConnectionManager;
 import com.sun.identity.shared.encode.URLEncDec;
 import sun.security.x509.CRLDistributionPointsExtension;
 import sun.security.x509.DistributionPoint;
+import sun.security.x509.DistributionPointName;
 import sun.security.x509.GeneralNames;
+import sun.security.x509.IssuingDistributionPointExtension;
 import sun.security.x509.PKIXExtensions;
 import sun.security.x509.X509CertImpl;
 
@@ -346,7 +348,7 @@ public class AMCRLStore extends AMCertStore {
                     crl.getExtensionValue(
                             PKIXExtensions.IssuingDistributionPoint_Id.toString());
             if (ext != null) {
-                idpExt = new IssuingDistributionPointExtension(ext);
+                idpExt = new IssuingDistributionPointExtension(true, ext);
             }
         } catch (Exception e) {
             debug.error("Error finding CRL distribution Point configured: ", e);
@@ -371,10 +373,10 @@ public class AMCRLStore extends AMCertStore {
 
         List dps = null;
         try {
-            dps = (List) dpExt.get(CRLDistributionPointsExtension.POINTS);
-        } catch (IOException ioex) {
+            dps = JdkProviderUtils.getDistributionPoints(dpExt);
+        } catch (Exception ex) {
             if (debug.warningEnabled()) {
-                debug.warning("AMCRLStore.getUpdateCRLFromCrlDP: ", ioex);
+                debug.warning("AMCRLStore.getUpdateCRLFromCrlDP: ", ex);
             }
         }
 
@@ -415,8 +417,12 @@ public class AMCRLStore extends AMCertStore {
      * @param idpExt
      */
     private synchronized X509CRL getUpdateCRLFromCrlIDP(IssuingDistributionPointExtension idpExt) {
-
-        GeneralNames gName = idpExt.getFullName();
+        DistributionPointName dpName = idpExt.getDistributionPoint();
+        if (dpName == null) {
+            return null;
+        }
+        
+        GeneralNames gName = dpName.getFullName();
         if (gName == null) {
             return null;
         }
