@@ -25,7 +25,7 @@
  * $Id: Cert.java,v 1.14 2009/03/13 20:54:42 beomsuk Exp $
  *
  * Portions Copyrighted 2013-2017 ForgeRock AS.
- * Portions Copyrighted 2022 Wren Security
+ * Portions Copyrighted 2022-2025 Wren Security
  */
 
 package com.sun.identity.authentication.modules.cert;
@@ -62,6 +62,7 @@ import com.sun.identity.security.cert.AMCRLStore;
 import com.sun.identity.security.cert.AMCertPath;
 import com.sun.identity.security.cert.AMCertStore;
 import com.sun.identity.security.cert.AMLDAPCertStoreParameters;
+import com.sun.identity.security.cert.JdkProviderUtils;
 import com.sun.identity.shared.datastruct.CollectionHelper;
 import com.sun.identity.shared.encode.Base64;
 
@@ -563,14 +564,11 @@ public class Cert extends AMLoginModule {
                 new X509CertImpl(cert.getEncoded());
             X509CertInfo cinfo = 
                 new X509CertInfo(certImpl.getTBSCertificate());
-            CertificateExtensions exts = (CertificateExtensions) 
-                            cinfo.get(X509CertInfo.EXTENSIONS);
-            SubjectAlternativeNameExtension altNameExt = 
-                (SubjectAlternativeNameExtension)
-                    exts.get(SubjectAlternativeNameExtension.NAME);
+            CertificateExtensions exts = JdkProviderUtils.getExtensions(cinfo);
+            SubjectAlternativeNameExtension altNameExt = JdkProviderUtils.getSanExtension(exts);
 
             if (altNameExt != null) {
-                GeneralNames names = altNameExt.get(SubjectAlternativeNameExtension.SUBJECT_NAME);
+                GeneralNames names = JdkProviderUtils.getSubjectNames(altNameExt);
         
                 Iterator itr = names.iterator();
                 while ((userTokenId == null) && itr.hasNext()) {
