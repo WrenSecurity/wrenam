@@ -1,0 +1,8 @@
+# Only used when issuing new certificate for updating the database
+sample-ca/newcerts
+
+# Not interested in storing old replaced state
+sample-ca/*.old
+
+# Not interested in storing temporary CSR files
+*.csr.pem
