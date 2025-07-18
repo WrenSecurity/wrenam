@@ -63,7 +63,7 @@
         <url>https://github.com/WrenSecurity/WrenAM</url>
         <connection>scm:git:git://github.com/WrenSecurity/WrenAM.git</connection>
         <developerConnection>scm:git:git@github.com:WrenSecurity/WrenAM.git</developerConnection>
-        <tag>15.1.1</tag>
+        <tag>sustaining/15.x</tag>
     </scm>
 
     <repositories>
