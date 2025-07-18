@@ -12,7 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Portions copyright 2011-2016 ForgeRock AS.
- * Portions copyright 2024 Wren Security.
+ * Portions copyright 2024-2025 Wren Security.
  */
 
 define([
@@ -116,6 +116,28 @@ define([
      */
     function hasConfirmationCallback (requirements) {
         return _.some(requirements.callbacks, ["type", "ConfirmationCallback"]);
+    }
+
+    /**
+     * Decide if the form template needs to be rendered.
+     * @param {Object} oldReqs The requirements used for the last render
+     * @param {Object} newReqs The newly received requirements
+     * @returns {Boolean} `true` when a render is required
+     */
+    function shouldRenderTemplate (oldReqs, newReqs) {
+        if (!oldReqs || !newReqs || oldReqs.stage !== newReqs.stage) {
+            return true;
+        }
+        if (!oldReqs.callbacks || !newReqs.callbacks || oldReqs.callbacks.length !== newReqs.callbacks.length) {
+            return true;
+        }
+        return _.some(oldReqs, (oldReq, index) => {
+            const newReq = newReqs[index];
+            if (oldReq.type === "PollingWaitCallback" && newReq.type === "PollingWaitCallback") {
+                return false;
+            }
+            return !_.isEqual(oldReq, newReq);
+        });
     }
 
     function getFragmentParamString () {
@@ -333,9 +355,7 @@ define([
                     const pollingWaitTimeoutMs = _.find(element.output, { name: "waitTime" }).value;
 
                     _.delay(() => {
-                        this.pollingInProgress = true;
-
-                        if (hasPollingCallback(this.reqs)) {
+                        if (this.reqs === reqs) {
                             EventManager.sendEvent(Constants.EVENT_LOGIN_REQUEST, { suppressSpinner: true });
                         }
                     }, pollingWaitTimeoutMs);
@@ -367,16 +387,16 @@ define([
                 });
             }
 
+            const renderTemplate = shouldRenderTemplate(this.reqs, reqs);
+
             this.reqs = reqs;
             this.data.reqs = requirements;
-
-            const pollingInProgress = this.pollingInProgress && hasPollingCallback(reqs);
 
             // Is there an attempt at autologin happening?
             // if yes then don't render the form until it fails one time
             if (urlParams.IDToken1 && Configuration.globalData.auth.autoLoginAttempts === 1) {
                 Configuration.globalData.auth.autoLoginAttempts++;
-            } else if (!pollingInProgress) {
+            } else if (renderTemplate) {
                 // Attempt to load a stage-specific template to render this form.  If not found, use the generic one.
                 template = `templates/openam/authn/${reqs.stage}.html`;
                 UIUtils.compileTemplate(template, _.extend({}, Configuration.globalData, this.data))
