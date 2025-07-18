@@ -51,7 +51,7 @@ import com.sun.web.ui.model.CCActionTableModel;
 import com.sun.web.ui.model.CCPageTitleModel;
 import java.util.Iterator;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 public class UMUserPasswordResetOptionsViewBean
     extends RMRealmViewBeanBase

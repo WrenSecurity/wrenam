@@ -29,8 +29,8 @@ import com.sun.identity.saml2.common.SAML2Exception;
 import com.sun.identity.saml2.protocol.AuthnRequest;
 import com.sun.identity.saml2.protocol.Response;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * This interface <code> SAML2IdentityProviderAdapter</code> is used to perform

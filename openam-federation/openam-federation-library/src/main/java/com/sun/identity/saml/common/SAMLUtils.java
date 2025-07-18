@@ -69,9 +69,9 @@ import com.sun.identity.shared.xml.XMLUtils;
 import com.sun.identity.shared.encode.URLEncDec;
 import com.sun.identity.shared.encode.Base64;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
 
 import javax.xml.soap.MimeHeaders;
 import javax.xml.soap.MimeHeader;

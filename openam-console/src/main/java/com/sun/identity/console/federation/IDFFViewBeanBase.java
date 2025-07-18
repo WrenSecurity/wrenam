@@ -56,7 +56,7 @@ import com.sun.identity.console.federation.model.IDFFModelImpl;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 public abstract class IDFFViewBeanBase
     extends EntityPropertiesBase 

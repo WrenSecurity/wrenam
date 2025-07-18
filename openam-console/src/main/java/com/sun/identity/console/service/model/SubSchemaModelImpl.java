@@ -38,7 +38,7 @@ import com.sun.identity.sm.SMSException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /* - LOG COMPLETE - */
 /* Logging is done in base.model.SubConfigMeta class */

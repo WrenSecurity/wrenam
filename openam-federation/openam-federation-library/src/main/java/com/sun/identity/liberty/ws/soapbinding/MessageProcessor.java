@@ -33,7 +33,7 @@ import javax.xml.soap.SOAPMessage;
 import javax.xml.soap.SOAPHeader;
 import javax.xml.soap.SOAPException;
 import javax.security.auth.Subject;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import java.io.ByteArrayOutputStream;
 import java.io.ByteArrayInputStream;

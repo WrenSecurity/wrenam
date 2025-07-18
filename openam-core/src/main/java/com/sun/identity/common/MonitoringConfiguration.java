@@ -30,9 +30,9 @@ package com.sun.identity.common;
 
 import com.sun.identity.setup.AMSetupServlet;
 import com.iplanet.services.naming.WebtopNaming;
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
+import jakarta.servlet.ServletConfig;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
 
 
 /**

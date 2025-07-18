@@ -19,10 +19,10 @@ package org.forgerock.openam.core.rest.session.action;
 import static org.forgerock.json.resource.Responses.newActionResponse;
 import static org.forgerock.util.promise.Promises.newResultPromise;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpServletResponseWrapper;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponseWrapper;
 import java.util.HashMap;
 import java.util.Map;
 

@@ -16,7 +16,7 @@
 
 package org.forgerock.openam.audit.servlet;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.forgerock.openam.audit.AuditConstants.Component;
 

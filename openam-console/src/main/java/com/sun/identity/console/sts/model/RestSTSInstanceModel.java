@@ -21,7 +21,7 @@ import com.sun.identity.console.base.model.AMConsoleException;
 import org.forgerock.openam.shared.sts.SharedSTSConstants;
 import org.forgerock.openam.utils.CollectionUtils;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;

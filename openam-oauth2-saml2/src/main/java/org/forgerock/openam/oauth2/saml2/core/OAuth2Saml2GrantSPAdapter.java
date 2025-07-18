@@ -31,8 +31,8 @@ import org.forgerock.openam.oauth2.OAuth2Constants;
 import org.forgerock.openam.utils.StringUtils;
 import org.forgerock.util.encode.Base64url;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;

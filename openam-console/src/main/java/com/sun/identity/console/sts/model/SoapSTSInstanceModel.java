@@ -25,7 +25,7 @@ import org.forgerock.openam.shared.sts.SharedSTSConstants;
 import org.forgerock.openam.utils.CollectionUtils;
 import org.forgerock.openam.utils.StringUtils;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import javax.xml.namespace.QName;
 import java.util.Map;
 import java.util.Set;

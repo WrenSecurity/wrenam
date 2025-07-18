@@ -16,7 +16,7 @@
 
 package com.sun.identity.console.task.model;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;

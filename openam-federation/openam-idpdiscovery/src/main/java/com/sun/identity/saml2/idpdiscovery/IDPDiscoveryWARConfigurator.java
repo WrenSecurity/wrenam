@@ -39,7 +39,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.Properties;
-import javax.servlet.ServletException;
+import jakarta.servlet.ServletException;
 
 /**
  * This class is used to setup the OpenAM IDP Discovery WAR.

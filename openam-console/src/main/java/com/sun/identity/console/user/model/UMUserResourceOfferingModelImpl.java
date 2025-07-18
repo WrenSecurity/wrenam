@@ -38,7 +38,7 @@ import com.sun.identity.idm.IdRepoException;
 import com.sun.identity.idm.IdUtils;
 import java.util.HashMap;
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /* - LOG COMPLETE - */
 

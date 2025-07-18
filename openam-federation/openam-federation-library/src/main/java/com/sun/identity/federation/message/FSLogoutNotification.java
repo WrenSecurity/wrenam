@@ -47,7 +47,7 @@ import com.sun.identity.federation.message.common.FSMsgException;
 import com.sun.identity.federation.common.FSUtils;
 import com.sun.identity.federation.common.IFSConstants;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import java.text.ParseException;
 

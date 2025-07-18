@@ -57,7 +57,7 @@ import com.sun.web.ui.view.table.CCActionTable;
 import com.sun.web.ui.view.tabs.CCTabs;
 import java.util.Iterator;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * This view bean manages server configuration XML.

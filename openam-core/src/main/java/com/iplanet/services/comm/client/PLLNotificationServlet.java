@@ -36,11 +36,11 @@ import com.sun.identity.common.RequestUtils;
 import com.sun.identity.shared.locale.L10NMessageImpl;
 import java.io.InputStream;
 import java.util.Vector;
-import javax.servlet.ServletException;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * 
@@ -67,7 +67,7 @@ public class PLLNotificationServlet extends HttpServlet {
      * HttpServletNotification Reference to HttpServletNotification object
      * @param HttpServletResponse Reference to HttpServletResponse object
      * 
-     * @see javax.servlet.http.HttpServlet
+     * @see jakarta.servlet.http.HttpServlet
      */
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, java.io.IOException {

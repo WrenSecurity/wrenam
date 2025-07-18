@@ -62,7 +62,7 @@ import javax.security.auth.Subject;
 import javax.security.auth.callback.Callback;
 import javax.security.auth.login.Configuration;
 import javax.security.auth.login.LoginContext;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.ietf.jgss.GSSContext;
 import org.ietf.jgss.GSSCredential;

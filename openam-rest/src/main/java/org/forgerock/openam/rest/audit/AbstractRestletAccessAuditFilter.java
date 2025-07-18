@@ -28,7 +28,7 @@ import static org.restlet.ext.servlet.ServletUtils.getRequest;
 
 import java.util.Set;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.forgerock.audit.AuditException;
 import org.forgerock.json.JsonValue;

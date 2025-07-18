@@ -41,7 +41,7 @@ import com.sun.web.ui.model.CCPageTitleModel;
 import com.sun.web.ui.view.alert.CCAlert;
 import java.text.MessageFormat;
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 public class ServicesEditViewBean
     extends ServiceViewBeanBase {

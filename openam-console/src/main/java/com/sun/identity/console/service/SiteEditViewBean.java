@@ -51,7 +51,7 @@ import com.sun.web.ui.view.pagetitle.CCPageTitle;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * Creates a new site.

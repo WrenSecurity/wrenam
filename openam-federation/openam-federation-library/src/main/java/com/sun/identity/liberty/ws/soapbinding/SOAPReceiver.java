@@ -39,13 +39,13 @@ import java.util.logging.Level;
 
 import java.security.cert.X509Certificate;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletInputStream;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletConfig;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletInputStream;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import javax.xml.namespace.QName;
 import javax.xml.soap.MessageFactory;
@@ -157,7 +157,7 @@ public class SOAPReceiver extends HttpServlet {
 	String remoteAddr = ClientUtils.getClientIPAddress(request);
 
         X509Certificate[] allCerts = (X509Certificate[]) 
-            request.getAttribute("javax.servlet.request.X509Certificate");
+            request.getAttribute("jakarta.servlet.request.X509Certificate");
         X509Certificate certificate = null;
         if (allCerts != null && allCerts.length > 0) {
             certificate = allCerts[0];

@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -18,8 +18,8 @@ package com.sun.identity.saml2.profile;
 import com.sun.identity.saml2.common.SAML2Exception;
 import com.sun.identity.saml2.protocol.ProtocolFactory;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.Serializable;
 import java.util.Map;
 

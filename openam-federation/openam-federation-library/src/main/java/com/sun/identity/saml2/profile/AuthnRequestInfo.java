@@ -33,8 +33,8 @@ import static org.forgerock.openam.utils.Time.*;
 
 import com.sun.identity.saml2.protocol.AuthnRequest;
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * This class stores information about the request made to

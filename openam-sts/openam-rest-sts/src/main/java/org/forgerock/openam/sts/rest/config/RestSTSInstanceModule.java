@@ -400,7 +400,7 @@ public class RestSTSInstanceModule extends AbstractModule {
      * If a rest-sts instance is configured to support a token transformation with an x509 token as an input token type, the
      * instance must be invoked via a two-way TLS exchange (i.e. where the client presents their certificate). If OpenAM
      * is deployed behind a tls-offloading engine, the client certificate won't be set as a HttpServetRequest attribute
-     * referenced by the javax.servlet.request.X509Certificate key, but rather the rest sts instance must be configured
+     * referenced by the jakarta.servlet.request.X509Certificate key, but rather the rest sts instance must be configured
      * with the name of the http header where the tls-offloading engine will store the client certificate prior to invoking
      * OpenAM.
      *

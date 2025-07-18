@@ -44,7 +44,7 @@ import com.sun.identity.console.realm.model.IDRepoModelImpl;
 import com.sun.web.ui.model.CCPageTitleModel;
 import com.sun.web.ui.view.alert.CCAlert;
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 public abstract class IDRepoOpViewBeanBase
     extends AMPrimaryMastHeadViewBean

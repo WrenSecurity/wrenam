@@ -28,7 +28,7 @@ import org.forgerock.json.resource.http.HttpContext;
 import org.forgerock.services.context.ClientContext;
 import org.forgerock.services.context.Context;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**

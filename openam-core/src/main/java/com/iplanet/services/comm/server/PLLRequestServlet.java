@@ -43,11 +43,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.util.Hashtable;
-import javax.servlet.ServletException;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * 
@@ -95,7 +95,7 @@ public class PLLRequestServlet extends HttpServlet {
      * HttpServletRequest Reference to HttpServletRequest object @param
      * HttpServletResponse Reference to HttpServletResponse object
      * 
-     * @see javax.servlet.http.HttpServlet
+     * @see jakarta.servlet.http.HttpServlet
      */
     public void doPost(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, java.io.IOException {

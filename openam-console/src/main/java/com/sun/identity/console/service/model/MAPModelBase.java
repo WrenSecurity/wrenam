@@ -47,7 +47,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 public abstract class MAPModelBase extends AMModelBase implements MAPModel {
 

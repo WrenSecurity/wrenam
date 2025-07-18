@@ -21,7 +21,7 @@ import org.restlet.service.StatusService;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import javax.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServlet;
 import java.util.Collections;
 import java.util.Enumeration;
 

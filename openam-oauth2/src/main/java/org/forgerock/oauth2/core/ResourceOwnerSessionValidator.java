@@ -30,7 +30,7 @@ import static org.forgerock.openidconnect.Client.MIN_DEFAULT_MAX_AGE;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import java.io.IOException;
 import java.io.StringWriter;

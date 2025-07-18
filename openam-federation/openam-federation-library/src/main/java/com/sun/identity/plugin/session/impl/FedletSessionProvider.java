@@ -33,8 +33,8 @@ import com.sun.identity.shared.debug.Debug;
 import com.sun.identity.plugin.session.SessionException;
 import com.sun.identity.plugin.session.SessionListener;
 import com.sun.identity.plugin.session.SessionProvider;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 

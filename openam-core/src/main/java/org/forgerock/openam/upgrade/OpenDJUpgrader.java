@@ -27,7 +27,7 @@ package org.forgerock.openam.upgrade;
 import static java.nio.file.Files.copy;
 
 import javax.annotation.Nonnull;
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;

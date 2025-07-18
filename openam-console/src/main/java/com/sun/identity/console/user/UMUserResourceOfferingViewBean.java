@@ -50,7 +50,7 @@ import com.sun.web.ui.view.pagetitle.CCPageTitle;
 import com.sun.web.ui.view.table.CCActionTable;
 import java.text.MessageFormat;
 import java.util.Iterator;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 public class UMUserResourceOfferingViewBean
     extends RMRealmViewBeanBase

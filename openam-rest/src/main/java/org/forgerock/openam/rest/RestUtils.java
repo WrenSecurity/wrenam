@@ -20,7 +20,7 @@ package org.forgerock.openam.rest;
 import static org.forgerock.json.resource.http.HttpUtils.PROTOCOL_VERSION_1;
 
 import javax.mail.internet.MimeUtility;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import javax.xml.parsers.DocumentBuilder;
 
 import java.io.IOException;

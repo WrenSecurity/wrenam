@@ -20,8 +20,8 @@ import com.sun.identity.saml2.common.SAML2Utils;
 import com.sun.identity.saml2.logging.LogUtil;
 import java.util.Map;
 import java.util.logging.Level;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 public abstract class SAMLBase {
 

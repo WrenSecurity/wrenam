@@ -31,7 +31,7 @@ package com.iplanet.services.cdm;
 import com.iplanet.am.util.AMClientDetector;
 import com.sun.identity.shared.debug.Debug;
 import java.util.Iterator;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * The <code>ClientDetectionInterface</code> interface needs to be implemented

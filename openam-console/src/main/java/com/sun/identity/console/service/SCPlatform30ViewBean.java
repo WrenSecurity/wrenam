@@ -41,7 +41,7 @@ import com.sun.identity.console.service.model.SCPlatformModel;
 import com.sun.identity.console.service.model.SCPlatformModelImpl;
 import com.sun.web.ui.view.alert.CCAlert;
 import java.text.MessageFormat;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * View bean for platform server revision 30.

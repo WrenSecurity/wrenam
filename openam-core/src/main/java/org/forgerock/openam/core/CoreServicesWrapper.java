@@ -16,8 +16,8 @@
 
 package org.forgerock.openam.core;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.security.AccessController;
 import java.util.Map;
 import java.util.Set;
@@ -53,7 +53,7 @@ public class CoreServicesWrapper {
      * @param request The HttpServletRequest.
      * @return The SessionID from the request.
      *
-     * @see com.sun.identity.authentication.service.AuthUtils#getSessionIDFromRequest(javax.servlet.http.HttpServletRequest)
+     * @see com.sun.identity.authentication.service.AuthUtils#getSessionIDFromRequest(jakarta.servlet.http.HttpServletRequest)
      */
     public SessionID getSessionIDFromRequest(HttpServletRequest request) {
         return AuthUtils.getSessionIDFromRequest(request);
@@ -65,7 +65,7 @@ public class CoreServicesWrapper {
      * @param request The HttpServletRequest.
      * @return The environment map.
      *
-     * @see com.sun.identity.authentication.client.AuthClientUtils#getEnvMap(javax.servlet.http.HttpServletRequest)
+     * @see com.sun.identity.authentication.client.AuthClientUtils#getEnvMap(jakarta.servlet.http.HttpServletRequest)
      */
     public Map<String, Set<String>> getEnvMap(HttpServletRequest request) {
         return AuthClientUtils.getEnvMap(request);

@@ -53,7 +53,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.text.ParseException;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;

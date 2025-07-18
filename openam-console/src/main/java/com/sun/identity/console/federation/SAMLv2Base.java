@@ -44,7 +44,7 @@ import java.util.List;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 public abstract class SAMLv2Base extends EntityPropertiesBase {
     protected static final String PROPERTIES = "propertyAttributes";

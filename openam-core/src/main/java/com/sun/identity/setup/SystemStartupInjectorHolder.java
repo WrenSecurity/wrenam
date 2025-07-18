@@ -16,8 +16,8 @@
 
 package com.sun.identity.setup;
 
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletContextEvent;
+import jakarta.servlet.FilterConfig;
+import jakarta.servlet.ServletContextEvent;
 
 import com.google.inject.Injector;
 import com.google.inject.Key;

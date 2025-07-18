@@ -31,7 +31,7 @@ package com.sun.identity.console.task;
 
 import static com.sun.identity.console.XuiRedirectHelper.*;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import com.iplanet.jato.model.ModelControlException;
 import com.iplanet.jato.view.event.DisplayEvent;

@@ -28,7 +28,7 @@
  */
 package com.sun.identity.authentication.UI.taglib;
 
-import javax.servlet.jsp.JspException;
+import jakarta.servlet.jsp.JspException;
 
 import com.iplanet.am.util.SystemProperties;
 import com.iplanet.jato.taglib.html.FormTag;

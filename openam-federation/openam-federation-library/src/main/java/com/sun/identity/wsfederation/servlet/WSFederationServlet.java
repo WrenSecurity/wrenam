@@ -34,10 +34,10 @@ package com.sun.identity.wsfederation.servlet;
 import com.sun.identity.wsfederation.common.WSFederationException;
 import com.sun.identity.wsfederation.common.WSFederationUtils;
 import java.io.IOException;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * Servlet endpoint for WS-Federation. All requests and responses flow through 
@@ -48,7 +48,7 @@ public class WSFederationServlet extends HttpServlet {
     /** Handles the HTTP <code>GET</code> method.
      * @param request servlet request
      * @param response servlet response
-     * @throws javax.servlet.ServletException 
+     * @throws jakarta.servlet.ServletException
      * @throws java.io.IOException 
      */
     protected void doGet(HttpServletRequest request, 
@@ -82,7 +82,7 @@ public class WSFederationServlet extends HttpServlet {
     /** Handles the HTTP <code>POST</code> method.
      * @param request servlet request
      * @param response servlet response
-     * @throws javax.servlet.ServletException 
+     * @throws jakarta.servlet.ServletException
      * @throws java.io.IOException 
      */
     protected void doPost(HttpServletRequest request, 

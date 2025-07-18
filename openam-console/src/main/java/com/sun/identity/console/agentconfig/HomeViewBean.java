@@ -42,7 +42,7 @@ import com.sun.identity.console.idm.model.EntitiesModelImpl;
 import com.sun.web.ui.view.pagetitle.CCPageTitle;
 import com.sun.web.ui.model.CCPageTitleModel;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 
 /**

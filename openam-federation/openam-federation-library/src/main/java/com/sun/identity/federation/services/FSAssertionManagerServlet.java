@@ -32,9 +32,9 @@
 
 package com.sun.identity.federation.services;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import com.sun.identity.federation.common.FSUtils;
 import com.sun.xml.rpc.server.http.JAXRPCServlet;
 import org.forgerock.openam.utils.ClientUtils;

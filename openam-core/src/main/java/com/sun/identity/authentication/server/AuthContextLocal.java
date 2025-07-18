@@ -39,7 +39,7 @@ import java.util.Set;
 
 import javax.security.auth.Subject;
 import javax.security.auth.callback.Callback;
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSession;
 
 import com.iplanet.sso.SSOToken;
 import com.sun.identity.authentication.AuthContext;

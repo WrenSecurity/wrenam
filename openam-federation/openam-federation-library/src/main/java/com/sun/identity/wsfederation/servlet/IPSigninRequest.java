@@ -41,8 +41,8 @@ import com.sun.identity.wsfederation.common.WSFederationException;
 import com.sun.identity.wsfederation.jaxb.wsfederation.FederationElement;
 
 import java.io.IOException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import com.sun.identity.wsfederation.common.WSFederationUtils;
 import com.sun.identity.wsfederation.jaxb.entityconfig.SPSSOConfigElement;
@@ -55,7 +55,7 @@ import com.sun.identity.wsfederation.profile.RequestSecurityTokenResponse;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.logging.Level;
-import javax.servlet.ServletException;
+import jakarta.servlet.ServletException;
 import org.owasp.esapi.ESAPI;
 
 /**

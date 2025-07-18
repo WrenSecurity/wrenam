@@ -59,7 +59,7 @@ import com.sun.web.ui.view.tabs.CCNodeEventHandlerInterface;
 import com.sun.web.ui.view.tabs.CCTabs;
 import java.util.Iterator;
 import java.util.Set;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 public class MAPClientManagerViewBean
     extends AMViewBeanBase

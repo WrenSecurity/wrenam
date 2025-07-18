@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2013-2014 ForgeRock AS.
+ * Portions Copyright 2025 Wren Security.
  */
 
 package org.forgerock.oauth2.restlet;
@@ -42,7 +43,7 @@ public class OAuth2StatusService extends StatusService {
      * @return {@inheritDoc}
      */
     @Override
-    public Representation getRepresentation(Status status, Request request, Response response) {
+    public Representation toRepresentation(Status status, Request request, Response response) {
         Map<String, Object> rep = new HashMap<String, Object>();
 
         rep.put("error", status.getReasonPhrase());

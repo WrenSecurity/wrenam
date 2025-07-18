@@ -289,7 +289,7 @@ public class SSOTokenManager {
      * @supported.api
      */
     public SSOToken createSSOToken(
-            javax.servlet.http.HttpServletRequest request)
+            jakarta.servlet.http.HttpServletRequest request)
             throws UnsupportedOperationException, SSOException {
 
         for (SSOProviderPlugin ssoProvider : getSsoProviderPlugins()) {

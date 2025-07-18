@@ -29,7 +29,7 @@
 package com.sun.identity.setup;
 
 import com.iplanet.sso.SSOToken;
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 
 public interface ConfiguratorPlugin {
     /**

@@ -35,7 +35,7 @@ import com.sun.identity.console.base.model.AMModel;
 import com.sun.identity.console.realm.model.RMRealmModelImpl;
 import com.sun.web.ui.view.pagetitle.CCPageTitle;
 import com.sun.web.ui.model.CCPageTitleModel;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 public class HomePageViewBean
     extends RMRealmViewBeanBase

@@ -32,7 +32,7 @@ package com.iplanet.sso;
 import java.security.Principal;
 import java.util.Set;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * <code>SSOProvider</code> is the interface that the SSO providers or the

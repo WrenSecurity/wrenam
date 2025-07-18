@@ -24,8 +24,8 @@ import com.sun.identity.saml2.common.SAML2Constants;
 import com.sun.identity.shared.encode.URLEncDec;
 import com.sun.xml.bind.StringInputStream;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import javax.xml.xpath.XPathFactory;
 
 import org.forgerock.util.xml.XMLUtils;

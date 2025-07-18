@@ -31,8 +31,8 @@ package com.sun.identity.federation.services;
 
 import com.sun.identity.federation.message.FSAuthnRequest;
 import com.sun.identity.federation.common.FSRedirectException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * This interface <code>FSRealmIDPProxy</code> is used to find a preferred 

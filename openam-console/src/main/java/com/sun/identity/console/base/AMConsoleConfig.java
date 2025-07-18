@@ -35,7 +35,7 @@ import com.iplanet.am.util.SystemProperties;
 import com.sun.identity.shared.Constants;
 import com.sun.identity.common.RequestUtils;
 import com.sun.identity.console.base.model.AMAdminConstants;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 public final class AMConsoleConfig {
     static private AMConsoleConfig instance = new AMConsoleConfig();

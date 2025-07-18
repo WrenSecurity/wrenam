@@ -39,7 +39,7 @@ import com.sun.identity.idm.IdRepoException;
 import com.sun.identity.idm.IdUtils;
 import com.sun.identity.sm.SMSException;
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 public class AgentDumpModelImpl extends AMModelBase implements AgentDumpModel
 {

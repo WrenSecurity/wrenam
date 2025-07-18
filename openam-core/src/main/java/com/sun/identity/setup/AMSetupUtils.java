@@ -23,7 +23,7 @@ import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLHandshakeException;
 import javax.net.ssl.SSLSession;
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;

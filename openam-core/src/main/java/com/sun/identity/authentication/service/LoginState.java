@@ -61,9 +61,9 @@ import java.util.StringTokenizer;
 import javax.security.auth.Subject;
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.NameCallback;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.wrensecurity.guava.common.base.Joiner;
@@ -4157,7 +4157,7 @@ public class LoginState {
     public X509Certificate getX509Certificate(HttpServletRequest servletrequest) {
         if ((servletrequest != null) && (servletrequest.isSecure())) {
             Object obj = servletrequest.getAttribute(
-                    "javax.servlet.request.X509Certificate");
+                    "jakarta.servlet.request.X509Certificate");
             X509Certificate[] allCerts = (X509Certificate[]) obj;
             if ((allCerts != null) && (allCerts.length != 0)) {
                 if (DEBUG.messageEnabled()) {
