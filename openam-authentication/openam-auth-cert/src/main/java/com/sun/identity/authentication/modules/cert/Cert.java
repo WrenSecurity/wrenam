@@ -25,7 +25,7 @@
  * $Id: Cert.java,v 1.14 2009/03/13 20:54:42 beomsuk Exp $
  *
  * Portions Copyrighted 2013-2017 ForgeRock AS.
- * Portions Copyrighted 2022 Wren Security
+ * Portions Copyrighted 2022-2025 Wren Security
  */
 
 package com.sun.identity.authentication.modules.cert;
@@ -62,6 +62,7 @@ import com.sun.identity.security.cert.AMCRLStore;
 import com.sun.identity.security.cert.AMCertPath;
 import com.sun.identity.security.cert.AMCertStore;
 import com.sun.identity.security.cert.AMLDAPCertStoreParameters;
+import com.sun.identity.security.cert.SunSecurityProviderCompat;
 import com.sun.identity.shared.datastruct.CollectionHelper;
 import com.sun.identity.shared.encode.Base64;
 
@@ -86,31 +87,31 @@ public class Cert extends AMLoginModule {
 
     // from profile server.
     // default: MUST HAVE where is the ldap server.
-    private String amAuthCert_serverHost;  
-    // default: values stored in auth.certificate.ldap.server.context; 
+    private String amAuthCert_serverHost;
+    // default: values stored in auth.certificate.ldap.server.context;
     // think ok to be nil.
-    private String amAuthCert_startSearchLoc;  
+    private String amAuthCert_startSearchLoc;
     // none, simple or CRAM-MD5 (default to NONE)
-    private String amAuthCert_securityType; 
+    private String amAuthCert_securityType;
     // ldap user name [if missing default to amAuthCert_securityType to none.]
-    private String amAuthCert_principleUser;  
-    // ldap user's passwd  
+    private String amAuthCert_principleUser;
+    // ldap user's passwd
     // [if missing default to amAuthCert_securityType to none.]
-    private String amAuthCert_principlePasswd;  
+    private String amAuthCert_principlePasswd;
     // use ssl to talk to ldap. default is false.
-    private String amAuthCert_useSSL;        
+    private String amAuthCert_useSSL;
     // Field in Cert to user to access user profile.  default to DN
-    private String amAuthCert_userProfileMapper;    
-    // Alternate Field in Cert to userid to access user profile 
+    private String amAuthCert_userProfileMapper;
+    // Alternate Field in Cert to userid to access user profile
     // if above is "other"
     private String amAuthCert_altUserProfileMapper;
-    // SubjectAltNameExtension Value Type OID 
+    // SubjectAltNameExtension Value Type OID
     // This OID type of value is retrieved and used to access user profile
     private String amAuthCert_subjectAltExtMapper;
     // check user cert against revoke list in LDAP.
-    private String amAuthCert_chkCRL;        
+    private String amAuthCert_chkCRL;
     // check CA cert against revoke list in LDAP.
-    private String amAuthCert_validateCA;        
+    private String amAuthCert_validateCA;
     // attr to use in search for user cert in CRL in LDAP
     private String amAuthCert_chkAttrCRL = null;
     // attributes to use in searchfilter to find crlDistributionPoint entry in LDAP
@@ -119,11 +120,11 @@ public class Cert extends AMLoginModule {
     // params to use in accessing CRL DP
     private String amAuthCert_uriParamsCRL = null;
     // check user cert with cert in LDAP.
-    private String amAuthCert_chkCertInLDAP; 
+    private String amAuthCert_chkCertInLDAP;
     // attr to use in search for user cert in LDAP
     private String amAuthCert_chkAttrCertInLDAP = null;
     // this is what appears in the user selectable choice field.
-    private String amAuthCert_emailAddrTag; 
+    private String amAuthCert_emailAddrTag;
     private int amAuthCert_serverPort =389;
     private boolean portal_gw_cert_auth_enabled = false;
     private boolean portal_gw_cert_preferred = false;
@@ -141,18 +142,18 @@ public class Cert extends AMLoginModule {
     static final int ldap_version = 3;
 
     private static final String amAuthCert = "amAuthCert";
-    
+
     private static com.sun.identity.shared.debug.Debug debug = null;
 
     static String UPNOID = "1.3.6.1.4.1.311.20.2.3";
 
     private String amAuthCert_cacheCRL;
     private boolean doCRLCaching = true;
-    
+
     //attribute and flag to check whether CRLs should be updated from CRL distribution point
     private String amAuthCert_updateCRL;
     private boolean doCRLUpdate = true;
-    
+
 
     /**
      * Default module constructor does nothing
@@ -161,11 +162,12 @@ public class Cert extends AMLoginModule {
     }
 
     /**
-     * Initialize module 
+     * Initialize module
      * @param subject for auth
      * @param sharedState with auth framework
      * @param options for auth
      */
+    @Override
     public void init(Subject subject, Map sharedState, Map options) {
         if (debug == null) {
             debug = com.sun.identity.shared.debug.Debug.getInstance(amAuthCert);
@@ -179,11 +181,11 @@ public class Cert extends AMLoginModule {
             debug.message("Cert Auth resbundle locale="+locale);
             debug.message("Cert auth init() done");
         }
-    } 
+    }
 
     private void initAuthConfig() throws AuthLoginException {
         if (options != null) {
-            debug.message("Certificate: getting attributes."); 
+            debug.message("Certificate: getting attributes.");
             // init auth level
             String authLevel = CollectionHelper.getMapAttr(
                 options, "iplanet-am-auth-cert-auth-level");
@@ -195,7 +197,7 @@ public class Cert extends AMLoginModule {
                     // invalid auth level
                     debug.error("Invalid auth level " + authLevel, e);
                 }
-            } 
+            }
             // will need access control to ldap server; passwd and user name
             // will also need to yank out the user profile based on cn or dn
             //  out of "profile server"
@@ -208,17 +210,17 @@ public class Cert extends AMLoginModule {
             amAuthCert_useSSL = CollectionHelper.getMapAttr(
                 options, "iplanet-am-auth-cert-use-ssl");
             amAuthCert_userProfileMapper = CollectionHelper.getMapAttr(
-                options, "iplanet-am-auth-cert-user-profile-mapper"); 
+                options, "iplanet-am-auth-cert-user-profile-mapper");
             amAuthCert_altUserProfileMapper = CollectionHelper.getMapAttr(
                 options, "iplanet-am-auth-cert-user-profile-mapper-other");
             amAuthCert_subjectAltExtMapper = CollectionHelper.getMapAttr(
                 options, "iplanet-am-auth-cert-user-profile-mapper-ext");
             amAuthCert_chkCRL = CollectionHelper.getMapAttr(
-                options, "iplanet-am-auth-cert-check-crl"); 
+                options, "iplanet-am-auth-cert-check-crl");
             if (amAuthCert_chkCRL.equalsIgnoreCase("true")) {
                 amAuthCert_chkAttrCRL = CollectionHelper.getMapAttr(
                     options, "iplanet-am-auth-cert-attr-check-crl");
-                if (amAuthCert_chkAttrCRL == null || 
+                if (amAuthCert_chkAttrCRL == null ||
                     amAuthCert_chkAttrCRL.equals("")) {
                     throw new AuthLoginException(amAuthCert, "noCRLAttr", null);
                 } else {
@@ -233,17 +235,17 @@ public class Cert extends AMLoginModule {
                         options, "openam-am-auth-cert-update-crl", "true");
                 if (amAuthCert_updateCRL.equalsIgnoreCase("false")) {
                     doCRLUpdate = false;
-                }               
-                
+                }
+
                 crlEnabled = true;
             }
             amAuthCert_validateCA = CollectionHelper.getMapAttr(
-                options, "sunAMValidateCACert"); 
+                options, "sunAMValidateCACert");
 
             amAuthCert_uriParamsCRL = CollectionHelper.getMapAttr(
                 options, "iplanet-am-auth-cert-param-get-crl");
             amAuthCert_chkCertInLDAP = CollectionHelper.getMapAttr(
-                options, "iplanet-am-auth-cert-check-cert-in-ldap"); 
+                options, "iplanet-am-auth-cert-check-cert-in-ldap");
             if (amAuthCert_chkCertInLDAP.equalsIgnoreCase("true")) {
                 amAuthCert_chkAttrCertInLDAP = CollectionHelper.getMapAttr(
                     options, "iplanet-am-auth-cert-attr-check-ldap");
@@ -254,7 +256,7 @@ public class Cert extends AMLoginModule {
                 }
             }
             String ocspChk = CollectionHelper.getMapAttr(
-                options, "iplanet-am-auth-cert-check-ocsp"); 
+                options, "iplanet-am-auth-cert-check-ocsp");
             ocspEnabled = (ocspChk != null && ocspChk.equalsIgnoreCase("true"));
 
              //
@@ -271,7 +273,7 @@ public class Cert extends AMLoginModule {
 
             String client = getLoginState("process").getClient();
             portal_gw_cert_auth_enabled = false;
-            if (gwCertAuth == null || gwCertAuth.equals("") 
+            if (gwCertAuth == null || gwCertAuth.equals("")
                                 || gwCertAuth.equalsIgnoreCase("none")) {
                 if (debug.messageEnabled()) {
                     debug.message("iplanet-am-auth-cert-gw-cert-auth-enabled = "
@@ -280,7 +282,7 @@ public class Cert extends AMLoginModule {
             } else if (gwCertAuth.equalsIgnoreCase("any")) {
                 portal_gw_cert_auth_enabled = true;
             } else {
-                portalGateways = 
+                portalGateways =
                   (Set)options.get("iplanet-am-auth-cert-gw-cert-auth-enabled");
                 if ((client !=null) && (portalGateways.contains(client))) {
                     portal_gw_cert_auth_enabled = true;
@@ -305,11 +307,11 @@ public class Cert extends AMLoginModule {
 
             amAuthCert_serverHost = CollectionHelper.getServerMapAttr(
                 options, "iplanet-am-auth-cert-ldap-provider-url");
-            if (amAuthCert_serverHost == null 
-                && (amAuthCert_chkCertInLDAP.equalsIgnoreCase("true") || 
+            if (amAuthCert_serverHost == null
+                && (amAuthCert_chkCertInLDAP.equalsIgnoreCase("true") ||
                     amAuthCert_chkCRL.equalsIgnoreCase("true"))) {
                 debug.error("Fatal error: LDAP Server and Port misconfigured");
-                throw new AuthLoginException(amAuthCert, 
+                throw new AuthLoginException(amAuthCert,
                                 "wrongLDAPServer", null);
             }
 
@@ -327,8 +329,8 @@ public class Cert extends AMLoginModule {
 
             amAuthCert_startSearchLoc = CollectionHelper.getServerMapAttr(
                 options, "iplanet-am-auth-cert-start-search-loc");
-            if (amAuthCert_startSearchLoc == null 
-                && (amAuthCert_chkCertInLDAP.equalsIgnoreCase("true") || 
+            if (amAuthCert_startSearchLoc == null
+                && (amAuthCert_chkCertInLDAP.equalsIgnoreCase("true") ||
                     amAuthCert_chkCRL.equalsIgnoreCase("true"))) {
                 debug.error("Fatal error: LDAP Start Search " +
                                 "DN is not configured");
@@ -375,7 +377,7 @@ public class Cert extends AMLoginModule {
             throw new AuthLoginException(amAuthCert, "CERTex", null);
         }
     }
-    
+
     /**
      * Process Certificate based auth request
      * @param callbacks for auth
@@ -383,22 +385,23 @@ public class Cert extends AMLoginModule {
      * @return proper jaas state for auth framework
      * @throws AuthLoginException if auth fails
      */
-    public int process (Callback[] callbacks, int state) 
+    @Override
+    public int process (Callback[] callbacks, int state)
         throws AuthLoginException {
         initAuthConfig();
         X509Certificate[] allCerts = null;
         try {
             HttpServletRequest servletRequest = getHttpServletRequest();
-            if (servletRequest != null) { 
+            if (servletRequest != null) {
                 allCerts = (X509Certificate[]) servletRequest.
-                   getAttribute("javax.servlet.request.X509Certificate"); 
+                   getAttribute("javax.servlet.request.X509Certificate");
                 if (allCerts == null || allCerts.length == 0) {
                     debug.message(
                           "Certificate: checking for cert passed in the URL.");
                     if (!portal_gw_cert_auth_enabled) {
                         debug.error ("Certificate: cert passed " +
                                      "in URL not enabled for this client");
-                        throw new AuthLoginException(amAuthCert, 
+                        throw new AuthLoginException(amAuthCert,
                             "noURLCertAuth", null);
                     }
                     thecert = getPortalStyleCert(servletRequest);
@@ -429,7 +432,7 @@ public class Cert extends AMLoginModule {
             getTokenFromCert(thecert);
             storeUsernamePasswd(userTokenId, null);
             if(debug.messageEnabled()){
-                debug.message("in Certificate. userTokenId=" + 
+                debug.message("in Certificate. userTokenId=" +
                     userTokenId + " from getTokenFromCert");
             }
         } catch (AuthLoginException e) {
@@ -443,7 +446,7 @@ public class Cert extends AMLoginModule {
             debug.message("Got client cert =\n" + thecert.toString());
         }
 
-        if (amAuthCert_chkCertInLDAP.equalsIgnoreCase("false") && 
+        if (amAuthCert_chkCertInLDAP.equalsIgnoreCase("false") &&
                 amAuthCert_chkCRL.equalsIgnoreCase("false") &&
                                 !ocspEnabled) {
                 return ISAuthConstants.LOGIN_SUCCEED;
@@ -458,9 +461,9 @@ public class Cert extends AMLoginModule {
         if (ldapParam == null) {
             setLdapStoreParam();
         }
-        
-        if (amAuthCert_chkCertInLDAP.equalsIgnoreCase("true")) { 
-            X509Certificate ldapcert = 
+
+        if (amAuthCert_chkCertInLDAP.equalsIgnoreCase("true")) {
+            X509Certificate ldapcert =
                 AMCertStore.getRegisteredCertificate(
                     ldapParam, thecert, amAuthCert_chkAttrCertInLDAP);
             if (ldapcert == null) {
@@ -477,14 +480,14 @@ public class Cert extends AMLoginModule {
     	    setFailureID(userTokenId);
             throw new AuthLoginException(amAuthCert, "CertVerifyFailed", null);
         }
-        
+
         return ISAuthConstants.LOGIN_SUCCEED;
     }
 
     private int doJCERevocationValidation(X509Certificate[] allCerts)
         throws AuthLoginException {
     	int ret = ISAuthConstants.LOGIN_IGNORE;
-		
+
     	try {
             Vector crls = new Vector();
             for (X509Certificate cert : allCerts) {
@@ -514,7 +517,7 @@ public class Cert extends AMLoginModule {
     	}catch (Exception e) {
             debug.error("Cert.doRevocationValidation: verify failed.", e);
     	}
-        
+
         return ret;
     }
 
@@ -534,13 +537,13 @@ public class Cert extends AMLoginModule {
 
             ldapParam.setDoCRLCaching(doCRLCaching);
             ldapParam.setDoCRLUpdate(doCRLUpdate);
-            
+
         } catch (Exception e) {
             debug.error("validate.SSLSocketFactory", e);
             setFailureID(userTokenId);
             throw new AuthLoginException(amAuthCert,"sslSokFactoryFail", null);
         }
-            
+
         return;
     }
 
@@ -550,7 +553,7 @@ public class Cert extends AMLoginModule {
 	    getTokenFromSubjectAltExt(cert);
 	}
 
-	if (!amAuthCert_userProfileMapper.equalsIgnoreCase("none") && 
+	if (!amAuthCert_userProfileMapper.equalsIgnoreCase("none") &&
 	    (userTokenId == null)) {
 	    getTokenFromSubjectDN(cert);
 	}
@@ -559,42 +562,39 @@ public class Cert extends AMLoginModule {
     private void getTokenFromSubjectAltExt(X509Certificate cert)
         throws AuthLoginException {
         try {
-            X509CertImpl certImpl = 
+            X509CertImpl certImpl =
                 new X509CertImpl(cert.getEncoded());
-            X509CertInfo cinfo = 
+            X509CertInfo cinfo =
                 new X509CertInfo(certImpl.getTBSCertificate());
-            CertificateExtensions exts = (CertificateExtensions) 
-                            cinfo.get(X509CertInfo.EXTENSIONS);
-            SubjectAlternativeNameExtension altNameExt = 
-                (SubjectAlternativeNameExtension)
-                    exts.get(SubjectAlternativeNameExtension.NAME);
+            CertificateExtensions exts = SunSecurityProviderCompat.getExtensions(cinfo);
+            SubjectAlternativeNameExtension altNameExt = SunSecurityProviderCompat.getSanExtension(exts);
 
             if (altNameExt != null) {
-                GeneralNames names = altNameExt.get(SubjectAlternativeNameExtension.SUBJECT_NAME);
-        
+                GeneralNames names = SunSecurityProviderCompat.getSubjectAlternativeNames(altNameExt);
+
                 Iterator itr = names.iterator();
                 while ((userTokenId == null) && itr.hasNext()) {
                     GeneralName generalname = (GeneralName) itr.next();
                     if (generalname != null) {
                         if (amAuthCert_subjectAltExtMapper.
-                        	equalsIgnoreCase("UPN") && 
-                        	(generalname.getType() == 
+                        	equalsIgnoreCase("UPN") &&
+                        	(generalname.getType() ==
                 	        GeneralNameInterface.NAME_ANY)) {
-                            OtherName othername = 
-                                (OtherName)generalname.getName(); 
+                            OtherName othername =
+                                (OtherName)generalname.getName();
                             if (UPNOID.equals(othername.getOID().toString())) {
-                                byte[] nval = othername.getNameValue(); 
-                                DerValue derValue = new DerValue(nval); 
-                                userTokenId = 
-                                    derValue.getData().getUTF8String(); 
-                            } 
+                                byte[] nval = othername.getNameValue();
+                                DerValue derValue = new DerValue(nval);
+                                userTokenId =
+                                    derValue.getData().getUTF8String();
+                            }
                         }else if (amAuthCert_subjectAltExtMapper.
-                            equalsIgnoreCase("RFC822Name") && 
-                            (generalname.getType() == 
+                            equalsIgnoreCase("RFC822Name") &&
+                            (generalname.getType() ==
                 	        GeneralNameInterface.NAME_RFC822)) {
-                            RFC822Name email = 
-                                (RFC822Name) generalname.getName(); 
-                            userTokenId = email.getName(); 
+                            RFC822Name email =
+                                (RFC822Name) generalname.getName();
+                            userTokenId = email.getName();
                         }
                     }
                 }
@@ -604,14 +604,14 @@ public class Cert extends AMLoginModule {
                     "Error in getTokenFromSubjectAltExt = " , e);
             throw new AuthLoginException(amAuthCert, "CertNoReg", null);
         }
-            
+
     }
 
     private void getTokenFromSubjectDN(X509Certificate cert)
         throws AuthLoginException {
     /*
      * The certificate has passed the authentication steps
-     * so return the part of the certificate as specified 
+     * so return the part of the certificate as specified
      * in the profile server.
      */
         try {
@@ -654,6 +654,7 @@ public class Cert extends AMLoginModule {
         }
     }
 
+    @Override
     public java.security.Principal getPrincipal() {
         if (userPrincipal != null) {
             return userPrincipal;
@@ -666,7 +667,7 @@ public class Cert extends AMLoginModule {
     }
 
     /**
-     * Return value of Certificate 
+     * Return value of Certificate
      * @return X509Certificate for auth
      */
     public X509Certificate getCertificate() {
@@ -674,47 +675,47 @@ public class Cert extends AMLoginModule {
     }
 
     /**
-     * Return value of Attribute Name for CRL checking 
+     * Return value of Attribute Name for CRL checking
      * @return value for attribute name to search crl from ldap store
      */
     public String getChkAttrCRL() {
        return amAuthCert_chkAttrCRL;
     }
-        
+
     /**
-     * Return value of Debug object for this module 
+     * Return value of Debug object for this module
      *
-     * @return debug 
+     * @return debug
      */
     public com.sun.identity.shared.debug.Debug getDebug() {
        return debug;
     }
 
     /**
-     * Return value of URI parameter for getting CRL 
+     * Return value of URI parameter for getting CRL
      *
-     * @return value of URI parameter for getting CRL 
+     * @return value of URI parameter for getting CRL
      */
     public String getUriParamsCRL() {
        return amAuthCert_uriParamsCRL;
     }
 
     /**
-     * Return value of LDAP Search loc for directory server 
+     * Return value of LDAP Search loc for directory server
      *
-     * @return value of LDAP Search loc for directory server  
+     * @return value of LDAP Search loc for directory server
      */
     public String getStartSearchLoc() {
        return amAuthCert_startSearchLoc;
     }
-                        
+
     private X509Certificate sendCallback() throws AuthLoginException {
         if (callbackHandler == null) {
             throw new AuthLoginException(amAuthCert, "NoCallbackHandler", null);        }
         X509Certificate cert = null;
         try {
             Callback[] callbacks = new Callback[1];
-            callbacks[0] = 
+            callbacks[0] =
                 new X509CertificateCallback (bundle.getString("certificate"));
             callbackHandler.handle(callbacks);
             X509CertificateCallback xcb = (X509CertificateCallback)callbacks[0];
@@ -742,10 +743,10 @@ public class Cert extends AMLoginModule {
             throw new AuthLoginException(ioe);
         } catch (UnsupportedCallbackException uce) {
             throw new AuthLoginException(amAuthCert, "NoCallbackHandler", null);
-        }    
+        }
     }
 
-    private X509Certificate getPortalStyleCert (HttpServletRequest request) 
+    private X509Certificate getPortalStyleCert (HttpServletRequest request)
        throws AuthLoginException {
        String certParam = null;
 
@@ -771,9 +772,9 @@ public class Cert extends AMLoginModule {
            debug.message("getPortalStyleCert: checking cert in userCert param");
            Map<String, String> requestHash = getLoginState("getPortalStyleCert()").getRequestParamHash();
            if (requestHash != null) {
-               certParam = (String) requestHash.get("IDToken0"); 
+               certParam = requestHash.get("IDToken0");
                if (certParam == null) {
-                   certParam = (String) requestHash.get("Login.Token0"); 
+                   certParam = requestHash.get("Login.Token0");
                }
            }
        }
@@ -809,7 +810,7 @@ public class Cert extends AMLoginModule {
        }
 
        if (debug.messageEnabled()) {
-           debug.message("X509Certificate: principal is: " + 
+           debug.message("X509Certificate: principal is: " +
                userCert.getSubjectDN().getName() +
                "\nissuer DN:" + userCert.getIssuerDN().getName() +
                "\nserial number:" + String.valueOf(userCert.getSerialNumber()) +
@@ -821,6 +822,7 @@ public class Cert extends AMLoginModule {
     /**
      * Destroy the state of module
      */
+    @Override
     public void destroyModuleState() {
         userPrincipal = null;
         userTokenId = null;
@@ -829,6 +831,7 @@ public class Cert extends AMLoginModule {
     /**
      * Initialize all member variables as null
      */
+    @Override
     public void nullifyUsedVars() {
         bundle = null;
         thecert = null;
@@ -852,12 +855,12 @@ public class Cert extends AMLoginModule {
         portalGateways = null;
         amAuthCert_updateCRL = null;
     }
-    
+
     private String[] trimItems(String[] items) {
         String[] trimmedItems = new String[items.length];
         for (int i = 0; i < items.length; i++) {
             trimmedItems[i] = items[i].trim();
         }
         return trimmedItems;
-    }    
+    }
 }
