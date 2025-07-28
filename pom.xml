@@ -210,7 +210,7 @@
         <rhino.version>1.7.14</rhino.version>
 
         <!-- Other Specialized Dependencies -->
-        <activemq.version>5.18.2</activemq.version>
+        <activemq.version>5.18.7</activemq.version>
         <amazon.sns.version>1.10.72</amazon.sns.version>
         <asciidoctorj.version>2.5.10</asciidoctorj.version>
         <geoip.version>2.0.0</geoip.version>
