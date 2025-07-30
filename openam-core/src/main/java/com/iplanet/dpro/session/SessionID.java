@@ -39,7 +39,7 @@ import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.forgerock.openam.utils.PerThreadCache;
 import org.forgerock.openam.utils.StringUtils;

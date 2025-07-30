@@ -33,7 +33,7 @@ import com.sun.identity.console.base.model.AMConsoleException;
 import com.sun.identity.console.base.model.AMServiceProfileModelImpl;
 import com.sun.identity.sm.ServiceManager;
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /* - NEED NOT LOG - */
 

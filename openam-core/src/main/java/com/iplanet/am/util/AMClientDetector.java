@@ -42,7 +42,7 @@ import com.sun.identity.sm.ServiceSchemaManager;
 import java.security.AccessController;
 import java.util.Map;
 import java.util.Set;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * This is an utility to get the client type. This utility executes Client

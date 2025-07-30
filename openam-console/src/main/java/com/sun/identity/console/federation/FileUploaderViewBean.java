@@ -37,7 +37,7 @@ import com.sun.identity.console.base.model.AMModelBase;
 import com.sun.web.ui.model.CCPageTitleModel;
 import com.sun.web.ui.view.pagetitle.CCPageTitle;
 import com.sun.web.ui.view.masthead.CCSecondaryMasthead;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 public class FileUploaderViewBean
     extends AMViewBeanBase

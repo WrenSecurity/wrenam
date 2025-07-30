@@ -34,8 +34,8 @@ import static org.forgerock.openam.utils.Time.*;
 
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import com.sun.identity.shared.debug.Debug;
 import com.sun.identity.plugin.session.SessionManager;

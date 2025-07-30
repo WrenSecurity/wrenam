@@ -47,7 +47,7 @@ import com.sun.web.ui.model.CCPropertySheetModel;
 import com.sun.web.ui.view.pagetitle.CCPageTitle;
 import com.sun.web.ui.view.propertysheet.CCPropertySheet;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 public abstract class SCConfigViewBean extends AMPrimaryMastHeadViewBean {
 

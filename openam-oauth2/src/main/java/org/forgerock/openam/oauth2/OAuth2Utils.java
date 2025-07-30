@@ -19,7 +19,7 @@ package org.forgerock.openam.oauth2;
 import static org.forgerock.openam.utils.JsonValueBuilder.toJsonValue;
 
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Iterator;

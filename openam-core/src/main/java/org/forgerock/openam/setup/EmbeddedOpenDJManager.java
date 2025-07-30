@@ -29,7 +29,7 @@
 
 package org.forgerock.openam.setup;
 
-import javax.servlet.ServletException;
+import jakarta.servlet.ServletException;
 import java.io.File;
 
 import com.sun.identity.shared.debug.Debug;

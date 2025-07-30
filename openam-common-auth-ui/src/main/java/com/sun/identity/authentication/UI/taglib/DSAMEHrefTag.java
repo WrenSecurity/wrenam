@@ -38,9 +38,9 @@ import com.iplanet.jato.view.ViewBean;
 import com.iplanet.jato.view.ViewBeanBase;
 import com.sun.identity.authentication.UI.AuthViewBeanBase;
 import com.sun.identity.shared.debug.Debug;
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.tagext.BodyContent;
-import javax.servlet.jsp.tagext.BodyTag;
+import jakarta.servlet.jsp.JspException;
+import jakarta.servlet.jsp.tagext.BodyContent;
+import jakarta.servlet.jsp.tagext.BodyTag;
 
 import org.owasp.esapi.ESAPI;
 

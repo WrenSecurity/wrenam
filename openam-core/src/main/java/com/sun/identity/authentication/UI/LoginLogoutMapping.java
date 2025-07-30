@@ -35,8 +35,8 @@ import com.sun.identity.shared.locale.L10NMessageImpl;
 import com.sun.identity.shared.debug.Debug;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import javax.servlet.*;
-import javax.servlet.http.*;
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
 
 /** 
  *

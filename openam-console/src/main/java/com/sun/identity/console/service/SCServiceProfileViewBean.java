@@ -60,7 +60,7 @@ import com.sun.web.ui.view.alert.CCAlert;
 import com.sun.web.ui.view.html.CCRadioButton;
 import com.sun.web.ui.view.table.CCActionTable;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashSet;

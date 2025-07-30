@@ -43,7 +43,7 @@ import com.sun.web.ui.model.CCActionTableModel;
 import com.sun.web.ui.view.table.CCActionTable;
 import org.forgerock.openam.utils.CollectionUtils;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashSet;

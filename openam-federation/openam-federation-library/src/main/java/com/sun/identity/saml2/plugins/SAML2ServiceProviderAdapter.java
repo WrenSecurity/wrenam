@@ -36,8 +36,8 @@ import com.sun.identity.saml2.protocol.LogoutResponse;
 import com.sun.identity.saml2.protocol.ManageNameIDRequest;
 import com.sun.identity.saml2.protocol.ManageNameIDResponse;
 import com.sun.identity.saml2.protocol.Response;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.util.Map;
 

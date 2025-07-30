@@ -41,9 +41,9 @@ import com.sun.web.ui.taglib.html.CCButtonTag;
 import com.sun.web.ui.taglib.html.CCTextFieldTag;
 import com.sun.web.ui.taglib.orderablelist.CCOrderableListTag;
 import com.sun.web.ui.view.html.CCButton;
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.tagext.Tag;
+import jakarta.servlet.jsp.JspException;
+import jakarta.servlet.jsp.PageContext;
+import jakarta.servlet.jsp.tagext.Tag;
 
 /**
  * This is the corresponding tag for <code>CCOrderedListView</code>.

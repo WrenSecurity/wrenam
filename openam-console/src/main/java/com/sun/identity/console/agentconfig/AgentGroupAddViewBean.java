@@ -45,7 +45,7 @@ import com.sun.web.ui.view.alert.CCAlert;
 import com.sun.web.ui.view.html.CCTextField;
 import com.sun.web.ui.view.pagetitle.CCPageTitle;
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * View Bean to create agent group.

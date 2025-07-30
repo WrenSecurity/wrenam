@@ -52,8 +52,8 @@ import com.sun.identity.liberty.ws.soapbinding.ServiceInstanceUpdateHeader;
 import com.sun.identity.liberty.ws.soapbinding.SOAPBindingConstants;
 import com.sun.identity.liberty.ws.soapbinding.Utils;
 import com.sun.identity.shared.configuration.SystemPropertiesManager;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * The class <code>DSTClient</code> provides methods for Liberty

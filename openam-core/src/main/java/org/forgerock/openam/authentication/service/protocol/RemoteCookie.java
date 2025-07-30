@@ -27,7 +27,7 @@
 package org.forgerock.openam.authentication.service.protocol;
 
 import java.io.Serializable;
-import javax.servlet.http.Cookie;
+import jakarta.servlet.http.Cookie;
 
 /**
  * Encapsulates a Cookie making it Serializable.

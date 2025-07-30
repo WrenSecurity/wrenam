@@ -34,7 +34,7 @@ import com.sun.identity.console.base.model.AMModel;
 import com.sun.identity.console.federation.model.EntityModel;
 import com.sun.identity.console.federation.model.WSFedPropertiesModel;
 import com.sun.identity.console.federation.model.WSFedPropertiesModelImpl;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Set;
 import java.util.HashSet;

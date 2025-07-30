@@ -35,7 +35,7 @@ import com.sun.identity.setup.AMSetupUtils;
 import com.sun.identity.setup.HttpServletRequestWrapper;
 import com.sun.identity.setup.HttpServletResponseWrapper;
 import com.sun.identity.setup.SetupConstants;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import com.sun.identity.shared.Constants;
 import org.apache.click.control.ActionLink;

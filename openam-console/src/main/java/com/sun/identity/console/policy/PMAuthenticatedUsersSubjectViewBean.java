@@ -30,7 +30,7 @@ package com.sun.identity.console.policy;
 
 import com.iplanet.jato.view.event.RequestInvocationEvent;
 import com.sun.identity.console.base.model.AMAdminConstants;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 public class PMAuthenticatedUsersSubjectViewBean
     extends PolicySubjectPluginViewBeanBase

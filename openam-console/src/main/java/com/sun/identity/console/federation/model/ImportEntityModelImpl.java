@@ -46,7 +46,7 @@ import com.sun.identity.workflow.WorkflowException;
 import java.util.List;
 import java.util.Map;
 import javax.xml.bind.JAXBException;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import org.w3c.dom.Document;
 
 import com.sun.identity.wsfederation.meta.WSFederationMetaManager;

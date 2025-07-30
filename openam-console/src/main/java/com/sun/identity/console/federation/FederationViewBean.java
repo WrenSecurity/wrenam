@@ -73,7 +73,7 @@ import java.util.Set;
 import org.owasp.esapi.ESAPI;
 import org.owasp.esapi.Encoder;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 public  class FederationViewBean
     extends AMPrimaryMastHeadViewBean {

@@ -28,7 +28,7 @@
 
 package com.sun.identity.setup;
 
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 
 public class HttpServletResponseWrapper
     implements IHttpServletResponse {

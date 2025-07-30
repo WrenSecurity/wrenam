@@ -21,8 +21,8 @@ import java.io.PrintWriter;
 import java.io.Serializable;
 import java.util.Locale;
 
-import javax.servlet.ServletOutputStream;
-import javax.servlet.ServletResponse;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.ServletResponse;
 
 /**
  * Encapsulates the transferable state of a ServletResponse object.

@@ -26,10 +26,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.security.auth.callback.CallbackHandler;
-import javax.security.auth.message.MessagePolicy;
-import javax.security.auth.message.module.ServerAuthModule;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.security.auth.message.MessagePolicy;
+import jakarta.security.auth.message.module.ServerAuthModule;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;

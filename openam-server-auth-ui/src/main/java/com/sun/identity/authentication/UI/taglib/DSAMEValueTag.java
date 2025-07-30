@@ -31,12 +31,12 @@
  */
 package com.sun.identity.authentication.UI.taglib;
 
-import javax.servlet.jsp.JspException;
+import jakarta.servlet.jsp.JspException;
 import com.iplanet.jato.taglib.DisplayFieldTagBase;
 import com.iplanet.jato.ViewBeanManager;
 
-import javax.servlet.jsp.tagext.BodyTag;
-import javax.servlet.jsp.tagext.BodyContent;
+import jakarta.servlet.jsp.tagext.BodyTag;
+import jakarta.servlet.jsp.tagext.BodyContent;
 
 import com.sun.identity.authentication.UI.LoginViewBean;
 

@@ -20,8 +20,8 @@ package org.forgerock.openam.notifications;
 import static com.sun.identity.common.configuration.AgentConfiguration.AGENT_TYPE_J2EE;
 import static com.sun.identity.common.configuration.AgentConfiguration.AGENT_TYPE_OAUTH2;
 import static com.sun.identity.common.configuration.AgentConfiguration.AGENT_TYPE_WEB;
-import static javax.servlet.http.HttpServletResponse.SC_FORBIDDEN;
-import static javax.servlet.http.HttpServletResponse.SC_UNAUTHORIZED;
+import static jakarta.servlet.http.HttpServletResponse.SC_FORBIDDEN;
+import static jakarta.servlet.http.HttpServletResponse.SC_UNAUTHORIZED;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -32,9 +32,9 @@ import java.lang.annotation.Annotation;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.servlet.FilterChain;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.forgerock.guice.core.GuiceModuleLoader;
 import org.forgerock.guice.core.GuiceTestCase;

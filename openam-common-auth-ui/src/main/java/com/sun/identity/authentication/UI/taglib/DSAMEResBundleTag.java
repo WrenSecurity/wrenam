@@ -39,9 +39,9 @@ import com.sun.identity.authentication.UI.AuthViewBeanBase;
 import com.sun.identity.shared.locale.AMResourceBundleCache;
 import java.util.ResourceBundle;
 import java.util.MissingResourceException;
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.tagext.BodyContent;
-import javax.servlet.jsp.tagext.BodyTag;
+import jakarta.servlet.jsp.JspException;
+import jakarta.servlet.jsp.tagext.BodyContent;
+import jakarta.servlet.jsp.tagext.BodyTag;
 
 /**
  * Href tag reimplements JATO Href tag.  It adds a content encoding

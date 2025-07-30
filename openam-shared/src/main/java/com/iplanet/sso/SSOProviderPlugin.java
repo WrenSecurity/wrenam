@@ -16,7 +16,7 @@
 
 package com.iplanet.sso;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * Extension interface for dynamically loaded SSOProvider plugins.

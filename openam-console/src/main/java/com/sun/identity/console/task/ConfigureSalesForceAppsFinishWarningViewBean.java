@@ -40,7 +40,7 @@ import com.sun.identity.console.base.model.AMModel;
 import com.sun.identity.console.task.model.TaskModel;
 import com.sun.identity.console.task.model.TaskModelImpl;
 import com.sun.web.ui.view.alert.CCAlert;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.forgerock.http.util.Uris;
 

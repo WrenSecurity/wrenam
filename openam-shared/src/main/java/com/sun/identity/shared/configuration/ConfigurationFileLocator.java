@@ -31,7 +31,7 @@ package com.sun.identity.shared.configuration;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 
 /**
  * This class provides method to locate configuration file.

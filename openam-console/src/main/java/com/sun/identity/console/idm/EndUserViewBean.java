@@ -42,7 +42,7 @@ import com.sun.identity.idm.IdRepoException;
 import com.sun.identity.idm.IdUtils;
 import com.sun.web.ui.model.CCPageTitleModel;
 import java.util.Set;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 public class EndUserViewBean
     extends EntityEditViewBean

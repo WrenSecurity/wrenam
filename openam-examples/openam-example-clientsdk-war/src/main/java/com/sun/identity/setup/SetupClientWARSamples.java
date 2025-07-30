@@ -48,8 +48,8 @@ import java.net.URL;
 import java.net.MalformedURLException;
 import java.util.Iterator;
 import java.util.Properties;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletException;
 
 /**
  * This setup the OpenSSO client WAR samples.

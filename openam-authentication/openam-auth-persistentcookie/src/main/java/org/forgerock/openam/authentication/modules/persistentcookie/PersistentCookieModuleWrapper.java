@@ -21,7 +21,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.security.auth.message.MessageInfo;
+import jakarta.security.auth.message.MessageInfo;
 
 import org.forgerock.jaspi.modules.session.jwt.JwtSessionModule;
 import org.forgerock.jaspi.modules.session.jwt.ServletJwtSessionModule;

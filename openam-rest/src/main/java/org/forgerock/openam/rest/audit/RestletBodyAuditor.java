@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015 ForgeRock AS.
+ * Portions Copyright 2025 Wren Security.
  */
 
 package org.forgerock.openam.rest.audit;
@@ -20,7 +21,6 @@ import static org.forgerock.json.JsonValue.*;
 
 import java.io.IOException;
 import java.util.Map;
-import java.util.Set;
 
 import org.forgerock.audit.AuditException;
 import org.forgerock.json.JsonValue;
@@ -79,7 +79,7 @@ public abstract class RestletBodyAuditor<T> implements Function<Representation, 
                         return json(object());
                     }
                     return extractValues(new JsonRepresentation(representation).getJsonObject());
-                } catch (IOException | JSONException e) {
+                } catch (JSONException e) {
                     throw new AuditException("Could not parse body as JSON - wrong body auditor?", e);
                 }
             }

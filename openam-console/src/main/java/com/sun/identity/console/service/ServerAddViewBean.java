@@ -46,7 +46,7 @@ import com.sun.web.ui.view.alert.CCAlert;
 import com.sun.web.ui.view.html.CCTextField;
 import com.sun.web.ui.view.pagetitle.CCPageTitle;
 import java.net.MalformedURLException;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * Creates a new server.

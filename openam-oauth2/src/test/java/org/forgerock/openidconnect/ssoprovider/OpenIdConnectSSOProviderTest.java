@@ -23,7 +23,7 @@ import static org.forgerock.openam.utils.CollectionUtils.asList;
 import static org.forgerock.openam.utils.CollectionUtils.asSet;
 import static org.mockito.BDDMockito.given;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.forgerock.json.JsonValue;
 import org.forgerock.json.jose.jws.SignedJwt;

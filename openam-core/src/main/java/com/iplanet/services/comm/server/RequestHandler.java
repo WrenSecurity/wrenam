@@ -31,9 +31,9 @@ package com.iplanet.services.comm.server;
 
 import com.iplanet.services.comm.share.Request;
 
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import com.iplanet.services.comm.share.ResponseSet;
 

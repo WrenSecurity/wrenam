@@ -19,7 +19,7 @@ package org.forgerock.openam.license;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 import java.io.ByteArrayInputStream;
 import java.nio.charset.Charset;
 

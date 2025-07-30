@@ -37,7 +37,7 @@ import com.sun.identity.console.base.model.AMServiceProfileModel;
 import com.sun.identity.console.base.model.AMServiceProfileModelImpl;
 import com.sun.identity.console.property.PropertyXMLBuilder;
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /* - NEED NOT LOG - */
 

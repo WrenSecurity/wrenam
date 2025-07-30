@@ -28,7 +28,7 @@
 
 package com.sun.identity.rest.spi;
 
-import javax.servlet.Filter;
+import jakarta.servlet.Filter;
 
 /**
  * Implements this interface to do REST permission check.

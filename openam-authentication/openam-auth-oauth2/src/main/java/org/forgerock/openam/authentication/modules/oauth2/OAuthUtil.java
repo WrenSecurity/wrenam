@@ -26,7 +26,7 @@
 
 package org.forgerock.openam.authentication.modules.oauth2;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import com.sun.identity.shared.debug.Debug;
 import com.sun.identity.shared.encode.CookieUtils;

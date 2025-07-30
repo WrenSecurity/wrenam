@@ -18,8 +18,8 @@ package org.forgerock.openam.core.rest.authn.core;
 
 import com.sun.identity.authentication.client.AuthClientUtils;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * Contains all the configuration required to start or continue a login process.

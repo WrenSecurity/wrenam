@@ -37,9 +37,9 @@ import org.forgerock.openam.utils.ClientUtils;
 
 import com.sun.xml.rpc.server.http.JAXRPCServlet;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletException;
 
 /**
  * This class provides remote interfaces for the

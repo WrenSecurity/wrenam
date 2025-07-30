@@ -19,8 +19,8 @@ package org.forgerock.openam.core.rest.authn.callbackhandlers;
 import static org.forgerock.json.JsonValue.*;
 
 import com.sun.identity.authentication.spi.RedirectCallback;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.forgerock.json.JsonValue;
 import org.forgerock.openam.core.rest.authn.exceptions.RestAuthException;
 import org.forgerock.openam.core.rest.authn.exceptions.RestAuthResponseException;
