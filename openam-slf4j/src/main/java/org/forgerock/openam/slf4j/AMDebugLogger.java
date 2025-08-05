@@ -12,6 +12,7 @@
  * information: "Portions Copyrighted [year] [name of copyright owner]".
  *
  * Copyright 2014-2016 ForgeRock AS.
+ * Portions Copyrighted 2025 Wren Security.
  */
 
 package org.forgerock.openam.slf4j;
@@ -29,6 +30,7 @@ public class AMDebugLogger extends MarkerIgnoringBase {
 
     public AMDebugLogger(Debug debug) {
         this.debug = debug;
+        this.name = debug.getName();
     }
 
     public boolean isTraceEnabled() {

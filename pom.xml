@@ -183,7 +183,7 @@
         <java-ipv6.version>0.17</java-ipv6.version>
         <javassist.version>3.29.1-GA</javassist.version>
         <restlet.version>2.6.0</restlet.version>
-        <slf4j.version>1.7.36</slf4j.version>
+        <slf4j.version>2.0.17</slf4j.version>
         <snakeyaml.version>2.2</snakeyaml.version>
 
         <!-- WS / RS Related Dependencies -->

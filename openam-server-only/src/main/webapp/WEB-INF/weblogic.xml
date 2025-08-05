@@ -13,6 +13,7 @@
   ~ information: "Portions copyright [year] [name of copyright owner]".
   ~
   ~ Copyright 2015-2016 ForgeRock AS.
+  ~ Portions copyright 2025 Wren Security.
   -->
 <weblogic-web-app xmlns="http://xmlns.oracle.com/weblogic/weblogic-web-app"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -39,7 +40,7 @@
             <package-name>org.slf4j.bridge.*</package-name>
         </prefer-application-packages>
         <prefer-application-resources>
-            <resource-name>org/slf4j/impl/StaticLoggerBinder.class</resource-name>
+            <resource-name>META-INF/services/org.slf4j.spi.SLF4JServiceProvider</resource-name>
         </prefer-application-resources>
     </container-descriptor>
 </weblogic-web-app>

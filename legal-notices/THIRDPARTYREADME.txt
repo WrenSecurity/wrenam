@@ -951,11 +951,11 @@ Copyright: Copyright 2008 Sebo Zoltan <iamzoli@yahoo.com>
 Version: isorelax-20030108.jar
 Copyright: Copyright 2001 Kohsuke KAWAGUCHI
 
-Version: slf4j-api-1.7.5.jar
-Copyright: Copyright 2004-2013 QOS.ch
+Version: slf4j-api-2.0.17.jar
+Copyright: Copyright 2004-2025 QOS.ch
 
-Version: slf4j-nop-1.7.5.jar
-Copyright: Copyright 2004-2013 QOS.ch
+Version: slf4j-nop-2.0.17.jar
+Copyright: Copyright 2004-2025 QOS.ch
 
 Version: slf4j-jdk14-1.7.5.jar
 Copyright: Copyright 2004-2007 QOS.ch
