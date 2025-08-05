@@ -25,10 +25,11 @@
  * $Id: DebugImpl.java,v 1.4 2009/03/07 08:01:53 veiming Exp $
  *
  * Portions Copyrighted 2014-2016 ForgeRock AS.
+ * Portions Copyrighted 2025 Wren Security.
  */
 package com.sun.identity.shared.debug.impl;
 
-import static com.sun.identity.shared.debug.DebugConstants.DEBUG_DATE_FORMAT;
+import static com.sun.identity.shared.debug.DebugConstants.DEBUG_DATE_FORMATTER;
 import static org.forgerock.openam.utils.StringUtils.isNotEmpty;
 import static org.forgerock.openam.utils.Time.*;
 
@@ -40,12 +41,12 @@ import com.sun.identity.shared.debug.IDebug;
 import com.sun.identity.shared.debug.file.DebugFile;
 import com.sun.identity.shared.debug.file.DebugFileProvider;
 import com.sun.identity.shared.debug.file.impl.StdDebugFile;
+import java.time.Instant;
 import org.forgerock.openam.audit.context.AuditRequestContext;
 import org.forgerock.openam.utils.IOUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.Properties;
@@ -238,10 +239,7 @@ public class DebugImpl implements IDebug {
     private void record(String msg, Throwable th) {
 
         StringBuilder prefix = new StringBuilder();
-        String dateFormatted;
-        synchronized (DEBUG_DATE_FORMAT) {
-            dateFormatted = DEBUG_DATE_FORMAT.format(newDate());
-        }
+        String dateFormatted = DEBUG_DATE_FORMATTER.format(newDate().toInstant());
         prefix.append(debugName)
                 .append(":").append(dateFormatted)
                 .append(": ").append(Thread.currentThread().toString())

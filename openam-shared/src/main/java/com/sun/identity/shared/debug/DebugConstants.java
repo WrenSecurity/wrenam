@@ -12,11 +12,12 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014-2016 ForgeRock AS.
- * Portions Copyright 2022 Wren Security
+ * Portions Copyright 2022-2025 Wren Security
  */
 package com.sun.identity.shared.debug;
 
-import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Debug constant
@@ -58,7 +59,10 @@ public final class DebugConstants {
      */
     public static final String CONFIG_DEBUG_PROVIDER = "com.sun.identity.util.debug.provider";
 
-    public static final SimpleDateFormat DEBUG_DATE_FORMAT = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss:SSS a zzz");
+    public static final DateTimeFormatter DEBUG_DATE_FORMATTER =
+        DateTimeFormatter
+            .ofPattern("MM/dd/yyyy hh:mm:ss:SSS a zzz")
+            .withZone(ZoneId.systemDefault());
 
     private DebugConstants() {
 

@@ -28,6 +28,7 @@
 
 /**
  * Portions Copyrighted 2014-2016 ForgeRock AS.
+ * Portions Copyrighted 2025 Wren Security.
  */
 package com.sun.identity.shared.debug.file.impl;
 
@@ -45,9 +46,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -71,7 +72,7 @@ public class DebugFileImpl implements DebugFile {
 
     private long nextRotation = 0;
 
-    private final SimpleDateFormat suffixDateFormat;
+    private final DateTimeFormatter suffixDateFormat;
 
     private final DebugConfiguration configuration;
 
@@ -103,17 +104,18 @@ public class DebugFileImpl implements DebugFile {
         this.clock = clock;
         this.configuration = configuration;
 
-        //initialize SimpleDateFormat
-        SimpleDateFormat tmpSuffixDateFormat = null;
+        DateTimeFormatter tmpSuffixDateFormat = null;
         if (!configuration.getDebugSuffix().isEmpty()) {
             try {
-                tmpSuffixDateFormat = new SimpleDateFormat(configuration.getDebugSuffix());
+                tmpSuffixDateFormat = DateTimeFormatter.ofPattern(configuration.getDebugSuffix())
+                    .withZone(ZoneId.systemDefault());
             } catch (IllegalArgumentException iae) {
                 // cannot debug as we are debug
                 String message = "An error occurred with the date format suffix : '" + configuration.getDebugSuffix() +
                         "'. Please check the configuration file '" + DebugConstants.CONFIG_DEBUG_PROPERTIES + "'.";
                 StdDebugFile.printError(debugName, message, iae);
-                tmpSuffixDateFormat = new SimpleDateFormat(DebugConstants.DEFAULT_DEBUG_SUFFIX_FORMAT);
+                tmpSuffixDateFormat = DateTimeFormatter.ofPattern(DebugConstants.DEFAULT_DEBUG_SUFFIX_FORMAT)
+                    .withZone(ZoneId.systemDefault());
             }
         }
         this.suffixDateFormat = tmpSuffixDateFormat;
@@ -124,7 +126,7 @@ public class DebugFileImpl implements DebugFile {
         if (StringUtils.isEmpty(newDebugDir)) {
             ResourceBundle bundle = Locale.getInstallResourceBundle("amUtilMsgs");
             throw new IOException(bundle.getString("com.iplanet.services.debug.nodir") + " Current Debug File : " +
-                    this);
+                this);
         }
 
         fileLock.readLock().lock();
@@ -204,10 +206,8 @@ public class DebugFileImpl implements DebugFile {
 
         //Set suffix
         if (suffixDateFormat != null &&
-                (configuration.getRotationInterval() > 0 || configuration.getRotationFileSizeInByte() > 0)) {
-            synchronized (suffixDateFormat) {
-                newFileName.append(suffixDateFormat.format(new Date(fileCreationTime)));
-            }
+            (configuration.getRotationInterval() > 0 || configuration.getRotationFileSizeInByte() > 0)) {
+            newFileName.append(suffixDateFormat.format(Instant.ofEpochMilli(fileCreationTime)));
         }
 
         return newFileName.toString();
@@ -316,12 +316,13 @@ public class DebugFileImpl implements DebugFile {
 
     @Override
     public String toString() {
-        DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss:SSS a zzz");
         return "DebugFileImpl{" +
-                "debugDirectory" + debugDirectory.get() +
-                "debugName='" + debugName + '\'' +
-                ", fileCreationTime=" + dateFormat.format(new Date(fileCreationTime)) +
-                '}';
+            "debugDirectory" + debugDirectory.get() +
+            "debugName='" + debugName + '\'' +
+            ", fileCreationTime=" +
+            DebugConstants.DEBUG_DATE_FORMATTER.format(
+                Instant.ofEpochMilli(fileCreationTime)) +
+            '}';
 
     }
 }

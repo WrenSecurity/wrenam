@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014-2016 ForgeRock AS.
+ * Portions copyright 2025 Wren Security.
  */
 package com.sun.identity.shared.debug.file.impl;
 
@@ -23,8 +24,6 @@ import com.sun.identity.shared.debug.file.DebugFile;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * Debug file dedicated to std out
@@ -71,9 +70,8 @@ public class StdDebugFile implements DebugFile {
      * @param ex        the exception (can be null)
      */
     public static void printError(String debugName, String message, Throwable ex) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss:SSS a zzz");
-        String prefix = debugName + ":" + dateFormat.format(newDate()) + ": " + Thread.currentThread().toString() +
-                "\n";
+        String timestamp = DebugConstants.DEBUG_DATE_FORMATTER.format(newDate().toInstant());
+        String prefix = debugName + ":" + timestamp + ": " + Thread.currentThread() + "\n";
 
         System.err.println(prefix + message);
         if (ex != null) {

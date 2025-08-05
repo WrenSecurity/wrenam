@@ -29,7 +29,7 @@
 
 package com.sun.identity.setup;
 
-import static com.sun.identity.shared.debug.DebugConstants.DEBUG_DATE_FORMAT;
+import static com.sun.identity.shared.debug.DebugConstants.DEBUG_DATE_FORMATTER;
 import static org.forgerock.openam.utils.Time.newDate;
 
 import org.forgerock.openam.utils.IOUtils;
@@ -204,9 +204,7 @@ public class SetupProgress {
 
     private static void reportDebug(String istr) {
 
-        synchronized (DEBUG_DATE_FORMAT) {
-            istr = DEBUG_DATE_FORMAT.format(newDate()) + ": " + istr;
-        }
+        istr = DEBUG_DATE_FORMATTER.format(newDate().toInstant()) + ": " + istr;
 
         try {
                 InstallLog.getInstance().write(istr + "\n");
