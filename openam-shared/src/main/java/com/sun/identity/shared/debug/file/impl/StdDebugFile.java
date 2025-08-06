@@ -16,14 +16,15 @@
  */
 package com.sun.identity.shared.debug.file.impl;
 
-import static org.forgerock.openam.utils.Time.*;
+import static com.sun.identity.shared.debug.DebugConstants.DEBUG_DATE_FORMATTER;
+import static org.forgerock.openam.utils.Time.newDate;
 
-import com.sun.identity.shared.debug.DebugConstants;
 import com.sun.identity.shared.debug.file.DebugFile;
-
+import com.sun.identity.shared.debug.format.DebugFormatter;
+import com.sun.identity.shared.debug.format.DebugRecord;
+import com.sun.identity.shared.debug.format.impl.DebugFormatterFactory;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.StringWriter;
 
 /**
  * Debug file dedicated to std out
@@ -32,7 +33,9 @@ public class StdDebugFile implements DebugFile {
 
     private static final StdDebugFile INSTANCE = new StdDebugFile();
 
-    private PrintWriter stdoutWriter = new PrintWriter(System.out, true);
+    private final DebugFormatter logFormatter = DebugFormatterFactory.getInstance();
+
+    private final PrintWriter stdoutWriter = new PrintWriter(System.out, true);
 
     private StdDebugFile() {
     }
@@ -46,22 +49,6 @@ public class StdDebugFile implements DebugFile {
         return INSTANCE;
     }
 
-    @Override
-    public void writeIt(String prefix, String msg, Throwable th) throws IOException {
-        StringBuilder buf = new StringBuilder(prefix);
-        buf.append('\n');
-        buf.append(msg);
-        if (th != null) {
-            buf.append('\n');
-            StringWriter stBuf = new StringWriter(DebugConstants.MAX_BUFFER_SIZE_EXCEPTION);
-            PrintWriter stackStream = new PrintWriter(stBuf);
-            th.printStackTrace(stackStream);
-            stackStream.flush();
-            buf.append(stBuf.toString());
-        }
-        stdoutWriter.println(buf.toString());
-    }
-
     /**
      * Printing error directly into the stdout. A log header will be generated
      *
@@ -70,13 +57,18 @@ public class StdDebugFile implements DebugFile {
      * @param ex        the exception (can be null)
      */
     public static void printError(String debugName, String message, Throwable ex) {
-        String timestamp = DebugConstants.DEBUG_DATE_FORMATTER.format(newDate().toInstant());
+        String timestamp = DEBUG_DATE_FORMATTER.format(newDate().toInstant());
         String prefix = debugName + ":" + timestamp + ": " + Thread.currentThread() + "\n";
 
         System.err.println(prefix + message);
         if (ex != null) {
             ex.printStackTrace(System.err);
         }
+    }
+
+    @Override
+    public void write(DebugRecord logRecord) throws IOException {
+        stdoutWriter.println(logFormatter.format(logRecord));
     }
 
 }

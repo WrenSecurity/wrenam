@@ -36,6 +36,9 @@ import com.sun.identity.shared.configuration.SystemPropertiesManager;
 import com.sun.identity.shared.debug.DebugConstants;
 import com.sun.identity.shared.debug.file.DebugConfiguration;
 import com.sun.identity.shared.debug.file.DebugFile;
+import com.sun.identity.shared.debug.format.DebugFormatter;
+import com.sun.identity.shared.debug.format.DebugRecord;
+import com.sun.identity.shared.debug.format.impl.DebugFormatterFactory;
 import com.sun.identity.shared.locale.Locale;
 import org.forgerock.openam.utils.IOUtils;
 import org.forgerock.openam.utils.StringUtils;
@@ -45,7 +48,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -81,6 +83,8 @@ public class DebugFileImpl implements DebugFile {
     private final ReadWriteLock fileLock = new ReentrantReadWriteLock();
 
     private File currentFile;
+
+    private final DebugFormatter logFormatter = DebugFormatterFactory.getInstance();
 
     /**
      * Constructor
@@ -142,21 +146,7 @@ public class DebugFileImpl implements DebugFile {
     }
 
     @Override
-    public void writeIt(String prefix, String msg, Throwable th) throws IOException {
-
-        StringBuilder buf = new StringBuilder();
-        buf.append(prefix);
-        buf.append('\n');
-        buf.append(msg);
-        if (th != null) {
-            buf.append('\n');
-            StringWriter stBuf = new StringWriter(DebugConstants.MAX_BUFFER_SIZE_EXCEPTION);
-            PrintWriter stackStream = new PrintWriter(stBuf);
-            th.printStackTrace(stackStream);
-            stackStream.flush();
-            buf.append(stBuf.toString());
-        }
-
+    public void write(DebugRecord logRecord) throws IOException {
         if (isConfigChanged() || !isConfigFileInitialized()) {
             initialize();
         }
@@ -168,9 +158,9 @@ public class DebugFileImpl implements DebugFile {
         fileLock.readLock().lock();
         try {
             if (debugWriter != null) {
-                debugWriter.println(buf.toString());
+                debugWriter.println(logFormatter.format(logRecord));
             } else {
-                StdDebugFile.printError(prefix, msg, th);
+                StdDebugFile.printError(logRecord.logger, logRecord.message, logRecord.throwable);
             } 
         } finally {
             fileLock.readLock().unlock();

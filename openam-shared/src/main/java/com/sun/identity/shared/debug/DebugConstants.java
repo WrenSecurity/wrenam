@@ -43,6 +43,14 @@ public final class DebugConstants {
 
     public static final String CONFIG_DEBUG_LOGFILE_MAX_SIZE = "org.forgerock.openam.debug.rotation.maxsize";
 
+    /**
+     * Control the type of formatter created by the debug formatter factory.
+     *
+     * <p>Set this property to {@code json} to use the JSON formatter,
+     * or leave it empty to use the legacy plain text formatter.
+     */
+    public static final String CONFIG_DEBUG_LOGFILE_FORMAT = "org.forgerock.openam.debug.format";
+
     public static final String DEFAULT_DEBUG_SUFFIX_FORMAT = "-yyyy-MM-dd'T'HH-mm-ss.SSSXX";
 
     public static final String CONFIG_DEBUG_LEVEL = "com.iplanet.services.debug.level";
