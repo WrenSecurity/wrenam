@@ -188,7 +188,7 @@ public class DebugConfigurationFromProperties implements DebugConfiguration {
     private boolean validateSuffix(int field, int amount) throws IllegalArgumentException {
         // Check the rotation and suffix consistency
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(getDebugSuffix())
-            .withZone(ZoneId.systemDefault());
+                .withZone(ZoneId.systemDefault());
         Calendar cal = getCalendarInstance();
         cal.setTimeInMillis(0);
         String initialSuffix = dateTimeFormatter.format(Instant.ofEpochMilli(cal.getTimeInMillis()));

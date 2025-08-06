@@ -30,6 +30,7 @@
 
 package com.sun.identity.shared.debug;
 
+import com.sun.identity.shared.debug.format.impl.DebugFormatterFactory;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -687,6 +688,7 @@ public class Debug {
      * @param mf merge flag - on for creating a single debug file.
      */
     public void resetDebug(String mf) {
+        DebugFormatterFactory.resetInstance();
         getDebugServiceInstance().resetDebug(mf);
     }
 

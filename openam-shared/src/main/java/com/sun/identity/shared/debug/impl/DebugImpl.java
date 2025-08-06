@@ -29,7 +29,6 @@
  */
 package com.sun.identity.shared.debug.impl;
 
-import static com.sun.identity.shared.debug.DebugConstants.DEBUG_DATE_FORMATTER;
 import static org.forgerock.openam.utils.StringUtils.isNotEmpty;
 import static org.forgerock.openam.utils.Time.*;
 
@@ -41,7 +40,8 @@ import com.sun.identity.shared.debug.IDebug;
 import com.sun.identity.shared.debug.file.DebugFile;
 import com.sun.identity.shared.debug.file.DebugFileProvider;
 import com.sun.identity.shared.debug.file.impl.StdDebugFile;
-import java.time.Instant;
+import com.sun.identity.shared.debug.format.DebugRecord;
+import java.util.Date;
 import org.forgerock.openam.audit.context.AuditRequestContext;
 import org.forgerock.openam.utils.IOUtils;
 
@@ -208,7 +208,7 @@ public class DebugImpl implements IDebug {
      */
     public void message(String message, Throwable th) {
         if (messageEnabled()) {
-            record(message, th);
+            record(DebugLevel.MESSAGE, message, th);
         }
     }
 
@@ -220,7 +220,7 @@ public class DebugImpl implements IDebug {
      */
     public void warning(String message, Throwable th) {
         if (warningEnabled()) {
-            record("WARNING: " + message, th);
+            record(DebugLevel.WARNING, message, th);
         }
     }
 
@@ -232,20 +232,8 @@ public class DebugImpl implements IDebug {
      */
     public void error(String message, Throwable th) {
         if (errorEnabled()) {
-            record("ERROR: " + message, th);
+            record(DebugLevel.ERROR, message, th);
         }
-    }
-
-    private void record(String msg, Throwable th) {
-
-        StringBuilder prefix = new StringBuilder();
-        String dateFormatted = DEBUG_DATE_FORMATTER.format(newDate().toInstant());
-        prefix.append(debugName)
-                .append(":").append(dateFormatted)
-                .append(": ").append(Thread.currentThread().toString())
-                .append(": TransactionId[").append(getAuditTransactionId()).append("]");
-
-        writeIt(prefix.toString(), msg, th);
     }
 
     /**
@@ -262,15 +250,23 @@ public class DebugImpl implements IDebug {
     }
 
     /**
-     * Write message on Debug file. If it failed, it try to print it on the Sdtout Debug file.
-     * If both failed, it prints in System.out
+     * Write message on Debug file. If it failed, try to print it on the stdout debug file.
+     * If both failed, print in System.out via {@link StdDebugFile#printError}.
      *
-     * @param prefix Message prefix
-     * @param msg    Message to be recorded.
-     * @param th     the optional <code>java.lang.Throwable</code> which if
-     *               present will be used to record the stack trace.
+     * @param level     debug level
+     * @param message   message to be recorded
+     * @param throwable the optional <code>java.lang.Throwable</code> which if
+     *                  present will be used to record the stack trace
      */
-    private void writeIt(String prefix, String msg, Throwable th) {
+    private void record(DebugLevel level, String message, Throwable throwable) {
+        DebugRecord logRecord = new DebugRecord(
+                new Date().toInstant(),
+                level,
+                Thread.currentThread().getName(),
+                debugName,
+                getAuditTransactionId(),
+                message,
+                throwable);
 
         //we create the debug file only if we need to write on it
         if (debugFile == null) {
@@ -280,11 +276,11 @@ public class DebugImpl implements IDebug {
 
         try {
             if (this.debugLevel == DebugLevel.ON) {
-                stdoutDebugFile.writeIt(prefix, msg, th);
+                stdoutDebugFile.write(logRecord);
             } else {
 
                 try {
-                    this.debugFile.writeIt(prefix, msg, th);
+                    this.debugFile.write(logRecord);
                 } catch (IOException e) {
                     /*
                      * In order to have less logs for this kind of issue. It's waiting an interval of time before
@@ -292,9 +288,10 @@ public class DebugImpl implements IDebug {
                      */
                     if (lastDirectoryIssue + DIR_ISSUE_ERROR_INTERVAL_IN_MS < currentTimeMillis()) {
                         lastDirectoryIssue = currentTimeMillis();
-                        stdoutDebugFile.writeIt(prefix, "Debug file can't be written : " + e.getMessage(), null);
+                        StdDebugFile.printError(DebugImpl.class.getSimpleName(),
+                                "Debug file can't be written : " + e.getMessage(), null);
                     }
-                    stdoutDebugFile.writeIt(prefix, msg, th);
+                    stdoutDebugFile.write(logRecord);
 
                 }
             }

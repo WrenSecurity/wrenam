@@ -36,6 +36,9 @@ import com.sun.identity.shared.configuration.SystemPropertiesManager;
 import com.sun.identity.shared.debug.DebugConstants;
 import com.sun.identity.shared.debug.file.DebugConfiguration;
 import com.sun.identity.shared.debug.file.DebugFile;
+import com.sun.identity.shared.debug.format.DebugFormatter;
+import com.sun.identity.shared.debug.format.DebugRecord;
+import com.sun.identity.shared.debug.format.impl.DebugFormatterFactory;
 import com.sun.identity.shared.locale.Locale;
 import org.forgerock.openam.utils.IOUtils;
 import org.forgerock.openam.utils.StringUtils;
@@ -45,7 +48,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -108,14 +110,14 @@ public class DebugFileImpl implements DebugFile {
         if (!configuration.getDebugSuffix().isEmpty()) {
             try {
                 tmpSuffixDateFormat = DateTimeFormatter.ofPattern(configuration.getDebugSuffix())
-                    .withZone(ZoneId.systemDefault());
+                        .withZone(ZoneId.systemDefault());
             } catch (IllegalArgumentException iae) {
                 // cannot debug as we are debug
                 String message = "An error occurred with the date format suffix : '" + configuration.getDebugSuffix() +
                         "'. Please check the configuration file '" + DebugConstants.CONFIG_DEBUG_PROPERTIES + "'.";
                 StdDebugFile.printError(debugName, message, iae);
                 tmpSuffixDateFormat = DateTimeFormatter.ofPattern(DebugConstants.DEFAULT_DEBUG_SUFFIX_FORMAT)
-                    .withZone(ZoneId.systemDefault());
+                        .withZone(ZoneId.systemDefault());
             }
         }
         this.suffixDateFormat = tmpSuffixDateFormat;
@@ -126,7 +128,7 @@ public class DebugFileImpl implements DebugFile {
         if (StringUtils.isEmpty(newDebugDir)) {
             ResourceBundle bundle = Locale.getInstallResourceBundle("amUtilMsgs");
             throw new IOException(bundle.getString("com.iplanet.services.debug.nodir") + " Current Debug File : " +
-                this);
+                    this);
         }
 
         fileLock.readLock().lock();
@@ -142,21 +144,7 @@ public class DebugFileImpl implements DebugFile {
     }
 
     @Override
-    public void writeIt(String prefix, String msg, Throwable th) throws IOException {
-
-        StringBuilder buf = new StringBuilder();
-        buf.append(prefix);
-        buf.append('\n');
-        buf.append(msg);
-        if (th != null) {
-            buf.append('\n');
-            StringWriter stBuf = new StringWriter(DebugConstants.MAX_BUFFER_SIZE_EXCEPTION);
-            PrintWriter stackStream = new PrintWriter(stBuf);
-            th.printStackTrace(stackStream);
-            stackStream.flush();
-            buf.append(stBuf.toString());
-        }
-
+    public void write(DebugRecord logRecord) throws IOException {
         if (isConfigChanged() || !isConfigFileInitialized()) {
             initialize();
         }
@@ -168,10 +156,10 @@ public class DebugFileImpl implements DebugFile {
         fileLock.readLock().lock();
         try {
             if (debugWriter != null) {
-                debugWriter.println(buf.toString());
+                debugWriter.println(DebugFormatterFactory.getInstance().format(logRecord));
             } else {
-                StdDebugFile.printError(prefix, msg, th);
-            } 
+                StdDebugFile.printError(logRecord.logger, logRecord.message, logRecord.throwable);
+            }
         } finally {
             fileLock.readLock().unlock();
         }
@@ -206,7 +194,7 @@ public class DebugFileImpl implements DebugFile {
 
         //Set suffix
         if (suffixDateFormat != null &&
-            (configuration.getRotationInterval() > 0 || configuration.getRotationFileSizeInByte() > 0)) {
+                (configuration.getRotationInterval() > 0 || configuration.getRotationFileSizeInByte() > 0)) {
             newFileName.append(suffixDateFormat.format(Instant.ofEpochMilli(fileCreationTime)));
         }
 
@@ -317,12 +305,11 @@ public class DebugFileImpl implements DebugFile {
     @Override
     public String toString() {
         return "DebugFileImpl{" +
-            "debugDirectory" + debugDirectory.get() +
-            "debugName='" + debugName + '\'' +
-            ", fileCreationTime=" +
-            DebugConstants.DEBUG_DATE_FORMATTER.format(
-                Instant.ofEpochMilli(fileCreationTime)) +
-            '}';
-
+                "debugDirectory" + debugDirectory.get() +
+                "debugName='" + debugName + '\'' +
+                ", fileCreationTime=" +
+                DebugConstants.DEBUG_DATE_FORMATTER.format(Instant.ofEpochMilli(fileCreationTime)) +
+                '}';
     }
+
 }

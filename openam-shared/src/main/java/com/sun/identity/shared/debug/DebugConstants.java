@@ -45,6 +45,14 @@ public final class DebugConstants {
 
     public static final String DEFAULT_DEBUG_SUFFIX_FORMAT = "-yyyy.MM.dd-HH.mm.ss";
 
+    /**
+     * Control the type of formatter created by the debug formatter factory.
+     *
+     * <p>Set this property to {@code json} to use the JSON formatter,
+     * or leave it empty to use the legacy plain text formatter.
+     */
+    public static final String CONFIG_DEBUG_LOGFILE_FORMAT = "org.wrensecurity.wrenam.debug.format";
+
     public static final String CONFIG_DEBUG_LEVEL = "com.iplanet.services.debug.level";
 
     public static final String CONFIG_DEBUG_MERGEALL = "com.sun.services.debug.mergeall";
