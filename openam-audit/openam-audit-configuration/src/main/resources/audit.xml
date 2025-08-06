@@ -13,6 +13,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions copyright 2025 Wren Security.
 -->
 <!DOCTYPE ServicesConfiguration
         PUBLIC "=//iPlanet//Service Management Services (SMS) 1.0 DTD//EN" "jar://com/sun/identity/sm/sms.dtd">
@@ -174,6 +175,120 @@
                     <AttributeSchema name="handlerFactory" type="single" i18nKey="handler.factory" order="2100">
                         <DefaultValues>
                             <Value>org.forgerock.openam.audit.events.handlers.CsvAuditEventHandlerFactory</Value>
+                        </DefaultValues>
+                    </AttributeSchema>
+                </SubSchema>
+
+                <SubSchema name="JSON" inheritance="multiple" i18nKey="handler.name.json" i18nFileName="audit">
+                    <AttributeSchema name="enabled" type="single" syntax="boolean"
+                                     i18nKey="audit.handlers.all.enabled" order="300">
+                        <BooleanValues>
+                            <BooleanTrueValue>true</BooleanTrueValue>
+                            <BooleanFalseValue>false</BooleanFalseValue>
+                        </BooleanValues>
+                        <DefaultValues>
+                            <Value>true</Value>
+                        </DefaultValues>
+                    </AttributeSchema>
+                    <AttributeSchema name="topics" type="multiple_choice" i18nKey="audit.handlers.all.topics" order="400">
+                        <ChoiceValues>
+                            <ChoiceValuesClassName
+                                    className="org.forgerock.openam.audit.configuration.AuditTopicChoiceValues"/>
+                        </ChoiceValues>
+                        <DefaultValues>
+                            <DefaultValuesClassName
+                                    className="org.forgerock.openam.audit.configuration.AuditTopicDefaultValues"/>
+                        </DefaultValues>
+                    </AttributeSchema>
+                    <AttributeSchema name="location" type="single" i18nKey="audit.handlers.json.logDirectory" order="500">
+                        <DefaultValues>
+                            <Value>%BASE_DIR%/%SERVER_URI%/@LOG_DIR@/</Value>
+                        </DefaultValues>
+                    </AttributeSchema>
+                    <AttributeSchema name="rotationEnabled" type="single" syntax="boolean"
+                                     i18nKey="audit.handlers.file.rotationEnabled" order="600">
+                        <BooleanValues>
+                            <BooleanTrueValue>true</BooleanTrueValue>
+                            <BooleanFalseValue>false</BooleanFalseValue>
+                        </BooleanValues>
+                        <DefaultValues>
+                            <Value>true</Value>
+                        </DefaultValues>
+                    </AttributeSchema>
+                    <AttributeSchema name="rotationMaxFileSize" type="single"
+                                     i18nKey="audit.handlers.file.maxFileSize" order="700">
+                        <DefaultValues>
+                            <Value>100000000</Value>
+                        </DefaultValues>
+                    </AttributeSchema>
+                    <AttributeSchema name="rotationFilePrefix" type="single"
+                                     i18nKey="audit.handlers.file.rotationFilePrefix" order="800">
+                        <IsOptional/>
+                    </AttributeSchema>
+                    <AttributeSchema name="rotationFileSuffix" type="single"
+                                     i18nKey="audit.handlers.file.rotationFileSuffix" order="900">
+                        <IsOptional/>
+                        <DefaultValues>
+                            <Value>-yyyy.MM.dd-HH.mm.ss</Value>
+                        </DefaultValues>
+                    </AttributeSchema>
+                    <AttributeSchema name="rotationInterval" type="single"
+                                     i18nKey="audit.handlers.file.rotationInterval" order="1000">
+                        <DefaultValues>
+                            <Value>-1</Value>
+                        </DefaultValues>
+                    </AttributeSchema>
+                    <AttributeSchema name="rotationTimes" type="list" syntax="string"
+                                     i18nKey="audit.handlers.file.rotationTimes" order="1100"/>
+                    <AttributeSchema name="retentionMaxNumberOfHistoryFiles" type="single"
+                                     i18nKey="audit.handlers.file.maxNumberOfHistoryFiles" order="1200">
+                        <DefaultValues>
+                            <Value>1</Value>
+                        </DefaultValues>
+                    </AttributeSchema>
+                    <AttributeSchema name="retentionMaxDiskSpaceToUse" type="single"
+                                     i18nKey="audit.handlers.file.maxDiskSpaceToUse" order="1300">
+                        <DefaultValues>
+                            <Value>-1</Value>
+                        </DefaultValues>
+                    </AttributeSchema>
+                    <AttributeSchema name="retentionMinFreeSpaceRequired" type="single"
+                                     i18nKey="audit.handlers.file.minFreeSpaceRequired" order="1400">
+                        <DefaultValues>
+                            <Value>-1</Value>
+                        </DefaultValues>
+                    </AttributeSchema>
+                    <AttributeSchema name="bufferingMaxSize" type="single"
+                                     i18nKey="audit.handlers.json.buffering.maxSize" order="1500">
+                        <DefaultValues>
+                            <Value>100000</Value>
+                        </DefaultValues>
+                    </AttributeSchema>
+                    <AttributeSchema name="bufferingWriteInterval" type="single"
+                                     i18nKey="audit.handlers.json.buffering.writeInterval" order="1600">
+                        <DefaultValues>
+                            <Value>5</Value>
+                        </DefaultValues>
+                    </AttributeSchema>
+                    <AttributeSchema name="elasticsearchCompatible" type="single" syntax="boolean"
+                                     i18nKey="audit.handlers.json.elasticsearchCompatible" order="1700">
+                        <BooleanValues>
+                            <BooleanTrueValue>true</BooleanTrueValue>
+                            <BooleanFalseValue>false</BooleanFalseValue>
+                        </BooleanValues>
+                        <DefaultValues>
+                            <Value>false</Value>
+                        </DefaultValues>
+                    </AttributeSchema>
+                    <AttributeSchema name="rotationRetentionCheckInterval" type="single"
+                                     i18nKey="audit.handlers.json.rotationRetentionCheckInterval" order="1800">
+                        <DefaultValues>
+                            <Value>20</Value>
+                        </DefaultValues>
+                    </AttributeSchema>
+                    <AttributeSchema name="handlerFactory" type="single" i18nKey="handler.factory" order="1900">
+                        <DefaultValues>
+                            <Value>org.forgerock.openam.audit.events.handlers.JsonAuditEventHandlerFactory</Value>
                         </DefaultValues>
                     </AttributeSchema>
                 </SubSchema>
@@ -914,6 +1029,120 @@
                     <AttributeSchema name="handlerFactory" type="single" i18nKey="handler.factory" order="2100">
                         <DefaultValues>
                             <Value>org.forgerock.openam.audit.events.handlers.CsvAuditEventHandlerFactory</Value>
+                        </DefaultValues>
+                    </AttributeSchema>
+                </SubSchema>
+
+                <SubSchema name="JSON" inheritance="multiple" i18nKey="handler.name.json" i18nFileName="audit">
+                    <AttributeSchema name="enabled" type="single" syntax="boolean"
+                                     i18nKey="audit.handlers.all.enabled" order="300">
+                        <BooleanValues>
+                            <BooleanTrueValue>true</BooleanTrueValue>
+                            <BooleanFalseValue>false</BooleanFalseValue>
+                        </BooleanValues>
+                        <DefaultValues>
+                            <Value>true</Value>
+                        </DefaultValues>
+                    </AttributeSchema>
+                    <AttributeSchema name="topics" type="multiple_choice" i18nKey="audit.handlers.all.topics" order="400">
+                        <ChoiceValues>
+                            <ChoiceValuesClassName
+                                    className="org.forgerock.openam.audit.configuration.AuditTopicChoiceValues"/>
+                        </ChoiceValues>
+                        <DefaultValues>
+                            <DefaultValuesClassName
+                                    className="org.forgerock.openam.audit.configuration.AuditTopicDefaultValues"/>
+                        </DefaultValues>
+                    </AttributeSchema>
+                    <AttributeSchema name="location" type="single" i18nKey="audit.handlers.json.logDirectory" order="500">
+                        <DefaultValues>
+                            <Value>%BASE_DIR%/%SERVER_URI%/@LOG_DIR@/</Value>
+                        </DefaultValues>
+                    </AttributeSchema>
+                    <AttributeSchema name="rotationEnabled" type="single" syntax="boolean"
+                                     i18nKey="audit.handlers.file.rotationEnabled" order="600">
+                        <BooleanValues>
+                            <BooleanTrueValue>true</BooleanTrueValue>
+                            <BooleanFalseValue>false</BooleanFalseValue>
+                        </BooleanValues>
+                        <DefaultValues>
+                            <Value>true</Value>
+                        </DefaultValues>
+                    </AttributeSchema>
+                    <AttributeSchema name="rotationMaxFileSize" type="single"
+                                     i18nKey="audit.handlers.file.maxFileSize" order="700">
+                        <DefaultValues>
+                            <Value>100000000</Value>
+                        </DefaultValues>
+                    </AttributeSchema>
+                    <AttributeSchema name="rotationFilePrefix" type="single"
+                                     i18nKey="audit.handlers.file.rotationFilePrefix" order="800">
+                        <IsOptional/>
+                    </AttributeSchema>
+                    <AttributeSchema name="rotationFileSuffix" type="single"
+                                     i18nKey="audit.handlers.file.rotationFileSuffix" order="900">
+                        <IsOptional/>
+                        <DefaultValues>
+                            <Value>-yyyy.MM.dd-HH.mm.ss</Value>
+                        </DefaultValues>
+                    </AttributeSchema>
+                    <AttributeSchema name="rotationInterval" type="single"
+                                     i18nKey="audit.handlers.file.rotationInterval" order="1000">
+                        <DefaultValues>
+                            <Value>-1</Value>
+                        </DefaultValues>
+                    </AttributeSchema>
+                    <AttributeSchema name="rotationTimes" type="list" syntax="string"
+                                     i18nKey="audit.handlers.file.rotationTimes" order="1100"/>
+                    <AttributeSchema name="retentionMaxNumberOfHistoryFiles" type="single"
+                                     i18nKey="audit.handlers.file.maxNumberOfHistoryFiles" order="1200">
+                        <DefaultValues>
+                            <Value>1</Value>
+                        </DefaultValues>
+                    </AttributeSchema>
+                    <AttributeSchema name="retentionMaxDiskSpaceToUse" type="single"
+                                     i18nKey="audit.handlers.file.maxDiskSpaceToUse" order="1300">
+                        <DefaultValues>
+                            <Value>-1</Value>
+                        </DefaultValues>
+                    </AttributeSchema>
+                    <AttributeSchema name="retentionMinFreeSpaceRequired" type="single"
+                                     i18nKey="audit.handlers.file.minFreeSpaceRequired" order="1400">
+                        <DefaultValues>
+                            <Value>-1</Value>
+                        </DefaultValues>
+                    </AttributeSchema>
+                    <AttributeSchema name="bufferingMaxSize" type="single"
+                                     i18nKey="audit.handlers.json.buffering.maxSize" order="1500">
+                        <DefaultValues>
+                            <Value>100000</Value>
+                        </DefaultValues>
+                    </AttributeSchema>
+                    <AttributeSchema name="bufferingWriteInterval" type="single"
+                                     i18nKey="audit.handlers.json.buffering.writeInterval" order="1600">
+                        <DefaultValues>
+                            <Value>5</Value>
+                        </DefaultValues>
+                    </AttributeSchema>
+                    <AttributeSchema name="elasticsearchCompatible" type="single" syntax="boolean"
+                                     i18nKey="audit.handlers.json.elasticsearchCompatible" order="1700">
+                        <BooleanValues>
+                            <BooleanTrueValue>true</BooleanTrueValue>
+                            <BooleanFalseValue>false</BooleanFalseValue>
+                        </BooleanValues>
+                        <DefaultValues>
+                            <Value>false</Value>
+                        </DefaultValues>
+                    </AttributeSchema>
+                    <AttributeSchema name="rotationRetentionCheckInterval" type="single"
+                                     i18nKey="audit.handlers.json.rotationRetentionCheckInterval" order="1800">
+                        <DefaultValues>
+                            <Value>20</Value>
+                        </DefaultValues>
+                    </AttributeSchema>
+                    <AttributeSchema name="handlerFactory" type="single" i18nKey="handler.factory" order="1900">
+                        <DefaultValues>
+                            <Value>org.forgerock.openam.audit.events.handlers.JsonAuditEventHandlerFactory</Value>
                         </DefaultValues>
                     </AttributeSchema>
                 </SubSchema>
