@@ -430,26 +430,6 @@
                 </exclusions>
             </dependency>
 
-
-            <dependency>
-                <groupId>org.wrensecurity.commons</groupId>
-                <artifactId>json-resource-http</artifactId>
-                <version>${wrensec-commons.version}</version>
-
-                <exclusions>
-                    <!-- Replaced by Jakarta -->
-                    <exclusion>
-                        <groupId>com.sun.mail</groupId>
-                        <artifactId>javax.mail</artifactId>
-                    </exclusion>
-
-                    <exclusion>
-                        <groupId>com.sun.xml.bind</groupId>
-                        <artifactId>jaxb-osgi</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-
             <dependency>
                 <groupId>org.wrensecurity.commons</groupId>
                 <artifactId>json-web-token</artifactId>
