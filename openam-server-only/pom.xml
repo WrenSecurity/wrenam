@@ -999,6 +999,7 @@
             <groupId>org.wrensecurity.wrenam</groupId>
             <artifactId>openam-slf4j</artifactId>
             <version>${project.version}</version>
+            <classifier>shaded</classifier>
         </dependency>
 
         <dependency>
