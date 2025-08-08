@@ -34,7 +34,7 @@ public class AMSlf4jServiceProvider implements SLF4JServiceProvider {
 
     private final IMarkerFactory markerFactory = new BasicMarkerFactory();
 
-    private final MDCAdapter mdcAdapter = new NOPMDCAdapter();
+    private MDCAdapter mdcAdapter;
 
     private ILoggerFactory loggerFactory;
 
@@ -60,6 +60,13 @@ public class AMSlf4jServiceProvider implements SLF4JServiceProvider {
 
     @Override
     public void initialize() {
+        if ("com.sun.identity.shared.debug.impl.Slf4jProviderImpl".equals(
+                System.getProperty("com.sun.identity.util.debug.provider"))) {
+            mdcAdapter = LogbackLoggerAdapter.getMDCAdapter();
+        } else {
+            mdcAdapter = new NOPMDCAdapter();
+        }
         loggerFactory = new AMLoggerFactory();
     }
+
 }
