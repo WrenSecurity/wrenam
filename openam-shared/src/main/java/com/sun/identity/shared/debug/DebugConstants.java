@@ -12,11 +12,12 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014-2016 ForgeRock AS.
- * Portions Copyright 2022 Wren Security
+ * Portions Copyright 2022-2025 Wren Security
  */
 package com.sun.identity.shared.debug;
 
-import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Debug constant
@@ -42,7 +43,15 @@ public final class DebugConstants {
 
     public static final String CONFIG_DEBUG_LOGFILE_MAX_SIZE = "org.forgerock.openam.debug.rotation.maxsize";
 
-    public static final String DEFAULT_DEBUG_SUFFIX_FORMAT = "-yyyy.MM.dd-HH.mm.ss";
+    /**
+     * Control the type of formatter created by the debug formatter factory.
+     *
+     * <p>Set this property to {@code json} to use the JSON formatter,
+     * or leave it empty to use the legacy plain text formatter.
+     */
+    public static final String CONFIG_DEBUG_LOGFILE_FORMAT = "org.forgerock.openam.debug.format";
+
+    public static final String DEFAULT_DEBUG_SUFFIX_FORMAT = "-yyyy-MM-dd'T'HH-mm-ss.SSSXX";
 
     public static final String CONFIG_DEBUG_LEVEL = "com.iplanet.services.debug.level";
 
@@ -58,7 +67,8 @@ public final class DebugConstants {
      */
     public static final String CONFIG_DEBUG_PROVIDER = "com.sun.identity.util.debug.provider";
 
-    public static final SimpleDateFormat DEBUG_DATE_FORMAT = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss:SSS a zzz");
+    public static final DateTimeFormatter DEBUG_DATE_FORMATTER =
+            DateTimeFormatter.ISO_OFFSET_DATE_TIME.withZone(ZoneId.systemDefault());
 
     private DebugConstants() {
 

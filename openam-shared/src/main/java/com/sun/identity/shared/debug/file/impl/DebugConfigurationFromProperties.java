@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions copyright 2025 Wren Security.
  */
 package com.sun.identity.shared.debug.file.impl;
 
@@ -19,12 +20,14 @@ import static org.forgerock.openam.utils.Time.*;
 
 import com.sun.identity.shared.debug.DebugConstants;
 import com.sun.identity.shared.debug.file.DebugConfiguration;
+import java.time.ZoneId;
 import org.forgerock.openam.utils.IOUtils;
 import org.forgerock.openam.utils.StringUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Properties;
 
@@ -184,12 +187,13 @@ public class DebugConfigurationFromProperties implements DebugConfiguration {
      */
     private boolean validateSuffix(int field, int amount) throws IllegalArgumentException {
         // Check the rotation and suffix consistency
-        SimpleDateFormat dateFormat = new SimpleDateFormat(getDebugSuffix());
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(getDebugSuffix())
+            .withZone(ZoneId.systemDefault());
         Calendar cal = getCalendarInstance();
         cal.setTimeInMillis(0);
-        String initialSuffix = dateFormat.format(cal.getTime());
+        String initialSuffix = dateTimeFormatter.format(Instant.ofEpochMilli(cal.getTimeInMillis()));
         cal.add(field, amount);
-        String suffixAfterOneRotation = dateFormat.format(cal.getTime());
+        String suffixAfterOneRotation = dateTimeFormatter.format(Instant.ofEpochMilli(cal.getTimeInMillis()));
         return suffixAfterOneRotation.equals(initialSuffix);
     }
 
