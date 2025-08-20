@@ -1,0 +1,30 @@
+name: Trigger Sonar analysis
+
+on:
+  workflow_run:
+    workflows:
+      - Build project
+    types:
+      - completed
+
+permissions:
+  contents: read
+
+jobs:
+  prepare:
+    if: github.event.workflow_run.conclusion == 'success'
+    uses: WrenSecurity/.github/.github/workflows/sonar-prepare.yml@main
+    name: Prepare analysis context
+    with:
+      workflow_run: ${{ toJSON(github.event.workflow_run) }}
+  trigger:
+    needs: prepare
+    if: needs.prepare.outputs.sonar_allowed
+    name: Trigger Sonar analysis
+    uses: WrenSecurity/.github/.github/workflows/sonar-maven.yml@main
+    with:
+      java_version: 21
+      project_key: 'WrenSecurity_wrenam'
+      pull_request: ${{ needs.prepare.outputs.pull_request }}
+    secrets:
+      sonar_token: ${{ secrets.SONAR_TOKEN }}
