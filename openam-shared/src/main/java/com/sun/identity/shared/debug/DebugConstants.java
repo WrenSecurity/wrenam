@@ -60,9 +60,7 @@ public final class DebugConstants {
     public static final String CONFIG_DEBUG_PROVIDER = "com.sun.identity.util.debug.provider";
 
     public static final DateTimeFormatter DEBUG_DATE_FORMATTER =
-        DateTimeFormatter
-            .ofPattern("MM/dd/yyyy hh:mm:ss:SSS a zzz")
-            .withZone(ZoneId.systemDefault());
+            DateTimeFormatter.ISO_OFFSET_DATE_TIME.withZone(ZoneId.systemDefault());
 
     private DebugConstants() {
 
