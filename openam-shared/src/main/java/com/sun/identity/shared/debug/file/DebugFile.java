@@ -12,9 +12,11 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014-2015 ForgeRock AS.
+ * Portions copyright 2025 Wren Security.
  */
 package com.sun.identity.shared.debug.file;
 
+import com.sun.identity.shared.debug.format.DebugRecord;
 import java.io.IOException;
 
 
@@ -41,14 +43,12 @@ import java.io.IOException;
 public interface DebugFile {
 
     /**
-     * Write message into file
+     * Write debug log record into file.
      *
-     * @param prefix Message prefix
-     * @param msg    Message to be recorded.
-     * @param th     the optional <code>java.lang.Throwable</code> which if
-     *               present will be used to record the stack trace.
+     * @param logRecord debug log record to be written.
+     *
      * @throws IOException
      */
-    public void writeIt(String prefix, String msg, Throwable th) throws IOException;
+    public void write(DebugRecord logRecord) throws IOException;
 
 }
