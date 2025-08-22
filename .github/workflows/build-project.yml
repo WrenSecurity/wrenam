@@ -1,0 +1,34 @@
+name: Build project
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: [17, 21]
+    name: "Java ${{ matrix.java }} build"
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v4
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "${{ matrix.java }}"
+          cache: "maven"
+      - name: Verify build
+        run: mvn -B verify
+  sonar:
+    needs: build
+    if: github.base_ref == 'main' && github.event_name == 'pull_request'
+    name: Prepare analysis context
+    uses: WrenSecurity/.github/.github/workflows/sonar-pull-prepare.yml@main
+    with:
+      pull_request: ${{ toJSON(github.event.pull_request) }}
