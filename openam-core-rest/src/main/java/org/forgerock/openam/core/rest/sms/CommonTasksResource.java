@@ -236,7 +236,7 @@ class CommonTasksResource implements CollectionResourceProvider {
         private JsonValue getProductDocumentationCommonTaskConfiguration(ResourceBundle resourceBundle) {
             return createTaskGroup(resourceBundle, "documentation",
                     createTaskWithAbsoluteLink(resourceBundle, "doc",
-                            "http://docs.forgerock.org/en/index.html?product=openam"));
+                            "https://docs.wrensecurity.org/wrenam/latest/index.html"));
         }
 
         private JsonValue getCreateSoapSTSDeploymentCommonTaskConfiguration(ResourceBundle resourceBundle) {
