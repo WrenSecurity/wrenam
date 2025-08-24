@@ -12,18 +12,17 @@
  * information: "Portions Copyrighted [year] [name of copyright owner]".
  *
  * Copyright 2014-2016 ForgeRock AS.
- * Portions copyright 2022 Wren Security
+ * Portions copyright 2022-2025 Wren Security
  */
 
 package org.forgerock.openam.slf4j;
 
 import com.sun.identity.shared.debug.Debug;
-
+import org.slf4j.ILoggerFactory;
+import org.slf4j.Logger;
 import org.wrensecurity.guava.common.cache.CacheBuilder;
 import org.wrensecurity.guava.common.cache.CacheLoader;
 import org.wrensecurity.guava.common.cache.LoadingCache;
-import org.slf4j.ILoggerFactory;
-import org.slf4j.Logger;
 
 public class AMLoggerFactory implements ILoggerFactory {
 
@@ -43,10 +42,21 @@ public class AMLoggerFactory implements ILoggerFactory {
                 }
             });
 
+    private static final LoadingCache<String, Logger> logbackLoggerCache = CacheBuilder.newBuilder()
+            .build(new CacheLoader<String, Logger>() {
+                @Override
+                public Logger load(String s) {
+                    return LogbackLoggerAdapter.getLogger(s);
+                }
+            });
+
     public Logger getLogger(String s) {
         // For the case when OpenAM is running with OpenDJ embedded
         if (isEmbeddedDJLogger(s)) {
             return djLoggerCache.getUnchecked(s);
+        } else if ("com.sun.identity.shared.debug.impl.Slf4jProviderImpl".equals(
+                System.getProperty("com.sun.identity.util.debug.provider"))) {
+            return logbackLoggerCache.getUnchecked(s);
         } else {
             return amLoggerCache.getUnchecked(s);
         }
@@ -65,4 +75,5 @@ public class AMLoggerFactory implements ILoggerFactory {
 
         return isOpenDJ && !isOpenDJSDK;
     }
+
 }
