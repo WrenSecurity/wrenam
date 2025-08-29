@@ -14,7 +14,7 @@
  *
  * Copyright 2011-2016 ForgeRock AS.
  * Portions Copyrighted 2016 Agile Digital Engineering
- * Portions Copyright 2022-2024 Wren Security
+ * Portions Copyright 2022-2025 Wren Security
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.wrensecurity</groupId>
         <artifactId>wrensec-parent</artifactId>
-        <version>4.1.1</version>
+        <version>4.2.0</version>
         <relativePath />
     </parent>
 
@@ -63,7 +63,7 @@
         <url>https://github.com/WrenSecurity/WrenAM</url>
         <connection>scm:git:git://github.com/WrenSecurity/WrenAM.git</connection>
         <developerConnection>scm:git:git@github.com:WrenSecurity/WrenAM.git</developerConnection>
-        <tag>15.1.1</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <repositories>
@@ -97,9 +97,6 @@
     </repositories>
 
     <properties>
-        <pgpVerifyKeysVersion>1.9.0</pgpVerifyKeysVersion>
-        <wrenBuildToolsVersion>1.2.0</wrenBuildToolsVersion>
-
         <!-- Source code has to be Java 8 compliant (code base is not JPMS ready) -->
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>

@@ -23,19 +23,21 @@ import static org.fest.assertions.Assertions.*;
 public class XMLUtilsTest {
 
     @DataProvider(name = "invalid")
-    public String[][] getInvalidData() {
-        return new String[][]{
-            {"\u0000hello\u0008\u000bworld\u001f"},
-            {"\u0001hello\u0007\ufffeworld\uffff"},
-            {"\u0002hello\u0006\u000cworld\u001e"},
-            {"\u0003hello\u0005\u000eworld\u001d"},
-            {"\u0000h\u0001e\u0002l\u0003l\u0004o\u0005w\u0006o\u0007r\u0008l\u000bd\u000c"}
+    public byte[][] getInvalidData() {
+        // use byte array so that Surefire report won't contain invalid byte sequences
+        // which messes up Sonar's report parsing
+        return new byte[][]{
+            "\u0000hello\u0008\u000bworld\u001f".getBytes(),
+            "\u0001hello\u0007\ufffeworld\uffff".getBytes(),
+            "\u0002hello\u0006\u000cworld\u001e".getBytes(),
+            "\u0003hello\u0005\u000eworld\u001d".getBytes(),
+            "\u0000h\u0001e\u0002l\u0003l\u0004o\u0005w\u0006o\u0007r\u0008l\u000bd\u000c".getBytes()
         };
     }
 
     @Test(dataProvider = "invalid")
-    public void invalidCharactersAreCorrectlyRemoved(String invalid) {
-        assertThat(XMLUtils.removeInvalidXMLChars(invalid)).isEqualTo("helloworld");
+    public void invalidCharactersAreCorrectlyRemoved(byte[] invalid) {
+        assertThat(XMLUtils.removeInvalidXMLChars(new String(invalid))).isEqualTo("helloworld");
     }
 
     @DataProvider(name = "escaping")
