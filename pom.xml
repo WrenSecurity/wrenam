@@ -97,7 +97,7 @@
     </repositories>
 
     <properties>
-        <pgpVerifyKeysVersion>1.8.3</pgpVerifyKeysVersion>
+        <pgpVerifyKeysVersion>1.9.3</pgpVerifyKeysVersion>
         <wrenBuildToolsVersion>1.2.0</wrenBuildToolsVersion>
 
         <!-- Source code has to be Java 8 compliant (code base is not JPMS ready) -->
@@ -213,6 +213,7 @@
         <activemq.version>5.18.7</activemq.version>
         <amazon.sns.version>1.10.72</amazon.sns.version>
         <asciidoctorj.version>2.5.10</asciidoctorj.version>
+        <bouncycastle.version>1.81</bouncycastle.version>
         <geoip.version>2.0.0</geoip.version>
         <json.version>20231013</json.version>
         <mail.version>1.5.1</mail.version>
@@ -1326,6 +1327,18 @@
                 <artifactId>relaxngDatatype</artifactId>
                 <version>${relaxngDatatype.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>org.bouncycastle</groupId>
+                <artifactId>bcprov-jdk18on</artifactId>
+                <version>${bouncycastle.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.bouncycastle</groupId>
+                <artifactId>bcpkix-jdk18on</artifactId>
+                <version>${bouncycastle.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -1475,7 +1488,6 @@
                 <artifactId>maven-compiler-plugin</artifactId>
 
                 <configuration>
-                    <release combine.self="override" />
                     <compilerArgument>-Xlint:none</compilerArgument>
                     <showDeprecation>false</showDeprecation>
                 </configuration>
