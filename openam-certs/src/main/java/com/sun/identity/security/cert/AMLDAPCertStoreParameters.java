@@ -26,97 +26,94 @@
  *
  * Portions Copyrighted 2013-2015 ForgeRock AS.
  */
-
 package com.sun.identity.security.cert;
 
 /**
  * Parameters used to access ldap cert store
  */
 public class AMLDAPCertStoreParameters {
+
     private String serverName = null;
     private int serverPort;
     private String ldapUser = null;
     private String password = null;
     private String searchFilter = null;
-    private String startSearchLoc = null;  
+    private String startSearchLoc = null;
     private boolean secureLdap = false;
     private String uriParams = null;
     private boolean doCRLCaching = true;
     private boolean doCRLupdate = true;
 
-    /**
-     * @param server
-     * @param port
-     */
     public AMLDAPCertStoreParameters(String server, int port) {
         serverName = server;
         serverPort = port;
     }
 
-    public static AMLDAPCertStoreParameters
-        setLdapStoreParam(AMLDAPCertStoreParameters ldapParams,
-                          String user, String passwd, String searchLoc,
-                          String uriParamsCRL, boolean secureCon) {
-            ldapParams.setUser(user);
-            ldapParams.setPassword(passwd);
-            ldapParams.setStartLoc(searchLoc);
-            ldapParams.setURIParams(uriParamsCRL);
-            ldapParams.setSecure(secureCon);
-            
-            return ldapParams;
+    public static AMLDAPCertStoreParameters setLdapStoreParam(
+            AMLDAPCertStoreParameters ldapParams,
+            String user, String passwd,
+            String searchLoc,
+            String uriParamsCRL,
+            boolean secureCon) {
+        ldapParams.setUser(user);
+        ldapParams.setPassword(passwd);
+        ldapParams.setStartLoc(searchLoc);
+        ldapParams.setURIParams(uriParamsCRL);
+        ldapParams.setSecure(secureCon);
+        return ldapParams;
     }
 
     /**
-     * Get host name 
+     * Get host name
      */
     public String getServerName() {
         return  serverName;
     }
 
     /**
-     * Get port number 
+     * Get port number
      */
     public int getPort() {
-        return serverPort;  
+        return serverPort;
     }
 
     /**
-     * Set ldap search start loc  
+     * Set ldap search start loc
      */
     public void setStartLoc(String startloc) {
-        startSearchLoc = startloc;  
+        startSearchLoc = startloc;
     }
 
     /**
-     * Get ldap search start loc  
+     * Get ldap search start loc
      */
     public String getStartLoc() {
-        return startSearchLoc;  
+        return startSearchLoc;
     }
 
     /**
-     * Set ldap user for bind  
+     * Set ldap user for bind
      */
     public void setUser(String uid) {
         ldapUser = uid;
     }
 
     /**
-     * Get ldap user for bind  
+     * Get ldap user for bind
      */
     public String getUser() {
         return ldapUser;
     }
 
     /**
-     * Set ldap password for bind  
+     * Set ldap password for bind
      */
     public void setPassword(String passwd) {
         password = passwd;
     }
 
     /**
-     * Get ldap password for bind  
+     * Get ldap password for bind
      */
     public String getPassword() {
         return password;
@@ -177,7 +174,7 @@ public class AMLDAPCertStoreParameters {
     public void setDoCRLCaching(boolean doCRLCaching) {
         this.doCRLCaching = doCRLCaching;
     }
-    
+
     /**
      * @return the doCRLupdate
      */
@@ -190,6 +187,6 @@ public class AMLDAPCertStoreParameters {
      */
     public void setDoCRLUpdate(boolean doCRLupdate) {
         this.doCRLupdate = doCRLupdate;
-    }    
-    
+    }
+
 }

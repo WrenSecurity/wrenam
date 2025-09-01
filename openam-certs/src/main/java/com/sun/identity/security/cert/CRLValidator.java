@@ -25,26 +25,28 @@
  * $Id: CRLValidator.java,v 1.3 2008/06/25 05:52:58 qcheng Exp $
  *
  * Portions Copyrighted 2014-2015 ForgeRock AS.
+ * Portions Copyrighted 2025 Wren Security
  */
 package com.sun.identity.security.cert;
 
-import java.io.IOException;
-import java.security.cert.X509CRL;
-import java.security.cert.X509Certificate;
-import java.util.Vector;
-
-import com.sun.identity.shared.configuration.SystemPropertiesManager;
-import com.sun.identity.shared.Constants;
-import com.sun.identity.shared.debug.Debug;
 import com.iplanet.am.util.AMPasswordUtil;
 import com.iplanet.security.x509.CertUtils;
 import com.sun.identity.security.SecurityDebug;
+import com.sun.identity.shared.Constants;
+import com.sun.identity.shared.configuration.SystemPropertiesManager;
+import com.sun.identity.shared.debug.Debug;
+import java.io.IOException;
+import java.security.cert.X509CRL;
+import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This interface is for <code>CRLValidator</code> that is representing
- * configued <code>X509CRLValidator</code> 
+ * configued <code>X509CRLValidator</code>
  */
 public class CRLValidator {
+
     private static Debug debug = SecurityDebug.debug;
     private static AMLDAPCertStoreParameters ldapParams = null;
     // Dir server info for CRL entry
@@ -58,82 +60,64 @@ public class CRLValidator {
     private static String crlSearchAttr = null;
 
     static {
-       /*
-         * Setup the LDAP certificate directory service context for
-         * use in verification of signing certificates.
-         */
-        dirServerHost = SystemPropertiesManager.get(
-                        Constants.CRL_CACHE_DIR_HOST, null);
+        // Setup the LDAP certificate directory service context for use in verification of signing certificates.
+        dirServerHost = SystemPropertiesManager.get(Constants.CRL_CACHE_DIR_HOST, null);
         crlCheckEnabled = dirServerHost != null;
         if (debug.messageEnabled()) {
-            debug.message("CRLValidator : " + 
-                "CRL Check configured : " + crlCheckEnabled);
+            debug.message("CRLValidator : CRL Check configured : " + crlCheckEnabled);
         }
 
         if (crlCheckEnabled == true) {
-            dirServerHost = SystemPropertiesManager.get(
-                        Constants.CRL_CACHE_DIR_HOST, null);
-            dirServerPort = SystemPropertiesManager.get(
-                        Constants.CRL_CACHE_DIR_PORT, "389");
-            dirUseSSL = SystemPropertiesManager.get(
-                        Constants.CRL_CACHE_DIR_SSL_ENABLED, "false");
-            dirPrincipleUser = SystemPropertiesManager.get(
-                        Constants.CRL_CACHE_DIR_USER, null);
-            dirPrinciplePasswd = AMPasswordUtil.decrypt(
-                        SystemPropertiesManager.get(
-                            Constants.CRL_CACHE_DIR_PASSWD, null));
-            dirStartSearchLoc = SystemPropertiesManager.get(
-                        Constants.CRL_CACHE_DIR_SEARCH_LOC, null);
-            crlSearchAttr = SystemPropertiesManager.get(
-                        Constants.CRL_CACHE_DIR_SEARCH_ATTR, "CN");
+            dirServerHost = SystemPropertiesManager.get(Constants.CRL_CACHE_DIR_HOST, null);
+            dirServerPort = SystemPropertiesManager.get(Constants.CRL_CACHE_DIR_PORT, "389");
+            dirUseSSL = SystemPropertiesManager.get(Constants.CRL_CACHE_DIR_SSL_ENABLED, "false");
+            dirPrincipleUser = SystemPropertiesManager.get(Constants.CRL_CACHE_DIR_USER, null);
+            dirPrinciplePasswd = AMPasswordUtil.decrypt(SystemPropertiesManager.get(Constants.CRL_CACHE_DIR_PASSWD,
+                    null));
+            dirStartSearchLoc = SystemPropertiesManager.get(Constants.CRL_CACHE_DIR_SEARCH_LOC, null);
+            crlSearchAttr = SystemPropertiesManager.get(Constants.CRL_CACHE_DIR_SEARCH_ATTR, "CN");
 
             try {
-                ldapParams = AMCertStore.setLdapStoreParam(dirServerHost,
-                       Integer.valueOf(dirServerPort).intValue(),
-                       dirPrincipleUser,
-                       dirPrinciplePasswd,
-                       dirStartSearchLoc,
-                       null,
-                       dirUseSSL.equalsIgnoreCase("true"));
+                ldapParams = AMCertStore.setLdapStoreParam(
+                        dirServerHost,
+                        Integer.valueOf(dirServerPort).intValue(),
+                        dirPrincipleUser,
+                        dirPrinciplePasswd,
+                        dirStartSearchLoc,
+                        null,
+                        dirUseSSL.equalsIgnoreCase("true"));
             } catch (Exception e) {
                 debug.error("Unable to configure ldap CRL cache " + e);
             }
 
             if (debug.messageEnabled()) {
-                debug.message("CRLValidator : Directory Server Host : " 
-                    + dirServerHost);
-                debug.message("CRLValidator : Directory Server Port# : " 
-                    + dirServerPort);
+                debug.message("CRLValidator : Directory Server Host : " + dirServerHost);
+                debug.message("CRLValidator : Directory Server Port# : " + dirServerPort);
                 debug.message("CRLValidator : SSL Enabled : " + dirUseSSL);
-                debug.message("CRLValidator : Principal User : " 
-                    + dirPrincipleUser);
+                debug.message("CRLValidator : Principal User : " + dirPrincipleUser);
                 if (dirPrinciplePasswd != null) {
                     debug.message("CRLValidator : User Password : xxxxxx");
                 } else {
                     debug.message("CRLValidator : User Password : null");
                 }
-                debug.message("CRLValidator : Start Search Loc : " 
-                    + dirStartSearchLoc);
-                debug.message("CRLValidator : CRL Search Attr : " 
-                    + crlSearchAttr);
+                debug.message("CRLValidator : Start Search Loc : " + dirStartSearchLoc);
+                debug.message("CRLValidator : CRL Search Attr : " + crlSearchAttr);
             }
         }
     }
-    
+
     /**
      * Validate certificate against configured crl
-     * @param cert cert to be validated 
+     * @param cert cert to be validated
      * @return true if certificate is not in crl
      */
-    static public boolean validateCertificate(X509Certificate cert, 
-                                       boolean checkCAStatus) {
+    static public boolean validateCertificate(X509Certificate cert, boolean checkCAStatus) {
         String method = "validateCertificate : ";
         boolean certgood = true;
 
     	try {
-            Vector crls = new Vector();
-            X509CRL crl = 
-               AMCRLStore.getCRL(ldapParams, cert, crlSearchAttr);
+            List<X509CRL> crls = new ArrayList<>();
+            X509CRL crl = AMCRLStore.getCRL(ldapParams, cert, crlSearchAttr);
 
             if (crl != null) {
                 crls.add(crl);
@@ -149,7 +133,7 @@ public class CRLValidator {
             }
 
             AMCertPath certpath = new AMCertPath(crls);
-            X509Certificate certs[] = { cert }; 
+            X509Certificate certs[] = { cert };
             if (!certpath.verify(certs, true, false)) {
                 debug.error(method + "CertPath:verify failed.");
                 return certgood = false;
@@ -160,47 +144,14 @@ public class CRLValidator {
     	}
 
         if ((checkCAStatus == true) && (AMCertStore.isRootCA(cert) == false)) {
-            X509Certificate caCert = 
-                AMCertStore.getIssuerCertificate(
-                    ldapParams, cert, crlSearchAttr);
+            X509Certificate caCert = AMCertStore.getIssuerCertificate(ldapParams, cert, crlSearchAttr);
             certgood = validateCertificate(caCert, checkCAStatus);
         }
-
         return certgood;
-    }
-    
-    /**
-     * Get certificate revocation list from cofigured ldap store
-     * @param cert cert to be validated 
-     * @return crl if ldap store configured with crl
-     */
-    static public X509CRL getCRL(X509Certificate cert) {
-        X509CRL crl = null;
-        //Get the CN of the input certificate
-        String attrValue = CertUtils.getAttributeValue(cert.getIssuerX500Principal(), crlSearchAttr);
-
-        if (attrValue == null || ldapParams == null) {
-            return null;
-        }
-
-        if (debug.messageEnabled()) {
-            debug.message("CRLValidator - attrValue to search crl : " + attrValue);
-        }
-
-        //Lookup the certificate in the LDAP certificate directory and compare the values.
-        String searchFilter = AMCRLStore.setSearchFilter(crlSearchAttr, attrValue);
-        ldapParams.setSearchFilter(searchFilter);
-        try {
-            AMCRLStore store = new AMCRLStore(ldapParams);
-            crl = store.getCRL(cert);
-        } catch (IOException e) {
-            debug.error("X509Certificate: verifyCertificate." + e.toString());
-        }
-
-        return crl;
     }
 
     static public boolean isCRLCheckEnabled() {
         return crlCheckEnabled;
     }
+
 }
