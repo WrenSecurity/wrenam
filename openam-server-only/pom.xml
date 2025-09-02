@@ -197,6 +197,7 @@
                         <nonFilteredFileExtension>dll</nonFilteredFileExtension>
                         <nonFilteredFileExtension>dmg</nonFilteredFileExtension>
                         <nonFilteredFileExtension>ear</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>eot</nonFilteredFileExtension>
                         <nonFilteredFileExtension>exe</nonFilteredFileExtension>
                         <nonFilteredFileExtension>gif</nonFilteredFileExtension>
                         <nonFilteredFileExtension>gz</nonFilteredFileExtension>
@@ -226,18 +227,18 @@
 
                     <webResources>
                         <webResource>
-                            <directory>${project.build.directory}/XUI/</directory>
+                            <directory>${project.build.directory}/XUI</directory>
                             <includes>
-                                <include>**/**</include>
+                                <include>**</include>
                             </includes>
                             <targetPath>XUI</targetPath>
                             <filtering>true</filtering>
                         </webResource>
 
                         <webResource>
-                            <directory>${project.build.directory}/api/</directory>
+                            <directory>${project.build.directory}/api</directory>
                             <includes>
-                                <include>**/**</include>
+                                <include>**</include>
                             </includes>
                             <targetPath>api</targetPath>
                             <filtering>true</filtering>
@@ -246,30 +247,30 @@
                         <webResource>
                             <directory>${basedir}/src/main/webapp</directory>
                             <includes>
-                                <include>**/**</include>
+                                <include>**</include>
                             </includes>
                             <excludes>
-                                <exclude>META-INF</exclude>
-                                <exclude>WEB-INF</exclude>
-                                <exclude>com_sun_web_ui/images</exclude>
+                                <exclude>META-INF/</exclude>
+                                <exclude>WEB-INF/</exclude>
+                                <exclude>com_sun_web_ui/</exclude>
                             </excludes>
                             <targetPath />
                             <filtering>true</filtering>
                         </webResource>
 
                         <webResource>
-                            <directory>${basedir}/src/main/webapp/com_sun_web_ui/images</directory>
+                            <directory>${basedir}/src/main/webapp/com_sun_web_ui</directory>
                             <includes>
-                                <include>**/**</include>
+                                <include>**</include>
                             </includes>
-                            <targetPath>com_sun_web_ui/images</targetPath>
+                            <targetPath>com_sun_web_ui</targetPath>
                             <filtering>false</filtering>
                         </webResource>
 
                         <webResource>
                             <directory>${project.basedir}/src/main/webapp/WEB-INF</directory>
                             <includes>
-                                <include>**/**</include>
+                                <include>**</include>
                             </includes>
                             <targetPath>WEB-INF</targetPath>
                             <filtering>true</filtering>
@@ -278,7 +279,7 @@
                         <webResource>
                             <directory>${project.basedir}/../legal-notices</directory>
                             <includes>
-                                <include>**/**</include>
+                                <include>**</include>
                             </includes>
                             <targetPath>legal-notices</targetPath>
                         </webResource>
@@ -310,7 +311,7 @@
                             <directory>${project.build.directory}/openam_TEMP
                             </directory>
                             <includes>
-                                <include>**/**</include>
+                                <include>**</include>
                             </includes>
                             <targetPath />
                             <filtering>false</filtering>

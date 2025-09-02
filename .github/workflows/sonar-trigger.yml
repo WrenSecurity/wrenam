@@ -23,8 +23,12 @@ jobs:
     name: Trigger Sonar analysis
     uses: WrenSecurity/.github/.github/workflows/sonar-maven.yml@main
     with:
+      build_args:
+        -pl openam-server-only -am
+        -Dsonar.javascript.node.maxspace=4096
+        -Dsonar.scanner.javaOpts=-Xmx8g
       java_version: 21
-      project_key: 'WrenSecurity_wrenam'
+      project_key: WrenSecurity_wrenam
       pull_request: ${{ needs.prepare.outputs.pull_request }}
     secrets:
       sonar_token: ${{ secrets.SONAR_TOKEN }}
