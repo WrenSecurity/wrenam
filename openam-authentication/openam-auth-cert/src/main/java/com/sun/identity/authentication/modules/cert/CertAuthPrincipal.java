@@ -1,4 +1,4 @@
-/**
+/*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
  * Copyright (c) 2005 Sun Microsystems Inc. All Rights Reserved
@@ -24,16 +24,17 @@
  *
  * $Id: CertAuthPrincipal.java,v 1.2 2008/06/25 05:41:55 qcheng Exp $
  *
- */
-
-/**
  * Portions Copyrighted [2011] [ForgeRock AS]
+ * Portions Copyrighted 2025 Wren Security
  */
 package com.sun.identity.authentication.modules.cert;
 
 import java.security.Principal;
 
 public class CertAuthPrincipal implements Principal, java.io.Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     private String name;
 
     public CertAuthPrincipal(String name) {
@@ -48,6 +49,7 @@ public class CertAuthPrincipal implements Principal, java.io.Serializable {
      *
      * @return the username for this <code>CertAuthPrincipal</code>
      */
+    @Override
     public String getName() {
         return name;
     }
@@ -57,6 +59,7 @@ public class CertAuthPrincipal implements Principal, java.io.Serializable {
      *
      * @return a string representation of this <code>CertAuthPrincipal</code>.
      */
+    @Override
     public String toString() {
         return("CertAuthPrincipal:  " + name);
     }
@@ -72,6 +75,7 @@ public class CertAuthPrincipal implements Principal, java.io.Serializable {
      * @return <code>true</code> if the specified Object is equal equal to this
      *         <code>CertAuthPrincipal</code>.
      */
+    @Override
     public boolean equals(Object o) {
         if (o == null) {
             return false;
@@ -88,12 +92,13 @@ public class CertAuthPrincipal implements Principal, java.io.Serializable {
         CertAuthPrincipal that = (CertAuthPrincipal)o;
         return this.getName().equals(that.getName());
     }
- 
+
     /**
      * Returns a hash code for this <code>CertAuthPrincipal</code>.
      *
      * @return a hash code for this <code>CertAuthPrincipal</code>.
      */
+    @Override
     public int hashCode() {
         return name.hashCode();
     }

@@ -25,11 +25,16 @@
  * $Id: AMCertPath.java,v 1.5 2009/07/16 00:02:24 beomsuk Exp $
  *
  * Portions Copyrighted 2010-2015 ForgeRock AS.
+ * Portions Copyrighted 2025 Wren Security
  */
-
 package com.sun.identity.security.cert;
 
+import com.sun.identity.security.SecurityDebug;
+import com.sun.identity.shared.configuration.SystemPropertiesManager;
+import com.sun.identity.shared.debug.Debug;
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.KeyStore;
 import java.security.NoSuchAlgorithmException;
@@ -45,22 +50,13 @@ import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Vector;
-
-import com.sun.identity.shared.debug.Debug;
-import com.sun.identity.security.SecurityDebug;
-import com.sun.identity.shared.configuration.SystemPropertiesManager;
 import org.forgerock.openam.utils.StringUtils;
-
-import java.net.MalformedURLException;
-import java.net.URL;
 
 /**
  * Class AMCertPath is special cased Certpath validation class.
- * It does cert path validation together with CRL check and ocsp checking 
+ * It does cert path validation together with CRL check and ocsp checking
  * if they are properly configured.
  */
-
 public class AMCertPath {
 
     private static CertificateFactory cf = null;
@@ -74,28 +70,23 @@ public class AMCertPath {
 
     static {
     	try {
-    	    cf= CertificateFactory.getInstance("X509");
-            cpv= CertPathValidator.getInstance("PKIX");
+    	    cf = SecurityProviderCompat.getCertificateFactory();
+            cpv = SecurityProviderCompat.getPathValidator();
     	} catch (Exception e) {
     		debug.error("AMCertPath.Static:",e);
     	}
     }
 
-    /**
-     * Class constructor
-     * param Vector crls
-     */
-    public AMCertPath(Vector crls) 
+    public AMCertPath(List<X509CRL> crls)
          throws NoSuchAlgorithmException, InvalidAlgorithmParameterException {
 
-        if ((crls != null) && (crls.size() > 0)) {
+        if (crls != null && !crls.isEmpty()) {
             if (debug.messageEnabled()) {
-	        X509CRL crl = (X509CRL) crls.elementAt(0);
+                X509CRL crl = crls.get(0);
                 debug.message("AMCertPath:AMCertPath: crl =" + crl.toString());
             }
-		
-            CollectionCertStoreParameters collection = 
-                                new CollectionCertStoreParameters(crls);
+
+            CollectionCertStoreParameters collection = new CollectionCertStoreParameters(crls);
             synchronized(AMCertPath.class) {
                 store = CertStore.getInstance("Collection", collection);
             }
@@ -107,12 +98,9 @@ public class AMCertPath {
     }
 
     /**
-     * It does cert path validation together with CRL check and ocsp checking 
-     * if they are properly configured.
-     * @param certs
+     * It does cert path validation together with CRL check and ocsp checking if they are properly configured.
      **/
-    public boolean verify(X509Certificate[] certs, boolean crlEnabled,
-                          boolean ocspEnabled) {
+    public boolean verify(X509Certificate[] certs, boolean crlEnabled, boolean ocspEnabled) {
         /*
         The entire contents of this method must be synchronized for the following reasons:
         1. The CertPathValidator#validate method is not thread-safe
@@ -134,12 +122,11 @@ public class AMCertPath {
             }
             try {
                 final List<X509Certificate> certList = Arrays.asList(certs);
-                final CertPath cp = (CertPath) cf.generateCertPath(certList);
+                final CertPath cp = cf.generateCertPath(certList);
 
                 // init PKIXParameters
-                Class<?> trustMgrClass = Class.forName(
-                        "com.sun.identity.security.keystore.AMX509TrustManager");
-                Object trustMgr = (Object) trustMgrClass.newInstance();
+                Class<?> trustMgrClass = Class.forName("com.sun.identity.security.keystore.AMX509TrustManager");
+                Object trustMgr = trustMgrClass.getDeclaredConstructor().newInstance();
                 Method method = trustMgrClass.getMethod("getKeyStore");
                 KeyStore keystore = (KeyStore) method.invoke(trustMgr);
                 PKIXParameters pkixparams = new PKIXParameters(keystore);
@@ -214,11 +201,10 @@ public class AMCertPath {
                 "com.sun.identity.authentication.ocsp.responder.url");
         if (responderURLString != null) {
             try {
-                final URL responderURL = new URL(responderURLString);
+                new URL(responderURLString);
             } catch (MalformedURLException urlEx) {
                 debug.error("AMCertPath.getResponderURLString: Invalid ocsp responder url configured", urlEx);
-            } finally {
-                return responderURLString;
+                return null;
             }
         } else {
             if (debug.warningEnabled()) {
@@ -227,6 +213,6 @@ public class AMCertPath {
         }
         return responderURLString;
     }
-    
-    
+
+
 }

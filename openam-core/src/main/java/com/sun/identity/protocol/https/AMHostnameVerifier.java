@@ -2,6 +2,7 @@
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
  * Copyright (c) 2007 Sun Microsystems Inc. All Rights Reserved
+ * Portions copyright 2025 Wren Security
  *
  * The contents of this file are subject to the terms
  * of the Common Development and Distribution License
@@ -30,17 +31,15 @@ package com.sun.identity.protocol.https;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
-import java.util.Iterator;
+import java.util.List;
 import java.util.HashSet;
 import java.util.StringTokenizer;
-
+import javax.naming.ldap.LdapName;
+import javax.naming.ldap.Rdn;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLSession;
-
-import sun.security.x509.GeneralName;
-import sun.security.x509.GeneralNameInterface;
-import sun.security.x509.X500Name;
 
 import com.iplanet.am.util.SystemProperties;
 import com.sun.identity.shared.debug.Debug;
@@ -48,67 +47,66 @@ import com.sun.identity.shared.debug.Debug;
 
 public class AMHostnameVerifier implements HostnameVerifier {
 
+    private static final Integer NAME_DNS = 2;
+
     public static boolean trustAllServerCerts = false;
 
     public static boolean checkSubjectAltName = false;
 
     public static boolean resolveIPAddress = false;
 
-    public static HashSet sslTrustHosts = new HashSet();
+    public static HashSet<String> sslTrustHosts = new HashSet<>();
 
     static private Debug debug = Debug.getInstance("amJSSE");
-    
+
     static {
-        String tmp = 
-            SystemProperties.get("com.iplanet.am.jssproxy.trustAllServerCerts");
+        String tmp = SystemProperties.get("com.iplanet.am.jssproxy.trustAllServerCerts");
         trustAllServerCerts = (tmp != null && tmp.equalsIgnoreCase("true"));
 
-        tmp = 
-            SystemProperties.get("com.iplanet.am.jssproxy.checkSubjectAltName");
+        tmp = SystemProperties.get("com.iplanet.am.jssproxy.checkSubjectAltName");
         checkSubjectAltName = (tmp != null && tmp.equalsIgnoreCase("true"));
 
         tmp = SystemProperties.get("com.iplanet.am.jssproxy.resolveIPAddress");
         resolveIPAddress = (tmp != null && tmp.equalsIgnoreCase("true"));
 
-        tmp = SystemProperties.get(
-            "com.iplanet.am.jssproxy.SSLTrustHostList", null);
+        tmp = SystemProperties.get("com.iplanet.am.jssproxy.SSLTrustHostList", null);
         if (tmp != null) {
             getSSLTrustHosts(tmp);
         }
 
         if (debug.messageEnabled()) {
-            debug.message("AMHostnameVerifier trustAllServerCerts = " +
-                                   trustAllServerCerts);
-            debug.message("AMHostnameVerifier checkSubjectAltName = " +
-                                   checkSubjectAltName);
-            debug.message("AMHostnameVerifier  resolveIPAddress = " +
-                                   resolveIPAddress);
-            debug.message("AMHostnameVerifier  SSLTrustHostList = " +
-                                   sslTrustHosts.toString());
+            debug.message("AMHostnameVerifier trustAllServerCerts = " + trustAllServerCerts);
+            debug.message("AMHostnameVerifier checkSubjectAltName = " + checkSubjectAltName);
+            debug.message("AMHostnameVerifier  resolveIPAddress = " + resolveIPAddress);
+            debug.message("AMHostnameVerifier  SSLTrustHostList = " + sslTrustHosts.toString());
         }
     }
 
+    @Override
     public boolean verify(String hostname, SSLSession session) {
     	if (trustAllServerCerts) {
             return true;
         }
 
         boolean approve = true;
-    	X509Certificate peercert =  null;
-	String cn = null;
+        X509Certificate peercert =  null;
+    	String cn = null;
 
-        try {
-            X509Certificate[] peercerts = 
-                   (X509Certificate[]) session.getPeerCertificates();
-	    peercert =  peercerts[0];
-            String subjectDN = peercert.getSubjectDN().getName();
-            cn = new X500Name(subjectDN).getCommonName();
+    	try {
+            Certificate[] peercerts = session.getPeerCertificates();
+    	    peercert = (X509Certificate) peercerts[0];
+            LdapName subjectDN = new LdapName(peercert.getSubjectDN().getName());
+            Rdn subjectName = subjectDN.getRdn(subjectDN.size() - 1);
+            if (subjectName.getType().equalsIgnoreCase("cn")) {
+                cn = (String) subjectName.getValue();
+            }
         } catch (Exception ex) {
             debug.error("AMHostnameVerifier:"+ex.toString());
         }
 
-        if (cn == null) 
+        if (cn == null) {
             return false;
+        }
 
         if (!sslTrustHosts.isEmpty()) {
             if (sslTrustHosts.contains(cn.toLowerCase())) {
@@ -130,34 +128,32 @@ public class AMHostnameVerifier implements HostnameVerifier {
         } else {
             approve = false;
         }
-        
+
         if (checkSubjectAltName && !approve) {
             try {
-                Iterator i = 
-                    (Iterator) peercert.getSubjectAlternativeNames().iterator();
-                for (; !approve && i.hasNext();) {
-                    approve = compareHosts((GeneralName) i.next(), hostname);
+                for (List<?> name : peercert.getSubjectAlternativeNames()) {
+                    if (NAME_DNS.equals(name.get(0)) && compareHosts((String) name.get(1), hostname)) {
+                        approve = true;
+                        break;
+                    }
                 }
             } catch (Exception ex) {
                 return false;
             }
         }
-        
+
         return approve;
     }
 
-    private boolean compareHosts(GeneralName generalName, String hostname) {
+    private boolean compareHosts(String name, String hostname) {
         try {
-            if (generalName.getType() == GeneralNameInterface.NAME_DNS) {
-                String name = generalName.toString();
-    	        name = name.substring(name.indexOf(':')+1).trim();
-                return InetAddress.getByName(name).equals(
-                        InetAddress.getByName(hostname));
-            }
+	        name = name.substring(name.indexOf(':')+1).trim();
+            return InetAddress.getByName(name).equals(
+                    InetAddress.getByName(hostname));
         } catch (UnknownHostException e) {
-	    if (debug.messageEnabled()) {
-	        debug.message(e.toString());
-	    }
+    	    if (debug.messageEnabled()) {
+    	        debug.message(e.toString());
+    	    }
         }
 
         return false;
@@ -171,8 +167,8 @@ public class AMHostnameVerifier implements HostnameVerifier {
         StringTokenizer st = new StringTokenizer(hostlist, ",");
         sslTrustHosts.clear();
         while (st.hasMoreTokens()) {
-            sslTrustHosts.add(((String)st.nextToken()).trim().toLowerCase());
+            sslTrustHosts.add(st.nextToken().trim().toLowerCase());
         }
     }
 }
-        
+
