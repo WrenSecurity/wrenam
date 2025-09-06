@@ -347,6 +347,7 @@ public class Routers {
          * @return This route.
          * @throws IllegalStateException If attempted to be set twice.
          */
+        @SafeVarargs
         public final ResourceRoute authorizeWith(Key<? extends CrestAuthorizationModule>... authorizationModuleKeys) {
             Reject.ifNull(authorizationModuleKeys);
             if (this.authorizationModules != null) {
