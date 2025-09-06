@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "i18n:api-descriptor/IdentityResourceV4#users.schema.title",
+  "description": "i18n:api-descriptor/IdentityResourceV4#users.schema.description",
+  "type": "object",
+  "properties": {
+    "name": {
+      "title": "i18n:api-descriptor/IdentityResourceV4#users.schema.name.title",
+      "description": "i18n:api-descriptor/IdentityResource#users.schema.name.description",
+      "type": "string"
+    }
+  }
+}

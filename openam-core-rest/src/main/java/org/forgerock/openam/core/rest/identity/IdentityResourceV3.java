@@ -13,11 +13,15 @@
  *
  * Copyright 2015-2016 ForgeRock AS.
  */
-package org.forgerock.openam.core.rest;
+package org.forgerock.openam.core.rest.identity;
 
 import static org.forgerock.json.resource.Responses.newQueryResponse;
 import static org.forgerock.json.resource.Responses.newResourceResponse;
-import static org.forgerock.openam.core.rest.IdentityRestUtils.*;
+import static org.forgerock.openam.core.rest.identity.IdentityRestUtils.getIdentityServicesAttributes;
+import static org.forgerock.openam.core.rest.identity.IdentityRestUtils.getSSOToken;
+import static org.forgerock.openam.core.rest.identity.IdentityRestUtils.identityAttributeJsonToSet;
+import static org.forgerock.openam.core.rest.identity.IdentityRestUtils.identityDetailsToJsonValue;
+import static org.forgerock.openam.core.rest.identity.IdentityRestUtils.isUserActive;
 import static org.forgerock.openam.rest.RestUtils.isAdmin;
 import static org.forgerock.openam.utils.CollectionUtils.isNotEmpty;
 import static org.forgerock.util.promise.Promises.newResultPromise;
@@ -31,6 +35,12 @@ import com.sun.identity.idsvcs.ObjectNotFound;
 import com.sun.identity.idsvcs.TokenExpired;
 import com.sun.identity.idsvcs.opensso.IdentityServicesImpl;
 import com.sun.identity.shared.debug.Debug;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import org.forgerock.json.JsonPointer;
 import org.forgerock.json.JsonValue;
 import org.forgerock.json.resource.ActionRequest;
@@ -53,6 +63,7 @@ import org.forgerock.json.resource.ResourceException;
 import org.forgerock.json.resource.ResourceResponse;
 import org.forgerock.json.resource.UpdateRequest;
 import org.forgerock.openam.core.CoreWrapper;
+import org.forgerock.openam.core.rest.UiRolePredicate;
 import org.forgerock.openam.forgerockrest.utils.MailServerLoader;
 import org.forgerock.openam.forgerockrest.utils.PrincipalRestUtils;
 import org.forgerock.openam.rest.RealmContext;
@@ -65,13 +76,6 @@ import org.forgerock.openam.utils.CrestQuery;
 import org.forgerock.services.context.Context;
 import org.forgerock.util.promise.Promise;
 import org.forgerock.util.query.QueryFilter;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * A simple {@code Map} based collection resource provider.
@@ -141,9 +145,6 @@ public final class IdentityResourceV3 implements CollectionResourceProvider {
         logger.warning("The action '" + action + "' in the 'users' endpoint is deprecated in version 3.0");
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Promise<ActionResponse, ResourceException> actionInstance(final Context context,
             final String resourceId, final ActionRequest request) {
@@ -151,9 +152,6 @@ public final class IdentityResourceV3 implements CollectionResourceProvider {
         return identityResourceV2.actionInstance(context, resourceId, request);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Promise<ResourceResponse, ResourceException> createInstance(final Context context,
             final CreateRequest request) {
@@ -161,9 +159,6 @@ public final class IdentityResourceV3 implements CollectionResourceProvider {
         return identityResourceV2.createInstance(context, request);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Promise<ResourceResponse, ResourceException> deleteInstance(final Context context,
                                                                        final String resourceId,
@@ -171,9 +166,6 @@ public final class IdentityResourceV3 implements CollectionResourceProvider {
         return identityResourceV2.deleteInstance(context, resourceId, request);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Promise<ResourceResponse, ResourceException> readInstance(final Context context,
                                                                      final String resourceId,
@@ -181,9 +173,6 @@ public final class IdentityResourceV3 implements CollectionResourceProvider {
         return identityResourceV2.readInstance(context, resourceId, request);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Promise<ResourceResponse, ResourceException> updateInstance(final Context context,
                                                                        final String resourceId,
@@ -191,9 +180,7 @@ public final class IdentityResourceV3 implements CollectionResourceProvider {
         return identityResourceV2.updateInstance(context, resourceId, request);
     }
 
-    /*******************************************************************************************************************
-     * {@inheritDoc}
-     */
+    @Override
     public Promise<QueryResponse, ResourceException> queryCollection(final Context context,
             final QueryRequest request, final QueryResourceHandler handler) {
 
