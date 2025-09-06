@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "i18n:api-descriptor/IdentityResourceV4#groups.schema.title",
+  "description": "i18n:api-descriptor/IdentityResourceV4#groups.schema.description",
+  "type": "object",
+  "properties": {
+    "members": {
+      "type": "object",
+      "title": "i18n:api-descriptor/IdentityResourceV4#groups.schema.members.title",
+      "description": "i18n:api-descriptor/IdentityResourceV4#groups.schema.members.description",
+      "properties": {
+        "uniqueMember": {
+          "title": "i18n:api-descriptor/IdentityResourceV4#groups.schema.uniqueMember.title",
+          "description": "i18n:api-descriptor/IdentityResourceV4#groups.schema.uniqueMember.description",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "title": "i18n:api-descriptor/IdentityResourceV4#groups.schema.uniqueMember.name.title",
+            "description": "i18n:api-descriptor/IdentityResourceV4#groups.schema.uniqueMember.name.description"
+          }
+        }
+      }
+    }
+  }
+}

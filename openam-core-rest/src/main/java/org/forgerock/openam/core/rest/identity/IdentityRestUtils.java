@@ -12,8 +12,9 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions copyright 2025 Wren Security
  */
-package org.forgerock.openam.core.rest;
+package org.forgerock.openam.core.rest.identity;
 
 import static com.sun.identity.idsvcs.opensso.IdentityServicesImpl.asAttributeArray;
 import static com.sun.identity.idsvcs.opensso.IdentityServicesImpl.asMap;
@@ -24,25 +25,10 @@ import com.iplanet.sso.SSOTokenManager;
 import com.sun.identity.idm.AMIdentity;
 import com.sun.identity.idm.IdRepoException;
 import com.sun.identity.idm.IdType;
+import com.sun.identity.idm.IdUtils;
 import com.sun.identity.idsvcs.Attribute;
 import com.sun.identity.idsvcs.IdentityDetails;
 import com.sun.identity.shared.debug.Debug;
-import org.forgerock.guice.core.InjectorHolder;
-import org.forgerock.json.JsonValue;
-import org.forgerock.json.JsonValueException;
-import org.forgerock.json.resource.BadRequestException;
-import org.forgerock.json.resource.NotFoundException;
-import org.forgerock.json.resource.PermanentException;
-import org.forgerock.json.resource.ResourceException;
-import org.forgerock.openam.core.CoreWrapper;
-import org.forgerock.openam.rest.RealmContext;
-import org.forgerock.openam.rest.RestUtils;
-import org.forgerock.openam.rest.resource.SSOTokenContext;
-import org.forgerock.openam.errors.IdentityResourceExceptionMappingHandler;
-import org.forgerock.openam.utils.JsonValueBuilder;
-import org.forgerock.selfservice.core.SelfServiceContext;
-import org.forgerock.services.context.Context;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -52,6 +38,22 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.forgerock.guice.core.InjectorHolder;
+import org.forgerock.json.JsonValue;
+import org.forgerock.json.JsonValueException;
+import org.forgerock.json.resource.BadRequestException;
+import org.forgerock.json.resource.NotFoundException;
+import org.forgerock.json.resource.PermanentException;
+import org.forgerock.json.resource.ResourceException;
+import org.forgerock.openam.core.CoreWrapper;
+import org.forgerock.openam.errors.IdentityResourceExceptionMappingHandler;
+import org.forgerock.openam.identity.idm.IdentityUtils;
+import org.forgerock.openam.rest.RealmContext;
+import org.forgerock.openam.rest.RestUtils;
+import org.forgerock.openam.rest.resource.SSOTokenContext;
+import org.forgerock.openam.utils.JsonValueBuilder;
+import org.forgerock.selfservice.core.SelfServiceContext;
+import org.forgerock.services.context.Context;
 
 public final class IdentityRestUtils {
 
@@ -104,7 +106,7 @@ public final class IdentityRestUtils {
     }
 
     /**
-     * Convert an {@link IdentityDetails} object into a {@link JsonValue}.  Package private for IdentityResourceV2.
+     * Convert an {@link IdentityDetails} object into a {@link JsonValue}.
      *
      * @param details The IdentityDetails
      * @return The JsonValue
@@ -141,7 +143,7 @@ public final class IdentityRestUtils {
         }
     }
 
-    private static boolean isPasswordAttribute(String attributeName) {
+    static boolean isPasswordAttribute(String attributeName) {
         return PASSWORD_ATTRIBUTES.contains(attributeName.toLowerCase());
     }
 
@@ -190,41 +192,48 @@ public final class IdentityRestUtils {
      * Returns an IdentityDetails from a JsonValue.
      *
      * @param objectType the object type, eg. user, group, etc.
-     * @param jVal The JsonValue Object to be converted
+     * @param jsonValue The JsonValue Object to be converted
      * @param realm The realm
      * @return The IdentityDetails object
      */
-    public static IdentityDetails jsonValueToIdentityDetails(final String objectType,
-                                                             final JsonValue jVal,
-                                                             final String realm) {
+    public static IdentityDetails jsonValueToIdentityDetails(final String objectType, final JsonValue jsonValue,
+            final String realm) {
 
         IdentityDetails identity = new IdentityDetails();
         Map<String, Set<String>> identityAttrList = new HashMap<>();
 
         try {
-            identity.setType(objectType); //set type ex. user
-            identity.setRealm(realm); //set realm
-            identity.setName(jVal.get(USERNAME).asString());//set name from JsonValue object
+            identity.setType(objectType);
+            identity.setRealm(realm);
+            if (jsonValue.get(IdentityRestMapper.NAME_USER_PROP) != null) {
+                identity.setName(jsonValue.get(IdentityRestMapper.NAME_USER_PROP).asString());
+                jsonValue.remove(IdentityRestMapper.NAME_USER_PROP);
+            } else {
+                identity.setName(jsonValue.get(IdentityRestMapper.NAME_NAME_PROP).asString());
+                jsonValue.remove(IdentityRestMapper.NAME_NAME_PROP);
+            }
 
             if (AGENT_TYPE.equals(objectType)) {
-                jVal.remove(USERNAME);
-                jVal.remove(REALM);
-                jVal.remove(UNIVERSAL_ID);
+                jsonValue.remove(USERNAME);
+                jsonValue.remove(REALM);
+                jsonValue.remove(UNIVERSAL_ID);
+            } else if (GROUP_TYPE.equals(objectType)) {
+                jsonValue.remove(DelegationRestUtils.PRIVILEGES_PROP);
+                jsonValue.remove(IdentityRestMapper.GROUP_MEMBERS_PROP);
             }
 
             try {
-                for (String s : jVal.keys()) {
-                    identityAttrList.put(s, identityAttributeJsonToSet(jVal.get(s)));
+                for (String key : jsonValue.keys()) {
+                    identityAttrList.put(key, identityAttributeJsonToSet(jsonValue.get(key)));
                 }
             } catch (Exception e) {
                 debug.error("IdentityResource.jsonValueToIdentityDetails() :: Cannot Traverse JsonValue. ", e);
             }
             identity.setAttributes(asAttributeArray(identityAttrList));
 
-        } catch (final Exception e) {
-            debug.error("IdentityResource.jsonValueToIdentityDetails() :: Cannot convert JsonValue to IdentityDetails" +
-                    ".", e);
-            //deal with better exceptions
+        } catch (Exception e) {
+            debug.error("IdentityResource.jsonValueToIdentityDetails() :: Cannot convert JsonValue to IdentityDetails.",
+                    e);
         }
         return identity;
     }
@@ -289,6 +298,18 @@ public final class IdentityRestUtils {
             }
             throw new NotFoundException("Invalid SSOToken " + ssoe.getMessage(), ssoe);
         }
+    }
+
+    /**
+     * Get Universal ID for the identity represented by the given identity details.
+     *
+     * @param details identity details
+     * @return Universal ID for the AM identity
+     * @throws IdRepoException in case the details don't represent a known identity type
+     */
+    public static String getUniversalId(IdentityDetails details) throws IdRepoException {
+        return new IdentityUtils().getUniversalId(details.getName(), IdUtils.getType(details.getType()),
+                details.getRealm());
     }
 
 }
