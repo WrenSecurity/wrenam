@@ -21,7 +21,7 @@
     <parent>
         <groupId>org.wrensecurity.wrenam</groupId>
         <artifactId>openam-tools</artifactId>
-        <version>15.2.0</version>
+        <version>15.2.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>openam-license-manager-cli</artifactId>
