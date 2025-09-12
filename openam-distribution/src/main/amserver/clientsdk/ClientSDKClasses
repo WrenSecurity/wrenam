@@ -435,7 +435,6 @@ com/sun/identity/common/configuration/UnknownPropertyNameException.class
 com/sun/identity/protocol/LDAPSocketFactory.class
 com/sun/identity/protocol/SSLSocketFactoryManager.class
 com/sun/identity/protocol/https/AMHostnameVerifier.class
-com/sun/identity/protocol/https/Handler.class
 com/sun/identity/protocol/https/Https.class
 com/sun/identity/security/keystore/AMCallbackHandler.class
 com/sun/identity/security/keystore/AMPassword.class

@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM debian:bullseye-slim AS project-build
+FROM --platform=$BUILDPLATFORM debian:trixie-slim AS project-build
 
 # Install build dependencies
 RUN \
