@@ -136,12 +136,13 @@
 
         <!-- Wren Security Dependencies -->
         <wrends.version>5.0.0</wrends.version>
-        <wrensec-commons.version>23.0.0-SNAPSHOT</wrensec-commons.version>
-        <wrensec-guava.version>18.0.5</wrensec-guava.version>
+        <wrensec-commons.version>23.0.0-M1</wrensec-commons.version>
         <wrensec-ui.version>23.2.2</wrensec-ui.version>
 
         <!-- Test Dependencies -->
+        <assertj.version>3.19.0</assertj.version>
         <mockito.version>5.5.0</mockito.version>
+        <testng.version>7.8.0</testng.version>
 
         <!-- Build Dependencies -->
         <ant.contrib.version>1.0b3</ant.contrib.version>
@@ -211,6 +212,7 @@
         <bouncycastle.version>1.81</bouncycastle.version>
         <geoip.version>2.0.0</geoip.version>
         <json.version>20231013</json.version>
+        <jodaTime.version>2.10.9</jodaTime.version>
         <mail.version>1.5.1</mail.version>
 
         <!-- Deprecated Dependencies (TBD) -->
@@ -549,6 +551,12 @@
                 </exclusions>
             </dependency>
 
+            <dependency>
+                <groupId>org.assertj</groupId>
+                <artifactId>assertj-core</artifactId>
+                <version>${assertj.version}</version>
+            </dependency>
+
             <!-- TODO upgrade version -->
             <dependency>
                 <groupId>com.googlecode.java-ipv6</groupId>
@@ -810,6 +818,12 @@
             </dependency>
 
             <dependency>
+                <groupId>joda-time</groupId>
+                <artifactId>joda-time</artifactId>
+                <version>${jodaTime.version}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>org.apache.activemq</groupId>
                 <artifactId>activemq-client</artifactId>
                 <version>${activemq.version}</version>
@@ -886,7 +900,6 @@
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-core</artifactId>
                 <version>${mockito.version}</version>
-                <scope>test</scope>
             </dependency>
 
             <dependency>
@@ -984,9 +997,27 @@
 
             <dependency>
                 <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-jdk14</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-nop</artifactId>
                 <version>${slf4j.version}</version>
                 <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.testng</groupId>
+                <artifactId>testng</artifactId>
+                <version>${testng.version}</version>
             </dependency>
 
             <dependency>
@@ -1342,16 +1373,19 @@
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -1493,6 +1527,8 @@
                 <artifactId>maven-javadoc-plugin</artifactId>
 
                 <configuration>
+                    <!-- Ignore JavaDoc building for the module dependencies -->
+                    <detectOfflineLinks>false</detectOfflineLinks>
                     <doclint>all,-missing,-html</doclint>
                     <tags>
                         <tag>
@@ -1523,7 +1559,6 @@
                 <configuration>
                     <argLine>${java.surefire.options}</argLine>
                     <redirectTestOutputToFile>true</redirectTestOutputToFile>
-                    <forkMode>once</forkMode>
                 </configuration>
             </plugin>
 
