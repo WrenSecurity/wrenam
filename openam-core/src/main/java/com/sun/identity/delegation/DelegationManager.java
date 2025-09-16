@@ -25,6 +25,7 @@
  * $Id: DelegationManager.java,v 1.10 2008/06/25 05:43:24 qcheng Exp $
  *
  * Portions Copyrighted 2013-2016 ForgeRock AS.
+ * Portions Copyrighted 2025 Wren Security.
  */
 package com.sun.identity.delegation;
 
@@ -62,32 +63,32 @@ import com.sun.identity.sm.ServiceSchemaManager;
  */
 
 public final class DelegationManager {
-    
+
     public static final String DELEGATION_SERVICE = "sunAMDelegationService";
-    
+
     static final String DELEGATION_PLUGIN_INTERFACE = "DelegationInterface";
-    
+
     static final String PERMISSIONS = "Permissions";
-    
+
     static final String PRIVILEGES = "Privileges";
-    
+
     static final String LIST_OF_PERMISSIONS = "listOfPermissions";
-    
+
     static final String DELEGATION_DEBUG = "amDelegation";
-    
+
     static final String SUBJECT_ID_TYPES = "SubjectIdTypes";
-    
+
     public static final Debug debug = Debug.getInstance(DELEGATION_DEBUG);
-    
+
     private volatile static DelegationInterface pluginInstance = null;
-    
-    private static Set subjectIdTypes = new CaseInsensitiveHashSet();
-    
+
+    private static Set<String> subjectIdTypes = new CaseInsensitiveHashSet<>();
+
     private String orgName;
-    
+
     private SSOToken token;
     private static final String AUTHN_USERS_ID = "id=All Authenticated Users,ou=role," + ServiceManager.getBaseDN();
-    
+
     /**
      * Constructor of <code>DelegationManager</code> for the specified realm.
      * It requires a <code>SSOToken</code> which will be used to perform
@@ -102,18 +103,18 @@ public final class DelegationManager {
      * @throws SSOException  if invalid or expired single-sign-on token
      * @throws DelegationException for any other abnormal condition
      */
-    
+
     public DelegationManager(SSOToken token, String orgName)
     throws SSOException, DelegationException {
         SSOTokenManager.getInstance().validateToken(token);
         this.token = token;
         this.orgName = DNMapper.orgNameToDN(orgName);
-        
+
         if (pluginInstance == null) {
             pluginInstance = getDelegationPlugin();
         }
     }
-    
+
     /**
      * Returns all the names of the delegation privileges that are configured
      * with the realm.
@@ -123,13 +124,13 @@ public final class DelegationManager {
      *
      * @throws DelegationException  for any abnormal condition
      */
-    public Set getConfiguredPrivilegeNames() throws DelegationException {
-        Set privNames = null;
-        Set globalPrivNames = null;
-        Set orgPrivNames = null;
+    public Set<String> getConfiguredPrivilegeNames() throws DelegationException {
+        Set<String> privNames = null;
+        Set<String> globalPrivNames = null;
+        Set<String> orgPrivNames = null;
         ServiceConfig privsConfig;
         ServiceConfig sc;
-        
+
         String subConfigName = null;
         int revisionNum = DelegationUtils.getRevisionNumber();
         if (revisionNum == DelegationUtils.AM70_DELEGATION_REVISION) {
@@ -137,7 +138,7 @@ public final class DelegationManager {
         } else {
             subConfigName = DelegationManager.PRIVILEGES;
         }
-        
+
         try {
             ServiceConfigManager scm = new ServiceConfigManager(
                 DELEGATION_SERVICE, getAdminToken());
@@ -175,7 +176,7 @@ public final class DelegationManager {
         }
         return privNames;
     }
-    
+
     /**
      * Returns all the delegation privileges associated with the realm.
      *
@@ -184,8 +185,8 @@ public final class DelegationManager {
      *
      * @throws DelegationException for any abnormal condition
      */
-    
-    public Set getPrivileges() throws DelegationException {
+
+    public Set<DelegationPrivilege> getPrivileges() throws DelegationException {
         if (pluginInstance != null) {
             try {
                 return pluginInstance.getPrivileges(token, orgName);
@@ -197,7 +198,7 @@ public final class DelegationManager {
                 "no_plugin_specified", null, null);
         }
     }
-    
+
     /**
      * Returns all the delegation privileges associated with the realm and
      * applicable to a subject.
@@ -209,13 +210,13 @@ public final class DelegationManager {
      *
      * @throws DelegationException for any abnormal condition
      */
-    
-    public Set getPrivileges(String universalId) throws DelegationException {
-        Set privileges = getPrivileges();
+
+    public Set<DelegationPrivilege> getPrivileges(String universalId) throws DelegationException {
+        Set<DelegationPrivilege> privileges = getPrivileges();
         if (universalId == null) {
             return privileges;
         }
-        Set applicablePrivileges = new HashSet();
+        Set<DelegationPrivilege> applicablePrivileges = new HashSet<>();
         if ((privileges != null) && (!privileges.isEmpty())) {
             AMIdentity identity = null;
             try {
@@ -223,12 +224,10 @@ public final class DelegationManager {
             } catch (IdRepoException idrepo) {
                 throw (new DelegationException(idrepo.getMessage()));
             }
-            for (Iterator i = privileges.iterator(); i.hasNext(); ) {
-                DelegationPrivilege dp = (DelegationPrivilege)i.next();
-                Set subjs = dp.getSubjects();
+            for (DelegationPrivilege dp : privileges) {
+                Set<String> subjs = dp.getSubjects();
                 if ((subjs != null) && (!subjs.isEmpty())) {
-                    for (Iterator j = subjs.iterator(); j.hasNext(); ) {
-                        String subject = (String)j.next();
+                    for (String subject : subjs) {
                         if (subject.equals(AUTHN_USERS_ID)) {
                             //getPrivileges returned delegation privileges for this realm, hence if the subject is all
                             //authenticated users, then the privilege is always a match.
@@ -254,7 +253,7 @@ public final class DelegationManager {
         }
         return applicablePrivileges;
     }
-    
+
     /**
      * Adds a delegation privilege to a specific realm. The permission will be
      * added to the existing privilege in the event that this method is trying
@@ -269,12 +268,12 @@ public final class DelegationManager {
             debug.message("privilege=" + privilege);
         }
         String name = privilege.getName();
-        Set subjects = privilege.getSubjects();
+        Set<String> subjects = privilege.getSubjects();
         validateSupportedSubjectTypes(subjects);
         DelegationPrivilege dp = new DelegationPrivilege(
             name, subjects, orgName);
         privilege = dp;
-        
+
         if (pluginInstance != null) {
             try {
                 pluginInstance.addPrivilege(token, orgName, privilege);
@@ -286,7 +285,7 @@ public final class DelegationManager {
                 "no_plugin_specified", null, null);
         }
     }
-    
+
     /**
      * Removes a delegation privilege to the realm.
      *
@@ -295,7 +294,7 @@ public final class DelegationManager {
      *
      * @throws DelegationException for any abnormal condition
      */
-    
+
     public void removePrivilege(String privilegeName)
     throws DelegationException {
         if (pluginInstance != null) {
@@ -309,7 +308,7 @@ public final class DelegationManager {
                 "no_plugin_specified", null, null);
         }
     }
-    
+
     /**
      * Returns a set of selected subjects matching the pattern in the given
      * realm. The pattern accepts "*" as the wild card for searching subjects.
@@ -322,8 +321,8 @@ public final class DelegationManager {
      *
      * @throws DelegationException  for any abnormal condition
      */
-    
-    public Set getSubjects(String pattern) throws DelegationException {
+
+    public Set<String> getSubjects(String pattern) throws DelegationException {
         if (pluginInstance != null) {
             try {
                 return pluginInstance.getSubjects(token, orgName,
@@ -336,7 +335,7 @@ public final class DelegationManager {
                 "no_plugin_specified", null, null);
         }
     }
-    
+
     /**
      * Returns a set of realm names, based on the input parameter
      * <code>organizationNames</code>, in which the "user" has some
@@ -349,8 +348,8 @@ public final class DelegationManager {
      *         <code>organizationNames</code>
      * @throws DelegationException  for any abnormal condition
      */
-    
-    public Set getManageableOrganizationNames(Set organizationNames)
+
+    public Set<String> getManageableOrganizationNames(Set<String> organizationNames)
     throws DelegationException {
         if (pluginInstance != null) {
             try {
@@ -364,7 +363,7 @@ public final class DelegationManager {
                 "no_plugin_specified", null, null);
         }
     }
-    
+
     /**
      * Gets an instance of <code>DelegationInterface</code>
      * which is the default configured delegation plugin instance.
@@ -376,8 +375,8 @@ public final class DelegationManager {
         }
         return loadDelegationPlugin();
     }
-    
-    
+
+
     /**
      * Loads the default implementation of DelegationInterface
      */
@@ -389,12 +388,12 @@ public final class DelegationManager {
                 SSOToken privilegedToken = getAdminToken();
                 ServiceSchemaManager ssm = new ServiceSchemaManager(
                     DELEGATION_SERVICE, privilegedToken);
-                
+
                 ServiceSchema globalSchema = ssm.getGlobalSchema();
                 if (globalSchema != null) {
-                    Map attributeDefaults = globalSchema.getAttributeDefaults();
+                    Map<String, Set<String>> attributeDefaults = globalSchema.getAttributeDefaults();
                     if (attributeDefaults != null) {
-                        subjectIdTypes.addAll((Set)attributeDefaults.get(
+                        subjectIdTypes.addAll(attributeDefaults.get(
                             SUBJECT_ID_TYPES));
                     }
                 }
@@ -402,7 +401,7 @@ public final class DelegationManager {
                     debug.message("Configured Subject ID Types: "
                         + subjectIdTypes);
                 }
-                
+
                 Set pluginNames = ssm.getPluginSchemaNames(
                     DELEGATION_PLUGIN_INTERFACE, null);
                 if (pluginNames == null) {
@@ -412,11 +411,11 @@ public final class DelegationManager {
                 if (debug.messageEnabled()) {
                     debug.message("pluginNames=" + pluginNames);
                 }
-                
+
                 // for the time being, only support one plugin
-                Iterator it = pluginNames.iterator();
+                Iterator<String> it = pluginNames.iterator();
                 if (it.hasNext()) {
-                    String pluginName = (String) it.next();
+                    String pluginName = it.next();
                     PluginSchema ps = ssm.getPluginSchema(pluginName,
                         DELEGATION_PLUGIN_INTERFACE, null);
                     if (ps == null) {
@@ -427,7 +426,7 @@ public final class DelegationManager {
                     if (debug.messageEnabled()) {
                         debug.message("Plugin class name:" + className);
                     }
-                    DelegationInterface instance = 
+                    DelegationInterface instance =
                         (DelegationInterface) Class.forName(className).newInstance();
                     instance.initialize(privilegedToken, null);
                     pluginInstance = instance;
@@ -448,14 +447,13 @@ public final class DelegationManager {
         }
         return pluginInstance;
     }
-    
-    private static void validateSupportedSubjectTypes(Set subjects)
+
+    private static void validateSupportedSubjectTypes(Set<String> subjects)
         throws DelegationException {
         if ((subjects != null) && !subjects.isEmpty()) {
             try {
                 SSOToken adminToken = getAdminToken();
-                for (Iterator i = subjects.iterator(); i.hasNext(); ) {
-                    String uuid = (String)i.next();
+                for (String uuid : subjects) {
                     AMIdentity amid = IdUtils.getIdentity(adminToken, uuid);
                     if (!subjectIdTypes.contains(amid.getType().getName())) {
                         throw new DelegationException(ResBundleUtils.rbName,
@@ -469,12 +467,12 @@ public final class DelegationManager {
             }
         }
     }
-    
+
     /**
      * Return the SSOToken of the admin configured in serverconfig.xml
      */
     static SSOToken getAdminToken() throws SSOException {
-        SSOToken adminToken = (SSOToken) AccessController
+        SSOToken adminToken = AccessController
             .doPrivileged(AdminTokenAction.getInstance());
         if (adminToken == null) {
             throw (new SSOException(new DelegationException(

@@ -24,6 +24,7 @@
  *
  * $Id: DelegationInterface.java,v 1.5 2008/06/25 05:43:25 qcheng Exp $
  *
+ * Portions Copyrighted 2025 Wren Security.
  */
 
 package com.sun.identity.delegation.interfaces;
@@ -79,7 +80,7 @@ public interface DelegationInterface {
      * @throws DelegationException  for any abnormal condition
      */
 
-    public Set getPrivileges(SSOToken token, String orgName)
+    public Set<DelegationPrivilege> getPrivileges(SSOToken token, String orgName)
             throws SSOException, DelegationException;
 
     /**
@@ -131,7 +132,7 @@ public interface DelegationInterface {
      * @throws DelegationException for any abnormal condition
      */
 
-    public Set getSubjects(SSOToken token, String orgName, Set types,
+    public Set<String> getSubjects(SSOToken token, String orgName, Set<String> types,
             String pattern) throws SSOException, DelegationException;
 
     /**
@@ -150,8 +151,8 @@ public interface DelegationInterface {
      * @throws DelegationException for any abnormal condition
      */
 
-    public Set getManageableOrganizationNames(SSOToken token,
-            Set organizationNames) throws SSOException, DelegationException;
+    public Set<String> getManageableOrganizationNames(SSOToken token,
+            Set<String> organizationNames) throws SSOException, DelegationException;
 
     /**
      * Returns a boolean value indicating if a user has the the specified
@@ -181,6 +182,6 @@ public interface DelegationInterface {
      * @throws DelegationException for any other abnormal condition
      */
 
-    public Set getPermissions(SSOToken token, String orgName)
+    public Set<DelegationPermission> getPermissions(SSOToken token, String orgName)
             throws SSOException, DelegationException;
 }

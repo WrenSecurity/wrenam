@@ -14,7 +14,7 @@
  * Copyright 2015 ForgeRock AS.
  */
 
-package org.forgerock.openam.core.rest;
+package org.forgerock.openam.core.rest.identity;
 
 import org.forgerock.openam.sm.config.ConfigAttribute;
 import org.forgerock.openam.sm.config.ConfigSource;

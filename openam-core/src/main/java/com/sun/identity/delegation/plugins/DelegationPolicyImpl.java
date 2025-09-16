@@ -25,6 +25,7 @@
  * $Id: DelegationPolicyImpl.java,v 1.12 2010/01/16 06:35:25 dillidorai Exp $
  *
  * Portions Copyrighted 2011-2016 ForgeRock AS.
+ * Portions Copyrighted 2025 Wren Security.
  */
 
 package com.sun.identity.delegation.plugins;
@@ -230,10 +231,10 @@ public class DelegationPolicyImpl implements DelegationInterface, ServiceListene
      * @throws SSOException  invalid or expired single-sign-on token
      * @throws DelegationException  for any abnormal condition
      */
-    public Set getPrivileges(SSOToken token, String orgName)
+    public Set<DelegationPrivilege> getPrivileges(SSOToken token, String orgName)
         throws SSOException, DelegationException {
         try {
-            Set privileges = new HashSet();
+            Set<DelegationPrivilege> privileges = new HashSet<DelegationPrivilege>();
             // Need to check if user has "delegate" permissions for org
             if (hasDelegationPermissionsForRealm(token, orgName)) {
                 // Replace token with AdminToken
@@ -242,7 +243,7 @@ public class DelegationPolicyImpl implements DelegationInterface, ServiceListene
             }
             PolicyManager pm = new PolicyManager(token,
                 POLICY_REPOSITORY_REALM);
-            Set pnames = pm.getPolicyNames();
+            Set<String> pnames = pm.getPolicyNames();
             if (pnames != null) {
                 /* the name of the policy is in the form of
                  * orgName^^privilegeName, the privilegeName is the
@@ -259,9 +260,9 @@ public class DelegationPolicyImpl implements DelegationInterface, ServiceListene
                     prefix = NAME_DELIMITER;
                 }
                 int prefixLength = prefix.length();
-                Iterator it = pnames.iterator();
+                Iterator<String> it = pnames.iterator();
                 while (it.hasNext()) {
-                    String pname = (String)it.next();
+                    String pname = it.next();
                     if (pname.toLowerCase().startsWith(prefix)) {
                         Policy p = pm.getPolicy(pname);
                         // converts the policy to its corresponding
@@ -309,7 +310,7 @@ public class DelegationPolicyImpl implements DelegationInterface, ServiceListene
                     POLICY_REPOSITORY_REALM);
                 Policy p = privilegeToPolicy(pm, privilege, orgName);
                 if (p != null) {
-                    Set existingPolicies = pm.getPolicyNames();
+                    Set<String> existingPolicies = pm.getPolicyNames();
                     if (existingPolicies.contains(p.getName())) {
                         Set<String> subjectNames = p.getSubjectNames();
 
@@ -402,9 +403,9 @@ public class DelegationPolicyImpl implements DelegationInterface, ServiceListene
      * @throws DelegationException for any abnormal condition
      */
 
-    public Set getSubjects(SSOToken token, String orgName, Set types,
+    public Set<String> getSubjects(SSOToken token, String orgName, Set<String> types,
         String pattern) throws SSOException, DelegationException {
-        Set results = new HashSet();
+        Set<String> results = new HashSet<>();
         // All Authenticated Users would be returned only if pattern is *
         if ((pattern != null) && pattern.equals("*")) {
             results.add(AUTHN_USERS_ID);
@@ -426,9 +427,9 @@ public class DelegationPolicyImpl implements DelegationInterface, ServiceListene
             }
             if ((supportedTypes != null) && (!supportedTypes.isEmpty())
                 && (types != null) && (!types.isEmpty())) {
-                Iterator it = types.iterator();
+                Iterator<String> it = types.iterator();
                 while (it.hasNext()) {
-                    IdType idType = IdUtils.getType((String)it.next());
+                    IdType idType = IdUtils.getType(it.next());
                     if (supportedTypes.contains(idType)) {
                         IdSearchControl ctrl = new IdSearchControl();
                         ctrl.setRecursive(true);
@@ -437,12 +438,12 @@ public class DelegationPolicyImpl implements DelegationInterface, ServiceListene
                         IdSearchResults idsr = idRepo.searchIdentities(
                                                 idType, pattern, ctrl);
                         if (idsr != null) {
-                            Set searchRes = idsr.getSearchResults();
+                            Set<AMIdentity> searchRes = idsr.getSearchResults();
                             if ((searchRes !=null) &&
                                 (!searchRes.isEmpty())) {
-                                Iterator iter = searchRes.iterator();
+                                Iterator<AMIdentity> iter = searchRes.iterator();
                                 while (iter.hasNext()) {
-                                    AMIdentity id = (AMIdentity)iter.next();
+                                    AMIdentity id = iter.next();
                                     results.add(IdUtils.getUniversalId(id));
                                 }
                             }
@@ -474,15 +475,15 @@ public class DelegationPolicyImpl implements DelegationInterface, ServiceListene
      * @throws DelegationException for any abnormal condition
      */
 
-    public Set getManageableOrganizationNames(SSOToken token,
-      Set organizationNames) throws SSOException, DelegationException {
-        Set names = new HashSet();
+    public Set<String> getManageableOrganizationNames(SSOToken token,
+      Set<String> organizationNames) throws SSOException, DelegationException {
+        Set<String> names = new HashSet<>();
 
         if ((organizationNames != null) &&
             (!organizationNames.isEmpty())) {
-            Iterator it = organizationNames.iterator();
+            Iterator<String> it = organizationNames.iterator();
             while (it.hasNext()) {
-                String orgName = (String)it.next();
+                String orgName = it.next();
                 Set perms = getPermissions(token, orgName);
                 if ((perms != null) && (!perms.isEmpty())) {
                     names.add(orgName);
@@ -698,12 +699,12 @@ public class DelegationPolicyImpl implements DelegationInterface, ServiceListene
      * @throws SSOException if single-sign-on token invalid or expired
      * @throws DelegationException for any other abnormal condition
      */
-    public Set getPermissions(SSOToken token, String orgName)
+    public Set<DelegationPermission> getPermissions(SSOToken token, String orgName)
         throws SSOException, DelegationException {
 
         DelegationPrivilege dp;
-        Set perms = new HashSet();
-        Set subjects;
+        Set<DelegationPermission> perms = new HashSet<>();
+        Set<String> subjects;
         AMIdentity userIdentity = null;
         AMIdentity subjectIdentity = null;
         IdSearchResults results = null;
@@ -728,7 +729,7 @@ public class DelegationPolicyImpl implements DelegationInterface, ServiceListene
                 return perms;
             }
 
-            Set privileges = getPrivileges(appToken, orgName);
+            Set<DelegationPrivilege> privileges = getPrivileges(appToken, orgName);
             if ((privileges != null) && (!privileges.isEmpty())) {
                 AMIdentityRepository idRepo =
                     new AMIdentityRepository(appToken, orgName);
@@ -736,9 +737,9 @@ public class DelegationPolicyImpl implements DelegationInterface, ServiceListene
                 ctrl.setRecursive(true);
                 ctrl.setMaxResults(-1);
                 ctrl.setTimeOut(-1);
-                Iterator it = privileges.iterator();
+                Iterator<DelegationPrivilege> it = privileges.iterator();
                 while (it.hasNext()) {
-                    dp = (DelegationPrivilege)it.next();
+                    dp = it.next();
                     subjects = dp.getSubjects();
                     if ((subjects != null) && (!subjects.isEmpty())) {
                         Iterator sit = subjects.iterator();
