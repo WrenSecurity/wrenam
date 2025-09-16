@@ -1,0 +1,17 @@
+name: Check-backport
+on:
+  pull_request_target:
+    types: ["closed", "labeled"]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  backport:
+    if: ${{ github.event.pull_request.merged }}
+    uses: WrenSecurity/.github/.github/workflows/backport-prepare.yml@main
+    with:
+      event: ${{ github.event.action }}
+      label: ${{ github.event.action == 'labeled' && github.event.label.name || '' }}
+      pull_request: ${{ toJSON(github.event.pull_request) }}
