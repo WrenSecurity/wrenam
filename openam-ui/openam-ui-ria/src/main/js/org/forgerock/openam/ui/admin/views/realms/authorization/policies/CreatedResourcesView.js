@@ -147,6 +147,8 @@ define([
         },
 
         deleteResource (e) {
+            e.stopPropagation();
+
             if (e.type === "keyup" && e.keyCode !== 13) {
                 return;
             }
