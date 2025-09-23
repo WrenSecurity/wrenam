@@ -14,7 +14,7 @@
         "classnames": "2.2.5",
         "codemirror": "^6.0.1",
         "emotion": "9.2.12",
-        "handlebars": "3.0.3",
+        "handlebars": "4.7.8",
         "json-editor": "0.7.9",
         "microplugin": "0.0.3",
         "prop-types": "15.8.1",
@@ -3284,14 +3284,6 @@
         "uri-js": "^4.2.2"
       }
     },
-    "node_modules/amdefine": {
-      "version": "1.0.1",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/amdefine/-/amdefine-1.0.1.tgz",
-      "integrity": "sha512-S2Hw0TtNkMJhIabBwIojKL9YHO5T0n5eNqWJ7Lrlel/zDbftQpxpapi8tZs3X1HWa+u+QeydGmzzNU0m09+Rcg==",
-      "engines": {
-        "node": ">=0.4.2"
-      }
-    },
     "node_modules/ansi-colors": {
       "version": "1.1.0",
       "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/ansi-colors/-/ansi-colors-1.1.0.tgz",
@@ -5232,16 +5224,6 @@
         "node": ">=4"
       }
     },
-    "node_modules/escodegen/node_modules/source-map": {
-      "version": "0.6.1",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/source-map/-/source-map-0.6.1.tgz",
-      "integrity": "sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==",
-      "dev": true,
-      "optional": true,
-      "engines": {
-        "node": ">=0.10.0"
-      }
-    },
     "node_modules/eslint": {
       "version": "8.57.0",
       "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/eslint/-/eslint-8.57.0.tgz",
@@ -6540,12 +6522,15 @@
       }
     },
     "node_modules/handlebars": {
-      "version": "3.0.3",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/handlebars/-/handlebars-3.0.3.tgz",
-      "integrity": "sha512-J9taYZrrTysRyIMmf+lR86bUys/sYqXsc1jbIqyZS3hFDwdGnoXykESARCepYv6nQYa7TjJtXgOGOPGchsjvCg==",
+      "version": "4.7.8",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/handlebars/-/handlebars-4.7.8.tgz",
+      "integrity": "sha512-vafaFqs8MZkRrSX7sFVUdo3ap/eNiLnb4IakshzvP56X5Nr1iGKAIqdX6tMlm6HcNRIkr6AxO5jFEoJzzpT8aQ==",
+      "license": "MIT",
       "dependencies": {
-        "optimist": "^0.6.1",
-        "source-map": "^0.1.40"
+        "minimist": "^1.2.5",
+        "neo-async": "^2.6.2",
+        "source-map": "^0.6.1",
+        "wordwrap": "^1.0.0"
       },
       "bin": {
         "handlebars": "bin/handlebars"
@@ -6554,8 +6539,14 @@
         "node": ">=0.4.7"
       },
       "optionalDependencies": {
-        "uglify-js": "~2.3"
+        "uglify-js": "^3.1.4"
       }
+    },
+    "node_modules/handlebars/node_modules/wordwrap": {
+      "version": "1.0.0",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/wordwrap/-/wordwrap-1.0.0.tgz",
+      "integrity": "sha512-gvVzJFlPycKc5dZN4yPkP8w7Dc37BtP1yczEneOb4uq34pXZcvrtRTmWV8W+Ume+XCxKgbjM+nevkyFPMybd4Q==",
+      "license": "MIT"
     },
     "node_modules/has-bigints": {
       "version": "1.0.2",
@@ -7812,15 +7803,6 @@
         "rimraf": "bin.js"
       }
     },
-    "node_modules/karma/node_modules/source-map": {
-      "version": "0.6.1",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/source-map/-/source-map-0.6.1.tgz",
-      "integrity": "sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==",
-      "dev": true,
-      "engines": {
-        "node": ">=0.10.0"
-      }
-    },
     "node_modules/karma/node_modules/yargs": {
       "version": "16.2.0",
       "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/yargs/-/yargs-16.2.0.tgz",
@@ -7928,16 +7910,6 @@
       },
       "engines": {
         "node": ">=4"
-      }
-    },
-    "node_modules/less/node_modules/source-map": {
-      "version": "0.6.1",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/source-map/-/source-map-0.6.1.tgz",
-      "integrity": "sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==",
-      "dev": true,
-      "optional": true,
-      "engines": {
-        "node": ">=0.10.0"
       }
     },
     "node_modules/levn": {
@@ -8872,6 +8844,12 @@
       "engines": {
         "node": ">= 0.6"
       }
+    },
+    "node_modules/neo-async": {
+      "version": "2.6.2",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/neo-async/-/neo-async-2.6.2.tgz",
+      "integrity": "sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==",
+      "license": "MIT"
     },
     "node_modules/netmask": {
       "version": "2.0.2",
@@ -10834,14 +10812,12 @@
       }
     },
     "node_modules/source-map": {
-      "version": "0.1.43",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/source-map/-/source-map-0.1.43.tgz",
-      "integrity": "sha512-VtCvB9SIQhk3aF6h+N85EaqIaBFIAfZ9Cu+NJHHVvc8BbEcnvDcFw6sqQ2dQrT6SlOrZq3tIvyD9+EGq/lJryQ==",
-      "dependencies": {
-        "amdefine": ">=0.0.4"
-      },
+      "version": "0.6.1",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/source-map/-/source-map-0.6.1.tgz",
+      "integrity": "sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==",
+      "license": "BSD-3-Clause",
       "engines": {
-        "node": ">=0.8.0"
+        "node": ">=0.10.0"
       }
     },
     "node_modules/source-map-js": {
@@ -10861,15 +10837,6 @@
       "dependencies": {
         "buffer-from": "^1.0.0",
         "source-map": "^0.6.0"
-      }
-    },
-    "node_modules/source-map-support/node_modules/source-map": {
-      "version": "0.6.1",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/source-map/-/source-map-0.6.1.tgz",
-      "integrity": "sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==",
-      "dev": true,
-      "engines": {
-        "node": ">=0.10.0"
       }
     },
     "node_modules/sparkles": {
@@ -11515,29 +11482,16 @@
       "dev": true
     },
     "node_modules/uglify-js": {
-      "version": "2.3.6",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/uglify-js/-/uglify-js-2.3.6.tgz",
-      "integrity": "sha512-T2LWWydxf5+Btpb0S/Gg/yKFmYjnX9jtQ4mdN9YRq73BhN21EhU0Dvw3wYDLqd3TooGUJlCKf3Gfyjjy/RTcWA==",
+      "version": "3.19.3",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/uglify-js/-/uglify-js-3.19.3.tgz",
+      "integrity": "sha512-v3Xu+yuwBXisp6QYTcH4UbH+xYJXqnq2m/LtQVWKWzYc1iehYnLixoQDN9FH6/j9/oybfd6W9Ghwkl8+UMKTKQ==",
+      "license": "BSD-2-Clause",
       "optional": true,
-      "dependencies": {
-        "async": "~0.2.6",
-        "optimist": "~0.3.5",
-        "source-map": "~0.1.7"
-      },
       "bin": {
         "uglifyjs": "bin/uglifyjs"
       },
       "engines": {
-        "node": ">=0.4.0"
-      }
-    },
-    "node_modules/uglify-js/node_modules/optimist": {
-      "version": "0.3.7",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/optimist/-/optimist-0.3.7.tgz",
-      "integrity": "sha512-TCx0dXQzVtSCg2OgY/bO9hjM9cV4XYx09TVK+s3+FhkjT6LovsLe+pPMzpWf+6yXK/hUizs2gUoTw3jHM0VaTQ==",
-      "optional": true,
-      "dependencies": {
-        "wordwrap": "~0.0.2"
+        "node": ">=0.8.0"
       }
     },
     "node_modules/unbox-primitive": {
@@ -14752,11 +14706,6 @@
         "uri-js": "^4.2.2"
       }
     },
-    "amdefine": {
-      "version": "1.0.1",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/amdefine/-/amdefine-1.0.1.tgz",
-      "integrity": "sha512-S2Hw0TtNkMJhIabBwIojKL9YHO5T0n5eNqWJ7Lrlel/zDbftQpxpapi8tZs3X1HWa+u+QeydGmzzNU0m09+Rcg=="
-    },
     "ansi-colors": {
       "version": "1.1.0",
       "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/ansi-colors/-/ansi-colors-1.1.0.tgz",
@@ -16228,13 +16177,6 @@
           "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/esprima/-/esprima-4.0.1.tgz",
           "integrity": "sha512-eGuFFw7Upda+g4p+QHvnW0RyTX/SVeJBDM/gCtMARO0cLuT2HcEKnTPvhjV6aGeqrCB/sbNop0Kszm0jsaWU4A==",
           "dev": true
-        },
-        "source-map": {
-          "version": "0.6.1",
-          "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/source-map/-/source-map-0.6.1.tgz",
-          "integrity": "sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==",
-          "dev": true,
-          "optional": true
         }
       }
     },
@@ -17210,13 +17152,22 @@
       }
     },
     "handlebars": {
-      "version": "3.0.3",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/handlebars/-/handlebars-3.0.3.tgz",
-      "integrity": "sha512-J9taYZrrTysRyIMmf+lR86bUys/sYqXsc1jbIqyZS3hFDwdGnoXykESARCepYv6nQYa7TjJtXgOGOPGchsjvCg==",
+      "version": "4.7.8",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/handlebars/-/handlebars-4.7.8.tgz",
+      "integrity": "sha512-vafaFqs8MZkRrSX7sFVUdo3ap/eNiLnb4IakshzvP56X5Nr1iGKAIqdX6tMlm6HcNRIkr6AxO5jFEoJzzpT8aQ==",
       "requires": {
-        "optimist": "^0.6.1",
-        "source-map": "^0.1.40",
-        "uglify-js": "~2.3"
+        "minimist": "^1.2.5",
+        "neo-async": "^2.6.2",
+        "source-map": "^0.6.1",
+        "uglify-js": "^3.1.4",
+        "wordwrap": "^1.0.0"
+      },
+      "dependencies": {
+        "wordwrap": {
+          "version": "1.0.0",
+          "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/wordwrap/-/wordwrap-1.0.0.tgz",
+          "integrity": "sha512-gvVzJFlPycKc5dZN4yPkP8w7Dc37BtP1yczEneOb4uq34pXZcvrtRTmWV8W+Ume+XCxKgbjM+nevkyFPMybd4Q=="
+        }
       }
     },
     "has-bigints": {
@@ -18027,12 +17978,6 @@
             "glob": "^7.1.3"
           }
         },
-        "source-map": {
-          "version": "0.6.1",
-          "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/source-map/-/source-map-0.6.1.tgz",
-          "integrity": "sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==",
-          "dev": true
-        },
         "yargs": {
           "version": "16.2.0",
           "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/yargs/-/yargs-16.2.0.tgz",
@@ -18184,13 +18129,6 @@
           "version": "1.6.0",
           "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/mime/-/mime-1.6.0.tgz",
           "integrity": "sha512-x0Vn8spI+wuJ1O6S7gnbaQg8Pxh4NNHb7KSINmEWKiPE4RKOplvijn+NkmYmmRgP68mc70j2EbeTFRsrswaQeg==",
-          "dev": true,
-          "optional": true
-        },
-        "source-map": {
-          "version": "0.6.1",
-          "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/source-map/-/source-map-0.6.1.tgz",
-          "integrity": "sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==",
           "dev": true,
           "optional": true
         }
@@ -18888,6 +18826,11 @@
       "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/negotiator/-/negotiator-0.6.3.tgz",
       "integrity": "sha512-+EUsqGPLsM+j/zdChZjsnX51g4XrHFOIXwfnCVPGlQk/k5giakcKsuxCObBRu6DSm9opw/O6slWbJdghQM4bBg==",
       "dev": true
+    },
+    "neo-async": {
+      "version": "2.6.2",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/neo-async/-/neo-async-2.6.2.tgz",
+      "integrity": "sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw=="
     },
     "netmask": {
       "version": "2.0.2",
@@ -20393,12 +20336,9 @@
       }
     },
     "source-map": {
-      "version": "0.1.43",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/source-map/-/source-map-0.1.43.tgz",
-      "integrity": "sha512-VtCvB9SIQhk3aF6h+N85EaqIaBFIAfZ9Cu+NJHHVvc8BbEcnvDcFw6sqQ2dQrT6SlOrZq3tIvyD9+EGq/lJryQ==",
-      "requires": {
-        "amdefine": ">=0.0.4"
-      }
+      "version": "0.6.1",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/source-map/-/source-map-0.6.1.tgz",
+      "integrity": "sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g=="
     },
     "source-map-js": {
       "version": "1.0.2",
@@ -20414,14 +20354,6 @@
       "requires": {
         "buffer-from": "^1.0.0",
         "source-map": "^0.6.0"
-      },
-      "dependencies": {
-        "source-map": {
-          "version": "0.6.1",
-          "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/source-map/-/source-map-0.6.1.tgz",
-          "integrity": "sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==",
-          "dev": true
-        }
       }
     },
     "sparkles": {
@@ -20923,26 +20855,10 @@
       "dev": true
     },
     "uglify-js": {
-      "version": "2.3.6",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/uglify-js/-/uglify-js-2.3.6.tgz",
-      "integrity": "sha512-T2LWWydxf5+Btpb0S/Gg/yKFmYjnX9jtQ4mdN9YRq73BhN21EhU0Dvw3wYDLqd3TooGUJlCKf3Gfyjjy/RTcWA==",
-      "optional": true,
-      "requires": {
-        "async": "~0.2.6",
-        "optimist": "~0.3.5",
-        "source-map": "~0.1.7"
-      },
-      "dependencies": {
-        "optimist": {
-          "version": "0.3.7",
-          "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/optimist/-/optimist-0.3.7.tgz",
-          "integrity": "sha512-TCx0dXQzVtSCg2OgY/bO9hjM9cV4XYx09TVK+s3+FhkjT6LovsLe+pPMzpWf+6yXK/hUizs2gUoTw3jHM0VaTQ==",
-          "optional": true,
-          "requires": {
-            "wordwrap": "~0.0.2"
-          }
-        }
-      }
+      "version": "3.19.3",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/uglify-js/-/uglify-js-3.19.3.tgz",
+      "integrity": "sha512-v3Xu+yuwBXisp6QYTcH4UbH+xYJXqnq2m/LtQVWKWzYc1iehYnLixoQDN9FH6/j9/oybfd6W9Ghwkl8+UMKTKQ==",
+      "optional": true
     },
     "unbox-primitive": {
       "version": "1.1.0",

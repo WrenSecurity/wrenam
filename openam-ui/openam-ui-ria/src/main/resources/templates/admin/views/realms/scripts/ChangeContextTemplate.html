@@ -5,9 +5,9 @@
     <label>
         <input type="radio" name="changeContext" id="{{_id}}" value="{{_id}}"
         {{#if ../newScript}}
-            {{#equals ../../defaultContext _id}} checked {{/equals}}
+            {{#equals ../defaultContext _id}} checked {{/equals}}
         {{else}}
-            {{#equals ../../entity.context _id}} checked {{/equals}}
+            {{#equals ../entity.context _id}} checked {{/equals}}
         {{/if}}
         >
         {{name}}
