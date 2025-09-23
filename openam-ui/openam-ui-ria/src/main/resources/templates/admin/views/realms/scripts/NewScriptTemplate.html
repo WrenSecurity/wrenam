@@ -19,7 +19,7 @@
             <div class="col-sm-9">
                 <select class="form-control" data-field="context" id="context">
                     {{#each contexts}}
-                    <option value="{{_id}}" {{#equals ../../defaultContext _id}} selected {{/equals}} >
+                    <option value="{{_id}}" {{#equals ../defaultContext _id}} selected {{/equals}} >
                         {{name}}
                     </option>
                     {{/each}}
