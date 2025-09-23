@@ -267,7 +267,7 @@ define([
             var self = this,
                 editRuleView = self.getNewRule(),
                 properties = self.getProperties(),
-                itemData = item.data(),
+                itemData = item.data().itemData,
                 disabledConditions;
 
             editRuleView.render(properties, item.parent(), self.idCount, itemData, true).then(() => {
