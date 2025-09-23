@@ -40,7 +40,7 @@ define([
             var self = this;
             this.setElement(element);
 
-            this.data = $.extend(true, [], schema);
+            this.data = $.extend(true, {}, schema);
             this.data.itemID = itemID;
 
             _.each(this.data.subjects, function (subj) {
@@ -73,8 +73,8 @@ define([
         createListItem (allSubjects, item) {
             var self = this,
                 itemToDisplay = null,
-                itemData = item.data(),
-                hiddenData = item.data(),
+                itemData = item.data().itemData,
+                hiddenData = item.data().hiddenData,
                 type,
                 list,
                 mergedData = _.merge({}, itemData, hiddenData);
