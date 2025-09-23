@@ -14,7 +14,6 @@
         "classnames": "2.2.5",
         "codemirror": "^6.0.1",
         "emotion": "9.2.12",
-        "handlebars": "4.7.8",
         "json-editor": "0.7.9",
         "microplugin": "0.0.3",
         "prop-types": "15.8.1",
@@ -6521,33 +6520,6 @@
         "node": ">= 10.13.0"
       }
     },
-    "node_modules/handlebars": {
-      "version": "4.7.8",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/handlebars/-/handlebars-4.7.8.tgz",
-      "integrity": "sha512-vafaFqs8MZkRrSX7sFVUdo3ap/eNiLnb4IakshzvP56X5Nr1iGKAIqdX6tMlm6HcNRIkr6AxO5jFEoJzzpT8aQ==",
-      "license": "MIT",
-      "dependencies": {
-        "minimist": "^1.2.5",
-        "neo-async": "^2.6.2",
-        "source-map": "^0.6.1",
-        "wordwrap": "^1.0.0"
-      },
-      "bin": {
-        "handlebars": "bin/handlebars"
-      },
-      "engines": {
-        "node": ">=0.4.7"
-      },
-      "optionalDependencies": {
-        "uglify-js": "^3.1.4"
-      }
-    },
-    "node_modules/handlebars/node_modules/wordwrap": {
-      "version": "1.0.0",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/wordwrap/-/wordwrap-1.0.0.tgz",
-      "integrity": "sha512-gvVzJFlPycKc5dZN4yPkP8w7Dc37BtP1yczEneOb4uq34pXZcvrtRTmWV8W+Ume+XCxKgbjM+nevkyFPMybd4Q==",
-      "license": "MIT"
-    },
     "node_modules/has-bigints": {
       "version": "1.0.2",
       "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/has-bigints/-/has-bigints-1.0.2.tgz",
@@ -8845,12 +8817,6 @@
         "node": ">= 0.6"
       }
     },
-    "node_modules/neo-async": {
-      "version": "2.6.2",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/neo-async/-/neo-async-2.6.2.tgz",
-      "integrity": "sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==",
-      "license": "MIT"
-    },
     "node_modules/netmask": {
       "version": "2.0.2",
       "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/netmask/-/netmask-2.0.2.tgz",
@@ -10815,6 +10781,7 @@
       "version": "0.6.1",
       "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/source-map/-/source-map-0.6.1.tgz",
       "integrity": "sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==",
+      "dev": true,
       "license": "BSD-3-Clause",
       "engines": {
         "node": ">=0.10.0"
@@ -11480,19 +11447,6 @@
       "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/uc.micro/-/uc.micro-1.0.6.tgz",
       "integrity": "sha512-8Y75pvTYkLJW2hWQHXxoqRgV7qb9B+9vFEtidML+7koHUFapnVJAZ6cKs+Qjz5Aw3aZWHMC6u0wJE3At+nSGwA==",
       "dev": true
-    },
-    "node_modules/uglify-js": {
-      "version": "3.19.3",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/uglify-js/-/uglify-js-3.19.3.tgz",
-      "integrity": "sha512-v3Xu+yuwBXisp6QYTcH4UbH+xYJXqnq2m/LtQVWKWzYc1iehYnLixoQDN9FH6/j9/oybfd6W9Ghwkl8+UMKTKQ==",
-      "license": "BSD-2-Clause",
-      "optional": true,
-      "bin": {
-        "uglifyjs": "bin/uglifyjs"
-      },
-      "engines": {
-        "node": ">=0.8.0"
-      }
     },
     "node_modules/unbox-primitive": {
       "version": "1.1.0",
@@ -17151,25 +17105,6 @@
         "glogg": "^2.2.0"
       }
     },
-    "handlebars": {
-      "version": "4.7.8",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/handlebars/-/handlebars-4.7.8.tgz",
-      "integrity": "sha512-vafaFqs8MZkRrSX7sFVUdo3ap/eNiLnb4IakshzvP56X5Nr1iGKAIqdX6tMlm6HcNRIkr6AxO5jFEoJzzpT8aQ==",
-      "requires": {
-        "minimist": "^1.2.5",
-        "neo-async": "^2.6.2",
-        "source-map": "^0.6.1",
-        "uglify-js": "^3.1.4",
-        "wordwrap": "^1.0.0"
-      },
-      "dependencies": {
-        "wordwrap": {
-          "version": "1.0.0",
-          "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/wordwrap/-/wordwrap-1.0.0.tgz",
-          "integrity": "sha512-gvVzJFlPycKc5dZN4yPkP8w7Dc37BtP1yczEneOb4uq34pXZcvrtRTmWV8W+Ume+XCxKgbjM+nevkyFPMybd4Q=="
-        }
-      }
-    },
     "has-bigints": {
       "version": "1.0.2",
       "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/has-bigints/-/has-bigints-1.0.2.tgz",
@@ -18827,11 +18762,6 @@
       "integrity": "sha512-+EUsqGPLsM+j/zdChZjsnX51g4XrHFOIXwfnCVPGlQk/k5giakcKsuxCObBRu6DSm9opw/O6slWbJdghQM4bBg==",
       "dev": true
     },
-    "neo-async": {
-      "version": "2.6.2",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/neo-async/-/neo-async-2.6.2.tgz",
-      "integrity": "sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw=="
-    },
     "netmask": {
       "version": "2.0.2",
       "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/netmask/-/netmask-2.0.2.tgz",
@@ -20338,7 +20268,8 @@
     "source-map": {
       "version": "0.6.1",
       "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/source-map/-/source-map-0.6.1.tgz",
-      "integrity": "sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g=="
+      "integrity": "sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==",
+      "dev": true
     },
     "source-map-js": {
       "version": "1.0.2",
@@ -20853,12 +20784,6 @@
       "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/uc.micro/-/uc.micro-1.0.6.tgz",
       "integrity": "sha512-8Y75pvTYkLJW2hWQHXxoqRgV7qb9B+9vFEtidML+7koHUFapnVJAZ6cKs+Qjz5Aw3aZWHMC6u0wJE3At+nSGwA==",
       "dev": true
-    },
-    "uglify-js": {
-      "version": "3.19.3",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/uglify-js/-/uglify-js-3.19.3.tgz",
-      "integrity": "sha512-v3Xu+yuwBXisp6QYTcH4UbH+xYJXqnq2m/LtQVWKWzYc1iehYnLixoQDN9FH6/j9/oybfd6W9Ghwkl8+UMKTKQ==",
-      "optional": true
     },
     "unbox-primitive": {
       "version": "1.1.0",
