@@ -54,7 +54,6 @@ const MODULE_RESOURCES = {
     "react-input-autosize/dist/react-input-autosize.min.js": "libs/react-input-autosize.js",
     "emotion/dist/emotion.umd.min.js": "libs/emotion.js",
     "backbone.paginator/lib/backbone.paginator.min.js": "libs/backbone.paginator.js",
-    "handlebars/dist/handlebars.amd.min.js": "libs/handlebars.js"
     /* eslint-enable max-len */
 };
 

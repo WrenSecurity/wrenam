@@ -49,7 +49,6 @@
     "classnames": "2.2.5",
     "codemirror": "^6.0.1",
     "emotion": "9.2.12",
-    "handlebars": "3.0.3",
     "json-editor": "0.7.9",
     "microplugin": "0.0.3",
     "prop-types": "15.8.1",
