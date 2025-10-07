@@ -16,7 +16,9 @@
  * Portions Copyrighted 2016 Agile Digital Engineering
  * Portions Copyright 2022-2025 Wren Security
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -1101,7 +1103,7 @@
                 <version>${snakeyaml.version}</version>
             </dependency>
 
-           <!-- Maven Plugin Dependencies -->
+            <!-- Maven Plugin Dependencies -->
 
             <dependency>
                 <groupId>org.apache.maven</groupId>
@@ -1340,7 +1342,8 @@
                 <artifactId>groovy-sandbox</artifactId>
                 <version>${groovy-sandbox.version}</version>
 
-                <!-- Groovy-sandbox depends on Groovy 1.8.5, so ignore that in favour of our version. -->
+                <!-- Groovy-sandbox depends on Groovy 1.8.5, so ignore that in favour of our
+                version. -->
                 <exclusions>
                     <exclusion>
                         <groupId>org.codehaus.groovy</groupId>
