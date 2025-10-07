@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions copyright 2025 Wren Security.
  */
 package org.forgerock.openam.i18n.apidescriptor;
 
@@ -87,7 +88,7 @@ public final class ApiDescriptorConstants {
 
     /** Constant used as key to API Descriptor translations **/
     public static final String PATCH_DESCRIPTION = PATCH + DESCRIPTION;
-    
+
     /** Constant used as key to API Descriptor translations **/
     public static final String ERROR_400_DESCRIPTION = ERROR + "400." + DESCRIPTION;
 
@@ -153,6 +154,9 @@ public final class ApiDescriptorConstants {
 
     /** Constant used as key to API Descriptor translations **/
     public static final String OATH_DEVICES_RESOURCE = TRANSLATION_KEY_PREFIX + "OathDevicesResource#";
+
+    /** Constant used as key to API Descriptor translations **/
+    public static final String WEBAUTHN_DEVICES_RESOURCE = TRANSLATION_KEY_PREFIX + "WebAuthnDevicesResource#";
 
     /** Constant used as key to API Descriptor translations **/
     public static final String SCRIPT_RESOURCE = TRANSLATION_KEY_PREFIX + "ScriptResource#";

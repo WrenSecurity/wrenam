@@ -12,25 +12,18 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions copyright 2025 Wren Security.
  */
 
 package org.forgerock.openam.core.rest.devices;
 
 import static org.forgerock.json.resource.Responses.newQueryResponse;
 import static org.forgerock.json.resource.Responses.newResourceResponse;
-import static org.forgerock.openam.i18n.apidescriptor.ApiDescriptorConstants.DELETE_DESCRIPTION;
-import static org.forgerock.openam.i18n.apidescriptor.ApiDescriptorConstants.QUERY_DESCRIPTION;
 import static org.forgerock.util.promise.Promises.newResultPromise;
-import static org.forgerock.openam.i18n.apidescriptor.ApiDescriptorConstants.USER_DEVICES_RESOURCE;
 
 import java.text.ParseException;
 import java.util.List;
 
-import org.forgerock.api.annotations.ApiError;
-import org.forgerock.api.annotations.Delete;
-import org.forgerock.api.annotations.Operation;
-import org.forgerock.api.annotations.Query;
-import org.forgerock.api.enums.QueryType;
 import org.forgerock.json.JsonValue;
 import org.forgerock.json.resource.ActionRequest;
 import org.forgerock.json.resource.ActionResponse;
@@ -57,9 +50,9 @@ import org.forgerock.util.promise.Promise;
  *
  * @since 13.0.0
  */
-public abstract class UserDevicesResource<T extends UserDevicesDao> extends RealmAwareResource {
+public abstract class UserDevicesResource<T extends UserDevicesDao<?>> extends RealmAwareResource {
 
-    static final String UUID_KEY = "uuid";
+    protected static final String UUID_KEY = "uuid";
 
     protected final T userDevicesDao;
 
