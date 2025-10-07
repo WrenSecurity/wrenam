@@ -35,7 +35,7 @@ import org.forgerock.util.annotations.VisibleForTesting;
  * A TwoFADevice must have the ability to skip the module, if desired by the user and
  * the configuration of that server allows it.
  */
-public abstract class TwoFADevicesResource<T extends UserDevicesDao> extends UserDevicesResource<T> {
+public abstract class TwoFADevicesResource<T extends UserDevicesDao<?>> extends UserDevicesResource<T> {
 
     protected final static String SKIP = "skip";
     protected final static String CHECK = "check";
