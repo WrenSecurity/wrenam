@@ -25,6 +25,7 @@
  * $Id: ISAuthConstants.java,v 1.21 2009/11/25 12:05:07 manish_rustagi Exp $
  *
  * Portions Copyrighted 2010-2016 ForgeRock AS.
+ * Portions Copyrighted 2025 Wren Security.
  */
 
 package com.sun.identity.authentication.util;
@@ -206,6 +207,8 @@ public interface ISAuthConstants {
     public static final String AUTH_ATTR_PREFIX_NEW = "sunAMAuth";
 
     public static final String AUTH_ATTR_PREFIX_FORGEROCK = "forgerock-am-auth-";
+
+    public static final String AUTH_ATTR_PREFIX_WRENSEC = "wrensec-am-auth-";
 
     /**
      * LDAP Service Attributes
