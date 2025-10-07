@@ -1,0 +1,47 @@
+<div class="container">
+    {{#if reqs.header}}
+    <div class="page-header">
+        <h1 class="text-center">{{reqs.header}}</h1>
+    </div>
+    {{/if}}
+    <form action="" method="post" class="form login col-sm-6 col-sm-offset-3" autocomplete="off" data-stage="{{reqs.stage}}">
+        <fieldset class="row">
+            {{#each reqs.callbacks}}
+            {{#equals type "HiddenValueCallback"}}
+            <div class="form-group">
+                {{callbackRender}}
+            </div>
+            {{/equals}}
+
+            {{#equals type "TextOutputCallback"}}
+            <div class="form-group">
+                {{callbackRender}}
+            </div>
+            {{/equals}}
+
+            {{#equals type "ConfirmationCallback"}}
+            <div class="form-group">
+                <input id="button_1"
+                       name="callback_2"
+                       role="button"
+                       style="display: none;"
+                       type="submit"
+                       value=""
+                       index="0">
+                {{#each output}}
+                {{#equals name "options"}}
+                <input name="callback_2"
+                       class="btn btn-lg btn-block btn-uppercase btn-default"
+                       id="button_2"
+                       role="button"
+                       type="submit"
+                       value="{{this.value.[1]}}"
+                       index="1">
+                {{/equals}}
+                {{/each}}
+            </div>
+            {{/equals}}
+            {{/each}}
+        </fieldset>
+    </form>
+</div>
