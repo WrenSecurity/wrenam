@@ -97,7 +97,7 @@
     </repositories>
 
     <properties>
-        <pgpVerifyKeysVersion>1.9.2</pgpVerifyKeysVersion>
+        <pgpVerifyKeysVersion>1.9.4</pgpVerifyKeysVersion>
 
         <!-- XXX Skip PMD plugin execution (https://github.com/WrenSecurity/wrenam/issues/71) -->
         <pmd.skip>true</pmd.skip>

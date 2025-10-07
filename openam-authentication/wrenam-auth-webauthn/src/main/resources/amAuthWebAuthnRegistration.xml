@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+ * The contents of this file are subject to the terms of the Common Development and
+ * Distribution License (the License). You may not use this file except in compliance with the
+ * License.
+ *
+ * You can obtain a copy of the License at legal/CDDLv1.1.txt. See the License for the
+ * specific language governing permission and limitations under the License.
+ *
+ * When distributing Covered Software, include this CDDL Header Notice in each file and include
+ * the License file at legal/CDDLv1.1.txt. If applicable, add the following below the CDDL
+ * Header, with the fields enclosed by brackets [] replaced by your own identifying
+ * information: "Portions copyright [year] [name of copyright owner]".
+ *
+ * Copyright 2025 Wren Security. All rights reserved.
+-->
+<!DOCTYPE ServicesConfiguration
+        PUBLIC "=//iPlanet//Service Management Services (SMS) 1.0 DTD//EN"
+        "jar://com/sun/identity/sm/sms.dtd">
+<ServicesConfiguration>
+    <Service name="iPlanetAMAuthWebAuthnRegistrationService" version="1.0">
+        <Schema
+                i18nFileName="amAuthWebAuthnRegistration"
+                serviceHierarchy="/DSAMEConfig/authentication/iPlanetAMAuthWebAuthnRegistrationService"
+                revisionNumber="1"
+                resourceName="amAuthWebAuthnRegistration"
+                i18nKey="iPlanetAMAuthWebAuthnRegistrationServiceDescription">
+            <Organization>
+                <AttributeSchema
+                        name="wrensec-am-auth-webauthnregistration-attestation"
+                        type="single_choice"
+                        syntax="string"
+                        resourceName="attestation"
+                        order="100"
+                        i18nKey="attestation">
+                    <ChoiceValues>
+                        <ChoiceValue i18nKey="none">none</ChoiceValue>
+                        <ChoiceValue i18nKey="direct">direct</ChoiceValue>
+                        <ChoiceValue i18nKey="enterprise">enterprise</ChoiceValue>
+                        <ChoiceValue i18nKey="indirect">indirect</ChoiceValue>
+                    </ChoiceValues>
+                    <DefaultValues>
+                        <Value>none</Value>
+                    </DefaultValues>
+                </AttributeSchema>
+                <AttributeSchema
+                        name="wrensec-am-auth-webauthnregistration-authenticator-attachment"
+                        type="single_choice"
+                        syntax="string"
+                        resourceName="authenticatorAttachment"
+                        order="200"
+                        i18nKey="authenticatorAttachment">
+                    <ChoiceValues>
+                        <ChoiceValue i18nKey="platform">platform</ChoiceValue>
+                        <ChoiceValue i18nKey="crossPlatform">cross-platform</ChoiceValue>
+                        <ChoiceValue i18nKey="empty">[Empty]</ChoiceValue>
+                    </ChoiceValues>
+                    <DefaultValues>
+                        <Value>[Empty]</Value>
+                    </DefaultValues>
+                </AttributeSchema>
+                <AttributeSchema
+                        name="wrensec-am-auth-webauthnregistration-resident-key"
+                        type="single_choice"
+                        syntax="string"
+                        i18nKey="residentKey"
+                        order="202"
+                        resourceName="residentKey">
+                    <ChoiceValues>
+                        <ChoiceValue i18nKey="discouraged">discouraged</ChoiceValue>
+                        <ChoiceValue i18nKey="preferred">preferred</ChoiceValue>
+                        <ChoiceValue i18nKey="required">required</ChoiceValue>
+                    </ChoiceValues>
+                    <DefaultValues>
+                        <Value>discouraged</Value>
+                    </DefaultValues>
+                </AttributeSchema>
+                <AttributeSchema
+                        name="wrensec-am-auth-webauthnregistration-user-verification"
+                        type="single_choice"
+                        syntax="string"
+                        i18nKey="userVerification"
+                        order="203"
+                        resourceName="userVerification">
+                    <ChoiceValues>
+                        <ChoiceValue i18nKey="required">required</ChoiceValue>
+                        <ChoiceValue i18nKey="preferred">preferred</ChoiceValue>
+                        <ChoiceValue i18nKey="discouraged">discouraged</ChoiceValue>
+                    </ChoiceValues>
+                    <DefaultValues>
+                        <Value>preferred</Value>
+                    </DefaultValues>
+                </AttributeSchema>
+                <AttributeSchema
+                        name="wrensec-am-auth-webauthnregistration-rp-id"
+                        type="single"
+                        syntax="string"
+                        i18nKey="rpId"
+                        order="300"
+                        resourceName="rpId">
+                    <DefaultValues>
+                        <Value>@SERVER_HOST@</Value>
+                    </DefaultValues>
+                </AttributeSchema>
+                <AttributeSchema
+                        name="wrensec-am-auth-webauthnregistration-rp-name"
+                        type="single"
+                        syntax="string"
+                        i18nKey="rpName"
+                        order="500"
+                        resourceName="rpName">
+                    <DefaultValues>
+                        <Value>Relying party</Value>
+                    </DefaultValues>
+                </AttributeSchema>
+                <AttributeSchema
+                        name="wrensec-am-auth-webauthnregistration-timeout"
+                        type="single"
+                        syntax="number_range"
+                        rangeStart="0"
+                        rangeEnd="2147483647"
+                        i18nKey="timeout"
+                        order="600"
+                        resourceName="timeout">
+                    <DefaultValues>
+                        <Value>120000</Value>
+                    </DefaultValues>
+                </AttributeSchema>
+                <AttributeSchema
+                        name="wrensec-am-auth-webauthnregistration-auth-level"
+                        type="single"
+                        syntax="number_range"
+                        rangeStart="0"
+                        rangeEnd="2147483647"
+                        i18nKey="authenticationLevel"
+                        order="700"
+                        resourceName="authenticationLevel">
+                    <DefaultValues>
+                        <Value>0</Value>
+                    </DefaultValues>
+                </AttributeSchema>
+                <AttributeSchema
+                        name="wrensec-am-auth-webauthnregistration-user-display-name-attr"
+                        type="single"
+                        syntax="string"
+                        i18nKey="userDisplayNameAttr"
+                        order="800"
+                        resourceName="userDisplayNameAttr">
+                    <DefaultValues>
+                        <Value>cn</Value>
+                    </DefaultValues>
+                </AttributeSchema>
+                <AttributeSchema
+                        name="wrensec-am-auth-webauthnregistration-user-id-attr"
+                        type="single"
+                        syntax="string"
+                        i18nKey="userIdAttr"
+                        order="900"
+                        resourceName="userIdAttr">
+                    <DefaultValues>
+                        <Value>entryUUID</Value>
+                    </DefaultValues>
+                </AttributeSchema>
+                <SubSchema name="serverconfig" inheritance="multiple" resourceName="USE-PARENT">
+                    <AttributeSchema
+                            name="wrensec-am-auth-webauthnregistration-attestation"
+                            type="single_choice"
+                            syntax="string"
+                            resourceName="attestation"
+                            order="100"
+                            i18nKey="attestation">
+                        <ChoiceValues>
+                            <ChoiceValue i18nKey="none">none</ChoiceValue>
+                            <ChoiceValue i18nKey="direct">direct</ChoiceValue>
+                            <ChoiceValue i18nKey="indirect">indirect</ChoiceValue>
+                        </ChoiceValues>
+                        <DefaultValues>
+                            <Value>none</Value>
+                        </DefaultValues>
+                    </AttributeSchema>
+                    <AttributeSchema
+                            name="wrensec-am-auth-webauthnregistration-authenticator-attachment"
+                            type="single_choice"
+                            syntax="string"
+                            resourceName="authenticatorAttachment"
+                            order="200"
+                            i18nKey="authenticatorAttachment">
+                        <ChoiceValues>
+                            <ChoiceValue i18nKey="platform">platform</ChoiceValue>
+                            <ChoiceValue i18nKey="crossPlatform">cross-platform</ChoiceValue>
+                            <ChoiceValue i18nKey="empty">[Empty]</ChoiceValue>
+                        </ChoiceValues>
+                        <DefaultValues>
+                            <Value>[Empty]</Value>
+                        </DefaultValues>
+                    </AttributeSchema>
+                    <AttributeSchema
+                            name="wrensec-am-auth-webauthnregistration-resident-key"
+                            type="single_choice"
+                            syntax="string"
+                            i18nKey="residentKey"
+                            order="202"
+                            resourceName="residentKey">
+                        <ChoiceValues>
+                            <ChoiceValue i18nKey="discouraged">discouraged</ChoiceValue>
+                            <ChoiceValue i18nKey="preferred">preferred</ChoiceValue>
+                            <ChoiceValue i18nKey="required">required</ChoiceValue>
+                        </ChoiceValues>
+                        <DefaultValues>
+                            <Value>discouraged</Value>
+                        </DefaultValues>
+                    </AttributeSchema>
+                    <AttributeSchema
+                            name="wrensec-am-auth-webauthnregistration-user-verification"
+                            type="single_choice"
+                            syntax="string"
+                            i18nKey="userVerification"
+                            order="203"
+                            resourceName="userVerification">
+                        <ChoiceValues>
+                            <ChoiceValue i18nKey="required">required</ChoiceValue>
+                            <ChoiceValue i18nKey="preferred">preferred</ChoiceValue>
+                            <ChoiceValue i18nKey="discouraged">discouraged</ChoiceValue>
+                        </ChoiceValues>
+                        <DefaultValues>
+                            <Value>preferred</Value>
+                        </DefaultValues>
+                    </AttributeSchema>
+                    <AttributeSchema
+                            name="wrensec-am-auth-webauthnregistration-rp-id"
+                            type="single"
+                            syntax="string"
+                            i18nKey="rpId"
+                            order="300"
+                            resourceName="rpId">
+                        <DefaultValues>
+                            <Value>@SERVER_HOST@</Value>
+                        </DefaultValues>
+                    </AttributeSchema>
+                    <AttributeSchema
+                            name="wrensec-am-auth-webauthnregistration-rp-name"
+                            type="single"
+                            syntax="string"
+                            i18nKey="rpName"
+                            order="500"
+                            resourceName="rpName">
+                        <DefaultValues>
+                            <Value>Relying party</Value>
+                        </DefaultValues>
+                    </AttributeSchema>
+                    <AttributeSchema
+                            name="wrensec-am-auth-webauthnregistration-timeout"
+                            type="single"
+                            syntax="number_range"
+                            rangeStart="0"
+                            rangeEnd="2147483647"
+                            i18nKey="timeout"
+                            order="600"
+                            resourceName="timeout">
+                        <DefaultValues>
+                            <Value>120000</Value>
+                        </DefaultValues>
+                    </AttributeSchema>
+                    <AttributeSchema
+                            name="wrensec-am-auth-webauthnregistration-auth-level"
+                            type="single"
+                            syntax="number_range"
+                            rangeStart="0"
+                            rangeEnd="2147483647"
+                            i18nKey="authenticationLevel"
+                            order="700"
+                            resourceName="authenticationLevel">
+                        <DefaultValues>
+                            <Value>0</Value>
+                        </DefaultValues>
+                    </AttributeSchema>
+                    <AttributeSchema
+                            name="wrensec-am-auth-webauthnregistration-user-display-name-attr"
+                            type="single"
+                            syntax="string"
+                            i18nKey="userDisplayNameAttr"
+                            order="800"
+                            resourceName="userDisplayNameAttr">
+                        <DefaultValues>
+                            <Value>cn</Value>
+                        </DefaultValues>
+                    </AttributeSchema>
+                    <AttributeSchema
+                            name="wrensec-am-auth-webauthnregistration-user-id-attr"
+                            type="single"
+                            syntax="string"
+                            i18nKey="userIdAttr"
+                            order="900"
+                            resourceName="userIdAttr">
+                        <DefaultValues>
+                            <Value>entryUUID</Value>
+                        </DefaultValues>
+                    </AttributeSchema>
+                </SubSchema>
+            </Organization>
+        </Schema>
+    </Service>
+</ServicesConfiguration>
