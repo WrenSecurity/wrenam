@@ -23,9 +23,13 @@
                                     <i class="fa fa-ellipsis-v fa-lg"></i>
                                 </button>
                                 <ul class="dropdown-menu pull-left" role="menu">
+                                    {{#equals type "webAuthn"}}
+                                    <li><a data-delete href="#" role="button" aria-haspopup="true"><i class="fa fa-times"></i> {{ t "common.form.delete" }}</a></li>
+                                    {{else}}
                                     <li><a data-recovery-codes href="#" role="button" aria-haspopup="true"><i class="fa fa-list"></i> {{ t "openam.authDevices.menu.recoveryCodes" }}</a></li>
                                     <li role="separator" class="divider"></li>
                                     <li><a data-delete href="#" role="button" aria-haspopup="true"><i class="fa fa-times"></i> {{ t "common.form.delete" }}</a></li>
+                                    {{/equals}}
                                 </ul>
                             </div>
                             <a data-details href="#">
