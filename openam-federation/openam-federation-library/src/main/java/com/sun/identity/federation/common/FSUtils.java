@@ -25,6 +25,7 @@
  * $Id: FSUtils.java,v 1.10 2009/11/20 23:52:57 ww203982 Exp $
  *
  * Portions Copyrighted 2013-2017 ForgeRock AS.
+ * Portions Copyrighted 2025 Wren Security
  */
 
 package com.sun.identity.federation.common;
@@ -74,10 +75,10 @@ public class FSUtils {
     public static IFSConstants sc;
     public static ResourceBundle bundle =
         Locale.getInstallResourceBundle(BUNDLE_NAME);
-    public static Debug debug = Debug.getInstance("libIDFF");    
+    public static Debug debug = Debug.getInstance("libIDFF");
     private static SecureRandom random = new SecureRandom();
-    public static final String FSID_PREFIX = "f"; 
-    public static IDFFMetaManager metaInstance = null;    
+    public static final String FSID_PREFIX = "f";
+    public static IDFFMetaManager metaInstance = null;
 
     private static String server_protocol =
         SystemPropertiesManager.get(Constants.AM_SERVER_PROTOCOL);
@@ -116,7 +117,7 @@ public class FSUtils {
             System.err.println(mre.getMessage());
             System.exit(1);
         }
-    } 
+    }
 
     /**
      * Generates an ID String with length of IFSConstants.ID_LENGTH.
@@ -136,11 +137,11 @@ public class FSUtils {
 
         return encodedID;
     }
-    
+
     /**
-     * Generates source ID String 
-     * @param entityID the entity ID of the source site 
-     * @return source ID 
+     * Generates source ID String
+     * @param entityID the entity ID of the source site
+     * @return source ID
      */
     public static String generateSourceID(String entityID) {
         MessageDigest md = null;
@@ -159,7 +160,7 @@ public class FSUtils {
         md.update(bytes);
         return SAMLUtils.byteArrayToString(md.digest());
     }
-    
+
     /**
      * Generates assertion handle.
      * @return 20-byte random string to be used to form an artifact.
@@ -176,7 +177,7 @@ public class FSUtils {
         }
         return result;
     }
-    
+
     /**
      * Converts a string to Base64 encoded string.
      * @param succinctID provider's succinctID string
@@ -213,7 +214,7 @@ public class FSUtils {
     public static void checkHTTPRequestLength(HttpServletRequest request)
         throws ServletException
     {
-        // avoid the DOS attack for SOAP messaging 
+        // avoid the DOS attack for SOAP messaging
         int maxContentLength = SAMLUtils.getMaxContentLength();
 
         if (maxContentLength != 0) {
@@ -226,14 +227,14 @@ public class FSUtils {
             if (length > maxContentLength) {
                 if (debug.messageEnabled()) {
                     debug.message("FSUtils.checkHTTPRequestLength: " +
-                        "content length too large" + length); 
+                        "content length too large" + length);
                 }
                 throw new ServletException(
                     bundle.getString("largeContentLength"));
              }
-        }    
+        }
     }
-   
+
 /**
      * Test if url in argument is
      *  in  the same web container as current opensso web
@@ -262,7 +263,7 @@ public class FSUtils {
             String targetHost = target.getHost();
             int targetPort = target.getPort();
             if (debug.messageEnabled()) {
-		FSUtils.debug.message("FSUtils.isSameContainer: targetHost=" + 
+		FSUtils.debug.message("FSUtils.isSameContainer: targetHost=" +
 			targetHost + " targetPort=" + targetPort);
             }
             int index = url.indexOf(deploymentURI + "/");
@@ -286,14 +287,14 @@ public class FSUtils {
         }
         return result;
     }
- 
+
     /**
      * Forwards or redirects to a new URL. This method will do forwarding
-     * if the target url is in  the same web deployment URI as current web 
-     * apps. Otherwise will do redirecting.   
+     * if the target url is in  the same web deployment URI as current web
+     * apps. Otherwise will do redirecting.
      * @param request HttpServletRequest
      * @param response HttpServletResponse
-     * @param url the target URL to be forwarded to redirected.  
+     * @param url the target URL to be forwarded to redirected.
      */
     public static void forwardRequest(
         HttpServletRequest request,
@@ -322,46 +323,46 @@ public class FSUtils {
 
         try {
             //get source host and port
-            String sourceHost = request.getServerName();            
+            String sourceHost = request.getServerName();
             int sourcePort = request.getServerPort();
             FSUtils.debug.message("FSUtils.forwardRequest: " +
                 "SourceHost=" + sourceHost + " SourcePort="+ sourcePort);
             //get target host and port
             URL target = new URL(newUrl);
             String targetHost = target.getHost();
-            int targetPort = target.getPort();            
-            FSUtils.debug.message("FSUtils.forwardRequest: targetHost=" 
+            int targetPort = target.getPort();
+            FSUtils.debug.message("FSUtils.forwardRequest: targetHost="
                 + targetHost + " targetPort=" + targetPort);
- 
+
             /**
              * IBM websphere is not able to handle forwards with long urls.
-             */ 
+             */
             boolean isWebSphere = false;
             String container = SystemConfigurationUtil.getProperty(
                 Constants.IDENTITY_WEB_CONTAINER);
             if (container != null && (container.indexOf("IBM") != -1)) {
                isWebSphere = true;
             }
-            
-                        
+
+
             int index = newUrl.indexOf(deploymentURI + "/");
-            if( !(sourceHost.equals(targetHost)) || 
-                !(sourcePort == targetPort) || 
+            if( !(sourceHost.equals(targetHost)) ||
+                !(sourcePort == targetPort) ||
                 !(index > 0) || isWebSphere)
             {
                 FSUtils.debug.message("FSUtils.forwardRequest: Source and " +
-                    "Target are not on the same container." + 
-                    "Redirecting to target");            
+                    "Target are not on the same container." +
+                    "Redirecting to target");
                 response.sendRedirect(newUrl);
                 return;
-            } else {      
+            } else {
                 String resource = newUrl.substring(
                     index + deploymentURI.length());
                 if (FSUtils.debug.messageEnabled()) {
                     FSUtils.debug.message(
                         "FSUtils.forwardRequest: Forwarding to :" + resource);
-                }  
-                RequestDispatcher dispatcher = 
+                }
+                RequestDispatcher dispatcher =
                     request.getRequestDispatcher(resource);
                 try {
                     dispatcher.forward(request, response);
@@ -370,7 +371,7 @@ public class FSUtils {
                         + "occured while trying to forward to resource:" +
                         resource , e);
                 }
-            } 
+            }
         } catch (Exception ex) {
             FSUtils.debug.error("FSUtils.forwardRequest: Exception occured",ex);
         }
@@ -380,9 +381,9 @@ public class FSUtils {
      * Returns entity ID from the Succinct ID.
      * @param realm The realm under which the entity resides.
      * @param succinctID Succinct ID.
-     * @return String entity ID; or <code>null</code> for failure in 
+     * @return String entity ID; or <code>null</code> for failure in
      *  converting the succinct id to entity id.
-     */ 
+     */
     private static String getProviderIDFromSuccinctID(
         String realm, String succinctID) {
         if (succinctID == null) {
@@ -414,7 +415,7 @@ public class FSUtils {
         }
 
         String succinctID = request.getParameter(IFSConstants.PROVIDER_ID_KEY);
-        if ((succinctID == null) || succinctID.length() == 0) { 
+        if ((succinctID == null) || succinctID.length() == 0) {
            debug.message("FSUtils.findPreferredIDP::Pref IDP not found.");
            return null;
         }
@@ -427,7 +428,7 @@ public class FSUtils {
             if ((preferredSuccinctId.length() < 28) &&
                  st.hasMoreTokens())
             {
-                preferredSuccinctId = 
+                preferredSuccinctId =
                     preferredSuccinctId + "+" + st.nextToken();
             }
         }
@@ -441,7 +442,7 @@ public class FSUtils {
     /**
      * Removes new line characters (useful for Base64 decoding)
      * @param s String
-     * @return result String 
+     * @return result String
      */
     public static String removeNewLineChars(String s) {
         String retString = null;
@@ -485,7 +486,7 @@ public class FSUtils {
     }
 
     /*
-     * Returns the Authentication Domain URL Mappings for the given 
+     * Returns the Authentication Domain URL Mappings for the given
      * organization.
      * @param orgDN dn of the organization/realm name
      * @return authentication domain
@@ -686,7 +687,7 @@ public class FSUtils {
             Set<String> domains = SystemConfigurationUtil.getCookieDomainsForRequest(request);
             for (String domain : domains) {
                 cookie = CookieUtils.newCookie(cookieName, cookieValue, "/", domain);
-                CookieUtils.addCookieToResponse(response, cookie);
+                CookieUtils.addCookieToResponse(response, cookie, true);
             }
         }
     }
