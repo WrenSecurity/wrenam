@@ -25,6 +25,7 @@
  * $Id: CookieUtils.java,v 1.6 2009/10/02 00:08:26 ericow Exp $
  *
  * Portions Copyrighted 2014-2016 ForgeRock AS.
+ * Portions Copyrighted 2025 Wren Security
  */
 
 package com.sun.identity.shared.encode;
@@ -57,18 +58,18 @@ import jakarta.servlet.http.HttpServletResponse;
  * Implements utility methods for handling Cookie.
  */
 public class CookieUtils {
-    static boolean secureCookie = 
-        (SystemPropertiesManager.get(Constants.AM_COOKIE_SECURE) != null) && 
+    static boolean secureCookie =
+        (SystemPropertiesManager.get(Constants.AM_COOKIE_SECURE) != null) &&
         (SystemPropertiesManager.get(Constants.AM_COOKIE_SECURE).
             equalsIgnoreCase("true"));
 
-    static boolean cookieHttpOnly = 
-        (SystemPropertiesManager.get(Constants.AM_COOKIE_HTTPONLY) != null) && 
+    static boolean cookieHttpOnly =
+        (SystemPropertiesManager.get(Constants.AM_COOKIE_HTTPONLY) != null) &&
         (SystemPropertiesManager.get(Constants.AM_COOKIE_HTTPONLY).
             equalsIgnoreCase("true"));
 
-    static boolean cookieEncoding = 
-        (SystemPropertiesManager.get(Constants.AM_COOKIE_ENCODE) != null) && 
+    static boolean cookieEncoding =
+        (SystemPropertiesManager.get(Constants.AM_COOKIE_ENCODE) != null) &&
         (SystemPropertiesManager.get(Constants.AM_COOKIE_ENCODE)
             .equalsIgnoreCase("true"));
 
@@ -85,21 +86,10 @@ public class CookieUtils {
     private static int defAge = -1;
 
     static Debug debug = Debug.getInstance("amCookieUtils");
-    private static final Method setHttpOnlyMethod;
-
-    static {
-        Method method = null;
-        try {
-            method = Cookie.class.getMethod("setHttpOnly", boolean.class);
-        } catch (NoSuchMethodException nsme) {
-            debug.message("This is not a Java EE 6+ container, Cookie#setHttpOnly(boolean) is not available");
-        }
-        setHttpOnlyMethod = method;
-    }
 
     /**
      * Gets property value of "com.iplanet.am.cookie.name"
-     * 
+     *
      * @return the property value of "com.iplanet.am.cookie.name"
      */
     public static String getAmCookieName() {
@@ -108,7 +98,7 @@ public class CookieUtils {
 
     /**
      * Returns property value of "com.iplanet.am.pcookie.name"
-     * 
+     *
      * @return the property value of "com.iplanet.am.pcookie.name"
      */
     public static String getAmPCookieName() {
@@ -117,7 +107,7 @@ public class CookieUtils {
 
     /**
      * Returns property value of "com.iplanet.services.cdsso.cookiedomain"
-     * 
+     *
      * @return the property value of "com.iplanet.services.cdsso.cookiedomain"
      */
     public static Set getCdssoCookiedomain() {
@@ -138,12 +128,12 @@ public class CookieUtils {
             }
         }
 
-        return cookieDomains.isEmpty() ? Collections.EMPTY_SET : cookieDomains; 
+        return cookieDomains.isEmpty() ? Collections.EMPTY_SET : cookieDomains;
     }
 
     /**
      * Returns property value of "com.sun.identity.federation.fedCookieName"
-     * 
+     *
      * @return the property value of "com.sun.identity.federation.fedCookieName"
      */
     public static String getFedCookieName() {
@@ -152,7 +142,7 @@ public class CookieUtils {
 
     /**
      * Returns property value of "com.iplanet.am.cookie.secure"
-     * 
+     *
      * @return the property value of "com.iplanet.am.cookie.secure"
      */
     public static boolean isCookieSecure() {
@@ -161,7 +151,7 @@ public class CookieUtils {
 
     /**
      * Returns property value of "com.sun.identity.cookie.httponly"
-     * 
+     *
      * @return the property value of "com.sun.identity.cookie.httponly"
      */
     public static boolean isCookieHttpOnly() {
@@ -170,7 +160,7 @@ public class CookieUtils {
 
     /**
      * Returns value of cookie that has mached name in servlet request
-     * 
+     *
      * @param req HTTP Servlet Request.
      * @param name Name in servlet request
      * @return value of that name of cookie
@@ -191,7 +181,7 @@ public class CookieUtils {
 
     /**
      * Gets cookie object that has mached name in servlet request
-     * 
+     *
      * @param req HTTP Servlet Request.
      * @param name Name in servlet request
      * @return value of that name of cookie
@@ -210,7 +200,7 @@ public class CookieUtils {
 
     /**
      * Returns normalized value of cookie
-     * 
+     *
      * @param cookie Cookie object.
      * @return normalized value of cookie.
      */
@@ -227,7 +217,7 @@ public class CookieUtils {
 
     /**
      * Gets Array of cookie in servlet request.
-     * 
+     *
      * @param req HTTP Servlet Request.
      */
     public static Cookie[] getCookieArrayFromReq(HttpServletRequest req) {
@@ -273,11 +263,11 @@ public class CookieUtils {
 
     /**
      * Returns a cookie with a specified name and value.
-     * 
+     *
      * @param name Name of the cookie.
-     * 
+     *
      * @param value Value of the cookie.
-     * 
+     *
      * @return constructed cookie.
      */
     public static Cookie newCookie(String name, String value) {
@@ -287,10 +277,10 @@ public class CookieUtils {
     /**
      * Returns a cookie with a specified name and value and sets the maximum
      * age of the cookie in seconds.
-     * 
+     *
      * @param name Name of the cookie
      * @param value Value of the cookie
-     * @param maxAge Maximum age of the cookie in seconds; if negative, means 
+     * @param maxAge Maximum age of the cookie in seconds; if negative, means
      *        the cookie is not stored; if zero, deletes the cookie.
      * @return constructed cookie
      */
@@ -301,7 +291,7 @@ public class CookieUtils {
     /**
      * Returns a cookie with a specified name and value and sets a path for
      * the cookie to which the client should return the cookie.
-     * 
+     *
      * @param name Name of the cookie
      * @param value Value of the cookie
      * @param path Path
@@ -315,11 +305,11 @@ public class CookieUtils {
      * Returns a cookie with a specified name and value and sets a path for
      * the cookie to which the client should return the cookie and sets the
      * domain within which this cookie should be presented.
-     * 
+     *
      * @param name Name of the cookie
      * @param value Value of the cookie
      * @param path Path
-     * @param domain Domain name within which this cookie is visible; form is 
+     * @param domain Domain name within which this cookie is visible; form is
      *        according to <code>RFC 2109</code>
      * @return constructed cookie
      */
@@ -337,19 +327,19 @@ public class CookieUtils {
      * age of the cookie in seconds and sets a path for the cookie to which the
      * client should return the cookie and sets the domain within which this
      * cookie should be presented.
-     * 
+     *
      * @param name Name of the cookie
      * @param value Value of the cookie
-     * @param maxAge Maximum age of the cookie in seconds; if negative, means 
+     * @param maxAge Maximum age of the cookie in seconds; if negative, means
      *        the cookie is not stored; if zero, deletes the cookie.
      * @param path Path
-     * @param domain Domain name within which this cookie is visible; form is 
+     * @param domain Domain name within which this cookie is visible; form is
      *        according to <code>RFC 2109</code>
      * @return constructed cookie
      */
     public static Cookie newCookie(
         String name,
-        String value, 
+        String value,
         int maxAge,
         String path,
         String domain
@@ -384,7 +374,7 @@ public class CookieUtils {
     /**
      * Check cookie value whether it has double quote or not. Remove start /
      * ending double quote from cookie and returns cookie value only.
-     * 
+     *
      * @param cookie Value of the Cookie
      * @return cookie value without double quote
      */
@@ -399,57 +389,57 @@ public class CookieUtils {
     }
 
     /**
-     * Add cookie to HttpServletResponse as custom header
-     * 
-     * @param response
-     * @param cookie 
+     * Add cookie to {@link HttpServletResponse}.
+     *
+     * @param response HTTP response to update. Never null.
+     * @param cookie Cookie to add. Never null.
      */
     public static void addCookieToResponse(HttpServletResponse response, Cookie cookie) {
+        addCookieToResponse(response, cookie, false);
+    }
+
+    /**
+     * Add cookie to {@link HttpServletResponse}.
+     *
+     * @param response HTTP response to update. Never null.
+     * @param cookie Cookie to add. Never null.
+     * @param crossDomain Whether to set the SameSite cookie attribute to <code>None</code>.
+     */
+    public static void addCookieToResponse(HttpServletResponse response, Cookie cookie, boolean crossDomain) {
         if (cookie == null) {
             return;
-        }
-        if (!isCookieHttpOnly()) {
-            response.addCookie(cookie);
-            return;
-        }
-
-        if (setHttpOnlyMethod != null) {
-            try {
-                setHttpOnlyMethod.invoke(cookie, true);
-                response.addCookie(cookie);
-                return;
-            } catch (IllegalAccessException iae) {
-                debug.warning("IllegalAccessException while trying to add HttpOnly cookie: " + iae.getMessage());
-            } catch (InvocationTargetException ite) {
-                debug.error("An error occurred while trying to add HttpOnly cookie", ite);
-            }
         }
 
         StringBuilder sb = new StringBuilder(150);
         sb.append(cookie.getName()).append("=").append(cookie.getValue());
         String path = cookie.getPath();
         if (path != null && path.length() > 0) {
-            sb.append(";path=").append(path);
+            sb.append("; Path=").append(path);
         } else {
-            sb.append(";path=/");
+            sb.append("; Path=/");
         }
         String domain = cookie.getDomain();
         if (domain != null && domain.length() > 0) {
-            sb.append(";domain=").append(domain);
+            sb.append("; Domain=").append(domain);
         }
         int age = cookie.getMaxAge();
         if (age > -1) {
             Date date = new Date(currentTimeMillis() + age * 1000l);
             SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd-MMM-yyyy HH:mm:ss zzz", Locale.UK);
             sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-            sb.append(";max-age=").append(age);
+            sb.append("; Max-Age=").append(age);
             // set Expires as < IE 8 does not support max-age
-            sb.append(";Expires=").append(sdf.format(date));
+            sb.append("; Expires=").append(sdf.format(date));
         }
-        if (CookieUtils.isCookieSecure() || cookie.getSecure()) {
-            sb.append(";secure");
+        if (isCookieSecure() || cookie.getSecure()) {
+            sb.append("; Secure");
+            if (crossDomain) {
+                sb.append("; SameSite=None");
+            }
         }
-        sb.append(";httponly");
+        if (isCookieHttpOnly() || cookie.isHttpOnly()) {
+            sb.append("; HttpOnly");
+        }
         if (debug.messageEnabled()) {
             debug.message("CookieUtils:addCookieToResponse adds " + sb);
         }
