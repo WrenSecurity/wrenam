@@ -2,6 +2,8 @@ name: Build project
 
 on:
   push:
+    branches-ignore:
+      - 'backport/**'
   pull_request:
 
 permissions:
