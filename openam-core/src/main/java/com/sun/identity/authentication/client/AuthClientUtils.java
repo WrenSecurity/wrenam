@@ -25,7 +25,7 @@
  * $Id: AuthClientUtils.java,v 1.40 2010/01/22 03:31:01 222713 Exp $
  *
  * Portions Copyrighted 2010-2016 ForgeRock AS.
- * Portions Copyrighted 2023 Wren Security
+ * Portions Copyrighted 2023-2025 Wren Security
  */
 package com.sun.identity.authentication.client;
 
@@ -186,12 +186,12 @@ public class AuthClientUtils {
 
     private static final String distAuthCluster =
         SystemProperties.get(Constants.DISTAUTH_CLUSTER, "");
-    
-    private static ArrayList distAuthClusterList = new ArrayList();     
-    
+
+    private static ArrayList distAuthClusterList = new ArrayList();
+
     private static final String distAuthSites =
         SystemProperties.get(Constants.AM_DISTAUTH_SITES, "");
-    
+
     private static Map<String, Set<String>> distAuthSitesMap = new HashMap();
     private static final List<String> RETAINED_HTTP_REQUEST_HEADERS = new ArrayList<String>();
     private static final List<String> RETAINED_HTTP_HEADERS = new ArrayList<String>();
@@ -227,10 +227,10 @@ public class AuthClientUtils {
                         + "Cluster List is: " + distAuthCluster);
                 }
                 if (distAuthCluster.indexOf(",") != -1) {
-                    StringTokenizer distAuthServersList = 
+                    StringTokenizer distAuthServersList =
                         new StringTokenizer(distAuthCluster, ",");
                     while (distAuthServersList.hasMoreTokens()) {
-                        String distAuthServer = 
+                        String distAuthServer =
                             distAuthServersList.nextToken().trim();
                         distAuthClusterList.add(distAuthServer);
                     }
@@ -238,11 +238,11 @@ public class AuthClientUtils {
                     distAuthClusterList.add(distAuthCluster.trim());
                 }
             } catch (Exception e) {
-            	utilDebug.error("AuthClientUtils.static(): " + 
+            	utilDebug.error("AuthClientUtils.static(): " +
                     e.toString());
-            }        	
+            }
         }
-        
+
         if (distAuthSites.length() != 0) {
             try {
                 if (utilDebug.messageEnabled()) {
@@ -251,24 +251,24 @@ public class AuthClientUtils {
                         + "Dist Auth Site list is: " + distAuthSites);
                 }
                 if (distAuthSites.indexOf(",") != -1) {
-                    StringTokenizer distAuthSitesList = 
+                    StringTokenizer distAuthSitesList =
                         new StringTokenizer(distAuthSites, ",");
-                    
+
                     while (distAuthSitesList.hasMoreTokens()) {
-                        String distAuthServer = 
+                        String distAuthServer =
                             distAuthSitesList.nextToken().trim();
-                        
+
                         if (distAuthServer.indexOf("=") != -1) {
-                            String distAuthServerName = 
+                            String distAuthServerName =
                                     distAuthServer.substring(0, distAuthServer.indexOf("="));
                             String distAuthSiteName =
                                     distAuthServer.substring(distAuthServer.indexOf("=") + 1);
                             Set<String> distAuthSet = distAuthSitesMap.get(distAuthSiteName);
-                            
+
                             if (distAuthSet == null) {
                                 distAuthSet = new HashSet<String>();
                             }
-                            
+
                             distAuthSet.add(distAuthServerName);
                             distAuthSitesMap.put(distAuthSiteName, distAuthSet);
                         } else {
@@ -281,7 +281,7 @@ public class AuthClientUtils {
                     }
                 } else {
                     if (distAuthSites.indexOf("=") != -1) {
-                        String distAuthServerName = 
+                        String distAuthServerName =
                                 distAuthSites.substring(0, distAuthSites.indexOf("="));
                         String distAuthSiteName =
                                 distAuthSites.substring(distAuthSites.indexOf("=") + 1);
@@ -296,10 +296,10 @@ public class AuthClientUtils {
                     }
                 }
             } catch (Exception ex) {
-                utilDebug.error("AuthClientUtils.static(): " + 
+                utilDebug.error("AuthClientUtils.static(): " +
                     ex.toString());
             }
-            
+
             if (utilDebug.messageEnabled()) {
                 utilDebug.message("AuthClientUtils.static(): " +
                         "dist auth server to site: " + distAuthSitesMap);
@@ -330,7 +330,7 @@ public class AuthClientUtils {
      * Needs to be protected to allow subclass AuthUtils
      */
     protected AuthClientUtils() {
-    }        
+    }
 
     private static List<String> getHeaderNameListForProperty(String property) {
         String value = SystemProperties.get(property);
@@ -420,7 +420,7 @@ public class AuthClientUtils {
             }
         }// while
         return (data);
-    }           
+    }
 
     /**
      * Returns the Logout cookie.
@@ -448,7 +448,7 @@ public class AuthClientUtils {
     public static String getLogoutCookieString(SessionID sid) {
         String logout_cookie = null;
         try {
-            logout_cookie = (String) AccessController.doPrivileged(
+            logout_cookie = AccessController.doPrivileged(
                 new EncodeAction(
                 "LOGOUT" + "@" +
                 sid.getSessionServerProtocol() + "@" +
@@ -480,7 +480,7 @@ public class AuthClientUtils {
                     cookieDomain);
         }
         return (createCookie(cookieName,cookieValue,cookieDomain));
-    }    
+    }
 
     public static String getQueryOrgName(HttpServletRequest request,
         String org) {
@@ -496,7 +496,7 @@ public class AuthClientUtils {
             utilDebug.message("queryOrg is :" + queryOrg);
         }
         return queryOrg;
-    }   
+    }
 
 
     // print cookies in the request
@@ -513,7 +513,7 @@ public class AuthClientUtils {
                 utilDebug.message("Received Cookie: '{}'='{}'", ck[i].getName(), ck[i].getValue());
             }
         }
-    }    
+    }
 
     public static void printHash(Hashtable reqParameters) {
         try {
@@ -553,10 +553,10 @@ public class AuthClientUtils {
                 for (Iterator it = domains.iterator(); it.hasNext(); ) {
                     String domain = (String)it.next();
                     Cookie cookie = createlbCookie(domain);
-                    CookieUtils.addCookieToResponse(response, cookie);
+                    CookieUtils.addCookieToResponse(response, cookie, true);
                 }
             } else {
-                CookieUtils.addCookieToResponse(response, createlbCookie(null));
+                CookieUtils.addCookieToResponse(response, createlbCookie(null), true);
             }
         }
     }
@@ -609,7 +609,7 @@ public class AuthClientUtils {
                         createCookie(cookieName, "LOGOUT", 0, null));
             }
         }
-    }          
+    }
 
     /* return the the error message for the error code */
     public static String getErrorMessage(String errorCode) {
@@ -626,7 +626,7 @@ public class AuthClientUtils {
         // came here if cookie not found , return false
         return CookieUtils.getCookieValueFromReq(req,getAuthCookieName()) != null
                 || CookieUtils.getCookieValueFromReq(req,getCookieName()) != null;
-    }       
+    }
 
     // Get Original Redirect URL for Auth to redirect the Login request
     public static String getOrigRedirectURL(HttpServletRequest request, SessionID sessID) {
@@ -651,7 +651,7 @@ public class AuthClientUtils {
             return null;
         }
         return null;
-    }     
+    }
 
     /**
      * Adds Logout cookie to URL.
@@ -690,7 +690,7 @@ public class AuthClientUtils {
         }
 
         return logoutURL;
-    }                 
+    }
 
     /**
      * Returns the Session ID for the request.
@@ -745,7 +745,7 @@ public class AuthClientUtils {
             utilDebug.message("AuthUtils:returning sessionID:" + sessionID);
         }
         return sessionID;
-    }    
+    }
 
     /**
      * Returns <code>true</code> if the request has the
@@ -804,7 +804,7 @@ public class AuthClientUtils {
             } else if (indexType == AuthContext.IndexType.SERVICE) {
                 indexName = ssoToken.getProperty("Service");
             } else if (indexType == AuthContext.IndexType.MODULE_INSTANCE) {
-                indexName = 
+                indexName =
                     getLatestIndexName(ssoToken.getProperty("AuthType"));
             } else if (indexType == AuthContext.IndexType.LEVEL) {
                 indexName = ssoToken.getProperty("AuthLevel");
@@ -828,7 +828,7 @@ public class AuthClientUtils {
         if (indexName != null) {
             StringTokenizer st = new StringTokenizer(indexName,"|");
             if (st.hasMoreTokens()) {
-                firstIndexName = (String)st.nextToken();
+                firstIndexName = st.nextToken();
             }
         }
         return firstIndexName;
@@ -1090,7 +1090,7 @@ public class AuthClientUtils {
     /**
      * return the requested property for default client
      */
-    public static String getDefaultProperty(String property) {        
+    public static String getDefaultProperty(String property) {
         try {
             return (defaultClient.getProperty(property));
         } catch (Exception ce) {
@@ -1167,7 +1167,7 @@ public class AuthClientUtils {
     public static boolean isGenericHTMLClient(String clientType) {
         String type = getProperty(clientType,"genericHTML");
         return type == null || "true".equals(type);
-    }    
+    }
 
     /* return true if cookiSupport is true or cookieDetection
      * mode has been detected .This is used to determine
@@ -1402,7 +1402,7 @@ public class AuthClientUtils {
     public static String getOrganizationDN(String orgParam,boolean noQueryParam,
         HttpServletRequest request) {
         String orgName = null;
-        SSOToken token = (SSOToken) AccessController.doPrivileged(
+        SSOToken token = AccessController.doPrivileged(
             AdminTokenAction.getInstance());
 
         // try to get the host name if org or domain Param is null
@@ -1690,8 +1690,8 @@ public class AuthClientUtils {
                 utilDebug.message("constructLoginURL:parameter: "+parameter);
             }
             if(!ignoreParameter(parameter)){
-                // This will nornally be the case when browser back button is 
-                // used and the form is posted again with the base64 encoded 
+                // This will nornally be the case when browser back button is
+                // used and the form is posted again with the base64 encoded
                 // parameters
                 if (parameter.equalsIgnoreCase("SunQueryParamsString")) {
                     String queryParams = request.getParameter(parameter);
@@ -1708,7 +1708,7 @@ public class AuthClientUtils {
                             utilDebug.message("constructLoginURL: value: " + queryParams);
                         }
                         // This function will encode all the parameters in
-                        // SunQueryParamsString 
+                        // SunQueryParamsString
                         queryParams = URLencodedSunQueryParamsString(queryParams,encoding);
                     }
                     queryString.append(queryParams);
@@ -1729,7 +1729,7 @@ public class AuthClientUtils {
                            if(utilDebug.messageEnabled()) {
                                utilDebug.message("constructLoginURL: Base64 decoded "+parameter+"='{}'", value);
                            }
-                       } 
+                       }
                        queryString.append(URLEncDec.encode(parameter)).append("=")
                                .append(URLEncDec.encode(getCharDecodedField(value, encoding)));
                     }
@@ -1749,9 +1749,9 @@ public class AuthClientUtils {
         }
         return loginURL.toString();
     }
-    
+
     /**
-     * This method takes in a String representing query parameters, and 
+     * This method takes in a String representing query parameters, and
      * URL encodes "sunamcompositeadvice" parameter out of it.
      */
      private static String URLencodedCompositeAdvice(String queryParams) {
@@ -1772,9 +1772,9 @@ public class AuthClientUtils {
          sb.append(URLEncDec.encode(value));
          return sb.toString();
      }
-     
+
      /**
-     * This method takes in a String representing base64 decoded 
+     * This method takes in a String representing base64 decoded
      * SunQueryParamsString and URL encodes all the parameters
      * included in its value
      */
@@ -1799,10 +1799,10 @@ public class AuthClientUtils {
                   if(st.hasMoreTokens()){
                       sb.append("&");
                   }
-              } 
-          }          
+              }
+          }
           return sb.toString();
-      }     
+      }
 
     // Get Original Redirect URL for Auth to redirect the Login request
     public static SSOToken getExistingValidSSOToken(SessionID sessID) {
@@ -1865,7 +1865,7 @@ public class AuthClientUtils {
         if (resProperty.length() != 0) {
             int commaIndex = resProperty.indexOf(MSG_DELIMITER);
             if (commaIndex != -1) {
-                templateName = 
+                templateName =
                     resProperty.substring(commaIndex + 1);
                 errorMsg = resProperty.substring(0,commaIndex);
             } else {
@@ -2023,7 +2023,7 @@ public class AuthClientUtils {
     public static String getDefaultFileName(
         HttpServletRequest request,
         String fileName,
-        java.util.Locale locale, 
+        java.util.Locale locale,
         ServletContext servletContext) {
 
         String strlocale = "";
@@ -2280,6 +2280,7 @@ public class AuthClientUtils {
      * @deprecated use {@link #getDomainNameByRequest(
      * javax.servlet.http.HttpServletRequest, java.util.Map<String, String>)} instead.
      */
+    @Deprecated
     public static String getDomainNameByRequest(Map<String, String> requestHash) {
         String realm = getRealmFromPolicyAdvice(requestHash);
         String orgParam = getOrgParam(requestHash);
@@ -2303,7 +2304,7 @@ public class AuthClientUtils {
             utilDebug.message("orgDN is " + orgDN);
         }
         return orgDN;
-    }          
+    }
 
     /**
      * Parses the policy condition advice and checks for realm advices
@@ -2394,7 +2395,7 @@ public class AuthClientUtils {
                 int uriIndex = cookieURL.indexOf(serviceURI);
                 String tmpCookieURL = cookieURL;
                 if (uriIndex != -1) {
-                    tmpCookieURL = cookieURL.substring(0,uriIndex) + 
+                    tmpCookieURL = cookieURL.substring(0,uriIndex) +
                         SystemProperties.get(Constants.
                         AM_SERVICES_DEPLOYMENT_DESCRIPTOR);
                 }
@@ -2426,37 +2427,37 @@ public class AuthClientUtils {
         }
         return isLocalServer(tmpCookieURL + serviceURI, true);
     }
-    
+
     public static boolean isServerMemberOfLocalSite(String cookieURL) {
         boolean isSiteMember = false;
-        
+
         try {
             if (!distAuthSitesMap.isEmpty()) {
                 String localSiteID = WebtopNaming.getSiteID(WebtopNaming.getAMServerID());
-                
+
                 if (localSiteID == null) {
                     if (utilDebug.warningEnabled()) {
                         utilDebug.warning("AuthClientUtils::isServerMemberOfLocalSite:" +
                                 "unable to determine local site id: " + WebtopNaming.getAMServerID());
                     }
-                    
+
                     return false;
                 }
-                
+
                 String localSiteName = WebtopNaming.getSiteNameById(localSiteID);
-                
+
                 if (localSiteName != null) {
                     Set distAuthForSite = distAuthSitesMap.get(localSiteName);
-                    
+
                     if (distAuthForSite == null) {
                         if (utilDebug.warningEnabled()) {
                             utilDebug.warning("AuthClientUtils::isServerMemberOfLocalSite:" +
                                 "unable to determine distAuthForSite: " + localSiteName);
                         }
-                    
-                        return false;   
+
+                        return false;
                     }
-                    
+
                     if (distAuthForSite.contains(cookieURL)) {
                         isSiteMember = true;
 
@@ -2475,7 +2476,7 @@ public class AuthClientUtils {
         } catch (Exception ex) {
             utilDebug.error("AuthClientUtils::isServerMemberOfLocalSite: ", ex);
         }
-        
+
         return isSiteMember;
     }
 
@@ -2501,7 +2502,7 @@ public class AuthClientUtils {
             Enumeration<String> requestHeaders = request.getHeaderNames();
             while (requestHeaders.hasMoreElements()) {
                 String name = requestHeaders.nextElement();
-                Enumeration value = (Enumeration) request.getHeaders(name);
+                Enumeration value = request.getHeaders(name);
                 message.append("Header name='").append(name).append("', Value='").append(value).append("'\n");
             }
             utilDebug.message(message.toString());
@@ -2810,7 +2811,7 @@ public class AuthClientUtils {
                         createCookie(cookieName,cookieValue,null));
             }
         }
-    } 
+    }
 
     /**
      * Sets the redirectBackUrlCookie to be set as OpenAM
@@ -2821,7 +2822,7 @@ public class AuthClientUtils {
      * @param response <code>true</code> if it is persistent
      * @throws AuthException if it fails to create this cookie
      */
-    public static void setRedirectBackServerCookie(String cookieName, 
+    public static void setRedirectBackServerCookie(String cookieName,
             String cookieValue, HttpServletRequest request,
             HttpServletResponse response) throws AuthException {
 
@@ -2941,7 +2942,7 @@ public class AuthClientUtils {
 
          return persistCookie;
      }
-    
+
 
     /**
      * Returns true if the request has the ForceAuth=<code>true</code>
@@ -2998,8 +2999,8 @@ public class AuthClientUtils {
         }
         return returnForcedAuth;
     }
-    
-    /** 
+
+    /**
      * Returns the service URI
      * @return a String the Service URI
      */
@@ -3020,7 +3021,7 @@ public class AuthClientUtils {
                 hostUrlCookieValue = WebtopNaming.getServerFromID(siteID);
                 String uri = SystemProperties.get(
                         Constants.AM_SERVICES_DEPLOYMENT_DESCRIPTOR);
-                hostUrlCookieValue = hostUrlCookieValue.substring(0, 
+                hostUrlCookieValue = hostUrlCookieValue.substring(0,
                         (hostUrlCookieValue.length() - uri.length()));
             } catch(ServerEntryNotFoundException e) {
                 utilDebug.message("AuthClientUtils.setHostUrlCookie:", e);
@@ -3037,14 +3038,14 @@ public class AuthClientUtils {
                 hostUrlCookieValue   = authServerProtocol + "://" +
                         authServer + ":" + authServerPort;
             }
-            
+
             if (utilDebug.messageEnabled()) {
                 utilDebug.message("AuthClientUtils.setHostUrlCookie: " +
                     "hostUrlCookieName = " + hostUrlCookieName +
                     ", hostUrlCookieDomain = " + hostUrlCookieDomain +
                     ", hostUrlCookieValue = " + hostUrlCookieValue);
             }
-            
+
             // Create Cookie
             try {
                 Cookie cookie = createCookie(hostUrlCookieName,
@@ -3069,14 +3070,14 @@ public class AuthClientUtils {
             }
         }
     }
-    
+
     public static boolean isDistAuthServerTrusted(String distAuthServerLoginURL){
         return distAuthClusterList.contains(distAuthServerLoginURL);
     }
-    
+
     /**
-     * Returns the resource URL. The method checks value for "resourceURL" 
-     * parameter first, if not present, checks value for "goto" parameter. 
+     * Returns the resource URL. The method checks value for "resourceURL"
+     * parameter first, if not present, checks value for "goto" parameter.
      * If none exists, returns null.
      * @param request HttpServletRequest object
      * @return resourceURL based on the query parameters, returns null if
@@ -3086,7 +3087,7 @@ public class AuthClientUtils {
         String resourceUrl = request.getParameter(
             ISAuthConstants.RESOURCE_URL_PARAM);
         if (resourceUrl == null) {
-            resourceUrl = 
+            resourceUrl =
                 request.getParameter(ISAuthConstants.GOTO_PARAM);
         }
         return resourceUrl;
@@ -3105,7 +3106,7 @@ public class AuthClientUtils {
         String strIP = ClientUtils.getClientIPAddress(request);
         if (strIP != null) {
             Set ipSet = new HashSet(1);
-            ipSet.add((String) strIP);
+            ipSet.add(strIP);
             envParameters.put(ISAuthConstants.REQUEST_IP,ipSet);
         }
         Enumeration enum1 = request.getParameterNames();
@@ -3115,7 +3116,7 @@ public class AuthClientUtils {
             if (values != null) {
                 Set set = new HashSet();
                 for (int i = 0; i < values.length; i++) {
-                    set.add((String) values[i]);
+                    set.add(values[i]);
                 }
                 if (!set.isEmpty()) {
                     envParameters.put(paramName, set);
@@ -3140,7 +3141,7 @@ public class AuthClientUtils {
         }
         return envParameters;
     }
-   
+
     /**
      * Returns unescaped text. This method replaces "&#124;" with "|".
      *
@@ -3177,7 +3178,7 @@ public class AuthClientUtils {
         }
         return text;
     }
-    
+
     /**
      * Returns the data from Realm qualified data. This could be authentication
      * scheme or authentication level or service.
