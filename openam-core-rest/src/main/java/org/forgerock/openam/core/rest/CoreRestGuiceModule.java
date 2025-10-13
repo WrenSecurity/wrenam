@@ -22,6 +22,7 @@ import org.forgerock.openam.core.rest.authn.CoreRestAuthenticationGuiceModule;
 import org.forgerock.openam.core.rest.cts.CoreRestCtsGuiceModule;
 import org.forgerock.openam.core.rest.devices.CoreRestDevicesGuiceModule;
 import org.forgerock.openam.core.rest.docs.CoreRestDocsGuiceModule;
+import org.forgerock.openam.core.rest.identity.CoreRestIdentityGuiceModule;
 import org.forgerock.openam.core.rest.record.CoreRestRecordGuiceModule;
 import org.forgerock.openam.core.rest.session.CoreRestSessionGuiceModule;
 import org.forgerock.openam.core.rest.sms.CoreRestSmsGuiceModule;

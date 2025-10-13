@@ -12,14 +12,26 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions copyright 2025 Wren Security
  */
-
 package org.forgerock.openam.core.rest;
 
-import static org.forgerock.http.routing.RoutingMode.*;
-import static org.forgerock.openam.audit.AuditConstants.Component.*;
-import static org.forgerock.openam.rest.Routers.*;
+import static org.forgerock.http.routing.RoutingMode.EQUALS;
+import static org.forgerock.openam.audit.AuditConstants.Component.AUTHENTICATION;
+import static org.forgerock.openam.audit.AuditConstants.Component.CTS;
+import static org.forgerock.openam.audit.AuditConstants.Component.DASHBOARD;
+import static org.forgerock.openam.audit.AuditConstants.Component.DEVICES;
+import static org.forgerock.openam.audit.AuditConstants.Component.DOCUMENTATION;
+import static org.forgerock.openam.audit.AuditConstants.Component.GROUPS;
+import static org.forgerock.openam.audit.AuditConstants.Component.POLICY_AGENT;
+import static org.forgerock.openam.audit.AuditConstants.Component.RECORD;
+import static org.forgerock.openam.audit.AuditConstants.Component.SERVER_INFO;
+import static org.forgerock.openam.audit.AuditConstants.Component.SESSION;
+import static org.forgerock.openam.audit.AuditConstants.Component.USERS;
+import static org.forgerock.openam.rest.Routers.ssoToken;
 
+import com.google.inject.Key;
+import com.google.inject.name.Names;
 import org.forgerock.http.routing.RoutingMode;
 import org.forgerock.openam.core.rest.authn.http.AuthenticationServiceV1;
 import org.forgerock.openam.core.rest.authn.http.AuthenticationServiceV2;
@@ -31,6 +43,11 @@ import org.forgerock.openam.core.rest.devices.oath.OathDevicesResource;
 import org.forgerock.openam.core.rest.devices.push.PushDevicesResource;
 import org.forgerock.openam.core.rest.docs.api.ApiDocsService;
 import org.forgerock.openam.core.rest.docs.api.ApiService;
+import org.forgerock.openam.core.rest.identity.AllAuthenticatedUsersResourceV1;
+import org.forgerock.openam.core.rest.identity.IdentityResourceV1;
+import org.forgerock.openam.core.rest.identity.IdentityResourceV2;
+import org.forgerock.openam.core.rest.identity.IdentityResourceV3;
+import org.forgerock.openam.core.rest.identity.IdentityResourceV4;
 import org.forgerock.openam.core.rest.record.RecordConstants;
 import org.forgerock.openam.core.rest.record.RecordResource;
 import org.forgerock.openam.core.rest.server.ServerInfoResource;
@@ -48,9 +65,6 @@ import org.forgerock.openam.rest.authz.AdminOnlyAuthzModule;
 import org.forgerock.openam.rest.authz.CrestPrivilegeAuthzModule;
 import org.forgerock.openam.rest.authz.ResourceOwnerOrSuperUserAuthzModule;
 import org.forgerock.openam.services.MailService;
-
-import com.google.inject.Key;
-import com.google.inject.name.Names;
 
 /**
  * A {@link RestRouteProvider} that add routes for all the core endpoints.
@@ -86,7 +100,9 @@ public class CoreRestRouteProvider extends AbstractRestRouteProvider {
                 .forVersion(2, 1)
                 .toCollection(Key.get(IdentityResourceV2.class, Names.named("UsersResource")))
                 .forVersion(3, 0)
-                .toCollection(Key.get(IdentityResourceV3.class, Names.named("UsersResource")));
+                .toCollection(Key.get(IdentityResourceV3.class, Names.named("UsersResource")))
+                .forVersion(4, 0)
+                .toCollection(Key.get(IdentityResourceV4.class, Names.named("UsersResource")));
 
         realmRouter.route("groups")
                 .auditAs(GROUPS)
@@ -95,7 +111,14 @@ public class CoreRestRouteProvider extends AbstractRestRouteProvider {
                 .forVersion(2, 1)
                 .toCollection(Key.get(IdentityResourceV2.class, Names.named("GroupsResource")))
                 .forVersion(3, 0)
-                .toCollection(Key.get(IdentityResourceV3.class, Names.named("GroupsResource")));
+                .toCollection(Key.get(IdentityResourceV3.class, Names.named("GroupsResource")))
+                .forVersion(4, 0)
+                .toCollection(Key.get(IdentityResourceV4.class, Names.named("GroupsResource")));
+
+        realmRouter.route("groups/allauthenticatedusers")
+                .auditAs(GROUPS)
+                .forVersion(1, 0)
+                .toSingleton(Key.get(AllAuthenticatedUsersResourceV1.class));
 
         realmRouter.route("agents")
                 .auditAs(POLICY_AGENT)

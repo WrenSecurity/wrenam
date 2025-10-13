@@ -12,22 +12,25 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions copyright 2025 Wren Security
  */
-
-package org.forgerock.openam.core.rest;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Singleton;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+package org.forgerock.openam.core.rest.identity;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.multibindings.Multibinder;
 import com.sun.identity.idsvcs.opensso.IdentityServicesImpl;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
 import org.forgerock.openam.core.CoreWrapper;
+import org.forgerock.openam.core.rest.GlobalAdminUiRolePredicate;
+import org.forgerock.openam.core.rest.RealmAdminUiRolePredicate;
+import org.forgerock.openam.core.rest.SelfServiceUserUiRolePredicate;
+import org.forgerock.openam.core.rest.UiRolePredicate;
 import org.forgerock.openam.forgerockrest.utils.MailServerLoader;
 import org.forgerock.openam.services.RestSecurityProvider;
 import org.forgerock.openam.services.baseurl.BaseURLProviderFactory;
@@ -47,6 +50,13 @@ public class CoreRestIdentityGuiceModule extends AbstractModule {
         userUiRolePredicates.addBinding().to(SelfServiceUserUiRolePredicate.class);
         userUiRolePredicates.addBinding().to(GlobalAdminUiRolePredicate.class);
         userUiRolePredicates.addBinding().to(RealmAdminUiRolePredicate.class);
+    }
+
+    @Provides
+    @Inject
+    @Singleton
+    public IdentityRestMapper getIdentityRestMapper(CoreWrapper coreWrapper, Set<UiRolePredicate> uiRolePredicates) {
+        return new IdentityRestMapper(coreWrapper, uiRolePredicates);
     }
 
     @Provides
@@ -75,12 +85,22 @@ public class CoreRestIdentityGuiceModule extends AbstractModule {
     @Named("UsersResource")
     @Inject
     @Singleton
-    public IdentityResourceV3 getUsersResource(MailServerLoader mailServerLoader,
+    public IdentityResourceV3 getUsersResourceV3(MailServerLoader mailServerLoader,
             IdentityServicesImpl identityServices, CoreWrapper coreWrapper, RestSecurityProvider restSecurityProvider,
             ConsoleConfigHandler configHandler, BaseURLProviderFactory baseURLProviderFactory,
             @Named("PatchableUserAttributes") Set<String> patchableAttributes, Set<UiRolePredicate> uiRolePredicates) {
         return new IdentityResourceV3(IdentityResourceV2.USER_TYPE, mailServerLoader, identityServices, coreWrapper,
                 restSecurityProvider, configHandler, baseURLProviderFactory, patchableAttributes, uiRolePredicates);
+    }
+
+    @Provides
+    @Named("UsersResource")
+    @Inject
+    @Singleton
+    public IdentityResourceV4 getUsersResource(IdentityServicesImpl identityServices,
+            IdentityRestMapper identityMapper, @Named("UsersResource") IdentityResourceV3 identityResourceV3) {
+        return new IdentityResourceV4(IdentityRestUtils.USER_TYPE, identityServices, identityMapper,
+                identityResourceV3);
     }
 
     @Provides
@@ -109,11 +129,21 @@ public class CoreRestIdentityGuiceModule extends AbstractModule {
     @Named("GroupsResource")
     @Inject
     @Singleton
-    public IdentityResourceV3 getGroupsResource(MailServerLoader mailServerLoader,
+    public IdentityResourceV3 getGroupsResourceV3(MailServerLoader mailServerLoader,
             IdentityServicesImpl identityServices, CoreWrapper coreWrapper, RestSecurityProvider restSecurityProvider,
             ConsoleConfigHandler configHandler, BaseURLProviderFactory baseURLProviderFactory, Set<UiRolePredicate> uiRolePredicates) {
         return new IdentityResourceV3(IdentityResourceV2.GROUP_TYPE, mailServerLoader, identityServices,
                 coreWrapper, restSecurityProvider, configHandler, baseURLProviderFactory, Collections.<String>emptySet(), uiRolePredicates);
+    }
+
+    @Provides
+    @Named("GroupsResource")
+    @Inject
+    @Singleton
+    public IdentityResourceV4 getGroupsResource(IdentityServicesImpl identityServices,
+            IdentityRestMapper identityMapper, @Named("GroupsResource") IdentityResourceV3 identityResourceV3) {
+        return new IdentityResourceV4(IdentityRestUtils.GROUP_TYPE, identityServices, identityMapper,
+                identityResourceV3);
     }
 
     @Provides
@@ -125,6 +155,12 @@ public class CoreRestIdentityGuiceModule extends AbstractModule {
             ConsoleConfigHandler configHandler, Set<UiRolePredicate> uiRolePredicates) {
         return new IdentityResourceV1(IdentityResourceV1.AGENT_TYPE, mailServerLoader, identityServices, coreWrapper,
                 restSecurityProvider, configHandler, uiRolePredicates);
+    }
+
+    @Provides
+    @Singleton
+    public AllAuthenticatedUsersResourceV1 getAllAuthenticatedUsersResource() {
+        return new AllAuthenticatedUsersResourceV1();
     }
 
     @Provides
@@ -157,4 +193,5 @@ public class CoreRestIdentityGuiceModule extends AbstractModule {
         patchableAttributes.add("kbaInfo");
         return patchableAttributes;
     }
+
 }

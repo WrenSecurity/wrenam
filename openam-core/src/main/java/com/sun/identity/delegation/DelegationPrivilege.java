@@ -24,6 +24,7 @@
  *
  * $Id: DelegationPrivilege.java,v 1.7 2008/06/25 05:43:24 qcheng Exp $
  *
+ * Portions Copyrighted 2025 Wren Security.
  */
 
 /*
@@ -61,9 +62,9 @@ public class DelegationPrivilege {
 
     private String name;
 
-    private Set permissions = new HashSet();
+    private Set<DelegationPermission> permissions = new HashSet<>();
 
-    private Set subjects;
+    private Set<String> subjects;
 
     /**
      * Constructor for <code>DelegationPrivilege</code>. Constructs a
@@ -79,7 +80,7 @@ public class DelegationPrivilege {
      * @throws DelegationException if any input value is incorrect.
      */
 
-    public DelegationPrivilege(String name, Set permissions, Set subjects)
+    public DelegationPrivilege(String name, Set<DelegationPermission> permissions, Set<String> subjects)
             throws DelegationException 
     {
         setName(name);
@@ -97,7 +98,7 @@ public class DelegationPrivilege {
      * @throws DelegationException if unable to create <code>
      *         DelegationPrivilege</code> instance.
      */
-    public DelegationPrivilege(String name, Set subjects, String orgName) 
+    public DelegationPrivilege(String name, Set<String> subjects, String orgName)
         throws DelegationException 
     {
         this.name = name;
@@ -288,7 +289,7 @@ public class DelegationPrivilege {
      * @return the <code>DelegationPermission</code>s in the privilege
      */
 
-    public Set getPermissions() {
+    public Set<DelegationPermission> getPermissions() {
         return permissions;
     }
 
@@ -301,7 +302,7 @@ public class DelegationPrivilege {
      *         <code>DelegationPermission</code>
      */
 
-    public void setPermissions(Set permissions) throws DelegationException {
+    public void setPermissions(Set<DelegationPermission> permissions) throws DelegationException {
         this.permissions = permissions;
     }
 
@@ -311,7 +312,7 @@ public class DelegationPrivilege {
      * @return the subjects in the privilege
      */
 
-    public Set getSubjects() {
+    public Set<String> getSubjects() {
         return subjects;
     }
 
@@ -322,8 +323,8 @@ public class DelegationPrivilege {
      * @throws DelegationException  if unable to set subjects
      */
 
-    public void setSubjects(Set names) throws DelegationException {
-        subjects = new HashSet();
+    public void setSubjects(Set<String> names) throws DelegationException {
+        subjects = new HashSet<>();
         if (names != null) {
             subjects.addAll(names);
         }

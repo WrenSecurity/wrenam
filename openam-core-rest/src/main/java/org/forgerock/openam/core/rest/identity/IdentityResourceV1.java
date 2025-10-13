@@ -14,18 +14,49 @@
  * Copyright 2012-2016 ForgeRock AS.
  * Portions copyright 2022 Wren Security.
  */
-package org.forgerock.openam.core.rest;
+package org.forgerock.openam.core.rest.identity;
 
-import static com.sun.identity.idsvcs.opensso.IdentityServicesImpl.*;
-import static org.forgerock.json.JsonValue.*;
-import static org.forgerock.json.resource.ResourceException.*;
-import static org.forgerock.json.resource.Responses.*;
-import static org.forgerock.openam.core.rest.IdentityRestUtils.*;
-import static org.forgerock.openam.core.rest.UserAttributeInfo.*;
-import static org.forgerock.openam.rest.RestUtils.*;
-import static org.forgerock.openam.utils.Time.*;
-import static org.forgerock.util.promise.Promises.*;
+import static com.sun.identity.idsvcs.opensso.IdentityServicesImpl.asMap;
+import static org.forgerock.json.JsonValue.field;
+import static org.forgerock.json.JsonValue.json;
+import static org.forgerock.json.JsonValue.object;
+import static org.forgerock.json.resource.ResourceException.UNAVAILABLE;
+import static org.forgerock.json.resource.ResourceException.getException;
+import static org.forgerock.json.resource.Responses.newActionResponse;
+import static org.forgerock.json.resource.Responses.newQueryResponse;
+import static org.forgerock.json.resource.Responses.newResourceResponse;
+import static org.forgerock.openam.core.rest.identity.IdentityRestUtils.enforceWhiteList;
+import static org.forgerock.openam.core.rest.identity.IdentityRestUtils.getSSOToken;
+import static org.forgerock.openam.core.rest.identity.IdentityRestUtils.identityDetailsToJsonValue;
+import static org.forgerock.openam.core.rest.identity.IdentityRestUtils.jsonValueToIdentityDetails;
+import static org.forgerock.openam.rest.RestUtils.getCookieFromServerContext;
+import static org.forgerock.openam.rest.RestUtils.isAdmin;
+import static org.forgerock.openam.utils.Time.getCalendarInstance;
+import static org.forgerock.util.promise.Promises.newResultPromise;
 
+import com.iplanet.am.util.SystemProperties;
+import com.iplanet.sso.SSOException;
+import com.iplanet.sso.SSOToken;
+import com.iplanet.sso.SSOTokenManager;
+import com.sun.identity.authentication.util.ISAuthConstants;
+import com.sun.identity.idm.AMIdentity;
+import com.sun.identity.idm.IdRepoException;
+import com.sun.identity.idm.IdUtils;
+import com.sun.identity.idsvcs.AccessDenied;
+import com.sun.identity.idsvcs.GeneralFailure;
+import com.sun.identity.idsvcs.IdentityDetails;
+import com.sun.identity.idsvcs.NeedMoreCredentials;
+import com.sun.identity.idsvcs.ObjectNotFound;
+import com.sun.identity.idsvcs.TokenExpired;
+import com.sun.identity.idsvcs.opensso.IdentityServicesImpl;
+import com.sun.identity.shared.Constants;
+import com.sun.identity.shared.datastruct.CollectionHelper;
+import com.sun.identity.shared.debug.Debug;
+import com.sun.identity.shared.encode.Hash;
+import com.sun.identity.sm.SMSException;
+import com.sun.identity.sm.ServiceConfig;
+import com.sun.identity.sm.ServiceConfigManager;
+import com.sun.identity.sm.ServiceNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URLEncoder;
@@ -38,9 +69,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-
 import javax.mail.MessagingException;
-
 import org.apache.commons.lang.RandomStringUtils;
 import org.forgerock.guice.core.InjectorHolder;
 import org.forgerock.json.JsonPointer;
@@ -67,6 +96,8 @@ import org.forgerock.json.resource.ResourceResponse;
 import org.forgerock.json.resource.UpdateRequest;
 import org.forgerock.json.resource.http.HttpContext;
 import org.forgerock.openam.core.CoreWrapper;
+import org.forgerock.openam.core.rest.UiRolePredicate;
+import org.forgerock.openam.core.rest.identity.UserAttributeInfo.UserAttributeInfoBuilder;
 import org.forgerock.openam.cts.CTSPersistentStore;
 import org.forgerock.openam.cts.exceptions.CoreTokenException;
 import org.forgerock.openam.cts.exceptions.DeleteFailedException;
@@ -89,30 +120,6 @@ import org.forgerock.util.AsyncFunction;
 import org.forgerock.util.Reject;
 import org.forgerock.util.promise.Promise;
 import org.forgerock.util.query.QueryFilter;
-
-import com.iplanet.am.util.SystemProperties;
-import com.iplanet.sso.SSOException;
-import com.iplanet.sso.SSOToken;
-import com.iplanet.sso.SSOTokenManager;
-import com.sun.identity.authentication.util.ISAuthConstants;
-import com.sun.identity.idm.AMIdentity;
-import com.sun.identity.idm.IdRepoException;
-import com.sun.identity.idm.IdUtils;
-import com.sun.identity.idsvcs.AccessDenied;
-import com.sun.identity.idsvcs.GeneralFailure;
-import com.sun.identity.idsvcs.IdentityDetails;
-import com.sun.identity.idsvcs.NeedMoreCredentials;
-import com.sun.identity.idsvcs.ObjectNotFound;
-import com.sun.identity.idsvcs.TokenExpired;
-import com.sun.identity.idsvcs.opensso.IdentityServicesImpl;
-import com.sun.identity.shared.Constants;
-import com.sun.identity.shared.datastruct.CollectionHelper;
-import com.sun.identity.shared.debug.Debug;
-import com.sun.identity.shared.encode.Hash;
-import com.sun.identity.sm.SMSException;
-import com.sun.identity.sm.ServiceConfig;
-import com.sun.identity.sm.ServiceConfigManager;
-import com.sun.identity.sm.ServiceNotFoundException;
 
 /**
  * A simple {@code Map} based collection resource provider.
