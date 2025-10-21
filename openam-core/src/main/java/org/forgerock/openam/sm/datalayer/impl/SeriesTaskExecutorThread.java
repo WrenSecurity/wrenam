@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014-2015 ForgeRock AS.
+ * Portions copyright 2025 Wren Security
  */
 package org.forgerock.openam.sm.datalayer.impl;
 
@@ -44,6 +45,9 @@ import com.sun.identity.shared.debug.Debug;
  * @see org.forgerock.openam.sm.datalayer.impl.tasks.TaskFactory
  */
 public class SeriesTaskExecutorThread implements Runnable {
+
+    private static final ThreadLocal<SimpleTaskExecutor> CURRENT_EXECUTOR = new ThreadLocal<>();
+
     private final SimpleTaskExecutor taskExecutor;
     private BlockingQueue<Task> queue;
     private final Debug debug;
@@ -57,6 +61,14 @@ public class SeriesTaskExecutorThread implements Runnable {
     public SeriesTaskExecutorThread(@Named(CoreTokenConstants.CTS_DEBUG) Debug debug, SimpleTaskExecutor taskExecutor) {
         this.debug = debug;
         this.taskExecutor = taskExecutor;
+    }
+
+    /**
+     * Get {@link SimpleTaskExecutor} associated with the current thread.
+     * @return Executor associated with the current thread or null.
+     */
+    public static SimpleTaskExecutor getCurrentExecutor() {
+        return CURRENT_EXECUTOR.get();
     }
 
     /**
@@ -77,7 +89,9 @@ public class SeriesTaskExecutorThread implements Runnable {
      */
     @Override
     public void run() {
-        if (queue == null) throw new IllegalStateException("Must assign a queue before starting.");
+        if (queue == null) {
+            throw new IllegalStateException("Must assign a queue before starting.");
+        }
 
         try {
             taskExecutor.start();
@@ -85,16 +99,21 @@ public class SeriesTaskExecutorThread implements Runnable {
             throw new IllegalStateException("Cannot start task executor", e);
         }
 
-        // Iterate until shutdown
-        while (!Thread.currentThread().isInterrupted()) {
-            try {
-                Task task = queue.take();
-                debug("process Task {0}", task);
-                taskExecutor.execute(null, task);
-            } catch (InterruptedException e) {
-                error("interrupt detected", e);
-                Thread.currentThread().interrupt();
+        try {
+            CURRENT_EXECUTOR.set(taskExecutor);
+            // Iterate until shutdown
+            while (!Thread.currentThread().isInterrupted()) {
+                try {
+                    Task task = queue.take();
+                    debug("process Task {0}", task);
+                    taskExecutor.execute(null, task);
+                } catch (InterruptedException e) {
+                    error("interrupt detected", e);
+                    Thread.currentThread().interrupt();
+                }
             }
+        } finally {
+            CURRENT_EXECUTOR.remove();
         }
 
         debug("Processor thread shutdown.");

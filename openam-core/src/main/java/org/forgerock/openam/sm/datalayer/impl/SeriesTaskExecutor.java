@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions copyright 2025 Wren Security
  */
 
 package org.forgerock.openam.sm.datalayer.impl;
@@ -105,6 +106,16 @@ public class SeriesTaskExecutor implements TaskExecutor {
 
     @Override
     public void execute(String tokenId, Task task) throws DataLayerException {
+        // Do not queue the requested task when a different task is already being processed... this will
+        // skip the synchronization, however the alternative is having to deal with deadlocks (i.e. when
+        // the requested task gets queued to a queue of the current executor)
+        SimpleTaskExecutor currentExecutor = SeriesTaskExecutorThread.getCurrentExecutor();
+        if (currentExecutor != null) {
+            debug("Nested task detected - {1}", task);
+            currentExecutor.execute(null, task);
+            return;
+        }
+
         BlockingQueue<Task> queue = getQueue(tokenId);
         offer(queue, task);
     }
