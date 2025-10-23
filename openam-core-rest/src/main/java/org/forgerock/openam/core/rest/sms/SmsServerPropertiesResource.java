@@ -12,7 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
- * Portions Copyright 2023 Wren Security.
+ * Portions Copyright 2023-2025 Wren Security.
  */
 
 package org.forgerock.openam.core.rest.sms;
@@ -36,14 +36,12 @@ import static org.forgerock.api.enums.ParameterSource.PATH;
 import static org.forgerock.api.models.Action.action;
 import static org.forgerock.api.models.ApiDescription.apiDescription;
 import static org.forgerock.api.models.Parameter.parameter;
-import static org.forgerock.api.models.Reference.reference;
 import static org.forgerock.json.JsonValue.field;
 import static org.forgerock.json.JsonValue.json;
 import static org.forgerock.json.JsonValue.object;
 import static org.forgerock.json.resource.Responses.newActionResponse;
 import static org.forgerock.json.resource.Responses.newResourceResponse;
 import static org.forgerock.openam.core.rest.sms.SmsResourceProvider.SCHEMA_DESCRIPTION;
-import static org.forgerock.openam.core.rest.sms.SmsResourceProvider.TEMPLATE_DESCRIPTION;
 import static org.forgerock.openam.i18n.apidescriptor.ApiDescriptorConstants.CONSOLE;
 import static org.forgerock.openam.i18n.apidescriptor.ApiDescriptorConstants.SERVER_PROPERTIES;
 import static org.forgerock.openam.rest.DescriptorUtils.fromResource;
@@ -81,10 +79,8 @@ import org.forgerock.api.annotations.Operation;
 import org.forgerock.api.annotations.Read;
 import org.forgerock.api.annotations.RequestHandler;
 import org.forgerock.api.annotations.Update;
-import org.forgerock.api.enums.ParameterSource;
 import org.forgerock.api.models.ApiDescription;
 import org.forgerock.api.models.Paths;
-import org.forgerock.api.models.Reference;
 import org.forgerock.api.models.Resource;
 import org.forgerock.api.models.Schema;
 import org.forgerock.api.models.VersionedPath;
@@ -777,7 +773,9 @@ public class SmsServerPropertiesResource implements Describable<ApiDescription, 
             String attributePath = (sectionName == null ? "" : sectionName + "/") + attributeName;
             Object defaultAttribute = getValue(defaultAttributes, attributeName);
 
-            if (defaultAttribute != null) {
+            if (PASSWORD_ATTRIBUTES.contains(attributeName)) {
+                result.putPermissive(new JsonPointer(attributePath), null);
+            } else if (defaultAttribute != null) {
                 result.putPermissive(new JsonPointer(attributePath), defaultAttribute);
             }
         }
@@ -811,7 +809,10 @@ public class SmsServerPropertiesResource implements Describable<ApiDescription, 
                 String valuePath = attributePath + "/value";
                 String inheritedPath = attributePath + "/inherited";
 
-                if (serverAttribute != null) {
+                if (PASSWORD_ATTRIBUTES.contains(attributeName)) {
+                    result.putPermissive(new JsonPointer(valuePath), null);
+                    result.putPermissive(new JsonPointer(inheritedPath), serverAttribute == null);
+                } else if (serverAttribute != null) {
                     result.putPermissive(new JsonPointer(valuePath), serverAttribute);
                     result.putPermissive(new JsonPointer(inheritedPath), false);
                 } else {
@@ -860,7 +861,7 @@ public class SmsServerPropertiesResource implements Describable<ApiDescription, 
 
     private List<String> getAdvancedTabAttributeNames(ServiceConfig serverConfig) {
         List<String> attributeNamesForTab;
-        Set<String> allAttributeNames = (Set<String>) serverConfig.getAttributes().get(SERVER_CONFIG);
+        Set<String> allAttributeNames = serverConfig.getAttributes().get(SERVER_CONFIG);
 
         attributeNamesForTab = new ArrayList<>();
         for (String attributeRawValue : allAttributeNames) {
@@ -1031,8 +1032,7 @@ public class SmsServerPropertiesResource implements Describable<ApiDescription, 
     private void addAttributeValues(JsonValue attributes, Map<String, String> attributeValues) {
         for (String attributeName : attributes.keys()) {
             String value = valueOf(attributes.get(attributeName).getObject());
-            attributeValues.put(attributeName, PASSWORD_ATTRIBUTES.contains(attributeName)
-                    ? Crypt.encode(value) : value);
+            addAttributeValue(attributeValues, attributeName, value);
         }
     }
 
@@ -1048,9 +1048,18 @@ public class SmsServerPropertiesResource implements Describable<ApiDescription, 
                 inheritedAttributeNames.add(attributeName);
             } else {
                 String value = valueOf(attribute.get("value").getObject());
-                attributeValues.put(attributeName, PASSWORD_ATTRIBUTES.contains(attributeName)
-                        ? Crypt.encode(value) : value);
+                addAttributeValue(attributeValues, attributeName, value);
             }
+        }
+    }
+
+    private void addAttributeValue(Map<String, String> result, String attribute, String value) {
+        if (PASSWORD_ATTRIBUTES.contains(attribute)) {
+            if (!isBlank(value)) {
+                result.put(attribute, Crypt.encode(value));
+            }
+        } else {
+            result.put(attribute, value);
         }
     }
 
