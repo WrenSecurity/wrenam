@@ -12,16 +12,18 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions Copyright 2025 Wren Security
  */
 
 package org.forgerock.oauth2.core;
 
 import org.forgerock.json.JsonValue;
-
+import org.forgerock.openam.oauth2.OAuth2Constants;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
@@ -128,13 +130,13 @@ public abstract class StatefulToken extends JsonValue {
     }
 
     /**
-     * Sets the end user's original authentication
-     * time in seconds since epoch.
+     * Sets the end user's original authentication time in seconds since epoch.
      *
      * @param authTime The authentication time.
      */
     protected void setAuthTime(long authTime) {
-        put(AUTH_TIME, authTime);
+        // store in milliseconds since epoch (Java friendly timestamp)
+        setStringProperty(AUTH_TIME, String.valueOf(authTime * 1000));
     }
 
     /**
@@ -204,7 +206,12 @@ public abstract class StatefulToken extends JsonValue {
      * @return The authentication time.
      */
     public long getAuthTimeSeconds() {
-        return get(AUTH_TIME).asLong();
+        final String value = getStringProperty(OAuth2Constants.CoreTokenParams.AUTH_TIME);
+        if (value == null) {
+            //  backwards compatibility to fill-in missing auth time for old tokens
+            return TimeUnit.MILLISECONDS.toSeconds(currentTimeMillis());
+        }
+        return Long.parseLong(value) / 1000;
     }
 
     /**

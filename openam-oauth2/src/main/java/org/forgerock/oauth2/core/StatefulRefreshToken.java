@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014-2016 ForgeRock AS.
+ * Portions copyright 2025 Wren Security
  */
 
 package org.forgerock.oauth2.core;
@@ -102,7 +103,7 @@ public class StatefulRefreshToken extends StatefulToken implements RefreshToken 
      * @param acr The authentication context.
      * @param auditId The audit id, used for tracking tokens throughout the audit logs.
      * @param authGrantId The authorization grant id.
-     * @param authTime The end user's original auth time in seconds.
+     * @param authTime The end user's original auth time in seconds since epoch.
      */
     public StatefulRefreshToken(String id, String resourceOwnerId, String clientId, String redirectUri, Set<String> scope,
             long expiryTime, String tokenType, String tokenName, String grantType, String realm,
@@ -139,6 +140,7 @@ public class StatefulRefreshToken extends StatefulToken implements RefreshToken 
      *
      * @return The claims.
      */
+    @Override
     public String getClaims() {
         return getStringProperty(OAuth2Constants.Custom.CLAIMS);
     }
@@ -171,6 +173,7 @@ public class StatefulRefreshToken extends StatefulToken implements RefreshToken 
     /**
      * Gets the realm.
      */
+    @Override
     public String getRealm() {
         return this.getStringProperty(OAuth2Constants.CoreTokenParams.REALM);
     }
@@ -253,6 +256,7 @@ public class StatefulRefreshToken extends StatefulToken implements RefreshToken 
         return ! isNeverExpires() && super.isExpired();
     }
 
+    @Override
     protected long defaultExpireTime() {
         return -1;
     }
@@ -302,6 +306,7 @@ public class StatefulRefreshToken extends StatefulToken implements RefreshToken 
         return getStringProperty(AUTH_GRANT_ID);
     }
 
+    @Override
     protected Long getTimeLeft() {
         if (isNeverExpires()) {
             return null;
@@ -341,23 +346,6 @@ public class StatefulRefreshToken extends StatefulToken implements RefreshToken 
     @Override
     public String getAuditTrackingId() {
         return getStringProperty(AUDIT_TRACKING_ID);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected void setAuthTime(long authTime) {
-        setStringProperty(AUTH_TIME, valueOf(authTime));;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public long getAuthTimeSeconds() {
-        final String value = getStringProperty(OAuth2Constants.CoreTokenParams.AUTH_TIME);
-        return value == null ? TimeUnit.MILLISECONDS.toSeconds(currentTimeMillis()) : Long.parseLong(value);
     }
 
     @Override

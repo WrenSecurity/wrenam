@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2013-2016 ForgeRock AS.
+ * Portions copyright 2025 Wren Security
  */
 package org.forgerock.openam.cts.adapters;
 
@@ -25,21 +26,24 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 
-
+/**
+ * {@link OAuthValues} test case.
+ */
 public class OAuthValuesTest {
+
     @Test
     public void shouldStoreDateValue() {
         // Given
-        String date = "1370259234252";
+        long timestamp = 1370259234252L;
         OAuthValues values = new OAuthValues();
 
         // When
-        Calendar calendar = values.getDateValue(Arrays.asList(date));
+        Calendar calendar = values.getDateValue(timestamp);
         Collection<String> result = values.fromDateValue(calendar);
 
         // Then
         assertEquals(1, result.size());
-        assertThat(result).contains(date);
+        assertThat(result).contains(String.valueOf(timestamp));
     }
 
     @Test

@@ -12,6 +12,8 @@
  * the License file at legal/CDDLv1.0.txt. If applicable, add the following below the CDDL
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
+ *
+ * Portions copyright 2025 Wren Security
  */
 package org.forgerock.openam.cts.api.fields;
 
@@ -49,7 +51,7 @@ public enum OAuthTokenField {
     SESSION_ID(OAuth2Constants.Custom.SSO_TOKEN_ID, CoreTokenField.STRING_THIRTEEN),
     DEVICE_USER_CODE(OAuth2Constants.DeviceCode.USER_CODE, CoreTokenField.STRING_FOURTEEN),
     AUTH_GRANT_ID(OAuth2Constants.CoreTokenParams.AUTH_GRANT_ID, CoreTokenField.STRING_FIFTEEN),
-    AUTH_TIME(OAuth2Constants.CoreTokenParams.AUTH_TIME, CoreTokenField.DATE_TWO);
+    AUTH_TIME(OAuth2Constants.CoreTokenParams.AUTH_TIME, CoreTokenField.DATE_THREE);
 
     private final String oAuthField;
     private final CoreTokenField coreTokenField;
