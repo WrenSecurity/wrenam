@@ -12,14 +12,13 @@
  * the License file at legal/CDDLv1.0.txt. If applicable, add the following below the CDDL
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
+ *
+ * Portions copyright 2025 Wren Security
  */
 package org.forgerock.openam.cts.adapters;
 
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import javax.inject.Inject;
 import org.forgerock.json.JsonValue;
 import org.forgerock.openam.cts.api.fields.OAuthTokenField;
@@ -88,6 +87,7 @@ public class OAuthAdapter implements TokenAdapter<JsonValue> {
      * @throws IllegalArgumentException If the object wrapped inside the JsonValue
      * was not an instance of a Map.
      */
+    @Override
     public Token toToken(JsonValue request) {
         assertObjectIsAMap(request);
         Collection<String> idSet = request.get(TokenIdFactory.ID).asCollection(String.class);
@@ -119,17 +119,14 @@ public class OAuthAdapter implements TokenAdapter<JsonValue> {
                     if (OAuthTokenField.ID.getOAuthField().equals(key)) {
                         continue;
                     }
-                    if (OAuthTokenField.EXPIRY_TIME.getOAuthField().equals(key) ||
-                            OAuthTokenField.AUTH_TIME.getOAuthField().equals(key)) {
-
-                        if (!Collection.class.isAssignableFrom(value.getClass())) {
-                            throw new IllegalStateException("Date must be in a collection");
+                    if (OAuthTokenField.EXPIRY_TIME.getOAuthField().equals(key)) {
+                        long timestamp = getTimestampValue(value);
+                        if (timestamp == -1) {
+                            continue; // token set to never expire
                         }
-
-                        if (isSetToNeverExpire((Collection<String>) value)) {
-                            continue;
-                        }
-                        value = oAuthValues.getDateValue((Collection<String>) value);
+                        value = oAuthValues.getDateValue(timestamp);
+                    } else if (OAuthTokenField.AUTH_TIME.getOAuthField().equals(key)) {
+                        value = oAuthValues.getDateValue(getTimestampValue(value));
                     } else if (value instanceof Collection) {
                         value = oAuthValues.getSingleValue((Collection<String>) value);
                     }
@@ -151,8 +148,15 @@ public class OAuthAdapter implements TokenAdapter<JsonValue> {
         return token;
     }
 
-    private boolean isSetToNeverExpire(Collection<String> value) {
-        return Long.parseLong(value.iterator().next()) == -1;
+    private long getTimestampValue(Object value) {
+        if (!Collection.class.isAssignableFrom(value.getClass())) {
+            throw new IllegalStateException("Timestamp value must be a collection");
+        }
+        Object timestamp = ((Collection<?>) value).iterator().next();
+        if (!(timestamp instanceof String)) {
+            throw new IllegalStateException("Stringified timestamp expected");
+        }
+        return Long.valueOf((String) timestamp);
     }
 
     /**
@@ -163,6 +167,7 @@ public class OAuthAdapter implements TokenAdapter<JsonValue> {
      * @throws IllegalArgumentException If the object wrapped inside the Token
      * was not an instance of a Map.
      */
+    @Override
     public JsonValue fromToken(Token token) {
         if (token == null){
             return null;

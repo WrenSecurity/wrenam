@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014-2016 ForgeRock AS.
+ * Portions copyright 2025 Wren Security
  */
 
 package org.forgerock.oauth2.core;
@@ -20,7 +21,6 @@ import static java.lang.String.valueOf;
 import static org.forgerock.json.JsonValueFunctions.setOf;
 import static org.forgerock.openam.oauth2.OAuth2Constants.Bearer.BEARER;
 import static org.forgerock.openam.oauth2.OAuth2Constants.CoreTokenParams.AUDIT_TRACKING_ID;
-import static org.forgerock.openam.oauth2.OAuth2Constants.CoreTokenParams.AUTH_TIME;
 import static org.forgerock.openam.oauth2.OAuth2Constants.CoreTokenParams.CLIENT_ID;
 import static org.forgerock.openam.oauth2.OAuth2Constants.CoreTokenParams.CONFIRMATION_KEY;
 import static org.forgerock.openam.oauth2.OAuth2Constants.CoreTokenParams.EXPIRE_TIME;
@@ -135,7 +135,7 @@ public class StatefulAccessToken extends StatefulToken implements AccessToken {
      * @param realm The realm.
      * @param claims The requested claims.
      * @param auditTrackingId The tracking ID, used for tracking tokens throughout the audit logs.
-     * @param authTime The end user's original auth time.
+     * @param authTime The end user's original auth time in seconds since epoch.
      * @param confirmationKey JSON confirmation key
      */
     public StatefulAccessToken(String id, String authorizationCode, String resourceOwnerId, String clientId,
@@ -308,6 +308,7 @@ public class StatefulAccessToken extends StatefulToken implements AccessToken {
      *
      * @return The realm.
      */
+    @Override
     public String getRealm() {
         return getStringProperty(REALM);
     }
@@ -387,6 +388,7 @@ public class StatefulAccessToken extends StatefulToken implements AccessToken {
         return (String) extraData.get(SSO_TOKEN_ID);
     }
 
+    @Override
     protected long defaultExpireTime() {
         return 0;
     }
@@ -505,23 +507,6 @@ public class StatefulAccessToken extends StatefulToken implements AccessToken {
     @Override
     public String getAuditTrackingId() {
         return getStringProperty(AUDIT_TRACKING_ID);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected void setAuthTime(long authTime) {
-        setStringProperty(AUTH_TIME, valueOf(authTime));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public long getAuthTimeSeconds() {
-        final String value = getStringProperty(OAuth2Constants.CoreTokenParams.AUTH_TIME);
-        return value == null ? TimeUnit.MILLISECONDS.toSeconds(currentTimeMillis()) : Long.parseLong(value);
     }
 
     @Override
