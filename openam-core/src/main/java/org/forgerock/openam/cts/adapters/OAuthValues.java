@@ -12,6 +12,8 @@
  * the License file at legal/CDDLv1.0.txt. If applicable, add the following below the CDDL
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
+ *
+ * Portions copyright 2025 Wren Security
  */
 package org.forgerock.openam.cts.adapters;
 
@@ -55,20 +57,12 @@ public class OAuthValues {
     }
 
     /**
-     * @param values A Collection containing a single timestamp to convert.
-     *               The timestamp must be in milliseconds from the epoch.
+     * @param timestamp Timestamp to convert (must be in milliseconds from the epoch).
      * @return A Calendar that represents this timestamp.
      */
-    public Calendar getDateValue(Collection<String> values) {
-        if (values == null || values.size() != 1) {
-            throw new IllegalArgumentException();
-        }
-        String dateString = values.iterator().next();
-        long timestamp = Long.parseLong(dateString);
-
+    public Calendar getDateValue(long timestamp) {
         Calendar calendar = getCalendarInstance(TimeUtils.UTC);
         calendar.setTimeInMillis(timestamp);
-
         return calendar;
     }
 
