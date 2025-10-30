@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions copyright 2025 Wren Security
  */
 
 package org.forgerock.oauth2.core;
@@ -21,7 +22,6 @@ import static com.sun.identity.shared.DateUtils.stringToDate;
 import javax.inject.Inject;
 import java.text.ParseException;
 import java.util.Set;
-
 import com.iplanet.sso.SSOException;
 import com.iplanet.sso.SSOToken;
 import com.iplanet.sso.SSOTokenManager;
@@ -58,7 +58,7 @@ public class GrantTypeAccessTokenGenerator {
                 try {
                     final SSOTokenManager ssoTokenManager = SSOTokenManager.getInstance();
                     final SSOToken token = ssoTokenManager.createSSOToken(sessionId);
-                    authTime = stringToDate(token.getProperty(ISAuthConstants.AUTH_INSTANT)).getTime();
+                    authTime = stringToDate(token.getProperty(ISAuthConstants.AUTH_INSTANT)).getTime() / 1000;
                 } catch (SSOException | ParseException e) {
                     logger.error("Error retrieving session from AuthorizationCode", e);
                 }
