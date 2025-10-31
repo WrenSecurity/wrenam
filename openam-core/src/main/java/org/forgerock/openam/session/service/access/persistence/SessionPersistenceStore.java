@@ -12,7 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
- * Portions copyright 2022-2023 Wren Security
+ * Portions copyright 2022-2025 Wren Security
  */
 
 package org.forgerock.openam.session.service.access.persistence;
@@ -260,7 +260,7 @@ public class SessionPersistenceStore {
         try {
             Collection<Token> collection =
                     coreTokenService.query(new TokenFilterBuilder().withQuery(
-                            QueryFilter.contains(
+                            QueryFilter.equalTo(
                                     SessionTokenField.RESTRICTED_TOKENS.getField(),
                                     sessionID.toString()))
                             .build());
