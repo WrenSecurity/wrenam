@@ -15,3 +15,5 @@ jobs:
       event: ${{ github.event.action }}
       label: ${{ github.event.action == 'labeled' && github.event.label.name || '' }}
       pull_request: ${{ toJSON(github.event.pull_request) }}
+    secrets:
+      pull_request_token: ${{ secrets.PR_TOKEN }}
