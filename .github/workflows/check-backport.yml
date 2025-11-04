@@ -15,3 +15,6 @@ jobs:
       event: ${{ github.event.action }}
       label: ${{ github.event.action == 'labeled' && github.event.label.name || '' }}
       pull_request: ${{ toJSON(github.event.pull_request) }}
+      backport_app_id: ${{ vars.BACKPORT_APP_ID }}
+    secrets:
+      backport_app_key: ${{ secrets.BACKPORT_APP_KEY }}
