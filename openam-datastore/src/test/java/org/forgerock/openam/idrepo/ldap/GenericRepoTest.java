@@ -374,6 +374,15 @@ public class GenericRepoTest extends IdRepoTestBase {
         assertThat(resultAttrs.get("searchTester1").get("uid")).containsOnly("searchTester1");
     }
 
+    @Test
+    public void searchUserWithSpecialCharacters() throws Exception {
+        CrestQuery crestQuery = new CrestQuery("special\\user");
+        RepoSearchResults results = idrepo.search(null, IdType.USER, crestQuery, 0, 0, null, true, IdRepo.AND_MOD, null, true);
+        assertThat(results.getErrorCode()).isEqualTo(ResultCode.SUCCESS.intValue());
+        assertThat(results.getType()).isEqualTo(IdType.USER);
+        assertThat(results.getSearchResults()).hasSize(1).containsOnly("special\\user");
+    }
+
     //need to depend on deleteSuccessful, otherwise testuser1 would ruin the day :)
     @Test(dependsOnMethods = "deleteSuccessful")
     public void searchReturnsMatchesForComplexFilters() throws Exception {
@@ -390,7 +399,7 @@ public class GenericRepoTest extends IdRepoTestBase {
         assertThat(results.getErrorCode()).isEqualTo(ResultCode.SUCCESS.intValue());
         assertThat(results.getType()).isEqualTo(IdType.USER);
         assertThat(results.getSearchResults()).containsOnly(DEMO, "searchTester1", "searchTester2", "searchTester3",
-                "searchTester4");
+                "searchTester4", "special\\user");
     }
 
     @Test(enabled = false)
