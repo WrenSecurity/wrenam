@@ -65,3 +65,13 @@ objectclass: organizationalPerson
 objectclass: inetuser
 objectclass: top
 objectclass: person
+
+dn: uid=special\\user,ou=people,dc=openam,dc=forgerock,dc=org
+uid: special\user
+sn: Doe
+userpassword: test
+objectclass: inetorgperson
+objectclass: organizationalPerson
+objectclass: inetuser
+objectclass: top
+objectclass: person
