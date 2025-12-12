@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2013-2016 ForgeRock AS.
+ * Portions copyright 2025 Wren Security.
  */
 package org.forgerock.openam.upgrade;
 
@@ -85,6 +86,7 @@ public class DirectoryContentUpgrader {
     private static final String DEVICE_PRINT_OC = "devicePrintProfilesContainer";
     private static final String OATH_DEVICE_OC = "oathDeviceProfilesContainer";
     private static final String PUSH_DEVICE_OC = "pushDeviceProfilesContainer";
+    private static final String WEBAUTHN_DEVICE_OC = "webAuthnDeviceProfilesContainer";
     private static final String OATH2FAENABLED = "oath2faEnabled";
 
     // Knowledge Based Authentication information container - the object class for kbaInfo
@@ -141,6 +143,7 @@ public class DirectoryContentUpgrader {
             upgraders.add(new AddDevicePrintSchema());
             upgraders.add(new AddOATHDeviceSchema());
             upgraders.add(new AddPushDeviceSchema());
+            upgraders.add(new AddWebAuthnDeviceSchema());
             upgraders.add(new OATH2FASchema());
             upgraders.add(new AddKBAInformationSchema());
             upgraders.add(new LiftUserPasswordRestriction());
@@ -639,6 +642,20 @@ public class DirectoryContentUpgrader {
         public boolean isUpgradeNecessary(Connection conn, Schema schema) throws UpgradeException {
             return !schema.hasObjectClass(PUSH_DEVICE_OC);
         }
+    }
+
+    private class AddWebAuthnDeviceSchema implements Upgrader {
+
+        @Override
+        public String getLDIFPath() {
+            return "/WEB-INF/template/ldif/opendj/opendj_webauthndevices.ldif";
+        }
+
+        @Override
+        public boolean isUpgradeNecessary(Connection conn, Schema schema) throws UpgradeException {
+            return !schema.hasObjectClass(WEBAUTHN_DEVICE_OC);
+        }
+
     }
 
     /*
