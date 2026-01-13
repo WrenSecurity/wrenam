@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions copyright 2026 Wren Security
  */
 
 package com.iplanet.services.ldap.event;
@@ -35,6 +36,7 @@ import org.forgerock.openam.sm.datalayer.api.DataLayerException;
 import org.forgerock.openam.utils.IOUtils;
 import org.forgerock.opendj.ldap.Attribute;
 import org.forgerock.opendj.ldap.Connection;
+import org.forgerock.opendj.ldap.ConnectionEventListener;
 import org.forgerock.opendj.ldap.DN;
 import org.forgerock.opendj.ldap.DecodeException;
 import org.forgerock.opendj.ldap.DecodeOptions;
@@ -50,6 +52,7 @@ import org.forgerock.opendj.ldap.controls.GenericControl;
 import org.forgerock.opendj.ldap.controls.PersistentSearchChangeType;
 import org.forgerock.opendj.ldap.controls.PersistentSearchRequestControl;
 import org.forgerock.opendj.ldap.requests.SearchRequest;
+import org.forgerock.opendj.ldap.responses.ExtendedResult;
 import org.forgerock.opendj.ldap.responses.Result;
 import org.forgerock.opendj.ldap.responses.SearchResultEntry;
 import org.forgerock.opendj.ldap.responses.SearchResultReference;
@@ -185,6 +188,7 @@ public abstract class LDAPv3PersistentSearch<T, H> {
     }
 
     private void startSearch(Connection conn) throws LdapException {
+        conn.addConnectionEventListener(new ConnectionRestartListener());
         if (mode == null) {
             detectPersistentSearchMode(conn);
         }
@@ -400,6 +404,23 @@ public abstract class LDAPv3PersistentSearch<T, H> {
                 }
                 IOUtils.closeIfNotNull(conn);
             }
+        }
+    }
+
+    private class ConnectionRestartListener implements ConnectionEventListener {
+
+        @Override
+        public void handleConnectionClosed() {
+        }
+
+        @Override
+        public void handleConnectionError(boolean isDisconnectNotification, LdapException e) {
+            DEBUG.error("An error occurred while executing persistent search against base DN: {}", searchBaseDN, e);
+            restartSearch();
+        }
+
+        @Override
+        public void handleUnsolicitedNotification(ExtendedResult notification) {
         }
     }
 
