@@ -97,7 +97,7 @@
     </repositories>
 
     <properties>
-        <pgpVerifyKeysVersion>1.9.2</pgpVerifyKeysVersion>
+        <pgpVerifyKeysVersion>1.9.7</pgpVerifyKeysVersion>
 
         <!-- XXX Skip PMD plugin execution (https://github.com/WrenSecurity/wrenam/issues/71) -->
         <pmd.skip>true</pmd.skip>
@@ -135,7 +135,7 @@
         <project.build.outputTimestamp>2025-09-16T06:10:09Z</project.build.outputTimestamp>
 
         <!-- Wren Security Dependencies -->
-        <wrends.version>5.0.0</wrends.version>
+        <wrends.version>5.0.3</wrends.version>
         <wrensec-commons.version>23.0.0-M1</wrensec-commons.version>
         <wrensec-ui.version>23.2.2</wrensec-ui.version>
 
