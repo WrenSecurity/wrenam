@@ -5,6 +5,8 @@
             <input type="text" class="form-control input-btn" value="{{deviceName}}" readonly>
         </div>
     </div>
+    {{#equals deviceType "webAuthn"}}
+    {{else}}
     <div class="form-group">
         <label class="control-label col-sm-4">{{t "openam.authDevices.deviceDetailsDialog.recoveryCodes"}}</label>
         <div class="col-sm-7">
@@ -13,4 +15,5 @@
             <span>{{t "openam.authDevices.deviceDetailsDialog.copyRecoveryCodes"}}</span>
         </div>
     </div>
+    {{/equals}}
 </form>

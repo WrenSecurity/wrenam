@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions copyright 2025 Wren Security.
  */
 
 import $ from "jquery";
@@ -25,6 +26,10 @@ import {
     remove as removePush,
     getAll as getAllPush
 } from "org/forgerock/openam/ui/user/dashboard/services/PushDeviceService";
+import {
+    remove as removeWebAuthn,
+    getAll as getAllWebAuthn
+} from "org/forgerock/openam/ui/user/dashboard/services/WebAuthnDeviceService";
 import AbstractView from "org/forgerock/commons/ui/common/main/AbstractView";
 import DeviceDetailsDialog from "org/forgerock/openam/ui/user/dashboard/views/DeviceDetailsDialog";
 import DevicesSettingsDialog from "org/forgerock/openam/ui/user/dashboard/views/DevicesSettingsDialog";
@@ -59,7 +64,11 @@ class DeviceManagementView extends AbstractView {
 
         const uuid = getUUIDFromElement(event.currentTarget);
         const type = getTypeFromElement(event.currentTarget);
-        const deleteFunc = type === "oath" ? removeOAth : removePush;
+        const deleteFunc = {
+            oath: removeOAth,
+            push: removePush,
+            webAuthn: removeWebAuthn
+        }[type];
 
         deleteFunc(uuid).then(() => {
             this.render();
@@ -70,8 +79,9 @@ class DeviceManagementView extends AbstractView {
 
         const uuid = getUUIDFromElement(event.currentTarget);
         const device = _.find(this.data.devices, { uuid });
+        const type = getTypeFromElement(event.currentTarget);
 
-        DeviceDetailsDialog(uuid, device);
+        DeviceDetailsDialog(uuid, device, type);
     }
     showDevicesSettings (event) {
         event.preventDefault();
@@ -79,11 +89,12 @@ class DeviceManagementView extends AbstractView {
         DevicesSettingsDialog();
     }
     render () {
-        Promise.all([getAllOAth(), getAllPush()]).then((value) => {
+        Promise.all([getAllOAth(), getAllPush(), getAllWebAuthn()]).then((value) => {
             const oathDevices = _.map(value[0], _.partial(_.merge, { type: "oath", icon: "clock-o" }));
             const pushDevices = _.map(value[1], _.partial(_.merge, { type: "push", icon: "bell-o" }));
+            const webAuthnDevices = _.map(value[2], _.partial(_.merge, { type: "webAuthn", icon: "key" }));
 
-            this.data.devices = [...oathDevices, ...pushDevices];
+            this.data.devices = [...oathDevices, ...pushDevices, ...webAuthnDevices];
 
             this.parentRender();
         }, handleReject);
