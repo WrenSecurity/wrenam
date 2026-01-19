@@ -2,6 +2,7 @@
    DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
   
    Copyright (c) 2005 Sun Microsystems Inc. All Rights Reserved
+   Portions Copyrighted 2026 Wren Security
   
    The contents of this file are subject to the terms
    of the Common Development and Distribution License
@@ -35,7 +36,8 @@
         com.sun.identity.security.AdminTokenAction,
         com.iplanet.sso.SSOToken,
         com.sun.identity.sm.ServiceManager,
-        com.sun.identity.sm.SMSEntry"
+        com.sun.identity.sm.SMSEntry,
+        com.sun.identity.setup.AMSetupServlet"
 %>
 
 <html>
@@ -63,7 +65,7 @@
         attributes = null;
     }
 
-    if (attributes == null) {
+    if (attributes == null || !AMSetupServlet.isFullyInitialized()) {
         /**
          * Identity Server or directory is down, have failure message here
           * or throw an exception. This currently throws an exception
