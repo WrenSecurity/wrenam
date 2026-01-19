@@ -25,6 +25,7 @@
  * $Id: Wizard.java,v 1.27 2009/01/17 02:05:35 kevinserwin Exp $
  *
  * Portions Copyrighted 2010-2017 ForgeRock AS.
+ * Portions Copyrighted 2026 Wren Security
  */
 
 package com.sun.identity.config.wizard;
@@ -50,17 +51,17 @@ public class Wizard extends ProtectedPage implements Constants {
 
     public int startingTab = 1;
 
-    public ActionLink createConfigLink = 
+    public ActionLink createConfigLink =
         new ActionLink("createConfig", this, "createConfig" );
-    public ActionLink testUrlLink = 
+    public ActionLink testUrlLink =
         new ActionLink("testNewInstanceUrl", this, "testNewInstanceUrl" );
-    public ActionLink pushConfigLink = 
+    public ActionLink pushConfigLink =
         new ActionLink("pushConfig", this, "pushConfig" );
-    
+
     private String cookieDomain = null;
     private String hostName = getHostName();
     private String dataStore = SetupConstants.SMS_EMBED_DATASTORE;
-    
+
     public static String defaultUserName = "cn=Directory Manager";
     public static String defaultPassword = "";
     public static String defaultRootSuffix = DEFAULT_ROOT_SUFFIX;
@@ -71,25 +72,25 @@ public class Wizard extends ProtectedPage implements Constants {
             AMSetupUtils.getFirstUnusedPort(hostName, 4444, 1000));
     public String defaultJmxPort = Integer.toString(
             AMSetupUtils.getFirstUnusedPort(hostName, 1689, 1000));
-    
+
     /**
-     * This is the 'execute' operation for the entire wizard.  This method 
-     * aggregates all data submitted across the wizard pages here in one lump 
+     * This is the 'execute' operation for the entire wizard.  This method
+     * aggregates all data submitted across the wizard pages here in one lump
      * and hands it off to the back-end for processing.
      */
     public boolean createConfig() {
         HttpServletRequest req = getContext().getRequest();
-        
-        HttpServletRequestWrapper request = 
-            new HttpServletRequestWrapper(getContext().getRequest());          
-        HttpServletResponseWrapper response =                
-            new HttpServletResponseWrapper(getContext().getResponse());        
+
+        HttpServletRequestWrapper request =
+            new HttpServletRequestWrapper(getContext().getRequest());
+        HttpServletResponseWrapper response =
+            new HttpServletResponseWrapper(getContext().getResponse());
         initializeResourceBundle();
 
         // User must have accepted license terms to reach this point
         request.addParameter(SetupConstants.ACCEPT_LICENSE_PARAM, "true");
-        
-        /* 
+
+        /*
          * Get the admin password. use the same value for password and confirm
          * value because they were validated in the input screen
          */
@@ -99,7 +100,7 @@ public class Wizard extends ProtectedPage implements Constants {
             SetupConstants.CONFIG_VAR_ADMIN_PWD, adminPassword);
         request.addParameter(
             SetupConstants.CONFIG_VAR_CONFIRM_ADMIN_PWD, adminPassword);
-            
+
         /*
          * Get the agent password. same value used for password and confirm
          * because they were validated in the input screen.
@@ -110,25 +111,25 @@ public class Wizard extends ProtectedPage implements Constants {
             SetupConstants.CONFIG_VAR_AMLDAPUSERPASSWD, agentPassword);
         request.addParameter(
             SetupConstants.CONFIG_VAR_AMLDAPUSERPASSWD_CONFIRM, agentPassword);
-        
-        /* 
+
+        /*
          * Set the data store information
          */
         String tmp = getAttribute(
-            SetupConstants.CONFIG_VAR_DATA_STORE, 
+            SetupConstants.CONFIG_VAR_DATA_STORE,
             SetupConstants.SMS_EMBED_DATASTORE);
         request.addParameter(SetupConstants.CONFIG_VAR_DATA_STORE, tmp);
 
-        boolean isEmbedded = false; 
+        boolean isEmbedded = false;
         if (tmp.equals(SetupConstants.SMS_EMBED_DATASTORE)) {
             tmp = getAttribute("configStoreHost", hostName);
             request.addParameter(
                 SetupConstants.CONFIG_VAR_DIRECTORY_SERVER_HOST, tmp);
             request.addParameter(
-                SetupConstants.CONFIG_VAR_DIRECTORY_SERVER_SSL, "SIMPLE");   
-            
+                SetupConstants.CONFIG_VAR_DIRECTORY_SERVER_SSL, "SIMPLE");
+
             tmp = getAttribute(SetupConstants.DS_EMB_REPL_FLAG, "false");
-            
+
             /*
              * set the embedded replication information for local host port
              * and remote host port
@@ -138,7 +139,7 @@ public class Wizard extends ProtectedPage implements Constants {
                 request.addParameter(
                     SetupConstants.DS_EMB_REPL_FLAG,
                     SetupConstants.DS_EMP_REPL_FLAG_VAL);
-                
+
                 tmp = getAttribute("localRepPort", "");
                 request.addParameter(SetupConstants.DS_EMB_REPL_REPLPORT1, tmp);
 
@@ -152,7 +153,7 @@ public class Wizard extends ProtectedPage implements Constants {
                 request.addParameter(SetupConstants.DS_EMB_REPL_REPLPORT2, tmp);
 
                 tmp = getAttribute("existingserverid", "");
-                request.addParameter(SetupConstants.DS_EMB_EXISTING_SERVERID, 
+                request.addParameter(SetupConstants.DS_EMB_EXISTING_SERVERID,
                                      tmp);
             }
         }
@@ -171,7 +172,7 @@ public class Wizard extends ProtectedPage implements Constants {
 
         tmp = getAttribute("rootSuffix", defaultRootSuffix);
         request.addParameter(SetupConstants.CONFIG_VAR_ROOT_SUFFIX, tmp);
-       
+
         if (!isEmbedded) {
             tmp = getAttribute("configStoreHost", hostName);
             request.addParameter(
@@ -180,7 +181,7 @@ public class Wizard extends ProtectedPage implements Constants {
             request.addParameter(
                 SetupConstants.CONFIG_VAR_DIRECTORY_SERVER_SSL, tmp);
         }
-        
+
         tmp = getAttribute("configStoreLoginId", defaultUserName);
         request.addParameter(
             SetupConstants.CONFIG_VAR_DS_MGR_DN, tmp);
@@ -188,20 +189,20 @@ public class Wizard extends ProtectedPage implements Constants {
         tmp = getAttribute("configStorePassword", "");
         request.addParameter(
             SetupConstants.CONFIG_VAR_DS_MGR_PWD, tmp);
-                
+
         // user store repository
         tmp = (String)getContext().getSessionAttribute(
             SessionAttributeNames.EXT_DATA_STORE);
 
-        if ((tmp != null) && tmp.equals("true")) {                       
-            Map store = new HashMap(12);  
+        if ((tmp != null) && tmp.equals("true")) {
+            Map store = new HashMap(12);
             tmp = (String)getContext().getSessionAttribute(
-                SessionAttributeNames.USER_STORE_HOST);        
+                SessionAttributeNames.USER_STORE_HOST);
             store.put(SetupConstants.USER_STORE_HOST, tmp);
-            
+
             tmp = (String)getContext().getSessionAttribute(
-                SessionAttributeNames.USER_STORE_SSL);        
-            store.put(SetupConstants.USER_STORE_SSL, tmp);            
+                SessionAttributeNames.USER_STORE_SSL);
+            store.put(SetupConstants.USER_STORE_SSL, tmp);
 
             tmp = (String)getContext().getSessionAttribute(
                 SessionAttributeNames.USER_STORE_PORT);
@@ -211,20 +212,20 @@ public class Wizard extends ProtectedPage implements Constants {
             store.put(SetupConstants.USER_STORE_ROOT_SUFFIX, tmp);
             tmp = (String)getContext().getSessionAttribute(
                 SessionAttributeNames.USER_STORE_LOGIN_ID);
-            store.put(SetupConstants.USER_STORE_LOGIN_ID, tmp);      
+            store.put(SetupConstants.USER_STORE_LOGIN_ID, tmp);
             tmp = (String)getContext().getSessionAttribute(
                 SessionAttributeNames.USER_STORE_LOGIN_PWD);
-            store.put(SetupConstants.USER_STORE_LOGIN_PWD, tmp);      
+            store.put(SetupConstants.USER_STORE_LOGIN_PWD, tmp);
             tmp = (String)getContext().getSessionAttribute(
                 SessionAttributeNames.USER_STORE_TYPE);
             store.put(SetupConstants.USER_STORE_TYPE, tmp);
 
             request.addParameter("UserStore", store);
         }
-        
-        // site configuration is passed as a map of the site information 
+
+        // site configuration is passed as a map of the site information
         Map siteConfig = new HashMap(3);
-        String loadBalancerHost = (String)getContext().getSessionAttribute( 
+        String loadBalancerHost = (String)getContext().getSessionAttribute(
             SessionAttributeNames.LB_SITE_NAME);
         String primaryURL = (String)getContext().getSessionAttribute(
             SessionAttributeNames.LB_PRIMARY_URL);
@@ -240,7 +241,7 @@ public class Wizard extends ProtectedPage implements Constants {
             SessionAttributeNames.SERVER_URL);
         String serverHost;
         int serverPort;
-        
+
         if (serverUrl == null) {
             serverUrl = req.getRequestURL().toString();
             serverHost = getHostName();
@@ -249,7 +250,7 @@ public class Wizard extends ProtectedPage implements Constants {
             serverHost = getHostName(serverUrl, getHostName());
             serverPort = getServerPort(serverUrl, req.getServerPort());
         }
-        
+
         request.addParameter(
             SetupConstants.CONFIG_VAR_SERVER_HOST, serverHost);
         request.addParameter(
@@ -257,8 +258,8 @@ public class Wizard extends ProtectedPage implements Constants {
         request.addParameter(
             SetupConstants.CONFIG_VAR_SERVER_URI, req.getRequestURL().toString());
         request.addParameter(
-            SetupConstants.CONFIG_VAR_SERVER_URL, 
-            getAttribute("serverURL", serverUrl));        
+            SetupConstants.CONFIG_VAR_SERVER_URL,
+            getAttribute("serverURL", serverUrl));
 
         tmp = (String)getContext().getSessionAttribute(
             SessionAttributeNames.ENCRYPTION_KEY);
@@ -276,7 +277,7 @@ public class Wizard extends ProtectedPage implements Constants {
 
         String cookieDomain = (String)getContext().getSessionAttribute(SessionAttributeNames.COOKIE_DOMAIN);
         request.addParameter(SetupConstants.CONFIG_VAR_COOKIE_DOMAIN, cookieDomain);
-        
+
         String locale = (String)getContext().getSessionAttribute(
             SessionAttributeNames.PLATFORM_LOCALE);
         if (locale == null) {
@@ -291,17 +292,18 @@ public class Wizard extends ProtectedPage implements Constants {
         }
         request.addParameter(SetupConstants.CONFIG_VAR_BASE_DIR, base);
         request.addParameter("locale", configLocale.toString());
-                   
+
         try {
             if (AMSetupServlet.processRequest(request, response)) {
-                writeToResponse("true");           
+                AMSetupServlet.setFullyInitialized(true);
+                writeToResponse("true");
             } else {
                 writeToResponse(AMSetupServlet.getErrorMessage());
             }
         } catch (ConfiguratorException cfe) {
             writeToResponse(cfe.getMessage());
         }
-        
+
         setPath(null);
         return false;
     }
