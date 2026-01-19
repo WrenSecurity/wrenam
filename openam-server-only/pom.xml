@@ -945,6 +945,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.wrensecurity.wrenam</groupId>
+            <artifactId>wrenam-auth-webauthn</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
             <artifactId>json-resource</artifactId>
             <groupId>org.wrensecurity.commons</groupId>
         </dependency>
