@@ -25,6 +25,7 @@
  * $Id: DefaultSummary.java,v 1.13 2009/01/05 23:17:09 veiming Exp $
  *
  * Portions Copyrighted 2010-2015 ForgeRock AS.
+ * Portions Copyrighted 2026 Wren Security
  */
 
 package com.sun.identity.config;
@@ -41,24 +42,25 @@ import com.sun.identity.shared.Constants;
 import org.apache.click.control.ActionLink;
 
 public class DefaultSummary extends ProtectedPage {
-    
-    public ActionLink createConfig = 
+
+    public ActionLink createConfig =
         new ActionLink("createDefaultConfig", this, "createDefaultConfig");
-    
+
+    @Override
     public void onInit() {
         super.onInit();
     }
-    
+
     public boolean createDefaultConfig() {
         HttpServletRequest req = getContext().getRequest();
-        HttpServletRequestWrapper request = 
-            new HttpServletRequestWrapper(getContext().getRequest());          
-        HttpServletResponseWrapper response =                
+        HttpServletRequestWrapper request =
+            new HttpServletRequestWrapper(getContext().getRequest());
+        HttpServletResponseWrapper response =
             new HttpServletResponseWrapper(getContext().getResponse());
 
         // License terms must have been accepted to reach this point
         request.addParameter(SetupConstants.ACCEPT_LICENSE_PARAM, "true");
-        
+
         String adminPassword = (String)getContext().getSessionAttribute(
             SessionAttributeNames.CONFIG_VAR_ADMIN_PWD);
         request.addParameter(
@@ -72,19 +74,19 @@ public class DefaultSummary extends ProtectedPage {
             SetupConstants.CONFIG_VAR_AMLDAPUSERPASSWD, agentPassword);
         request.addParameter(
             SetupConstants.CONFIG_VAR_AMLDAPUSERPASSWD_CONFIRM, agentPassword);
-        
+
         request.addParameter(
             SetupConstants.CONFIG_VAR_DIRECTORY_SERVER_SSL, "SIMPLE");
         request.addParameter(
             SetupConstants.CONFIG_VAR_DIRECTORY_SERVER_HOST, getHostName());
         request.addParameter(
-            SetupConstants.CONFIG_VAR_DIRECTORY_SERVER_PORT, 
+            SetupConstants.CONFIG_VAR_DIRECTORY_SERVER_PORT,
             "" + AMSetupUtils.getFirstUnusedPort(getHostName(), 50389, 1000));
         request.addParameter(SetupConstants.CONFIG_VAR_DIRECTORY_ADMIN_SERVER_PORT,
             Integer.toString(AMSetupUtils.getFirstUnusedPort(getHostName(), 4444, 1000)));
         request.addParameter(SetupConstants.CONFIG_VAR_DIRECTORY_JMX_SERVER_PORT,
             Integer.toString(AMSetupUtils.getFirstUnusedPort(getHostName(), 1689, 1000)));
-        
+
         request.addParameter(
             SetupConstants.CONFIG_VAR_SERVER_HOST, getHostName());
         request.addParameter(
@@ -92,27 +94,27 @@ public class DefaultSummary extends ProtectedPage {
         request.addParameter(
             SetupConstants.CONFIG_VAR_SERVER_URI, req.getRequestURI());
         request.addParameter(
-            SetupConstants.CONFIG_VAR_SERVER_URL, 
+            SetupConstants.CONFIG_VAR_SERVER_URL,
                 req.getRequestURL().toString());
-        
+
         request.addParameter(
             SetupConstants.CONFIG_VAR_BASE_DIR, getBaseDir(
                 getContext().getRequest()));
 
         request.addParameter(SetupConstants.CONFIG_VAR_ENCRYPTION_KEY, AMSetupUtils.getRandomString());
-        
+
         request.addParameter(
             SetupConstants.CONFIG_VAR_COOKIE_DOMAIN, getCookieDomain());
-                
+
         request.addParameter(
             SetupConstants.CONFIG_VAR_DS_MGR_PWD, "");
-        
+
         request.addParameter(
             SetupConstants.CONFIG_VAR_DATA_STORE,
-            SetupConstants.SMS_EMBED_DATASTORE);                       
-                
+            SetupConstants.SMS_EMBED_DATASTORE);
+
         request.addParameter(
-            SetupConstants.CONFIG_VAR_PLATFORM_LOCALE, 
+            SetupConstants.CONFIG_VAR_PLATFORM_LOCALE,
             SetupConstants.DEFAULT_PLATFORM_LOCALE);
         request.addParameter("locale", configLocale.toString());
 
@@ -125,7 +127,9 @@ public class DefaultSummary extends ProtectedPage {
                 Constants.DEFAULT_SESSION_HA_STORE_TYPE);
 
         try {
-            if (!AMSetupServlet.processRequest(request, response)) {
+            if (AMSetupServlet.processRequest(request, response)) {
+                AMSetupServlet.setFullyInitialized(true);
+            } else {
                 responseString = AMSetupServlet.getErrorMessage();
             }
         } catch (Exception e) {
