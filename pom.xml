@@ -141,7 +141,7 @@
 
         <!-- Wren Security Dependencies -->
         <wrends.version>5.0.3</wrends.version>
-        <wrensec-commons.version>22.6.0</wrensec-commons.version>
+        <wrensec-commons.version>22.6.2</wrensec-commons.version>
         <wrensec-guava.version>18.0.5</wrensec-guava.version>
         <wrensec-ui.version>23.2.2</wrensec-ui.version>
 
