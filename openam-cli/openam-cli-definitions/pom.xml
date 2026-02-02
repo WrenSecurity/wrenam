@@ -21,7 +21,7 @@
     <parent>
         <groupId>org.wrensecurity.wrenam</groupId>
         <artifactId>openam-cli</artifactId>
-        <version>15.2.4</version>
+        <version>15.2.5-SNAPSHOT</version>
     </parent>
 
     <artifactId>openam-cli-definitions</artifactId>

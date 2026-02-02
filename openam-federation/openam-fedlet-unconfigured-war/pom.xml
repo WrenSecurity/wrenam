@@ -21,7 +21,7 @@
     <parent>
         <groupId>org.wrensecurity.wrenam</groupId>
         <artifactId>openam-federation</artifactId>
-        <version>15.2.4</version>
+        <version>15.2.5-SNAPSHOT</version>
     </parent>
 
     <artifactId>openam-fedlet-unconfigured-war</artifactId>
