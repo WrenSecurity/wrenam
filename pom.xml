@@ -137,7 +137,7 @@
         <!-- Wren Security Dependencies -->
         <wrends.version>5.0.4</wrends.version>
         <wrensec-commons.version>23.0.0-M1</wrensec-commons.version>
-        <wrensec-ui.version>23.2.2</wrensec-ui.version>
+        <wrensec-ui.version>23.2.3</wrensec-ui.version>
 
         <!-- Test Dependencies -->
         <assertj.version>3.19.0</assertj.version>
