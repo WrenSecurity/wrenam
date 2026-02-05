@@ -2144,85 +2144,27 @@
       "integrity": "sha512-6EwiSjwWYP7pTckG6I5eyFANjPhmPjUX9JRLUSfNPC7FX7zK9gyZAfUEaECL6ALTpGX5AjnBq3C9XmVWPitNpw==",
       "dev": true
     },
-    "node_modules/@isaacs/cliui": {
-      "version": "8.0.2",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/@isaacs/cliui/-/cliui-8.0.2.tgz",
-      "integrity": "sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==",
+    "node_modules/@isaacs/balanced-match": {
+      "version": "4.0.1",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/@isaacs/balanced-match/-/balanced-match-4.0.1.tgz",
+      "integrity": "sha512-yzMTt9lEb8Gv7zRioUilSglI0c0smZ9k5D65677DLWLtWJaXIS3CqcGyUFByYKlnUj6TkjLVs54fBl6+TiGQDQ==",
       "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": "20 || >=22"
+      }
+    },
+    "node_modules/@isaacs/brace-expansion": {
+      "version": "5.0.1",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/@isaacs/brace-expansion/-/brace-expansion-5.0.1.tgz",
+      "integrity": "sha512-WMz71T1JS624nWj2n2fnYAuPovhv7EUhk69R6i9dsVyzxt5eM3bjwvgk9L+APE1TRscGysAVMANkB0jh0LQZrQ==",
+      "dev": true,
+      "license": "MIT",
       "dependencies": {
-        "string-width": "^5.1.2",
-        "string-width-cjs": "npm:string-width@^4.2.0",
-        "strip-ansi": "^7.0.1",
-        "strip-ansi-cjs": "npm:strip-ansi@^6.0.1",
-        "wrap-ansi": "^8.1.0",
-        "wrap-ansi-cjs": "npm:wrap-ansi@^7.0.0"
+        "@isaacs/balanced-match": "^4.0.1"
       },
       "engines": {
-        "node": ">=12"
-      }
-    },
-    "node_modules/@isaacs/cliui/node_modules/ansi-regex": {
-      "version": "6.0.1",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/ansi-regex/-/ansi-regex-6.0.1.tgz",
-      "integrity": "sha512-n5M855fKb2SsfMIiFFoVrABHJC8QtHwVx+mHWP3QcEqBHYienj5dHSgjbxtC0WEZXYt4wcD6zrQElDPhFuZgfA==",
-      "dev": true,
-      "engines": {
-        "node": ">=12"
-      }
-    },
-    "node_modules/@isaacs/cliui/node_modules/ansi-styles": {
-      "version": "6.2.1",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/ansi-styles/-/ansi-styles-6.2.1.tgz",
-      "integrity": "sha512-bN798gFfQX+viw3R7yrGWRqnrN2oRkEkUjjl4JNn4E8GxxbjtG3FbrEIIY3l8/hrwUwIeCZvi4QuOTP4MErVug==",
-      "dev": true,
-      "engines": {
-        "node": ">=12"
-      }
-    },
-    "node_modules/@isaacs/cliui/node_modules/emoji-regex": {
-      "version": "9.2.2",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/emoji-regex/-/emoji-regex-9.2.2.tgz",
-      "integrity": "sha512-L18DaJsXSUk2+42pv8mLs5jJT2hqFkFE4j21wOmgbUqsZ2hL72NsUU785g9RXgo3s0ZNgVl42TiHp3ZtOv/Vyg==",
-      "dev": true
-    },
-    "node_modules/@isaacs/cliui/node_modules/string-width": {
-      "version": "5.1.2",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/string-width/-/string-width-5.1.2.tgz",
-      "integrity": "sha512-HnLOCR3vjcY8beoNLtcjZ5/nxn2afmME6lhrDrebokqMap+XbeW8n9TXpPDOqdGK5qcI3oT0GKTW6wC7EMiVqA==",
-      "dev": true,
-      "dependencies": {
-        "eastasianwidth": "^0.2.0",
-        "emoji-regex": "^9.2.2",
-        "strip-ansi": "^7.0.1"
-      },
-      "engines": {
-        "node": ">=12"
-      }
-    },
-    "node_modules/@isaacs/cliui/node_modules/strip-ansi": {
-      "version": "7.1.0",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/strip-ansi/-/strip-ansi-7.1.0.tgz",
-      "integrity": "sha512-iq6eVVI64nQQTRYq2KtEg2d2uU7LElhTJwsH4YzIHZshxlgZms/wIc4VoDQTlG/IvVIrBKG06CrZnp0qv7hkcQ==",
-      "dev": true,
-      "dependencies": {
-        "ansi-regex": "^6.0.1"
-      },
-      "engines": {
-        "node": ">=12"
-      }
-    },
-    "node_modules/@isaacs/cliui/node_modules/wrap-ansi": {
-      "version": "8.1.0",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/wrap-ansi/-/wrap-ansi-8.1.0.tgz",
-      "integrity": "sha512-si7QWI6zUMq56bESFvagtmzMdGOtoxfR+Sez11Mobfc7tm+VkUckk9bW2UeffTGVUbOksxmSw0AA2gs8g71NCQ==",
-      "dev": true,
-      "dependencies": {
-        "ansi-styles": "^6.1.0",
-        "string-width": "^5.0.1",
-        "strip-ansi": "^7.0.1"
-      },
-      "engines": {
-        "node": ">=12"
+        "node": "20 || >=22"
       }
     },
     "node_modules/@jridgewell/gen-mapping": {
@@ -2368,16 +2310,6 @@
       },
       "engines": {
         "node": ">= 8"
-      }
-    },
-    "node_modules/@pkgjs/parseargs": {
-      "version": "0.11.0",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/@pkgjs/parseargs/-/parseargs-0.11.0.tgz",
-      "integrity": "sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==",
-      "dev": true,
-      "optional": true,
-      "engines": {
-        "node": ">=14"
       }
     },
     "node_modules/@puppeteer/browsers": {
@@ -3028,7 +2960,7 @@
     "node_modules/@wrensecurity/commons-ui-build": {
       "version": "0.0.0",
       "resolved": "file:target/ui-libs/wrensecurity-commons-ui-build-0.0.0.tgz",
-      "integrity": "sha512-L/NvRCx3ka8e7rQS7HxEHNUH1/fz3U1MQvCjgJlht1ZqdRjkE7plh1xCd15S07B0bS71iHMRs3l74hgZewCWmQ==",
+      "integrity": "sha512-Rsys0d4PeqmfcSxkSAU0Dm300DFm/nSssPxSsZMhb02RId/u2hfBkkAHyDpbFxaYkHVZFyJy2Twllr10Bs7Kiw==",
       "dev": true,
       "dependencies": {
         "@babel/core": "^7.23.3",
@@ -3047,7 +2979,7 @@
         "postcss": "^8.4.31",
         "postcss-minify": "^1.1.0",
         "requirejs": "^2.3.7",
-        "rimraf": "^5.0.5",
+        "rimraf": "^6.1.2",
         "rollup": "^4.42.0"
       }
     },
@@ -3065,15 +2997,6 @@
       "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/bluebird/-/bluebird-3.7.2.tgz",
       "integrity": "sha512-XpNj6GDQzdfW+r2Wnn7xiSAd7TM3jzkxGXBGTtWKuSXv1xUV+azxAm8jdWZN06QTQk+2N2XB9jRDkvbmQmcRtg==",
       "dev": true
-    },
-    "node_modules/@wrensecurity/commons-ui-build/node_modules/brace-expansion": {
-      "version": "2.0.1",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/brace-expansion/-/brace-expansion-2.0.1.tgz",
-      "integrity": "sha512-XnAIvQ8eM+kC6aULx6wuQiwVsnzsi9d3WxzV3FpWTGA19F621kwdbsAcFKXgKUHZWsy+mY6iL1sHTxWEFCytDA==",
-      "dev": true,
-      "dependencies": {
-        "balanced-match": "^1.0.0"
-      }
     },
     "node_modules/@wrensecurity/commons-ui-build/node_modules/catharsis": {
       "version": "0.9.0",
@@ -3097,22 +3020,21 @@
       }
     },
     "node_modules/@wrensecurity/commons-ui-build/node_modules/glob": {
-      "version": "10.3.10",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/glob/-/glob-10.3.10.tgz",
-      "integrity": "sha512-fa46+tv1Ak0UPK1TOy/pZrIybNNt4HCv7SDzwyfiOZkvZLEbjsZkJBPtDHVshZjbecAoAGSC20MjLDG/qr679g==",
+      "version": "13.0.1",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/glob/-/glob-13.0.1.tgz",
+      "integrity": "sha512-B7U/vJpE3DkJ5WXTgTpTRN63uV42DseiXXKMwG14LQBXmsdeIoHAPbU/MEo6II0k5ED74uc2ZGTC6MwHFQhF6w==",
       "dev": true,
+      "license": "BlueOak-1.0.0",
       "dependencies": {
-        "foreground-child": "^3.1.0",
-        "jackspeak": "^2.3.5",
-        "minimatch": "^9.0.1",
-        "minipass": "^5.0.0 || ^6.0.2 || ^7.0.0",
-        "path-scurry": "^1.10.1"
-      },
-      "bin": {
-        "glob": "dist/esm/bin.mjs"
+        "minimatch": "^10.1.2",
+        "minipass": "^7.1.2",
+        "path-scurry": "^2.0.0"
       },
       "engines": {
-        "node": ">=16 || 14 >=14.17"
+        "node": "20 || >=22"
+      },
+      "funding": {
+        "url": "https://github.com/sponsors/isaacs"
       }
     },
     "node_modules/@wrensecurity/commons-ui-build/node_modules/js2xmlparser": {
@@ -3175,15 +3097,19 @@
       }
     },
     "node_modules/@wrensecurity/commons-ui-build/node_modules/minimatch": {
-      "version": "9.0.3",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/minimatch/-/minimatch-9.0.3.tgz",
-      "integrity": "sha512-RHiac9mvaRw0x3AYRgDC1CxAP7HTcNrrECeA8YYJeWnpo+2Q5CegtZjaotWTWxDG3UeGA1coE05iH1mPjT/2mg==",
+      "version": "10.1.2",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/minimatch/-/minimatch-10.1.2.tgz",
+      "integrity": "sha512-fu656aJ0n2kcXwsnwnv9g24tkU5uSmOlTjd6WyyaKm2Z+h1qmY6bAjrcaIxF/BslFqbZ8UBtbJi7KgQOZD2PTw==",
       "dev": true,
+      "license": "BlueOak-1.0.0",
       "dependencies": {
-        "brace-expansion": "^2.0.1"
+        "@isaacs/brace-expansion": "^5.0.1"
       },
       "engines": {
-        "node": ">=16 || 14 >=14.17"
+        "node": "20 || >=22"
+      },
+      "funding": {
+        "url": "https://github.com/sponsors/isaacs"
       }
     },
     "node_modules/@wrensecurity/commons-ui-build/node_modules/mkdirp": {
@@ -3199,18 +3125,23 @@
       }
     },
     "node_modules/@wrensecurity/commons-ui-build/node_modules/rimraf": {
-      "version": "5.0.5",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/rimraf/-/rimraf-5.0.5.tgz",
-      "integrity": "sha512-CqDakW+hMe/Bz202FPEymy68P+G50RfMQK+Qo5YUqc9SPipvbGjCGKd0RSKEelbsfQuw3g5NZDSrlZZAJurH1A==",
+      "version": "6.1.2",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/rimraf/-/rimraf-6.1.2.tgz",
+      "integrity": "sha512-cFCkPslJv7BAXJsYlK1dZsbP8/ZNLkCAQ0bi1hf5EKX2QHegmDFEFA6QhuYJlk7UDdc+02JjO80YSOrWPpw06g==",
       "dev": true,
+      "license": "BlueOak-1.0.0",
       "dependencies": {
-        "glob": "^10.3.7"
+        "glob": "^13.0.0",
+        "package-json-from-dist": "^1.0.1"
       },
       "bin": {
         "rimraf": "dist/esm/bin.mjs"
       },
       "engines": {
-        "node": ">=14"
+        "node": "20 || >=22"
+      },
+      "funding": {
+        "url": "https://github.com/sponsors/isaacs"
       }
     },
     "node_modules/@wrensecurity/eslint-config": {
@@ -4843,12 +4774,6 @@
         "node": ">= 10.13.0"
       }
     },
-    "node_modules/eastasianwidth": {
-      "version": "0.2.0",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/eastasianwidth/-/eastasianwidth-0.2.0.tgz",
-      "integrity": "sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==",
-      "dev": true
-    },
     "node_modules/ee-first": {
       "version": "1.1.1",
       "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/ee-first/-/ee-first-1.1.1.tgz",
@@ -5894,19 +5819,6 @@
       },
       "engines": {
         "node": ">=0.10.0"
-      }
-    },
-    "node_modules/foreground-child": {
-      "version": "3.1.1",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/foreground-child/-/foreground-child-3.1.1.tgz",
-      "integrity": "sha512-TMKDUnIte6bfb5nWv7V/caI169OHgvwjb7V4WkeUvbQQdjr5rWKqHFiKWb/fcOwB+CzBT+qbWjvj+DVwRskpIg==",
-      "dev": true,
-      "dependencies": {
-        "cross-spawn": "^7.0.0",
-        "signal-exit": "^4.0.1"
-      },
-      "engines": {
-        "node": ">=14"
       }
     },
     "node_modules/fork-stream": {
@@ -7418,21 +7330,6 @@
         "set-function-name": "^2.0.1"
       }
     },
-    "node_modules/jackspeak": {
-      "version": "2.3.6",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/jackspeak/-/jackspeak-2.3.6.tgz",
-      "integrity": "sha512-N3yCS/NegsOBokc8GAdM8UcmfsKiSS8cipheD/nivzr700H+nsMOxJjQnvwOcRYVuFkdH0wGUvW2WbXGmrZGbQ==",
-      "dev": true,
-      "dependencies": {
-        "@isaacs/cliui": "^8.0.2"
-      },
-      "engines": {
-        "node": ">=14"
-      },
-      "optionalDependencies": {
-        "@pkgjs/parseargs": "^0.11.0"
-      }
-    },
     "node_modules/js-tokens": {
       "version": "4.0.0",
       "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/js-tokens/-/js-tokens-4.0.0.tgz",
@@ -8244,10 +8141,11 @@
       }
     },
     "node_modules/minipass": {
-      "version": "7.0.4",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/minipass/-/minipass-7.0.4.tgz",
-      "integrity": "sha512-jYofLM5Dam9279rdkWzqHozUo4ybjdZmCsDHePy5V/PbBcVMiSZR97gmAy45aqi8CK1lG2ECd356FU86avfwUQ==",
+      "version": "7.1.2",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/minipass/-/minipass-7.1.2.tgz",
+      "integrity": "sha512-qOOzS1cBTWYF4BH8fVePDBOO9iptMnGUEZwNc/cMWnTV2nVLZ7VoNWEPHkYczZA0pdoA7dl6e7FL659nX9S2aw==",
       "dev": true,
+      "license": "ISC",
       "engines": {
         "node": ">=16 || 14 >=14.17"
       }
@@ -9191,6 +9089,13 @@
         "node": ">= 14"
       }
     },
+    "node_modules/package-json-from-dist": {
+      "version": "1.0.1",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/package-json-from-dist/-/package-json-from-dist-1.0.1.tgz",
+      "integrity": "sha512-UEZIS3/by4OC8vL3P2dTXRETpebLI2NiI5vIrjaD/5UtrkFX/tNbwjTSRAGC/+7CAo2pIcBaRgWmcBBHcsaCIw==",
+      "dev": true,
+      "license": "BlueOak-1.0.0"
+    },
     "node_modules/parent-module": {
       "version": "1.0.1",
       "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/parent-module/-/parent-module-1.0.1.tgz",
@@ -9315,25 +9220,30 @@
       }
     },
     "node_modules/path-scurry": {
-      "version": "1.10.1",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/path-scurry/-/path-scurry-1.10.1.tgz",
-      "integrity": "sha512-MkhCqzzBEpPvxxQ71Md0b1Kk51W01lrYvlMzSUaIzNsODdd7mqhiimSZlr+VegAz5Z6Vzt9Xg2ttE//XBhH3EQ==",
+      "version": "2.0.1",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/path-scurry/-/path-scurry-2.0.1.tgz",
+      "integrity": "sha512-oWyT4gICAu+kaA7QWk/jvCHWarMKNs6pXOGWKDTr7cw4IGcUbW+PeTfbaQiLGheFRpjo6O9J0PmyMfQPjH71oA==",
       "dev": true,
+      "license": "BlueOak-1.0.0",
       "dependencies": {
-        "lru-cache": "^9.1.1 || ^10.0.0",
-        "minipass": "^5.0.0 || ^6.0.2 || ^7.0.0"
+        "lru-cache": "^11.0.0",
+        "minipass": "^7.1.2"
       },
       "engines": {
-        "node": ">=16 || 14 >=14.17"
+        "node": "20 || >=22"
+      },
+      "funding": {
+        "url": "https://github.com/sponsors/isaacs"
       }
     },
     "node_modules/path-scurry/node_modules/lru-cache": {
-      "version": "10.2.0",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/lru-cache/-/lru-cache-10.2.0.tgz",
-      "integrity": "sha512-2bIM8x+VAf6JT4bKAljS1qUWgMsqZRPGJS6FSahIMPVvctcNhyVp7AJu7quxOW9jwkryBReKZY5tY5JYv2n/7Q==",
+      "version": "11.2.5",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/lru-cache/-/lru-cache-11.2.5.tgz",
+      "integrity": "sha512-vFrFJkWtJvJnD5hg+hJvVE8Lh/TcMzKnTgCWmtBipwI5yLX/iX+5UB2tfuyODF5E7k9xEzMdYgGqaSb1c0c5Yw==",
       "dev": true,
+      "license": "BlueOak-1.0.0",
       "engines": {
-        "node": "14 || >=16.14"
+        "node": "20 || >=22"
       }
     },
     "node_modules/path-type": {
@@ -10600,15 +10510,6 @@
         "microtime": "2.0.x"
       }
     },
-    "node_modules/signal-exit": {
-      "version": "4.1.0",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/signal-exit/-/signal-exit-4.1.0.tgz",
-      "integrity": "sha512-bzyZ1e88w9O1iNJbKnOlvYTrWPDl46O1bG0D3XInv+9tkPrxrN8jUUTiFlDkkmKWgn1M6CfIA13SuGqOa9Korw==",
-      "dev": true,
-      "engines": {
-        "node": ">=14"
-      }
-    },
     "node_modules/sinon": {
       "version": "21.0.0",
       "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/sinon/-/sinon-21.0.0.tgz",
@@ -10918,21 +10819,6 @@
         "node": ">=8"
       }
     },
-    "node_modules/string-width-cjs": {
-      "name": "string-width",
-      "version": "4.2.3",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/string-width/-/string-width-4.2.3.tgz",
-      "integrity": "sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==",
-      "dev": true,
-      "dependencies": {
-        "emoji-regex": "^8.0.0",
-        "is-fullwidth-code-point": "^3.0.0",
-        "strip-ansi": "^6.0.1"
-      },
-      "engines": {
-        "node": ">=8"
-      }
-    },
     "node_modules/string.prototype.matchall": {
       "version": "4.0.10",
       "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/string.prototype.matchall/-/string.prototype.matchall-4.0.10.tgz",
@@ -11011,19 +10897,6 @@
       }
     },
     "node_modules/strip-ansi": {
-      "version": "6.0.1",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/strip-ansi/-/strip-ansi-6.0.1.tgz",
-      "integrity": "sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==",
-      "dev": true,
-      "dependencies": {
-        "ansi-regex": "^5.0.1"
-      },
-      "engines": {
-        "node": ">=8"
-      }
-    },
-    "node_modules/strip-ansi-cjs": {
-      "name": "strip-ansi",
       "version": "6.0.1",
       "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/strip-ansi/-/strip-ansi-6.0.1.tgz",
       "integrity": "sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==",
@@ -11970,51 +11843,6 @@
       "engines": {
         "node": ">=10"
       }
-    },
-    "node_modules/wrap-ansi-cjs": {
-      "name": "wrap-ansi",
-      "version": "7.0.0",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/wrap-ansi/-/wrap-ansi-7.0.0.tgz",
-      "integrity": "sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==",
-      "dev": true,
-      "dependencies": {
-        "ansi-styles": "^4.0.0",
-        "string-width": "^4.1.0",
-        "strip-ansi": "^6.0.0"
-      },
-      "engines": {
-        "node": ">=10"
-      }
-    },
-    "node_modules/wrap-ansi-cjs/node_modules/ansi-styles": {
-      "version": "4.3.0",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/ansi-styles/-/ansi-styles-4.3.0.tgz",
-      "integrity": "sha512-zbB9rCJAT1rbjiVDb2hqKFHNYLxgtk8NURxZ3IZwD3F6NtxbXZQCnnSi1Lkx+IDohdPlFp222wVALIheZJQSEg==",
-      "dev": true,
-      "dependencies": {
-        "color-convert": "^2.0.1"
-      },
-      "engines": {
-        "node": ">=8"
-      }
-    },
-    "node_modules/wrap-ansi-cjs/node_modules/color-convert": {
-      "version": "2.0.1",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/color-convert/-/color-convert-2.0.1.tgz",
-      "integrity": "sha512-RRECPsj7iu/xb5oKYcsFHSppFNnsj/52OVTRKb4zP5onXwVF3zVmmToNcOfGC+CRDpfK/U584fMg38ZHCaElKQ==",
-      "dev": true,
-      "dependencies": {
-        "color-name": "~1.1.4"
-      },
-      "engines": {
-        "node": ">=7.0.0"
-      }
-    },
-    "node_modules/wrap-ansi-cjs/node_modules/color-name": {
-      "version": "1.1.4",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/color-name/-/color-name-1.1.4.tgz",
-      "integrity": "sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==",
-      "dev": true
     },
     "node_modules/wrap-ansi/node_modules/ansi-styles": {
       "version": "4.3.0",
@@ -13844,69 +13672,19 @@
       "integrity": "sha512-6EwiSjwWYP7pTckG6I5eyFANjPhmPjUX9JRLUSfNPC7FX7zK9gyZAfUEaECL6ALTpGX5AjnBq3C9XmVWPitNpw==",
       "dev": true
     },
-    "@isaacs/cliui": {
-      "version": "8.0.2",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/@isaacs/cliui/-/cliui-8.0.2.tgz",
-      "integrity": "sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==",
+    "@isaacs/balanced-match": {
+      "version": "4.0.1",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/@isaacs/balanced-match/-/balanced-match-4.0.1.tgz",
+      "integrity": "sha512-yzMTt9lEb8Gv7zRioUilSglI0c0smZ9k5D65677DLWLtWJaXIS3CqcGyUFByYKlnUj6TkjLVs54fBl6+TiGQDQ==",
+      "dev": true
+    },
+    "@isaacs/brace-expansion": {
+      "version": "5.0.1",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/@isaacs/brace-expansion/-/brace-expansion-5.0.1.tgz",
+      "integrity": "sha512-WMz71T1JS624nWj2n2fnYAuPovhv7EUhk69R6i9dsVyzxt5eM3bjwvgk9L+APE1TRscGysAVMANkB0jh0LQZrQ==",
       "dev": true,
       "requires": {
-        "string-width": "^5.1.2",
-        "string-width-cjs": "npm:string-width@^4.2.0",
-        "strip-ansi": "^7.0.1",
-        "strip-ansi-cjs": "npm:strip-ansi@^6.0.1",
-        "wrap-ansi": "^8.1.0",
-        "wrap-ansi-cjs": "npm:wrap-ansi@^7.0.0"
-      },
-      "dependencies": {
-        "ansi-regex": {
-          "version": "6.0.1",
-          "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/ansi-regex/-/ansi-regex-6.0.1.tgz",
-          "integrity": "sha512-n5M855fKb2SsfMIiFFoVrABHJC8QtHwVx+mHWP3QcEqBHYienj5dHSgjbxtC0WEZXYt4wcD6zrQElDPhFuZgfA==",
-          "dev": true
-        },
-        "ansi-styles": {
-          "version": "6.2.1",
-          "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/ansi-styles/-/ansi-styles-6.2.1.tgz",
-          "integrity": "sha512-bN798gFfQX+viw3R7yrGWRqnrN2oRkEkUjjl4JNn4E8GxxbjtG3FbrEIIY3l8/hrwUwIeCZvi4QuOTP4MErVug==",
-          "dev": true
-        },
-        "emoji-regex": {
-          "version": "9.2.2",
-          "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/emoji-regex/-/emoji-regex-9.2.2.tgz",
-          "integrity": "sha512-L18DaJsXSUk2+42pv8mLs5jJT2hqFkFE4j21wOmgbUqsZ2hL72NsUU785g9RXgo3s0ZNgVl42TiHp3ZtOv/Vyg==",
-          "dev": true
-        },
-        "string-width": {
-          "version": "5.1.2",
-          "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/string-width/-/string-width-5.1.2.tgz",
-          "integrity": "sha512-HnLOCR3vjcY8beoNLtcjZ5/nxn2afmME6lhrDrebokqMap+XbeW8n9TXpPDOqdGK5qcI3oT0GKTW6wC7EMiVqA==",
-          "dev": true,
-          "requires": {
-            "eastasianwidth": "^0.2.0",
-            "emoji-regex": "^9.2.2",
-            "strip-ansi": "^7.0.1"
-          }
-        },
-        "strip-ansi": {
-          "version": "7.1.0",
-          "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/strip-ansi/-/strip-ansi-7.1.0.tgz",
-          "integrity": "sha512-iq6eVVI64nQQTRYq2KtEg2d2uU7LElhTJwsH4YzIHZshxlgZms/wIc4VoDQTlG/IvVIrBKG06CrZnp0qv7hkcQ==",
-          "dev": true,
-          "requires": {
-            "ansi-regex": "^6.0.1"
-          }
-        },
-        "wrap-ansi": {
-          "version": "8.1.0",
-          "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/wrap-ansi/-/wrap-ansi-8.1.0.tgz",
-          "integrity": "sha512-si7QWI6zUMq56bESFvagtmzMdGOtoxfR+Sez11Mobfc7tm+VkUckk9bW2UeffTGVUbOksxmSw0AA2gs8g71NCQ==",
-          "dev": true,
-          "requires": {
-            "ansi-styles": "^6.1.0",
-            "string-width": "^5.0.1",
-            "strip-ansi": "^7.0.1"
-          }
-        }
+        "@isaacs/balanced-match": "^4.0.1"
       }
     },
     "@jridgewell/gen-mapping": {
@@ -14032,13 +13810,6 @@
         "@nodelib/fs.scandir": "2.1.5",
         "fastq": "^1.6.0"
       }
-    },
-    "@pkgjs/parseargs": {
-      "version": "0.11.0",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/@pkgjs/parseargs/-/parseargs-0.11.0.tgz",
-      "integrity": "sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==",
-      "dev": true,
-      "optional": true
     },
     "@puppeteer/browsers": {
       "version": "2.10.5",
@@ -14461,7 +14232,7 @@
     },
     "@wrensecurity/commons-ui-build": {
       "version": "file:target/ui-libs/wrensecurity-commons-ui-build-0.0.0.tgz",
-      "integrity": "sha512-L/NvRCx3ka8e7rQS7HxEHNUH1/fz3U1MQvCjgJlht1ZqdRjkE7plh1xCd15S07B0bS71iHMRs3l74hgZewCWmQ==",
+      "integrity": "sha512-Rsys0d4PeqmfcSxkSAU0Dm300DFm/nSssPxSsZMhb02RId/u2hfBkkAHyDpbFxaYkHVZFyJy2Twllr10Bs7Kiw==",
       "dev": true,
       "requires": {
         "@babel/core": "^7.23.3",
@@ -14480,7 +14251,7 @@
         "postcss": "^8.4.31",
         "postcss-minify": "^1.1.0",
         "requirejs": "^2.3.7",
-        "rimraf": "^5.0.5",
+        "rimraf": "^6.1.2",
         "rollup": "^4.42.0"
       },
       "dependencies": {
@@ -14496,15 +14267,6 @@
           "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/bluebird/-/bluebird-3.7.2.tgz",
           "integrity": "sha512-XpNj6GDQzdfW+r2Wnn7xiSAd7TM3jzkxGXBGTtWKuSXv1xUV+azxAm8jdWZN06QTQk+2N2XB9jRDkvbmQmcRtg==",
           "dev": true
-        },
-        "brace-expansion": {
-          "version": "2.0.1",
-          "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/brace-expansion/-/brace-expansion-2.0.1.tgz",
-          "integrity": "sha512-XnAIvQ8eM+kC6aULx6wuQiwVsnzsi9d3WxzV3FpWTGA19F621kwdbsAcFKXgKUHZWsy+mY6iL1sHTxWEFCytDA==",
-          "dev": true,
-          "requires": {
-            "balanced-match": "^1.0.0"
-          }
         },
         "catharsis": {
           "version": "0.9.0",
@@ -14522,16 +14284,14 @@
           "dev": true
         },
         "glob": {
-          "version": "10.3.10",
-          "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/glob/-/glob-10.3.10.tgz",
-          "integrity": "sha512-fa46+tv1Ak0UPK1TOy/pZrIybNNt4HCv7SDzwyfiOZkvZLEbjsZkJBPtDHVshZjbecAoAGSC20MjLDG/qr679g==",
+          "version": "13.0.1",
+          "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/glob/-/glob-13.0.1.tgz",
+          "integrity": "sha512-B7U/vJpE3DkJ5WXTgTpTRN63uV42DseiXXKMwG14LQBXmsdeIoHAPbU/MEo6II0k5ED74uc2ZGTC6MwHFQhF6w==",
           "dev": true,
           "requires": {
-            "foreground-child": "^3.1.0",
-            "jackspeak": "^2.3.5",
-            "minimatch": "^9.0.1",
-            "minipass": "^5.0.0 || ^6.0.2 || ^7.0.0",
-            "path-scurry": "^1.10.1"
+            "minimatch": "^10.1.2",
+            "minipass": "^7.1.2",
+            "path-scurry": "^2.0.0"
           }
         },
         "js2xmlparser": {
@@ -14582,12 +14342,12 @@
           "dev": true
         },
         "minimatch": {
-          "version": "9.0.3",
-          "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/minimatch/-/minimatch-9.0.3.tgz",
-          "integrity": "sha512-RHiac9mvaRw0x3AYRgDC1CxAP7HTcNrrECeA8YYJeWnpo+2Q5CegtZjaotWTWxDG3UeGA1coE05iH1mPjT/2mg==",
+          "version": "10.1.2",
+          "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/minimatch/-/minimatch-10.1.2.tgz",
+          "integrity": "sha512-fu656aJ0n2kcXwsnwnv9g24tkU5uSmOlTjd6WyyaKm2Z+h1qmY6bAjrcaIxF/BslFqbZ8UBtbJi7KgQOZD2PTw==",
           "dev": true,
           "requires": {
-            "brace-expansion": "^2.0.1"
+            "@isaacs/brace-expansion": "^5.0.1"
           }
         },
         "mkdirp": {
@@ -14597,12 +14357,13 @@
           "dev": true
         },
         "rimraf": {
-          "version": "5.0.5",
-          "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/rimraf/-/rimraf-5.0.5.tgz",
-          "integrity": "sha512-CqDakW+hMe/Bz202FPEymy68P+G50RfMQK+Qo5YUqc9SPipvbGjCGKd0RSKEelbsfQuw3g5NZDSrlZZAJurH1A==",
+          "version": "6.1.2",
+          "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/rimraf/-/rimraf-6.1.2.tgz",
+          "integrity": "sha512-cFCkPslJv7BAXJsYlK1dZsbP8/ZNLkCAQ0bi1hf5EKX2QHegmDFEFA6QhuYJlk7UDdc+02JjO80YSOrWPpw06g==",
           "dev": true,
           "requires": {
-            "glob": "^10.3.7"
+            "glob": "^13.0.0",
+            "package-json-from-dist": "^1.0.1"
           }
         }
       }
@@ -15834,12 +15595,6 @@
         "object.defaults": "^1.1.0"
       }
     },
-    "eastasianwidth": {
-      "version": "0.2.0",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/eastasianwidth/-/eastasianwidth-0.2.0.tgz",
-      "integrity": "sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==",
-      "dev": true
-    },
     "ee-first": {
       "version": "1.1.1",
       "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/ee-first/-/ee-first-1.1.1.tgz",
@@ -16657,16 +16412,6 @@
       "dev": true,
       "requires": {
         "for-in": "^1.0.1"
-      }
-    },
-    "foreground-child": {
-      "version": "3.1.1",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/foreground-child/-/foreground-child-3.1.1.tgz",
-      "integrity": "sha512-TMKDUnIte6bfb5nWv7V/caI169OHgvwjb7V4WkeUvbQQdjr5rWKqHFiKWb/fcOwB+CzBT+qbWjvj+DVwRskpIg==",
-      "dev": true,
-      "requires": {
-        "cross-spawn": "^7.0.0",
-        "signal-exit": "^4.0.1"
       }
     },
     "fork-stream": {
@@ -17699,16 +17444,6 @@
         "set-function-name": "^2.0.1"
       }
     },
-    "jackspeak": {
-      "version": "2.3.6",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/jackspeak/-/jackspeak-2.3.6.tgz",
-      "integrity": "sha512-N3yCS/NegsOBokc8GAdM8UcmfsKiSS8cipheD/nivzr700H+nsMOxJjQnvwOcRYVuFkdH0wGUvW2WbXGmrZGbQ==",
-      "dev": true,
-      "requires": {
-        "@isaacs/cliui": "^8.0.2",
-        "@pkgjs/parseargs": "^0.11.0"
-      }
-    },
     "js-tokens": {
       "version": "4.0.0",
       "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/js-tokens/-/js-tokens-4.0.0.tgz",
@@ -18349,9 +18084,9 @@
       "integrity": "sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA=="
     },
     "minipass": {
-      "version": "7.0.4",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/minipass/-/minipass-7.0.4.tgz",
-      "integrity": "sha512-jYofLM5Dam9279rdkWzqHozUo4ybjdZmCsDHePy5V/PbBcVMiSZR97gmAy45aqi8CK1lG2ECd356FU86avfwUQ==",
+      "version": "7.1.2",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/minipass/-/minipass-7.1.2.tgz",
+      "integrity": "sha512-qOOzS1cBTWYF4BH8fVePDBOO9iptMnGUEZwNc/cMWnTV2nVLZ7VoNWEPHkYczZA0pdoA7dl6e7FL659nX9S2aw==",
       "dev": true
     },
     "mitt": {
@@ -19042,6 +18777,12 @@
         "netmask": "^2.0.2"
       }
     },
+    "package-json-from-dist": {
+      "version": "1.0.1",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/package-json-from-dist/-/package-json-from-dist-1.0.1.tgz",
+      "integrity": "sha512-UEZIS3/by4OC8vL3P2dTXRETpebLI2NiI5vIrjaD/5UtrkFX/tNbwjTSRAGC/+7CAo2pIcBaRgWmcBBHcsaCIw==",
+      "dev": true
+    },
     "parent-module": {
       "version": "1.0.1",
       "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/parent-module/-/parent-module-1.0.1.tgz",
@@ -19129,19 +18870,19 @@
       "dev": true
     },
     "path-scurry": {
-      "version": "1.10.1",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/path-scurry/-/path-scurry-1.10.1.tgz",
-      "integrity": "sha512-MkhCqzzBEpPvxxQ71Md0b1Kk51W01lrYvlMzSUaIzNsODdd7mqhiimSZlr+VegAz5Z6Vzt9Xg2ttE//XBhH3EQ==",
+      "version": "2.0.1",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/path-scurry/-/path-scurry-2.0.1.tgz",
+      "integrity": "sha512-oWyT4gICAu+kaA7QWk/jvCHWarMKNs6pXOGWKDTr7cw4IGcUbW+PeTfbaQiLGheFRpjo6O9J0PmyMfQPjH71oA==",
       "dev": true,
       "requires": {
-        "lru-cache": "^9.1.1 || ^10.0.0",
-        "minipass": "^5.0.0 || ^6.0.2 || ^7.0.0"
+        "lru-cache": "^11.0.0",
+        "minipass": "^7.1.2"
       },
       "dependencies": {
         "lru-cache": {
-          "version": "10.2.0",
-          "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/lru-cache/-/lru-cache-10.2.0.tgz",
-          "integrity": "sha512-2bIM8x+VAf6JT4bKAljS1qUWgMsqZRPGJS6FSahIMPVvctcNhyVp7AJu7quxOW9jwkryBReKZY5tY5JYv2n/7Q==",
+          "version": "11.2.5",
+          "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/lru-cache/-/lru-cache-11.2.5.tgz",
+          "integrity": "sha512-vFrFJkWtJvJnD5hg+hJvVE8Lh/TcMzKnTgCWmtBipwI5yLX/iX+5UB2tfuyODF5E7k9xEzMdYgGqaSb1c0c5Yw==",
           "dev": true
         }
       }
@@ -20139,12 +19880,6 @@
         "optimist": "0.6.x"
       }
     },
-    "signal-exit": {
-      "version": "4.1.0",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/signal-exit/-/signal-exit-4.1.0.tgz",
-      "integrity": "sha512-bzyZ1e88w9O1iNJbKnOlvYTrWPDl46O1bG0D3XInv+9tkPrxrN8jUUTiFlDkkmKWgn1M6CfIA13SuGqOa9Korw==",
-      "dev": true
-    },
     "sinon": {
       "version": "21.0.0",
       "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/sinon/-/sinon-21.0.0.tgz",
@@ -20378,17 +20113,6 @@
         "strip-ansi": "^6.0.1"
       }
     },
-    "string-width-cjs": {
-      "version": "npm:string-width@4.2.3",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/string-width/-/string-width-4.2.3.tgz",
-      "integrity": "sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==",
-      "dev": true,
-      "requires": {
-        "emoji-regex": "^8.0.0",
-        "is-fullwidth-code-point": "^3.0.0",
-        "strip-ansi": "^6.0.1"
-      }
-    },
     "string.prototype.matchall": {
       "version": "4.0.10",
       "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/string.prototype.matchall/-/string.prototype.matchall-4.0.10.tgz",
@@ -20447,15 +20171,6 @@
     },
     "strip-ansi": {
       "version": "6.0.1",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/strip-ansi/-/strip-ansi-6.0.1.tgz",
-      "integrity": "sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==",
-      "dev": true,
-      "requires": {
-        "ansi-regex": "^5.0.1"
-      }
-    },
-    "strip-ansi-cjs": {
-      "version": "npm:strip-ansi@6.0.1",
       "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/strip-ansi/-/strip-ansi-6.0.1.tgz",
       "integrity": "sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==",
       "dev": true,
@@ -21164,43 +20879,6 @@
     },
     "wrap-ansi": {
       "version": "7.0.0",
-      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/wrap-ansi/-/wrap-ansi-7.0.0.tgz",
-      "integrity": "sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==",
-      "dev": true,
-      "requires": {
-        "ansi-styles": "^4.0.0",
-        "string-width": "^4.1.0",
-        "strip-ansi": "^6.0.0"
-      },
-      "dependencies": {
-        "ansi-styles": {
-          "version": "4.3.0",
-          "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/ansi-styles/-/ansi-styles-4.3.0.tgz",
-          "integrity": "sha512-zbB9rCJAT1rbjiVDb2hqKFHNYLxgtk8NURxZ3IZwD3F6NtxbXZQCnnSi1Lkx+IDohdPlFp222wVALIheZJQSEg==",
-          "dev": true,
-          "requires": {
-            "color-convert": "^2.0.1"
-          }
-        },
-        "color-convert": {
-          "version": "2.0.1",
-          "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/color-convert/-/color-convert-2.0.1.tgz",
-          "integrity": "sha512-RRECPsj7iu/xb5oKYcsFHSppFNnsj/52OVTRKb4zP5onXwVF3zVmmToNcOfGC+CRDpfK/U584fMg38ZHCaElKQ==",
-          "dev": true,
-          "requires": {
-            "color-name": "~1.1.4"
-          }
-        },
-        "color-name": {
-          "version": "1.1.4",
-          "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/color-name/-/color-name-1.1.4.tgz",
-          "integrity": "sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==",
-          "dev": true
-        }
-      }
-    },
-    "wrap-ansi-cjs": {
-      "version": "npm:wrap-ansi@7.0.0",
       "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/wrap-ansi/-/wrap-ansi-7.0.0.tgz",
       "integrity": "sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==",
       "dev": true,
