@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "title": "i18n:api-descriptor/UserDevicesResource#schema.title",
+  "description": "i18n:api-descriptor/UserDevicesResource#schema.description",
+  "properties": {
+    "uuid": {
+      "type": "string",
+      "title": "i18n:api-descriptor/UserDevicesResource#schema.uuid.title",
+      "description": "i18n:api-descriptor/UserDevicesResource#schema.uuid.description"
+    },
+    "name": {
+      "type": "string",
+      "title": "i18n:api-descriptor/UserDevicesResource#schema.name.title",
+      "description": "i18n:api-descriptor/UserDevicesResource#schema.name.description"
+    }
+  }
+}

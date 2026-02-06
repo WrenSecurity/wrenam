@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions copyright 2025 Wren Security.
  */
 
 package org.forgerock.openam.core.rest.devices;
@@ -43,18 +44,18 @@ import org.forgerock.openam.core.rest.devices.services.DeviceService;
  *
  * @since 13.0.0
  */
-public class UserDevicesDao {
+public class UserDevicesDao<T extends DeviceService> {
 
     private static final int NO_LIMIT = 0;
 
-    private final AuthenticatorDeviceServiceFactory serviceFactory;
+    protected final AuthenticatorDeviceServiceFactory<T> serviceFactory;
 
     /**
      * Construct a new UserDevicesDao with the provided serviceFactory.
      *
      * @param serviceFactory The DeviceServiceFactory used to generate specific services for realms.
      */
-    public UserDevicesDao(AuthenticatorDeviceServiceFactory serviceFactory) {
+    public UserDevicesDao(AuthenticatorDeviceServiceFactory<T> serviceFactory) {
         this.serviceFactory = serviceFactory;
     }
 
@@ -138,7 +139,7 @@ public class UserDevicesDao {
      * @return An {@code AMIdentity}.
      * @throws InternalServerErrorException If there is a problem getting the user's identity.
      */
-    private AMIdentity getIdentity(String userName, String realm) throws InternalServerErrorException {
+    protected AMIdentity getIdentity(String userName, String realm) throws InternalServerErrorException {
         final AMIdentity amIdentity;
         final AMIdentityRepository amIdRepo = AuthD.getAuth().getAMIdentityRepository(realm);
 

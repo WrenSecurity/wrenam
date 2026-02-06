@@ -28,7 +28,7 @@ import org.forgerock.openam.core.rest.devices.services.push.AuthenticatorPushSer
  *
  * @since 13.5.0
  */
-public class PushDevicesDao extends UserDevicesDao {
+public class PushDevicesDao extends UserDevicesDao<AuthenticatorPushService> {
 
     /**
      * Construct a new PushDevicesDao.

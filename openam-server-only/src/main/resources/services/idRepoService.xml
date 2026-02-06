@@ -27,7 +27,7 @@
    $Id: idRepoService.xml,v 1.37 2009/11/10 01:50:57 hengming Exp $
 
    Portions Copyrighted 2012-2016 ForgeRock AS.
-   Portions copyright 2024 Wren Security.
+   Portions copyright 2024-2025 Wren Security.
 -->
 <!DOCTYPE ServicesConfiguration
     PUBLIC "=//iplanet//Service Management Services (SMS) 1.0 DTD//EN"
@@ -1061,6 +1061,7 @@
                             <Value>devicePrintProfilesContainer</Value>
                             <Value>oathDeviceProfilesContainer</Value>
                             <Value>pushDeviceProfilesContainer</Value>
+                            <Value>webAuthnDeviceProfilesContainer</Value>
                             <Value>kbaInfoContainer</Value>
                         </DefaultValues>
                     </AttributeSchema>
@@ -1162,6 +1163,7 @@
                             <Value>createTimestamp</Value>
                             <Value>oathDeviceProfiles</Value>
                             <Value>pushDeviceProfiles</Value>
+                            <Value>webAuthnDeviceProfiles</Value>
                             <Value>oath2faEnabled</Value>
                         </DefaultValues>
                     </AttributeSchema>
@@ -1811,6 +1813,7 @@
                             <Value>devicePrintProfilesContainer</Value>
                             <Value>oathDeviceProfilesContainer</Value>
                             <Value>pushDeviceProfilesContainer</Value>
+                            <Value>webAuthnDeviceProfilesContainer</Value>
                             <Value>kbaInfoContainer</Value>
                         </DefaultValues>
                     </AttributeSchema>
@@ -1909,9 +1912,11 @@
                             <Value>createTimestamp</Value>
                             <Value>oathDeviceProfiles</Value>
                             <Value>pushDeviceProfiles</Value>
+                            <Value>webAuthnDeviceProfiles</Value>
                             <Value>oath2faEnabled</Value>
                             <Value>kbaInfo</Value>
                             <Value>kbaActiveIndex</Value>
+                            <Value>entryUUID</Value>
                         </DefaultValues>
                     </AttributeSchema>
 
@@ -2426,6 +2431,7 @@
                             <Value>devicePrintProfilesContainer</Value>
                             <Value>oathDeviceProfilesContainer</Value>
                             <Value>pushDeviceProfilesContainer</Value>
+                            <Value>webAuthnDeviceProfilesContainer</Value>
                             <Value>kbaInfoContainer</Value>
                         </DefaultValues>
                     </AttributeSchema>
@@ -2524,6 +2530,7 @@
                             <Value>createTimestamp</Value>
                             <Value>oathDeviceProfiles</Value>
                             <Value>pushDeviceProfiles</Value>
+                            <Value>webAuthnDeviceProfiles</Value>
                             <Value>oath2faEnabled</Value>
                             <Value>kbaInfo</Value>
                             <Value>kbaActiveIndex</Value>
@@ -3122,6 +3129,7 @@
                             <Value>createTimestamp</Value>
                             <Value>oathDeviceProfiles</Value>
                             <Value>pushDeviceProfiles</Value>
+                            <Value>webAuthnDeviceProfiles</Value>
                             <Value>oath2faEnabled</Value>
                             <Value>kbaInfo</Value>
                             <Value>kbaActiveIndex</Value>
@@ -3628,6 +3636,7 @@
                             <Value>devicePrintProfilesContainer</Value>
                             <Value>oathDeviceProfilesContainer</Value>
                             <Value>pushDeviceProfilesContainer</Value>
+                            <Value>webAuthnDeviceProfilesContainer</Value>
                             <Value>kbaInfoContainer</Value>
                         </DefaultValues>
                     </AttributeSchema>
@@ -3726,6 +3735,7 @@
                             <Value>kbaInfo</Value>
                             <Value>kbaActiveIndex</Value>
                             <Value>pushDeviceProfiles</Value>
+                            <Value>webAuthnDeviceProfiles</Value>
                         </DefaultValues>
                     </AttributeSchema>
 

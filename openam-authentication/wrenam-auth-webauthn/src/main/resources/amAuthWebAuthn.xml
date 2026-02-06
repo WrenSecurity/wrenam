@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+ * The contents of this file are subject to the terms of the Common Development and
+ * Distribution License (the License). You may not use this file except in compliance with the
+ * License.
+ *
+ * You can obtain a copy of the License at legal/CDDLv1.1.txt. See the License for the
+ * specific language governing permission and limitations under the License.
+ *
+ * When distributing Covered Software, include this CDDL Header Notice in each file and include
+ * the License file at legal/CDDLv1.1.txt. If applicable, add the following below the CDDL
+ * Header, with the fields enclosed by brackets [] replaced by your own identifying
+ * information: "Portions copyright [year] [name of copyright owner]".
+ *
+ * Copyright 2025 Wren Security. All rights reserved.
+-->
+<!DOCTYPE ServicesConfiguration
+        PUBLIC "=//iPlanet//Service Management Services (SMS) 1.0 DTD//EN"
+        "jar://com/sun/identity/sm/sms.dtd">
+<ServicesConfiguration>
+    <Service name="iPlanetAMAuthWebAuthnService" version="1.0">
+        <Schema
+                i18nFileName="amAuthWebAuthn"
+                serviceHierarchy="/DSAMEConfig/authentication/iPlanetAMAuthWebAuthnService"
+                revisionNumber="1"
+                resourceName="amAuthWebAuthn"
+                i18nKey="iPlanetAMAuthWebAuthnServiceDescription">
+            <Organization>
+                <AttributeSchema
+                        name="wrensec-am-auth-webauthn-usernameless"
+                        type="single"
+                        syntax="boolean"
+                        i18nKey="usernameless"
+                        order="100"
+                        resourceName="usernameless">
+                    <BooleanValues>
+                        <BooleanTrueValue i18nKey="true">true</BooleanTrueValue>
+                        <BooleanFalseValue i18nKey="false">false</BooleanFalseValue>
+                    </BooleanValues>
+                    <DefaultValues>
+                        <Value>false</Value>
+                    </DefaultValues>
+                </AttributeSchema>
+                <AttributeSchema
+                        name="wrensec-am-auth-webauthn-user-verification"
+                        type="single_choice"
+                        syntax="string"
+                        i18nKey="userVerification"
+                        order="200"
+                        resourceName="userVerification">
+                    <ChoiceValues>
+                        <ChoiceValue i18nKey="required">required</ChoiceValue>
+                        <ChoiceValue i18nKey="preferred">preferred</ChoiceValue>
+                        <ChoiceValue i18nKey="discouraged">discouraged</ChoiceValue>
+                    </ChoiceValues>
+                    <DefaultValues>
+                        <Value>preferred</Value>
+                    </DefaultValues>
+                </AttributeSchema>
+                <AttributeSchema
+                        name="wrensec-am-auth-webauthn-rp-id"
+                        type="single"
+                        syntax="string"
+                        i18nKey="rpId"
+                        order="300"
+                        resourceName="rpId">
+                    <DefaultValues>
+                        <Value>@SERVER_HOST@</Value>
+                    </DefaultValues>
+                </AttributeSchema>
+                <AttributeSchema
+                        name="wrensec-am-auth-webauthn-timeout"
+                        type="single"
+                        syntax="number_range"
+                        rangeStart="0"
+                        rangeEnd="2147483647"
+                        i18nKey="timeout"
+                        order="500"
+                        resourceName="timeout">
+                    <DefaultValues>
+                        <Value>120000</Value>
+                    </DefaultValues>
+                </AttributeSchema>
+                <AttributeSchema
+                        name="wrensec-am-auth-webauthn-auth-level"
+                        type="single"
+                        syntax="number_range"
+                        rangeStart="0"
+                        rangeEnd="2147483647" i18nKey="authenticationLevel" order="600"
+                        resourceName="authenticationLevel">
+                    <DefaultValues>
+                        <Value>0</Value>
+                    </DefaultValues>
+                </AttributeSchema>
+                <SubSchema name="serverconfig" inheritance="multiple" resourceName="USE-PARENT">
+                    <AttributeSchema
+                            name="wrensec-am-auth-webauthn-usernameless"
+                            type="single"
+                            syntax="boolean"
+                            i18nKey="usernameless"
+                            order="100"
+                            resourceName="usernameless">
+                        <BooleanValues>
+                            <BooleanTrueValue i18nKey="true">true</BooleanTrueValue>
+                            <BooleanFalseValue i18nKey="false">false</BooleanFalseValue>
+                        </BooleanValues>
+                        <DefaultValues>
+                            <Value>false</Value>
+                        </DefaultValues>
+                    </AttributeSchema>
+                    <AttributeSchema
+                            name="wrensec-am-auth-webauthn-user-verification"
+                            type="single_choice"
+                            syntax="string"
+                            i18nKey="userVerification"
+                            order="200"
+                            resourceName="userVerification">
+                        <ChoiceValues>
+                            <ChoiceValue i18nKey="required">required</ChoiceValue>
+                            <ChoiceValue i18nKey="preferred">preferred</ChoiceValue>
+                            <ChoiceValue i18nKey="discouraged">discouraged</ChoiceValue>
+                        </ChoiceValues>
+                        <DefaultValues>
+                            <Value>preferred</Value>
+                        </DefaultValues>
+                    </AttributeSchema>
+                    <AttributeSchema
+                            name="wrensec-am-auth-webauthn-rp-id"
+                            type="single"
+                            syntax="string"
+                            i18nKey="rpId"
+                            order="300"
+                            resourceName="rpId">
+                        <DefaultValues>
+                            <Value>@SERVER_HOST@</Value>
+                        </DefaultValues>
+                    </AttributeSchema>
+                    <AttributeSchema
+                            name="wrensec-am-auth-webauthn-timeout"
+                            type="single"
+                            syntax="number_range"
+                            rangeStart="0"
+                            rangeEnd="2147483647"
+                            i18nKey="timeout"
+                            order="500"
+                            resourceName="timeout">
+                        <DefaultValues>
+                            <Value>120000</Value>
+                        </DefaultValues>
+                    </AttributeSchema>
+                    <AttributeSchema
+                            name="wrensec-am-auth-webauthn-auth-level"
+                            type="single"
+                            syntax="number_range"
+                            rangeStart="0"
+                            rangeEnd="2147483647"
+                            i18nKey="authenticationLevel"
+                            order="600"
+                            resourceName="authenticationLevel">
+                        <DefaultValues>
+                            <Value>0</Value>
+                        </DefaultValues>
+                    </AttributeSchema>
+                </SubSchema>
+            </Organization>
+        </Schema>
+    </Service>
+</ServicesConfiguration>
