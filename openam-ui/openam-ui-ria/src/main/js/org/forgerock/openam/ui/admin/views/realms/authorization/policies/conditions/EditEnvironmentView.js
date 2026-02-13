@@ -53,7 +53,7 @@ define([
 
             this.setElement(element);
 
-            this.data = $.extend(true, [], schema);
+            this.data = $.extend(true, {}, schema);
             this.data.itemID = itemID;
 
             _.each(this.data.conditions, function (condition) {
