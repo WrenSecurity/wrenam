@@ -785,13 +785,6 @@ public interface Constants {
             "am.protected";
 
     /**
-     * Property string to determine whether to set auth cookies to all
-     * domains in the domain list.
-     */
-    static final String SET_COOKIE_TO_ALL_DOMAINS =
-            "com.sun.identity.authentication.setCookieToAllDomains";
-
-    /**
      * Property Name for cache polling interval.
      */
     static final String CACHE_POLLING_TIME_PROPERTY = "com.sun.identity.sm.cacheTime";
