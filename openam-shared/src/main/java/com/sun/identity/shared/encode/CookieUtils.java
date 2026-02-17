@@ -36,8 +36,6 @@ import com.sun.identity.shared.Constants;
 import com.sun.identity.shared.configuration.SystemPropertiesManager;
 import com.sun.identity.shared.debug.Debug;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Collections;
@@ -448,18 +446,13 @@ public class CookieUtils {
 
     /**
      * Matches the provided cookie domains against the current request's domain and returns the resulting set of
-     * matching cookie domains if the 'com.sun.identity.authentication.setCookieToAllDomains' advanced property is set
-     * to false.
+     * matching cookie domains.
      *
      * @param request The HTTP request.
      * @param cookieDomains The configured cookie domains to match against.
      * @return The set of matching cookie domains. May contain null.
      */
     public static Set<String> getMatchingCookieDomains(HttpServletRequest request, Collection<String> cookieDomains) {
-        if (SystemPropertiesManager.getAsBoolean(Constants.SET_COOKIE_TO_ALL_DOMAINS, true)) {
-            return new HashSet<>(cookieDomains);
-        }
-
         String host = request.getServerName();
         Set<String> domains = new HashSet<>();
 
