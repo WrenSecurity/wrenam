@@ -41,6 +41,8 @@ public class WebAuthnService extends EncryptedDeviceStorage implements DeviceSer
 
     private static final String WEBAUTHN_USER_ID_ATTR = "wrensec-am-auth-webauthn-user-id-attr";
 
+    private static final String WEBAUTHN_USER_DISPLAY_NAME_ATTR = "wrensec-am-auth-webauthn-user-display-name-attr";
+
     private static final String WEBAUTHN_ENCRYPTION_SCHEME =
             "wrensec-am-auth-webauthn-device-settings-encryption-scheme";
 
@@ -79,6 +81,10 @@ public class WebAuthnService extends EncryptedDeviceStorage implements DeviceSer
 
     public String getUserIdAttributeName() {
         return CollectionHelper.getMapAttr(options, WEBAUTHN_USER_ID_ATTR);
+    }
+
+    public String getUserDisplayNameAttributeName() {
+        return CollectionHelper.getMapAttr(options, WEBAUTHN_USER_DISPLAY_NAME_ATTR);
     }
 
     @Override

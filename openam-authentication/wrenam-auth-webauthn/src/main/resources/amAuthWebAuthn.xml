@@ -12,7 +12,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2025 Wren Security. All rights reserved.
+ * Copyright 2025-2026 Wren Security. All rights reserved.
 -->
 <!DOCTYPE ServicesConfiguration
         PUBLIC "=//iPlanet//Service Management Services (SMS) 1.0 DTD//EN"
@@ -66,6 +66,17 @@
                         resourceName="rpId">
                     <DefaultValues>
                         <Value>@SERVER_HOST@</Value>
+                    </DefaultValues>
+                </AttributeSchema>
+                <AttributeSchema
+                        name="wrensec-am-auth-webauthn-origin"
+                        type="single"
+                        syntax="string"
+                        i18nKey="origin"
+                        order="400"
+                        resourceName="origin">
+                    <DefaultValues>
+                        <Value>@SERVER_PROTO@://@SERVER_HOST@:@SERVER_PORT@</Value>
                     </DefaultValues>
                 </AttributeSchema>
                 <AttributeSchema
@@ -133,6 +144,17 @@
                             resourceName="rpId">
                         <DefaultValues>
                             <Value>@SERVER_HOST@</Value>
+                        </DefaultValues>
+                    </AttributeSchema>
+                    <AttributeSchema
+                            name="wrensec-am-auth-webauthn-origin"
+                            type="single"
+                            syntax="string"
+                            i18nKey="origin"
+                            order="400"
+                            resourceName="origin">
+                        <DefaultValues>
+                            <Value>@SERVER_PROTO@://@SERVER_HOST@:@SERVER_PORT@</Value>
                         </DefaultValues>
                     </AttributeSchema>
                     <AttributeSchema

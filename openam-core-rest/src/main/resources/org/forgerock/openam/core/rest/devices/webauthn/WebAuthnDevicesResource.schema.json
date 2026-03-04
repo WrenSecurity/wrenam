@@ -1,18 +1,36 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
   "type": "object",
-  "title": "i18n:api-descriptor/UserDevicesResource#schema.title",
-  "description": "i18n:api-descriptor/UserDevicesResource#schema.description",
+  "title": "i18n:api-descriptor/WebAuthnDevicesResource#schema.title",
+  "description": "i18n:api-descriptor/WebAuthnDevicesResource#schema.description",
   "properties": {
     "uuid": {
       "type": "string",
-      "title": "i18n:api-descriptor/UserDevicesResource#schema.uuid.title",
-      "description": "i18n:api-descriptor/UserDevicesResource#schema.uuid.description"
+      "title": "i18n:api-descriptor/WebAuthnDevicesResource#schema.uuid.title",
+      "description": "i18n:api-descriptor/WebAuthnDevicesResource#schema.uuid.description"
     },
-    "name": {
+    "deviceName": {
       "type": "string",
-      "title": "i18n:api-descriptor/UserDevicesResource#schema.name.title",
-      "description": "i18n:api-descriptor/UserDevicesResource#schema.name.description"
+      "title": "i18n:api-descriptor/WebAuthnDevicesResource#schema.deviceName.title",
+      "description": "i18n:api-descriptor/WebAuthnDevicesResource#schema.deviceName.description"
+    },
+    "type": {
+      "type": "string",
+      "title": "i18n:api-descriptor/WebAuthnDevicesResource#schema.type.title",
+      "description": "i18n:api-descriptor/WebAuthnDevicesResource#schema.type.description"
+    },
+    "transports": {
+      "type": "array",
+      "title": "i18n:api-descriptor/WebAuthnDevicesResource#schema.transports.title",
+      "description": "i18n:api-descriptor/WebAuthnDevicesResource#schema.transports.description",
+      "items": {
+        "type": "string"
+      }
     }
-  }
+  },
+  "required": [
+    "uuid",
+    "deviceName",
+    "type"
+  ]
 }

@@ -76,18 +76,10 @@ public final class RegistrationConstants {
     static final String AUTHENTICATION_LEVEL = "wrensec-am-auth-webauthnregistration-auth-level";
 
     /**
-     * Module configuration key for the user display name attribute name.
+     * Module configuration key for maximum age (in milliseconds) of a prior authentication
+     * that is required before allowing passkey registration.
      */
-    static final String USER_DISPLAY_NAME_ATTR = "wrensec-am-auth-webauthnregistration-user-display-name-attr";
-
-    /**
-     * Module configuration key for the user id attribute name.
-     *
-     * <p>MUST NOT include personally identifying information, e.g., e-mail addresses or usernames, as per
-     * <a href="https://www.w3.org/TR/webauthn-3/#sctn-privacy-considerations-rp">
-     *     privacy considerations for relying parties</a>.
-     */
-    static final String USER_ID_ATTR = "wrensec-am-auth-webauthnregistration-user-id-attr";
+    static final String MAX_AUTH_AGE = "wrensec-am-auth-webauthnregistration-max-auth-age";
 
     /**
      * Resource name of credentials create script template.

@@ -24,11 +24,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iplanet.sso.SSOException;
 import com.sun.identity.authentication.spi.AuthLoginException;
-import com.sun.identity.security.AdminTokenAction;
-import com.sun.identity.shared.datastruct.CollectionHelper;
 import com.sun.identity.sm.SMSException;
-import com.sun.identity.sm.ServiceConfig;
-import com.sun.identity.sm.ServiceConfigManager;
 import com.webauthn4j.WebAuthnManager;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.ObjectConverter;
@@ -50,17 +46,19 @@ import com.webauthn4j.data.client.Origin;
 import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 import com.webauthn4j.server.ServerProperty;
+import com.webauthn4j.verifier.exception.BadOriginException;
+import com.webauthn4j.verifier.exception.BadRpIdException;
+import com.webauthn4j.verifier.exception.CrossOriginException;
 import com.webauthn4j.verifier.exception.VerificationException;
-import java.security.AccessController;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.forgerock.guice.core.InjectorHolder;
-import org.forgerock.openam.core.rest.devices.services.webauthn.WebAuthnService;
+import org.forgerock.json.resource.InternalServerErrorException;
 import org.forgerock.openam.core.rest.devices.webauthn.WebAuthnDeviceSettings;
 import org.wrensecurity.wrenam.authentication.modules.webauthn.registration.PublicKeyCredentialCreationOptions;
 
@@ -73,6 +71,8 @@ public class WebAuthnResponseHandler {
 
     private final WebAuthnDeviceProfileManager webAuthnDeviceProfileManager;
 
+    private final WebAuthnConfigManager webAuthnConfigManager;
+
     private final ObjectConverter objectConverter;
 
     private final ObjectMapper objectMapper;
@@ -81,11 +81,13 @@ public class WebAuthnResponseHandler {
      * Create a new {@code WebAuthnResponseHandler} instance with default components.
      *
      * <p>Uses a non-strict {@link WebAuthnManager} and default instances of
-     * {@link WebAuthnDeviceProfileManager}, {@link ObjectConverter}, and {@link ObjectMapper}.
+     * {@link WebAuthnDeviceProfileManager}, {@link WebAuthnConfigManager}, {@link ObjectConverter},
+     * and {@link ObjectMapper}.
      */
     public WebAuthnResponseHandler() {
         this(WebAuthnManager.createNonStrictWebAuthnManager(),
                 InjectorHolder.getInstance(WebAuthnDeviceProfileManager.class),
+                new WebAuthnConfigManager(),
                 new ObjectConverter(), new ObjectMapper());
     }
 
@@ -99,9 +101,11 @@ public class WebAuthnResponseHandler {
      */
     public WebAuthnResponseHandler(WebAuthnManager webAuthnManager,
             WebAuthnDeviceProfileManager webAuthnDeviceProfileManager,
+            WebAuthnConfigManager webAuthnConfigManager,
             ObjectConverter objectConverter, ObjectMapper objectMapper) {
         this.webAuthnManager = webAuthnManager;
         this.webAuthnDeviceProfileManager = webAuthnDeviceProfileManager;
+        this.webAuthnConfigManager = webAuthnConfigManager;
         this.objectConverter = objectConverter;
         this.objectMapper = objectMapper;
     }
@@ -110,12 +114,34 @@ public class WebAuthnResponseHandler {
         return Base64.getUrlDecoder().decode(src);
     }
 
+    static void assertChallengeNotExpired(long challengeIssuedAtMillis, int timeoutMillis)
+            throws AuthLoginException {
+        if (timeoutMillis <= 0) {
+            return;
+        }
+        if (challengeIssuedAtMillis <= 0) {
+            throw new AuthLoginException(RESOURCE_NAME, "challengeExpired", null);
+        }
+        long ageMillis = System.currentTimeMillis() - challengeIssuedAtMillis;
+        if (ageMillis > timeoutMillis) {
+            throw new AuthLoginException(RESOURCE_NAME, "challengeExpired", null);
+        }
+    }
+
+    static void assertSignCountProgression(long oldCounter, long newCounter) throws AuthLoginException {
+        if (newCounter > 0 && oldCounter > 0 && newCounter <= oldCounter) {
+            // Potential cloned credential per WebAuthn guidance
+            throw new AuthLoginException(RESOURCE_NAME, "assertionVerificationFailed", null);
+        }
+    }
+
     private void verifyRegistrationData(PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions,
             String origin,
             RegistrationData registrationData) throws DataConversionException, VerificationException, AssertionError {
-        String rpId = publicKeyCredentialCreationOptions.getRpId();
-        Challenge challenge = publicKeyCredentialCreationOptions::getChallenge;
-        ServerProperty serverProperty = new ServerProperty(Origin.create(origin), rpId, challenge);
+        ServerProperty serverProperty = createServerProperty(
+                origin,
+                publicKeyCredentialCreationOptions.getRpId(),
+                publicKeyCredentialCreationOptions.getChallenge());
         List<PublicKeyCredentialParameters> pubKeyCredParams = publicKeyCredentialCreationOptions.getPubKeyCredParams()
                 .stream().map(param -> new PublicKeyCredentialParameters(PublicKeyCredentialType.PUBLIC_KEY,
                         COSEAlgorithmIdentifier.create(param.get("alg").asInteger()))).collect(Collectors.toList());
@@ -123,6 +149,21 @@ public class WebAuthnResponseHandler {
         RegistrationParameters registrationParameters = new RegistrationParameters(serverProperty, pubKeyCredParams,
                 userVerificationRequired);
         webAuthnManager.verify(registrationData, registrationParameters);
+    }
+
+    private ServerProperty createServerProperty(String origin, String rpId, byte[] challengeBytes) {
+        Challenge challenge = () -> challengeBytes;
+        return new ServerProperty(Origin.create(origin), rpId, challenge);
+    }
+
+    private AuthLoginException mapVerificationFailure(String defaultErrorCode, Throwable e) {
+        if (e instanceof BadOriginException || e instanceof CrossOriginException) {
+            return new AuthLoginException(RESOURCE_NAME, "originMismatch", null, e);
+        }
+        if (e instanceof BadRpIdException) {
+            return new AuthLoginException(RESOURCE_NAME, "rpIdMismatch", null, e);
+        }
+        return new AuthLoginException(RESOURCE_NAME, defaultErrorCode, null, e);
     }
 
     /**
@@ -140,6 +181,9 @@ public class WebAuthnResponseHandler {
     public WebAuthnDeviceSettings handleRegistrationResponse(
             PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions, String origin, String response)
             throws AuthLoginException {
+        assertChallengeNotExpired(publicKeyCredentialCreationOptions.getChallengeIssuedAtMillis(),
+                publicKeyCredentialCreationOptions.getTimeout());
+
         JsonNode root;
         RegistrationData registrationData;
 
@@ -153,7 +197,7 @@ public class WebAuthnResponseHandler {
         try {
             verifyRegistrationData(publicKeyCredentialCreationOptions, origin, registrationData);
         } catch (DataConversionException | VerificationException | AssertionError e) {
-            throw new AuthLoginException(RESOURCE_NAME, "registrationVerificationFailed", null, e);
+            throw mapVerificationFailure("registrationVerificationFailed", e);
         }
 
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData =
@@ -186,7 +230,15 @@ public class WebAuthnResponseHandler {
      */
     public String handleAuthenticationResponse(PublicKeyCredentialRequestOptions publicKeyCredentialRequestOptions,
             String origin, String response, String username, String realm) throws AuthLoginException {
-        AuthenticationData authenticationData = webAuthnManager.parseAuthenticationResponseJSON(response);
+        assertChallengeNotExpired(publicKeyCredentialRequestOptions.getChallengeIssuedAtMillis(),
+                publicKeyCredentialRequestOptions.getTimeout());
+
+        AuthenticationData authenticationData;
+        try {
+            authenticationData = webAuthnManager.parseAuthenticationResponseJSON(response);
+        } catch (RuntimeException e) {
+            throw new AuthLoginException(RESOURCE_NAME, "assertionVerificationFailed", null, e);
+        }
 
         byte[] credentialId = authenticationData.getCredentialId();
         if (credentialId == null || credentialId.length == 0) {
@@ -200,10 +252,15 @@ public class WebAuthnResponseHandler {
             if (userHandle == null || userHandle.length == 0) {
                 throw new AuthLoginException(RESOURCE_NAME, "missingUserHandle", null);
             }
-            String userIdAttr = getUserIdAttr(realm);
+            final String userIdAttr;
+            try {
+                userIdAttr = webAuthnConfigManager.getUserIdAttribute(realm);
+            } catch (SMSException | SSOException e) {
+                throw new AuthLoginException(RESOURCE_NAME, "userIdAttrLookupFailed", null, e);
+            }
             try {
                 resolvedUsername = getUsernameForUserId(userHandle, userIdAttr, realm);
-            } catch (Exception e) {
+            } catch (InternalServerErrorException e) {
                 throw new AuthLoginException(RESOURCE_NAME, "userLookupFailed", null, e);
             }
         }
@@ -212,16 +269,17 @@ public class WebAuthnResponseHandler {
         WebAuthnDeviceSettings device;
         try {
             device = webAuthnDeviceProfileManager.getDeviceProfile(effectiveUser, realm, credentialId);
-        } catch (Exception e) {
+        } catch (IOException e) {
             throw new AuthLoginException(RESOURCE_NAME, "deviceLookupFailed", null, e);
         }
         if (device == null) {
             throw new AuthLoginException(RESOURCE_NAME, "unknownCredential", null);
         }
 
-        String rpId = publicKeyCredentialRequestOptions.getRpId();
-        Challenge challenge = publicKeyCredentialRequestOptions::getChallenge;
-        ServerProperty serverProperty = new ServerProperty(Origin.create(origin), rpId, challenge);
+        ServerProperty serverProperty = createServerProperty(
+                origin,
+                publicKeyCredentialRequestOptions.getRpId(),
+                publicKeyCredentialRequestOptions.getChallenge());
 
         AttestationObject attestationObject = objectConverter.getCborConverter()
                 .readValue(device.getAttestationObject(), AttestationObject.class);
@@ -230,7 +288,17 @@ public class WebAuthnResponseHandler {
         Set<AuthenticatorTransport> transports = (device.getTransports() == null)
                 ? Collections.emptySet()
                 : Arrays.stream(device.getTransports()).map(AuthenticatorTransport::create).collect(Collectors.toSet());
-        CredentialRecord credentialRecord = new CredentialRecordImpl(attestationObject, clientData, null, transports);
+        CredentialRecord credentialRecord = new CredentialRecordImpl(
+                attestationObject.getAttestationStatement(),
+                null,
+                device.isBackupEligible(),
+                device.isBackupState(),
+                device.getSignCount(),
+                attestationObject.getAuthenticatorData().getAttestedCredentialData(),
+                attestationObject.getAuthenticatorData().getExtensions(),
+                clientData,
+                null,
+                transports);
         boolean uvRequired = "required".equals(publicKeyCredentialRequestOptions.getUserVerification());
         List<byte[]> allowCredentials = Collections.singletonList(device.getCredentialId());
         AuthenticationParameters params = new AuthenticationParameters(serverProperty, credentialRecord,
@@ -239,38 +307,22 @@ public class WebAuthnResponseHandler {
         try {
             webAuthnManager.verify(authenticationData, params);
         } catch (DataConversionException | VerificationException | AssertionError e) {
-            throw new AuthLoginException(RESOURCE_NAME, "assertionVerificationFailed", null, e);
+            throw mapVerificationFailure("assertionVerificationFailed", e);
         }
 
         long newCounter = authenticationData.getAuthenticatorData().getSignCount();
         long oldCounter = device.getSignCount();
-        if (newCounter < oldCounter) {
-            // Potential cloned credential per WebAuthn guidance
-            throw new AuthLoginException(RESOURCE_NAME, "assertionVerificationFailed", null);
-        }
+        assertSignCountProgression(oldCounter, newCounter);
         if (newCounter > oldCounter) {
             device.setSignCount(newCounter);
+            device.setBackupState(authenticationData.getAuthenticatorData().isFlagBS());
             try {
                 webAuthnDeviceProfileManager.updateDeviceProfile(effectiveUser, realm, device);
-            } catch (Exception e) {
+            } catch (IOException e) {
                 throw new AuthLoginException(RESOURCE_NAME, "counterPersistFailed", null, e);
             }
         }
         return resolvedUsername;
-    }
-
-    private String getUserIdAttr(String realm) throws AuthLoginException {
-        try {
-            ServiceConfigManager scm = new ServiceConfigManager(
-                    AccessController.doPrivileged(AdminTokenAction.getInstance()), WebAuthnService.SERVICE_NAME,
-                    WebAuthnService.SERVICE_VERSION);
-            ServiceConfig org = scm.getOrganizationConfig(realm, null);
-            Map<String, Set<String>> attrs = org.getAttributes();
-            String attr = CollectionHelper.getMapAttr(attrs, "wrensec-am-auth-webauthn-user-id-attr");
-            return (attr == null || attr.isEmpty()) ? "entryUUID" : attr;
-        } catch (SMSException | SSOException e) {
-            throw new AuthLoginException(RESOURCE_NAME, "userIdAttrLookupFailed", null, e);
-        }
     }
 
 }

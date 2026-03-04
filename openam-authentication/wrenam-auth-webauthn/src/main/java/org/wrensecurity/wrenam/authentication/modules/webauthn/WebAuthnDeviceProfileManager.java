@@ -17,7 +17,6 @@ package org.wrensecurity.wrenam.authentication.modules.webauthn;
 
 import java.io.IOException;
 import java.util.Base64;
-import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
 import org.forgerock.json.JsonValue;
@@ -30,6 +29,8 @@ import org.forgerock.util.Reject;
  * Manager of WebAuthn device profiles.
  */
 public class WebAuthnDeviceProfileManager {
+
+    private static final String MISSING_CREDENTIAL_ERROR = "Credential profile no longer exists";
 
     private final WebAuthnDevicesDao devicesDao;
 
@@ -59,8 +60,12 @@ public class WebAuthnDeviceProfileManager {
     public void saveDeviceProfile(String username, String realm, WebAuthnDeviceSettings deviceSettings)
             throws IOException {
         Reject.ifNull(username, realm, deviceSettings);
-        devicesDao.saveDeviceProfiles(username, realm,
-                jsonUtils.toJsonValues(Collections.singletonList(deviceSettings)));
+        List<WebAuthnDeviceSettings> profiles =
+                jsonUtils.toDeviceSettingValues(devicesDao.getDeviceProfiles(username, realm));
+        if (!replaceProfile(profiles, deviceSettings)) {
+            profiles.add(deviceSettings);
+        }
+        devicesDao.saveDeviceProfiles(username, realm, jsonUtils.toJsonValues(profiles));
     }
 
     /**
@@ -82,7 +87,7 @@ public class WebAuthnDeviceProfileManager {
     public WebAuthnDeviceSettings getDeviceProfile(String username, String realm, byte[] credentialId)
             throws IOException {
         Reject.ifNull(username, realm, credentialId);
-        String requestedCredentialId = Base64.getEncoder().encodeToString(credentialId);
+        String requestedCredentialId = encodeCredentialId(credentialId);
         for (JsonValue device : devicesDao.getDeviceProfiles(username, realm)) {
             String storedCredentialId = device.get("credentialId").asString();
             if (requestedCredentialId.equals(storedCredentialId)) {
@@ -94,26 +99,40 @@ public class WebAuthnDeviceProfileManager {
 
     /**
      * Update (replace) an existing WebAuthn device profile for the given user by credentialId. If no existing profile
-     * matches, the updated profile is appended.
+     * matches, an exception is raised to avoid resurrecting concurrently deleted credentials.
      */
     public void updateDeviceProfile(String username, String realm, WebAuthnDeviceSettings updated) throws IOException {
         Reject.ifNull(username, realm, updated, updated.getCredentialId());
-        List<JsonValue> raw = devicesDao.getDeviceProfiles(username, realm);
-        List<WebAuthnDeviceSettings> profiles = jsonUtils.toDeviceSettingValues(raw);
-        String updatedId = Base64.getEncoder().encodeToString(updated.getCredentialId());
-        boolean replaced = false;
+        List<WebAuthnDeviceSettings> currentProfiles =
+                jsonUtils.toDeviceSettingValues(devicesDao.getDeviceProfiles(username, realm));
+        if (!replaceProfile(currentProfiles, updated)) {
+            throw new IOException(MISSING_CREDENTIAL_ERROR);
+        }
+
+        // Re-read before write to reduce delete-vs-update races where a credential is removed concurrently.
+        List<WebAuthnDeviceSettings> latestProfiles =
+                jsonUtils.toDeviceSettingValues(devicesDao.getDeviceProfiles(username, realm));
+        if (!replaceProfile(latestProfiles, updated)) {
+            throw new IOException(MISSING_CREDENTIAL_ERROR);
+        }
+        devicesDao.saveDeviceProfiles(username, realm, jsonUtils.toJsonValues(latestProfiles));
+    }
+
+    private boolean replaceProfile(List<WebAuthnDeviceSettings> profiles, WebAuthnDeviceSettings updated) {
+        String updatedId = encodeCredentialId(updated.getCredentialId());
+        // Expected profile count is small per user, so linear scan is simpler and fast enough here
         for (int i = 0; i < profiles.size(); i++) {
-            String existingId = Base64.getEncoder().encodeToString(profiles.get(i).getCredentialId());
+            String existingId = encodeCredentialId(profiles.get(i).getCredentialId());
             if (updatedId.equals(existingId)) {
                 profiles.set(i, updated);
-                replaced = true;
-                break;
+                return true;
             }
         }
-        if (!replaced) {
-            profiles.add(updated);
-        }
-        devicesDao.saveDeviceProfiles(username, realm, jsonUtils.toJsonValues(profiles));
+        return false;
+    }
+
+    private String encodeCredentialId(byte[] credentialId) {
+        return Base64.getEncoder().encodeToString(credentialId);
     }
 
 }

@@ -11,7 +11,7 @@
 # Header, with the fields enclosed by brackets [] replaced by your own identifying
 # information: "Portions copyright [year] [name of copyright owner]".
 #
-# Copyright 2025 Wren Security. All rights reserved.
+# Copyright 2025-2026 Wren Security. All rights reserved.
 dn: CN=webAuthnDeviceProfiles,CN=Schema,CN=Configuration,CN=@userStoreRootSuffix@
 changetype: add
 adminDisplayName: webAuthnDeviceProfiles
@@ -22,7 +22,7 @@ attributeID: 1.3.6.1.4.1.64165.1.1.1.1
 attributeSyntax: 2.5.5.3
 oMSyntax: 27
 instanceType: 4
-isSingleValued: TRUE
+isSingleValued: FALSE
 objectCategory: CN=Attribute-Schema,CN=Schema,CN=Configuration,CN=@userStoreRootSuffix@
 objectClass: attributeSchema
 schemaIDGUID:: jF344+nYoUep4QNlRqtMfg==

@@ -44,6 +44,8 @@ public class PublicKeyCredentialRequestOptions {
 
     private final int timeout;
 
+    private final long challengeIssuedAtMillis;
+
     private final String userVerification;
 
     private final List<WebAuthnDeviceSettings> allowCredentials;
@@ -52,6 +54,7 @@ public class PublicKeyCredentialRequestOptions {
         this.challenge = builder.challenge;
         this.rpId = builder.rpId;
         this.timeout = builder.timeout;
+        this.challengeIssuedAtMillis = builder.challengeIssuedAtMillis;
         this.userVerification = builder.userVerification;
         this.allowCredentials = builder.allowCredentials;
     }
@@ -63,6 +66,8 @@ public class PublicKeyCredentialRequestOptions {
         private String rpId;
 
         private int timeout;
+
+        private long challengeIssuedAtMillis;
 
         private String userVerification;
 
@@ -104,6 +109,18 @@ public class PublicKeyCredentialRequestOptions {
         }
 
         /**
+         * Set the server-side issue timestamp of the challenge in epoch milliseconds.
+         * If not provided, current system time will be used.
+         *
+         * @param challengeIssuedAtMillis challenge issue timestamp in milliseconds
+         * @return this builder instance
+         */
+        public Builder challengeIssuedAtMillis(long challengeIssuedAtMillis) {
+            this.challengeIssuedAtMillis = challengeIssuedAtMillis;
+            return this;
+        }
+
+        /**
          * Set the user verification requirement.
          *
          * @param userVerification one of {@code required}, {@code preferred}, or {@code discouraged}
@@ -139,6 +156,9 @@ public class PublicKeyCredentialRequestOptions {
             if (userVerification != null && !USER_VERIFICATION_VALUES.contains(userVerification)) {
                 throw new IllegalArgumentException("Invalid userVerification: " + userVerification);
             }
+            if (challengeIssuedAtMillis <= 0) {
+                challengeIssuedAtMillis = System.currentTimeMillis();
+            }
             return new PublicKeyCredentialRequestOptions(this);
         }
     }
@@ -170,6 +190,15 @@ public class PublicKeyCredentialRequestOptions {
      */
     public int getTimeout() {
         return timeout;
+    }
+
+    /**
+     * Get the server-side issue timestamp of the challenge in epoch milliseconds.
+     *
+     * @return challenge issue timestamp in milliseconds
+     */
+    public long getChallengeIssuedAtMillis() {
+        return challengeIssuedAtMillis;
     }
 
     /**

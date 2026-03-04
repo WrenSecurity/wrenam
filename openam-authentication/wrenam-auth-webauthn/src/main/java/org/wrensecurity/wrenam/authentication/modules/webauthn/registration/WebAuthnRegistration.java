@@ -26,13 +26,16 @@ import com.sun.identity.authentication.util.ISAuthConstants;
 import com.sun.identity.idm.AMIdentity;
 import com.sun.identity.idm.IdRepoException;
 import com.sun.identity.idm.IdUtils;
+import com.sun.identity.shared.DateUtils;
 import com.sun.identity.shared.datastruct.CollectionHelper;
 import com.sun.identity.shared.debug.Debug;
 import com.sun.identity.sm.DNMapper;
-import jakarta.servlet.http.HttpServletRequest;
+import com.sun.identity.sm.SMSException;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.Principal;
+import java.text.ParseException;
+import java.util.Base64;
 import java.util.Map;
 import javax.security.auth.Subject;
 import javax.security.auth.callback.Callback;
@@ -43,7 +46,10 @@ import org.forgerock.guice.core.InjectorHolder;
 import org.forgerock.openam.core.rest.devices.webauthn.WebAuthnDeviceSettings;
 import org.forgerock.openam.utils.IOUtils;
 import org.wrensecurity.wrenam.authentication.modules.webauthn.WebAuthnChallengeProvider;
+import org.wrensecurity.wrenam.authentication.modules.webauthn.WebAuthnCallbackResultParser;
+import org.wrensecurity.wrenam.authentication.modules.webauthn.WebAuthnConfigManager;
 import org.wrensecurity.wrenam.authentication.modules.webauthn.WebAuthnDeviceProfileManager;
+import org.wrensecurity.wrenam.authentication.modules.webauthn.WebAuthnFailureReason;
 import org.wrensecurity.wrenam.authentication.modules.webauthn.WebAuthnPrincipal;
 import org.wrensecurity.wrenam.authentication.modules.webauthn.WebAuthnResponseHandler;
 
@@ -64,6 +70,8 @@ public class WebAuthnRegistration extends AMLoginModule {
 
     private final WebAuthnResponseHandler webAuthnResponseHandler = new WebAuthnResponseHandler();
 
+    private final WebAuthnConfigManager webAuthnConfigManager = new WebAuthnConfigManager();
+
     private Map options;
 
     private String username;
@@ -76,20 +84,25 @@ public class WebAuthnRegistration extends AMLoginModule {
 
     private WebAuthnDeviceSettings deviceSettings;
 
+    private int maxAuthAgeMillis;
+
     @Override
     public void init(Subject subject, Map sharedState, Map options) {
         this.options = options;
         username = (String) sharedState.get(getUserKey());
         realm = DNMapper.orgNameToRealmName(getRequestOrg());
         user = IdUtils.getIdentity(username, realm);
+        maxAuthAgeMillis = CollectionHelper.getIntMapAttr(
+                options, RegistrationConstants.MAX_AUTH_AGE, 300000, debug);
         setAuthLevel(CollectionHelper.getIntMapAttr(options, RegistrationConstants.AUTHENTICATION_LEVEL, 0, debug));
     }
 
     @Override
     public int process(Callback[] callbacks, int state) throws LoginException {
         if (user == null) {
-            throw new AuthLoginException(RegistrationConstants.RESOURCE_NAME, "unauthenticated", null);
+            throw failure(WebAuthnFailureReason.NOT_ALLOWED, "Registration requires authenticated user", null);
         }
+        enforceRecentAuthentication();
 
         switch (state) {
         case ISAuthConstants.LOGIN_START:
@@ -99,8 +112,7 @@ public class WebAuthnRegistration extends AMLoginModule {
         case RegistrationConstants.STATE_COMPLETE_REGISTRATION:
             return completeRegistration(callbacks);
         default:
-            setFailureID(username);
-            throw new AuthLoginException(RegistrationConstants.RESOURCE_NAME, "authFailed", null);
+            throw failure(WebAuthnFailureReason.VERIFICATION_FAILED, null, null);
         }
     }
 
@@ -126,11 +138,7 @@ public class WebAuthnRegistration extends AMLoginModule {
 
     private int startRegistration() throws AuthLoginException {
         publicKeyCredentialCreationOptions = preparePublicKeyCredentialCreationOptions();
-        ScriptTextOutputCallback scriptCallback = prepareScriptCallback(publicKeyCredentialCreationOptions);
-        replaceCallback(
-                RegistrationConstants.STATE_VALIDATE_SCRIPT_OUTPUT,
-                RegistrationConstants.VALIDATE_SCRIPT_OUTPUT_SCRIPT_CALLBACK_INDEX,
-                scriptCallback);
+        replaceScriptCallback(publicKeyCredentialCreationOptions);
         return RegistrationConstants.STATE_VALIDATE_SCRIPT_OUTPUT;
     }
 
@@ -139,19 +147,24 @@ public class WebAuthnRegistration extends AMLoginModule {
                 RegistrationConstants.VALIDATE_SCRIPT_OUTPUT_HIDDEN_VALUE_CALLBACK_INDEX]).getValue();
         boolean hasError = ((ConfirmationCallback) callbacks[
                 RegistrationConstants.VALIDATE_SCRIPT_OUTPUT_CONFIRMATION_CALLBACK_INDEX]).getSelectedIndex() == 1;
-        if (hasError) {
-            throw new AuthLoginException(RegistrationConstants.RESOURCE_NAME, "registrationAuthenticatorError", null);
+        WebAuthnCallbackResultParser.Result callbackResult =
+                WebAuthnCallbackResultParser.parse(hiddenValueCallbackValue, hasError);
+        if (!callbackResult.isSuccess()) {
+            throw failure(callbackResult.getFailureReason(), callbackResult.getFailureMessage(), null);
         }
-        HttpServletRequest request = getHttpServletRequest();
-        String origin = request.getScheme() + "://" + request.getServerName() + ':' + request.getServerPort();
-        deviceSettings = webAuthnResponseHandler.handleRegistrationResponse(publicKeyCredentialCreationOptions,
-                origin, hiddenValueCallbackValue);
+        final String origin = normalizeOrigin();
+        try {
+            deviceSettings = webAuthnResponseHandler.handleRegistrationResponse(publicKeyCredentialCreationOptions,
+                    origin, callbackResult.getCredentialJson());
+        } catch (AuthLoginException e) {
+            throw failure(WebAuthnFailureReason.fromAuthErrorCode(e.getErrorCode()), e.getMessage(), e);
+        }
         return RegistrationConstants.STATE_COMPLETE_REGISTRATION;
     }
 
     private int completeRegistration(Callback[] callbacks) throws AuthLoginException {
         if (deviceSettings == null) {
-            throw new AuthLoginException(RegistrationConstants.RESOURCE_NAME, "registrationMissingDevice", null);
+            throw failure(WebAuthnFailureReason.VERIFICATION_FAILED, "Registration device response missing", null);
         }
         boolean renameRequested = ((ConfirmationCallback) callbacks[
                 RegistrationConstants.COMPLETE_REGISTRATION_CONFIRMATION_CALLBACK_INDEX]).getSelectedIndex() == 0;
@@ -165,19 +178,22 @@ public class WebAuthnRegistration extends AMLoginModule {
         try {
             webAuthnDeviceProfileManager.saveDeviceProfile(username, realm, deviceSettings);
         } catch (IOException e) {
-            throw new AuthLoginException(RegistrationConstants.RESOURCE_NAME, "devicePersistFailed", null, e);
+            throw failure(WebAuthnFailureReason.VERIFICATION_FAILED, "Failed to persist credential", e);
         }
         return ISAuthConstants.LOGIN_SUCCEED;
     }
 
     private PublicKeyCredentialCreationOptions preparePublicKeyCredentialCreationOptions() throws AuthLoginException {
         try {
-            String userIdAttr = CollectionHelper.getMapAttr(options, RegistrationConstants.USER_ID_ATTR);
-            String userId = getAttributeValue(user, userIdAttr);
-            if (userId == null || userId.isEmpty()) {
-                debug.error("Missing userId attribute '{}' for user '{}'", userIdAttr, username);
+            final String displayNameAttr = webAuthnConfigManager.getUserDisplayNameAttribute(realm);
+            final String userIdAttr = webAuthnConfigManager.getUserIdAttribute(realm);
+            final String displayName;
+            final String userId;
+            userId = getAttributeValue(user, userIdAttr);
+            if (userId == null || userId.isBlank()) {
                 throw new AuthLoginException(RegistrationConstants.RESOURCE_NAME, "missingUserIdAttribute", null);
             }
+            displayName = getAttributeValue(user, displayNameAttr);
             String authenticatorAttachment = CollectionHelper.getMapAttr(options,
                     RegistrationConstants.AUTHENTICATOR_ATTACHMENT);
             return new PublicKeyCredentialCreationOptions.Builder()
@@ -193,12 +209,14 @@ public class WebAuthnRegistration extends AMLoginModule {
                     .timeout(CollectionHelper.getIntMapAttr(options, RegistrationConstants.TIMEOUT, 60000, debug))
                     .userId(userId.getBytes(StandardCharsets.UTF_8))
                     .userName(username)
-                    .displayName(getAttributeValue(user,
-                            CollectionHelper.getMapAttr(options, RegistrationConstants.USER_DISPLAY_NAME_ATTR)))
+                    .displayName((displayName == null || displayName.isBlank()) ? username : displayName)
                     .build();
-        } catch (IOException | IdRepoException | SSOException e) {
-            throw new AuthLoginException(RegistrationConstants.RESOURCE_NAME, "failedBuildingPublicKeyCredential", null,
-                    e);
+        } catch (AuthLoginException e) {
+            throw failure(WebAuthnFailureReason.fromAuthErrorCode(e.getErrorCode()), e.getMessage(), e);
+        } catch (SMSException e) {
+            throw failure(WebAuthnFailureReason.VERIFICATION_FAILED, "Failed reading WebAuthn service config", e);
+        } catch (IOException | IdRepoException | SSOException | IllegalArgumentException e) {
+            throw failure(WebAuthnFailureReason.VERIFICATION_FAILED, "Failed building registration options", e);
         }
     }
 
@@ -209,11 +227,73 @@ public class WebAuthnRegistration extends AMLoginModule {
             String scriptTemplate = IOUtils.readStream(getClass().getClassLoader()
                     .getResourceAsStream(RegistrationConstants.CREDENTIALS_CREATE_SCRIPT_TEMPLATE_NAME));
             String publicKey = publicKeyCredentialCreationOptions.toJson().toString();
-            script = scriptTemplate.replace("{publicKey}", publicKey);
+            String publicKeyEncoded = Base64.getUrlEncoder().withoutPadding()
+                    .encodeToString(publicKey.getBytes(StandardCharsets.UTF_8));
+            script = scriptTemplate.replace("{publicKeyB64}", publicKeyEncoded);
         } catch (IOException e) {
             throw new AuthLoginException(RegistrationConstants.RESOURCE_NAME, "failedPreparingScriptCallback", null, e);
         }
         return new ScriptTextOutputCallback(script);
+    }
+
+    private void replaceScriptCallback(PublicKeyCredentialCreationOptions options) throws AuthLoginException {
+        final ScriptTextOutputCallback scriptCallback = prepareScriptCallback(options);
+        replaceCallback(
+                RegistrationConstants.STATE_VALIDATE_SCRIPT_OUTPUT,
+                RegistrationConstants.VALIDATE_SCRIPT_OUTPUT_SCRIPT_CALLBACK_INDEX,
+                scriptCallback);
+    }
+
+    private String normalizeOrigin() throws AuthLoginException {
+        try {
+            return webAuthnConfigManager.normalizeConfiguredOrigin(
+                    CollectionHelper.getMapAttr(options, RegistrationConstants.RP_ORIGIN),
+                    RegistrationConstants.RESOURCE_NAME);
+        } catch (AuthLoginException e) {
+            throw failure(WebAuthnFailureReason.fromAuthErrorCode(e.getErrorCode()), e.getMessage(), e);
+        }
+    }
+
+    private void enforceRecentAuthentication() throws AuthLoginException {
+        if (maxAuthAgeMillis <= 0) {
+            return;
+        }
+        String authInstant = getUserSessionProperty(ISAuthConstants.AUTH_INSTANT);
+        if (authInstant == null || authInstant.isBlank()) {
+            throw failure(WebAuthnFailureReason.NOT_ALLOWED, "Recent authentication required", null);
+        }
+        try {
+            long age = System.currentTimeMillis() - DateUtils.stringToDate(authInstant).getTime();
+            if (age > maxAuthAgeMillis) {
+                throw failure(WebAuthnFailureReason.NOT_ALLOWED, "Recent authentication required", null);
+            }
+        } catch (ParseException e) {
+            throw failure(WebAuthnFailureReason.NOT_ALLOWED, "Recent authentication required", e);
+        }
+    }
+
+    private AuthLoginException failure(WebAuthnFailureReason reason, String detail, Throwable cause) {
+        if (username != null) {
+            setFailureID(username);
+        }
+        StringBuilder logLine = new StringBuilder("WebAuthn registration failure; reason=").append(reason.name())
+                .append(", realm=").append(realm);
+        if (username != null && !username.isBlank()) {
+            logLine.append(", user=").append(username);
+        }
+        if (detail != null && !detail.isBlank()) {
+            logLine.append(", detail=").append(detail);
+        }
+        if (cause != null) {
+            debug.warning(logLine.toString(), cause);
+        } else {
+            debug.warning(logLine.toString());
+        }
+        return new AuthLoginException(
+                RegistrationConstants.RESOURCE_NAME,
+                reason.messageKey(),
+                null,
+                cause);
     }
 
 }

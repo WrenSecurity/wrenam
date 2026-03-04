@@ -12,7 +12,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2025 Wren Security. All rights reserved.
+ * Copyright 2025-2026 Wren Security. All rights reserved.
 -->
 <!DOCTYPE ServicesConfiguration
         PUBLIC "=//iPlanet//Service Management Services (SMS) 1.0 DTD//EN"
@@ -35,9 +35,6 @@
                         i18nKey="attestation">
                     <ChoiceValues>
                         <ChoiceValue i18nKey="none">none</ChoiceValue>
-                        <ChoiceValue i18nKey="direct">direct</ChoiceValue>
-                        <ChoiceValue i18nKey="enterprise">enterprise</ChoiceValue>
-                        <ChoiceValue i18nKey="indirect">indirect</ChoiceValue>
                     </ChoiceValues>
                     <DefaultValues>
                         <Value>none</Value>
@@ -103,6 +100,17 @@
                     </DefaultValues>
                 </AttributeSchema>
                 <AttributeSchema
+                        name="wrensec-am-auth-webauthnregistration-origin"
+                        type="single"
+                        syntax="string"
+                        i18nKey="origin"
+                        order="400"
+                        resourceName="origin">
+                    <DefaultValues>
+                        <Value>@SERVER_PROTO@://@SERVER_HOST@:@SERVER_PORT@</Value>
+                    </DefaultValues>
+                </AttributeSchema>
+                <AttributeSchema
                         name="wrensec-am-auth-webauthnregistration-rp-name"
                         type="single"
                         syntax="string"
@@ -140,25 +148,16 @@
                     </DefaultValues>
                 </AttributeSchema>
                 <AttributeSchema
-                        name="wrensec-am-auth-webauthnregistration-user-display-name-attr"
+                        name="wrensec-am-auth-webauthnregistration-max-auth-age"
                         type="single"
-                        syntax="string"
-                        i18nKey="userDisplayNameAttr"
-                        order="800"
-                        resourceName="userDisplayNameAttr">
+                        syntax="number_range"
+                        rangeStart="0"
+                        rangeEnd="2147483647"
+                        i18nKey="maxAuthAge"
+                        order="1000"
+                        resourceName="maxAuthAge">
                     <DefaultValues>
-                        <Value>cn</Value>
-                    </DefaultValues>
-                </AttributeSchema>
-                <AttributeSchema
-                        name="wrensec-am-auth-webauthnregistration-user-id-attr"
-                        type="single"
-                        syntax="string"
-                        i18nKey="userIdAttr"
-                        order="900"
-                        resourceName="userIdAttr">
-                    <DefaultValues>
-                        <Value>entryUUID</Value>
+                        <Value>300000</Value>
                     </DefaultValues>
                 </AttributeSchema>
                 <SubSchema name="serverconfig" inheritance="multiple" resourceName="USE-PARENT">
@@ -171,8 +170,6 @@
                             i18nKey="attestation">
                         <ChoiceValues>
                             <ChoiceValue i18nKey="none">none</ChoiceValue>
-                            <ChoiceValue i18nKey="direct">direct</ChoiceValue>
-                            <ChoiceValue i18nKey="indirect">indirect</ChoiceValue>
                         </ChoiceValues>
                         <DefaultValues>
                             <Value>none</Value>
@@ -238,6 +235,17 @@
                         </DefaultValues>
                     </AttributeSchema>
                     <AttributeSchema
+                            name="wrensec-am-auth-webauthnregistration-origin"
+                            type="single"
+                            syntax="string"
+                            i18nKey="origin"
+                            order="400"
+                            resourceName="origin">
+                        <DefaultValues>
+                            <Value>@SERVER_PROTO@://@SERVER_HOST@:@SERVER_PORT@</Value>
+                        </DefaultValues>
+                    </AttributeSchema>
+                    <AttributeSchema
                             name="wrensec-am-auth-webauthnregistration-rp-name"
                             type="single"
                             syntax="string"
@@ -275,25 +283,16 @@
                         </DefaultValues>
                     </AttributeSchema>
                     <AttributeSchema
-                            name="wrensec-am-auth-webauthnregistration-user-display-name-attr"
+                            name="wrensec-am-auth-webauthnregistration-max-auth-age"
                             type="single"
-                            syntax="string"
-                            i18nKey="userDisplayNameAttr"
-                            order="800"
-                            resourceName="userDisplayNameAttr">
+                            syntax="number_range"
+                            rangeStart="0"
+                            rangeEnd="2147483647"
+                            i18nKey="maxAuthAge"
+                            order="1000"
+                            resourceName="maxAuthAge">
                         <DefaultValues>
-                            <Value>cn</Value>
-                        </DefaultValues>
-                    </AttributeSchema>
-                    <AttributeSchema
-                            name="wrensec-am-auth-webauthnregistration-user-id-attr"
-                            type="single"
-                            syntax="string"
-                            i18nKey="userIdAttr"
-                            order="900"
-                            resourceName="userIdAttr">
-                        <DefaultValues>
-                            <Value>entryUUID</Value>
+                            <Value>300000</Value>
                         </DefaultValues>
                     </AttributeSchema>
                 </SubSchema>

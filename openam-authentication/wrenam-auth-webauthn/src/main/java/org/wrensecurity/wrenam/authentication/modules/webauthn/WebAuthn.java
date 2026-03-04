@@ -25,9 +25,9 @@ import com.sun.identity.idm.IdUtils;
 import com.sun.identity.shared.datastruct.CollectionHelper;
 import com.sun.identity.shared.debug.Debug;
 import com.sun.identity.sm.DNMapper;
-import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.security.Principal;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 import javax.security.auth.Subject;
@@ -53,6 +53,8 @@ public class WebAuthn extends AMLoginModule {
             InjectorHolder.getInstance(WebAuthnChallengeProvider.class);
 
     private final WebAuthnResponseHandler webAuthnResponseHandler = new WebAuthnResponseHandler();
+
+    private final WebAuthnConfigManager webAuthnConfigManager = new WebAuthnConfigManager();
 
     private Map options;
 
@@ -88,8 +90,7 @@ public class WebAuthn extends AMLoginModule {
         case Constants.STATE_VALIDATE_SCRIPT_OUTPUT:
             return validateScriptOutput(callbacks);
         default:
-            setFailureID(username);
-            throw new AuthLoginException(Constants.RESOURCE_NAME, "authFailed", null);
+            throw failure(WebAuthnFailureReason.VERIFICATION_FAILED, null, null);
         }
     }
 
@@ -102,11 +103,7 @@ public class WebAuthn extends AMLoginModule {
         // Start immediately for usernameless OR when user is already known (2FA), otherwise prompt for username
         if (usernameless || user != null) {
             publicKeyCredentialRequestOptions = preparePublicKeyCredentialRequestOptions(usernameless);
-            ScriptTextOutputCallback scriptCallback = prepareScriptCallback(publicKeyCredentialRequestOptions);
-            replaceCallback(
-                    Constants.STATE_VALIDATE_SCRIPT_OUTPUT,
-                    Constants.VALIDATE_SCRIPT_OUTPUT_SCRIPT_CALLBACK_INDEX,
-                    scriptCallback);
+            replaceScriptCallback(publicKeyCredentialRequestOptions);
             return Constants.STATE_VALIDATE_SCRIPT_OUTPUT;
         }
         return Constants.STATE_PROMPT_USERNAME;
@@ -118,11 +115,7 @@ public class WebAuthn extends AMLoginModule {
             user = IdUtils.getIdentity(username, realm);
         }
         publicKeyCredentialRequestOptions = preparePublicKeyCredentialRequestOptions(false);
-        ScriptTextOutputCallback scriptCallback = prepareScriptCallback(publicKeyCredentialRequestOptions);
-        replaceCallback(
-                Constants.STATE_VALIDATE_SCRIPT_OUTPUT,
-                Constants.VALIDATE_SCRIPT_OUTPUT_SCRIPT_CALLBACK_INDEX,
-                scriptCallback);
+        replaceScriptCallback(publicKeyCredentialRequestOptions);
         return Constants.STATE_VALIDATE_SCRIPT_OUTPUT;
     }
 
@@ -131,23 +124,29 @@ public class WebAuthn extends AMLoginModule {
                 Constants.VALIDATE_SCRIPT_OUTPUT_HIDDEN_VALUE_CALLBACK_INDEX]).getValue();
         boolean hasError = ((ConfirmationCallback) callbacks[
                 Constants.VALIDATE_SCRIPT_OUTPUT_CONFIRMATION_CALLBACK_INDEX]).getSelectedIndex() == 1;
-        if (hasError) {
-            throw new AuthLoginException(Constants.RESOURCE_NAME, "authenticatorError", null);
+        WebAuthnCallbackResultParser.Result callbackResult =
+                WebAuthnCallbackResultParser.parse(hiddenValueCallbackValue, hasError);
+        if (!callbackResult.isSuccess()) {
+            throw failure(callbackResult.getFailureReason(), callbackResult.getFailureMessage(), null);
         }
-        HttpServletRequest request = getHttpServletRequest();
-        String origin = request.getScheme() + "://" + request.getServerName() + ':' + request.getServerPort();
-        String resolvedUsername = webAuthnResponseHandler.handleAuthenticationResponse(
-                publicKeyCredentialRequestOptions, origin, hiddenValueCallbackValue, username, realm);
+        final String origin = normalizeOrigin();
+        String resolvedUsername;
+        try {
+            resolvedUsername = webAuthnResponseHandler.handleAuthenticationResponse(
+                    publicKeyCredentialRequestOptions, origin, callbackResult.getCredentialJson(), username, realm);
+        } catch (AuthLoginException e) {
+            throw failure(WebAuthnFailureReason.fromAuthErrorCode(e.getErrorCode()), e.getMessage(), e);
+        }
         if (resolvedUsername != null) {
             username = resolvedUsername;
             user = IdUtils.getIdentity(username, realm);
             if (user == null) {
                 // userHandle present but not mapped to a directory entry
-                throw new AuthLoginException(Constants.RESOURCE_NAME, "userLookupFailed", null);
+                throw failure(WebAuthnFailureReason.CREDENTIAL_NOT_FOUND, null, null);
             }
         }
         if (usernameless && user == null) {
-            throw new AuthLoginException(Constants.RESOURCE_NAME, "missingUserHandle", null);
+            throw failure(WebAuthnFailureReason.CREDENTIAL_NOT_FOUND, null, null);
         }
         return ISAuthConstants.LOGIN_SUCCEED;
     }
@@ -164,11 +163,16 @@ public class WebAuthn extends AMLoginModule {
             if (!usernameless) {
                 List<WebAuthnDeviceSettings> allowCredentials =
                         webAuthnDeviceProfileManager.getDeviceProfiles(username, realm);
+                if (allowCredentials == null || allowCredentials.isEmpty()) {
+                    throw new AuthLoginException(Constants.RESOURCE_NAME, "noRegisteredCredentials", null);
+                }
                 builder.allowCredentials(allowCredentials);
             }
             return builder.build();
         } catch (IOException e) {
-            throw new AuthLoginException(Constants.RESOURCE_NAME, "failedPreparingPublicKeyCredentialRequestOptions", null, e);
+            throw failure(WebAuthnFailureReason.VERIFICATION_FAILED, "Failed to prepare request options", e);
+        } catch (AuthLoginException e) {
+            throw failure(WebAuthnFailureReason.fromAuthErrorCode(e.getErrorCode()), e.getMessage(), e);
         }
     }
 
@@ -179,11 +183,55 @@ public class WebAuthn extends AMLoginModule {
             String scriptTemplate = IOUtils.readStream(
                     getClass().getClassLoader().getResourceAsStream(Constants.CREDENTIALS_GET_SCRIPT_TEMPLATE_NAME));
             String publicKey = publicKeyCredentialRequestOptions.toJson().toString();
-            script = scriptTemplate.replace("{publicKey}", publicKey);
+            String publicKeyEncoded = Base64.getUrlEncoder().withoutPadding()
+                    .encodeToString(publicKey.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+            script = scriptTemplate.replace("{publicKeyB64}", publicKeyEncoded);
         } catch (IOException e) {
             throw new AuthLoginException(Constants.RESOURCE_NAME, "failedPreparingScriptCallback", null, e);
         }
         return new ScriptTextOutputCallback(script);
+    }
+
+    private void replaceScriptCallback(PublicKeyCredentialRequestOptions options) throws AuthLoginException {
+        final ScriptTextOutputCallback scriptCallback = prepareScriptCallback(options);
+        replaceCallback(
+                Constants.STATE_VALIDATE_SCRIPT_OUTPUT,
+                Constants.VALIDATE_SCRIPT_OUTPUT_SCRIPT_CALLBACK_INDEX,
+                scriptCallback);
+    }
+
+    private String normalizeOrigin() throws AuthLoginException {
+        try {
+            return webAuthnConfigManager.normalizeConfiguredOrigin(
+                    CollectionHelper.getMapAttr(options, Constants.RP_ORIGIN),
+                    Constants.RESOURCE_NAME);
+        } catch (AuthLoginException e) {
+            throw failure(WebAuthnFailureReason.fromAuthErrorCode(e.getErrorCode()), e.getMessage(), e);
+        }
+    }
+
+    private AuthLoginException failure(WebAuthnFailureReason reason, String detail, Throwable cause) {
+        if (username != null) {
+            setFailureID(username);
+        }
+        StringBuilder logLine = new StringBuilder("WebAuthn authentication failure; reason=").append(reason.name())
+                .append(", realm=").append(realm);
+        if (username != null && !username.isBlank()) {
+            logLine.append(", user=").append(username);
+        }
+        if (detail != null && !detail.isBlank()) {
+            logLine.append(", detail=").append(detail);
+        }
+        if (cause != null) {
+            debug.warning(logLine.toString(), cause);
+        } else {
+            debug.warning(logLine.toString());
+        }
+        return new AuthLoginException(
+                Constants.RESOURCE_NAME,
+                reason.messageKey(),
+                null,
+                cause);
     }
 
 }

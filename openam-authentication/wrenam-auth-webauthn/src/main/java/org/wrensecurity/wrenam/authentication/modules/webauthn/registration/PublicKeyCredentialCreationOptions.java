@@ -36,7 +36,7 @@ import org.forgerock.util.Reject;
  */
 public class PublicKeyCredentialCreationOptions {
 
-    private static final Set<String> ATTESTATION_VALUES = Set.of("none", "indirect", "direct", "enterprise");
+    private static final Set<String> ATTESTATION_VALUES = Set.of("none");
 
     private static final Set<String> AUTHENTICATOR_ATTACHMENT_VALUES = Set.of("platform", "cross-platform");
 
@@ -64,6 +64,8 @@ public class PublicKeyCredentialCreationOptions {
 
     private final int timeout;
 
+    private final long challengeIssuedAtMillis;
+
     private final byte[] userId;
 
     private final String userName;
@@ -81,6 +83,7 @@ public class PublicKeyCredentialCreationOptions {
         this.rpId = builder.rpId;
         this.rpName = builder.rpName;
         this.timeout = builder.timeout;
+        this.challengeIssuedAtMillis = builder.challengeIssuedAtMillis;
         this.userId = builder.userId;
         this.userName = builder.userName;
         this.displayName = builder.displayName;
@@ -107,6 +110,8 @@ public class PublicKeyCredentialCreationOptions {
         private String rpName;
 
         private int timeout;
+
+        private long challengeIssuedAtMillis;
 
         private byte[] userId;
 
@@ -237,6 +242,18 @@ public class PublicKeyCredentialCreationOptions {
         }
 
         /**
+         * Set the server-side issue timestamp of the challenge in epoch milliseconds.
+         * If not provided, current system time will be used.
+         *
+         * @param challengeIssuedAtMillis challenge issue timestamp in milliseconds
+         * @return this builder instance
+         */
+        public Builder challengeIssuedAtMillis(long challengeIssuedAtMillis) {
+            this.challengeIssuedAtMillis = challengeIssuedAtMillis;
+            return this;
+        }
+
+        /**
          * Set the user handle.
          *
          * @param userId an opaque user handle with a maximum size of 64 bytes, not meant to be displayed to the user
@@ -302,6 +319,9 @@ public class PublicKeyCredentialCreationOptions {
             }
             if (userVerification != null && !USER_VERIFICATION_VALUES.contains(userVerification)) {
                 throw new IllegalArgumentException("Invalid userVerification: " + userVerification);
+            }
+            if (challengeIssuedAtMillis <= 0) {
+                challengeIssuedAtMillis = System.currentTimeMillis();
             }
             if (pubKeyCredParams == null || pubKeyCredParams.isEmpty()) {
                 // Include broad defaults per spec recommendation
@@ -428,6 +448,15 @@ public class PublicKeyCredentialCreationOptions {
      */
     public int getTimeout() {
         return timeout;
+    }
+
+    /**
+     * Get the server-side issue timestamp of the challenge in epoch milliseconds.
+     *
+     * @return challenge issue timestamp in milliseconds
+     */
+    public long getChallengeIssuedAtMillis() {
+        return challengeIssuedAtMillis;
     }
 
     /**

@@ -15,6 +15,9 @@
  */
 package org.forgerock.openam.core.rest.devices.webauthn;
 
+import static org.forgerock.json.JsonValue.field;
+import static org.forgerock.json.JsonValue.json;
+import static org.forgerock.json.JsonValue.object;
 import static org.forgerock.json.resource.Responses.newResourceResponse;
 import static org.forgerock.openam.i18n.apidescriptor.ApiDescriptorConstants.DELETE_DESCRIPTION;
 import static org.forgerock.openam.i18n.apidescriptor.ApiDescriptorConstants.DESCRIPTION;
@@ -70,6 +73,14 @@ import org.forgerock.util.promise.Promise;
     )
 public class WebAuthnDevicesResource extends UserDevicesResource<WebAuthnDevicesDao> {
 
+    private final String DEVICE_NAME_KEY = "deviceName";
+
+    private final String TYPE_KEY = "type";
+
+    private final String TRANSPORTS_KEY = "transports";
+
+    private final String WEBAUTHN_TYPE = "webAuthn";
+
     /**
      * Construct a new UserDevicesResource.
      *
@@ -83,7 +94,16 @@ public class WebAuthnDevicesResource extends UserDevicesResource<WebAuthnDevices
 
     @Override
     protected ResourceResponse convertValue(JsonValue profile) {
-        return newResourceResponse(profile.get(UUID_KEY).asString(), Integer.toString(profile.hashCode()), profile);
+        String deviceName = profile.get(DEVICE_NAME_KEY).asString();
+        // Expose only metadata; never return credential material via the devices endpoint
+        JsonValue response = json(object(
+                field(UUID_KEY, profile.get(UUID_KEY).asString()),
+                field(DEVICE_NAME_KEY, deviceName),
+                field(TYPE_KEY, WEBAUTHN_TYPE)));
+        if (profile.get(TRANSPORTS_KEY).isList()) {
+            response.put(TRANSPORTS_KEY, profile.get(TRANSPORTS_KEY).copy());
+        }
+        return newResourceResponse(response.get(UUID_KEY).asString(), Integer.toString(response.hashCode()), response);
     }
 
     @Override

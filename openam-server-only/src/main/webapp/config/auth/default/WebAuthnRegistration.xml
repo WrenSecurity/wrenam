@@ -30,7 +30,7 @@
                     <Value>Continue</Value>
                 </OptionValue>
                 <OptionValue>
-                    <Value>Cancel</Value>
+                    <Value>Cancel setup</Value>
                 </OptionValue>
             </OptionValues>
         </ConfirmationCallback>

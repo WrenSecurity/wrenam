@@ -4,7 +4,7 @@
         <h1 class="text-center">{{reqs.header}}</h1>
     </div>
     {{/if}}
-    <form action="" method="post" class="form col-sm-6 col-sm-offset-3" autocomplete="off" data-stage="{{reqs.stage}}">
+    <form action="" method="post" class="form col-sm-6 col-sm-offset-3 text-center" autocomplete="off" data-stage="{{reqs.stage}}">
         <fieldset class="row">
             {{#each reqs.callbacks}}
             {{#equals type "HiddenValueCallback"}}
@@ -18,7 +18,15 @@
                 {{callbackRender}}
             </div>
             {{/equals}}
+            {{/each}}
 
+            <div class="panel panel-default">
+                <div class="panel-body text-center">
+                    <h4 class="awaiting-response"><i class="fa fa-circle-o-notch fa-spin text-primary"></i> {{t "templates.user.LoginTemplate.waitingForResponse"}}</h4>
+                </div>
+            </div>
+
+            {{#each reqs.callbacks}}
             {{#equals type "ConfirmationCallback"}}
             <div class="form-group">
                 <input id="button_1"
@@ -31,7 +39,7 @@
                 {{#equals name "options"}}
                 <input id="button_2"
                        name="callback_2"
-                       class="btn btn-lg btn-block btn-uppercase btn-default"
+                       class="btn btn-default btn-uppercase"
                        type="submit"
                        role="button"
                        value="{{this.value.[1]}}"

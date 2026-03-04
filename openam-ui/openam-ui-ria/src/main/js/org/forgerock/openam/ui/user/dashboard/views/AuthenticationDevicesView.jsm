@@ -12,7 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
- * Portions copyright 2025 Wren Security.
+ * Portions copyright 2025-2026 Wren Security.
  */
 
 import $ from "jquery";
@@ -35,6 +35,7 @@ import DeviceDetailsDialog from "org/forgerock/openam/ui/user/dashboard/views/De
 import DevicesSettingsDialog from "org/forgerock/openam/ui/user/dashboard/views/DevicesSettingsDialog";
 import Messages from "org/forgerock/commons/ui/common/components/Messages";
 import Promise from "org/forgerock/openam/ui/common/util/Promise";
+import showConfirmationBeforeAction from "org/forgerock/openam/ui/admin/utils/form/showConfirmationBeforeAction";
 
 const getAttributeFromElement = (element, attribute) => $(element).closest(`div[${attribute}]`).attr(attribute);
 const getUUIDFromElement = (element) => getAttributeFromElement(element, "data-device-uuid");
@@ -70,9 +71,13 @@ class DeviceManagementView extends AbstractView {
             webAuthn: removeWebAuthn
         }[type];
 
-        deleteFunc(uuid).then(() => {
-            this.render();
-        }, handleReject);
+        showConfirmationBeforeAction({
+            message: $.t("openam.authDevices.confirmDeleteText")
+        }, () => {
+            deleteFunc(uuid).then(() => {
+                this.render();
+            }, handleReject);
+        });
     }
     handleShowDeviceDetails (event) {
         event.preventDefault();

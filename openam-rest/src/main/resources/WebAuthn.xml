@@ -49,6 +49,17 @@
                     </DefaultValues>
                 </AttributeSchema>
                 <AttributeSchema
+                        name="wrensec-am-auth-webauthn-user-display-name-attr"
+                        type="single"
+                        syntax="string"
+                        resourceName="userDisplayNameAttr"
+                        order="250"
+                        i18nKey="userDisplayNameAttr">
+                    <DefaultValues>
+                        <Value>cn</Value>
+                    </DefaultValues>
+                </AttributeSchema>
+                <AttributeSchema
                         name="wrensec-am-auth-webauthn-device-settings-encryption-scheme"
                         type="single_choice"
                         resourceName="deviceSettingsEncryptionScheme"
