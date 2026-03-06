@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2013-2016 ForgeRock AS.
+ * Portions copyright 2026 Wren Security.
  */
 
 package org.forgerock.openidconnect;
@@ -45,7 +46,6 @@ import org.forgerock.oauth2.core.ClientRegistrationStore;
 import org.forgerock.oauth2.core.OAuth2Request;
 import org.forgerock.oauth2.core.exceptions.InvalidClientException;
 import org.forgerock.oauth2.core.exceptions.NotFoundException;
-import org.forgerock.oauth2.core.exceptions.UnauthorizedClientException;
 import org.forgerock.openam.cts.CTSPersistentStore;
 import org.forgerock.openam.cts.adapters.TokenAdapter;
 import org.forgerock.openam.oauth2.OAuth2Constants;
@@ -96,8 +96,7 @@ public class CheckSession {
      * @param request The HttpServletRequest.
      * @return The url as a string or empty String.
      */
-    public String getClientSessionURI(HttpServletRequest request) throws UnauthorizedClientException,
-            InvalidClientException, NotFoundException {
+    public String getClientSessionURI(HttpServletRequest request) throws InvalidClientException, NotFoundException {
 
         SignedJwt jwt = getIDToken(request);
 
@@ -107,7 +106,7 @@ public class CheckSession {
 
         final ClientRegistration clientRegistration = getClientRegistration(jwt);
 
-        if (clientRegistration != null && !isJwtValid(jwt, clientRegistration)) {
+        if (clientRegistration == null || !isJwtValid(jwt, clientRegistration)) {
             return "";
         }
 
@@ -149,13 +148,13 @@ public class CheckSession {
         }
         final SigningHandler signingHandler = signingManager.newHmacSigningHandler(
                 clientSecret.getBytes(Charset.forName("UTF-8")));
-        return jwt == null || !jwt.verify(signingHandler);
+        return jwt != null && jwt.verify(signingHandler);
     }
 
     /**
      * Check if the JWT contains a valid session id.
      *
-     * @param request The HttpServletRequset.
+     * @param request The HttpServletRequest.
      * @return {@code true} if valid.
      */
     public boolean getValidSession(HttpServletRequest request) {
@@ -168,7 +167,7 @@ public class CheckSession {
         try {
             final ClientRegistration clientRegistration = getClientRegistration(jwt);
 
-            if (clientRegistration != null && !isJwtValid(jwt, clientRegistration)) {
+            if (clientRegistration == null || !isJwtValid(jwt, clientRegistration)) {
                 return false;
             }
 
@@ -192,7 +191,7 @@ public class CheckSession {
         try {
             referer = new URI(request.getHeader("Referer"));
         } catch (Exception e){
-            logger.error("No id_token supplied to the checkSesison endpoint", e);
+            logger.error("No id_token supplied to the checkSession endpoint", e);
             return null;
         }
         Map<String, String> map = null;
