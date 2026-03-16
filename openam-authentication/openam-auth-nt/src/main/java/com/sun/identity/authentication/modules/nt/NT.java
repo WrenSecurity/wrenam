@@ -28,25 +28,28 @@
 
 /*
  * Portions Copyrighted [2011] [ForgeRock AS]
+ * Portions Copyrighted [2026] [Wren Security]
  */
 package com.sun.identity.authentication.modules.nt;
 
 import com.iplanet.am.util.SystemProperties;
-import com.sun.identity.shared.Constants;
-import com.sun.identity.shared.datastruct.CollectionHelper;
 import com.sun.identity.authentication.spi.AMLoginModule;
 import com.sun.identity.authentication.spi.AuthLoginException;
 import com.sun.identity.authentication.util.ISAuthConstants;
-
+import com.sun.identity.shared.Constants;
+import com.sun.identity.shared.datastruct.CollectionHelper;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.attribute.FileAttribute;
+import java.nio.file.attribute.PosixFilePermissions;
 import java.security.Principal;
-import java.util.ResourceBundle;
 import java.util.Map;
+import java.util.ResourceBundle;
 import javax.security.auth.Subject;
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.NameCallback;
@@ -59,6 +62,8 @@ public class NT extends AMLoginModule {
     private static String smbPath;
     private static final String charSet = "ISO8859_1";
     private static final String amAuthNT = "amAuthNT";
+    private static final FileAttribute<?> OWNER_ONLY =
+            PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString("rw-------"));
 
     private ResourceBundle bundle = null;
     private Map options;
@@ -68,21 +73,21 @@ public class NT extends AMLoginModule {
     private NTPrincipal userPrincipal;
     private String userTokenId = "";
     private String userName = null;
-    private String smbConfFileName; 
+    private String smbConfFileName;
     //Screen State
 
     private boolean getCredentialsFromSharedState;
 
     public NT() {
     }
- 
+
     /**
      * TODO-JAVADOC
      */
     public void init(Subject subject, Map sharedState, Map options) {
         java.util.Locale locale = getLoginLocale();
         bundle = amCache.getResBundle(amAuthNT, locale);
-        
+
         if (debug.messageEnabled()) {
             debug.message("NT resbundle locale="+locale);
         }
@@ -130,7 +135,7 @@ public class NT extends AMLoginModule {
     /**
      * TODO-JAVADOC
      */
-    public int process(Callback[] callbacks, int state) 
+    public int process(Callback[] callbacks, int state)
         throws AuthLoginException {
         if (!hasInitialized) {
             throw  new AuthLoginException(amAuthNT, "NTSMB", null);
@@ -140,16 +145,16 @@ public class NT extends AMLoginModule {
             throw new AuthLoginException(amAuthNT, "Hosterror", null);
         }
         if (domain == null || domain.length() == 0) {
-            debug.message ("NT Domain cannot be null ");   
+            debug.message ("NT Domain cannot be null ");
             throw new AuthLoginException(amAuthNT, "Domainerror", null);
         }
         try {
             if (!host.equals(new String(host.getBytes("ASCII"), "ASCII"))) {
-                throw new AuthLoginException(amAuthNT, 
+                throw new AuthLoginException(amAuthNT,
                         "NTHostnameNotASCII", null);
             }
             if (!domain.equals(new String(domain.getBytes("ASCII"), "ASCII"))) {
-                throw new AuthLoginException(amAuthNT, 
+                throw new AuthLoginException(amAuthNT,
                         "NTDomainnameNotASCII", null);
             }
         } catch (UnsupportedEncodingException ueex) {
@@ -157,17 +162,17 @@ public class NT extends AMLoginModule {
         }
 
         String userPassword = null;
-        if (callbacks !=null && callbacks.length == 0) {                
+        if (callbacks !=null && callbacks.length == 0) {
             userName = (String) sharedState.get(getUserKey());
             userPassword = (String) sharedState.get(getPwdKey());
             if (userName == null || userPassword == null) {
                 return ISAuthConstants.LOGIN_START;
             }
             getCredentialsFromSharedState = true;
-        } else { 
-        
+        } else {
+
             userName =  ((NameCallback)callbacks[0]).getName();
-            userPassword = 
+            userPassword =
                 charToString(((PasswordCallback)callbacks[1]).getPassword(),
                              callbacks[1]);
             if (userName == null || userName.length() == 0) {
@@ -181,7 +186,7 @@ public class NT extends AMLoginModule {
             }
         }
 
-        // store username, password both in success and failure case        
+        // store username, password both in success and failure case
         storeUsernamePasswd(userName, userPassword);
 
         try {
@@ -191,17 +196,17 @@ public class NT extends AMLoginModule {
                     getCredentialsFromSharedState = false;
                     return ISAuthConstants.LOGIN_START;
                }
-                throw new AuthLoginException(amAuthNT, 
+                throw new AuthLoginException(amAuthNT,
                         "NTUsernameNotASCII", null);
             }
-            if (!userPassword.equals(new String(userPassword.getBytes("UTF-8"), 
+            if (!userPassword.equals(new String(userPassword.getBytes("UTF-8"),
             "UTF-8"))) {
                if (getCredentialsFromSharedState && !isUseFirstPassEnabled()) {
                     getCredentialsFromSharedState = false;
                     return ISAuthConstants.LOGIN_START;
                }
                 setFailureID(userName);
-                throw new AuthLoginException(amAuthNT, 
+                throw new AuthLoginException(amAuthNT,
                         "NTPasswordNotASCII", null);
             }
         } catch (UnsupportedEncodingException ueex) {
@@ -211,7 +216,22 @@ public class NT extends AMLoginModule {
            }
             throw new AuthLoginException(amAuthNT, "NTInputNotASCII", null);
         }
-        
+        if (containsControlChar(userName)) {
+            if (getCredentialsFromSharedState && !isUseFirstPassEnabled()) {
+                getCredentialsFromSharedState = false;
+                return ISAuthConstants.LOGIN_START;
+            }
+            throw new AuthLoginException(amAuthNT, "NTUsernameContainsControlChar", null);
+        }
+        if (containsControlChar(userPassword)) {
+            if (getCredentialsFromSharedState && !isUseFirstPassEnabled()) {
+                getCredentialsFromSharedState = false;
+                return ISAuthConstants.LOGIN_START;
+            }
+            setFailureID(userName);
+            throw new AuthLoginException(amAuthNT, "NTPasswordContainsControlChar", null);
+        }
+
         if (debug.messageEnabled()) {
             debug.message ("userName='"+ userName + "' host='" + host + "'");
             debug.message ("domain='" + domain + "'");
@@ -219,15 +239,14 @@ public class NT extends AMLoginModule {
         File tmpFile = null;
         try {
             // Create the tmpFile
-            tmpFile = File.createTempFile(userName,"pwd");
-            FileOutputStream fw = new FileOutputStream(tmpFile);
-            OutputStreamWriter dos = new OutputStreamWriter(fw, "ISO-8859-1");
-            dos.write("username = " + userName + "\n");
-            dos.write("password = " + userPassword);
-            dos.flush();
-            dos.close();
-            fw.close();
-            
+            tmpFile = Files.createTempFile("smb-", "-pwd", OWNER_ONLY).toFile();
+
+            try (BufferedWriter bw = Files.newBufferedWriter(tmpFile.toPath(), StandardCharsets.ISO_8859_1)) {
+                bw.write("username = " + userName);
+                bw.newLine();
+                bw.write("password = " + userPassword);
+            }
+
             Runtime rt = Runtime.getRuntime();
             int c;
             StringBuilder buftxt = new StringBuilder(80);
@@ -326,6 +345,10 @@ public class NT extends AMLoginModule {
                 } catch(Exception e){}
             } 
        }
+    }
+
+    private static boolean containsControlChar(String value) {
+        return value.codePoints().anyMatch(Character::isISOControl);
     }
 
     private String charToString (char [] tmpPassword, Callback cbk ) {
