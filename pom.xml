@@ -14,7 +14,7 @@
  *
  * Copyright 2011-2016 ForgeRock AS.
  * Portions Copyrighted 2016 Agile Digital Engineering
- * Portions Copyright 2022-2025 Wren Security
+ * Portions Copyright 2022-2026 Wren Security
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
@@ -141,7 +141,7 @@
 
         <!-- Test Dependencies -->
         <assertj.version>3.19.0</assertj.version>
-        <mockito.version>5.5.0</mockito.version>
+        <mockito.version>5.23.0</mockito.version>
         <testng.version>7.8.0</testng.version>
 
         <!-- Build Dependencies -->
