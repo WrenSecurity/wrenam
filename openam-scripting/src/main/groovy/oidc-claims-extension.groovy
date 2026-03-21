@@ -12,6 +12,7 @@
 * information: "Portions copyright [year] [name of copyright owner]".
 *
 * Copyright 2014-2016 ForgeRock AS.
+* Portions Copyright 2026 Wren Security
 */
 import com.iplanet.sso.SSOException
 import com.sun.identity.idm.IdRepoException
@@ -89,16 +90,17 @@ if (logger.messageEnabled()) {
 
 def computeClaim = { claim, requestedValues ->
     try {
-        [ claim, claimAttributes.get(claim)(claim, identity, requestedValues) ]
+        return [ claim, claimAttributes.get(claim)(claim, identity, requestedValues) ]
     } catch (IdRepoException e) {
         if (logger.warningEnabled()) {
-            logger.warning("OpenAMScopeValidator.getUserInfo(): Unable to retrieve attribute=$attribute", e);
+            logger.warning("OpenAMScopeValidator.getUserInfo(): Unable to retrieve claim=$claim", e);
         }
     } catch (SSOException e) {
         if (logger.warningEnabled()) {
-            logger.warning("OpenAMScopeValidator.getUserInfo(): Unable to retrieve attribute=$attribute", e);
+            logger.warning("OpenAMScopeValidator.getUserInfo(): Unable to retrieve claim=$claim", e);
         }
     }
+    [ claim, null ]
 }
 
 def computedClaims = scopes.findAll { s -> !"openid".equals(s) && scopeClaimsMap.containsKey(s) }.inject(claims) { map, s ->
