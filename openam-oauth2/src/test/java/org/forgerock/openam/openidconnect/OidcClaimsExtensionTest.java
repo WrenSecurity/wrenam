@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions Copyright 2026 Wren Security
  */
 
 package org.forgerock.openam.openidconnect;
@@ -23,6 +24,7 @@ import static org.mockito.Mockito.*;
 
 import com.iplanet.sso.SSOToken;
 import com.sun.identity.idm.AMIdentity;
+import com.sun.identity.idm.IdRepoException;
 import com.sun.identity.shared.debug.Debug;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -190,6 +192,24 @@ public class OidcClaimsExtensionTest {
             }
             assertThat(e.getMessage()).isEqualTo("No selection logic for given_name defined. Values: [george, fred]");
         }
+    }
+
+    @Test
+    public void testIdRepoExceptionHandledGracefully() throws Exception {
+        // Given
+        Bindings variables = testBindings(asSet("profile"));
+        when(identity.getAttribute("givenname")).thenThrow(new IdRepoException());
+        when(identity.getAttribute("sn")).thenReturn(asSet("bloggs"));
+        when(identity.getAttribute("preferredtimezone")).thenReturn(asSet("Europe/London"));
+        when(identity.getAttribute("preferredlocale")).thenReturn(asSet("en"));
+        when(identity.getAttribute("cn")).thenReturn(asSet("Joe Bloggs"));
+
+        // When
+        UserInfoClaims result = scriptEvaluator.evaluateScript(script, variables);
+
+        // Then - given_name should be absent due to IdRepoException, other claims should be present
+        assertThat(result.getValues()).doesNotContainKey("given_name");
+        assertThat(result.getValues()).containsKeys("family_name", "name", "zoneinfo", "locale");
     }
 
     private Bindings testBindings(Set<String> scopes) {
