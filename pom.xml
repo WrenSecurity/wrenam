@@ -146,7 +146,7 @@
         <wrensec-ui.version>23.2.3</wrensec-ui.version>
 
         <!-- Test Dependencies -->
-        <mockito.version>5.5.0</mockito.version>
+        <mockito.version>5.23.0</mockito.version>
 
         <!-- Build Dependencies -->
         <ant.contrib.version>1.0b3</ant.contrib.version>
