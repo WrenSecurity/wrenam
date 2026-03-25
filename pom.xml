@@ -14,7 +14,7 @@
  *
  * Copyright 2011-2016 ForgeRock AS.
  * Portions Copyrighted 2016 Agile Digital Engineering
- * Portions Copyright 2022-2024 Wren Security
+ * Portions Copyright 2022-2026 Wren Security
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
@@ -140,7 +140,7 @@
         <project.build.outputTimestamp>2026-02-13T08:26:15Z</project.build.outputTimestamp>
 
         <!-- Wren Security Dependencies -->
-        <wrends.version>5.0.4</wrends.version>
+        <wrends.version>5.0.5</wrends.version>
         <wrensec-commons.version>22.6.2</wrensec-commons.version>
         <wrensec-guava.version>18.0.5</wrensec-guava.version>
         <wrensec-ui.version>23.2.3</wrensec-ui.version>
