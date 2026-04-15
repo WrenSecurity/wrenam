@@ -15,7 +15,7 @@
  */
 package org.forgerock.openam.rest;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 import jakarta.servlet.http.HttpServletRequest;
 
 import com.google.inject.Inject;

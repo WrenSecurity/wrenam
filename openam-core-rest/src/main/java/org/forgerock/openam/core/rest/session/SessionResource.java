@@ -40,7 +40,7 @@ import com.sun.identity.common.CaseInsensitiveHashMap;
 import com.sun.identity.shared.debug.Debug;
 import java.util.Collection;
 import java.util.Map;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import org.forgerock.api.annotations.Action;
 import org.forgerock.api.annotations.Actions;
 import org.forgerock.api.annotations.ApiError;

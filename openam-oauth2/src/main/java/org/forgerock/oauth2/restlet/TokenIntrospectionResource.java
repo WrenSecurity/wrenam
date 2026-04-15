@@ -16,7 +16,7 @@
 
 package org.forgerock.oauth2.restlet;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.forgerock.oauth2.core.OAuth2ProviderSettingsFactory;
 import org.forgerock.oauth2.core.OAuth2Request;

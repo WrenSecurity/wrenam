@@ -20,7 +20,7 @@ import org.forgerock.openam.sts.TokenCreationException;
 import org.forgerock.openam.sts.config.user.SAML2Config;
 import org.slf4j.Logger;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 /**
  * @see SAML2CryptoProviderFactory

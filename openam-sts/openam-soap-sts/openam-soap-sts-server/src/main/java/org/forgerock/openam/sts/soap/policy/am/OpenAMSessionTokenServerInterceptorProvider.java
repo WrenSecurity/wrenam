@@ -21,7 +21,7 @@ import org.forgerock.openam.sts.AMSTSConstants;
 import org.forgerock.openam.sts.token.ThreadLocalAMTokenCache;
 import org.forgerock.openam.sts.token.validator.PrincipalFromSession;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.util.Arrays;
 
 /**

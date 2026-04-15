@@ -28,9 +28,8 @@
 
 package com.sun.identity.common;
 
+import jakarta.xml.bind.DatatypeConverter;
 import java.util.Iterator;
-
-import javax.xml.bind.DatatypeConverter;
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.namespace.QName;
 
@@ -40,14 +39,17 @@ import javax.xml.namespace.QName;
 public class ISValidUtils {
 
     private static NamespaceContext nsc = new NamespaceContext() {
+        @Override
         public String getNamespaceURI(String pPrefix) {
             return "";
         }
 
+        @Override
         public String getPrefix(String pNamespaceURI) {
             return "";
         }
 
+        @Override
         public Iterator getPrefixes(String pNamespaceURI) {
             return null;
         }
@@ -55,7 +57,7 @@ public class ISValidUtils {
 
     /**
      * Returns true if <code>QName</code> is valid for a given local part.
-     * 
+     *
      * @param localPart
      *            local part entry for object <code>QName</code>
      * @return true if <code>QName</code> is valid.

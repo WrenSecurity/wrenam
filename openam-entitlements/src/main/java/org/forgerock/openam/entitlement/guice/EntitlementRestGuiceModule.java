@@ -23,7 +23,7 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import org.forgerock.guice.core.GuiceModule;
 import org.forgerock.json.resource.CollectionResourceProvider;

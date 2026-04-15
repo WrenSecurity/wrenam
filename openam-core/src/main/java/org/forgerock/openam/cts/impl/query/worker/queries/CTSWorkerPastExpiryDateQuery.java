@@ -22,7 +22,7 @@ import static org.forgerock.openam.utils.Time.getCalendarInstance;
 import java.io.Closeable;
 import java.util.Calendar;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.forgerock.openam.cts.CoreTokenConfig;
 import org.forgerock.openam.sm.datalayer.api.ConnectionFactory;

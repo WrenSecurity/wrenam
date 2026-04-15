@@ -30,7 +30,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.wrensecurity.guava.common.base.Joiner;
 import org.forgerock.openam.sm.datalayer.api.ConnectionFactory;

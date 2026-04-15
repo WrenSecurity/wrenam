@@ -25,7 +25,7 @@ import org.forgerock.openam.entitlement.configuration.ResourceTypeSmsAttributes;
 import org.forgerock.openam.entitlement.configuration.SmsAttribute;
 import org.forgerock.util.query.QueryFilter;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import javax.security.auth.Subject;
 import java.security.Principal;
 import java.util.Map;

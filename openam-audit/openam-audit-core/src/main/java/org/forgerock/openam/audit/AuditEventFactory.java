@@ -17,7 +17,7 @@ package org.forgerock.openam.audit;
 
 import static org.forgerock.openam.utils.StringUtils.isNotBlank;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 /**
  * Factory for creation of AuditEvent builders.

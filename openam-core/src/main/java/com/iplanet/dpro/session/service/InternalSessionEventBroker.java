@@ -15,8 +15,8 @@
  */
 package com.iplanet.dpro.session.service;
 
-import javax.inject.Singleton;
-import javax.inject.Inject;
+import jakarta.inject.Singleton;
+import jakarta.inject.Inject;
 
 /**
  * Propagates {@link InternalSessionEvent} to fixed set of observers.

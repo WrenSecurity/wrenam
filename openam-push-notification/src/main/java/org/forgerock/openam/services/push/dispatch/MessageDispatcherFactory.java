@@ -18,7 +18,7 @@ package org.forgerock.openam.services.push.dispatch;
 
 import com.sun.identity.shared.debug.Debug;
 import java.util.concurrent.TimeUnit;
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 import org.wrensecurity.guava.common.cache.Cache;
 import org.wrensecurity.guava.common.cache.CacheBuilder;
 

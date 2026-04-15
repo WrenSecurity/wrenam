@@ -24,7 +24,7 @@ import org.forgerock.openam.sts.XMLUtilities;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import javax.xml.parsers.ParserConfigurationException;
 import java.security.cert.X509Certificate;
 

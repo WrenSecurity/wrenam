@@ -16,7 +16,7 @@
 
 package org.forgerock.openam.utils;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import org.forgerock.json.resource.NotFoundException;
 import org.forgerock.openam.core.CoreWrapper;

@@ -31,8 +31,8 @@ import org.forgerock.openam.audit.configuration.AuditServiceConfigurationProvide
 import org.forgerock.util.thread.listener.ShutdownListener;
 import org.forgerock.util.thread.listener.ShutdownManager;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;

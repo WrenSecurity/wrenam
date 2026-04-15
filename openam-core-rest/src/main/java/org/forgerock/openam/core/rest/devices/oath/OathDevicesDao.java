@@ -18,8 +18,8 @@ package org.forgerock.openam.core.rest.devices.oath;
 
 import static org.forgerock.openam.core.rest.devices.services.oath.AuthenticatorOathServiceFactory.FACTORY_NAME;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import org.forgerock.openam.core.rest.devices.UserDevicesDao;
 import org.forgerock.openam.core.rest.devices.services.AuthenticatorDeviceServiceFactory;
 import org.forgerock.openam.core.rest.devices.services.oath.AuthenticatorOathService;

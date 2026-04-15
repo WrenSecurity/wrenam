@@ -21,7 +21,7 @@ import org.forgerock.oauth2.core.exceptions.ServerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 /**
  * Verifies that a OAuth2 request that is made to one of the protected endpoints on the OAuth2 provider,

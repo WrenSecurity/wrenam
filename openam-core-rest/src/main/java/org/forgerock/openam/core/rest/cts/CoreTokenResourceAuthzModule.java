@@ -16,7 +16,7 @@
 
 package org.forgerock.openam.core.rest.cts;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.forgerock.authz.filter.api.AuthorizationResult;
 import org.forgerock.json.resource.ResourceException;

@@ -22,7 +22,7 @@ import com.sun.identity.entitlement.interfaces.ISearchIndex;
 import com.sun.identity.entitlement.util.ResourceNameSplitter;
 import org.forgerock.guice.core.InjectorHolder;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.util.Set;
 
 /**

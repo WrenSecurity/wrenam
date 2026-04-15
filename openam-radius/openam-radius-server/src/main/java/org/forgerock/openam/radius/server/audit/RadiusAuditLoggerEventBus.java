@@ -24,8 +24,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.forgerock.audit.events.AccessAuditEventBuilder.ResponseStatus;
 import org.wrensecurity.guava.common.base.Strings;

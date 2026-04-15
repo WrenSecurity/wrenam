@@ -28,7 +28,7 @@ import org.forgerock.openam.sts.rest.token.canceller.RestIssuedTokenCanceller;
 import org.forgerock.openam.sts.rest.token.canceller.RestIssuedTokenCancellerParameters;
 import org.forgerock.openam.sts.user.invocation.RestSTSTokenCancellationInvocationState;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 import java.util.HashSet;
 import java.util.Set;
 

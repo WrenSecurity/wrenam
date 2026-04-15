@@ -22,8 +22,8 @@ import static org.forgerock.openam.http.HttpRoute.newHttpRoute;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import java.net.URI;
 import java.util.Collections;
 import java.util.HashSet;

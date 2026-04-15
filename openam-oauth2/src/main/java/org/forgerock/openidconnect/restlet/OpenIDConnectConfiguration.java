@@ -29,7 +29,7 @@ import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 /**
  * Handles requests to the OpenId Connect .well-known endpoint for retrieving OpenId Connect provider configuration.

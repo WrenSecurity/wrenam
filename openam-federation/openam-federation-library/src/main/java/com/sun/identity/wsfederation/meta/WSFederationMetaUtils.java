@@ -66,16 +66,16 @@ import org.xml.sax.InputSource;
  * methods.
  */
 public final class WSFederationMetaUtils {
-    public static Debug debug = 
+    public static Debug debug =
 	Debug.getInstance(WSFederationConstants.AM_WSFEDERATION);
 
     /**
      * Resource bundle for the WS-Federation implementation.
-     */ 
+     */
     public static ResourceBundle bundle = Locale.
 	getInstallResourceBundle(WSFederationConstants.BUNDLE_NAME);
 
-    
+
     // Need to explicitly list xmldsig, otherwise JAXB doesn't see it, since
     // dsig elements are buried in 'any' elements. Grrr...
     private static final String JAXB_PACKAGES =
@@ -132,7 +132,7 @@ public final class WSFederationMetaUtils {
         throws JAXBException {
 
        Unmarshaller u = jaxbContext.createUnmarshaller();
-       return u.unmarshal(XMLUtils.createSAXSource(new InputSource(new StringReader(str))));
+       return u.unmarshal(XMLUtils.createSAXSourceLegacy(new InputSource(new StringReader(str))));
     }
 
     /**
@@ -146,7 +146,7 @@ public final class WSFederationMetaUtils {
         throws JAXBException {
 
        Unmarshaller u = jaxbContext.createUnmarshaller();
-       return u.unmarshal(XMLUtils.createSAXSource(new InputSource(is)));
+       return u.unmarshal(XMLUtils.createSAXSourceLegacy(new InputSource(is)));
     }
 
     /**
@@ -228,7 +228,7 @@ public final class WSFederationMetaUtils {
      * @param config the <code>BaseConfigType</code> object
      * @return a attrbute value <code>Map</code>
      */
-    public static Map<String,List<String>> getAttributes(BaseConfigType config) 
+    public static Map<String,List<String>> getAttributes(BaseConfigType config)
     {
         Map<String,List<String>> attrMap = new HashMap<String,List<String>>();
         List list = config.getAttribute();
@@ -252,19 +252,19 @@ public final class WSFederationMetaUtils {
     }
 
     /**
-     * Sets attribute value pairs in <code>BaseConfigType</code>. NOTE - 
-     * existing AVPs are discarded! The key is 
+     * Sets attribute value pairs in <code>BaseConfigType</code>. NOTE -
+     * existing AVPs are discarded! The key is
      * @param config the <code>BaseConfigType</code> object
-     * @param map mapping from attribute names to <code>List</code>s of 
+     * @param map mapping from attribute names to <code>List</code>s of
      * attribute values;
      */
-    public static void setAttributes(BaseConfigType config, 
-        Map<String,List<String>> map) 
+    public static void setAttributes(BaseConfigType config,
+        Map<String,List<String>> map)
         throws JAXBException
     {
         JAXBContext jc = WSFederationMetaUtils.getMetaJAXBContext();
-        com.sun.identity.wsfederation.jaxb.entityconfig.ObjectFactory 
-            objFactory = 
+        com.sun.identity.wsfederation.jaxb.entityconfig.ObjectFactory
+            objFactory =
             new com.sun.identity.wsfederation.jaxb.entityconfig.ObjectFactory();
 
         List attributeList = config.getAttribute();
@@ -278,11 +278,11 @@ public final class WSFederationMetaUtils {
                 avp = objFactory.createAttributeElement();
             avp.setName(key);
             avp.getValue().addAll(map.get(key));
-            
+
             attributeList.add(avp);
         }
     }
-    
+
     /**
      * Gets a single attribute value from <code>BaseConfigType</code>
      * @param config the <code>BaseConfigType</code> object
@@ -382,8 +382,8 @@ public final class WSFederationMetaUtils {
     }
 
     /**
-     * Get the first value of set by given key searching in the given map. 
-     * return null if <code>attrMap</code> is null or <code>key</code> 
+     * Get the first value of set by given key searching in the given map.
+     * return null if <code>attrMap</code> is null or <code>key</code>
      * is null.
      *
      * @param attrMap Map of which set is to be added.
@@ -403,7 +403,7 @@ public final class WSFederationMetaUtils {
 
         return retValue;
     }
-    
+
      /**
      * Adds a set of a given value to a map. Set will not be added if
      * <code>attrMap</code> is null or <code>value</code> is null or
@@ -415,7 +415,7 @@ public final class WSFederationMetaUtils {
      */
     public static void fillEntriesInSet(Map attrMap, String key, String value) {
         if ((key != null) && (value != null) && (attrMap != null)) {
-            Set valueSet = new HashSet(); 
+            Set valueSet = new HashSet();
             valueSet.add(value);
             attrMap.put(key, valueSet);
         }

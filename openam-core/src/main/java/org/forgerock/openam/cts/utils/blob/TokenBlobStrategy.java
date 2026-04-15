@@ -17,7 +17,7 @@ package org.forgerock.openam.cts.utils.blob;
 
 import org.forgerock.openam.cts.CoreTokenConfig;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;

@@ -27,9 +27,9 @@ import com.sun.identity.sm.ServiceListener;
 import java.security.AccessController;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.inject.Singleton;
 import jakarta.servlet.ServletContext;
 
 import org.forgerock.openam.core.CoreWrapper;

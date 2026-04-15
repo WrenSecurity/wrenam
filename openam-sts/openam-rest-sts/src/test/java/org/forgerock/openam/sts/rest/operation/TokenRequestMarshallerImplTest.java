@@ -33,7 +33,7 @@ import java.security.cert.X509Certificate;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Set;
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.wrensecurity.guava.common.collect.Sets;
 import org.forgerock.services.context.ClientContext;

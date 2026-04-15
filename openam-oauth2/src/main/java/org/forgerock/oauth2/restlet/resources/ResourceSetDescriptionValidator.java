@@ -19,7 +19,7 @@ package org.forgerock.oauth2.restlet.resources;
 import static org.forgerock.json.JsonValue.json;
 import static org.forgerock.json.JsonValueFunctions.uri;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 import java.util.Map;
 
 import org.forgerock.json.JsonValue;

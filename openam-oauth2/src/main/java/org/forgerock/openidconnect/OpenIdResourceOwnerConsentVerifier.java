@@ -16,7 +16,7 @@
 
 package org.forgerock.openidconnect;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 import org.forgerock.oauth2.core.ClientRegistration;
 import org.forgerock.oauth2.core.OAuth2Request;
 import org.forgerock.oauth2.core.ResourceOwnerConsentVerifier;

@@ -18,9 +18,9 @@ package org.forgerock.openam.entitlement.guice;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.inject.Singleton;
 
 import org.forgerock.guice.core.GuiceModule;
 import org.forgerock.openam.auditors.SMSAuditFilter;

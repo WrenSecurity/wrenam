@@ -18,7 +18,7 @@ package org.forgerock.openam.cts.monitoring.impl.persistence;
 import org.forgerock.openam.tokens.TokenType;
 import org.forgerock.openam.cts.exceptions.CoreTokenException;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.util.Collection;
 
 /**

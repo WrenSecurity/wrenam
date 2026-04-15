@@ -13,11 +13,11 @@
 
 package org.forgerock.openam.authentication.modules.oath;
 
+import jakarta.xml.bind.DatatypeConverter;
 import java.lang.reflect.UndeclaredThrowableException;
 import java.security.GeneralSecurityException;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-import javax.xml.bind.DatatypeConverter;
 
 /**
  * This is an example implementation of the OATH
@@ -130,8 +130,9 @@ public class TOTPAlgorithm {
         // Using the counter
         // First 8 bytes are for the movingFactor
         // Compliant with base RFC 4226 (HOTP)
-        while (time.length() < 16)
+        while (time.length() < 16) {
             time = "0" + time;
+        }
 
         // Get the HEX in a Byte[]
         byte[] msg = DatatypeConverter.parseHexBinary(time);

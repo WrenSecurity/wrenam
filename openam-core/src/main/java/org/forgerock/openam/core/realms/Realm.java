@@ -16,7 +16,7 @@
 
 package org.forgerock.openam.core.realms;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.forgerock.openam.core.CoreWrapper;
 import org.forgerock.util.Reject;

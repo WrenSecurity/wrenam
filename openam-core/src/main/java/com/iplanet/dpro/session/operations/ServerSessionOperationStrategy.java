@@ -16,8 +16,8 @@
 
 package com.iplanet.dpro.session.operations;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.forgerock.openam.session.SessionConstants;
 import org.forgerock.openam.sso.providers.stateless.StatelessSessionManager;

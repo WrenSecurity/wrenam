@@ -15,7 +15,7 @@
 */
 package com.iplanet.dpro.session.monitoring;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import org.forgerock.openam.shared.monitoring.AbstractTimingStore;
 
 /**

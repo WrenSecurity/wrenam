@@ -31,8 +31,8 @@ package com.iplanet.dpro.session.service;
 import static com.iplanet.dpro.session.service.SessionConstants.SESSION_DEBUG;
 import static com.iplanet.dpro.session.service.SessionConstants.STATS_MASTER_TABLE;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.forgerock.guice.core.InjectorHolder;
 import org.forgerock.openam.session.service.SessionAccessManager;

@@ -40,7 +40,7 @@ import com.sun.identity.log.Level;
 import java.text.MessageFormat;
 import java.util.List;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import javax.security.auth.Subject;
 
 import org.forgerock.openam.entitlement.service.ApplicationService;

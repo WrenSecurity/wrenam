@@ -18,7 +18,7 @@ package org.forgerock.openam.sts.tokengeneration.state;
 
 import org.forgerock.openam.sts.AMSTSConstants;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 /**
  * This class implements the ServiceListener interface and leverages the STSInstanceStateProvider interface to

@@ -18,8 +18,8 @@ package org.forgerock.openam.scripting.rest.batch;
 import static org.forgerock.json.resource.Responses.newActionResponse;
 import static org.forgerock.util.promise.Promises.newResultPromise;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import javax.script.Bindings;
 import javax.script.SimpleBindings;
 

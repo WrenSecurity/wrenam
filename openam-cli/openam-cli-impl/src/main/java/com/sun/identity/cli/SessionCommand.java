@@ -42,7 +42,7 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.forgerock.openam.ldap.LDAPUtils;
 import org.forgerock.openam.session.SessionCache;

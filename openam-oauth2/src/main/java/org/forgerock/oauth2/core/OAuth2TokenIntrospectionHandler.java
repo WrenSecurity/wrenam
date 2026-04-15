@@ -27,7 +27,7 @@ import static org.forgerock.openam.oauth2.OAuth2Constants.IntrospectionEndpoint.
 import static org.forgerock.openam.oauth2.OAuth2Constants.IntrospectionEndpoint.TOKEN_TYPE;
 import static org.forgerock.openam.oauth2.OAuth2Constants.IntrospectionEndpoint.USER_ID;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.wrensecurity.guava.common.base.Joiner;
 import org.forgerock.json.JsonPointer;

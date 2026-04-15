@@ -16,7 +16,7 @@
 
 package org.forgerock.openam.uma;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import javax.security.auth.Subject;
 
 import java.util.HashMap;

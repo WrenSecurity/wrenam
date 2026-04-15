@@ -19,7 +19,7 @@ package org.forgerock.openam.uma.rest;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import javax.security.auth.Subject;
 
 import org.forgerock.http.routing.UriRouterContext;

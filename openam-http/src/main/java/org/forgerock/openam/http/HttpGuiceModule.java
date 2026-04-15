@@ -16,13 +16,12 @@
 
 package org.forgerock.openam.http;
 
-import javax.inject.Singleton;
-import java.util.ServiceLoader;
-
 import com.google.inject.Key;
 import com.google.inject.PrivateModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Names;
+import jakarta.inject.Singleton;
+import java.util.ServiceLoader;
 import org.forgerock.guice.core.GuiceModule;
 import org.forgerock.http.Handler;
 import org.forgerock.http.HttpApplication;

@@ -22,7 +22,7 @@ import org.forgerock.openam.sts.publish.common.STSInstanceConfigStoreBase;
 import org.forgerock.openam.sts.soap.config.user.SoapSTSInstanceConfig;
 import org.slf4j.Logger;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 /**
  * @see org.forgerock.openam.sts.publish.common.STSInstanceConfigStoreBase

@@ -50,7 +50,7 @@ import org.forgerock.selfservice.core.annotations.SelfService;
 import org.forgerock.selfservice.core.config.StageConfig;
 import org.forgerock.selfservice.core.snapshot.SnapshotTokenHandlerFactory;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 import java.security.PrivilegedAction;
 
 /**

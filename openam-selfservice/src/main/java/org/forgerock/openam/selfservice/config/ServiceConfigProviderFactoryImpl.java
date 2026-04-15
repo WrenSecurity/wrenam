@@ -18,8 +18,8 @@ package org.forgerock.openam.selfservice.config;
 
 import com.google.inject.Injector;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 

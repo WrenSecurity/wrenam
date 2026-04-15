@@ -16,7 +16,7 @@
 
 package org.forgerock.openam.shared.security.crypto;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 

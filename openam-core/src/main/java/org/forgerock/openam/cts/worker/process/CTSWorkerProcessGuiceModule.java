@@ -19,8 +19,8 @@ package org.forgerock.openam.cts.worker.process;
 import static org.forgerock.openam.session.SessionEventType.IDLE_TIMEOUT;
 import static org.forgerock.openam.session.SessionEventType.MAX_TIMEOUT;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;

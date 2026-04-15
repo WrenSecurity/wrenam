@@ -33,7 +33,7 @@ import org.forgerock.openam.sts.tokengeneration.saml2.statements.DefaultSubjectP
 import org.forgerock.openam.sts.tokengeneration.saml2.statements.SubjectProvider;
 import org.forgerock.openam.sts.tokengeneration.saml2.xmlsig.KeyInfoFactory;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 /**
  * @see org.forgerock.openam.sts.tokengeneration.saml2.StatementProvider

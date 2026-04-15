@@ -30,11 +30,12 @@
 
 <!--
 Portions Copyrighted [2013] [ForgeRock US]
+Portions Copyrighted 2026 Wren Security
 -->
 
-<jaxb:bindings xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+<jaxb:bindings xmlns:jaxb="https://jakarta.ee/xml/ns/jaxb"
                xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-               version="2.0">
+               version="3.0">
   <jaxb:bindings schemaLocation="../xsd/xacml-core-v3-schema-wd-17.xsd"  node="/xsd:schema">
     <jaxb:schemaBindings>
       <jaxb:package name="com.sun.identity.entitlement.xacml3.core"/>
@@ -198,4 +199,3 @@ Portions Copyrighted [2013] [ForgeRock US]
 
   </jaxb:bindings>
 </jaxb:bindings>
-

@@ -15,8 +15,8 @@
  */
 package org.forgerock.openam.cts;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;

@@ -20,7 +20,7 @@ package org.forgerock.openam.sts.tokengeneration.oidc;
 import org.forgerock.openam.sts.config.user.OpenIdConnectTokenConfig;
 import org.slf4j.Logger;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 /**
  * @see org.forgerock.openam.sts.tokengeneration.oidc.OpenIdConnectTokenClaimMapperProvider

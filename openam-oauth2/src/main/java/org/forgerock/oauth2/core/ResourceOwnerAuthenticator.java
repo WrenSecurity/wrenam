@@ -20,8 +20,8 @@ import static com.sun.identity.shared.Constants.AM_CTX_ID;
 import static org.forgerock.openam.oauth2.OAuth2Constants.Params.*;
 import static org.forgerock.openam.utils.Time.currentTimeMillis;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.NameCallback;
 import javax.security.auth.callback.PasswordCallback;

@@ -46,7 +46,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.NameCallback;
 import javax.security.auth.callback.PasswordCallback;

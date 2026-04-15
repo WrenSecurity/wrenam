@@ -22,8 +22,8 @@ import org.forgerock.json.resource.ActionResponse;
 import org.forgerock.openam.audit.AuditEventFactory;
 import org.forgerock.openam.audit.AuditEventPublisher;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 /**
  * Filter which will audit any policy requests that pass through it. Acts exactly as the {@link AuditFilter} and

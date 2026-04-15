@@ -26,8 +26,8 @@ import static org.forgerock.openam.utils.StringUtils.isEmpty;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
 import org.apache.commons.lang.StringUtils;
 import org.forgerock.openam.audit.AMActivityAuditEventBuilder;

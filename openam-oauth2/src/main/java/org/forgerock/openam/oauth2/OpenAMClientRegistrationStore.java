@@ -22,9 +22,9 @@ import java.security.PrivilegedAction;
 import java.util.Collections;
 import java.util.Set;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.inject.Singleton;
 
 import org.forgerock.i18n.LocalizedIllegalArgumentException;
 import org.forgerock.jaspi.modules.openid.resolvers.service.OpenIdResolverService;

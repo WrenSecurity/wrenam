@@ -26,6 +26,7 @@
  *
  * Portions Copyrighted 2011-2016 ForgeRock AS.
  * Portions Copyrighted 2014 Nomura Research Institute, Ltd
+ * Portions Copyrighted 2026 Wren Security
  */
 package com.sun.identity.entitlement.xacml3;
 
@@ -46,12 +47,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBElement;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Marshaller;
+import jakarta.xml.bind.Unmarshaller;
 import javax.xml.namespace.QName;
+import javax.xml.transform.sax.SAXSource;
 
 import org.forgerock.util.annotations.VisibleForTesting;
 import org.json.JSONException;
@@ -847,7 +849,7 @@ public class XACMLPrivilegeUtils {
                 VariableDefinition vd = (VariableDefinition) obj;
                 if (vd.getVariableId().equals(id)) {
                     JAXBElement<AttributeValue> jav = (JAXBElement<AttributeValue>) vd.getExpression();
-                    AttributeValue attributeValue = (AttributeValue) jav.getValue();
+                    AttributeValue attributeValue = jav.getValue();
                     val = attributeValue.getContent().get(0).toString();
                 }
             }
@@ -1237,7 +1239,8 @@ public class XACMLPrivilegeUtils {
                     XACMLConstants.XACML3_CORE_PKG);
 
         Unmarshaller um = jc.createUnmarshaller();
-        JAXBElement je = (JAXBElement)um.unmarshal(XMLUtils.createSAXSource(new InputSource(stream)));
+        SAXSource saxSource = XMLUtils.createSAXSource(new InputSource(stream));
+        JAXBElement je = (JAXBElement) um.unmarshal(saxSource);
         PolicySet ps = (PolicySet)je.getValue();
         return ps;
     }

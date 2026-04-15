@@ -25,7 +25,7 @@ import org.restlet.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 /**
  * A ClientAuthenticationFailureFactory which includes implementations of methods suitable for handling the OpenAM

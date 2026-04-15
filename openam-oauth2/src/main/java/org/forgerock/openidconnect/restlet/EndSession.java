@@ -41,7 +41,7 @@ import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
 import org.restlet.routing.Redirector;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import java.net.URI;
 

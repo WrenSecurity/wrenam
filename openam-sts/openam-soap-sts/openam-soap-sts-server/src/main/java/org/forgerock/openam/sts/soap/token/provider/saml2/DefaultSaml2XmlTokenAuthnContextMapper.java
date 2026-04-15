@@ -28,7 +28,7 @@ import org.forgerock.openam.sts.TokenType;
 import org.forgerock.openam.sts.TokenTypeId;
 import org.slf4j.Logger;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.util.List;
 
 /**

@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.annotation.Nullable;
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.wrensecurity.guava.common.base.Function;
 import org.wrensecurity.guava.common.base.Predicate;

@@ -24,7 +24,7 @@ import org.forgerock.openam.sts.token.validator.ValidationInvocationContext;
 import org.forgerock.openam.sts.token.validator.AuthenticationHandler;
 import org.slf4j.Logger;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.security.cert.X509Certificate;
 
 /**

@@ -20,7 +20,7 @@ package org.forgerock.openam.rest.resource;
 
 import static org.wrensecurity.guava.common.base.Suppliers.*;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import javax.security.auth.Subject;
 
 import org.wrensecurity.guava.common.base.Supplier;

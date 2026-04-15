@@ -26,7 +26,7 @@ import org.forgerock.openam.sts.rest.token.validator.RestSAML2IssuedTokenValidat
 import org.forgerock.openam.sts.token.CTSTokenIdGenerator;
 import org.forgerock.openam.sts.token.provider.TokenServiceConsumer;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 /**
  * @see IssuedTokenValidatorFactory

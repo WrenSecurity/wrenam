@@ -19,8 +19,8 @@ package com.iplanet.dpro.session.service;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
 import org.forgerock.openam.session.service.SessionAccessManager;
 import org.forgerock.util.Reject;

@@ -19,7 +19,7 @@ package org.forgerock.openam.cts.monitoring.impl.operations;
 import org.forgerock.openam.cts.CTSOperation;
 import org.forgerock.openam.tokens.TokenType;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 import java.util.HashMap;
 import java.util.Map;
 

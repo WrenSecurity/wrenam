@@ -21,7 +21,7 @@ import static org.forgerock.json.resource.Responses.newActionResponse;
 import static org.forgerock.openam.utils.StringUtils.isBlank;
 import static org.forgerock.util.promise.Promises.newResultPromise;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import javax.mail.MessagingException;
 import java.util.Map;
 import java.util.Set;

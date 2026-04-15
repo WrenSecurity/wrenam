@@ -22,7 +22,7 @@ import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.forgerock.openam.core.DNWrapper;
 import org.forgerock.openam.cts.CoreTokenConfig;

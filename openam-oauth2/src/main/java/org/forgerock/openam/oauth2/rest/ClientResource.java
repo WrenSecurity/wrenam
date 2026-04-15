@@ -27,7 +27,7 @@ import static org.forgerock.json.resource.Responses.newResourceResponse;
 import static org.forgerock.openam.utils.Time.*;
 import static org.forgerock.util.promise.Promises.newResultPromise;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 import java.security.AccessController;
 import java.util.ArrayList;
 import java.util.HashMap;

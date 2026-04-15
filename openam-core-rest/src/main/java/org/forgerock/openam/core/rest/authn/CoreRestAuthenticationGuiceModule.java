@@ -23,8 +23,8 @@ import static org.forgerock.http.routing.RoutingMode.EQUALS;
 import static org.forgerock.http.routing.Version.version;
 import static org.forgerock.openam.audit.AuditConstants.Component.AUTHENTICATION;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import java.util.Set;
 
 import com.google.inject.AbstractModule;

@@ -28,7 +28,7 @@ import org.forgerock.openam.sts.rest.token.validator.RestIssuedTokenValidator;
 import org.forgerock.openam.sts.rest.token.validator.RestIssuedTokenValidatorParameters;
 import org.forgerock.openam.sts.user.invocation.RestSTSTokenValidationInvocationState;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 import java.util.HashSet;
 import java.util.Set;
 

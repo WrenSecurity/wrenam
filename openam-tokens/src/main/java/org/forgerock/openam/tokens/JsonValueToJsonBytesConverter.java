@@ -18,8 +18,8 @@ package org.forgerock.openam.tokens;
 
 import java.io.IOException;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.forgerock.json.JsonValue;
 

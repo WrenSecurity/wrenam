@@ -17,9 +17,9 @@ package com.iplanet.dpro.session.monitoring;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.inject.Singleton;
 
 /**
  * The store for session monitoring information. Each of the operations which can be applied to sessions

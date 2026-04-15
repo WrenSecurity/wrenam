@@ -33,7 +33,7 @@ import static org.forgerock.openam.session.SessionConstants.*;
 import java.net.URL;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import org.forgerock.guice.core.InjectorHolder;
 import org.forgerock.openam.session.service.ServicesClusterMonitorHandler;

@@ -20,7 +20,7 @@ import static org.forgerock.json.resource.Responses.newActionResponse;
 import static org.forgerock.util.promise.Promises.newResultPromise;
 import static org.forgerock.openam.i18n.apidescriptor.ApiDescriptorConstants.*;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.forgerock.api.annotations.Action;
 import org.forgerock.api.annotations.Actions;

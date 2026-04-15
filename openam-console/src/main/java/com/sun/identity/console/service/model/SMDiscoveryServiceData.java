@@ -27,6 +27,7 @@
  */
 /**
  * Portions Copyrighted 2012 ForgeRock Inc
+ * Portions Copyrighted 2026 Wren Security
  */
 package com.sun.identity.console.service.model;
 
@@ -147,7 +148,7 @@ public class SMDiscoveryServiceData implements Serializable
     public List getResourceData() {
         return discoData;
     }
- 
+
     /**
      * Stores the global attributes for discovery services in this object.
      *
@@ -167,7 +168,7 @@ public class SMDiscoveryServiceData implements Serializable
     }
 
     /**
-     * Returns the global attributes for discovery service stored in 
+     * Returns the global attributes for discovery service stored in
      * this object.
      *
      * @return the map of global attributes.
@@ -177,7 +178,7 @@ public class SMDiscoveryServiceData implements Serializable
     }
 
     /**
-     * Returns the dynamic attributes for discovery service stored in 
+     * Returns the dynamic attributes for discovery service stored in
      * this object.
      *
      * @return the map of dynamic attributes.
@@ -205,7 +206,7 @@ public class SMDiscoveryServiceData implements Serializable
     }
 
     /**
-     * Sets the global entry flag to the value provided. True value indicate 
+     * Sets the global entry flag to the value provided. True value indicate
      * that it is a global entry.
      *
      * @param value value to indicate global entry or not.
@@ -313,7 +314,7 @@ public class SMDiscoveryServiceData implements Serializable
                     SMDiscoEntryData smDisco = new SMDiscoEntryData();
                     smDisco.discoStr = str;
                     DiscoEntryElement entry = (DiscoEntryElement)u.unmarshal(
-                            XMLUtils.createSAXSource(new InputSource(new StringReader(str))));
+                            XMLUtils.createSAXSourceLegacy(new InputSource(new StringReader(str))));
                     setDiscoEntryData(entry, smDisco);
                     smEntry.addResourceData(smDisco);
                 }
@@ -380,7 +381,7 @@ public class SMDiscoveryServiceData implements Serializable
             if ((discoData != null) && !discoData.isEmpty()) {
                 int size = discoData.size();
 
-		for (Iterator iter = discoData.iterator(); 
+		for (Iterator iter = discoData.iterator();
 		    iter.hasNext() && (abstractValue == null);
 		) {
                     SMDiscoEntryData smDisco = (SMDiscoEntryData)iter.next();

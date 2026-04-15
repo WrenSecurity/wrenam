@@ -32,6 +32,7 @@
  */
 /**
  * Portions Copyrighted 2012 ForgeRock Inc
+ * Portions Copyrighted 2026 Wren Security
  */
 package com.sun.identity.federation.meta;
 
@@ -68,7 +69,7 @@ import org.xml.sax.InputSource;
  * the IDFF Meta data.
  */
 public class IDFFMetaUtils {
-    
+
     /**
      * IDFF Meta Data Configuration Name
      */
@@ -77,7 +78,7 @@ public class IDFFMetaUtils {
      * IDFF Meta Debug
      */
     public static Debug debug = Debug.getInstance("libIDFF");
-    
+
     /**
      * Bundle Name
      */
@@ -85,16 +86,16 @@ public class IDFFMetaUtils {
     private static final String JAXB_PACKAGES =
             "com.sun.identity.liberty.ws.meta.jaxb:" +
             "com.sun.identity.federation.jaxb.entityconfig:" ;
-    
+
     private static JAXBContext jaxbContext = null;
     private static final String PROP_JAXB_FORMATTED_OUTPUT =
             "jaxb.formatted.output";
     private static final String PROP_NAMESPACE_PREFIX_MAPPER =
             "com.sun.xml.bind.namespacePrefixMapper";
-    
+
     private static NamespacePrefixMapperImpl nsPrefixMapper =
             new NamespacePrefixMapperImpl();
-    
+
     static {
         try {
             jaxbContext = JAXBContext.newInstance(JAXB_PACKAGES);
@@ -103,13 +104,13 @@ public class IDFFMetaUtils {
             jaxbe.printStackTrace();
         }
     }
-    
+
     /**
      * Default Constructor
      */
     protected IDFFMetaUtils() {
     }
-    
+
     /**
      * Converts a JAXB object to a <code>String</code> object.
      * @param jaxbObj a JAXB object
@@ -125,7 +126,7 @@ public class IDFFMetaUtils {
         marshaller.marshal(jaxbObj, sw);
         return sw.toString();
     }
-    
+
     /**
      * Converts a JAXB object to a <code>String</code> object and creates a
      * <code>Map</code>. The key is 'attrName' and the value is a
@@ -147,7 +148,7 @@ public class IDFFMetaUtils {
         attrs.put(attrName, values);
         return attrs;
     }
-    
+
     /**
      * Converts a <code>Node</code> object to a JAXB object.
      *
@@ -163,7 +164,7 @@ public class IDFFMetaUtils {
         //a secure XML parser
         return u.unmarshal(node);
     }
-    
+
     /**
      * Converts a <code>String</code> object to a JAXB object.
      *
@@ -175,9 +176,9 @@ public class IDFFMetaUtils {
     public static Object convertStringToJAXB(String str)
     throws JAXBException {
         Unmarshaller u = jaxbContext.createUnmarshaller();
-        return u.unmarshal(XMLUtils.createSAXSource(new InputSource(new StringReader(str))));
+        return u.unmarshal(XMLUtils.createSAXSourceLegacy(new InputSource(new StringReader(str))));
     }
-    
+
     /**
      * Returns the SPDescriptor in the Entity Descriptor.
      * If there is more then one SPDescriptor then the first
@@ -230,7 +231,7 @@ public class IDFFMetaUtils {
         }
         return idpDescriptor;
     }
-    
+
     /**
      * Returns the Service Provider Entity Configuration.
      * If there are multiple Configurations then the first
@@ -257,7 +258,7 @@ public class IDFFMetaUtils {
         }
         return spEntityConfig;
     }
-    
+
     /**
      * Returns the Identity Provider Entity Configuration.
      * If there are multiple Configuraitons then the
@@ -393,8 +394,8 @@ public class IDFFMetaUtils {
         } else {
             return null;
         }
-    } 
-        
+    }
+
     /**
      * Returns the realm by parsing the metaAlias. MetaAlias format is
      * <pre>

@@ -21,7 +21,7 @@ import static org.forgerock.json.resource.Requests.*;
 import static org.forgerock.util.promise.Promises.newExceptionPromise;
 import static org.forgerock.util.promise.Promises.newResultPromise;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.net.URI;
 import java.util.Collections;
 import java.util.List;

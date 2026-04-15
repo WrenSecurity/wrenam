@@ -16,8 +16,8 @@
 
 package org.forgerock.oauth2.core;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import jakarta.servlet.http.HttpServletRequest;
 
 import org.forgerock.oauth2.core.exceptions.InvalidClientException;

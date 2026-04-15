@@ -28,8 +28,8 @@ import org.forgerock.oauth2.core.exceptions.UnsupportedResponseTypeException;
 import org.forgerock.json.JsonValue;
 import org.forgerock.openam.oauth2.OAuth2UrisFactory;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;

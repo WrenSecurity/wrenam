@@ -34,8 +34,8 @@ import static org.forgerock.openam.i18n.apidescriptor.ApiDescriptorConstants.REA
 import static org.forgerock.openam.i18n.apidescriptor.ApiDescriptorConstants.TITLE;
 import static org.forgerock.openam.i18n.apidescriptor.ApiDescriptorConstants.UPDATE_DESCRIPTION;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

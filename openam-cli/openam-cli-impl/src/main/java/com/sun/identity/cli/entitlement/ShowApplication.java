@@ -42,7 +42,7 @@ import com.sun.identity.log.Level;
 import java.text.MessageFormat;
 import java.util.Set;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.forgerock.openam.entitlement.service.ApplicationServiceFactory;
 

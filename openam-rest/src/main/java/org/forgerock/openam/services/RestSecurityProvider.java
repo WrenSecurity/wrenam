@@ -18,7 +18,7 @@ package org.forgerock.openam.services;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 /**
  * Guice-injectable singleton to allow access to the current realm's RestSecurity

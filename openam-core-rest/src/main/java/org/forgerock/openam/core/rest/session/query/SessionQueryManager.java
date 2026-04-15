@@ -19,7 +19,7 @@ package org.forgerock.openam.core.rest.session.query;
 import com.iplanet.dpro.session.share.SessionInfo;
 import com.sun.identity.shared.debug.Debug;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.LinkedList;

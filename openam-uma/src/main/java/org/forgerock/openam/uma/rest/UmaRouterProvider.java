@@ -21,8 +21,8 @@ import static org.forgerock.openam.rest.audit.RestletBodyAuditor.noBodyAuditor;
 import static org.forgerock.openam.rest.service.RestletUtils.wrap;
 import static org.forgerock.openam.uma.UmaConstants.*;
 
-import javax.inject.Inject;
-import javax.inject.Provider;
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
 
 import com.google.inject.Key;
 import com.google.inject.name.Names;

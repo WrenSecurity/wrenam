@@ -21,7 +21,7 @@ import static org.forgerock.openam.utils.Time.currentTimeMillis;
 import java.util.Collection;
 import java.util.concurrent.TimeUnit;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.forgerock.openam.blacklist.Blacklist;
 import org.forgerock.openam.blacklist.BlacklistException;

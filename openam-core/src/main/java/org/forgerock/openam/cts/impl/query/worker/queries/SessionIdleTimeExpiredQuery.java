@@ -24,7 +24,7 @@ import static org.forgerock.util.query.QueryFilter.lessThanOrEqualTo;
 import java.io.Closeable;
 import java.util.Calendar;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.forgerock.openam.cts.CoreTokenConfig;
 import org.forgerock.openam.cts.api.fields.SessionTokenField;

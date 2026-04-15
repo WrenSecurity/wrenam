@@ -32,8 +32,8 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 /**
  * {@link org.forgerock.openam.sts.token.provider.AMSessionInvalidator}

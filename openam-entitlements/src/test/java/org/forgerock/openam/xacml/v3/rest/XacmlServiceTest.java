@@ -12,7 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
- * Portions Copyright 2023 Wren Security
+ * Portions Copyright 2023-2026 Wren Security
  */
 
 package org.forgerock.openam.xacml.v3.rest;
@@ -271,8 +271,8 @@ public class XacmlServiceTest  {
         String xml = new String(baos.toByteArray(), "UTF-8");
 
         //then
-        assertThat(xml).contains("<ns2:PolicySet");
-        assertThat(xml).contains("xmlns:ns2=\"urn:oasis:names:tc:xacml:3.0:core:schema:wd-17\"");
+        assertThat(xml).contains("<PolicySet");
+        assertThat(xml).contains("xmlns=\"urn:oasis:names:tc:xacml:3.0:core:schema:wd-17\"");
         verify(response).setStatus(Status.SUCCESS_OK);
         ArgumentCaptor<List> listCaptor = ArgumentCaptor.forClass(List.class);
         verify(importExport).exportXACML(eq("/"), any(Subject.class), listCaptor.capture());

@@ -28,8 +28,8 @@ import org.forgerock.openam.sm.datalayer.impl.tasks.TaskFactory;
 import org.forgerock.openam.sm.datalayer.store.TokenDataStore;
 import org.forgerock.openam.sm.datalayer.impl.uma.UmaAuditEntry;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
 public class UmaAuditConnectionModule extends LdapDataLayerConnectionModule {
 

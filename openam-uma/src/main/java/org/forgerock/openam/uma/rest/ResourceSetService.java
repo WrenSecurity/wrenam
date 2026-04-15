@@ -20,7 +20,7 @@ import static org.forgerock.json.JsonValue.*;
 import static org.forgerock.json.resource.Requests.newQueryRequest;
 import static org.forgerock.util.promise.Promises.newResultPromise;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import javax.security.auth.Subject;
 import java.security.Principal;
 import java.util.ArrayList;

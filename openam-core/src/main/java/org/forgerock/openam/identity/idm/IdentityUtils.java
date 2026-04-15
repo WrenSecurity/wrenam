@@ -16,7 +16,7 @@
  */
 package org.forgerock.openam.identity.idm;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import com.iplanet.sso.SSOException;
 import com.iplanet.sso.SSOToken;

@@ -28,8 +28,8 @@
  */
 package com.iplanet.dpro.session.service;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
 import org.forgerock.openam.session.service.SessionAccessManager;
 

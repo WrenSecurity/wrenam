@@ -18,7 +18,7 @@ package org.forgerock.openam.sm;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import com.iplanet.sso.SSOException;
 import com.iplanet.sso.SSOToken;

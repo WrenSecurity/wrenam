@@ -16,7 +16,7 @@
 
 package org.forgerock.openam.rest;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import org.forgerock.caf.authentication.framework.AuditApi;
 import org.forgerock.json.JsonValue;

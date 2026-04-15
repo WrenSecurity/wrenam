@@ -27,8 +27,8 @@ import org.forgerock.openam.sts.AMSTSConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Named;
-import javax.inject.Singleton;
+import jakarta.inject.Named;
+import jakarta.inject.Singleton;
 
 /**
  * This module defines bindings which are common to all STS instances. This includes the ConnectionFactory and Router

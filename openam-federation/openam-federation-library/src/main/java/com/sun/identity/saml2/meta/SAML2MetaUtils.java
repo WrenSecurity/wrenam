@@ -25,7 +25,7 @@
  * $Id: SAML2MetaUtils.java,v 1.9 2009/09/21 17:28:12 exu Exp $
  *
  * Portions Copyrighted 2010-2015 ForgeRock AS.
- * Portions Copyrighted 2024 Wren Security.
+ * Portions Copyrighted 2024-2026 Wren Security.
  */
 package com.sun.identity.saml2.meta;
 
@@ -137,7 +137,7 @@ public final class SAML2MetaUtils {
         throws JAXBException {
 
        Unmarshaller u = jaxbContext.createUnmarshaller();
-       return u.unmarshal(XMLUtils.createSAXSource(new InputSource(new StringReader(str))));
+       return u.unmarshal(XMLUtils.createSAXSourceLegacy(new InputSource(new StringReader(str))));
     }
 
     /**
@@ -151,7 +151,7 @@ public final class SAML2MetaUtils {
         throws JAXBException {
 
        Unmarshaller u = jaxbContext.createUnmarshaller();
-       return u.unmarshal(XMLUtils.createSAXSource(new InputSource(is)));
+       return u.unmarshal(XMLUtils.createSAXSourceLegacy(new InputSource(is)));
     }
 
     /**

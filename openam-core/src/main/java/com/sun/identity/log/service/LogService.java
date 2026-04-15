@@ -32,7 +32,7 @@ package com.sun.identity.log.service;
 import java.io.ByteArrayInputStream;
 import java.net.InetAddress;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.ServletContext;

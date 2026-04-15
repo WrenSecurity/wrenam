@@ -28,7 +28,7 @@ package org.forgerock.openam.session;
 
 import static org.forgerock.openam.session.SessionConstants.*;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import org.forgerock.util.thread.listener.ShutdownListener;
 import org.forgerock.util.thread.listener.ShutdownManager;

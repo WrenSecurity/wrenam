@@ -21,7 +21,7 @@ import org.forgerock.openam.sts.STSPublishException;
 import org.forgerock.openam.sts.publish.STSInstanceConfigStore;
 import org.forgerock.openam.sts.soap.config.user.SoapSTSInstanceConfig;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.util.List;
 
 /**

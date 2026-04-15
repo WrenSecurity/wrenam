@@ -20,9 +20,9 @@ import static org.forgerock.openam.rest.service.RestletUtils.wrap;
 import static org.forgerock.openam.uma.UmaConstants.UMA_BACKEND_POLICY_RESOURCE_HANDLER;
 
 import org.forgerock.openam.auditors.SMSAuditFilter;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.inject.Singleton;
 import javax.security.auth.Subject;
 
 import com.google.inject.AbstractModule;

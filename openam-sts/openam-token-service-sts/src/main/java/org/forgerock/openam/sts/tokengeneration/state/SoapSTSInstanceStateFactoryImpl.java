@@ -21,7 +21,7 @@ import org.forgerock.openam.sts.soap.config.user.SoapSTSInstanceConfig;
 import org.forgerock.openam.sts.tokengeneration.oidc.crypto.OpenIdConnectTokenPKIProviderFactory;
 import org.forgerock.openam.sts.tokengeneration.saml2.xmlsig.SAML2CryptoProviderFactory;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 /**
  * @see STSInstanceStateFactory

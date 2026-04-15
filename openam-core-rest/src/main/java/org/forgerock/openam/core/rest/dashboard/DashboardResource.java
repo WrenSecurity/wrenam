@@ -26,8 +26,8 @@ import static org.forgerock.util.promise.Promises.newResultPromise;
 
 import java.util.HashMap;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.forgerock.api.annotations.CollectionProvider;
 import org.forgerock.api.annotations.Handler;

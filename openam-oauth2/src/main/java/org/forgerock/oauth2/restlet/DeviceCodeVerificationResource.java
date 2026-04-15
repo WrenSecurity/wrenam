@@ -18,8 +18,8 @@ package org.forgerock.oauth2.restlet;
 import static org.forgerock.openam.oauth2.OAuth2Constants.Params.CLIENT_ID;
 import static org.forgerock.openam.oauth2.OAuth2Constants.Params.SCOPE;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

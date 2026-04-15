@@ -33,7 +33,7 @@ import org.forgerock.openam.sts.TokenValidationException;
 import org.forgerock.openam.sts.config.user.AuthTargetMapping;
 import org.slf4j.Logger;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 /**
  * Class which encapsulates knowledge as to how to post a x509 certificate to the OpenAM REST authN context. It will

@@ -29,8 +29,8 @@ import java.util.concurrent.atomic.AtomicStampedReference;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.wrensecurity.guava.common.base.Throwables;
 import org.wrensecurity.guava.common.cache.Cache;

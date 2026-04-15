@@ -15,7 +15,7 @@
  */
 package org.forgerock.openam.cts.utils.blob;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import org.forgerock.openam.cts.CoreTokenConfig;
 import org.forgerock.openam.cts.utils.blob.strategies.AttributeCompressionStrategy;
 import org.forgerock.openam.cts.utils.blob.strategies.CompressionStrategy;

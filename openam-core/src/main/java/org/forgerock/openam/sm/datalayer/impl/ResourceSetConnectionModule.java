@@ -16,8 +16,8 @@
 
 package org.forgerock.openam.sm.datalayer.impl;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
 import org.forgerock.openam.oauth2.ResourceSetDescription;
 import org.forgerock.openam.cts.adapters.JavaBeanAdapter;

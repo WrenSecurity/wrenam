@@ -22,7 +22,7 @@ import static org.forgerock.api.models.Resource.fromAnnotatedType;
 import static org.forgerock.api.models.VersionedPath.*;
 import static org.forgerock.openam.i18n.apidescriptor.ApiDescriptorConstants.*;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.forgerock.api.annotations.Create;
 import org.forgerock.api.annotations.Handler;

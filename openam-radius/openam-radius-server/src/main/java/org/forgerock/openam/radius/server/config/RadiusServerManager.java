@@ -17,8 +17,8 @@ package org.forgerock.openam.radius.server.config;
 
 import java.text.MessageFormat;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
 import org.forgerock.openam.radius.server.RadiusLifecycleException;
 import org.forgerock.openam.radius.server.RadiusRequestListener;

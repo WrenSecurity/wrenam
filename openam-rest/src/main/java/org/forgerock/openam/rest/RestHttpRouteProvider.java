@@ -19,8 +19,8 @@ package org.forgerock.openam.rest;
 import static org.forgerock.http.routing.RoutingMode.STARTS_WITH;
 import static org.forgerock.openam.http.HttpRoute.newHttpRoute;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import java.util.Collections;
 import java.util.ServiceLoader;
 import java.util.Set;

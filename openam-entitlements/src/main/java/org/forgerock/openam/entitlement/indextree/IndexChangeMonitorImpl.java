@@ -19,7 +19,7 @@ package org.forgerock.openam.entitlement.indextree;
 import com.sun.identity.shared.debug.Debug;
 import com.sun.identity.sm.ServiceManagementDAO;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.forgerock.openam.ldap.LDAPRequests;
 import org.forgerock.openam.sm.datalayer.api.ConnectionFactory;

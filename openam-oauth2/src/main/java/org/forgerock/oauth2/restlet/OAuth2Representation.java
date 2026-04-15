@@ -17,7 +17,7 @@
 package org.forgerock.oauth2.restlet;
 
 import java.util.HashMap;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import org.forgerock.oauth2.core.AuthorizationToken;
 import org.forgerock.oauth2.core.OAuth2Request;
 import org.forgerock.openam.oauth2.OAuth2Constants;

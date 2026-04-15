@@ -16,7 +16,7 @@
 
 package org.forgerock.openam.http;
 
-import javax.inject.Provider;
+import jakarta.inject.Provider;
 import java.util.Set;
 
 import org.forgerock.http.routing.Router;

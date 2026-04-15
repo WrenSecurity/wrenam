@@ -17,35 +17,7 @@
 
 package org.forgerock.openam.authentication.modules.fr.oath;
 
-import static org.forgerock.openam.utils.Time.*;
-
-import java.io.IOException;
-import java.security.MessageDigest;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
-
-import javax.security.auth.Subject;
-import javax.security.auth.callback.Callback;
-import javax.security.auth.callback.ConfirmationCallback;
-import javax.security.auth.callback.NameCallback;
-import javax.xml.bind.DatatypeConverter;
-
-import org.apache.commons.codec.DecoderException;
-import org.forgerock.guice.core.InjectorHolder;
-import org.forgerock.openam.core.rest.devices.oath.OathDeviceSettings;
-import org.forgerock.openam.core.rest.devices.services.AuthenticatorDeviceServiceFactory;
-import org.forgerock.openam.core.rest.devices.services.oath.AuthenticatorOathService;
-import org.forgerock.openam.core.rest.devices.services.oath.AuthenticatorOathServiceFactory;
-import org.forgerock.openam.utils.Alphabet;
-import org.forgerock.openam.utils.CodeException;
-import org.forgerock.openam.utils.RecoveryCodeGenerator;
-import org.forgerock.openam.utils.CollectionUtils;
-import org.forgerock.openam.utils.StringUtils;
-import org.forgerock.openam.utils.qr.GenerationUtils;
+import static org.forgerock.openam.utils.Time.currentTimeMillis;
 
 import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
@@ -67,6 +39,31 @@ import com.sun.identity.shared.datastruct.CollectionHelper;
 import com.sun.identity.shared.debug.Debug;
 import com.sun.identity.sm.DNMapper;
 import com.sun.identity.sm.SMSException;
+import jakarta.xml.bind.DatatypeConverter;
+import java.io.IOException;
+import java.security.MessageDigest;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
+import javax.security.auth.Subject;
+import javax.security.auth.callback.Callback;
+import javax.security.auth.callback.ConfirmationCallback;
+import javax.security.auth.callback.NameCallback;
+import org.apache.commons.codec.DecoderException;
+import org.forgerock.guice.core.InjectorHolder;
+import org.forgerock.openam.core.rest.devices.oath.OathDeviceSettings;
+import org.forgerock.openam.core.rest.devices.services.AuthenticatorDeviceServiceFactory;
+import org.forgerock.openam.core.rest.devices.services.oath.AuthenticatorOathService;
+import org.forgerock.openam.core.rest.devices.services.oath.AuthenticatorOathServiceFactory;
+import org.forgerock.openam.utils.Alphabet;
+import org.forgerock.openam.utils.CodeException;
+import org.forgerock.openam.utils.CollectionUtils;
+import org.forgerock.openam.utils.RecoveryCodeGenerator;
+import org.forgerock.openam.utils.StringUtils;
+import org.forgerock.openam.utils.qr.GenerationUtils;
 
 /**
  * Implements the OATH specification. OATH uses a OTP to authenticate
@@ -158,7 +155,7 @@ public class AuthenticatorOATH extends AMLoginModule {
     private final RecoveryCodeGenerator recoveryCodeGenerator = InjectorHolder.getInstance(RecoveryCodeGenerator.class);
 
     private OathDeviceSettings newDevice = null;
-    
+
     /**
      * Standard constructor sets-up the debug logging module.
      */
@@ -642,7 +639,7 @@ public class AuthenticatorOATH extends AMLoginModule {
             throw new AuthLoginException(amAuthOATH, "authFailed", null);
         }
 
-        //convert secretkey hex string to hex.     
+        //convert secretkey hex string to hex.
         byte[] secretKeyBytes = DatatypeConverter.parseHexBinary(secretKey);
 
         //check password length MUST be 6 or higher according to RFC

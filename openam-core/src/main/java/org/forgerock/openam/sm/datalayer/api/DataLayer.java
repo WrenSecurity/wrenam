@@ -21,7 +21,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.Annotation;
 import java.lang.annotation.Retention;
 
-import javax.inject.Qualifier;
+import jakarta.inject.Qualifier;
 
 /**
  * An annotation for marking injectable objects as for a specific data layer.

@@ -31,7 +31,7 @@ import org.forgerock.openam.sts.rest.config.user.RestSTSInstanceConfig;
 import org.forgerock.openam.utils.StringUtils;
 import org.slf4j.Logger;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 /**
  * This ServiceListener implementation will be registered in RestSTSInstancePublisherImpl#registerServiceListener, which

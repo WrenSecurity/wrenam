@@ -16,8 +16,8 @@
 
 package org.forgerock.openam.rest;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 /**
  * An abstract implementation of the {@link RestRouteProvider} that provides

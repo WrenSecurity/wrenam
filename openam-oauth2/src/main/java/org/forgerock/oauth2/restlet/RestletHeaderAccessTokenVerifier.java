@@ -27,8 +27,8 @@ import org.restlet.engine.adapter.HttpRequest;
 import org.restlet.engine.header.HeaderConstants;
 import org.restlet.util.Series;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
 /**
  * Verifies that a OAuth2 request that is made to one of the protected endpoints on the OAuth2 provider,

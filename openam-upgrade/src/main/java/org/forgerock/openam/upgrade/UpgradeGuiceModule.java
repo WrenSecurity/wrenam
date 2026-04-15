@@ -25,7 +25,7 @@ import org.forgerock.openam.upgrade.steps.RemoveRedundantDefaultApplication;
 import org.forgerock.openam.upgrade.steps.UpgradeEntitlementSubConfigsStep;
 import org.forgerock.openam.upgrade.steps.policy.UpgradeResourceTypeStep;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 import java.util.Set;
 
 /**

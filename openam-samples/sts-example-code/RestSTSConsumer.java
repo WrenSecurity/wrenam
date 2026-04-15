@@ -49,7 +49,7 @@ import org.forgerock.openam.sts.token.SAML2SubjectConfirmation;
 import org.forgerock.openam.utils.IOUtils;
 import org.forgerock.util.encode.Base64;
  
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;

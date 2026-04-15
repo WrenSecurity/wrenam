@@ -20,7 +20,7 @@ import static org.forgerock.openam.oauth2.OAuth2Constants.CoreTokenParams.ID;
 import static org.forgerock.util.query.QueryFilter.and;
 import static org.forgerock.util.query.QueryFilter.equalTo;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import java.util.Collection;
 import java.util.Set;

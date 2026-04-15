@@ -22,7 +22,7 @@ import static org.forgerock.openam.uma.UmaConstants.UmaPolicy.*;
 import static org.forgerock.openam.utils.CollectionUtils.newList;
 import static org.forgerock.util.promise.Promises.newResultPromise;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import javax.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import java.text.MessageFormat;

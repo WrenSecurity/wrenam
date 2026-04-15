@@ -16,7 +16,7 @@
 package org.forgerock.openam.core.rest.devices.services.deviceprint;
 
 import com.sun.identity.sm.ServiceConfigManager;
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 import org.forgerock.openam.core.rest.devices.services.DeviceServiceFactory;
 
 /**

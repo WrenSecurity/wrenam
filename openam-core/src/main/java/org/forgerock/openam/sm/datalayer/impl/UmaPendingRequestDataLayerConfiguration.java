@@ -16,8 +16,8 @@
 
 package org.forgerock.openam.sm.datalayer.impl;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import com.iplanet.am.util.AMPasswordUtil;
 import com.iplanet.am.util.SystemProperties;

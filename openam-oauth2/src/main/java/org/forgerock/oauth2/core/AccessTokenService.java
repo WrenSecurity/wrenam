@@ -20,7 +20,7 @@ import static org.forgerock.oauth2.core.Utils.*;
 import static org.forgerock.openam.audit.AuditConstants.TrackingIdKey.OAUTH2_GRANT;
 import static org.forgerock.openam.oauth2.OAuth2Constants.Params.*;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;

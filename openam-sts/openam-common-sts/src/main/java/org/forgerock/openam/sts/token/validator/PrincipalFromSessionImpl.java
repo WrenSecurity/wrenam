@@ -27,8 +27,8 @@ import org.forgerock.openam.sts.TokenValidationException;
 import org.forgerock.openam.sts.token.UrlConstituentCatenator;
 import org.forgerock.openam.utils.JsonValueBuilder;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;

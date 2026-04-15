@@ -17,7 +17,7 @@
 package org.forgerock.openam.entitlement.indextree;
 
 import com.sun.identity.shared.debug.Debug;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import org.forgerock.openam.core.DNWrapper;
 import org.forgerock.openam.entitlement.indextree.events.ErrorEventType;
 import org.forgerock.openam.entitlement.indextree.events.IndexChangeObservable;

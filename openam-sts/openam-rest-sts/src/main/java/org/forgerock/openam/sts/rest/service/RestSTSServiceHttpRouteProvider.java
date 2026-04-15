@@ -23,8 +23,8 @@ import static org.forgerock.http.routing.RoutingMode.*;
 import static org.forgerock.json.resource.http.CrestHttp.newHttpHandler;
 import static org.forgerock.openam.audit.AuditConstants.Component.STS;
 
-import javax.inject.Inject;
-import javax.inject.Provider;
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
 
 import com.google.inject.Key;
 import org.forgerock.http.Handler;

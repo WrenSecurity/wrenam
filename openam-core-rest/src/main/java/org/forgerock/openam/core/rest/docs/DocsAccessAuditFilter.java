@@ -15,7 +15,7 @@
  */
 package org.forgerock.openam.core.rest.docs;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.forgerock.openam.audit.AbstractHttpAccessAuditFilter;
 import org.forgerock.openam.audit.AuditConstants;

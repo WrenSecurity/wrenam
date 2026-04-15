@@ -16,7 +16,7 @@
 
 package org.forgerock.openam.oauth2.resources.labels;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import org.forgerock.openam.sm.ConnectionConfig;
 import org.forgerock.openam.sm.datalayer.api.ConnectionType;

@@ -37,7 +37,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Nullable;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import javax.security.auth.callback.Callback;
 
 import org.forgerock.openam.ldap.LDAPUtils;

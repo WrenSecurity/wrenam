@@ -23,7 +23,7 @@ import static org.forgerock.openam.upgrade.UpgradeServices.LF;
 import static org.forgerock.openam.upgrade.UpgradeServices.tagSwapReport;
 import static org.forgerock.openam.upgrade.UpgradeUtils.ATTR_AUTH_POST_CLASS;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.security.PrivilegedAction;
 import java.util.Collections;
 import java.util.HashMap;

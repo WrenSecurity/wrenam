@@ -33,8 +33,8 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.forgerock.json.jose.builders.JwtBuilderFactory;

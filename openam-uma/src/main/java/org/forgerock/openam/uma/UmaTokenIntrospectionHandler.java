@@ -22,7 +22,7 @@ import static org.forgerock.openam.utils.CollectionUtils.newList;
 
 import java.util.ArrayList;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.forgerock.json.JsonValue;
 import org.forgerock.openam.oauth2.OAuth2Constants;

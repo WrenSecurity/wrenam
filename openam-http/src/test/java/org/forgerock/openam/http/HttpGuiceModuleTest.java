@@ -60,9 +60,7 @@ public class HttpGuiceModuleTest extends GuiceTestCase {
         } catch (ConfigurationException e) {
             //Then
             assertThat(e.getErrorMessages().iterator().next().getMessage())
-                    .contains("It was already configured on one or more child injectors or private modules")
-                    .contains("bound at org.forgerock.openam.http.HttpGuiceModule")
-                    .contains("If it was in a PrivateModule, did you forget to expose the binding?");
+                    .contains("because it was already configured on one or more child injectors or private modules");
         }
     }
 }

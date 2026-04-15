@@ -23,7 +23,7 @@ import org.forgerock.openam.entitlement.indextree.events.IndexChangeEvent;
 import org.forgerock.openam.entitlement.indextree.events.IndexChangeObservable;
 import org.forgerock.openam.entitlement.indextree.events.IndexChangeObserver;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;

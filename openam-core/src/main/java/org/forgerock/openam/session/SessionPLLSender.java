@@ -32,7 +32,7 @@ import static org.forgerock.openam.session.SessionConstants.*;
 import java.net.URL;
 import java.util.Vector;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import com.iplanet.am.util.SystemProperties;
 import com.iplanet.dpro.session.SessionException;

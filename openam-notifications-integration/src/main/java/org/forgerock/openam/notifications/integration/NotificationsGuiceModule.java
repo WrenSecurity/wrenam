@@ -19,8 +19,8 @@ package org.forgerock.openam.notifications.integration;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ScheduledExecutorService;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.forgerock.guice.core.GuiceModule;
 import org.forgerock.openam.audit.context.AMExecutorServiceFactory;

@@ -27,9 +27,9 @@ import static org.forgerock.openam.scripting.ScriptConstants.ScriptContext.POLIC
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.inject.Singleton;
 
 import org.forgerock.guice.core.GuiceModule;
 import org.forgerock.http.Client;

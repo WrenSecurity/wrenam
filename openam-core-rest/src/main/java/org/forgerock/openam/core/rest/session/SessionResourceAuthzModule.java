@@ -17,7 +17,7 @@
 
 package org.forgerock.openam.core.rest.session;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import com.iplanet.sso.SSOException;
 import com.iplanet.sso.SSOTokenManager;

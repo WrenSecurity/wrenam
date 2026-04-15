@@ -19,8 +19,8 @@ package org.forgerock.openam.scripting.api.http;
 
 import static org.forgerock.openam.scripting.ScriptConstants.SCRIPTING_HTTP_CLIENT_NAME;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import com.sun.identity.shared.debug.Debug;
 import org.forgerock.http.Client;

@@ -17,7 +17,7 @@
 
 package org.forgerock.openam.sm.datalayer.impl.ldap;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import org.forgerock.openam.cts.api.tokens.Token;
 import org.forgerock.openam.cts.impl.LdapAdapter;
@@ -85,7 +85,7 @@ public abstract class LdapDataLayerConnectionModule extends DataLayerConnectionM
      * Returns the provider of {@link org.forgerock.openam.sm.datalayer.api.ConnectionFactory}. The default is to use
      * {@link org.forgerock.openam.sm.datalayer.providers.DataLayerConnectionFactoryCache}.
      */
-    protected Class<? extends javax.inject.Provider<ConnectionFactory>> getConnectionFactoryProviderType() {
+    protected Class<? extends jakarta.inject.Provider<ConnectionFactory>> getConnectionFactoryProviderType() {
         return DataLayerConnectionFactoryCache.class;
     }
 

@@ -25,7 +25,7 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.forgerock.guice.core.GuiceTestCase;
 import org.forgerock.openam.cts.api.CoreTokenConstants;

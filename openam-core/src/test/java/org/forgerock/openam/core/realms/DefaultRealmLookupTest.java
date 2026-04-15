@@ -20,7 +20,7 @@ package org.forgerock.openam.core.realms;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
-import javax.inject.Provider;
+import jakarta.inject.Provider;
 import java.util.HashSet;
 import java.util.Set;
 

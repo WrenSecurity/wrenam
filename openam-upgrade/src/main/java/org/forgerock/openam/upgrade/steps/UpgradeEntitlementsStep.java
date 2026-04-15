@@ -43,7 +43,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.forgerock.openam.ldap.LDAPRequests;
 import org.forgerock.openam.sm.datalayer.api.ConnectionFactory;

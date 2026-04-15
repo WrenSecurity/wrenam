@@ -35,7 +35,7 @@ import static org.forgerock.openam.utils.JsonValueBuilder.fromResource;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.forgerock.api.models.ApiDescription;
 import org.forgerock.api.models.TranslateJsonSchema;

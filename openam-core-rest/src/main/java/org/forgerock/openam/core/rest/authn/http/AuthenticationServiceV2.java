@@ -18,7 +18,7 @@ package org.forgerock.openam.core.rest.authn.http;
 
 import static org.forgerock.json.JsonValue.*;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.util.Map;
 
 import org.forgerock.http.protocol.Request;

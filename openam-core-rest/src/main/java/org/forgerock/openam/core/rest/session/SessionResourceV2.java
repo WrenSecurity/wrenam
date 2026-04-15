@@ -23,7 +23,7 @@ import static org.forgerock.openam.session.SessionConstants.JSON_SESSION_REALM;
 import static org.forgerock.openam.session.SessionConstants.JSON_SESSION_USERNAME;
 import static org.forgerock.util.promise.Promises.newResultPromise;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.util.Collection;
 import java.util.Map;
 

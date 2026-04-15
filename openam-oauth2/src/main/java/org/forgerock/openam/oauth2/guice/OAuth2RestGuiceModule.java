@@ -16,7 +16,7 @@
 
 package org.forgerock.openam.oauth2.guice;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Key;

@@ -28,7 +28,7 @@ import static org.forgerock.util.promise.Promises.newResultPromise;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import org.forgerock.api.annotations.ApiError;
 import org.forgerock.api.annotations.CollectionProvider;
 import org.forgerock.api.annotations.Create;

@@ -38,7 +38,7 @@ import com.sun.identity.authentication.AuthContext;
 import com.sun.identity.authentication.service.LoginState;
 import com.sun.identity.common.DNUtils;
 import java.security.Principal;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import org.forgerock.openam.audit.AMAuditEventBuilderUtils;
 import org.forgerock.openam.audit.AMAuthenticationAuditEventBuilder;
 import org.forgerock.openam.audit.AuditConstants.AuthenticationFailureReason;

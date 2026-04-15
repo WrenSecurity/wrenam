@@ -16,8 +16,8 @@
 
 package org.forgerock.openam.rest.authz;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import com.iplanet.dpro.session.service.SessionService;
 import com.iplanet.sso.SSOException;

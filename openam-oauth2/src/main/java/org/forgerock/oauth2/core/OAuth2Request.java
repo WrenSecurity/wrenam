@@ -17,7 +17,7 @@
 
 package org.forgerock.oauth2.core;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;

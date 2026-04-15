@@ -19,7 +19,7 @@ package org.forgerock.openam.oauth2.resources;
 import static org.forgerock.json.JsonValue.array;
 import static org.forgerock.json.JsonValue.json;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;

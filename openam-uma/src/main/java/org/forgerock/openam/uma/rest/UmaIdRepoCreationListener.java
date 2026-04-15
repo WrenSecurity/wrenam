@@ -19,8 +19,8 @@ package org.forgerock.openam.uma.rest;
 import java.util.Set;
 import java.util.TreeSet;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
 import org.forgerock.openam.core.CoreWrapper;
 

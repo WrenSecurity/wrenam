@@ -37,7 +37,7 @@ import com.sun.identity.entitlement.ApplicationTypeManager;
 import com.sun.identity.log.Level;
 import java.util.Set;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.forgerock.openam.entitlement.service.ApplicationServiceFactory;
 

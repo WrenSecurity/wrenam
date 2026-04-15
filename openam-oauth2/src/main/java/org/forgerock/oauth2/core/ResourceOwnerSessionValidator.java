@@ -28,8 +28,8 @@ import static org.forgerock.openam.utils.Time.currentTimeMillis;
 import static org.forgerock.openidconnect.Client.CONFIRMED_MAX_AGE;
 import static org.forgerock.openidconnect.Client.MIN_DEFAULT_MAX_AGE;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.io.IOException;

@@ -19,9 +19,9 @@ package org.forgerock.openam.authentication.service;
 import static com.sun.identity.shared.Constants.UNIVERSAL_IDENTIFIER;
 import static org.forgerock.openam.ldap.LDAPUtils.rdnValueFromDn;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.inject.Singleton;
 
 import org.forgerock.openam.session.AMSession;
 import org.forgerock.openam.session.SessionConstants;

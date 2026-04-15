@@ -16,13 +16,10 @@
 
 package org.forgerock.openam.sm.validation;
 
-import java.util.Set;
-
-import javax.xml.bind.DatatypeConverter;
-
-import org.forgerock.openam.utils.CollectionUtils;
-
 import com.sun.identity.sm.ServiceAttributeValidator;
+import jakarta.xml.bind.DatatypeConverter;
+import java.util.Set;
+import org.forgerock.openam.utils.CollectionUtils;
 
 /**
  * Validates that an attribute is set to a single base64-encoded

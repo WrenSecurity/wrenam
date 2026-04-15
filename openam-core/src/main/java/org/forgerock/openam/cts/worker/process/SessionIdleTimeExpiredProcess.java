@@ -18,8 +18,8 @@ package org.forgerock.openam.cts.worker.process;
 import java.util.Collection;
 import java.util.concurrent.CountDownLatch;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.apache.commons.lang.time.StopWatch;
 import org.forgerock.openam.cts.api.CoreTokenConstants;

@@ -16,7 +16,7 @@
 
 package org.forgerock.openam.sts.token;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.forgerock.json.JsonException;
 import org.forgerock.json.JsonValue;

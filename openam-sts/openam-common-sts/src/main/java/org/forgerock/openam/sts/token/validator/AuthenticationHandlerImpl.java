@@ -23,7 +23,7 @@ import org.forgerock.openam.sts.token.AMTokenParser;
 import org.forgerock.openam.sts.token.validator.disp.TokenAuthenticationRequestDispatcher;
 import org.forgerock.openam.sts.token.validator.url.AuthenticationUrlProvider;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.net.URL;
 
 import org.slf4j.Logger;

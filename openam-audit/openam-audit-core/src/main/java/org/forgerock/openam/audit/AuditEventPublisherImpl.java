@@ -31,8 +31,8 @@ import org.forgerock.json.resource.ServiceUnavailableException;
 import org.forgerock.openam.audit.AuditConstants.EventName;
 import org.forgerock.services.context.RootContext;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
 /**
  * Responsible for publishing locally created audit events to the AuditService.

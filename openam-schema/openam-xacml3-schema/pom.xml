@@ -13,7 +13,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2011-2016 ForgeRock AS.
- * Portions Copyright 2018-2023 Wren Security
+ * Portions Copyright 2018-2026 Wren Security
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
@@ -36,45 +36,34 @@
         </dependency>
     </dependencies>
 
-    <!-- Profiles -->
-    <profiles>
-        <!-- Place Default Profiles here to override and determine Environment. -->
-        <profile>
-            <id>generate-xacml3-code</id>
-            <build>
-                <plugins>
-                    <!-- Generate the Latest XACML Java POJOs for WD-17 -->
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>jaxb2-maven-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>xjc-xacml</id>
-                                <goals>
-                                    <goal>xjc</goal>
-                                </goals>
-                                <configuration>
-                                    <packageName>com.sun.identity.entitlement.xacml3.core</packageName>
-                                    <failOnNoSchemas>true</failOnNoSchemas>
-                                    <bindingDirectory>${project.basedir}/src/main/resources/xjb</bindingDirectory>
-                                    <schemaDirectory>${project.basedir}/src/main/resources/xsd</schemaDirectory>
-                                    <verbose>true</verbose>
-                                </configuration>
-                            </execution>
-                        </executions>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jaxb2-maven-plugin</artifactId>
+
+                <executions>
+                    <execution>
+                        <id>xjc-xacml</id>
+
+                        <goals>
+                            <goal>xjc</goal>
+                        </goals>
+
                         <configuration>
-                            <extension>true</extension>
+                            <packageName>com.sun.identity.entitlement.xacml3.core</packageName>
+
+                            <sources>
+                                <source>${project.basedir}/src/main/resources/xsd</source>
+                            </sources>
+
+                            <xjbSources>
+                                <xjbSource>${project.basedir}/src/main/resources/xjb</xjbSource>
+                            </xjbSources>
                         </configuration>
-                        <dependencies>
-                            <dependency>
-                                <groupId>com.sun.xml.bind</groupId>
-                                <artifactId>jaxb-xjc</artifactId>
-                                <version>2.1.10</version>
-                            </dependency>
-                        </dependencies>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

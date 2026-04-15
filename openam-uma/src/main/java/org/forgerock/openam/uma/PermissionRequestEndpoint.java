@@ -18,7 +18,7 @@ package org.forgerock.openam.uma;
 
 import static org.forgerock.json.JsonValue.json;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import java.util.Collection;
 import java.util.Collections;
