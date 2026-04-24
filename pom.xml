@@ -97,7 +97,7 @@
     </repositories>
 
     <properties>
-        <pgpVerifyKeysVersion>1.9.7</pgpVerifyKeysVersion>
+        <pgpVerifyKeysVersion>1.9.17</pgpVerifyKeysVersion>
 
         <!-- XXX Skip PMD plugin execution (https://github.com/WrenSecurity/wrenam/issues/71) -->
         <pmd.skip>true</pmd.skip>
@@ -135,9 +135,9 @@
         <project.build.outputTimestamp>2025-09-16T06:10:09Z</project.build.outputTimestamp>
 
         <!-- Wren Security Dependencies -->
-        <wrends.version>5.0.5</wrends.version>
-        <wrensec-commons.version>23.0.0-M1</wrensec-commons.version>
-        <wrensec-ui.version>23.2.3</wrensec-ui.version>
+        <wrends.version>5.1.0</wrends.version>
+        <wrensec-commons.version>23.0.1</wrensec-commons.version>
+        <wrensec-ui.version>23.2.5</wrensec-ui.version>
 
         <!-- Test Dependencies -->
         <assertj.version>3.19.0</assertj.version>
@@ -158,33 +158,35 @@
         <commons-logging.version>1.2</commons-logging.version>
         <commons-logging-api.version>1.1</commons-logging-api.version>
         <freemarker.version>2.3.32</freemarker.version>
-        <guice.version>3.0</guice.version>
+        <guice.version>7.0.0</guice.version>
         <jackson.version>2.15.2</jackson.version>
-        <jakarta.activation-api.version>1.2.2</jakarta.activation-api.version>
-        <jakarta.annotation-api.version>1.3.5</jakarta.annotation-api.version>
+        <jakarta.activation-api.version>2.1.4</jakarta.activation-api.version>
+        <jakarta.annotation-api.version>3.0.0</jakarta.annotation-api.version>
         <jakarta.security.message-api.version>2.0.0-RC1</jakarta.security.message-api.version>
-        <jakarta.inject-api.version>1.0.5</jakarta.inject-api.version>
-        <jakarta.mail-api.version>1.6.7</jakarta.mail-api.version>
-        <jakarta.mail-impl.version>1.6.7</jakarta.mail-impl.version>
+        <jakarta.inject-api.version>2.0.1</jakarta.inject-api.version>
+        <jakarta.mail-api.version>2.1.5</jakarta.mail-api.version>
+        <jakarta.mail-impl.version>2.0.5</jakarta.mail-impl.version>
         <jakarta.servlet-api.version>5.0.0</jakarta.servlet-api.version>
         <jakarta.servlet.jsp-api.version>4.0.0</jakarta.servlet.jsp-api.version>
         <jakarta.servlet.jstl-api.version>3.0.2</jakarta.servlet.jstl-api.version>
-        <jakarta.validation-api.version>2.0.2</jakarta.validation-api.version>
+        <jakarta.validation-api.version>3.0.2</jakarta.validation-api.version>
         <jakarta.websocket-api.version>1.1.2</jakarta.websocket-api.version>
         <jakarta.ws.rs-api.version>2.1.5</jakarta.ws.rs-api.version>
         <jakarta.xml.rpc-api.version>1.1.4-jakarta1</jakarta.xml.rpc-api.version>
-        <jakarta.xml.bind-api.version>2.3.3</jakarta.xml.bind-api.version>
+        <jakarta.xml.bind-api.version>4.0.2</jakarta.xml.bind-api.version>
         <jakarta.xml.soap-api.version>1.4.2</jakarta.xml.soap-api.version>
         <jakarta.xml.ws-api.version>2.3.3</jakarta.xml.ws-api.version>
         <java-ipv6.version>0.17</java-ipv6.version>
         <javassist.version>3.29.1-GA</javassist.version>
+        <javax.xml.bind-api.version>2.3.1</javax.xml.bind-api.version>
         <restlet.version>2.6.0</restlet.version>
         <slf4j.version>2.0.17</slf4j.version>
         <snakeyaml.version>2.2</snakeyaml.version>
 
         <!-- WS / RS Related Dependencies -->
         <fastinfoset.version>1.2.18</fastinfoset.version>
-        <jaxb-impl.version>2.3.8</jaxb-impl.version>
+        <jaxb-impl.version>2.2.7</jaxb-impl.version>
+        <jaxb-osgi.version>3.0.2</jaxb-osgi.version>
         <jaxb1-impl.version>2.2.5-1</jaxb1-impl.version>
         <jaxrpc-impl.version>1.1.6-jakarta1</jaxrpc-impl.version>
         <jaxrpc-spi.version>1.1.6-jakarta1</jaxrpc-spi.version>
@@ -206,7 +208,7 @@
         <rhino.version>1.7.14</rhino.version>
 
         <!-- Other Specialized Dependencies -->
-        <activemq.version>5.18.7</activemq.version>
+        <activemq.version>6.2.4</activemq.version>
         <amazon.sns.version>1.10.72</amazon.sns.version>
         <asciidoctorj.version>2.5.10</asciidoctorj.version>
         <bouncycastle.version>1.81</bouncycastle.version>
@@ -305,141 +307,54 @@
                 <groupId>org.wrensecurity.commons</groupId>
                 <artifactId>api-descriptor</artifactId>
                 <version>${wrensec-commons.version}</version>
-
-                <exclusions>
-                    <!-- Replaced by Jakarta -->
-                    <exclusion>
-                        <groupId>com.sun.xml.bind</groupId>
-                        <artifactId>jaxb-osgi</artifactId>
-                    </exclusion>
-
-                    <exclusion>
-                        <groupId>javax.validation</groupId>
-                        <artifactId>validation-api</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
 
             <dependency>
                 <groupId>org.wrensecurity.commons</groupId>
                 <artifactId>forgerock-audit-core</artifactId>
                 <version>${wrensec-commons.version}</version>
-
-                <exclusions>
-                    <!-- Replaced by Jakarta -->
-                    <exclusion>
-                        <groupId>org.apache.servicemix.bundles</groupId>
-                        <artifactId>org.apache.servicemix.bundles.javax-inject</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
 
             <dependency>
                 <groupId>org.wrensecurity.commons</groupId>
                 <artifactId>forgerock-audit-json</artifactId>
                 <version>${wrensec-commons.version}</version>
-
-                <exclusions>
-                    <!-- Replaced by Jakarta -->
-                    <exclusion>
-                        <groupId>javax.validation</groupId>
-                        <artifactId>validation-api</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
 
             <dependency>
                 <groupId>org.wrensecurity.commons</groupId>
                 <artifactId>forgerock-audit-handler-elasticsearch</artifactId>
                 <version>${wrensec-commons.version}</version>
-
-                <exclusions>
-                    <!-- Replaced by Jakarta -->
-                    <exclusion>
-                        <groupId>org.apache.servicemix.bundles</groupId>
-                        <artifactId>org.apache.servicemix.bundles.javax-inject</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
 
             <dependency>
                 <groupId>org.wrensecurity.commons</groupId>
                 <artifactId>forgerock-audit-handler-json</artifactId>
                 <version>${wrensec-commons.version}</version>
-
-                <exclusions>
-                    <!-- Replaced by Jakarta -->
-                    <exclusion>
-                        <groupId>org.apache.servicemix.bundles</groupId>
-                        <artifactId>org.apache.servicemix.bundles.javax-inject</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
 
             <dependency>
                 <groupId>org.wrensecurity.commons</groupId>
                 <artifactId>forgerock-selfservice-core</artifactId>
                 <version>${wrensec-commons.version}</version>
-
-                <exclusions>
-                    <!-- Replaced by Jakarta -->
-                    <exclusion>
-                        <groupId>com.sun.xml.bind</groupId>
-                        <artifactId>jaxb-osgi</artifactId>
-                    </exclusion>
-
-                    <exclusion>
-                        <groupId>org.apache.servicemix.bundles</groupId>
-                        <artifactId>org.apache.servicemix.bundles.javax-inject</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
 
             <dependency>
                 <groupId>org.wrensecurity.commons</groupId>
                 <artifactId>json-resource</artifactId>
                 <version>${wrensec-commons.version}</version>
-
-                <exclusions>
-                    <!-- Replaced by Jakarta -->
-                    <exclusion>
-                        <groupId>com.sun.xml.bind</groupId>
-                        <artifactId>jaxb-osgi</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
 
             <dependency>
                 <groupId>org.wrensecurity.commons</groupId>
                 <artifactId>json-resource-http</artifactId>
                 <version>${wrensec-commons.version}</version>
-
-                <exclusions>
-                    <!-- Replaced by Jakarta -->
-                    <exclusion>
-                        <groupId>com.sun.mail</groupId>
-                        <artifactId>javax.mail</artifactId>
-                    </exclusion>
-
-                    <exclusion>
-                        <groupId>com.sun.xml.bind</groupId>
-                        <artifactId>jaxb-osgi</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
 
             <dependency>
                 <groupId>org.wrensecurity.commons</groupId>
                 <artifactId>json-web-token</artifactId>
                 <version>${wrensec-commons.version}</version>
-
-                <exclusions>
-                    <!-- Replaced by Jakarta -->
-                    <exclusion>
-                        <groupId>com.sun.xml.bind</groupId>
-                        <artifactId>jaxb-osgi</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
 
             <!-- Module Dependencies -->
@@ -623,8 +538,8 @@
             </dependency>
 
             <dependency>
-                <groupId>com.sun.mail</groupId>
-                <artifactId>jakarta.mail</artifactId>
+                <groupId>org.eclipse.angus</groupId>
+                <artifactId>angus-mail</artifactId>
                 <version>${jakarta.mail-impl.version}</version>
             </dependency>
 
@@ -638,6 +553,12 @@
                 <groupId>com.sun.xml.bind</groupId>
                 <artifactId>jaxb-impl</artifactId>
                 <version>${jaxb-impl.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.sun.xml.bind</groupId>
+                <artifactId>jaxb-osgi</artifactId>
+                <version>${jaxb-osgi.version}</version>
             </dependency>
 
             <dependency>
@@ -815,6 +736,12 @@
                 <groupId>jakarta.xml.ws</groupId>
                 <artifactId>jakarta.xml.ws-api</artifactId>
                 <version>${jakarta.xml.ws-api.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>javax.xml.bind</groupId>
+                <artifactId>jaxb-api</artifactId>
+                <version>${javax.xml.bind-api.version}</version>
             </dependency>
 
             <dependency>
@@ -1139,52 +1066,16 @@
             </dependency>
 
             <!-- FIXME do we need this dependency? -->
-            <!-- TODO Upgrade and review exclusion list -->
             <dependency>
                 <groupId>com.google.inject</groupId>
                 <artifactId>guice</artifactId>
                 <version>${guice.version}</version>
-                <!-- Exclude aopalliance dependency due to ambiguous licensing terms. -->
-                <classifier>no_aop</classifier>
-
-                <exclusions>
-                    <exclusion>
-                        <groupId>aopalliance</groupId>
-                        <artifactId>aopalliance</artifactId>
-                    </exclusion>
-
-                    <!-- Exclude javax.inject in favour of servicemix OSGi-compatible version -->
-                    <exclusion>
-                        <groupId>javax.inject</groupId>
-                        <artifactId>javax.inject</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
 
             <dependency>
                 <groupId>com.google.inject.extensions</groupId>
                 <artifactId>guice-assistedinject</artifactId>
                 <version>${guice.version}</version>
-
-                <exclusions>
-                    <exclusion>
-                        <groupId>com.google.inject</groupId>
-                        <artifactId>guice</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-
-            <dependency>
-                <groupId>com.google.inject.extensions</groupId>
-                <artifactId>guice-multibindings</artifactId>
-                <version>${guice.version}</version>
-
-                <exclusions>
-                    <exclusion>
-                        <groupId>com.google.inject</groupId>
-                        <artifactId>guice</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
 
             <dependency>
@@ -1455,7 +1346,7 @@
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>jaxb2-maven-plugin</artifactId>
-                    <version>2.5.0</version>
+                    <version>4.1.0</version>
                 </plugin>
 
                 <!-- TODO drop -->

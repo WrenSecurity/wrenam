@@ -29,7 +29,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.forgerock.api.annotations.ApiError;
 import org.forgerock.api.annotations.CollectionProvider;

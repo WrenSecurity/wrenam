@@ -17,8 +17,8 @@ package org.forgerock.openam.uma;
 
 import com.sun.identity.shared.Constants;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import java.security.AccessController;
 import java.util.Map;

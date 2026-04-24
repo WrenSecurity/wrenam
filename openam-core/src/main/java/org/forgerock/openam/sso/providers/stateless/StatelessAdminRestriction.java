@@ -17,7 +17,7 @@ package org.forgerock.openam.sso.providers.stateless;
 
 import java.security.Principal;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.forgerock.util.Reject;
 

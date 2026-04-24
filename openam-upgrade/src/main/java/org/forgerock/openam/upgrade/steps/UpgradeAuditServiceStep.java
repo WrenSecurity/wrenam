@@ -25,7 +25,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.PrivilegedAction;
 import java.util.Iterator;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.wrensecurity.guava.common.collect.ImmutableMap;
 import org.forgerock.openam.audit.AuditConstants;

@@ -38,8 +38,8 @@ import org.forgerock.util.thread.ExecutorServiceFactory;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;

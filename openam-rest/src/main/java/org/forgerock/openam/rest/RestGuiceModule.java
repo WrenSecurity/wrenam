@@ -24,8 +24,8 @@ import static org.forgerock.json.resource.Resources.newInternalConnectionFactory
 import static org.forgerock.json.resource.http.CrestHttp.newHttpHandler;
 import static org.forgerock.openam.rest.RealmRoutingFactory.REALM_ROUTE;
 
-import javax.inject.Named;
-import javax.inject.Singleton;
+import jakarta.inject.Named;
+import jakarta.inject.Singleton;
 import java.util.HashSet;
 import java.util.Set;
 

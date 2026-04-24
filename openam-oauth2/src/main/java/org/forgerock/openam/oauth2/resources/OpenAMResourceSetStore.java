@@ -16,7 +16,7 @@
 
 package org.forgerock.openam.oauth2.resources;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.util.Set;
 
 import com.google.inject.assistedinject.Assisted;

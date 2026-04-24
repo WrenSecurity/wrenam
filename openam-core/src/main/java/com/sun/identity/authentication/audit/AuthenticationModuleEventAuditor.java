@@ -38,7 +38,7 @@ import org.forgerock.openam.audit.AuditEventPublisher;
 import org.forgerock.openam.audit.context.AuditRequestContext;
 import org.forgerock.openam.audit.model.AuthenticationAuditEntry;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import java.security.Principal;
 import java.util.Map;

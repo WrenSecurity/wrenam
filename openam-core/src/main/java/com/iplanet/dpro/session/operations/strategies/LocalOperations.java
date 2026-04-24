@@ -23,8 +23,8 @@ import static org.forgerock.openam.utils.Time.currentTimeMillis;
 import java.text.MessageFormat;
 import java.util.Collection;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.forgerock.openam.dpro.session.InvalidSessionIdException;
 import org.forgerock.openam.dpro.session.PartialSession;

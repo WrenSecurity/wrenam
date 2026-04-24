@@ -54,8 +54,8 @@ import org.forgerock.openam.sts.token.validator.PrincipalFromSession;
 import org.forgerock.openam.sts.token.validator.ValidationInvocationContext;
 import org.forgerock.openam.sts.token.validator.AuthenticationHandler;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import java.net.MalformedURLException;
 import java.security.cert.X509Certificate;
 import java.util.Set;

@@ -35,7 +35,7 @@ import com.iplanet.dpro.session.service.QuotaExhaustionAction;
 import com.sun.identity.shared.debug.Debug;
 import java.util.Map;
 import java.util.Set;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import org.forgerock.guice.core.InjectorHolder;
 import org.forgerock.openam.session.SessionCache;
 

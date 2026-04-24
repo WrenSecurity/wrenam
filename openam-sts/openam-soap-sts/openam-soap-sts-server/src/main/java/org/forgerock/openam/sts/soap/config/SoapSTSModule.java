@@ -27,9 +27,9 @@ import java.util.Properties;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.inject.Singleton;
 
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import org.forgerock.openam.audit.AuditEventPublisher;

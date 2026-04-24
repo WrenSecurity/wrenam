@@ -22,8 +22,8 @@ import static org.forgerock.util.promise.Promises.*;
 import java.util.Map;
 import java.util.Set;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.forgerock.authz.filter.api.AuthorizationResult;
 import org.forgerock.json.resource.ActionRequest;

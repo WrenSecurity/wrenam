@@ -26,8 +26,8 @@ import org.forgerock.openam.sts.TokenTypeId;
 import org.forgerock.openam.sts.TokenValidationException;
 import org.forgerock.openam.sts.rest.config.user.TokenTransformConfig;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.forgerock.openam.sts.rest.operation.TokenRequestMarshaller;
 import org.forgerock.openam.sts.rest.token.validator.RestTokenTransformValidatorParameters;

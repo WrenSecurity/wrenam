@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 import org.forgerock.audit.AuditException;
 import org.forgerock.audit.events.handlers.AuditEventHandler;
 import org.forgerock.audit.handlers.json.JsonAuditEventHandler;

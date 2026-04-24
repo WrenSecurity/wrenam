@@ -15,7 +15,7 @@
 */
 package org.forgerock.openam.entitlement.monitoring;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import javax.security.auth.Subject;
 
 /**

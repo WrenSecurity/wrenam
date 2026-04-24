@@ -16,7 +16,7 @@
 
 package org.forgerock.openam.oauth2;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 

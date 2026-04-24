@@ -23,8 +23,8 @@ import java.util.LinkedList;
 import java.util.Map.Entry;
 import java.util.UUID;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
 import org.forgerock.openam.radius.server.config.RadiusServerConstants;
 import org.forgerock.openam.utils.collections.LeastRecentlyUsed;

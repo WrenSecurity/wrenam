@@ -41,9 +41,9 @@ import com.sun.identity.shared.debug.Debug;
 import org.forgerock.openam.session.SessionConstants;
 import org.forgerock.openam.session.SessionServiceURLService;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.inject.Singleton;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;

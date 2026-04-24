@@ -26,7 +26,7 @@ import static org.forgerock.openam.cts.api.fields.OAuthTokenField.*;
 import static org.forgerock.util.query.QueryFilter.and;
 import static org.forgerock.util.query.QueryFilter.equalTo;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import java.util.Collection;
 import java.util.HashMap;

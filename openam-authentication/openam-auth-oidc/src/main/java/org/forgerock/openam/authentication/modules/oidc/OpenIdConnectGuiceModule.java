@@ -23,7 +23,7 @@ import com.sun.identity.common.HttpURLConnectionManager;
 import org.forgerock.guice.core.GuiceModule;
 import org.forgerock.jaspi.modules.openid.resolvers.OpenIdResolverFactory;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 @GuiceModule
 public class OpenIdConnectGuiceModule extends AbstractModule {

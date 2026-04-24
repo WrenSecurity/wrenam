@@ -20,7 +20,7 @@ import java.net.URL;
 import java.security.AccessController;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.forgerock.jaspi.modules.openid.resolvers.OpenIdResolver;
 import org.forgerock.jaspi.modules.openid.resolvers.OpenIdResolverFactory;

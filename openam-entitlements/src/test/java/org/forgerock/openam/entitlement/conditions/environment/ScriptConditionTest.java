@@ -52,7 +52,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 import javax.script.Bindings;
 import javax.security.auth.Subject;
 import java.util.HashMap;

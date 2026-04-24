@@ -25,8 +25,8 @@ import org.forgerock.openam.session.SessionConstants;
 import org.forgerock.openam.sm.ConnectionConfig;
 import org.forgerock.openam.utils.ModifiedProperty;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;

@@ -34,9 +34,9 @@ import org.forgerock.guice.core.InjectorHolder;
 import org.forgerock.openam.utils.StringUtils;
 import org.slf4j.Logger;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.inject.Singleton;
 import java.security.AccessController;
 import java.util.ArrayList;
 import java.util.Collections;

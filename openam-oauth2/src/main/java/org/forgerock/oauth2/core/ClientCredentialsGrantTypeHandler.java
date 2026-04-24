@@ -20,8 +20,8 @@ import static org.forgerock.openam.oauth2.OAuth2Constants.Bearer.BEARER;
 import static org.forgerock.openam.oauth2.OAuth2Constants.Params.GRANT_TYPE;
 import static org.forgerock.openam.oauth2.OAuth2Constants.Params.SCOPE;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import java.util.List;
 import java.util.Set;
 

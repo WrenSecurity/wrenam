@@ -18,11 +18,10 @@ package org.forgerock.openam.http;
 
 import static org.forgerock.http.routing.RouteMatchers.requestUriMatcher;
 
-import javax.inject.Inject;
-import javax.inject.Provider;
-import java.util.Set;
-
 import com.google.inject.Injector;
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
+import java.util.Set;
 import org.forgerock.http.routing.Router;
 
 /**

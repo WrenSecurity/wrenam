@@ -17,7 +17,7 @@
 package org.forgerock.openam.entitlement.monitoring;
 
 import java.util.concurrent.atomic.AtomicLong;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import org.forgerock.openam.shared.monitoring.RateTimer;
 import org.forgerock.openam.shared.monitoring.RateWindow;
 

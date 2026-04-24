@@ -36,7 +36,7 @@ import org.forgerock.openam.upgrade.UpgradeProgress;
 import org.forgerock.openam.upgrade.UpgradeStepInfo;
 import org.forgerock.openam.upgrade.UpgradeUtils;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.security.PrivilegedAction;
 import java.text.MessageFormat;
 import java.util.HashMap;

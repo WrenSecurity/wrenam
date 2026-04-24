@@ -43,8 +43,8 @@ import org.forgerock.util.promise.Promise;
 import org.forgerock.util.promise.ResultHandler;
 import org.forgerock.util.promise.RuntimeExceptionHandler;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 /**
  * Filter which will audit any requests that pass through it.

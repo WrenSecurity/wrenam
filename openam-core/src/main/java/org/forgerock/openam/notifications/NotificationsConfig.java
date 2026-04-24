@@ -18,7 +18,7 @@ package org.forgerock.openam.notifications;
 
 import static com.sun.identity.shared.Constants.NOTIFICATIONS_AGENTS_ENABLED;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import com.iplanet.am.util.SystemProperties;
 import com.sun.identity.common.configuration.ConfigurationListener;

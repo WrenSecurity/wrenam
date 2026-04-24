@@ -21,8 +21,8 @@ import static org.forgerock.openam.session.SessionEventType.MAX_TIMEOUT;
 import java.util.Collection;
 import java.util.concurrent.CountDownLatch;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import com.google.inject.Module;
 import org.forgerock.openam.cts.adapters.SessionAdapter;

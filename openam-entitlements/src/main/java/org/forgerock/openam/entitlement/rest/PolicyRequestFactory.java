@@ -28,7 +28,7 @@ import org.forgerock.util.Reject;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 /**
  * Factory used for creating policy requests.

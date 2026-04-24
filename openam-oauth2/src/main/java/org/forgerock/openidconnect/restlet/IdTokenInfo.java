@@ -16,7 +16,7 @@
 
 package org.forgerock.openidconnect.restlet;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Locale;
 import java.util.Set;

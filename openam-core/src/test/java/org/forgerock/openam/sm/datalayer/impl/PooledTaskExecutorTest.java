@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.LockSupport;
 
-import javax.inject.Provider;
+import jakarta.inject.Provider;
 
 import org.forgerock.openam.sm.ConnectionConfig;
 import org.forgerock.openam.sm.ConnectionConfigFactory;

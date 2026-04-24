@@ -16,7 +16,7 @@
 
 package org.forgerock.openam.cts.monitoring.impl.connections;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 /**
  * A data structure that stores the cumulative count and rate for CTS connections.

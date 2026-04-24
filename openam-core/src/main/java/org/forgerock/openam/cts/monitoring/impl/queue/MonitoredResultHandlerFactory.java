@@ -24,7 +24,7 @@ import org.forgerock.openam.sm.datalayer.api.ResultHandler;
 import org.forgerock.openam.cts.impl.queue.ResultHandlerFactory;
 import org.forgerock.openam.cts.monitoring.CTSOperationsMonitoringStore;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.util.Collection;
 
 /**

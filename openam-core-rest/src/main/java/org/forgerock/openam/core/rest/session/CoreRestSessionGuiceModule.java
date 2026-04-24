@@ -16,8 +16,8 @@
 
 package org.forgerock.openam.core.rest.session;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import java.util.ArrayList;
 import java.util.List;
 

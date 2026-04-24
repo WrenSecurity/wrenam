@@ -42,7 +42,7 @@ import org.forgerock.openam.license.MissingLicenseException;
 import org.forgerock.openam.license.PersistentLicenseLocator;
 import org.forgerock.openam.license.User;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 /**
  * Checks whether the user has accepted the license terms, and if not, presents them to the user (on the CLI) to

@@ -21,7 +21,7 @@ import static org.forgerock.openam.upgrade.UpgradeServices.LF;
 import static org.forgerock.openam.upgrade.UpgradeServices.tagSwapReport;
 import static org.forgerock.openam.utils.CollectionUtils.asSet;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.security.PrivilegedAction;
 import java.util.HashMap;
 import java.util.HashSet;

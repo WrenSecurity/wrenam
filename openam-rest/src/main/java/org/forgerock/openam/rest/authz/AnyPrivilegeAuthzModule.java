@@ -18,8 +18,8 @@ package org.forgerock.openam.rest.authz;
 
 import java.util.Map;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.forgerock.openam.authz.PrivilegeDefinition;
 import org.forgerock.openam.core.CoreWrapper;

@@ -12,16 +12,23 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions Copyright 2026 Wren Security
  */
 
 package org.forgerock.openam.http;
 
-import static com.sun.identity.shared.Constants.*;
+import static com.sun.identity.shared.Constants.AM_SERVER_HOST;
+import static com.sun.identity.shared.Constants.AM_SERVER_PORT;
+import static com.sun.identity.shared.Constants.AM_SERVER_PROTOCOL;
+import static com.sun.identity.shared.Constants.AM_SERVICES_DEPLOYMENT_DESCRIPTOR;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Singleton;
-
+import com.iplanet.am.util.SystemProperties;
+import com.sun.identity.shared.debug.Debug;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.inject.Singleton;
 import org.forgerock.http.ApiProducer;
 import org.forgerock.http.DescribedHttpApplication;
 import org.forgerock.http.Filter;
@@ -38,13 +45,6 @@ import org.forgerock.util.Factory;
 import org.forgerock.util.promise.NeverThrowsException;
 import org.forgerock.util.promise.Promise;
 import org.forgerock.util.promise.RuntimeExceptionHandler;
-
-import com.iplanet.am.util.SystemProperties;
-import com.sun.identity.shared.debug.Debug;
-
-import io.swagger.models.Info;
-import io.swagger.models.Scheme;
-import io.swagger.models.Swagger;
 
 /**
  * OpenAM HTTP application.
@@ -89,10 +89,10 @@ final class OpenAMHttpApplication implements DescribedHttpApplication {
     }
 
     @Override
-    public ApiProducer<Swagger> getApiProducer() {
+    public ApiProducer<OpenAPI> getApiProducer() {
         String basePath = SystemProperties.get(AM_SERVICES_DEPLOYMENT_DESCRIPTOR);
         String host = SystemProperties.get(AM_SERVER_HOST) + ":" + SystemProperties.get(AM_SERVER_PORT);
-        Scheme scheme = Scheme.forValue(SystemProperties.get(AM_SERVER_PROTOCOL));
-        return new SwaggerApiProducer(new Info().title("OpenAM"), basePath, host, scheme);
+        String protocol = SystemProperties.get(AM_SERVER_PROTOCOL);
+        return new SwaggerApiProducer(new Info().title("OpenAM"), basePath, protocol + "://" + host);
     }
 }

@@ -38,8 +38,8 @@ import org.forgerock.openam.utils.IOUtils;
 import org.forgerock.openam.utils.JsonValueBuilder;
 import com.forgerock.openam.functionaltest.sts.frmwk.common.STSPublishContext;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;

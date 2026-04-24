@@ -26,7 +26,7 @@ import org.forgerock.openam.upgrade.steps.AbstractUpgradeStep;
 import org.forgerock.openam.utils.IOUtils;
 import org.w3c.dom.Document;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.io.InputStream;
 import java.security.PrivilegedAction;
 

@@ -28,8 +28,8 @@ import static org.forgerock.openam.i18n.apidescriptor.ApiDescriptorConstants.TIT
 import static org.forgerock.openam.utils.Time.*;
 import static org.forgerock.util.promise.Promises.newResultPromise;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import javax.security.auth.Subject;
 import java.util.Set;
 

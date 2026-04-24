@@ -16,7 +16,7 @@
 
 package org.forgerock.openam.rest.router;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 import java.util.Map;
 import java.util.Set;
 

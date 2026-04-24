@@ -24,8 +24,8 @@ import com.sun.identity.delegation.DelegationEvaluatorImpl;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.inject.Named;
-import javax.inject.Singleton;
+import jakarta.inject.Named;
+import jakarta.inject.Singleton;
 import org.forgerock.guice.core.GuiceModule;
 import org.forgerock.openam.entitlement.EntitlementRegistry;
 import org.forgerock.openam.forgerockrest.utils.AgentIdentity;

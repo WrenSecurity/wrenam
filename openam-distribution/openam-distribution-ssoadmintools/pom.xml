@@ -13,7 +13,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2011-2016 ForgeRock AS.
- * Portions Copyright 2018-2023 Wren Security
+ * Portions Copyright 2018-2026 Wren Security
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
@@ -32,14 +32,48 @@
 
     <properties>
         <setupArtifactIDs>
-            opendj-server,forgerock-util,json,xmlsec,openam-core,
-            openam-entitlements,openam-shared,openam-dtd-schema,openam-license-manager-cli,openam-license-core,
-            openam-audit-context,wrensec-guice-core,wrensec-guava-base,wrensec-guava-collect,
-            guice,guice-assistedinject,commons-lang,commons-collections,jakarta.inject-api,
-            slf4j-api,slf4j-nop,opendj-core,opendj-grizzly,i18n-core,openam-ldap-utils,grizzly-framework,
-            forgerock-audit-core,openam-audit-configuration,i18n-slf4j,
-            opendj-server-legacy,opendj-config,opendj-cli,chf-http-core,joda-time,
-            jackson-core,jackson-databind,jackson-annotations,jakarta.xml.bind-api
+            aopalliance,
+            commons-collections,
+            commons-lang,
+            failureaccess,
+            forgerock-audit-core,
+            forgerock-util,
+            grizzly-framework,
+            guava,
+            guice-assistedinject,
+            guice,
+            chf-http-core,
+            i18n-core,
+            i18n-slf4j,
+            jackson-annotations,
+            jackson-core,
+            jackson-databind,
+            jakarta.inject-api,
+            jakarta.xml.bind-api,
+            jaxb-api,
+            joda-time,
+            json,
+            openam-audit-configuration,
+            openam-audit-context,
+            openam-core,
+            openam-dtd-schema,
+            openam-entitlements,
+            openam-ldap-utils,
+            openam-license-core,
+            openam-license-manager-cli,
+            openam-shared,
+            opendj-cli,
+            opendj-config,
+            opendj-core,
+            opendj-grizzly,
+            opendj-server-legacy,
+            opendj-server,
+            slf4j-api,
+            slf4j-nop,
+            wrensec-guava-base,
+            wrensec-guava-collect,
+            wrensec-guice-core,
+            xmlsec
         </setupArtifactIDs>
     </properties>
 
@@ -65,7 +99,7 @@
                             <overWriteReleases>false</overWriteReleases>
                             <overWriteSnapshots>true</overWriteSnapshots>
                             <overWriteIfNewer>true</overWriteIfNewer>
-                            <excludeArtifactIds>${forgerock.license.artifactId},openam-rest,openam-installtools,openam-slf4j</excludeArtifactIds>
+                            <excludeArtifactIds>openam-rest,openam-installtools,openam-slf4j</excludeArtifactIds>
                         </configuration>
                     </execution>
 
@@ -252,8 +286,8 @@
         </dependency>
 
         <dependency>
-            <groupId>jakarta.xml.bind</groupId>
-            <artifactId>jakarta.xml.bind-api</artifactId>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
         </dependency>
 
         <dependency>

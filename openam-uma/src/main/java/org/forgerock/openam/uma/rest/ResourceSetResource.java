@@ -42,7 +42,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.forgerock.api.annotations.Action;
 import org.forgerock.api.annotations.ApiError;

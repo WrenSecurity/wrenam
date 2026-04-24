@@ -16,8 +16,8 @@
 
 package org.forgerock.openam.rest.fluent;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import com.iplanet.sso.SSOException;
 import com.iplanet.sso.SSOToken;

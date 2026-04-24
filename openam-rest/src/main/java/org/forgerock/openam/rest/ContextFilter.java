@@ -16,7 +16,7 @@
 
 package org.forgerock.openam.rest;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.forgerock.openam.rest.resource.LocaleContext;
 import org.forgerock.services.context.Context;

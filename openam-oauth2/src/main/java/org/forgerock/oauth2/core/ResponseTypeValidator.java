@@ -23,7 +23,7 @@ import static org.forgerock.openam.oauth2.OAuth2Constants.Params.SCOPE;
 
 import java.util.Map;
 import java.util.Set;
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 import org.forgerock.oauth2.core.exceptions.InvalidRequestException;
 import org.forgerock.oauth2.core.exceptions.ServerException;
 import org.forgerock.oauth2.core.exceptions.UnsupportedResponseTypeException;

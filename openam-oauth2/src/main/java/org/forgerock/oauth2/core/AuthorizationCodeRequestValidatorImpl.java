@@ -20,7 +20,7 @@ package org.forgerock.oauth2.core;
 import static org.forgerock.openam.oauth2.OAuth2Constants.Params.CODE;
 import static org.forgerock.openam.oauth2.OAuth2Constants.Params.REDIRECT_URI;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import org.forgerock.oauth2.core.exceptions.InvalidClientException;
 import org.forgerock.oauth2.core.exceptions.InvalidRequestException;
 import org.forgerock.oauth2.core.exceptions.RedirectUriMismatchException;

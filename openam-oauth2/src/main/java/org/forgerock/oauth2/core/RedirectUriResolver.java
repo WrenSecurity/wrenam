@@ -21,7 +21,7 @@ import static org.forgerock.openam.oauth2.OAuth2Constants.Params.CLIENT_ID;
 import static org.forgerock.openam.oauth2.OAuth2Constants.Params.REDIRECT_URI;
 import static org.forgerock.oauth2.core.Utils.isEmpty;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.net.URI;
 import java.util.Set;
 

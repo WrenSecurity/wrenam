@@ -31,8 +31,8 @@ package com.iplanet.dpro.session.service;
 
 import java.security.AccessController;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
 import com.iplanet.sso.SSOException;
 import com.iplanet.sso.SSOToken;

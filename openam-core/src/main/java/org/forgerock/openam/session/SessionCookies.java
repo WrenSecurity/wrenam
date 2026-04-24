@@ -29,8 +29,8 @@ package org.forgerock.openam.session;
 
 import static org.forgerock.openam.session.SessionConstants.*;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
 import org.forgerock.guice.core.InjectorHolder;
 import org.forgerock.openam.dpro.session.InvalidSessionIdException;

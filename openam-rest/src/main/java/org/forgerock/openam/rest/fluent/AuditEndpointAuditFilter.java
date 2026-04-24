@@ -15,7 +15,7 @@
  */
 package org.forgerock.openam.rest.fluent;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.forgerock.services.context.Context;
 import org.forgerock.json.resource.ActionRequest;

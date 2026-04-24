@@ -25,7 +25,7 @@ import static org.forgerock.oauth2.restlet.RestletConstants.*;
 
 import java.util.Map;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.forgerock.oauth2.core.AccessToken;
 import org.forgerock.oauth2.core.AccessTokenService;

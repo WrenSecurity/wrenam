@@ -16,7 +16,7 @@
 
 package org.forgerock.openam.sts.rest;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.forgerock.services.context.Context;
 import org.forgerock.json.JsonValue;

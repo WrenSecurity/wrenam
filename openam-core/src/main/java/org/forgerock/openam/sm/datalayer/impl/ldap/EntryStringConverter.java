@@ -16,7 +16,7 @@
 
 package org.forgerock.openam.sm.datalayer.impl.ldap;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import org.forgerock.opendj.ldap.Entry;
 import org.forgerock.util.Reject;

@@ -23,8 +23,8 @@ import static org.forgerock.openam.oauth2.OAuth2Constants.Params.REDIRECT_URI;
 import static org.forgerock.openam.oauth2.OAuth2Constants.Params.RESPONSE_TYPE;
 
 import com.sun.identity.shared.debug.Debug;
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import org.forgerock.oauth2.core.exceptions.InvalidClientException;
 import org.forgerock.oauth2.core.exceptions.InvalidRequestException;
 import org.forgerock.oauth2.core.exceptions.NotFoundException;

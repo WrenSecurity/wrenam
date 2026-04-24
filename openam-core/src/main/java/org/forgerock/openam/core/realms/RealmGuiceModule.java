@@ -16,9 +16,9 @@
 
 package org.forgerock.openam.core.realms;
 
-import javax.inject.Named;
-import javax.inject.Provider;
-import javax.inject.Singleton;
+import jakarta.inject.Named;
+import jakarta.inject.Provider;
+import jakarta.inject.Singleton;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 

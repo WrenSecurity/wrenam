@@ -29,7 +29,7 @@ import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 /**
  * Exposes the JWK Set of configured signing and encryption keys for the OAuth2 Authorization Server/OpenID Provider.

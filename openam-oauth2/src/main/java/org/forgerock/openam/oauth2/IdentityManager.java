@@ -16,8 +16,8 @@
 
 package org.forgerock.openam.oauth2;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import java.security.AccessController;
 import java.util.Collections;
 import java.util.HashMap;

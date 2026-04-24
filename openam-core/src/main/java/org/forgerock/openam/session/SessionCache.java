@@ -29,7 +29,7 @@ package org.forgerock.openam.session;
 
 import static org.forgerock.openam.utils.Time.currentTimeMillis;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 

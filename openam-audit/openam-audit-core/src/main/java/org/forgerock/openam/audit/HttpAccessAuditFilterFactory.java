@@ -17,7 +17,7 @@ package org.forgerock.openam.audit;
 
 import static org.forgerock.openam.audit.AuditConstants.Component;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.util.Map;
 
 import org.forgerock.http.Filter;

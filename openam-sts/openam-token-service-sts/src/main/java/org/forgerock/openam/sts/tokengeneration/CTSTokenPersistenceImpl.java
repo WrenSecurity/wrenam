@@ -37,7 +37,7 @@ import org.forgerock.openam.tokens.CoreTokenField;
 import org.forgerock.openam.utils.TimeUtils;
 import org.forgerock.util.query.QueryFilter;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Calendar;

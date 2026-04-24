@@ -31,7 +31,7 @@ import org.restlet.resource.ServerResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 /**
  * Handles requests to the OAuth2 tokeninfo endpoint for retrieving information about the provided token.

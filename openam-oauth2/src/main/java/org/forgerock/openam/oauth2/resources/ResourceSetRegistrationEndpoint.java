@@ -18,7 +18,7 @@ package org.forgerock.openam.oauth2.resources;
 
 import static java.util.Collections.emptyList;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import java.util.ArrayList;
 import java.util.Collections;

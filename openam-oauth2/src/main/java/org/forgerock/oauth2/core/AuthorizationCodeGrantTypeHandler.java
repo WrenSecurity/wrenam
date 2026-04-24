@@ -18,8 +18,8 @@ package org.forgerock.oauth2.core;
 
 import static org.forgerock.oauth2.core.Utils.joinScope;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;

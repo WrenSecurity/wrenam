@@ -18,8 +18,8 @@ package org.forgerock.openam.uma.rest;
 
 import static org.forgerock.util.promise.Promises.newResultPromise;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import com.iplanet.dpro.session.service.SessionService;
 import com.iplanet.sso.SSOException;

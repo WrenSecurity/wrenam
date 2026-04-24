@@ -20,7 +20,7 @@ import org.forgerock.oauth2.core.exceptions.UnauthorizedClientException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 /**
  * Implementation of the request validator for the OAuth2 client credentials grant.

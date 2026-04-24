@@ -24,7 +24,7 @@ import static org.forgerock.openam.audit.AuditConstants.TrackingIdKey.*;
 import static org.forgerock.openam.core.rest.authn.RestAuthenticationConstants.*;
 import static org.forgerock.openam.utils.JsonValueBuilder.toJsonValue;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.io.IOException;
 import java.util.Set;
 

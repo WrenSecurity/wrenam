@@ -46,7 +46,7 @@ import java.text.MessageFormat;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import javax.security.auth.Subject;
 
 /**

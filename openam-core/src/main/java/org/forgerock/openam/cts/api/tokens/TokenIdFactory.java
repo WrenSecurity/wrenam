@@ -15,7 +15,7 @@
  */
 package org.forgerock.openam.cts.api.tokens;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import com.iplanet.dpro.session.SessionID;
 import com.iplanet.dpro.session.service.InternalSession;
 import org.forgerock.openam.cts.api.fields.OAuthTokenField;

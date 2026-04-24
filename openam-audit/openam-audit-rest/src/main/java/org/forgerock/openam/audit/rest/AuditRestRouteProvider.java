@@ -19,7 +19,7 @@ package org.forgerock.openam.audit.rest;
 import static org.forgerock.http.routing.RoutingMode.STARTS_WITH;
 import static org.forgerock.openam.audit.AuditConstants.Component.AUDIT;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.forgerock.openam.audit.AuditServiceProvider;
 import org.forgerock.openam.rest.AbstractRestRouteProvider;

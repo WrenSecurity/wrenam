@@ -16,18 +16,15 @@
 
 package org.forgerock.openam.shared.guice;
 
+import com.sun.identity.shared.debug.Debug;
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
 import java.io.IOException;
-
-import javax.inject.Inject;
-
 import org.forgerock.http.Client;
 import org.forgerock.http.HttpApplicationException;
 import org.forgerock.http.handler.HttpClientHandler;
 import org.forgerock.util.thread.listener.ShutdownListener;
 import org.forgerock.util.thread.listener.ShutdownManager;
-
-import com.google.inject.Provider;
-import com.sun.identity.shared.debug.Debug;
 
 /**
  * This class provides Guice with instances of Client that contain a HttpClientHandler. The underlying HttpClientHandler

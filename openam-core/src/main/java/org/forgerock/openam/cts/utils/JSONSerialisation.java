@@ -18,8 +18,8 @@ package org.forgerock.openam.cts.utils;
 import java.io.IOException;
 import java.text.MessageFormat;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.forgerock.openam.cts.api.CoreTokenConstants;
 

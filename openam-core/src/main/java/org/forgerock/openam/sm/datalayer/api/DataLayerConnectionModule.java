@@ -16,8 +16,8 @@
 
 package org.forgerock.openam.sm.datalayer.api;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import java.util.concurrent.Semaphore;
 
 import com.google.inject.Key;

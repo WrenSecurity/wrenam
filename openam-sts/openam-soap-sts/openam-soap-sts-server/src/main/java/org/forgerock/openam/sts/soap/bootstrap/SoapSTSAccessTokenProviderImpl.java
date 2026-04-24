@@ -29,8 +29,8 @@ import org.forgerock.openam.sts.token.UrlConstituentCatenator;
 import org.forgerock.openam.utils.StringUtils;
 import org.slf4j.Logger;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;

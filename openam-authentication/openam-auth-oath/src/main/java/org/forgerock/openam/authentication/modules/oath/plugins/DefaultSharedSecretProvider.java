@@ -16,10 +16,9 @@
 
 package org.forgerock.openam.authentication.modules.oath.plugins;
 
-import javax.xml.bind.DatatypeConverter;
-
 import com.sun.identity.authentication.spi.AuthLoginException;
 import com.sun.identity.shared.debug.Debug;
+import jakarta.xml.bind.DatatypeConverter;
 
 /**
  * Default implementation of the {@link SharedSecretProvider } and this may also be used as an extension

@@ -16,7 +16,7 @@
 
 package org.forgerock.openam.uma;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 import javax.mail.MessagingException;
 
 import java.lang.reflect.InvocationTargetException;

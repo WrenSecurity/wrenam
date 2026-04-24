@@ -19,8 +19,8 @@ package org.forgerock.openam.entitlement.rest;
 import static org.forgerock.json.JsonValue.array;
 import static org.forgerock.openam.utils.CollectionUtils.transformSet;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import javax.security.auth.Subject;
 import java.util.ArrayList;
 import java.util.Arrays;

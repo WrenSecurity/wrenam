@@ -31,7 +31,7 @@ package com.sun.identity.sm;
 import static com.iplanet.ums.IUMSConstants.*;
 import static com.sun.identity.idm.IdConstants.*;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;

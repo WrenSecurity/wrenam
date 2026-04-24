@@ -42,7 +42,7 @@ import org.forgerock.openam.upgrade.UpgradeStepInfo;
 import org.forgerock.openam.upgrade.steps.AbstractUpgradeStep;
 import org.forgerock.openam.utils.StringUtils;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.security.PrivilegedAction;
 import java.text.MessageFormat;
 import java.util.Collections;

@@ -19,7 +19,7 @@ package org.forgerock.openam.cts.adapters;
 
 import java.util.Collection;
 import java.util.Map;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import org.forgerock.json.JsonValue;
 import org.forgerock.openam.cts.api.fields.OAuthTokenField;
 import org.forgerock.openam.cts.api.tokens.Token;

@@ -27,8 +27,8 @@ import static org.forgerock.openam.oauth2.OAuth2Constants.Token.*;
 import static org.forgerock.openam.utils.Time.currentTimeMillis;
 import static org.forgerock.openam.utils.Time.newDate;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.ECPublicKey;
 import java.util.ArrayList;

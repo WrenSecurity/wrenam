@@ -28,7 +28,7 @@ import java.security.AccessController;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
-import javax.inject.Named;
+import jakarta.inject.Named;
 import org.wrensecurity.guava.common.cache.Cache;
 import org.wrensecurity.guava.common.cache.CacheBuilder;
 import org.forgerock.guice.core.GuiceModule;

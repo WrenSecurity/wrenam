@@ -17,7 +17,7 @@ package org.forgerock.openam.sm.datalayer.impl;
 
 import java.util.concurrent.BlockingQueue;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.forgerock.guice.core.InjectorHolder;
 import org.forgerock.openam.sm.datalayer.api.Task;

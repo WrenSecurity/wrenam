@@ -36,8 +36,8 @@ import org.forgerock.openam.utils.Config;
 import org.forgerock.util.promise.Promise;
 import org.forgerock.util.promise.Promises;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import java.net.HttpURLConnection;
 
 /**

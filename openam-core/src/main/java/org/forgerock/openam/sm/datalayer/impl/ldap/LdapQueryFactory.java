@@ -16,7 +16,7 @@
 
 package org.forgerock.openam.sm.datalayer.impl.ldap;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.forgerock.openam.sm.datalayer.api.query.QueryBuilder;
 import org.forgerock.openam.sm.datalayer.api.query.QueryFactory;

@@ -16,7 +16,7 @@
 
 package org.forgerock.openam.core.rest.authn;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import javax.security.auth.callback.Callback;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

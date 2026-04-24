@@ -18,7 +18,7 @@ package org.forgerock.openam.core.rest.devices.services.push;
 import com.iplanet.sso.SSOException;
 import com.sun.identity.sm.SMSException;
 import com.sun.identity.sm.ServiceConfigManager;
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 import org.forgerock.openam.core.rest.devices.services.DeviceServiceFactory;
 
 /**

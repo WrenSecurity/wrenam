@@ -16,7 +16,7 @@
  */
 package org.forgerock.openam.core.rest.authn.core;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.Map;

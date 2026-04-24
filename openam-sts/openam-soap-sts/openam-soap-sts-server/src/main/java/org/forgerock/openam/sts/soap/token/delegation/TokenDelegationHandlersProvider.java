@@ -23,8 +23,8 @@ import org.forgerock.openam.sts.soap.config.user.SoapSTSInstanceConfig;
 import org.forgerock.openam.sts.token.ThreadLocalAMTokenCache;
 import org.slf4j.Logger;
 
-import javax.inject.Inject;
-import javax.inject.Provider;
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

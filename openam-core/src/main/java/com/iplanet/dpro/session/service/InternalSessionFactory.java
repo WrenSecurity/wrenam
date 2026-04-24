@@ -29,9 +29,9 @@
 
 package com.iplanet.dpro.session.service;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.inject.Singleton;
 
 import org.forgerock.guice.core.InjectorHolder;
 import org.forgerock.openam.session.SessionConstants;

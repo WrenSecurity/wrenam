@@ -30,7 +30,7 @@ import org.forgerock.openam.sts.soap.policy.am.OpenAMSessionTokenServerIntercept
 import org.forgerock.openam.sts.soap.publish.SoapSTSInstancePublisher;
 import org.slf4j.Logger;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;

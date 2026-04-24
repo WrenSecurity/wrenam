@@ -18,7 +18,7 @@ package org.forgerock.openam.uma;
 
 import static org.forgerock.openam.uma.UmaConstants.*;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.net.URI;
 import java.security.AccessController;
 import java.util.HashSet;

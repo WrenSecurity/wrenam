@@ -43,7 +43,7 @@ import org.forgerock.openam.entitlement.service.ResourceTypeService;
 import java.util.Collections;
 import java.util.Set;
 import java.util.logging.Level;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import javax.security.auth.Subject;
 
 /**

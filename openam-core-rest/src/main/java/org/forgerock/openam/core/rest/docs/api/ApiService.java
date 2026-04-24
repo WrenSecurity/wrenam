@@ -12,24 +12,24 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
- * Portions copyright 2022-2023 Wren Security
+ * Portions copyright 2022-2026 Wren Security
  */
 package org.forgerock.openam.core.rest.docs.api;
 
+import io.swagger.v3.oas.models.Operation;
+import io.swagger.v3.oas.models.PathItem;
+import io.swagger.v3.oas.models.Paths;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.regex.Pattern;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
 import org.forgerock.api.transform.LocalizableOperation;
-import org.wrensecurity.guava.common.collect.Lists;
-import org.wrensecurity.guava.common.collect.Sets;
 import org.forgerock.http.handler.DescribableHandler;
 import org.forgerock.http.header.AcceptLanguageHeader;
 import org.forgerock.http.header.MalformedHeaderException;
@@ -44,9 +44,8 @@ import org.forgerock.openam.http.annotations.Get;
 import org.forgerock.services.context.RootContext;
 import org.forgerock.util.i18n.LocalizableString;
 import org.forgerock.util.i18n.PreferredLocales;
-
-import io.swagger.models.Operation;
-import io.swagger.models.Path;
+import org.wrensecurity.guava.common.collect.Lists;
+import org.wrensecurity.guava.common.collect.Sets;
 
 /**
  * This service provides an HTML representation of the OpenAM REST API.
@@ -82,11 +81,11 @@ public class ApiService {
         return new Response(Status.OK).setEntity(JsonValue.json(groups));
     }
 
-    private Map<String, Set<String>> getGroups(Map<String, Path> paths, PreferredLocales preferredLocales) {
+    private Map<String, Set<String>> getGroups(Paths paths, PreferredLocales preferredLocales) {
         Map<String, Set<String>> groups = new HashMap<>();
 
-        for ( Map.Entry<String, Path> pathEntry : paths.entrySet()) {
-            List<Operation> operations = pathEntry.getValue().getOperations();
+        for (Entry<String, PathItem> pathEntry : paths.entrySet()) {
+            List<Operation> operations = pathEntry.getValue().readOperations();
             String apiPath = getApiPath(pathEntry.getKey());
 
             for (Operation operation : operations) {

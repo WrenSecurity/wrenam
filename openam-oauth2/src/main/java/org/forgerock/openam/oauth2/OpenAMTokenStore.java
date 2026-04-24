@@ -18,8 +18,8 @@ package org.forgerock.openam.oauth2;
 
 import static org.forgerock.openam.utils.Time.currentTimeMillis;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 

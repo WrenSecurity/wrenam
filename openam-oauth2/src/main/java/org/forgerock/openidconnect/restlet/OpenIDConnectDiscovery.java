@@ -17,7 +17,7 @@
 package org.forgerock.openidconnect.restlet;
 
 import java.util.Map;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import org.forgerock.oauth2.core.OAuth2Request;
 import org.forgerock.oauth2.core.OAuth2RequestFactory;
 import org.forgerock.oauth2.core.exceptions.OAuth2Exception;

@@ -12,10 +12,13 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions Copyright 2026 Wren Security
  */
 
 package org.forgerock.openam.http;
 
+import com.google.inject.Key;
+import io.swagger.v3.oas.models.OpenAPI;
 import org.forgerock.guice.core.InjectorHolder;
 import org.forgerock.http.ApiProducer;
 import org.forgerock.http.Handler;
@@ -28,10 +31,6 @@ import org.forgerock.util.Reject;
 import org.forgerock.util.promise.NeverThrowsException;
 import org.forgerock.util.promise.Promise;
 
-import com.google.inject.Key;
-
-import io.swagger.models.Swagger;
-
 /**
  * A {@link Handler} implementation which delegates to Guice to get the actual
  * {@code Handler} instance that will handle the request.
@@ -42,7 +41,7 @@ final class GuiceHandler implements DescribableHandler {
 
     private final Key<? extends Handler> key;
     private volatile Handler handler;
-    private volatile Describable<Swagger, Request> describable;
+    private volatile Describable<OpenAPI, Request> describable;
     private volatile boolean isDescribable;
 
     GuiceHandler(Key<? extends Handler> key) {
@@ -60,13 +59,13 @@ final class GuiceHandler implements DescribableHandler {
     }
 
     @Override
-    public Swagger api(ApiProducer<Swagger> producer) {
+    public OpenAPI api(ApiProducer<OpenAPI> producer) {
         getDescribable();
         return describable != null ? describable.api(producer) : null;
     }
 
     @Override
-    public Swagger handleApiRequest(Context context, Request request) {
+    public OpenAPI handleApiRequest(Context context, Request request) {
         getDescribable();
         return describable != null ? describable.handleApiRequest(context, request) : null;
     }
@@ -89,7 +88,7 @@ final class GuiceHandler implements DescribableHandler {
 
     private void getDescribable() {
         if (describable == null && isDescribable) {
-            describable = (Describable<Swagger, Request>) InjectorHolder.getInstance(key);
+            describable = (Describable<OpenAPI, Request>) InjectorHolder.getInstance(key);
         }
     }
 }

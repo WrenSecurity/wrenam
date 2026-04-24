@@ -33,8 +33,8 @@ import static org.forgerock.openam.services.push.PushNotificationConstants.MESSA
 
 import java.util.Map;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.forgerock.api.annotations.Action;
 import org.forgerock.api.annotations.ApiError;

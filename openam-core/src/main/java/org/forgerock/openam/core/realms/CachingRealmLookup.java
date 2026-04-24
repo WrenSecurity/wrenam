@@ -16,8 +16,8 @@
 
 package org.forgerock.openam.core.realms;
 
-import javax.inject.Provider;
-import javax.inject.Singleton;
+import jakarta.inject.Provider;
+import jakarta.inject.Singleton;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;

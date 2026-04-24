@@ -18,7 +18,7 @@ package org.forgerock.openam.rest.router;
 import java.util.Collection;
 import java.util.Map;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import org.forgerock.guice.core.InjectorHolder;
 import org.forgerock.openam.cts.CTSPersistentStore;

@@ -28,9 +28,9 @@ import org.forgerock.openam.cts.monitoring.impl.connections.ConnectionStore;
 import org.forgerock.openam.cts.monitoring.impl.operations.TokenOperationsStore;
 import org.forgerock.openam.cts.monitoring.impl.reaper.ReaperMonitor;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.inject.Singleton;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.RejectedExecutionException;

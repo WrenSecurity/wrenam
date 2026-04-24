@@ -18,8 +18,8 @@ package org.forgerock.openam.session.stateless.cache;
 import java.util.Collections;
 import java.util.Map;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
 import org.forgerock.openam.session.stateless.StatelessConfig;
 import org.forgerock.openam.utils.collections.LeastRecentlyUsed;

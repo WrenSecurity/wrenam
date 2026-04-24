@@ -20,7 +20,7 @@ package org.forgerock.openam.upgrade.steps;
 import static org.forgerock.openam.upgrade.UpgradeServices.LF;
 import static org.forgerock.openam.upgrade.UpgradeServices.tagSwapReport;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.security.PrivilegedAction;
 
 import com.iplanet.sso.SSOToken;

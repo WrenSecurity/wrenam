@@ -18,8 +18,8 @@ package com.sun.identity.setup;
 
 import java.io.File;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import jakarta.servlet.ServletContext;
 
 import org.forgerock.openam.upgrade.VersionUtils;

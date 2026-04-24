@@ -36,7 +36,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.Test;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import static org.mockito.Mockito.*;
 import static org.testng.Assert.assertTrue;
@@ -80,7 +80,7 @@ public class TokenIssueOperationProviderTest {
         }
 
         @Provides
-        @javax.inject.Named(AMSTSConstants.DELEGATED_TOKEN_VALIDATORS)
+        @jakarta.inject.Named(AMSTSConstants.DELEGATED_TOKEN_VALIDATORS)
         Set<TokenValidationConfig> getDelegatedTokenValidators() {
             Set<TokenValidationConfig> validationConfigs = new HashSet<TokenValidationConfig>();
             validationConfigs.add(new TokenValidationConfig(TokenType.USERNAME, true));

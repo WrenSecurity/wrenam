@@ -19,7 +19,7 @@ package org.forgerock.oauth2.core;
 
 import static com.sun.identity.shared.DateUtils.stringToDate;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.text.ParseException;
 import java.util.Set;
 import com.iplanet.sso.SSOException;

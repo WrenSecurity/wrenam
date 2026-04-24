@@ -78,7 +78,7 @@ import org.forgerock.opendj.ldap.DN;
 import org.forgerock.util.Reject;
 import org.forgerock.util.promise.Promise;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 

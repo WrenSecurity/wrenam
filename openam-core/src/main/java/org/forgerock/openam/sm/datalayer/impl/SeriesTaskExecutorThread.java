@@ -19,8 +19,8 @@ package org.forgerock.openam.sm.datalayer.impl;
 import java.text.MessageFormat;
 import java.util.concurrent.BlockingQueue;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.forgerock.openam.cts.api.CoreTokenConstants;
 import org.forgerock.openam.sm.datalayer.api.DataLayerException;

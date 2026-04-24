@@ -19,7 +19,7 @@ package org.forgerock.openam.selfservice;
 import java.security.KeyPair;
 
 import javax.crypto.SecretKey;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.forgerock.json.jose.jwe.EncryptionMethod;
 import org.forgerock.json.jose.jwe.JweAlgorithm;

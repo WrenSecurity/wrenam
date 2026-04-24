@@ -20,7 +20,7 @@ import java.security.PrivilegedAction;
 import java.util.ResourceBundle;
 import java.util.Set;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import javax.security.auth.Subject;
 
 import com.sun.identity.entitlement.opensso.SubjectUtils;

@@ -18,7 +18,7 @@ package org.forgerock.openam.cts.impl;
 
 import java.util.concurrent.ExecutorService;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.forgerock.openam.cts.api.CoreTokenConstants;
 import org.forgerock.openam.cts.impl.queue.config.CTSQueueConfiguration;
@@ -51,7 +51,7 @@ public class CTSAsyncConnectionModule extends CTSConnectionModule {
     }
 
     @Override
-    protected Class<? extends javax.inject.Provider<ConnectionFactory>> getConnectionFactoryProviderType() {
+    protected Class<? extends jakarta.inject.Provider<ConnectionFactory>> getConnectionFactoryProviderType() {
         return CTSConnectionFactoryProvider.class;
     }
 

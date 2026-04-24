@@ -16,8 +16,8 @@
 
 package org.forgerock.openam.core.rest.devices.push;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import org.forgerock.openam.core.rest.devices.UserDevicesDao;
 import org.forgerock.openam.core.rest.devices.services.AuthenticatorDeviceServiceFactory;
 import org.forgerock.openam.core.rest.devices.services.push.AuthenticatorPushService;

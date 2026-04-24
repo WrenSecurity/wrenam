@@ -20,8 +20,8 @@ import static org.forgerock.http.routing.RoutingMode.EQUALS;
 import static org.forgerock.json.resource.Router.uriTemplate;
 import static org.forgerock.openam.audit.AuditConstants.Component.STS;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

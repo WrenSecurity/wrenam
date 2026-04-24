@@ -26,8 +26,8 @@ import static org.forgerock.openam.oauth2.OAuth2Constants.ShortClientAttributeNa
 import static org.forgerock.openam.rest.audit.RestletBodyAuditor.*;
 import static org.forgerock.openam.rest.service.RestletUtils.wrap;
 
-import javax.inject.Inject;
-import javax.inject.Provider;
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
 
 import com.google.inject.Key;
 import com.google.inject.name.Names;

@@ -18,14 +18,14 @@ package org.forgerock.openam.authentication.modules.fr.oath;
 
 import com.sun.identity.authentication.spi.AuthLoginException;
 import com.sun.identity.shared.debug.Debug;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.xml.bind.DatatypeConverter;
 import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.Collections;
 import java.util.List;
 import javax.annotation.Nonnull;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.xml.bind.DatatypeConverter;
 import org.forgerock.openam.core.rest.devices.DeviceJsonUtils;
 import org.forgerock.openam.core.rest.devices.oath.OathDeviceSettings;
 import org.forgerock.openam.core.rest.devices.oath.OathDevicesDao;

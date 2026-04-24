@@ -33,7 +33,7 @@ import org.forgerock.openam.entitlement.utils.indextree.SimpleReferenceTree;
 import org.forgerock.util.thread.listener.ShutdownListener;
 import org.forgerock.util.thread.listener.ShutdownManager;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.Collections;

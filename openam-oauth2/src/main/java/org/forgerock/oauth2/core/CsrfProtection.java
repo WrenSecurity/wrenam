@@ -16,7 +16,7 @@
 
 package org.forgerock.oauth2.core;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 

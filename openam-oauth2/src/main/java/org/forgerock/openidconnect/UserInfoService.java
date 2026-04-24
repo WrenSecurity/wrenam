@@ -19,8 +19,8 @@ package org.forgerock.openidconnect;
 import static org.forgerock.oauth2.core.AccessTokenVerifier.FORM_BODY;
 import static org.forgerock.oauth2.core.AccessTokenVerifier.HEADER;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.forgerock.oauth2.core.AccessToken;
 import org.forgerock.oauth2.core.AccessTokenVerifier;

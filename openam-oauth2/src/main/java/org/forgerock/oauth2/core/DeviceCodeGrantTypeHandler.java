@@ -21,7 +21,7 @@ import static org.forgerock.openam.oauth2.OAuth2Constants.Params.REALM;
 import static org.forgerock.openam.utils.StringUtils.isEmpty;
 import static org.forgerock.openam.utils.Time.currentTimeMillis;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.util.Set;
 
 import org.forgerock.oauth2.core.exceptions.AuthorizationDeclinedException;

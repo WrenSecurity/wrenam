@@ -16,8 +16,8 @@
 
 package org.forgerock.openam.cts.impl;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.apache.commons.lang.StringUtils;
 import org.forgerock.openam.cts.api.CoreTokenConstants;

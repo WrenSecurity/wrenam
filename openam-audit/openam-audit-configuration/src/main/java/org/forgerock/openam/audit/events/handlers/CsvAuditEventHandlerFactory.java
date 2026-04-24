@@ -32,7 +32,7 @@ import org.forgerock.openam.audit.AuditEventHandlerFactory;
 import org.forgerock.openam.audit.configuration.AuditEventHandlerConfiguration;
 import org.forgerock.openam.utils.StringUtils;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

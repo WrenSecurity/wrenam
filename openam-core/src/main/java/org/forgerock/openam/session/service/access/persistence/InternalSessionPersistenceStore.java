@@ -16,7 +16,7 @@
 
 package org.forgerock.openam.session.service.access.persistence;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.forgerock.openam.cts.exceptions.CoreTokenException;
 import org.forgerock.util.Reject;

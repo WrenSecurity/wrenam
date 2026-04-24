@@ -23,8 +23,8 @@ import org.forgerock.openam.sts.STSInitializationException;
 import org.forgerock.openam.sts.soap.config.SoapSTSModule;
 import org.forgerock.util.encode.Base64;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyStore;
 import java.security.KeyStoreException;

@@ -18,7 +18,7 @@ package org.forgerock.openam.authentication.service;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 import javax.security.auth.login.AppConfigurationEntry;
 import javax.security.auth.login.Configuration;
 

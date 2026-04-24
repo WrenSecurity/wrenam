@@ -16,8 +16,8 @@
 
 package org.forgerock.openam.sm.datalayer.impl;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
 import com.google.inject.Key;
 import com.google.inject.PrivateBinder;

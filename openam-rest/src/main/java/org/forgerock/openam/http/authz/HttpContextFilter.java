@@ -20,8 +20,8 @@ import static org.forgerock.caf.authentication.framework.AuthenticationFramework
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.forgerock.http.Filter;
 import org.forgerock.http.Handler;

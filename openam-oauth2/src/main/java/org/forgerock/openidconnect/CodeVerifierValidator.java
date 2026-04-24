@@ -15,7 +15,7 @@
 */
 package org.forgerock.openidconnect;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import org.forgerock.oauth2.core.AuthorizeRequestValidator;
 import org.forgerock.openam.oauth2.OAuth2Constants;
 import org.forgerock.oauth2.core.OAuth2ProviderSettings;

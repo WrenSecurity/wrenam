@@ -23,8 +23,8 @@ import org.forgerock.openam.utils.ModifiedProperty;
 import org.forgerock.opendj.ldap.DN;
 import org.forgerock.util.annotations.VisibleForTesting;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
 /**
  * Responsible for storing the configuration required by the LDAP implementation of the

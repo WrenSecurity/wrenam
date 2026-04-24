@@ -25,37 +25,15 @@
  * $Id: XMLUtils.java,v 1.15 2009/10/19 18:19:20 asyhuang Exp $
  *
  * Portions Copyrighted 2011-2016 ForgeRock AS.
+ * Portions Copyrighted 2026 Wren Security
  */
 package com.sun.identity.shared.xml;
 
 import com.sun.identity.shared.Constants;
 import com.sun.identity.shared.configuration.SystemPropertiesManager;
-import com.sun.identity.shared.datastruct.OrderedSet;
 import com.sun.identity.shared.debug.Debug;
 import com.sun.identity.shared.encode.Base64;
-import org.forgerock.openam.utils.DocumentBuilderProvider;
-import org.forgerock.openam.utils.Providers;
-import org.forgerock.openam.utils.SAXParserProvider;
-import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.ErrorHandler;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-
-import javax.xml.bind.JAXBException;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.sax.SAXSource;
-import javax.xml.transform.stream.StreamResult;
+import jakarta.xml.bind.JAXBException;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -72,7 +50,28 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.sax.SAXSource;
+import javax.xml.transform.stream.StreamResult;
+import org.forgerock.openam.utils.DocumentBuilderProvider;
+import org.forgerock.openam.utils.Providers;
+import org.forgerock.openam.utils.SAXParserProvider;
 import org.forgerock.openam.utils.TransformerFactoryProvider;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.ErrorHandler;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 
 
@@ -92,7 +91,7 @@ public class XMLUtils {
             "com_sun_identity_opensso_base64_encoded";
     private static int ATTR_BASE64_ENCODED_LENGTH =
             ATTR_BASE64_ENCODED.length();
-    private static final String INVALID_XML_CHARACTERS = "[\u0000-\u0008\u000b-\u001f\ufffe\uffff]";   
+    private static final String INVALID_XML_CHARACTERS = "[\u0000-\u0008\u000b-\u001f\ufffe\uffff]";
     private static Pattern invalidXMLChars =
             Pattern.compile(INVALID_XML_CHARACTERS);
 
@@ -102,8 +101,8 @@ public class XMLUtils {
                 Constants.XML_VALIDATING, "off");
             String debugLevel = SystemPropertiesManager.get(
                 Constants.SERVICES_DEBUG_LEVEL, "error");
-            
-            if (xmlVal.trim().equalsIgnoreCase("on") && 
+
+            if (xmlVal.trim().equalsIgnoreCase("on") &&
                 (debugLevel.trim().equalsIgnoreCase("warning") ||
                     debugLevel.trim().equalsIgnoreCase("message"))
             ) {
@@ -156,7 +155,7 @@ public class XMLUtils {
 
     /**
      * Converts the XML document from a String format to DOM Document format.
-     * 
+     *
      * @param xmlString
      *            is the XML document in a String format
      * @param debug
@@ -185,7 +184,7 @@ public class XMLUtils {
 
     /**
      * Converts the XML document from an input stream to DOM Document format.
-     * 
+     *
      * @param is
      *            is the InputStream that contains XML document
      * @return Document is the DOM object obtained by parsing the input stream.
@@ -229,7 +228,7 @@ public class XMLUtils {
 
     /**
      * This method parse an Attributes tag, DTD for Attribute is as follows.
-     * 
+     *
      * <pre>
      *  &lt; !-- This DTD defines the DPro Attribute tag.
      *    Unique Declaration name for DOCTYPE tag:
@@ -241,7 +240,7 @@ public class XMLUtils {
      *       name    NMTOKEN         #REQUIRED
      *  &gt;
      * </pre>
-     * 
+     *
      * @param n
      *            Node
      * @return Set Set of the attribute names
@@ -362,13 +361,13 @@ public class XMLUtils {
             }
             resultMap.put(key, values);
         }
-        
+
         return resultMap == null ? EMPTY_MAP : resultMap;
     }
 
     /**
      * Obtains a new instance of a DOM Document object
-     * 
+     *
      * @return a new instance of a DOM Document object
      * @exception Exception
      *                if an error occurs while constructing a new document
@@ -400,8 +399,9 @@ public class XMLUtils {
 
     public static Node getRootNode(Document doc, String nodeName) {
         NodeList nodes = doc.getElementsByTagName(nodeName);
-        if (nodes == null || nodes.getLength() == 0)
+        if (nodes == null || nodes.getLength() == 0) {
             return (null);
+        }
         return (nodes.item(0));
     }
 
@@ -409,15 +409,16 @@ public class XMLUtils {
         NodeList children = parentNode.getChildNodes();
         for (int i = 0; i < children.getLength(); i++) {
             Node node = children.item(i);
-            if (node.getNodeName().equalsIgnoreCase(childName))
+            if (node.getNodeName().equalsIgnoreCase(childName)) {
                 return (node);
+            }
         }
         return (null);
     }
 
     /**
      * Checks if a node has a child of ELEMENT type.
-     * 
+     *
      * @param node
      *            a node
      * @return true if the node has a child of ELEMENT type
@@ -447,8 +448,9 @@ public class XMLUtils {
             Node node = children.item(i);
             if (childNodeName.equalsIgnoreCase(node.getNodeName())) {
                 if (getNodeAttributeValue(node, attrName).equalsIgnoreCase(
-                        attrValue))
+                        attrValue)) {
                     return (node);
+                }
             }
         }
         return (null);
@@ -469,7 +471,7 @@ public class XMLUtils {
     /**
      * Gets the value of an element. This method returns a concatenated String
      * from all its TEXT children.
-     * 
+     *
      * @param element
      *            a DOM tree element.
      * @return A String that contained in its TEXT children; or null if an error
@@ -497,7 +499,7 @@ public class XMLUtils {
      * Gets the children value of an element. This method returns a
      * concatenated String from all its children.
      * @param element a DOM tree element.
-     * @return A String that contained in its TEXT children; 
+     * @return A String that contained in its TEXT children;
      *		or null if an error occurred.
      */
     public static String getChildrenValue(Element element) {
@@ -517,7 +519,7 @@ public class XMLUtils {
     /**
      * Gets the value of an element. This method returns a concatenated String
      * from all its TEXT children.
-     * 
+     *
      * @param element
      *            a DOM tree element.
      * @return A String that contained in its TEXT children; or null if an error
@@ -544,17 +546,19 @@ public class XMLUtils {
 
     public static String getNodeAttributeValue(Node node, String attrName) {
         NamedNodeMap attrs = node.getAttributes();
-        if (attrs == null)
+        if (attrs == null) {
             return (null);
+        }
         Node value = attrs.getNamedItem(attrName);
-        if (value == null)
+        if (value == null) {
             return (null);
+        }
         return (value.getNodeValue());
     }
 
     /**
      * Gets attribute value of a node.
-     * 
+     *
      * @param node
      *            a node
      * @param namespaceURI
@@ -575,7 +579,7 @@ public class XMLUtils {
         }
         return value.getNodeValue();
     }
-    
+
     /**
      * Method to get Values within AttributeValuePair as a java.util.Set
      */
@@ -603,7 +607,7 @@ public class XMLUtils {
         }
         return (retVal);
     }
-    
+
     /**
      * Method to get the value of "Value" node
      */
@@ -619,7 +623,7 @@ public class XMLUtils {
     public static String getValueOfValueNode(Node n, boolean unescape) {
         return getValueOfValueNodeNoTrim(n, unescape).trim();
     }
-    
+
     /**
      * Method to get the value of "Value" node
      */
@@ -656,7 +660,7 @@ public class XMLUtils {
     /**
      * This method searches children of Element element for element with tagName
      * and namespaceURI nsName. It searchs one level down only.
-     * 
+     *
      * @param element
      *            The root element
      * @param nsName
@@ -691,7 +695,7 @@ public class XMLUtils {
     /**
      * Print SAML Attribute Element and replace its prefix with the input
      * prefix.
-     * 
+     *
      * @param node
      *            A DOM tree Node
      * @param prefix
@@ -735,7 +739,7 @@ public class XMLUtils {
 
     /**
      * Print a Node tree recursively using UTF-8 encoding.
-     * 
+     *
      * @param node
      *            A DOM tree Node
      * @return An xml String representation of the DOM tree.
@@ -743,7 +747,7 @@ public class XMLUtils {
     public static String print(Node node) {
         return print(node, "UTF-8");
     }
-    
+
     /**
      * Prints a Node tree recursively.
      * @param node A DOM tree Node
@@ -754,7 +758,7 @@ public class XMLUtils {
 	if (node == null) {
 	    return null;
 	}
-        
+
         try {
             TransformerFactory tFactory = TransformerFactory.newInstance();
             Transformer transformer = tFactory.newTransformer();
@@ -766,7 +770,7 @@ public class XMLUtils {
             transformer.transform(source, result);
             return os.toString(encoding);
         } catch (Exception e) {
-            return null; 
+            return null;
         }
     }
 
@@ -836,7 +840,7 @@ public class XMLUtils {
         Matcher matcher = invalidXMLChars.matcher(st);
         return matcher.find();
     }
-       
+
     /**
      * Remove invalid XML characters from a string.
      * @param text the text to cleanse.
@@ -957,6 +961,18 @@ public class XMLUtils {
         }
     }
 
+    /**
+     * Temporary Jakarta EE migration wrapper.
+     */
+    public static SAXSource createSAXSourceLegacy(InputSource source)
+            throws javax.xml.bind.JAXBException {
+        try {
+            return createSAXSource(source);
+        } catch (JAXBException e) {
+            throw new javax.xml.bind.JAXBException(e);
+        }
+    }
+
     private static String ATTR_VALUE_PAIR_NODE = "AttributeValuePair";
 
     private static String VALUE_NODE = "Value";
@@ -971,18 +987,21 @@ class ValidationErrorHandler implements ErrorHandler {
 
     }
 
+    @Override
     public void fatalError(SAXParseException spe) throws SAXParseException {
         if (debug != null) {
             debug.error("XMLUtils.fatalError", spe);
         }
     }
 
+    @Override
     public void error(SAXParseException spe) throws SAXParseException {
         if (debug != null) {
             debug.warning("XMLUtils.error", spe);
         }
     }
 
+    @Override
     public void warning(SAXParseException spe) throws SAXParseException {
         if ((debug != null) && (debug.warningEnabled())) {
             debug.warning("XMLUtils.warning", spe);

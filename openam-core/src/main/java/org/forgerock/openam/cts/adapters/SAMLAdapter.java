@@ -18,7 +18,7 @@ package org.forgerock.openam.cts.adapters;
 import java.text.MessageFormat;
 import java.util.Calendar;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.forgerock.openam.cts.api.CoreTokenConstants;
 import org.forgerock.openam.cts.api.fields.SAMLTokenField;

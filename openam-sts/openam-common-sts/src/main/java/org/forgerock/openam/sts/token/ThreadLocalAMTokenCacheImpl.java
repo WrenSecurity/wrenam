@@ -20,7 +20,7 @@ package org.forgerock.openam.sts.token;
 import org.forgerock.json.resource.ResourceException;
 import org.forgerock.openam.sts.TokenCreationException;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.forgerock.openam.sts.TokenValidationException;
 import org.forgerock.openam.sts.token.validator.ValidationInvocationContext;

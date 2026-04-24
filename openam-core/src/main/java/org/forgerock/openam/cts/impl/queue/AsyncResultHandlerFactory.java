@@ -17,8 +17,8 @@ package org.forgerock.openam.cts.impl.queue;
 
 import com.sun.identity.shared.debug.Debug;
 import java.util.Collection;
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import org.forgerock.guice.core.InjectorHolder;
 import org.forgerock.openam.cts.api.CoreTokenConstants;
 import org.forgerock.openam.cts.api.tokens.Token;

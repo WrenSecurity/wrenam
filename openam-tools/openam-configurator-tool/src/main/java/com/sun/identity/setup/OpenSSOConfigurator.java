@@ -42,7 +42,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Properties;
 import java.util.ResourceBundle;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import org.forgerock.openam.installer.utils.StatusChecker;
 import org.forgerock.openam.license.LicensePresenter;
 import org.forgerock.openam.license.LicenseRejectedException;

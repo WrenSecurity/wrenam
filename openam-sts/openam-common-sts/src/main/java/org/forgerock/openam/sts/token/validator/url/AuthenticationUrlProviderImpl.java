@@ -23,8 +23,8 @@ import org.forgerock.openam.sts.config.user.AuthTargetMapping;
 import org.forgerock.openam.sts.TokenValidationException;
 import org.forgerock.openam.sts.token.UrlConstituentCatenator;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import java.net.MalformedURLException;
 import java.net.URL;
 

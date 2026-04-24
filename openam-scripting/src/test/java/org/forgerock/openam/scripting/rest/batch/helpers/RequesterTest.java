@@ -20,7 +20,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-import javax.inject.Provider;
+import jakarta.inject.Provider;
 
 import org.forgerock.json.JsonValue;
 import org.forgerock.json.resource.ActionRequest;

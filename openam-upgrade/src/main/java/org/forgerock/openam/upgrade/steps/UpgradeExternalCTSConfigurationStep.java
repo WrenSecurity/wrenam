@@ -25,7 +25,7 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.forgerock.openam.cts.api.CoreTokenConstants;
 import org.forgerock.openam.sm.datalayer.api.ConnectionFactory;

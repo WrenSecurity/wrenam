@@ -24,7 +24,7 @@ import org.forgerock.openam.cts.utils.blob.TokenBlobUtils;
 import org.forgerock.openam.cts.utils.blob.TokenStrategyFailedException;
 import org.forgerock.util.Reject;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;

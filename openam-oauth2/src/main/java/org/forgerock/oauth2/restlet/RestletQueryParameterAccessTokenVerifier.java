@@ -21,8 +21,8 @@ import org.forgerock.oauth2.core.OAuth2Request;
 import org.forgerock.oauth2.core.TokenStore;
 import org.restlet.Request;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
 /**
  * Verifies that a OAuth2 request that is made to one of the protected endpoints on the OAuth2 provider,

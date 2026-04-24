@@ -26,8 +26,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import jakarta.servlet.http.HttpServletRequest;
 
 import org.wrensecurity.guava.common.base.Throwables;

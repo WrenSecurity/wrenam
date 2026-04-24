@@ -21,7 +21,7 @@ import static org.forgerock.openidconnect.Client.TokenEndpointAuthMethod.*;
 
 import com.sun.identity.shared.debug.Debug;
 import java.util.Set;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import org.forgerock.oauth2.core.ClientRegistration;
 import org.forgerock.openam.oauth2.OAuth2Constants;
 import org.forgerock.oauth2.core.OAuth2Jwt;

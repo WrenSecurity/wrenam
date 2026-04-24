@@ -20,8 +20,8 @@ package org.forgerock.openidconnect;
 import static org.forgerock.openam.oauth2.OAuth2Constants.Params.OPENID;
 import static org.forgerock.openam.oauth2.OAuth2Constants.ShortClientAttributeNames.*;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;

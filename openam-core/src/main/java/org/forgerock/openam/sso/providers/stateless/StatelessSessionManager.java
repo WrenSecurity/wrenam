@@ -17,7 +17,7 @@
 
 package org.forgerock.openam.sso.providers.stateless;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import jakarta.servlet.http.HttpServletRequest;
 
 import org.forgerock.json.jose.exceptions.JwtRuntimeException;

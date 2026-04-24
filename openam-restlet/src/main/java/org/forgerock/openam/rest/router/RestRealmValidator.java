@@ -22,7 +22,7 @@ import com.sun.identity.sm.DNMapper;
 import com.sun.identity.sm.SMSEntry;
 
 import java.security.AccessController;
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 /**
  * Validates that realms are configured.

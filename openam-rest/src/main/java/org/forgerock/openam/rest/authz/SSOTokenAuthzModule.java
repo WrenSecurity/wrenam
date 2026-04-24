@@ -18,7 +18,7 @@ package org.forgerock.openam.rest.authz;
 
 import static org.forgerock.util.promise.Promises.newResultPromise;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.forgerock.authz.filter.api.AuthorizationResult;
 import org.forgerock.authz.filter.crest.api.CrestAuthorizationModule;

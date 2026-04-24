@@ -16,8 +16,8 @@
 
 package org.forgerock.openam.sm.datalayer.impl.ldap;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
 import org.forgerock.openam.cts.utils.LdapTokenAttributeConversion;
 import org.forgerock.openam.sm.datalayer.api.query.PartialToken;
