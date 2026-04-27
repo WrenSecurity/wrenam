@@ -12,7 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
- * Portions copyright 2022-2023 Wren Security
+ * Portions copyright 2022-2026 Wren Security
  */
 
 package org.forgerock.openam.core.rest.sms;
@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -371,11 +372,14 @@ public class SmsRequestHandler implements RequestHandler, SMSObjectListener, Ser
     @Override
     public void allObjectsChanged() {
         try {
+            write.lock();
+            removeServices();
             createServices();
-        } catch (SSOException e) {
+            notifyDescriptorChange();
+        } catch (SSOException | SMSException e) {
             debug.error("Could not recreate SMS REST services", e);
-        } catch (SMSException e) {
-            debug.error("Could not recreate SMS REST services", e);
+        } finally {
+            write.unlock();
         }
     }
 
@@ -414,6 +418,13 @@ public class SmsRequestHandler implements RequestHandler, SMSObjectListener, Ser
         }
 
         this.serviceRoutes = serviceRoutes;
+    }
+
+    /**
+     * Remove all service routes.
+     */
+    private void removeServices() {
+        new HashSet<>(serviceRoutes.keySet()).forEach(this::removeService);
     }
 
     /**
