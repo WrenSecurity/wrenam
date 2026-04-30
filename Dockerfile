@@ -38,7 +38,6 @@ ENV \
   WRENAM_HOME="/srv/wrenam" \
   JAVA_OPTS=" \
     --add-exports=java.base/sun.security.tools.keytool=ALL-UNNAMED \
-    --add-exports=java.base/sun.security.x509=ALL-UNNAMED \
     --add-exports=java.management/sun.management=ALL-UNNAMED \
     --add-exports=java.xml/com.sun.org.apache.xerces.internal.dom=ALL-UNNAMED \
     --add-opens=java.base/java.io=ALL-UNNAMED \
