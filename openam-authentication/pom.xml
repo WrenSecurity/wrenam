@@ -58,6 +58,7 @@
         <module>openam-auth-scripted</module>
         <module>openam-auth-windowsdesktopsso</module>
         <module>wrenam-auth-duo</module>
+        <module>wrenam-auth-webauthn</module>
     </modules>
 
     <dependencies>

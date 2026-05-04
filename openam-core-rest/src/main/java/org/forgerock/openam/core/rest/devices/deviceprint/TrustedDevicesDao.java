@@ -28,7 +28,7 @@ import org.forgerock.openam.core.rest.devices.services.deviceprint.TrustedDevice
  * @since 12.0.0
  */
 @Singleton
-public class TrustedDevicesDao extends UserDevicesDao {
+public class TrustedDevicesDao extends UserDevicesDao<TrustedDeviceService> {
 
     public TrustedDevicesDao(AuthenticatorDeviceServiceFactory<TrustedDeviceService> serviceFactory) {
         super(serviceFactory);
