@@ -12,16 +12,16 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014-2016 ForgeRock AS.
- * Portions copyright 2023 Wren Security
+ * Portions copyright 2023-2026 Wren Security
  */
 
 package org.forgerock.openam.oauth2;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
 import org.forgerock.json.resource.http.HttpContext;
 import org.forgerock.oauth2.core.OAuth2ProviderSettings;
 import org.forgerock.oauth2.core.OAuth2ProviderSettingsFactory;
@@ -37,11 +37,15 @@ import org.forgerock.openam.services.baseurl.InvalidBaseUrlException;
 import org.forgerock.services.context.Context;
 import org.restlet.Request;
 import org.restlet.ext.servlet.ServletUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A factory for creating/retrieving OAuth2Uris instances.
  */
 public class OAuth2UrisFactory {
+
+    private final Logger logger = LoggerFactory.getLogger("OAuth2Provider");
 
     private final Map<String, OAuth2Uris> urisMap = new ConcurrentHashMap<>();
     private final OAuth2ProviderSettingsFactory oAuth2ProviderSettingsFactory;
@@ -121,6 +125,9 @@ public class OAuth2UrisFactory {
             return uris;
         }
         uris = new OAuth2UrisImpl(deploymentUrl, absoluteRealm, providerSettings, baseUrl);
+        if (!uris.getEndSessionEndpoint().toLowerCase(Locale.ROOT).startsWith("https://")) {
+            logger.warn("End session endpoint does not use HTTPS scheme: {}", uris.getEndSessionEndpoint());
+        }
         urisMap.put(baseUrl, uris);
         return uris;
     }
