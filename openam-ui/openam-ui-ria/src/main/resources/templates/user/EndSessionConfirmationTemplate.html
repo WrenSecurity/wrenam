@@ -1,0 +1,44 @@
+<div class="container">
+
+    <div class="page-header col-md-6 col-md-offset-3 wordwrap">
+        <h1 class="text-center">{{t 'confirmation.title'}}</h1>
+    </div>
+
+    <form method="post" class="form col-md-6 col-md-offset-3" autocomplete="off">
+
+        <fieldset>
+            {{#if clientName}}
+                <p>{{t 'confirmation.description' clientName=clientName}}</p>
+            {{/if}}
+
+            {{#if userName}}
+                <p>{{t 'confirmation.signedInAs'}} <span class="text-primary">{{userName}}</span></p>
+            {{/if}}
+
+            {{#if idTokenHint}}
+                <input type="hidden" name="id_token_hint" aria-hidden="true" value="{{idTokenHint}}"/>
+            {{/if}}
+
+            {{#if postLogoutRedirectUri}}
+                <input type="hidden" name="post_logout_redirect_uri" aria-hidden="true" value="{{postLogoutRedirectUri}}"/>
+            {{/if}}
+
+            {{#if state}}
+                <input type="hidden" name="state" aria-hidden="true" value="{{state}}"/>
+            {{/if}}
+
+            {{#if csrf}}
+                <input type="hidden" name="csrf" aria-hidden="true" value="{{csrf}}"/>
+            {{/if}}
+
+            <div class="form-group clearfix">
+                <div class="pull-right">
+                    <button type="submit" name="decision" class="btn btn-default" value="cancel">{{t 'confirmation.cancel'}}</button>
+                    <button type="submit" name="decision" class="btn btn-primary" value="logout">{{t 'confirmation.logout'}}</button>
+                </div>
+            </div>
+        </fieldset>
+
+    </form>
+
+</div>

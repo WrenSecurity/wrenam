@@ -1,0 +1,21 @@
+<div class="container">
+
+    {{#if error}}
+        <div class="alert alert-warning col-md-6 col-md-offset-3" role="alert">
+            {{#if error.description}}
+                <strong>{{error.message}}</strong>: {{error.description}}
+            {{else}}
+                <strong>{{error.message}}</strong>
+            {{/if}}
+        </div>
+    {{/if}}
+
+    <div class="page-header col-md-6 col-md-offset-3 wordwrap">
+        <h1 class="text-center">{{t 'error.title'}}</h1>
+    </div>
+
+    <div class="col-md-6 col-md-offset-3">
+        <p>{{t 'error.description'}}</p>
+    </div>
+
+</div>

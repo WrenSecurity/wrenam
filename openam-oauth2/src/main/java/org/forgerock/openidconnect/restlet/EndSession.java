@@ -12,127 +12,235 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2013-2016 ForgeRock AS.
+ * Portions copyright 2026 Wren Security
  */
 
 package org.forgerock.openidconnect.restlet;
 
-import org.forgerock.json.jose.common.JwtReconstruction;
-import org.forgerock.json.jose.jws.SignedJwt;
-import org.forgerock.json.jose.jwt.JwtClaimsSet;
-import org.forgerock.oauth2.core.ClientRegistration;
-import org.forgerock.oauth2.core.ClientRegistrationStore;
-import org.forgerock.openam.oauth2.OAuth2Constants;
+import static org.forgerock.openam.oauth2.OAuth2Constants.Custom.LOCALE;
+import static org.forgerock.openam.oauth2.OAuth2Constants.Custom.UI_LOCALES;
+
+import com.iplanet.sso.SSOToken;
+import java.net.URI;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.UriBuilder;
 import org.forgerock.oauth2.core.OAuth2Request;
 import org.forgerock.oauth2.core.OAuth2RequestFactory;
 import org.forgerock.oauth2.core.exceptions.InvalidClientException;
 import org.forgerock.oauth2.core.exceptions.NotFoundException;
 import org.forgerock.oauth2.core.exceptions.OAuth2Exception;
-import org.forgerock.oauth2.core.exceptions.RedirectUriMismatchException;
-import org.forgerock.oauth2.core.exceptions.RelativeRedirectUriException;
 import org.forgerock.oauth2.restlet.ExceptionHandler;
 import org.forgerock.oauth2.restlet.OAuth2RestletException;
+import org.forgerock.oauth2.restlet.TemplateFactory;
+import org.forgerock.openam.rest.service.RestletRealmRouter;
+import org.forgerock.openam.services.baseurl.BaseURLProviderFactory;
 import org.forgerock.openam.utils.StringUtils;
-import org.forgerock.openidconnect.OpenIDConnectEndSession;
-import org.restlet.Request;
-import org.restlet.Response;
-import org.restlet.data.Reference;
+import org.forgerock.openidconnect.EndSessionParameters;
+import org.forgerock.openidconnect.EndSessionService;
+import org.restlet.ext.freemarker.TemplateRepresentation;
+import org.restlet.ext.servlet.ServletUtils;
+import org.restlet.representation.EmptyRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
+import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
 import org.restlet.routing.Redirector;
 
-import javax.inject.Inject;
-
-import java.net.URI;
-
 /**
  * Handles requests to the OpenId Connect end session endpoint for ending OpenId Connect user sessions.
+ * <p>
+ * Implementation is conformant with the OpenID Connect RP-Initiated Logout 1.0. This resource only deals with
+ * HTTP/Restlet concerns and the rendering of the pages; the actual logout logic lives in {@link EndSessionService}.
+ * </p>
  *
  * @since 11.0.0
+ * @see <a href="https://openid.net/specs/openid-connect-rpinitiated-1_0.html">OpenID Connect RP-Initiated Logout 1.0</a>
  */
 public class EndSession extends ServerResource {
 
     private final OAuth2RequestFactory requestFactory;
-    private final OpenIDConnectEndSession openIDConnectEndSession;
     private final ExceptionHandler exceptionHandler;
-    private final ClientRegistrationStore clientRegistrationStore;
+    private final EndSessionService endSessionService;
+    private final BaseURLProviderFactory baseURLProviderFactory;
 
     /**
      * Constructs a new EndSession.
      *
      * @param requestFactory An instance of the OAuth2RequestFactory.
-     * @param openIDConnectEndSession An instance of the OpenIDConnectEndSession.
      * @param exceptionHandler An instance of the ExceptionHandler.
+     * @param endSessionService An instance of the EndSessionService.
+     * @param baseURLProviderFactory An instance of the BaseURLProviderFactory.
      */
     @Inject
-    public EndSession(OAuth2RequestFactory requestFactory, OpenIDConnectEndSession openIDConnectEndSession,
-            ExceptionHandler exceptionHandler, ClientRegistrationStore clientRegistrationStore) {
+    public EndSession(OAuth2RequestFactory requestFactory, ExceptionHandler exceptionHandler,
+            EndSessionService endSessionService, BaseURLProviderFactory baseURLProviderFactory) {
         this.requestFactory = requestFactory;
-        this.openIDConnectEndSession = openIDConnectEndSession;
         this.exceptionHandler = exceptionHandler;
-        this.clientRegistrationStore = clientRegistrationStore;
+        this.endSessionService = endSessionService;
+        this.baseURLProviderFactory = baseURLProviderFactory;
     }
 
     /**
-     * Handles GET requests to the OpenId Connect end session endpoint for ending OpenId Connect user sessions.
-     *
-     * @return The OpenId Connect token of the session that has ended.
-     * @throws OAuth2RestletException If an error occurs whilst ending the users session.
+     * Handles GET requests to display the OpenId Connect end session confirmation page.
      */
     @Get
-    public Representation endSession() throws OAuth2RestletException {
-
-        final OAuth2Request request = requestFactory.create(getRequest());
-        final String idToken = request.getParameter(OAuth2Constants.Params.END_SESSION_ID_TOKEN_HINT);
-        final String redirectUri = request.getParameter(OAuth2Constants.Params.POST_LOGOUT_REDIRECT_URI);
+    public Representation showConfirmation() throws OAuth2RestletException {
         try {
-            openIDConnectEndSession.endSession(request, idToken);
-            if (StringUtils.isNotEmpty(redirectUri)) {
-                return handleRedirect(request, idToken, redirectUri);
+            EndSessionParameters params = EndSessionParameters.from(getServletRequest());
+            OAuth2Request request = requestFactory.create(getRequest());
+            validateRequest(request, params);
+            SSOToken session = endSessionService.currentSession(getServletRequest()).orElse(null);
+            if (params.getIdTokenHint().isEmpty() && session == null) {
+                // Nothing to log out
+                return getTemplate("done");
+            }
+            return getTemplate("confirmation", getConfirmationDataModel(params, session));
+        } catch (OAuth2Exception e) {
+            throw new OAuth2RestletException(e.getStatusCode(), e.getError(), e.getMessage(), null);
+        }
+    }
+
+    /**
+     * Handles POST requests carrying the user's decision submitted from the end session confirmation page.
+     *
+     * @return The representation of the resulting page, or of the redirect response.
+     * @throws OAuth2RestletException If the logout request is invalid or the logout itself fails.
+     */
+    @Post
+    public Representation endSession(Representation ignored) throws OAuth2RestletException {
+        OAuth2Request request = requestFactory.create(getRequest());
+        String decision = request.getParameter("decision");
+
+        if ("logout".equals(decision)) {
+            EndSessionParameters params = EndSessionParameters.from(getServletRequest());
+            validateRequest(request, params);
+            return processLogout(request, params);
+        } else if ("cancel".equals(decision)) {
+            return getTemplate("canceled");
+        }
+
+        return showConfirmation();
+    }
+
+    private Representation processLogout(OAuth2Request request, EndSessionParameters params)
+            throws OAuth2RestletException {
+        SSOToken session = endSessionService.currentSession(getServletRequest()).orElse(null);
+        try {
+            endSessionService.verifyCsrf(request, session);
+            if (params.getIdTokenHint().isPresent()) {
+                endSessionService.endSession(request, params);
+                if (params.getPostLogoutRedirectUri().isPresent()) {
+                    return handleRedirect(params);
+                }
+            } else if (session != null) {
+                // Without a valid id_token_hint the OP MUST NOT perform post-logout redirection.
+                // Just terminate the current session.
+                endSessionService.logout(session);
             }
         } catch (OAuth2Exception e) {
             throw new OAuth2RestletException(e.getStatusCode(), e.getError(), e.getMessage(), null);
         }
-        return null;
+        return getTemplate("done");
+    }
+
+    private void validateRequest(OAuth2Request request, EndSessionParameters params) throws OAuth2RestletException {
+        try {
+            endSessionService.validate(request, params);
+        } catch (OAuth2Exception e) {
+            throw new OAuth2RestletException(e.getStatusCode(), e.getError(), e.getMessage(), null);
+        }
+    }
+
+    private TemplateRepresentation getTemplate(String stage) {
+        return getTemplate(stage, Map.of());
+    }
+
+    private TemplateRepresentation getTemplate(String stage, Map<String, Object> dataModel) {
+        Map<String, Object> endSessionDataModel = new HashMap<>(dataModel);
+        endSessionDataModel.put("stage", stage);
+        endSessionDataModel.put("baseUrl", baseURLProviderFactory.get(getRealm()).getRootURL(getServletRequest()));
+        endSessionDataModel.put("realm", getRealm());
+        endSessionDataModel.put("locale", getLocale());
+        TemplateFactory templateFactory = TemplateFactory.newInstance(getContext());
+        TemplateRepresentation representation = templateFactory.getTemplateRepresentation("templates/EndSession.ftl");
+        representation.setDataModel(endSessionDataModel);
+        return representation;
+    }
+
+    private Map<String, Object> getConfirmationDataModel(EndSessionParameters request, SSOToken session)
+            throws InvalidClientException, NotFoundException {
+        Map<String, Object> dataModel = new HashMap<>();
+
+        endSessionService.resolveClientName(getRealm(), request, getLocale())
+                .ifPresent(clientName -> dataModel.put("clientName", clientName));
+        endSessionService.resolveUserName(request, session)
+                .ifPresent(userName -> dataModel.put("userName", userName));
+        endSessionService.resolveCsrfToken(session)
+                .ifPresent(csrf -> dataModel.put("csrf", csrf));
+        request.getIdTokenHint()
+                .ifPresent(idTokenHint -> dataModel.put("idTokenHint", idTokenHint));
+        request.getPostLogoutRedirectUri()
+                .ifPresent(redirectUri -> dataModel.put("postLogoutRedirectUri", redirectUri));
+        request.getState()
+                .ifPresent(state -> dataModel.put("state", state));
+
+        return dataModel;
     }
 
     /**
-     * Handles any exception that is thrown when processing a OAuth2 authorization request.
+     * Handles any exception thrown when processing an end session request.
      *
      * @param throwable The throwable.
      */
     @Override
     protected void doCatch(Throwable throwable) {
-        exceptionHandler.handle(throwable, getResponse());
+        exceptionHandler.handle(throwable, getResponse(), error -> getTemplate("error", new HashMap<>(error)));
     }
 
-    private Representation handleRedirect(OAuth2Request request, String idToken, String redirectUri)
-            throws RedirectUriMismatchException, InvalidClientException, 
-            RelativeRedirectUriException, NotFoundException {
-
-        validateRedirect(request, idToken, redirectUri);
-        Response response = getResponse();
-        new Redirector(getContext(), new Reference(redirectUri).toString(), Redirector.MODE_CLIENT_FOUND).
-                handle(getRequest(), response);
-        return response == null ? null : response.getEntity();
+    private Representation handleRedirect(EndSessionParameters request) {
+        String target = request.getPostLogoutRedirectUri().orElseThrow();
+        Optional<String> state = request.getState();
+        if (state.isPresent()) {
+            target = UriBuilder.fromUri(URI.create(target))
+                    .queryParam("state", "{state}")
+                    .build(state.get())
+                    .toString();
+        }
+        new Redirector(getContext(), target, Redirector.MODE_CLIENT_FOUND)
+                .handle(getRequest(), getResponse());
+        return new EmptyRepresentation();
     }
 
-    private void validateRedirect(OAuth2Request request, String idToken, String redirectUri)
-            throws InvalidClientException, RedirectUriMismatchException, 
-            RelativeRedirectUriException, NotFoundException {
-
-        SignedJwt jwt = new JwtReconstruction().reconstructJwt(idToken, SignedJwt.class);
-        JwtClaimsSet claims = jwt.getClaimsSet();
-        String clientId = (String) claims.getClaim(OAuth2Constants.JWTTokenParams.AZP);
-        ClientRegistration client = clientRegistrationStore.get(clientId, request);
-        URI requestedUri = URI.create(redirectUri);
-
-        if (!requestedUri.isAbsolute()) {
-            throw new RelativeRedirectUriException();
+    /**
+     * Resolves the locale from the {@code ui_locales} or {@code locale} request parameters, falling back to the locale
+     * negotiated from the {@code Accept-Language} header. Never returns {@code null}.
+     */
+    private Locale getLocale() {
+        HttpServletRequest request = getServletRequest();
+        String uiLocaleParameter = request.getParameter(UI_LOCALES);
+        String localeParameter = request.getParameter(LOCALE);
+        if (StringUtils.isNotBlank(uiLocaleParameter)) {
+            // ui_locales is a space-separated list of BCP 47 tags. Use the first one.
+            return Locale.forLanguageTag(uiLocaleParameter.trim().split("\\s+")[0]);
         }
-        if (!client.getPostLogoutRedirectUris().contains(requestedUri)) {
-            throw new RedirectUriMismatchException();
+        if (StringUtils.isNotBlank(localeParameter)) {
+            return Locale.forLanguageTag(localeParameter);
         }
+        return request.getLocale();
+    }
+
+    private HttpServletRequest getServletRequest() {
+        return ServletUtils.getRequest(getRequest());
+    }
+
+    @SuppressWarnings("deprecation")
+    private String getRealm() {
+        return (String) getRequest().getAttributes().get(RestletRealmRouter.REALM);
     }
 
 }
