@@ -12,18 +12,10 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions Copyright 2026 Wren Security
  */
 
 package org.forgerock.openam.core.realms;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Provider;
-import javax.inject.Singleton;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Set;
-import java.util.StringTokenizer;
 
 import com.iplanet.am.sdk.AMException;
 import com.iplanet.am.sdk.AMOrganization;
@@ -36,6 +28,15 @@ import com.sun.identity.sm.OrganizationConfigManager;
 import com.sun.identity.sm.OrganizationConfigManagerFactory;
 import com.sun.identity.sm.SMSException;
 import com.sun.identity.sm.ServiceManager;
+import com.sun.identity.sm.ServiceUnavailableException;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Set;
+import java.util.StringTokenizer;
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Provider;
+import javax.inject.Singleton;
 import org.forgerock.openam.ldap.LDAPUtils;
 import org.forgerock.openam.utils.CollectionUtils;
 import org.forgerock.openam.utils.StringUtils;
@@ -164,7 +165,9 @@ class DefaultRealmLookup implements RealmLookup {
                 }
             } catch (SMSException | SSOException e) {
                 logger.trace("DefaultRealms:lookup Exception in getting org name from SMS", e);
-                throw new NoRealmFoundException(realmName);
+                throw e instanceof ServiceUnavailableException
+                        ? new RealmLookupException(e)
+                        : new NoRealmFoundException(realmName);
             }
         }
         logger.trace("DefaultRealms:lookup Search for OrgIdentifier:{} returning realm DN: {}", realmName, id);
