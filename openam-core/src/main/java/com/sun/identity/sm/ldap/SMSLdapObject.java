@@ -25,7 +25,7 @@
  * $Id: SMSLdapObject.java,v 1.27 2009/11/20 23:52:56 ww203982 Exp $
  *
  * Portions Copyrighted 2011-2016 ForgeRock AS.
- * Portions Copyrighted 2017-2023 Wren Security
+ * Portions Copyrighted 2017-2026 Wren Security
  */
 
 package com.sun.identity.sm.ldap;
@@ -49,6 +49,7 @@ import com.sun.identity.sm.SMSNotificationManager;
 import com.sun.identity.sm.SMSObjectDB;
 import com.sun.identity.sm.SMSObjectListener;
 import com.sun.identity.sm.SMSUtils;
+import com.sun.identity.sm.ServiceUnavailableException;
 import java.security.AccessController;
 import java.security.Principal;
 import java.text.MessageFormat;
@@ -255,6 +256,7 @@ public class SMSLdapObject extends SMSObjectDB implements SMSObjectListener {
      * Reads in the object from persistent store, assuming that the guid and the
      * SSOToken are valid
      */
+    @Override
     public Map<String, Set<String>> read(SSOToken token, String dn) throws SMSException,
             SSOException {
         if (dn == null || dn.length() == 0) {
@@ -322,6 +324,7 @@ public class SMSLdapObject extends SMSObjectDB implements SMSObjectListener {
     /**
      * Create an entry in the directory
      */
+    @Override
     public void create(SSOToken token, String dn, Map attrs)
             throws SMSException, SSOException {
         int retry = 0;
@@ -368,6 +371,7 @@ public class SMSLdapObject extends SMSObjectDB implements SMSObjectListener {
      * Save the entry using the token provided. The principal provided will be
      * used to get the proxy connection.
      */
+    @Override
     public void modify(SSOToken token, String dn, ModificationItem[] mods)
             throws SMSException, SSOException {
         int retry = 0;
@@ -403,6 +407,7 @@ public class SMSLdapObject extends SMSObjectDB implements SMSObjectListener {
     /**
      * Delete the entry in the directory. This will delete sub-entries also!
      */
+    @Override
     public void delete(SSOToken token, String dn) throws SMSException,
             SSOException {
         SMSAuditor auditor = newAuditor(token, dn, readCurrentState(dn));
@@ -467,6 +472,7 @@ public class SMSLdapObject extends SMSObjectDB implements SMSObjectListener {
      * The paramter <code>numOfEntries</code> identifies the number of entries
      * to return, if <code>0</code> returns all the entries.
      */
+    @Override
     public Set<String> subEntries(SSOToken token, String dn, String filter,
             int numOfEntries, boolean sortResults, boolean ascendingOrder)
             throws SMSException, SSOException {
@@ -558,6 +564,7 @@ public class SMSLdapObject extends SMSObjectDB implements SMSObjectListener {
      * The paramter <code>numOfEntries</code> identifies the number of entries
      * to return, if <code>0</code> returns all the entries.
      */
+    @Override
     public Set<String> schemaSubEntries(SSOToken token, String dn, String filter,
             String sidFilter, int numOfEntries, boolean sortResults,
             boolean ascendingOrder) throws SMSException, SSOException {
@@ -572,6 +579,7 @@ public class SMSLdapObject extends SMSObjectDB implements SMSObjectListener {
                 sortResults, ascendingOrder);
     }
 
+    @Override
     public String toString() {
         return ("SMSLdapObject");
     }
@@ -592,7 +600,8 @@ public class SMSLdapObject extends SMSObjectDB implements SMSObjectListener {
         }
         if (conn == null) {
             debug.error("SMSLdapObject: Unable to get connection to LDAP server for the principal: {}", p);
-            throw new SMSException(bundle.getString(IUMSConstants.SMS_SERVER_DOWN), "sms-SERVER_DOWN");
+            throw new ServiceUnavailableException(bundle.getString(IUMSConstants.SMS_SERVER_DOWN),
+                    "sms-SERVER_DOWN");
         }
         return conn;
     }
@@ -601,6 +610,7 @@ public class SMSLdapObject extends SMSObjectDB implements SMSObjectListener {
      * Returns LDAP entries that match the filter, using the start DN provided
      * in method
      */
+    @Override
     public Iterator<SMSDataEntry> search(SSOToken token, String startDN, String filter,
             int numOfEntries, int timeLimit, boolean sortResults,
             boolean ascendingOrder, Set<String> excludes)
@@ -656,6 +666,7 @@ public class SMSLdapObject extends SMSObjectDB implements SMSObjectListener {
      * Returns LDAP entries that match the filter, using the start DN provided
      * in method
      */
+    @Override
     public Set<String> search(SSOToken token, String startDN, String filter,
             int numOfEntries, int timeLimit, boolean sortResults,
             boolean ascendingOrder) throws SSOException, SMSException {
@@ -809,11 +820,13 @@ public class SMSLdapObject extends SMSObjectDB implements SMSObjectListener {
     /**
      * Registration of Notification Callbacks
      */
+    @Override
     public void registerCallbackHandler(SMSObjectListener changeListener)
             throws SMSException {
         LDAPEventManager.addObjectChangeListener(changeListener);
     }
 
+    @Override
     public void deregisterCallbackHandler(String id) {
         LDAPEventManager.removeObjectChangeListener();
     }
@@ -855,6 +868,7 @@ public class SMSLdapObject extends SMSObjectDB implements SMSObjectListener {
         return modifyRequest;
     }
 
+    @Override
     public void objectChanged(String dn, int type) {
         dn = DN.valueOf(dn).toString().toLowerCase();
         if (type == DELETE) {
@@ -867,6 +881,7 @@ public class SMSLdapObject extends SMSObjectDB implements SMSObjectListener {
         }
     }
 
+    @Override
     public void allObjectsChanged() {
         // Not clear why this class is implemeting the SMSObjectListener
         // interface.
@@ -884,6 +899,7 @@ public class SMSLdapObject extends SMSObjectDB implements SMSObjectListener {
      * the number of entries to return, if <code>0</code> returns all the
      * entries.
      */
+    @Override
     public Set<String> searchSubOrgNames(SSOToken token, String dn, String filter,
             int numOfEntries, boolean sortResults, boolean ascendingOrder,
             boolean recursive) throws SMSException, SSOException {
@@ -979,6 +995,7 @@ public class SMSLdapObject extends SMSObjectDB implements SMSObjectListener {
      * the number of entries to return, if <code>0</code> returns all the
      * entries.
      */
+    @Override
     public Set<String> searchOrganizationNames(SSOToken token, String dn,
             int numOfEntries, boolean sortResults, boolean ascendingOrder,
             String serviceName, String attrName, Set values)
@@ -1008,7 +1025,7 @@ public class SMSLdapObject extends SMSObjectDB implements SMSObjectListener {
          * (sunxmlkeyvalue=ATTR_NAME=VALUE1))
          * (|(sunxmlkeyvalue=SERVICE_NAME-ATTR_NAME=VALUE2)
          * (sunxmlkeyvalue=ATTR_NAME=VALUE2))(...))
-         * 
+         *
          */
 
         StringBuilder sb = new StringBuilder();
@@ -1044,7 +1061,8 @@ public class SMSLdapObject extends SMSObjectDB implements SMSObjectListener {
         }
         return getOrgNames(token, dn, sfilter, numOfEntries, sortResults, ascendingOrder);
     }
-    
+
+    @Override
     public void shutdown() {
         if (!enableProxy && (smdlayer != null)) {
             smdlayer.shutdown();
