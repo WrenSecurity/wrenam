@@ -65,7 +65,7 @@ public class RadiusRequestHandlerTest {
         // given
         final RadiusRequestContext reqCtx = mock(RadiusRequestContext.class);
         final ClientConfig clientConfig = mock(ClientConfig.class);
-        String url = "forgerock.org";
+        String url = "example.org";
         InetSocketAddress socketAddress = new InetSocketAddress(Inet4Address.getByName(url), 6836);
 
         when(reqCtx.getClientConfig()).thenReturn(clientConfig);
@@ -101,7 +101,7 @@ public class RadiusRequestHandlerTest {
         // given
         final RadiusRequestContext reqCtx = mock(RadiusRequestContext.class);
         final ClientConfig clientConfig = mock(ClientConfig.class);
-        String url = "forgerock.org";
+        String url = "example.org";
         InetSocketAddress socketAddress = new InetSocketAddress(Inet4Address.getByName(url), 6836);
 
         when(reqCtx.getClientConfig()).thenReturn(clientConfig);
@@ -138,7 +138,7 @@ public class RadiusRequestHandlerTest {
         // given
         final RadiusRequestContext reqCtx = mock(RadiusRequestContext.class);
         final ClientConfig clientConfig = mock(ClientConfig.class);
-        String url = "forgerock.org";
+        String url = "example.org";
         InetSocketAddress socketAddress = new InetSocketAddress(Inet4Address.getByName(url), 6836);
 
         when(reqCtx.getClientConfig()).thenReturn(clientConfig);

@@ -39,6 +39,7 @@ import java.util.concurrent.TimeUnit;
 import org.forgerock.http.header.CookieHeader;
 import org.forgerock.http.protocol.Cookie;
 import org.forgerock.json.JsonValue;
+import org.forgerock.json.resource.ActionRequest;
 import org.forgerock.json.resource.Request;
 import org.forgerock.json.resource.http.HttpContext;
 import org.forgerock.openam.core.rest.session.query.SessionQueryManager;
@@ -89,6 +90,7 @@ public class SessionResourceUtil {
      * <ol>
      *     <li>Path of the request</li>
      *     <li>URL parameters of the request</li>
+     *     <li>Request body property</li>
      *     <li>Cookies</li>
      *     <li>HTTP headers</li>
      * </ol>
@@ -103,6 +105,10 @@ public class SessionResourceUtil {
 
         if (StringUtils.isEmpty(tokenId)) {
             tokenId = getTokenIdFromUrlParam(request);
+        }
+
+        if (StringUtils.isEmpty(tokenId) && request instanceof ActionRequest) {
+            tokenId = getTokenIdFromRequest((ActionRequest) request);
         }
 
         if (StringUtils.isEmpty(tokenId)) {
@@ -122,6 +128,11 @@ public class SessionResourceUtil {
 
     private static String getTokenIdFromUrlParam(Request request) {
         return request.getAdditionalParameter("tokenId");
+    }
+
+    private static String getTokenIdFromRequest(ActionRequest request) {
+        JsonValue tokenId = request.getContent().get("tokenId");
+        return tokenId.isString() ? tokenId.asString() : null;
     }
 
     private static String getTokenIdFromCookie(HttpContext context, String cookieName) {
