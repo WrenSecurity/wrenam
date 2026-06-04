@@ -89,7 +89,7 @@ import org.forgerock.util.promise.Promise;
  *     <li>[server-id] - Lists the sessions for that server instance.</li>
  *     <li>[session-id] - Details opf the session information </li>
  * </ul>
- * 
+ *
  *
  * This resources acts as a read only resource.
  */
@@ -163,9 +163,6 @@ public class SessionResourceV2 implements CollectionResourceProvider {
         @Action(
             operationDescription = @Operation(
                 description = SESSION_RESOURCE + GET_SESSION_INFO_ACTION_ID + "." + ACTION_DESCRIPTION,
-                parameters = @Parameter(name = TOKEN_PARAM_NAME, type = "string",
-                        description = SESSION_RESOURCE + TOKEN_PARAM_NAME + "." + PARAMETER_DESCRIPTION,
-                        source = ParameterSource.ADDITIONAL),
                 errors = {
                     @ApiError(
                         code = 401,
@@ -174,14 +171,12 @@ public class SessionResourceV2 implements CollectionResourceProvider {
                 }
             ),
             name = GET_SESSION_INFO_ACTION_ID,
+            request = @Schema(schemaResource = "SessionResource.tokenId.request.schema.json"),
             response = @Schema(fromType = PartialSession.class)
         ),
         @Action(
             operationDescription = @Operation(
                 description = SESSION_RESOURCE + LOGOUT_ACTION_ID + "." + ACTION_DESCRIPTION,
-                parameters = @Parameter(name = TOKEN_PARAM_NAME, type = "string",
-                        description = SESSION_RESOURCE + TOKEN_PARAM_NAME + "." + PARAMETER_DESCRIPTION,
-                        source = ParameterSource.ADDITIONAL),
                 errors = {
                     @ApiError(
                         code = 401,
@@ -190,14 +185,12 @@ public class SessionResourceV2 implements CollectionResourceProvider {
                 }
             ),
             name = LOGOUT_ACTION_ID,
+            request = @Schema(schemaResource = "SessionResource.tokenId.request.schema.json"),
             response = @Schema(schemaResource = "SessionResource.properties.names.schema.json")
         ),
         @Action(
             operationDescription = @Operation(
                 description = SESSION_RESOURCE + REFRESH_ACTION_ID + "." + ACTION_DESCRIPTION,
-                parameters = @Parameter(name = TOKEN_PARAM_NAME, type = "string",
-                        description = SESSION_RESOURCE + TOKEN_PARAM_NAME + "." + PARAMETER_DESCRIPTION,
-                        source = ParameterSource.ADDITIONAL),
                 errors = {
                     @ApiError(
                         code = 401,
@@ -206,14 +199,12 @@ public class SessionResourceV2 implements CollectionResourceProvider {
                 }
             ),
             name = REFRESH_ACTION_ID,
+            request = @Schema(schemaResource = "SessionResource.tokenId.request.schema.json"),
             response = @Schema(schemaResource = "SessionResource.properties.names.schema.json")
         ),
         @Action(
             operationDescription = @Operation(
                 description = SESSION_RESOURCE + GET_SESSION_PROPERTIES_ACTION_ID + "." + ACTION_DESCRIPTION,
-                parameters = @Parameter(name = TOKEN_PARAM_NAME, type = "string",
-                        description = SESSION_RESOURCE + TOKEN_PARAM_NAME + "." + PARAMETER_DESCRIPTION,
-                        source = ParameterSource.ADDITIONAL),
                 errors = {
                     @ApiError(
                         code = 401,
@@ -222,14 +213,12 @@ public class SessionResourceV2 implements CollectionResourceProvider {
                 }
             ),
             name = GET_SESSION_PROPERTIES_ACTION_ID,
+            request = @Schema(schemaResource = "SessionResource.tokenId.request.schema.json"),
             response = @Schema(schemaResource = "SessionResource.properties.names.schema.json")
         ),
         @Action(
             operationDescription = @Operation(
                 description = SESSION_RESOURCE + UPDATE_SESSION_PROPERTIES_ACTION_ID + "." + ACTION_DESCRIPTION,
-                parameters = @Parameter(name = TOKEN_PARAM_NAME, type = "string",
-                        description = SESSION_RESOURCE + TOKEN_PARAM_NAME + "." + PARAMETER_DESCRIPTION,
-                        source = ParameterSource.ADDITIONAL),
                 errors = {
                     @ApiError(
                         code = 401,
@@ -238,6 +227,7 @@ public class SessionResourceV2 implements CollectionResourceProvider {
                 }
             ),
             name = UPDATE_SESSION_PROPERTIES_ACTION_ID,
+            request = @Schema(schemaResource = "SessionResource.tokenId.request.schema.json"),
             response = @Schema(schemaResource = "SessionResource.properties.names.schema.json")
         ),
         @Action(
