@@ -230,6 +230,7 @@ public class SessionResourceTest {
 
         given(context.asContext(HttpContext.class)).willReturn(httpContext);
         given(request.getAction()).willReturn(VALIDATE_ACTION_ID);
+        given(request.getContent()).willReturn(JsonValue.json(null));
 
         //When
         Promise<ActionResponse, ResourceException> promise = sessionResource.actionCollection(context, request);
@@ -251,6 +252,7 @@ public class SessionResourceTest {
         given(context.asContext(HttpContext.class)).willReturn(httpContext);
         given(httpContext.getHeader("cookie")).willReturn(List.of("iPlanetDirectoryPro=SSO_TOKEN_ID"));
         given(request.getAction()).willReturn(VALIDATE_ACTION_ID);
+        given(request.getContent()).willReturn(JsonValue.json(null));
         given(tokenContext.getCallerSSOToken()).willReturn(ssoToken);
         given(ssoTokenManager.isValidToken(ssoToken)).willReturn(true);
         given(ssoToken.getTokenID()).willReturn(ssoTokenId);
