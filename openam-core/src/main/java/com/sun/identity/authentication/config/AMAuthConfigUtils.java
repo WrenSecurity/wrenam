@@ -25,6 +25,7 @@
  * $Id: AMAuthConfigUtils.java,v 1.5 2008/06/25 05:41:51 qcheng Exp $
  *
  * Portions Copyrighted 2011-2016 ForgeRock AS.
+ * Portions Copyrighted 2025 Wren Security.
  */
 package com.sun.identity.authentication.config;
 
@@ -635,6 +636,9 @@ public class AMAuthConfigUtils {
             attrName = ISAuthConstants.AUTH_ATTR_PREFIX_FORGEROCK + module.toLowerCase() + "-auth-level";
             if (attrs.get(attrName) == null) {
                 attrName = ISAuthConstants.AUTH_ATTR_PREFIX_NEW + module + "AuthLevel";
+                if (attrs.get(attrName) == null) {
+                    attrName = ISAuthConstants.AUTH_ATTR_PREFIX_WRENSEC + module.toLowerCase() + "-auth-level";
+                }
             }
         }
         return attrName;

@@ -20,6 +20,8 @@
  * with the fields enclosed by brackets [] replaced by
  * your own identifying information:
  * "Portions Copyrighted [year] [name of copyright owner]"
+ *
+ * Portions Copyrighted 2025 Wren Security.
  */
 
 package org.forgerock.openam.upgrade.helpers;
@@ -57,12 +59,16 @@ public class AuthServiceHelper extends AbstractUpgradeHelper {
     private final static String NEW_AUTHENTICATOR_OATH = "org.forgerock.openam.authentication.modules.fr.oath.AuthenticatorOATH";
     private final static String NEW_PUSH = "org.forgerock.openam.authentication.modules.push.AuthenticatorPush";
     private final static String NEW_PUSH_REGISTRATION = "org.forgerock.openam.authentication.modules.push.registration.AuthenticatorPushRegistration";
+    private final static String NEW_DUO = "org.wrensecurity.wrenam.authentication.modules.duo.Duo";
+    private final static String NEW_WEBAUTHN = "org.wrensecurity.wrenam.authentication.modules.webauthn.WebAuthn";
+    private final static String NEW_WEBAUTHN_REGISTRATION = "org.wrensecurity.wrenam.authentication.modules.webauthn.registration.WebAuthnRegistration";
 
     // Note: Add new modules to this array.
     private final static List<String> NEW_MODULES = Arrays.asList(
             NEW_SECURID, NEW_ADAPTIVE, NEW_OAUTH2, NEW_OATH, NEW_PERSISTENT_COOKIE,
             NEW_OPEN_ID_CONNECT, NEW_SCRIPTED, NEW_SCRIPTED_DEVICE_PRINT,
-            NEW_DEVICE_PRINT_PERSIST, NEW_SAML2, NEW_AUTHENTICATOR_OATH, NEW_PUSH, NEW_PUSH_REGISTRATION);
+            NEW_DEVICE_PRINT_PERSIST, NEW_SAML2, NEW_AUTHENTICATOR_OATH, NEW_PUSH, NEW_PUSH_REGISTRATION,
+            NEW_DUO, NEW_WEBAUTHN, NEW_WEBAUTHN_REGISTRATION);
 
     // remove modules
     private final static String SAFEWORD = "com.sun.identity.authentication.modules.safeword.SafeWord";

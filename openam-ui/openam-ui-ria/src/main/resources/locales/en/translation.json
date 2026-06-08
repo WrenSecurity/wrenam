@@ -566,6 +566,7 @@
                 "recoveryCodes": "Recovery Codes",
                 "delete": "Delete"
             },
+            "confirmDeleteText": "Are you sure you want to delete this authentication device?",
             "devicesSettingDialog": {
                 "title": "Devices Settings",
                 "description": "Configure global settings across all your devices.",

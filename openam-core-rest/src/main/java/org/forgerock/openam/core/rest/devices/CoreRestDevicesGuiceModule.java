@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions copyright 2025 Wren Security.
  */
 
 package org.forgerock.openam.core.rest.devices;
@@ -40,6 +41,10 @@ import org.forgerock.openam.core.rest.devices.services.oath.AuthenticatorOathSer
 import org.forgerock.openam.core.rest.devices.services.oath.AuthenticatorOathServiceFactory;
 import org.forgerock.openam.core.rest.devices.services.push.AuthenticatorPushService;
 import org.forgerock.openam.core.rest.devices.services.push.AuthenticatorPushServiceFactory;
+import org.forgerock.openam.core.rest.devices.services.webauthn.WebAuthnService;
+import org.forgerock.openam.core.rest.devices.services.webauthn.WebAuthnServiceFactory;
+import org.forgerock.openam.core.rest.devices.webauthn.WebAuthnDeviceSettings;
+import org.forgerock.openam.core.rest.devices.webauthn.WebAuthnDevicesDao;
 
 /**
  * Guice module for binding the device REST endpoints.
@@ -54,6 +59,8 @@ public class CoreRestDevicesGuiceModule extends AbstractModule {
                 .toInstance(new DeviceJsonUtils<>(OathDeviceSettings.class));
         bind(new TypeLiteral<DeviceJsonUtils<PushDeviceSettings>>() {})
                 .toInstance(new DeviceJsonUtils<>(PushDeviceSettings.class));
+        bind(new TypeLiteral<DeviceJsonUtils<WebAuthnDeviceSettings>>() {})
+                .toInstance(new DeviceJsonUtils<>(WebAuthnDeviceSettings.class));
     }
 
     @Provides
@@ -81,6 +88,14 @@ public class CoreRestDevicesGuiceModule extends AbstractModule {
     }
 
     @Provides
+    @Inject
+    public WebAuthnDevicesDao getWebAuthnCredentialsDao(
+            @Named(WebAuthnServiceFactory.FACTORY_NAME)
+            AuthenticatorDeviceServiceFactory<WebAuthnService> serviceFactory) {
+        return new WebAuthnDevicesDao(serviceFactory);
+    }
+
+    @Provides
     @Named(AuthenticatorPushService.SERVICE_NAME)
     ServiceConfigManager getAuthenticatorPushServiceManager() throws SMSException, SSOException {
         return new ServiceConfigManager(AccessController.doPrivileged(AdminTokenAction.getInstance()),
@@ -92,6 +107,13 @@ public class CoreRestDevicesGuiceModule extends AbstractModule {
     ServiceConfigManager getAuthenticatorOathServiceManager() throws SMSException, SSOException {
         return new ServiceConfigManager(AccessController.doPrivileged(AdminTokenAction.getInstance()),
                 AuthenticatorOathService.SERVICE_NAME, AuthenticatorOathService.SERVICE_VERSION);
+    }
+
+    @Provides
+    @Named(WebAuthnService.SERVICE_NAME)
+    ServiceConfigManager getWebAuthnServiceManager() throws SMSException, SSOException {
+        return new ServiceConfigManager(AccessController.doPrivileged(AdminTokenAction.getInstance()),
+                WebAuthnService.SERVICE_NAME, WebAuthnService.SERVICE_VERSION);
     }
 
     @Provides
@@ -117,10 +139,22 @@ public class CoreRestDevicesGuiceModule extends AbstractModule {
     }
 
     @Provides
+    @Named(WebAuthnServiceFactory.FACTORY_NAME)
+    @Inject
+    @Singleton
+    AuthenticatorDeviceServiceFactory<WebAuthnService> getWebAuthnServiceFactory(
+            @Named("frRest") Debug debug,
+            @Named(WebAuthnService.SERVICE_NAME) ServiceConfigManager serviceConfigManager) {
+        return new AuthenticatorDeviceServiceFactory<>(debug, serviceConfigManager,
+                new WebAuthnServiceFactory());
+    }
+
+    @Provides
     @Named(TrustedDeviceServiceFactory.FACTORY_NAME)
     @Inject
     AuthenticatorDeviceServiceFactory<TrustedDeviceService> getTrustedDeviceServiceFactory(
             @Named("frRest") Debug debug) {
         return new AuthenticatorDeviceServiceFactory<>(debug, null, new TrustedDeviceServiceFactory());
     }
+
 }

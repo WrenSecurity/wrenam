@@ -27,7 +27,7 @@
     $Id: amAuth.xml,v 1.16 2009/11/25 12:06:32 manish_rustagi Exp $
 
     Portions Copyrighted 2011-2017 ForgeRock AS.
-    Portions Copyrighted 2023 Wren Security
+    Portions Copyrighted 2023-2025 Wren Security.
 -->
 
 <!DOCTYPE ServicesConfiguration
@@ -78,6 +78,8 @@
                         <Value>org.forgerock.openam.authentication.modules.push.registration.AuthenticatorPushRegistration</Value>
                         <Value>org.forgerock.openam.authentication.modules.amster.Amster</Value>
                         <Value>org.wrensecurity.wrenam.authentication.modules.duo.Duo</Value>
+                        <Value>org.wrensecurity.wrenam.authentication.modules.webauthn.WebAuthn</Value>
+                        <Value>org.wrensecurity.wrenam.authentication.modules.webauthn.registration.WebAuthnRegistration</Value>
                     </DefaultValues>
                 </AttributeSchema>
                 <AttributeSchema name="iplanet-am-auth-ldap-connection-pool-size"

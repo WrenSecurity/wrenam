@@ -41,6 +41,7 @@ import org.forgerock.openam.core.rest.dashboard.DashboardResource;
 import org.forgerock.openam.core.rest.devices.deviceprint.TrustedDevicesResource;
 import org.forgerock.openam.core.rest.devices.oath.OathDevicesResource;
 import org.forgerock.openam.core.rest.devices.push.PushDevicesResource;
+import org.forgerock.openam.core.rest.devices.webauthn.WebAuthnDevicesResource;
 import org.forgerock.openam.core.rest.docs.api.ApiDocsService;
 import org.forgerock.openam.core.rest.docs.api.ApiService;
 import org.forgerock.openam.core.rest.identity.AllAuthenticatedUsersResourceV1;
@@ -143,6 +144,11 @@ public class CoreRestRouteProvider extends AbstractRestRouteProvider {
                 .auditAs(DEVICES)
                 .authorizeWith(ResourceOwnerOrSuperUserAuthzModule.class)
                 .toAnnotatedCollection(PushDevicesResource.class);
+
+        realmRouter.route("users/{user}/devices/webauthn")
+                .auditAs(DEVICES)
+                .authorizeWith(ResourceOwnerOrSuperUserAuthzModule.class)
+                .toAnnotatedCollection(WebAuthnDevicesResource.class);
 
         realmRouter.route("sessions")
                 .authenticateWith(ssoToken().exceptActions("validate"))
