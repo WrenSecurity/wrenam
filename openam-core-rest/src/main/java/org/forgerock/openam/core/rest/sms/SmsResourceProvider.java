@@ -345,11 +345,13 @@ public abstract class SmsResourceProvider implements Describable<ApiDescription,
 
     private LocalizableString getSchemaI18N(String i18nKey, LocalizableString defaultValue) {
         String i18NFileName = schema.getI18NFileName();
-        return new LocalizableString(TRANSLATION_KEY_PREFIX + i18NFileName + "#"+ i18nKey, CLASS_LOADER, defaultValue);
+        return new LocalizableString(TRANSLATION_KEY_PREFIX + i18NFileName + "#"+ URLEncDec.encode(i18nKey),
+                CLASS_LOADER, defaultValue);
     }
 
     private LocalizableString getConsoleI18N(String i18nKey, LocalizableString defaultValue) {
-        return new LocalizableString(TRANSLATION_KEY_PREFIX + "amConsole" + "#" + URLEncDec.encode(i18nKey), CLASS_LOADER, defaultValue);
+        return new LocalizableString(TRANSLATION_KEY_PREFIX + "amConsole" + "#" + URLEncDec.encode(i18nKey),
+                CLASS_LOADER, defaultValue);
     }
 
     JsonValue createSchema(Optional<Context> context) {
@@ -614,13 +616,8 @@ public abstract class SmsResourceProvider implements Describable<ApiDescription,
             Map<String, String> valuesMap = attribute.getChoiceValuesMap(environment);
             for (Map.Entry<String, String> value : valuesMap.entrySet()) {
                 values.add(value.getKey());
-                if (AttributeSchema.UIType.SCRIPTSELECT.equals(attribute.getUIType())
-                        || AttributeSchema.UIType.GLOBALSCRIPTSELECT.equals(attribute.getUIType())) {
-                    descriptions.add(getConsoleI18N(value.getValue(), new LocalizableString(value.getValue())));
-                } else {
-                    descriptions.add(getConsoleI18N(value.getValue() == null ? value.getKey() : value.getValue(),
-                            new LocalizableString(value.getKey())));
-                }
+                String i18nKey = value.getValue() == null ? value.getKey() : value.getValue();
+                descriptions.add(getSchemaI18N(i18nKey, getConsoleI18N(i18nKey, new LocalizableString(i18nKey))));
             }
             jsonValue.add(ENUM, values);
             jsonValue.putPermissive(new JsonPointer("options/enum_titles"), descriptions);
