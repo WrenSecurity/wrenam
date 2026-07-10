@@ -12,7 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
- * Portions Copyright 2021 Wren Security.
+ * Portions Copyright 2021-2026 Wren Security.
  */
 package org.forgerock.openam.oauth2;
 
@@ -151,6 +151,11 @@ public class AgentClientRegistrationTest {
     @Test
     public void consentIsImplied() {
         assertThat(agentClientRegistration.isConsentImplied()).isEqualTo(true);
+    }
+
+    @Test
+    public void logoutConfirmationIsNotRequired() {
+        assertThat(agentClientRegistration.isLogoutConfirmationRequired()).isFalse();
     }
 
     @Test

@@ -103,8 +103,7 @@ public class OpenIDConnectProvider {
 
             JsonValue idTokenUserSessionToken = tokenAdapter.fromToken(opsToken);
             cts.delete(opsId);
-            String sessionId = getFirstItem(idTokenUserSessionToken.get(OAuth2Constants.JWTTokenParams.LEGACY_OPS)
-                    .asCollection(String.class));
+            String sessionId = getSessionId(idTokenUserSessionToken);
 
             // for some grant type, there is no OpenAM session associated with a id_token
             if (sessionId != null) {
@@ -118,5 +117,34 @@ public class OpenIDConnectProvider {
             logger.error("Unable to get SsoTokenManager", e);
             throw new ServerException("Unable to get SsoTokenManager");
         }
+    }
+
+    /**
+     * Determines whether the given ops token references the given SSO session.
+     *
+     * @param opsId The ops token id, as carried by an ID Token's {@code ops} claim.
+     * @param session The SSO session to match against, usually the current one.
+     * @return {@code true} if the ops token references the given SSO session.
+     */
+    public boolean isOpsTokenForSession(String opsId, SSOToken session) {
+        if (opsId == null || session == null) {
+            return false;
+        }
+        try {
+            Token opsToken = cts.read(opsId);
+            if (opsToken == null) {
+                return false;
+            }
+            String sessionId = getSessionId(tokenAdapter.fromToken(opsToken));
+            return sessionId != null && sessionId.equals(session.getTokenID().toString());
+        } catch (Exception e) {
+            logger.debug("Unable to verify the session referenced by the id_token_hint", e);
+            return false;
+        }
+    }
+
+    private String getSessionId(JsonValue idTokenUserSessionToken) {
+        return getFirstItem(idTokenUserSessionToken.get(OAuth2Constants.JWTTokenParams.LEGACY_OPS)
+                .asCollection(String.class));
     }
 }

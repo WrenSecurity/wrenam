@@ -13,7 +13,7 @@
  *
  * Copyright 2014-2016 ForgeRock AS.
  * Portions Copyrighted 2015 Nomura Research Institute, Ltd.
- * Portions Copyright 2023 Wren Security.
+ * Portions Copyright 2023-2026 Wren Security.
  */
 
 package org.forgerock.oauth2.core;
@@ -937,6 +937,11 @@ public class RealmOAuth2ProviderSettings implements OAuth2ProviderSettings {
     @Override
     public boolean clientsCanSkipConsent() throws ServerException {
         return Boolean.parseBoolean(getStringSettingValue(OAuth2Constants.OAuth2ProviderService.CLIENTS_CAN_SKIP_CONSENT));
+    }
+
+    @Override
+    public boolean isLogoutConfirmationRequired() throws ServerException {
+        return Boolean.parseBoolean(getStringSettingValue(OAuth2Constants.OAuth2ProviderService.REQUIRE_LOGOUT_CONFIRMATION));
     }
 
     @Override

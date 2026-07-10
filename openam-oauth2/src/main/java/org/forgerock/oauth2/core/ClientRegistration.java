@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014-2016 ForgeRock AS.
+ * Portions Copyright 2026 Wren Security
  */
 
 package org.forgerock.oauth2.core;
@@ -149,4 +150,13 @@ public interface ClientRegistration {
      * @return true if the client is configured to skip resource owner consent.
      */
     boolean isConsentImplied();
+
+    /**
+     * Gets whether the client requires the end user to confirm its RP-Initiated Logout requests even when they are
+     * trusted, that is, when they carry a valid ID Token referencing the current user session.
+     *
+     * @return {@code true} if logout confirmation is required for the client.
+     */
+    boolean isLogoutConfirmationRequired();
+
 }

@@ -13,7 +13,7 @@
  *
  * Copyright 2014-2016 ForgeRock AS.
  * Portions Copyrighted 2015 Nomura Research Institute, Ltd.
- * Portions Copyright 2021 Wren Security.
+ * Portions Copyright 2021-2026 Wren Security.
  */
 
 package org.forgerock.openam.oauth2;
@@ -141,6 +141,18 @@ public class OpenAMClientRegistrationTest extends AbstractMockBasedTest {
         setUpAgentToThrowExceptionForAttribute(OAuth2Constants.OAuth2Client.POST_LOGOUT_URI);
 
         clientRegistration.getPostLogoutRedirectUris();
+    }
+
+    @Test
+    public void logoutConfirmationRequirementReflectsClientConfiguration() throws Exception {
+        setUpAgentWithAttribute(OAuth2Constants.OAuth2Client.REQUIRE_LOGOUT_CONFIRMATION, "true");
+
+        assertThat(clientRegistration.isLogoutConfirmationRequired()).isTrue();
+    }
+
+    @Test
+    public void logoutConfirmationIsNotRequiredByDefault() {
+        assertThat(clientRegistration.isLogoutConfirmationRequired()).isFalse();
     }
 
     @Test
