@@ -68,7 +68,7 @@ public final class NotificationsWebSocketFilter implements Filter {
             throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
-        String tokenId = request.getHeader(authUtilsWrapper.getCookieName());
+        String tokenId = request.getHeader(authUtilsWrapper.getCookieHeaderName());
         if (StringUtils.isNotEmpty(tokenId)) {
             SSOToken ssoToken = tokenFactory.getTokenFromId(tokenId);
             if (ssoToken != null) {

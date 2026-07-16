@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2013-2016 ForgeRock AS.
+ * Portions Copyright 2026 Wren Security
  */
 
 package org.forgerock.openam.rest;
@@ -161,6 +162,7 @@ public class LocalSSOTokenSessionModule implements AsyncServerAuthModule {
                 SSOToken requesterToken = getFactory().getTokenFromId(requester);
                 if (getFactory().isTokenValid(requesterToken)) {
                     Object o = RestrictedTokenContext.doUsing(requesterToken, new RestrictedTokenAction() {
+                        @Override
                         public Object run() throws Exception {
                             return validate(request, messageInfo, clientSubject);
                         }
@@ -173,15 +175,6 @@ public class LocalSSOTokenSessionModule implements AsyncServerAuthModule {
             }
         }
         return validate(request, messageInfo, clientSubject);
-    }
-
-    /**
-     * Gets the AM cookie name, as set by AM.
-     *
-     * @return The AM cookie name.
-     */
-    private String getCookieHeaderName() {
-        return authUtilsWrapper.getCookieName();
     }
 
     /**
@@ -204,7 +197,7 @@ public class LocalSSOTokenSessionModule implements AsyncServerAuthModule {
 
         String tokenId = getRequestUtils().getTokenId(request);
         if (StringUtils.isEmpty(tokenId)) {
-            tokenId = request.getHeader(getCookieHeaderName());
+            tokenId = request.getHeader(authUtilsWrapper.getCookieHeaderName());
         }
         if (!StringUtils.isEmpty(tokenId)) {
             SSOToken ssoToken = getFactory().getTokenFromId(tokenId);

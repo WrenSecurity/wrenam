@@ -17,11 +17,15 @@
 package com.sun.identity.shared.encode;
 
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.only;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.util.Collections;
 import java.util.Set;
 import org.testng.annotations.DataProvider;
@@ -96,6 +100,39 @@ public class CookieUtilsTest {
         HttpServletRequest request = mock(HttpServletRequest.class);
         when(request.getServerName()).thenReturn(host);
         return request;
+    }
+
+    @DataProvider(name = "cookieHeaderNames")
+    public Object[][] cookieHeaderNames() {
+        return new Object[][] {
+                // cookie name, header name
+                { "iPlanetDirectoryPro", "iPlanetDirectoryPro" },
+                { "__Host-iPlanetDirectoryPro", "iPlanetDirectoryPro" },
+                { "__HOST-iPlanetDirectoryPro", "iPlanetDirectoryPro" },
+                { "__Secure-iPlanetDirectoryPro", "iPlanetDirectoryPro" },
+                { "__secure-iPlanetDirectoryPro", "iPlanetDirectoryPro" },
+        };
+    }
+
+    @Test(dataProvider = "cookieHeaderNames")
+    public void shouldGetCookieHeaderName(String cookieName, String headerName) {
+        assertEquals(CookieUtils.getCookieHeaderName(cookieName), headerName);
+    }
+
+    @DataProvider(name = "responseCookies")
+    public Object[][] responseCookies() {
+        return new Object[][] {
+            { CookieUtils.newCookie("foo", "bar"), "foo=bar; Path=/" },
+            { CookieUtils.newCookie("foo", "bar", "/hello", "example.org"), "foo=bar; Path=/hello; Domain=example.org" },
+            { CookieUtils.newCookie("__Host-foo", "bar", "/", "example.org"), "__Host-foo=bar; Path=/" }
+        };
+    }
+
+    @Test(dataProvider = "responseCookies")
+    public void shouldAddCookieToResponse(Cookie cookie, String expected) {
+        HttpServletResponse response = mock(HttpServletResponse.class);
+        CookieUtils.addCookieToResponse(response, cookie);
+        verify(response, only()).addHeader("Set-Cookie", expected);
     }
 
 }

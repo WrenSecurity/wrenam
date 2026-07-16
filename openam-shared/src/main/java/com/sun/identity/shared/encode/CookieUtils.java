@@ -30,30 +30,33 @@
 
 package com.sun.identity.shared.encode;
 
-import static org.forgerock.openam.utils.Time.currentTimeMillis;
-
 import com.sun.identity.shared.Constants;
 import com.sun.identity.shared.configuration.SystemPropertiesManager;
 import com.sun.identity.shared.debug.Debug;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.text.SimpleDateFormat;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
-import java.util.TimeZone;
 
 /**
  * Implements utility methods for handling Cookie.
  */
 public class CookieUtils {
+
+    static final String SECURE_COOKIE_PREFIX = "__Secure-";
+
+    static final String HOST_COOKIE_PREFIX = "__Host-";
+
     static boolean secureCookie =
         (SystemPropertiesManager.get(Constants.AM_COOKIE_SECURE) != null) &&
         (SystemPropertiesManager.get(Constants.AM_COOKIE_SECURE).
@@ -78,7 +81,8 @@ public class CookieUtils {
     static String fedCookieName = SystemPropertiesManager.get(
         Constants.FEDERATION_FED_COOKIE_NAME);
 
-    private static Set cookieDomains = null;
+    private static Set<String> cookieDomains = null;
+
     private static int defAge = -1;
 
     static Debug debug = Debug.getInstance("amCookieUtils");
@@ -90,6 +94,24 @@ public class CookieUtils {
      */
     public static String getAmCookieName() {
         return amCookieName;
+    }
+
+    /**
+     * Get name of a HTTP header that can be used as substitute value holder for a cookie
+     * with the given name.
+     *
+     * @param cookieName name of the cookie
+     * @return suitable HTTP header name
+     */
+    public static String getCookieHeaderName(String cookieName) {
+        String lowercaseName = cookieName.toLowerCase();
+        if (lowercaseName.startsWith(SECURE_COOKIE_PREFIX.toLowerCase())) {
+            return cookieName.substring(SECURE_COOKIE_PREFIX.length());
+        }
+        if (lowercaseName.startsWith(HOST_COOKIE_PREFIX.toLowerCase())) {
+            return cookieName.substring(HOST_COOKIE_PREFIX.length());
+        }
+        return cookieName;
     }
 
     /**
@@ -106,14 +128,14 @@ public class CookieUtils {
      *
      * @return the property value of "com.iplanet.services.cdsso.cookiedomain"
      */
-    public static Set getCdssoCookiedomain() {
+    public static Set<String> getCdssoCookiedomain() {
         if (cookieDomains != null) {
             return cookieDomains;
         }
 
-        Set cookieDomains = new HashSet();
+        Set<String> cookieDomains = new HashSet<>();
         if (cdssoCookiedomain == null || cdssoCookiedomain.length() < 1) {
-            return Collections.EMPTY_SET;
+            return Collections.emptySet();
         }
 
         StringTokenizer st = new StringTokenizer(cdssoCookiedomain, ",");
@@ -124,7 +146,7 @@ public class CookieUtils {
             }
         }
 
-        return cookieDomains.isEmpty() ? Collections.EMPTY_SET : cookieDomains;
+        return cookieDomains.isEmpty() ? Collections.emptySet() : cookieDomains;
     }
 
     /**
@@ -358,12 +380,15 @@ public class CookieUtils {
             cookie.setPath("/");
         }
 
-        if ((domain != null) && (domain.length() > 0)) {
-            cookie.setDomain(domain);
+        if (domain != null && domain.length() > 0) {
+            // Ignore domain when the name has __Host- prefix
+            if (!name.toLowerCase().startsWith(HOST_COOKIE_PREFIX.toLowerCase())) {
+                cookie.setDomain(domain);
+            }
         }
 
+        cookie.setHttpOnly(isCookieHttpOnly());
         cookie.setSecure(isCookieSecure());
-
         return cookie;
     }
 
@@ -397,49 +422,65 @@ public class CookieUtils {
     /**
      * Add cookie to {@link HttpServletResponse}.
      *
-     * @param response HTTP response to update. Never null.
+     * @param response HTTP response to update. Can be null.
      * @param cookie Cookie to add. Never null.
      * @param crossDomain Whether to set the SameSite cookie attribute to <code>None</code>.
      */
     public static void addCookieToResponse(HttpServletResponse response, Cookie cookie, boolean crossDomain) {
         if (cookie == null) {
-            return;
+            return; // This can unfortunately happen (see AuthClientUtils)
         }
 
-        StringBuilder sb = new StringBuilder(150);
-        sb.append(cookie.getName()).append("=").append(cookie.getValue());
+        String cookieString = renderSetCookieValue(cookie, crossDomain);
+        if (debug.messageEnabled()) {
+            debug.message("CookieUtils:addCookieToResponse adds " + cookieString);
+        }
+        response.addHeader("Set-Cookie", cookieString);
+    }
+
+    /**
+     * Render <code>Set-Cookie</code> header valut.
+     *
+     * @param cookie Cookie to render. Never null.
+     * @param crossDomain Whether to set the SameSite cookie attribute to <code>None</code>.
+     * @return Rendered <code>Set-Cookie</code> header value.
+     */
+    public static String renderSetCookieValue(Cookie cookie, boolean crossDomain) {
+        StringBuilder sb = new StringBuilder(150)
+                .append(cookie.getName()).append("=").append(cookie.getValue());
+
         String path = cookie.getPath();
         if (path != null && path.length() > 0) {
             sb.append("; Path=").append(path);
         } else {
             sb.append("; Path=/");
         }
+
         String domain = cookie.getDomain();
         if (domain != null && domain.length() > 0) {
             sb.append("; Domain=").append(domain);
         }
+
         int age = cookie.getMaxAge();
         if (age > -1) {
-            Date date = new Date(currentTimeMillis() + age * 1000l);
-            SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd-MMM-yyyy HH:mm:ss zzz", Locale.UK);
-            sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
             sb.append("; Max-Age=").append(age);
-            // set Expires as < IE 8 does not support max-age
-            sb.append("; Expires=").append(sdf.format(date));
+            // Support for Expires as < IE 8 does not support max-age
+            ZonedDateTime expires = ZonedDateTime.now(ZoneOffset.UTC).plusSeconds(age);
+            sb.append("; Expires=").append(DateTimeFormatter.RFC_1123_DATE_TIME.format(expires));
         }
-        if (isCookieSecure() || cookie.getSecure()) {
+
+        if (cookie.isHttpOnly()) {
+            sb.append("; HttpOnly");
+        }
+
+        if (cookie.getSecure()) {
             sb.append("; Secure");
             if (crossDomain) {
                 sb.append("; SameSite=None");
             }
         }
-        if (isCookieHttpOnly() || cookie.isHttpOnly()) {
-            sb.append("; HttpOnly");
-        }
-        if (debug.messageEnabled()) {
-            debug.message("CookieUtils:addCookieToResponse adds " + sb);
-        }
-        response.addHeader("Set-Cookie", sb.toString());
+
+        return sb.toString();
     }
 
     /**

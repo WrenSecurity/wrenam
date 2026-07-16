@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions Copyright 2026 Wren Security
  */
 
 /**
@@ -27,7 +28,8 @@ function cookieName () {
 }
 
 function cookieDomains () {
-    return Configuration.globalData.auth.cookieDomains;
+    const hostOnly = cookieName().toLowerCase().startsWith("__host-");
+    return hostOnly ? [] : Configuration.globalData.auth.cookieDomains;
 }
 
 function secureCookie () {
@@ -43,5 +45,5 @@ export function get () {
 }
 
 export function remove () {
-    return CookieHelper.deleteCookie(cookieName(), "/", cookieDomains());
+    return CookieHelper.deleteCookie(cookieName(), "/", cookieDomains(), secureCookie());
 }
