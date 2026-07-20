@@ -25,7 +25,7 @@
  * $Id: AuthUtils.java,v 1.33 2009/12/15 16:39:47 qcheng Exp $
  *
  * Portions Copyrighted 2010-2016 ForgeRock AS.
- * Portions Copyrighted 2025 Wren Security
+ * Portions Copyrighted 2025-2026 Wren Security
  */
 package com.sun.identity.authentication.service;
 
@@ -443,9 +443,6 @@ public class AuthUtils extends AuthClientUtils {
                 utilDebug.message("Create AM AUTH cookie");
             }
             cookie = createCookie(cookieName,sidString,cookieDomain);
-            if (CookieUtils.isCookieSecure()) {
-                cookie.setSecure(true);
-            }
         } catch (Exception e) {
             if (utilDebug.messageEnabled()) {
                 utilDebug.message("Error getting sid : " + e.getMessage());

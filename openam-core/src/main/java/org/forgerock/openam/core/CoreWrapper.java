@@ -63,7 +63,6 @@ public class CoreWrapper {
      * @return Set containing String values representing levels.
      * @throws SSOException if {@code token.getProperty()} fails.
      */
-    @SuppressWarnings("unchecked")
     public Set<String> getAuthenticatedLevels(SSOToken token) throws SSOException {
         return AMAuthUtils.getAuthenticatedLevels(token);
     }

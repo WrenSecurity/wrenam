@@ -25,7 +25,7 @@
  * $Id: AuthClientUtils.java,v 1.40 2010/01/22 03:31:01 222713 Exp $
  *
  * Portions Copyrighted 2010-2016 ForgeRock AS.
- * Portions Copyrighted 2023-2025 Wren Security
+ * Portions Copyrighted 2023-2026 Wren Security
  */
 package com.sun.identity.authentication.client;
 
@@ -1340,7 +1340,7 @@ public class AuthClientUtils {
                 // Ignore the exception and leave cookieDomains empty;
                 utilDebug.message("getCookieDomains - SMSException ");
             }
-            if (cookieDomains == null) {
+            if (cookieDomains == null || cookieDomains.isEmpty()) {
                 cookieDomains = Collections.singleton(null);
             }
         } catch (SSOException ex) {
@@ -1902,11 +1902,7 @@ public class AuthClientUtils {
     }
 
     public static Cookie createCookie(String name, String value, int maxAge, String cookieDomain) {
-
-        Cookie pCookie = CookieUtils.newCookie(name, value, "/", cookieDomain);
-        if (maxAge >= 0) {
-            pCookie.setMaxAge(maxAge);
-        }
+        Cookie pCookie = CookieUtils.newCookie(name, value, maxAge, "/", cookieDomain);
 
         if (utilDebug.messageEnabled()) {
             utilDebug.message("pCookie='{}'", pCookie);
@@ -1936,7 +1932,7 @@ public class AuthClientUtils {
     /**
      * Returns the Cookie object created based on the <code>cookieName</code>,
      * Session ID and <code>cookieDomain</code>.
-     * If <code>AuthContext,/code> status is not <code>SUCCESS</code> then
+     * If <code>AuthContext</code> status is not <code>SUCCESS</code> then
      * cookie is created with authentication cookie Name, else AM Cookie Name
      * will be used to create cookie.
      *

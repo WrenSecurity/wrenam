@@ -26,6 +26,7 @@ import org.forgerock.http.protocol.Response;
 import org.forgerock.http.protocol.Status;
 import org.forgerock.json.JsonValue;
 import org.forgerock.json.resource.ResourceException;
+import org.forgerock.openam.core.CoreWrapper;
 import org.forgerock.openam.core.rest.authn.RestAuthenticationHandler;
 import org.forgerock.openam.core.rest.authn.exceptions.RestAuthException;
 import org.forgerock.openam.core.rest.authn.exceptions.RestAuthResponseException;
@@ -39,11 +40,12 @@ public class AuthenticationServiceV2 extends AuthenticationServiceV1 {
     /**
      * Constructs an instance of the AuthenticationRestService.
      *
+     * @param coreWrapper an instance of CoreWrapper.
      * @param restAuthenticationHandler An instance of the RestAuthenticationHandler.
      */
     @Inject
-    public AuthenticationServiceV2(RestAuthenticationHandler restAuthenticationHandler) {
-        super(restAuthenticationHandler);
+    public AuthenticationServiceV2(CoreWrapper coreWrapper, RestAuthenticationHandler restAuthenticationHandler) {
+        super(coreWrapper, restAuthenticationHandler);
     }
 
     @Override

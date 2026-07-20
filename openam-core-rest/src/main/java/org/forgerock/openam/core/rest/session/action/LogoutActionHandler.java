@@ -31,6 +31,7 @@ import com.iplanet.sso.SSOException;
 import com.iplanet.sso.SSOToken;
 import com.iplanet.sso.SSOTokenManager;
 import com.sun.identity.shared.debug.Debug;
+import com.sun.identity.shared.encode.CookieUtils;
 import org.forgerock.json.JsonValue;
 import org.forgerock.json.resource.ActionRequest;
 import org.forgerock.json.resource.ActionResponse;
@@ -52,10 +53,9 @@ public class LogoutActionHandler implements ActionHandler {
 
     private static final Debug LOGGER = Debug.getInstance(SessionConstants.SESSION_DEBUG);
 
-    private AuthUtilsWrapper authUtilsWrapper;
-    private SSOTokenManager ssoTokenManager;
+    private final AuthUtilsWrapper authUtilsWrapper;
 
-
+    private final SSOTokenManager ssoTokenManager;
 
     /**
      * Constructs a LogoutActionHandler instance
@@ -89,7 +89,7 @@ public class LogoutActionHandler implements ActionHandler {
 
         @Override
         public void addCookie(Cookie cookie) {
-            adviceContext.putAdvice(SET_COOKIE_HEADER, renderCookieHeader(cookie));
+            adviceContext.putAdvice(SET_COOKIE_HEADER, CookieUtils.renderSetCookieValue(cookie, false));
 
         }
 
@@ -102,29 +102,6 @@ public class LogoutActionHandler implements ActionHandler {
         public void addHeader(String name, String value) {
             adviceContext.putAdvice(name, value);
         }
-    }
-
-    public String renderCookieHeader(Cookie cookie) {
-        StringBuilder header = new StringBuilder();
-        header.append(cookie.getName()).append("=").append(cookie.getValue());
-
-        if (cookie.getMaxAge() >= 0) {
-            header.append("; Max-Age=").append(cookie.getMaxAge());
-        }
-        if (cookie.getDomain() != null) {
-            header.append("; Domain=").append(cookie.getDomain());
-        }
-        if (cookie.getPath() != null) {
-            header.append("; Path=").append(cookie.getPath());
-        }
-        if (cookie.getSecure()) {
-            header.append("; Secure");
-        }
-        if (cookie.isHttpOnly()) {
-            header.append("; HttpOnly");
-        }
-
-        return header.toString();
     }
 
     @Override
@@ -196,6 +173,9 @@ public class LogoutActionHandler implements ActionHandler {
                 throw new InternalServerErrorException("Error logging out", e);
             }
 
+            // remove SSO cookie if set
+            removeSsoCookies(httpServletRequest, httpServletResponse);
+
             //equiv to LogoutViewBean's POST_PROCESS_LOGOUT_URL usage
             String papRedirect = authUtilsWrapper.getPostProcessLogoutURL(httpServletRequest);
             if (!StringUtils.isBlank(papRedirect)) {
@@ -207,4 +187,18 @@ public class LogoutActionHandler implements ActionHandler {
         LOGGER.message("SessionResource.logout() :: Successfully logged out token, {}", tokenId);
         return new JsonValue(map);
     }
+
+    private void removeSsoCookies(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+        if (httpServletResponse == null) {
+            return; // missing advice context
+        }
+
+        String cookieName = CookieUtils.getAmCookieName();
+        if (cookieName != null && CookieUtils.getCookieFromReq(httpServletRequest, cookieName) != null) {
+            for (String domain : authUtilsWrapper.getCookieDomainsForRequest(httpServletRequest)) {
+                httpServletResponse.addCookie(CookieUtils.newCookie(cookieName, "", 0, null, domain));
+            }
+        }
+    }
+
 }

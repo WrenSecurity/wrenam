@@ -33,6 +33,7 @@ import org.forgerock.http.protocol.Request;
 import org.forgerock.http.protocol.Response;
 import org.forgerock.http.protocol.Status;
 import org.forgerock.json.JsonValue;
+import org.forgerock.openam.core.CoreWrapper;
 import org.forgerock.openam.core.rest.authn.RestAuthenticationHandler;
 import org.forgerock.openam.core.rest.authn.exceptions.RestAuthException;
 import org.forgerock.openam.core.rest.authn.exceptions.RestAuthResponseException;
@@ -45,7 +46,7 @@ public class AuthenticationServiceV2Test {
 
     @BeforeMethod
     public void setUp() throws Exception {
-        authServiceV2 = new AuthenticationServiceV2(mock(RestAuthenticationHandler.class));
+        authServiceV2 = new AuthenticationServiceV2(mock(CoreWrapper.class), mock(RestAuthenticationHandler.class));
     }
 
     @Test

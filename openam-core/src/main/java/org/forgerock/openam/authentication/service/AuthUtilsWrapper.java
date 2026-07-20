@@ -22,6 +22,7 @@ import com.sun.identity.authentication.spi.AMPostAuthProcessInterface;
 import com.sun.identity.shared.encode.CookieUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.Collection;
 
 /**
  * Wrapper class around AuthUtils to facilitate testing.
@@ -35,6 +36,16 @@ public class AuthUtilsWrapper {
      */
     public String getCookieName() {
         return AuthUtils.getCookieName();
+    }
+
+    /**
+     * Gets the configured cookie domains for the server matching the current request's domains.
+     *
+     * @param request The HTTP request.
+     * @return The matching cookie domains for the current request.
+     */
+    public Collection<String> getCookieDomainsForRequest(HttpServletRequest request) {
+        return AuthUtils.getCookieDomainsForRequest(request);
     }
 
     /**
