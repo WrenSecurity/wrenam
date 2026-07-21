@@ -12,7 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Portions copyright 2014-2016 ForgeRock AS.
- * Portions copyright 2024 Wren Security.
+ * Portions copyright 2024-2026 Wren Security.
  */
 
 define([
@@ -20,10 +20,9 @@ define([
     "org/forgerock/commons/ui/common/main/Configuration",
     "org/forgerock/openam/ui/common/services/ServerService",
     "org/forgerock/openam/ui/common/util/isRealmChanged",
-    "org/forgerock/openam/ui/user/login/tokens/SessionToken",
     "org/forgerock/openam/ui/user/services/SessionService",
     "UserProfileView"
-], ($, Configuration, ServerService, isRealmChanged, SessionToken, SessionService, UserProfileView) => {
+], ($, Configuration, ServerService, isRealmChanged, SessionService, UserProfileView) => {
     isRealmChanged = isRealmChanged.default;
 
     const obj = {};
@@ -53,17 +52,14 @@ define([
      * @returns {Promise} promise empty promise
      */
     obj.checkForDifferences = function () {
-        const sessionToken = SessionToken.get();
-
-        if (sessionToken) {
-            return SessionService.updateSessionInfo().then(() => {
-                if (isRealmChanged()) {
-                    location.href = "#confirmLogin/";
-                }
-            });
-        } else {
-            return $.Deferred().resolve();
-        }
+        // The session token may be stored in an HttpOnly cookie and is therefore not readable here, so we ask the
+        // server for the current session. A missing/invalid session (e.g. an anonymous user) is treated as a no-op.
+        const suppressError = { errorsHandlers: { "Unauthorized": { status: 401 } } };
+        return SessionService.updateSessionInfo(suppressError).then(() => {
+            if (isRealmChanged()) {
+                location.href = "#confirmLogin/";
+            }
+        }, () => $.Deferred().resolve());
     };
 
     return obj;

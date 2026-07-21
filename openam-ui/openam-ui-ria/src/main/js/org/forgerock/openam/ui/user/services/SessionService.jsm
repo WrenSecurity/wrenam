@@ -69,7 +69,9 @@ export const updateSessionInfo = (options) => {
     });
 };
 
-export const isSessionValid = () => getSessionInfo().then((response) => _.has(response, "username"));
+export const isSessionValid = () => getSessionInfo({
+    errorsHandlers: { "Unauthorized": { status: 401 } }
+}).then((response) => _.has(response, "username"), () => false);
 
 export const logout = () => {
     const gotoUrl = Configuration.gotoURL;

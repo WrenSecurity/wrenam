@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions copyright 2026 Wren Security.
  */
 
 define([
@@ -46,7 +47,10 @@ define([
 
         if (shouldAutoLogin(response, destination)) {
             const tokenId = _.get(response, "additions.tokenId");
-            SessionToken.set(tokenId);
+            // In HttpOnly cookie mode the server sets the SSO cookie itself and returns an empty tokenId.
+            if (tokenId) {
+                SessionToken.set(tokenId);
+            }
             RESTLoginView.handleExistingSession(response.additions);
         } else if (shouldRouteToLoginView(response, destination)) {
             window.location.href = `#login${realm}`;

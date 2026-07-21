@@ -12,7 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Portions copyright 2011-2016 ForgeRock AS.
- * Portions copyright 2024-2025 Wren Security.
+ * Portions copyright 2024-2026 Wren Security.
  */
 
 define([
@@ -162,7 +162,7 @@ define([
                     location.href = "#confirmLogin/";
                 } else {
                     Configuration.setProperty("loggedUser", user);
-                    RESTLoginHelper.setSuccessURL(requirements.tokenId, requirements.successUrl).then(() => {
+                    RESTLoginHelper.setSuccessURL(requirements.successUrl).then(() => {
                         if (Configuration.globalData.auth.validatedGoto) {
                             window.location.href = Configuration.globalData.auth.validatedGoto;
                             $("body").empty();

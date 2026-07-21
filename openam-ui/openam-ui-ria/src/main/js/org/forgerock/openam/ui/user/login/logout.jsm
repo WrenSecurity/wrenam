@@ -12,7 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
- * Portions copyright 2024 Wren Security.
+ * Portions copyright 2024-2026 Wren Security.
  */
 
 /**
@@ -21,27 +21,21 @@
 
 import $ from "jquery";
 import Configuration from "org/forgerock/commons/ui/common/main/Configuration";
-import {
-    get as getSessionToken, remove as removeSessionToken
-} from "org/forgerock/openam/ui/user/login/tokens/SessionToken";
+import { remove as removeSessionToken } from "org/forgerock/openam/ui/user/login/tokens/SessionToken";
 import { isSessionValid, logout as serviceLogout } from "org/forgerock/openam/ui/user/services/SessionService";
 
 const logout = () => {
-    const sessionToken = getSessionToken();
     Configuration.setProperty("loggedUser", null);
 
-    if (sessionToken) {
-        return isSessionValid().then((isValid) => {
-            if (isValid) {
-                return serviceLogout();
-            } else {
-                return $.Deferred().resolve();
-            }
-        })
-            .then(removeSessionToken, removeSessionToken);
-    } else {
-        return $.Deferred().resolve();
-    }
+    // The session token may be stored in an HttpOnly cookie and is therefore not readable here, so we ask the
+    // server whether there is a valid session before invalidating it.
+    return isSessionValid().then((isValid) => {
+        if (isValid) {
+            return serviceLogout();
+        } else {
+            return $.Deferred().resolve();
+        }
+    }).then(removeSessionToken, removeSessionToken);
 };
 
 export default logout;
