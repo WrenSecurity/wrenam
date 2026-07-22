@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2017-2022 ForgeRock AS.
+ * Portions copyright 2026 Wren Security.
  */
 
 import PropTypes from "prop-types";
@@ -22,6 +23,7 @@ class HeaderSelection extends Component {
         this.update(this.props.checked);
     }
 
+    // eslint-disable-next-line camelcase
     UNSAFE_componentWillReceiveProps (props) {
         this.update(props.checked);
     }

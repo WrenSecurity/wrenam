@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2018-2019 ForgeRock AS.
+ * Portions copyright 2026 Wren Security.
  */
 
 /**
@@ -21,9 +22,9 @@ import { omitBy, startsWith } from "lodash";
 
 import AbstractDelegate from "org/forgerock/commons/ui/common/main/AbstractDelegate";
 import Constants from "org/forgerock/openam/ui/common/util/Constants";
-import fetchUrl from "api/fetchUrl";
+import fetchUrl from "org/forgerock/openam/ui/common/services/fetchUrl";
 
-const obj = new AbstractDelegate(`${Constants.host}${Constants.context}/json`);
+const obj = new AbstractDelegate(`${Constants.host}/${Constants.context}/json`);
 
 export function getSchema (realm) {
     return obj.serviceCall({

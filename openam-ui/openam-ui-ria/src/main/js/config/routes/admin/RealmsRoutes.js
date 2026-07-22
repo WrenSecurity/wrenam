@@ -12,7 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
- * Portions copyright 2024 Wren Security.
+ * Portions copyright 2024-2026 Wren Security.
  */
 
 define(function () {
@@ -267,6 +267,42 @@ define(function () {
                 page: "org/forgerock/openam/ui/admin/views/realms/authorization/resourceTypes/EditResourceTypeView",
                 url: scopedByRealm("authorization-resourceTypes/new"),
                 pattern: "realms/?/authorization-resourceTypes/new",
+                role: "ui-realm-admin",
+                navGroup: "admin",
+                forceUpdate: true
+            },
+            "realmsIdentities": {
+                view: "org/forgerock/openam/ui/admin/views/realms/RealmTreeNavigationView",
+                page: "org/forgerock/openam/ui/admin/views/realms/identities/Identities",
+                url: scopedByRealm("identities"),
+                pattern: "realms/?/identities",
+                role: "ui-realm-admin",
+                navGroup: "admin",
+                forceUpdate: true
+            },
+            "realmsIdentitiesGroupsEdit": {
+                view: "org/forgerock/openam/ui/admin/views/realms/RealmTreeNavigationView",
+                page: "org/forgerock/openam/ui/admin/views/realms/identities/groups/edit/EditGroupContainer",
+                url: scopedByRealm("identities/groups/edit/([^/]*)"),
+                pattern: "realms/?/identities/groups/edit/?",
+                role: "ui-realm-admin",
+                navGroup: "admin",
+                forceUpdate: true
+            },
+            "realmsIdentitiesAllAuthenticatedEdit": {
+                view: "org/forgerock/openam/ui/admin/views/realms/RealmTreeNavigationView",
+                page: "org/forgerock/openam/ui/admin/views/realms/identities/groups/edit/EditAllAuthenticatedContainer",
+                url: scopedByRealm("identities/groups/edit/allAuthenticatedIdentities"),
+                pattern: "realms/?/identities/groups/edit/?",
+                role: "ui-realm-admin",
+                navGroup: "admin",
+                forceUpdate: true
+            },
+            "realmsIdentitiesGroupsNew": {
+                view: "org/forgerock/openam/ui/admin/views/realms/RealmTreeNavigationView",
+                page: "org/forgerock/openam/ui/admin/views/realms/identities/groups/new/NewGroupContainer",
+                url: scopedByRealm("identities/groups/new"),
+                pattern: "realms/?/identities/groups/new",
                 role: "ui-realm-admin",
                 navGroup: "admin",
                 forceUpdate: true

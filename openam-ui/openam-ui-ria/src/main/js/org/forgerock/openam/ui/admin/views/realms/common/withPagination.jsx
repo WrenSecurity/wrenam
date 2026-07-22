@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2018-2024 ForgeRock AS.
+ * Portions copyright 2026 Wren Security.
  */
 
 import React, { Component } from "react";
@@ -79,19 +80,19 @@ const withPagination = (WrappedComponent) => {
         };
 
         handleDataDelete = (numToRemove) => {
-            // This handler will change the dataTotalSize with will in turn trigger the reload of the data from
-            // the endpoint.
             const { dataTotalSize, pagedResultsOffset, sizePerPage } = this.state;
             const numItemsFromOffset = dataTotalSize - pagedResultsOffset;
             const lastPage = numItemsFromOffset <= sizePerPage;
             const multiplePages = dataTotalSize / sizePerPage > 1;
             const removedAllItemsFromLastPage = numItemsFromOffset === numToRemove;
+            const movesToPreviousPage = multiplePages && lastPage && removedAllItemsFromLastPage;
 
-            if (multiplePages && lastPage && removedAllItemsFromLastPage) {
+            if (movesToPreviousPage) {
                 this.handlePageChange(this.state.page - 1, sizePerPage);
             }
 
             this.setState({ dataTotalSize: dataTotalSize - numToRemove });
+            return movesToPreviousPage;
         };
 
         handleTableChange = (type, newState) => {

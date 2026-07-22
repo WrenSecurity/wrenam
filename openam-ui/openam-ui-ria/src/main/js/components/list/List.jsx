@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2017-2022 ForgeRock AS.
+ * Portions copyright 2026 Wren Security.
  */
 
 import { isEmpty, isEqual, map, omit } from "lodash";
@@ -30,6 +31,7 @@ class List extends Component {
         this.state = { selectedItems: [] };
     }
 
+    // eslint-disable-next-line camelcase
     UNSAFE_componentWillReceiveProps (nextProps) {
         const listHasChanged = !isEqual(
             map(this.props.items, this.props.keyField).sort(),

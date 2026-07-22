@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2018-2019 ForgeRock AS.
+ * Portions copyright 2026 Wren Security.
  */
 
 import { Form, Panel } from "react-bootstrap";
@@ -26,6 +27,15 @@ import JSONValues from "org/forgerock/openam/ui/common/models/JSONValues";
 import Loading from "components/Loading";
 
 class EditGroupPrivileges extends Component {
+    constructor (props) {
+        super(props);
+
+        this.state = {
+            isEditorReady: false
+        };
+    }
+
+    // eslint-disable-next-line camelcase
     UNSAFE_componentWillReceiveProps (nextProps) {
         if (this.jsonSchemaView) {
             this.jsonSchemaView.setData(nextProps.values);
@@ -37,7 +47,8 @@ class EditGroupPrivileges extends Component {
         if (!this.jsonSchemaView && this.props.values) {
             this.jsonSchemaView = new FlatJSONSchemaView({
                 schema: new JSONSchema(this.props.schema),
-                values: new JSONValues(this.props.values)
+                values: new JSONValues(this.props.values),
+                onRendered: this.handleEditorRendered
             });
             this.jsonForm.appendChild(this.jsonSchemaView.render().el);
         }
@@ -45,6 +56,10 @@ class EditGroupPrivileges extends Component {
 
     setRef = (element) => {
         this.jsonForm = element;
+    };
+
+    handleEditorRendered = () => {
+        this.setState({ isEditorReady: true });
     };
 
     handleSave = () => {
@@ -70,7 +85,7 @@ class EditGroupPrivileges extends Component {
             <Panel className="fr-panel-tab">
                 <Panel.Body>{ content }</Panel.Body>
                 <Panel.Footer>
-                    <EditFooter onSaveClick={ this.handleSave } />
+                    <EditFooter disabled={ !this.state.isEditorReady } onSaveClick={ this.handleSave } />
                 </Panel.Footer>
             </Panel>
         );

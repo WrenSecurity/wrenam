@@ -12,13 +12,12 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2017-2019 ForgeRock AS.
+ * Portions copyright 2026 Wren Security.
  */
 import { combineReducers } from "redux";
 
-import global from "./global";
-import realm from "./realm";
+import realm from "./realm/index";
 
 export default combineReducers({
-    global,
     realm
 });

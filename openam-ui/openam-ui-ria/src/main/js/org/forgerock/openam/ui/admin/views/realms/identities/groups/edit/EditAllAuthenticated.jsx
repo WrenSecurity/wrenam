@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2018-2019 ForgeRock AS.
+ * Portions copyright 2026 Wren Security.
  */
 
 import { Form, Panel } from "react-bootstrap";
@@ -27,6 +28,15 @@ import Loading from "components/Loading";
 import PageHeader from "components/PageHeader";
 
 class EditAllAuthenticated extends Component {
+    constructor (props) {
+        super(props);
+
+        this.state = {
+            isEditorReady: false
+        };
+    }
+
+    // eslint-disable-next-line camelcase
     UNSAFE_componentWillReceiveProps (nextProps) {
         if (this.jsonSchemaView) {
             this.jsonSchemaView.setData(nextProps.values);
@@ -38,7 +48,8 @@ class EditAllAuthenticated extends Component {
         if (!this.jsonSchemaView && this.props.values && this.props.schema) {
             this.jsonSchemaView = new FlatJSONSchemaView({
                 schema: new JSONSchema(this.props.schema),
-                values: new JSONValues(this.props.values)
+                values: new JSONValues(this.props.values),
+                onRendered: this.handleEditorRendered
             });
             this.jsonForm.appendChild(this.jsonSchemaView.render().el);
         }
@@ -46,6 +57,10 @@ class EditAllAuthenticated extends Component {
 
     setRef = (element) => {
         this.jsonForm = element;
+    };
+
+    handleEditorRendered = () => {
+        this.setState({ isEditorReady: true });
     };
 
     handleSave = () => {
@@ -75,7 +90,7 @@ class EditAllAuthenticated extends Component {
                 <Panel>
                     <Panel.Body>{ content }</Panel.Body>
                     <Panel.Footer>
-                        <EditFooter disabled={ this.props.isFetching } onSaveClick={ this.handleSave } />
+                        <EditFooter disabled={ !this.state.isEditorReady } onSaveClick={ this.handleSave } />
                     </Panel.Footer>
                 </Panel>
             </div>

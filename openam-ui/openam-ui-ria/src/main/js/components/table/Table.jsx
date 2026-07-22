@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2017-2024 ForgeRock AS.
+ * Portions copyright 2026 Wren Security.
  */
 
 import BootstrapTable from "react-bootstrap-table-next";
@@ -21,11 +22,6 @@ import PropTypes from "prop-types";
 import React from "react";
 
 import RowSelection from "components/table/selection/RowSelection";
-
-import {
-    PLACEHOLDER_TYPES,
-    isPlaceholder
-} from "org/forgerock/commons/ui/common/util/PlaceholderUtils";
 
 const Table = ({ keyField, onRowClick, onSelectedChange, options = {}, selectedItems, tableRef, ...restProps }) => {
     const handleSelect = (row, isSelected) => {
@@ -51,32 +47,6 @@ const Table = ({ keyField, onRowClick, onSelectedChange, options = {}, selectedI
     // BootstrapTable requires an onTableChange prop to be passed,
     // so if it does not exist in options, pass an empty function
     const onTableChange = options.onTableChange || function () {};
-
-    for (let i = 0; i < restProps.data.length; i++) {
-        const current = restProps.data[i];
-        const keys = Object.keys(current);
-        for (let j = 0; j < keys.length; j++) {
-            const current = restProps.data[i][keys[j]];
-            PLACEHOLDER_TYPES.forEach((type) => {
-                if (current && current[type]) {
-                    try {
-                        restProps.data[i][keys[j]] = current[type];
-                    } catch (error) {
-                        // just ignore
-                    }
-                }
-            });
-            if ((!keys[j].startsWith("_")) && (restProps.data[i][keys[j]])) {
-                try {
-                    if (isPlaceholder(restProps.data[i][keys[j]])) {
-                        restProps.data[i][keys[j]] = [restProps.data[i][keys[j]]];
-                    }
-                } catch (error) {
-                    // just ignore
-                }
-            }
-        }
-    }
 
     return (
         <BootstrapTable

@@ -11,13 +11,12 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2025 Wren Security
+ * Copyright 2025-2026 Wren Security
  */
 package org.forgerock.openam.core.rest.identity;
 
 import static org.forgerock.json.JsonPointer.ptr;
 import static org.forgerock.json.resource.Responses.newActionResponse;
-import static org.forgerock.json.resource.Responses.newQueryResponse;
 import static org.forgerock.openam.core.rest.identity.IdentityRestUtils.getIdentityServicesAttributes;
 import static org.forgerock.openam.rest.RestUtils.isContractConformantUserProvidedIdCreate;
 import static org.forgerock.util.promise.Promises.newResultPromise;
@@ -32,6 +31,7 @@ import com.sun.identity.idsvcs.TokenExpired;
 import com.sun.identity.idsvcs.opensso.GeneralAccessDeniedError;
 import com.sun.identity.idsvcs.opensso.IdentityServicesImpl;
 import com.sun.identity.shared.debug.Debug;
+import java.util.ArrayList;
 import java.util.List;
 import org.forgerock.api.models.Schema;
 import org.forgerock.json.JsonPointer;
@@ -60,6 +60,7 @@ import org.forgerock.openam.forgerockrest.utils.PrincipalRestUtils;
 import org.forgerock.openam.forgerockrest.utils.ServerContextUtils;
 import org.forgerock.openam.rest.DescriptorUtils;
 import org.forgerock.openam.rest.RestConstants;
+import org.forgerock.openam.rest.query.QueryResponsePresentation;
 import org.forgerock.openam.utils.CrestQuery;
 import org.forgerock.services.context.Context;
 import org.forgerock.util.promise.Promise;
@@ -237,15 +238,19 @@ public class IdentityResourceV4 implements CollectionResourceProvider {
             debug.message("IdentityResourceV4.queryCollection :: QUERY performed on realm "
                     + realmName + " by " + principalName);
 
+            List<ResourceResponse> resourceResponses = new ArrayList<>(result.size());
             for (IdentityDetails identityDetails : result) {
-                handler.handleResource(identityMapper.toBasicResourceResponse(context, identityDetails));
+                resourceResponses.add(identityMapper.toBasicResourceResponse(context, identityDetails));
             }
+            // FIXME: The repository can stop searching at its configured limit even when more identities match
+            // IdentityServicesImpl returns that partial list but drops the SIZE_LIMIT_EXCEEDED status
+            // With 1,001 matching groups and a limit of 1,000, this reports exactly 1,000 and group 1,001
+            // cannot be reached
+            return QueryResponsePresentation.perform(handler, request, resourceResponses);
         } catch (Exception e) {
             debug.error("IdentityResourceV4.queryCollection :: Cannot QUERY collection", e);
             return new InternalServerErrorException(e.getMessage(), e).asPromise();
         }
-
-        return newResultPromise(newQueryResponse());
     }
 
     @Override

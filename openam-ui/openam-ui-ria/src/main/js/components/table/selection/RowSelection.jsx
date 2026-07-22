@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2017-2022 ForgeRock AS.
+ * Portions copyright 2026 Wren Security.
  */
 
 import PropTypes from "prop-types";
@@ -20,14 +21,12 @@ import React, { Component } from "react";
 import HeaderSelection from "./HeaderSelection";
 
 /**
-* Table row selection component.
-* @see https://github.com/AllenFang/react-bootstrap-table/blob/master/examples/js/selection/custom-multi-select-table.js
-* @returns {ReactElement} react row selection component
-*/
+ * Table row selection component.
+ * @see https://github.com/AllenFang/react-bootstrap-table/blob/master/examples/js/selection/custom-multi-select-table.js
+ */
 class RowSelection extends Component {
     handleSelect = () => {};
     render () {
-        /* eslint-disable jsx-a11y/label-has-associated-control */
         if (this.props.rowIndex === "Header") {
             return (
                 <div className="checkbox">
@@ -50,7 +49,6 @@ class RowSelection extends Component {
                 </div>
             );
         }
-        /* eslint-enable jsx-a11y/label-has-associated-control */
     }
 }
 

@@ -375,7 +375,9 @@
                 "shouldBeLong" : "Should be long value",
                 "wrongDateFormat" : "Wrong format"
             },
-            "inheritValue": "Inherit value"
+            "inheritValue": "Inherit value",
+            "addAll": "Add all",
+            "removeAll": "Remove all"
         },
         "grid": {
             "pagination": {
@@ -718,6 +720,7 @@
                 "edit" : "Edit",
                 "general": "General",
                 "global-services" : "Global Services",
+                "groups": "Groups",
                 "modules": "Modules",
                 "new" : "New",
                 "oauth20": "OAuth 2.0",
@@ -740,6 +743,7 @@
                 "sites": "Sites",
                 "sts": "STS",
                 "subjects": "Subjects",
+                "identities": "Identities",
                 "uma": "UMA",
                 "wsfed": "WS-Fed",
                 "applications-agents" : "Applications - Agents"
@@ -757,7 +761,8 @@
             "realmDefaults": "Realm Defaults",
             "dynamicAttributes": "Dynamic Attributes",
             "globalAttributes": "Global Attributes",
-            "global": "Global"
+            "global": "Global",
+            "loading": "Loading..."
         },
         "sites" : {
             "common" : {
@@ -941,6 +946,37 @@
                 },
                 "confirmDeleteSelected": "Are you sure you want to delete the selected configuration?",
                 "callToAction": "No secondary configurations found"
+            }
+        },
+        "identities": {
+            "tabs": ["Groups"],
+            "title": "Identities",
+            "groups": {
+                "confirmDeleteSelected": "Are you sure you want to delete the selected group?",
+                "confirmDeleteSelected_plural": "Are you sure you want to delete the selected groups?",
+                "confirmDeleteSelectedWithUsers": "Are you sure you want to delete the selected group? This group still contains assigned users.",
+                "confirmDeleteSelectedWithUsers_plural": "Are you sure you want to delete the selected groups? At least one of them still contains assigned users.",
+                "list": {
+                    "allAuthenticatedButton": "All Authenticated Identities",
+                    "grid": ["Name"],
+                    "callToAction": {
+                        "title": "No groups configured.",
+                        "description": "Configure groups of identities for easier use in policies.",
+                        "button": "Add Group"
+                    }
+                },
+                "new": {
+                    "title": "New Group",
+                    "groupId": "Group ID"
+                },
+                "edit": {
+                    "allAuthenticated": {
+                        "title": "All Authenticated Identities",
+                        "type": "Group Privileges"
+                    },
+                    "tabs": ["Members", "Privileges"],
+                    "type": "Group"
+                }
             }
         },
         "dataStores": {

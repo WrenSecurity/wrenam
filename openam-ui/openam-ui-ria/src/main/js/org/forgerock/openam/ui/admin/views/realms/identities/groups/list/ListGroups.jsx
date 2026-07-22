@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2018-2022 ForgeRock AS.
+ * Portions copyright 2026 Wren Security.
  */
 
 import { ButtonToolbar, Panel } from "react-bootstrap";
@@ -36,7 +37,7 @@ const ListGroups = (props) => {
         : null;
     const columns = [{
         title: identity,
-        dataField: "username",
+        dataField: "name",
         formatter: dataFormatReact(
             <FontAwesomeIconCell icon="folder" />
         ),
@@ -56,8 +57,7 @@ const ListGroups = (props) => {
                     additionalButtons={ <AllAuthenticatedButton /> }
                     columns={ columns }
                     description={ t("console.identities.groups.list.callToAction.description") }
-                    keyField="username"
-                    onPageChange={ props.onPageChange }
+                    keyField="_id"
                     title={ t("console.identities.groups.list.callToAction.title") }
                 />
             </Panel.Body>
@@ -67,8 +67,7 @@ const ListGroups = (props) => {
 
 ListGroups.propTypes = {
     items: PropTypes.arrayOf(PropTypes.object).isRequired,
-    newHref: PropTypes.string.isRequired,
-    onPageChange: PropTypes.func.isRequired
+    newHref: PropTypes.string.isRequired
 };
 
 export default ListGroups;

@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions copyright 2026 Wren Security.
  */
 
 define([
@@ -35,9 +36,11 @@ define([
         return _.drop(allFragments, droppedFragments);
     }
 
-    function getTitle (fragment, index) {
-        const title = index === 0 ? $.t(`console.common.navigation.${fragment}`) : fragment;
-        return decodeURIComponent(title);
+    function getTitle (fragment, translate) {
+        const decodedFragment = decodeURIComponent(fragment);
+        return translate
+            ? $.t(`console.common.navigation.${decodedFragment}`, { defaultValue: decodedFragment })
+            : decodedFragment;
     }
 
     function createPath (allFragments, index, base) {
@@ -85,7 +88,7 @@ define([
          * */
         let count = shiftStartPosition(fragmentPaths, lastFragmentPattern);
         _.forEachRight(fragmentPaths, (crumb, index) => {
-            const title = getTitle(crumb, index);
+            const title = getTitle(crumb, index === FIRST_CRUMB || fragmentTypes[count] !== "INSTANCE");
             const path = createPath(fragmentPaths, index, base);
 
             if (index === LAST_CRUMB) {

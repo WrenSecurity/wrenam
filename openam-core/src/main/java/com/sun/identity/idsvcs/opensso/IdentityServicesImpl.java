@@ -25,6 +25,7 @@
  * $Id: IdentityServicesImpl.java,v 1.20 2010/01/06 19:11:17 veiming Exp $
  *
  * Portions Copyrighted 2010-2016 ForgeRock AS.
+ * Portions Copyrighted 2026 Wren Security.
  */
 
 package com.sun.identity.idsvcs.opensso;
@@ -336,9 +337,9 @@ public class IdentityServicesImpl implements com.sun.identity.idsvcs.IdentitySer
             }
 
             if (IdType.GROUP.equals(objectIdType) || IdType.ROLE.equals(objectIdType)) {
-                Set<String> members = asSet(identity.getMemberList());
-                if (!members.isEmpty()) {
-                    setMembers(repo, amIdentity, members, IdType.USER);
+                ListWrapper memberList = identity.getMemberList();
+                if (memberList != null) {
+                    setMembers(repo, amIdentity, asSet(memberList), IdType.USER);
                 }
             }
         } catch (IdRepoException ex) {

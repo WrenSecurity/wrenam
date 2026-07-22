@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2018-2019 ForgeRock AS.
+ * Portions copyright 2026 Wren Security.
  */
 
 /**
@@ -23,14 +24,14 @@ import AbstractDelegate from "org/forgerock/commons/ui/common/main/AbstractDeleg
 import Constants from "org/forgerock/openam/ui/common/util/Constants";
 import constructFieldParams from "org/forgerock/openam/ui/admin/services/constructFieldParams";
 import constructPaginationParams from "org/forgerock/openam/ui/admin/services/constructPaginationParams";
-import fetchUrl from "api/fetchUrl";
+import fetchUrl from "org/forgerock/openam/ui/common/services/fetchUrl";
 
-const obj = new AbstractDelegate(`${Constants.host}${Constants.context}/json`);
+const obj = new AbstractDelegate(`${Constants.host}/${Constants.context}/json`);
 
 export function getSchema (realm) {
     return obj.serviceCall({
         url: fetchUrl("/groups?_action=schema", { realm }),
-        headers: { "Accept-API-Version": "protocol=2.0,resource=1.0" },
+        headers: { "Accept-API-Version": "protocol=2.0,resource=4.0" },
         type: "POST"
     });
 }

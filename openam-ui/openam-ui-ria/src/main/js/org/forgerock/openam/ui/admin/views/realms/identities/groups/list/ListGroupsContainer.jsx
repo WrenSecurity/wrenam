@@ -12,9 +12,10 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2018-2022 ForgeRock AS.
+ * Portions copyright 2026 Wren Security.
  */
 import { bindActionCreators } from "redux";
-import { findIndex, isEqual, map, values } from "lodash";
+import { findIndex, isEqual, map, pick } from "lodash";
 import { t } from "i18next";
 import PropTypes from "prop-types";
 import React, { Component } from "react";
@@ -31,6 +32,10 @@ import withPagination, { withPaginationPropTypes }
 import withRouter from "org/forgerock/commons/ui/common/components/hoc/withRouter";
 import withRouterPropType from "org/forgerock/commons/ui/common/components/hoc/withRouterPropType";
 
+const REQUEST_PAGINATION_FIELDS = [
+    "page", "pagedResultsOffset", "searchTerm", "sizePerPage", "sortDirection", "sortKey"
+];
+
 class ListGroupsContainer extends Component {
     constructor () {
         super();
@@ -44,8 +49,11 @@ class ListGroupsContainer extends Component {
         this.handleTableDataChange(this.props.pagination);
     }
 
+    // eslint-disable-next-line camelcase
     UNSAFE_componentWillReceiveProps (nextProps) {
-        if (!isEqual(this.props.pagination, nextProps.pagination)) {
+        // Reload only when request pagination values change
+        if (!isEqual(pick(this.props.pagination, REQUEST_PAGINATION_FIELDS),
+            pick(nextProps.pagination, REQUEST_PAGINATION_FIELDS))) {
             this.handleTableDataChange(nextProps.pagination);
         }
     }
@@ -60,10 +68,15 @@ class ListGroupsContainer extends Component {
             });
         };
 
-        const removeUsers = (realm, ids) => {
+        const removeGroups = (realm, ids) => {
             remove(realm, ids).then(() => {
-                Messages.addMessage({ message: t("config.messages.CommonMessages.changesSaved") });
-                this.props.pagination.onDataDelete(ids.length);
+                Messages.addMessage({ message: t("config.messages.AppMessages.changesSaved") });
+                const pagination = this.props.pagination;
+                const movesToPreviousPage = pagination.onDataDelete(ids.length);
+                // Reload directly when deletion does not move to another page
+                if (!movesToPreviousPage) {
+                    this.handleTableDataChange(pagination);
+                }
             }, (response) => {
                 Messages.addMessage({ response, type: Messages.TYPE_DANGER });
             });
@@ -76,7 +89,7 @@ class ListGroupsContainer extends Component {
                 : t("console.identities.groups.confirmDeleteSelected", { count: ids.length });
 
             showConfirmationBeforeAction({ message }, () => {
-                removeUsers(realm, ids);
+                removeGroups(realm, ids);
             });
         });
     };
@@ -94,10 +107,18 @@ class ListGroupsContainer extends Component {
     handleTableDataChange = (pagination) => {
         const realm = this.props.router.params[0];
         const additionalParams = {
-            fields: ["username"],
-            pagination
+            fields: ["name"],
+            pagination: {
+                ...pagination,
+                sortKey: pagination.sortKey || "name"
+            }
         };
         getAll(realm, additionalParams).then((response) => {
+            // Ignore responses superseded by a newer table request
+            if (!isEqual(pick(pagination, REQUEST_PAGINATION_FIELDS),
+                pick(this.props.pagination, REQUEST_PAGINATION_FIELDS))) {
+                return;
+            }
             this.setState({ isFetching: false });
             this.props.pagination.onDataChange(response);
             this.props.setInstances(response.result);
@@ -137,7 +158,7 @@ ListGroupsContainer.propTypes = {
 
 ListGroupsContainer = connectWithStore(ListGroupsContainer,
     (state) => ({
-        groups: values(state.remote.config.realm.identities.groups.instances)
+        groups: state.remote.config.realm.identities.groups.instances
     }),
     (dispatch) => ({
         setInstances: bindActionCreators(setInstances, dispatch)

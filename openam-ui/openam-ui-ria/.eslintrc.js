@@ -128,7 +128,8 @@ module.exports = {
             // react specific rules
             files: ["*.jsx"],
             rules: {
-                "no-class-assign": 0
+                "no-class-assign": 0,
+                "react/forbid-prop-types": 0
             }
         }
     ]

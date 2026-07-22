@@ -12,21 +12,12 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2017-2019 ForgeRock AS.
+ * Portions copyright 2026 Wren Security.
  */
 import { combineReducers } from "redux";
 
-import applications from "./applications";
-import authentication from "./authentication";
-import datastores from "./datastores";
-import identities from "./identities";
-import secretStores from "./secretStores";
-import sts from "./sts";
+import identities from "./identities/index";
 
 export default combineReducers({
-    applications,
-    authentication,
-    datastores,
-    identities,
-    secretStores,
-    sts
+    identities
 });

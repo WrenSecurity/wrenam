@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2018-2019 ForgeRock AS.
+ * Portions copyright 2026 Wren Security.
  */
 
 import { bindActionCreators } from "redux";
@@ -49,6 +50,7 @@ class EditGroupContainer extends Component {
         Promise.all([
             getSchema(realm),
             getGroup(realm, id),
+            // FIXME: The datastore search limit can make the member picker and Add All omit users in large realms
             getAllUsers(realm)
         ]).then(([schema, values, users]) => {
             this.setState({ isFetching: false });
@@ -100,7 +102,7 @@ class EditGroupContainer extends Component {
         const id = this.props.router.params[1];
 
         update(realm, data, id).then(() => {
-            Messages.addMessage({ message: t("config.messages.CommonMessages.changesSaved") });
+            Messages.addMessage({ message: t("config.messages.AppMessages.changesSaved") });
         }, (response) => {
             Messages.addMessage({ response, type: Messages.TYPE_DANGER });
         });
@@ -112,18 +114,18 @@ class EditGroupContainer extends Component {
         event.preventDefault();
 
         FormHelper.showConfirmationBeforeDeleting({
-            message: t("console.common.confirmDeleteItem")
+            type: t("console.identities.groups.edit.type").toLowerCase()
         }, () => {
             const realm = this.props.router.params[0];
             const id = this.props.router.params[1];
 
             remove(realm, [id]).then(() => {
-                Messages.addMessage({ message: t("config.messages.CommonMessages.changesSaved") });
+                Messages.addMessage({ message: t("config.messages.AppMessages.changesSaved") });
 
                 Router.routeTo(Router.configuration.routes.realmsIdentities, {
                     args: [encodeURIComponent(realm)], trigger: true
                 });
-            }, (model, response) => {
+            }, (response) => {
                 Messages.addMessage({ response, type: Messages.TYPE_DANGER });
             });
         });

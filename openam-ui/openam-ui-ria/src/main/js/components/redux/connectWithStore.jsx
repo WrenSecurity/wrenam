@@ -12,12 +12,13 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2017-2019 ForgeRock AS.
+ * Portions copyright 2026 Wren Security.
  */
 
 import { connect } from "react-redux";
 import React from "react";
 
-import store from "store";
+import store from "store/index";
 
 const getDisplayName = (WrappedComponent) => {
     return WrappedComponent.displayName || WrappedComponent.name || "Component";
@@ -30,7 +31,7 @@ const getDisplayName = (WrappedComponent) => {
  * @returns {ReactComponent} Wrapped component
  * @example
  * import connectWithStore from "components/redux/connectWithStore"
- * import store from "store";
+ * import store from "store/index";
  *
  * class MyReactComponent extends Component { ... }
  *

@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2018-2019 ForgeRock AS.
+ * Portions copyright 2026 Wren Security.
  */
 
 import { bindActionCreators } from "redux";
@@ -56,7 +57,7 @@ class EditAllAuthenticatedContainer extends Component {
         const realm = this.props.router.params[0];
 
         update(realm, { privileges }).then(() => {
-            Messages.addMessage({ message: t("config.messages.CommonMessages.changesSaved") });
+            Messages.addMessage({ message: t("config.messages.AppMessages.changesSaved") });
         }, (response) => {
             Messages.addMessage({ response, type: Messages.TYPE_DANGER });
         });
