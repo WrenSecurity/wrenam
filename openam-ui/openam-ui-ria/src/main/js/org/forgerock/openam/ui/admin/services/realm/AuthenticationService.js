@@ -12,7 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
- * Portions copyright 2024 Wren Security.
+ * Portions copyright 2024-2026 Wren Security.
  */
 
 /**
@@ -24,9 +24,11 @@ define([
     "org/forgerock/commons/ui/common/main/AbstractDelegate",
     "org/forgerock/commons/ui/common/util/Constants",
     "org/forgerock/openam/ui/admin/services/SMSServiceUtils",
+    "org/forgerock/openam/ui/common/models/JSONSchema",
+    "org/forgerock/openam/ui/common/models/JSONValues",
     "org/forgerock/openam/ui/common/services/fetchUrl",
     "org/forgerock/openam/ui/common/util/Promise"
-], ($, _, AbstractDelegate, Constants, SMSServiceUtils, fetchUrl, Promise) => {
+], ($, _, AbstractDelegate, Constants, SMSServiceUtils, JSONSchema, JSONValues, fetchUrl, Promise) => {
     const obj = new AbstractDelegate(`${Constants.host}/${Constants.context}/json`);
 
     obj.authentication = {
@@ -157,11 +159,20 @@ define([
                     data: JSON.stringify(data)
                 });
             },
-            get (realm, name, type, options) {
-                return obj.serviceCall(_.merge({
+            get (realm, name, type) {
+                const getValues = () => obj.serviceCall({
                     url: fetchUrl.default(`/realm-config/authentication/modules/${type}/${name}`, { realm }),
                     headers: { "Accept-API-Version": "protocol=1.0,resource=1.0" }
-                }, options)).then((data) => data);
+                }).then((response) => new JSONValues(response));
+
+                return Promise.all([
+                    this.schema(realm, type),
+                    getValues()
+                ]).then(([schema, values]) => ({
+                    name: values.raw._type.name,
+                    schema,
+                    values
+                }));
             },
             exists (realm, name) {
                 var promise = $.Deferred(),
@@ -189,8 +200,8 @@ define([
                     url: fetchUrl.default(`/realm-config/authentication/modules/${type}/${name}`, { realm }),
                     headers: { "Accept-API-Version": "protocol=1.0,resource=1.0" },
                     type: "PUT",
-                    data: JSON.stringify(data)
-                });
+                    data: new JSONValues(data).toJSON()
+                }).then((response) => new JSONValues(response));
             },
             types: {
                 all (realm) {
@@ -199,12 +210,6 @@ define([
                         headers: { "Accept-API-Version": "protocol=1.0,resource=1.0" },
                         type: "POST"
                     }).done(SMSServiceUtils.sortResultBy("name"));
-                },
-                get (realm, type) {
-                    // TODO: change this to a proper server-side call when OPENAM-7242 is implemented
-                    return obj.authentication.modules.types.all(realm).then(function (data) {
-                        return _.find(data.result, { "_id": type });
-                    });
                 }
             },
             schema (realm, type) {
@@ -212,9 +217,7 @@ define([
                     url: fetchUrl.default(`/realm-config/authentication/modules/${type}?_action=schema`, { realm }),
                     headers: { "Accept-API-Version": "protocol=1.0,resource=1.0" },
                     type: "POST"
-                }).then(function (data) {
-                    return SMSServiceUtils.sanitizeSchema(data);
-                });
+                }).then((data) => new JSONSchema(data));
             }
         }
     };
