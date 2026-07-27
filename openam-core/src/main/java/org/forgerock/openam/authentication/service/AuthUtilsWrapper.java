@@ -19,7 +19,7 @@ package org.forgerock.openam.authentication.service;
 import com.iplanet.sso.SSOException;
 import com.sun.identity.authentication.service.AuthUtils;
 import com.sun.identity.authentication.spi.AMPostAuthProcessInterface;
-
+import com.sun.identity.shared.encode.CookieUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -35,6 +35,16 @@ public class AuthUtilsWrapper {
      */
     public String getCookieName() {
         return AuthUtils.getCookieName();
+    }
+
+    /**
+     * Get name of the HTTP header that can hold AM cookie value.
+     *
+     * @return The AM cookie header name.
+     */
+    public String getCookieHeaderName() {
+        String cookieName = getCookieName();
+        return cookieName != null ? CookieUtils.getCookieHeaderName(cookieName) : null;
     }
 
     /**

@@ -97,7 +97,7 @@ public class NotificationsWebSocketFilterTest extends GuiceTestCase {
     public void setUp() throws Exception {
         ssoToken = mock(SSOToken.class);
         identity = mock(AMIdentity.class);
-        when(authUtilsWrapper.getCookieName()).thenReturn(COOKIE_NAME);
+        when(authUtilsWrapper.getCookieHeaderName()).thenReturn(COOKIE_NAME);
         request = mock(HttpServletRequest.class);
         response = mock(HttpServletResponse.class);
         filterChain = mock(FilterChain.class);

@@ -12,7 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
- * Portions copyright 2024 Wren Security.
+ * Portions copyright 2024-2026 Wren Security.
  */
 
 package org.forgerock.openam.core.rest.session;
@@ -32,6 +32,7 @@ import com.sun.identity.idm.AMIdentity;
 import com.sun.identity.idm.IdRepoException;
 import com.sun.identity.shared.Constants;
 import com.sun.identity.shared.debug.Debug;
+import com.sun.identity.shared.encode.CookieUtils;
 import com.sun.identity.sm.DNMapper;
 import java.util.Collection;
 import java.util.List;
@@ -52,7 +53,6 @@ import org.forgerock.openam.utils.StringUtils;
 public class SessionResourceUtil {
 
     private static final Debug LOGGER = Debug.getInstance(SessionConstants.SESSION_DEBUG);
-
 
     public static final String VALID = "valid";
     public static final String IDLE_TIME = "idletime";
@@ -116,7 +116,7 @@ public class SessionResourceUtil {
         }
 
         if (StringUtils.isEmpty(tokenId)) {
-            tokenId = getTokenIdFromHeader(context, cookieName);
+            tokenId = getTokenIdFromHeader(context, CookieUtils.getCookieHeaderName(cookieName));
         }
 
         return StringUtils.isEmpty(tokenId) ? null : tokenId;
