@@ -12,14 +12,21 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014-2016 ForgeRock AS.
+ * Portions copyright 2026 Wren Security
  */
 
 package org.forgerock.oauth2.restlet;
 
-import org.forgerock.openam.oauth2.OAuth2Constants.UrlLocation;
+import static org.forgerock.oauth2.core.Utils.isEmpty;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
+import javax.inject.Inject;
 import org.forgerock.oauth2.core.OAuth2RequestFactory;
 import org.forgerock.oauth2.core.exceptions.OAuth2Exception;
 import org.forgerock.oauth2.core.exceptions.ServerException;
+import org.forgerock.openam.oauth2.OAuth2Constants.UrlLocation;
 import org.forgerock.openam.rest.representations.JacksonRepresentationFactory;
 import org.forgerock.openam.services.baseurl.BaseURLProviderFactory;
 import org.restlet.Context;
@@ -28,16 +35,10 @@ import org.restlet.Response;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.ext.servlet.ServletUtils;
+import org.restlet.representation.Representation;
 import org.restlet.routing.Redirector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.inject.Inject;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.forgerock.oauth2.core.Utils.isEmpty;
 
 /**
  * Handles any exception that is thrown when processing a OAuth2 request, by converting to a OAuth2RestletException,
@@ -147,13 +148,25 @@ public class ExceptionHandler {
      * @param response The Restlet response.
      */
     public void handle(Throwable throwable, Response response) {
+        handle(throwable, response, jacksonRepresentationFactory::create);
+    }
+
+    /**
+     * Handles general OAuth2 exceptions using the provided response representation factory.
+     *
+     * @param throwable The throwable.
+     * @param response The Restlet response.
+     * @param representationFactory Creates the response entity from the OAuth2 error data.
+     */
+    public void handle(Throwable throwable, Response response,
+            Function<Map<String, String>, Representation> representationFactory) {
         if (LOGGER.isWarnEnabled()) {
             LOGGER.warn("Unhandled exception: " + throwable, throwable);
         }
 
         final OAuth2RestletException exception = toOAuth2RestletException(throwable);
         response.setStatus(exception.getStatus());
-        response.setEntity(jacksonRepresentationFactory.create(exception.asMap()));
+        response.setEntity(representationFactory.apply(exception.asMap()));
     }
 
     private OAuth2RestletException toOAuth2RestletException(Throwable throwable) {

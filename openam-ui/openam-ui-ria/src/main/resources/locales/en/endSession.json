@@ -1,0 +1,27 @@
+{
+    "common": {
+        "form": {
+            "copyright" : "&copy; Wren Security",
+            "build": "Build"
+        }
+    },
+    "confirmation": {
+        "title": "Logout",
+        "description": "__clientName__ has requested to sign you out.",
+        "signedInAs": "You are signed in as:",
+        "cancel": "Cancel",
+        "logout": "Logout"
+    },
+    "done": {
+        "title": "You have been logged out",
+        "returnToLoginPage": "Return to Login Page"
+    },
+    "canceled": {
+        "title": "Logout canceled",
+        "description": "You are still signed in with your identity provider. No application logout was completed from this page."
+    },
+    "error": {
+        "title": "Logout failed",
+        "description": "The sign-out request could not be completed. Your session may still be active."
+    }
+}
