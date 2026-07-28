@@ -26,7 +26,11 @@
 # Wren:AM
 
 [![License](https://img.shields.io/badge/license-CDDL-blue.svg)](https://github.com/WrenSecurity/wrenam/blob/main/LICENSE)
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/WrenSecurity)
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/WrenSecurity/wrenam/badge)](https://scorecard.dev/viewer/?uri=github.com/WrenSecurity/wrenam)
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/13613/badge)](https://www.bestpractices.dev/projects/13613)
+[![OpenSSF Baseline](https://www.bestpractices.dev/projects/13613/baseline)](https://www.bestpractices.dev/projects/13613)
+[![CodeQL](https://github.com/WrenSecurity/wrenam/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/WrenSecurity/wrenam/actions/workflows/github-code-scanning/codeql)
+
 
 Wren:AM is an "all-in-one" access management solution providing strong and adaptive authentication, authorization, single sign-on (SSO), entitlements, federation and web services security.
 
