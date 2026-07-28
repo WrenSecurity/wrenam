@@ -11,6 +11,8 @@ jobs:
   push_to_registry:
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
+    outputs:
+      image-digest: ${{ steps.build.outputs.digest }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -32,6 +34,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build and push
+        id: build
         uses: docker/build-push-action@d08e5c354a6adb9ed34480a06d141179aa583294 # v7.0.0
         with:
           context: .
@@ -44,3 +47,50 @@ jobs:
           platforms: linux/amd64,linux/arm64
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+  sbom_image:
+    name: Generate SBOM for Docker image
+    needs: push_to_registry
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate SBOM
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        with:
+          image-ref: "wrensecurity/wrenam@${{ needs.push_to_registry.outputs.image-digest }}"
+          format: 'cyclonedx'
+          output: 'sbom-docker-image.cdx.json'
+          vuln-type: 'os'
+
+      - name: Upload SBOM
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        with:
+          name: sbom-docker-image
+          path: sbom-docker-image.cdx.json
+          retention-days: 90
+
+  sbom_source:
+    name: Generate SBOM for Maven dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Set up Java
+        uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5.0.0
+        with:
+          distribution: "temurin"
+          java-version: "21"
+          cache: "maven"
+
+      - name: Build project
+        run: mvn clean install -DskipTests
+
+      - name: Generate SBOM
+        run: mvn org.cyclonedx:cyclonedx-maven-plugin:2.9.2:makeAggregateBom -DoutputName=sbom-source-deps -DoutputFormat=json
+
+      - name: Upload SBOM
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        with:
+          name: sbom-source-dependencies
+          path: target/sbom-source-deps.json
+          retention-days: 90
