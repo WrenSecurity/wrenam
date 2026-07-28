@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions copyright 2026 Wren Security.
  */
 
 define([
@@ -24,8 +25,10 @@ define([
     "org/forgerock/commons/ui/common/util/URIUtils",
     "org/forgerock/openam/ui/common/util/es6/normaliseModule"
 ], ($, _, ReactDOM, React, AbstractView, ModuleLoader, URIUtils, normaliseModule) => {
+    const contentElementId = "#sidePageContent";
     const isBackbonePage = (view) => view.prototype instanceof AbstractView;
-    const isReactPage = (view) => view.prototype instanceof React.Component || view.WrappedComponent;
+    const isReactPage = (view) =>
+        view.prototype instanceof React.Component || view.WrappedComponent || _.isFunction(view);
     const TreeNavigation = AbstractView.extend({
         template: "templates/admin/views/common/navigation/TreeNavigationTemplate.html",
         partials: [
@@ -34,6 +37,9 @@ define([
         ],
         events: {
             "click .sidenav a[href]:not([data-toggle])": "navigateToPage"
+        },
+        findContentElement () {
+            return this.$el.find(contentElementId)[0];
         },
         findActiveNavItem (fragment) {
             const element = this.$el.find(`.sidenav ol > li > a[href^="#${fragment}"]`);
@@ -73,6 +79,12 @@ define([
 
         render (args, callback) {
             this.args = args;
+
+            const element = this.findContentElement();
+            if (element) {
+                ReactDOM.unmountComponentAtNode(element);
+            }
+
             this.parentRender(() => {
                 this.$el.find(".sidenav li").removeClass("active");
                 this.findActiveNavItem(URIUtils.getCurrentFragment());
@@ -86,15 +98,13 @@ define([
         renderPage (Module, args, callback) {
             Module = normaliseModule.default(Module);
 
-            const elementId = "#sidePageContent";
-
             if (isBackbonePage(Module)) {
                 const page = new Module();
-                page.element = elementId;
+                page.element = contentElementId;
                 page.render(args, callback);
                 this.delegateEvents();
             } else if (isReactPage(Module)) {
-                ReactDOM.render(React.createElement(Module), this.$el.find(elementId)[0]);
+                ReactDOM.render(React.createElement(Module), this.findContentElement());
             } else {
                 throw new Error("[TreeNavigation] Unable to determine page type (Backbone or React).");
             }

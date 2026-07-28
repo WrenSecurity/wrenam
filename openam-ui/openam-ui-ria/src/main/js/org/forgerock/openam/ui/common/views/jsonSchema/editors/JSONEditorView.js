@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions copyright 2026 Wren Security.
  */
 
 define([
@@ -22,16 +23,15 @@ define([
     "org/forgerock/openam/ui/common/models/JSONSchema",
     "org/forgerock/openam/ui/common/models/JSONValues",
     "org/forgerock/openam/ui/admin/utils/JSONEditorTheme",
-    "org/forgerock/commons/ui/common/util/UIUtils",
+    "text!templates/common/jsonSchema/editors/_HelpPopover.html",
 
     "popoverclickaway", // depends on jquery and bootstrap
     "selectize" // jquery dependencies
-], ($, _, Backbone, JSONEditor, JSONSchema, JSONValues, JSONEditorTheme, UIUtils) => {
+], ($, _, Backbone, JSONEditor, JSONSchema, JSONValues, JSONEditorTheme, HelpPopoverTemplate) => {
     function convertHelpBlocksToPopOvers (element) {
-        const template = "templates/common/jsonSchema/editors/_HelpPopover.html";
-        UIUtils.compileTemplate(template).then((html) => {
-            $(element).find(".help-block").addClass("hidden-lg hidden-md hidden-sm").each((index, value) => {
-                const helpPopOver = $(html);
+        $(element).find(".help-block:not(.errormsg)").addClass("hidden-lg hidden-md hidden-sm")
+            .each((index, value) => {
+                const helpPopOver = $(HelpPopoverTemplate);
 
                 helpPopOver.popoverclickaway({
                     container: "#content",
@@ -44,7 +44,6 @@ define([
 
                 $(value).parent().append(helpPopOver);
             });
-        });
     }
     /**
      * Passwords are not delivered to the UI from the server. Thus we set a placeholder informing the user that
@@ -155,6 +154,15 @@ define([
         },
         setData (data) {
             this.options.values = this.options.values.extend(data);
+        },
+        destroy () {
+            if (this.jsonEditor) {
+                _.forEach(_.keys(this.jsonEditor.watchlist), (path) => {
+                    this.jsonEditor.unwatch(path);
+                });
+                this.jsonEditor.destroy();
+                this.jsonEditor = null;
+            }
         }
     });
 

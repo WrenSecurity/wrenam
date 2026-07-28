@@ -12,7 +12,7 @@
 * information: "Portions copyright [year] [name of copyright owner]".
 *
 * Copyright 2015-2016 ForgeRock AS.
-* Portions copyright 2024 Wren Security.
+* Portions copyright 2024-2026 Wren Security.
 */
 
 
@@ -209,6 +209,22 @@ a[data-toggle="popover"] {
 .am-btn-single-icon {
     width: 34px;
     height: 34px;
+}
+
+.am-btn-action-group {
+    margin: 0 -2px;
+
+    > .btn {
+        margin: 0 2px;
+    }
+}
+
+.am-table-icon-cell {
+    display: inline;
+
+    .am-table-icon-cell-stack {
+        margin: -5px 5px 0 0;
+    }
 }
 
 @media (min-width: 992px) {

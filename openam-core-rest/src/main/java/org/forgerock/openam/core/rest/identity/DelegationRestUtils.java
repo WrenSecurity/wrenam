@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2025 Wren Security
+ * Copyright 2025-2026 Wren Security
  */
 package org.forgerock.openam.core.rest.identity;
 
@@ -70,9 +70,11 @@ final class DelegationRestUtils {
                 JsonPointer path = ptr("properties", privilegeName);
                 schema.putPermissive(path, object(
                             field("title", new LocalizableString(
+                                    ApiDescriptorConstants.CONSOLE + "delegation." + privilegeName + ".title",
+                                    AllAuthenticatedUsersResourceV1.class.getClassLoader())),
+                            field("description", new LocalizableString(
                                     ApiDescriptorConstants.CONSOLE + "delegation." + privilegeName,
                                     AllAuthenticatedUsersResourceV1.class.getClassLoader())),
-                            field("description", ""),
                             field("type", "boolean"),
                             field("propertyOrder", propertyOrder++),
                             field("required", false)

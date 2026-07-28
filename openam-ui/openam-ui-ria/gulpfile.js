@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2024-2025 Wren Security.
+ * Copyright 2024-2026 Wren Security.
  */
 
 /* global __dirname, __filename, process */
@@ -46,6 +46,10 @@ const MODULE_RESOURCES = {
     "redux/dist/redux.min.js": "libs/redux.js",
     "redux-actions/dist/redux-actions.min.js": "libs/redux-actions.js",
     "react-bootstrap/dist/react-bootstrap.min.js": "libs/react-bootstrap.js",
+    "react-bootstrap-table-next/dist/react-bootstrap-table-next.min.js": "libs/react-bootstrap-table-next.js",
+    "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css": "css/react-bootstrap-table-next.css",
+    "react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.js": "libs/react-bootstrap-table2-paginator.js",
+    "react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css": "css/react-bootstrap-table2-paginator.css",
     "classnames/index.js": "libs/classnames.js",
     "react-dom/umd/react-dom.production.min.js": "libs/react-dom.js",
     "react/umd/react.production.min.js": "libs/react.js",

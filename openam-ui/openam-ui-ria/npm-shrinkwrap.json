@@ -19,6 +19,8 @@
         "prop-types": "15.8.1",
         "react": "16.9.0",
         "react-bootstrap": "0.33.1",
+        "react-bootstrap-table-next": "4.0.3",
+        "react-bootstrap-table2-paginator": "2.1.2",
         "react-dom": "16.9.0",
         "react-redux": "5.0.7",
         "react-select": "2.4.2",
@@ -10199,6 +10201,40 @@
         "react-dom": ">=16.3.0"
       }
     },
+    "node_modules/react-bootstrap-table-next": {
+      "version": "4.0.3",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/react-bootstrap-table-next/-/react-bootstrap-table-next-4.0.3.tgz",
+      "integrity": "sha512-uKxC73qUdUfusRf2uzDfMiF9LvTG5vuhTZa0lbAgHWSLLLaKTsI0iHf1e4+c7gP71q8dFsp7StvkP65SxC1JRg==",
+      "license": "MIT",
+      "dependencies": {
+        "classnames": "^2.2.5",
+        "react-transition-group": "^4.2.0",
+        "underscore": "1.9.1"
+      },
+      "peerDependencies": {
+        "classnames": "^2.2.5",
+        "prop-types": "^15.0.0",
+        "react": "^16.3.0",
+        "react-dom": "^16.3.0"
+      }
+    },
+    "node_modules/react-bootstrap-table-next/node_modules/underscore": {
+      "version": "1.9.1",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/underscore/-/underscore-1.9.1.tgz",
+      "integrity": "sha512-5/4etnCkd9c8gwgowi5/om/mYO5ajCaOgdzj/oW+0eQV9WxKBDZw5+ycmKmeaTXjInS/W0BzpGLo2xR2aBwZdg==",
+      "license": "MIT"
+    },
+    "node_modules/react-bootstrap-table2-paginator": {
+      "version": "2.1.2",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/react-bootstrap-table2-paginator/-/react-bootstrap-table2-paginator-2.1.2.tgz",
+      "integrity": "sha512-LC5znEphhgKJvaSY1q8d+Gj0Nc/1X+VS3tKJjkmWmfv9P61YC/BnwJ+aoqEmQzsLiVGowrzss+i/u+Tip5H+Iw==",
+      "license": "MIT",
+      "peerDependencies": {
+        "prop-types": "^15.0.0",
+        "react": "^16.3.0",
+        "react-dom": "^16.3.0"
+      }
+    },
     "node_modules/react-bootstrap/node_modules/react-transition-group": {
       "version": "2.9.0",
       "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/react-transition-group/-/react-transition-group-2.9.0.tgz",
@@ -10340,6 +10376,38 @@
       "peerDependencies": {
         "react": ">=15.0.0",
         "react-dom": ">=15.0.0"
+      }
+    },
+    "node_modules/react-transition-group": {
+      "version": "4.4.5",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/react-transition-group/-/react-transition-group-4.4.5.tgz",
+      "integrity": "sha512-pZcd1MCJoiKiBR2NRxeCRg13uCXbydPnmB4EOeRrY7480qNWO8IIgQG6zlDkm6uRMsURXPuKq0GWtiM59a5Q6g==",
+      "license": "BSD-3-Clause",
+      "dependencies": {
+        "@babel/runtime": "^7.5.5",
+        "dom-helpers": "^5.0.1",
+        "loose-envify": "^1.4.0",
+        "prop-types": "^15.6.2"
+      },
+      "peerDependencies": {
+        "react": ">=16.6.0",
+        "react-dom": ">=16.6.0"
+      }
+    },
+    "node_modules/react-transition-group/node_modules/csstype": {
+      "version": "3.2.3",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/csstype/-/csstype-3.2.3.tgz",
+      "integrity": "sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ==",
+      "license": "MIT"
+    },
+    "node_modules/react-transition-group/node_modules/dom-helpers": {
+      "version": "5.2.1",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/dom-helpers/-/dom-helpers-5.2.1.tgz",
+      "integrity": "sha512-nRCa7CK3VTrM2NmGkIy4cbK7IZlgBE/PYMn55rrXefr5xXDP0LdtfPnblFDoVdcAfslJ7or6iqAUnx0CCGIWQA==",
+      "license": "MIT",
+      "dependencies": {
+        "@babel/runtime": "^7.8.7",
+        "csstype": "^3.0.2"
       }
     },
     "node_modules/readable-stream": {
@@ -20080,6 +20148,29 @@
         }
       }
     },
+    "react-bootstrap-table-next": {
+      "version": "4.0.3",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/react-bootstrap-table-next/-/react-bootstrap-table-next-4.0.3.tgz",
+      "integrity": "sha512-uKxC73qUdUfusRf2uzDfMiF9LvTG5vuhTZa0lbAgHWSLLLaKTsI0iHf1e4+c7gP71q8dFsp7StvkP65SxC1JRg==",
+      "requires": {
+        "classnames": "^2.2.5",
+        "react-transition-group": "^4.2.0",
+        "underscore": "1.9.1"
+      },
+      "dependencies": {
+        "underscore": {
+          "version": "1.9.1",
+          "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/underscore/-/underscore-1.9.1.tgz",
+          "integrity": "sha512-5/4etnCkd9c8gwgowi5/om/mYO5ajCaOgdzj/oW+0eQV9WxKBDZw5+ycmKmeaTXjInS/W0BzpGLo2xR2aBwZdg=="
+        }
+      }
+    },
+    "react-bootstrap-table2-paginator": {
+      "version": "2.1.2",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/react-bootstrap-table2-paginator/-/react-bootstrap-table2-paginator-2.1.2.tgz",
+      "integrity": "sha512-LC5znEphhgKJvaSY1q8d+Gj0Nc/1X+VS3tKJjkmWmfv9P61YC/BnwJ+aoqEmQzsLiVGowrzss+i/u+Tip5H+Iw==",
+      "requires": {}
+    },
     "react-dom": {
       "version": "16.9.0",
       "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/react-dom/-/react-dom-16.9.0.tgz",
@@ -20179,6 +20270,33 @@
             "loose-envify": "^1.4.0",
             "prop-types": "^15.6.2",
             "react-lifecycles-compat": "^3.0.4"
+          }
+        }
+      }
+    },
+    "react-transition-group": {
+      "version": "4.4.5",
+      "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/react-transition-group/-/react-transition-group-4.4.5.tgz",
+      "integrity": "sha512-pZcd1MCJoiKiBR2NRxeCRg13uCXbydPnmB4EOeRrY7480qNWO8IIgQG6zlDkm6uRMsURXPuKq0GWtiM59a5Q6g==",
+      "requires": {
+        "@babel/runtime": "^7.5.5",
+        "dom-helpers": "^5.0.1",
+        "loose-envify": "^1.4.0",
+        "prop-types": "^15.6.2"
+      },
+      "dependencies": {
+        "csstype": {
+          "version": "3.2.3",
+          "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/csstype/-/csstype-3.2.3.tgz",
+          "integrity": "sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ=="
+        },
+        "dom-helpers": {
+          "version": "5.2.1",
+          "resolved": "https://wrensecurity.jfrog.io/artifactory/api/npm/npm-virtual/dom-helpers/-/dom-helpers-5.2.1.tgz",
+          "integrity": "sha512-nRCa7CK3VTrM2NmGkIy4cbK7IZlgBE/PYMn55rrXefr5xXDP0LdtfPnblFDoVdcAfslJ7or6iqAUnx0CCGIWQA==",
+          "requires": {
+            "@babel/runtime": "^7.8.7",
+            "csstype": "^3.0.2"
           }
         }
       }

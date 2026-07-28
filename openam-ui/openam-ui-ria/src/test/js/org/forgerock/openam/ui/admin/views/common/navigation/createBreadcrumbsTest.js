@@ -12,7 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
- * Portions copyright 2025 Wren Security.
+ * Portions copyright 2025-2026 Wren Security.
  */
 
 define([
@@ -31,8 +31,21 @@ define([
                 getCurrentFragment: sinon.stub()
             };
 
+            const translations = {
+                "console.common.navigation.authentication-chains": "Authentication - Chains",
+                "console.common.navigation.authentication-modules": "Authentication - Modules",
+                "console.common.navigation.authentication-settings": "Authentication - Settings",
+                "console.common.navigation.authorization-policySets": "Authorization - Policy Sets",
+                "console.common.navigation.authorization-resourceTypes": "Authorization - Resource Types",
+                "console.common.navigation.dashboard": "Authentication - Dashboard",
+                "console.common.navigation.groups": "Groups",
+                "console.common.navigation.identities": "Identities",
+                "console.common.navigation.new": "New",
+                "console.common.navigation.policies": "Policies",
+                "console.common.navigation.services": "Services"
+            };
             $ = {
-                t: sinon.stub()
+                t: sinon.stub().callsFake((key, options = {}) => translations[key] || options.defaultValue)
             };
 
             injector
@@ -47,7 +60,6 @@ define([
         context("When on the Authentication - Dashboard view", () => {
             it("correctly outputs object breadcrumbs", () => {
                 URIUtils.getCurrentFragment.returns("realms/%2F/dashboard");
-                $.t.returns("Authentication - Dashboard");
                 const pattern = "realms/?/dashboard";
                 expect(createBreadcrumbs(pattern)).to.eql([{
                     title:"Authentication - Dashboard"
@@ -58,7 +70,6 @@ define([
         context("When on the Authentication - Settings view", () => {
             it("correctly outputs object breadcrumbs", () => {
                 URIUtils.getCurrentFragment.returns("realms/%2F/authentication-settings");
-                $.t.returns("Authentication - Settings");
                 const pattern = "realms/?/authentication-settings";
                 expect(createBreadcrumbs(pattern)).to.eql([{
                     title:"Authentication - Settings"
@@ -69,7 +80,6 @@ define([
         context("When on the Authentication - List Chains view", () => {
             it("correctly outputs object breadcrumbs", () => {
                 URIUtils.getCurrentFragment.returns("realms/%2F/authentication-chains");
-                $.t.returns("Authentication - Chains");
                 const pattern = "realms/?/authentication-chains";
                 expect(createBreadcrumbs(pattern)).to.eql([{
                     title:"Authentication - Chains"
@@ -80,7 +90,6 @@ define([
         context("When on the Authentication - New Chain view", () => {
             it("correctly outputs object breadcrumbs", () => {
                 URIUtils.getCurrentFragment.returns("realms/%2F/authentication-chains/new");
-                $.t.returns("Authentication - Chains");
                 const pattern = "realms/?/authentication-chains/new";
                 expect(createBreadcrumbs(pattern)).to.eql([
                     {
@@ -88,7 +97,7 @@ define([
                         path:"#realms/%2F/authentication-chains"
                     },
                     {
-                        title:"new"
+                        title:"New"
                     }
                 ]);
             });
@@ -97,7 +106,6 @@ define([
         context("When on the Authentication - Edit Chain view", () => {
             it("correctly outputs object breadcrumbs", () => {
                 URIUtils.getCurrentFragment.returns("realms/%2F/authentication-chains/edit/foo");
-                $.t.returns("Authentication - Chains");
                 const pattern = "realms/?/authentication-chains/edit/?";
                 expect(createBreadcrumbs(pattern)).to.eql([
                     {
@@ -114,7 +122,6 @@ define([
         context("When on the Authentication - List Modules view", () => {
             it("correctly outputs object breadcrumbs", () => {
                 URIUtils.getCurrentFragment.returns("realms/%2F/authentication-modules");
-                $.t.returns("Authentication - Modules");
                 const pattern = "realms/?/authentication-modules";
                 expect(createBreadcrumbs(pattern)).to.eql([
                     {
@@ -127,7 +134,6 @@ define([
         context("When on the Authentication - New Module view", () => {
             it("correctly outputs object breadcrumbs", () => {
                 URIUtils.getCurrentFragment.returns("realms/%2F/authentication-modules/new");
-                $.t.returns("Authentication - Modules");
                 const pattern = "realms/?/authentication-modules/new";
                 expect(createBreadcrumbs(pattern)).to.eql([
                     {
@@ -135,7 +141,7 @@ define([
                         path:"#realms/%2F/authentication-modules"
                     },
                     {
-                        title:"new"
+                        title:"New"
                     }
                 ]);
             });
@@ -144,7 +150,6 @@ define([
         context("When on the Authentication - Edit Module view", () => {
             it("correctly outputs object breadcrumbs", () => {
                 URIUtils.getCurrentFragment.returns("realms/%2F/authentication-modules/foo/edit/bar");
-                $.t.returns("Authentication - Modules");
                 const pattern = "realms/?/authentication-modules/?/edit/?";
                 expect(createBreadcrumbs(pattern)).to.eql([
                     {
@@ -164,7 +169,6 @@ define([
         context("When on the List Services view", () => {
             it("correctly outputs object breadcrumbs", () => {
                 URIUtils.getCurrentFragment.returns("realms/%2F/services");
-                $.t.returns("Services");
                 const pattern = "realms/?/services";
                 expect(createBreadcrumbs(pattern)).to.eql([{
                     title:"Services"
@@ -175,7 +179,6 @@ define([
         context("When on the New Service view", () => {
             it("correctly outputs object breadcrumbs", () => {
                 URIUtils.getCurrentFragment.returns("realms/%2F/services/new");
-                $.t.returns("Services");
                 const pattern = "realms/?/services/new";
                 expect(createBreadcrumbs(pattern)).to.eql([
                     {
@@ -183,7 +186,7 @@ define([
                         path:"#realms/%2F/services"
                     },
                     {
-                        title:"new"
+                        title:"New"
                     }
                 ]);
             });
@@ -192,7 +195,6 @@ define([
         context("When on the Edit Service view", () => {
             it("correctly outputs object breadcrumbs", () => {
                 URIUtils.getCurrentFragment.returns("realms/%2F/services/edit/audit");
-                $.t.returns("Services");
                 const pattern = "realms/?/services/edit/?";
                 expect(createBreadcrumbs(pattern)).to.eql([
                     {
@@ -209,7 +211,6 @@ define([
         context("When on the New Service Subschema view", () => {
             it("correctly outputs object breadcrumbs", () => {
                 URIUtils.getCurrentFragment.returns("realms/%2F/services/edit/audit/CSV/new");
-                $.t.returns("Services");
                 const pattern = "realms/?/services/edit/?/?/new";
                 expect(createBreadcrumbs(pattern)).to.eql([
                     {
@@ -224,7 +225,7 @@ define([
                         title:"CSV"
                     },
                     {
-                        title:"new"
+                        title:"New"
                     }
                 ]);
             });
@@ -233,7 +234,6 @@ define([
         context("When on the Edit Service Subschema view", () => {
             it("correctly outputs object breadcrumbs", () => {
                 URIUtils.getCurrentFragment.returns("realms/%2F/services/edit/audit/CSV/edit/foo");
-                $.t.returns("Services");
                 const pattern = "realms/?/services/edit/?/?/edit/?";
                 expect(createBreadcrumbs(pattern)).to.eql([
                     {
@@ -257,7 +257,6 @@ define([
         context("When on the List Policy Sets view", () => {
             it("correctly outputs object breadcrumbs", () => {
                 URIUtils.getCurrentFragment.returns("realms/%2F/authorization-policySets");
-                $.t.returns("Authorization - Policy Sets");
                 const pattern = "realms/?/authorization-policySets";
                 expect(createBreadcrumbs(pattern)).to.eql([
                     {
@@ -270,7 +269,6 @@ define([
         context("When on the Edit Policy Set view", () => {
             it("correctly outputs object breadcrumbs", () => {
                 URIUtils.getCurrentFragment.returns("realms/%2F/authorization-policySets/edit/foo");
-                $.t.returns("Authorization - Policy Sets");
                 const pattern = "realms/?/authorization-policySets/edit/?";
                 expect(createBreadcrumbs(pattern)).to.eql([
                     {
@@ -287,7 +285,6 @@ define([
         context("When on the New Policy view", () => {
             it("correctly outputs object breadcrumbs", () => {
                 URIUtils.getCurrentFragment.returns("realms/%2F/authorization-policySets/edit/foo/policies/new");
-                $.t.returns("Authorization - Policy Sets");
                 const pattern = "realms/?/authorization-policySets/edit/?/policies/new";
                 expect(createBreadcrumbs(pattern)).to.eql([
                     {
@@ -299,10 +296,10 @@ define([
                         path:"#realms/%2F/authorization-policySets/edit/foo"
                     },
                     {
-                        title:"policies"
+                        title:"Policies"
                     },
                     {
-                        title:"new"
+                        title:"New"
                     }
                 ]);
             });
@@ -312,7 +309,6 @@ define([
             it("correctly outputs object breadcrumbs", () => {
                 URIUtils.getCurrentFragment.returns(
                     "realms/%2F/authorization-policySets/edit/foo/policies/edit/bar%20bar");
-                $.t.returns("Authorization - Policy Sets");
                 const pattern = "realms/?/authorization-policySets/edit/?/policies/edit/?";
                 expect(createBreadcrumbs(pattern)).to.eql([
                     {
@@ -324,7 +320,7 @@ define([
                         path:"#realms/%2F/authorization-policySets/edit/foo"
                     },
                     {
-                        title:"policies"
+                        title:"Policies"
                     },
                     {
                         title:"bar bar"
@@ -337,7 +333,6 @@ define([
             it("correctly outputs object breadcrumbs", () => {
                 URIUtils.getCurrentFragment.returns(
                     "realms/%2F/authorization-resourceTypes");
-                $.t.returns("Authorization - Resource Types");
                 const pattern = "realms/?/authorization-resourceTypes";
                 expect(createBreadcrumbs(pattern)).to.eql([{
                     title:"Authorization - Resource Types"
@@ -349,7 +344,6 @@ define([
             it("correctly outputs object breadcrumbs", () => {
                 URIUtils.getCurrentFragment.returns(
                     "realms/%2F/authorization-resourceTypes/new");
-                $.t.returns("Authorization - Resource Types");
                 const pattern = "realms/?/authorization-resourceTypes/new";
                 expect(createBreadcrumbs(pattern)).to.eql([
                     {
@@ -357,7 +351,7 @@ define([
                         path:"#realms/%2F/authorization-resourceTypes"
                     },
                     {
-                        title:"new"
+                        title:"New"
                     }
                 ]);
             });
@@ -367,7 +361,6 @@ define([
             it("correctly outputs object breadcrumbs", () => {
                 URIUtils.getCurrentFragment.returns(
                     "realms/%2F/authorization-resourceTypes/edit/76656a38-5f8e-401b-83aa-4ccb74ce88d2");
-                $.t.returns("Authorization - Resource Types");
                 const pattern = "realms/?/authorization-resourceTypes/edit/?";
                 expect(createBreadcrumbs(pattern)).to.eql([
                     {
@@ -376,6 +369,25 @@ define([
                     },
                     {
                         title:"76656a38-5f8e-401b-83aa-4ccb74ce88d2"
+                    }
+                ]);
+            });
+        });
+
+        context("When on the Edit Group view", () => {
+            it("translates the nested group collection breadcrumb", () => {
+                URIUtils.getCurrentFragment.returns("realms/%2F/identities/groups/edit/group-mixed");
+                const pattern = "realms/?/identities/groups/edit/?";
+                expect(createBreadcrumbs(pattern)).to.eql([
+                    {
+                        title:"Identities",
+                        path:"#realms/%2F/identities"
+                    },
+                    {
+                        title:"Groups"
+                    },
+                    {
+                        title:"group-mixed"
                     }
                 ]);
             });
