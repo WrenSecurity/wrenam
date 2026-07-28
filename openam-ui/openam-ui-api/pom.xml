@@ -13,7 +13,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
- * Portions Copyright 2018-2024 Wren Security.
+ * Portions Copyright 2018-2026 Wren Security.
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
@@ -108,12 +108,16 @@
                     </execution>
 
                     <execution>
-                        <id>npm-install</id>
+                        <id>npm-ci</id>
                         <phase>initialize</phase>
 
                         <goals>
                             <goal>npm</goal>
                         </goals>
+
+                        <configuration>
+                            <arguments>ci</arguments>
+                        </configuration>
                     </execution>
 
                     <execution>
