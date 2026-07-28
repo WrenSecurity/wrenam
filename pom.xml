@@ -135,7 +135,7 @@
 
         <!-- Wren Security Dependencies -->
         <wrends.version>5.1.0</wrends.version>
-        <wrensec-commons.version>23.0.1</wrensec-commons.version>
+        <wrensec-commons.version>23.0.3</wrensec-commons.version>
         <wrensec-ui.version>23.3.0</wrensec-ui.version>
 
         <!-- Test Dependencies -->
