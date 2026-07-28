@@ -2,6 +2,7 @@
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
  * Copyright 2011-2016 ForgeRock AS.
+ * Portions Copyrighted 2026 Wren Security.
  *
  * The contents of this file are subject to the terms
  * of the Common Development and Distribution License
@@ -70,6 +71,8 @@ public class AuthServiceHelper extends AbstractUpgradeHelper {
     private final static String WSS_AUTH = "com.sun.identity.authentication.modules.wss.WSSAuthModule";
     private final static String DEVICE_PRINT_AUTH =
             "org.forgerock.openam.authentication.modules.deviceprint.DevicePrintModule";
+    private final static String AMSTER =
+            "org.forgerock.openam.authentication.modules.amster.Amster";
     private final static String ATTR = "iplanet-am-auth-authenticators";
     // other attributes
     private final static String XUI = "openam-xui-interface-enabled";
@@ -116,6 +119,7 @@ public class AuthServiceHelper extends AbstractUpgradeHelper {
         defaultValues.remove(UNIX);
         defaultValues.remove(WSS_AUTH);
         defaultValues.remove(DEVICE_PRINT_AUTH);
+        defaultValues.remove(AMSTER);
         newAttr = updateDefaultValues(newAttr, defaultValues);
 
         return newAttr;
