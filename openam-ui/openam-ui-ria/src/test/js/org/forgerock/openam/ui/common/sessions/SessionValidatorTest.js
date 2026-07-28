@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions copyright 2026 Wren Security.
  */
 
 define([
@@ -55,18 +56,18 @@ define([
             });
 
             it("invokes strategy immediately", () => {
-                Validator.start("token", Strategy);
+                Validator.start(Strategy);
 
                 clock.tick(1000);
 
-                expect(Strategy).be.calledOnce.calledWith("token");
+                expect(Strategy).be.calledOnce;
             });
 
             context("when strategy rejects", () => {
                 it("invokes #logout", () => {
                     validatePromise.reject();
 
-                    Validator.start("token", Strategy);
+                    Validator.start(Strategy);
 
                     clock.tick(1000);
 
@@ -76,12 +77,12 @@ define([
 
             context("when invoked for the 2nd time", () => {
                 beforeEach(() => {
-                    Validator.start("token", Strategy);
+                    Validator.start(Strategy);
                 });
 
                 it("throws error", () => {
                     expect(() => {
-                        Validator.start("token", Strategy);
+                        Validator.start(Strategy);
                     }).to.throw(Error, "Validator has already been started");
                 });
 
@@ -90,7 +91,7 @@ define([
                         Validator.stop();
 
                         expect(() => {
-                            Validator.start("token", Strategy);
+                            Validator.start(Strategy);
                         }).to.not.throw(Error);
                     });
                 });

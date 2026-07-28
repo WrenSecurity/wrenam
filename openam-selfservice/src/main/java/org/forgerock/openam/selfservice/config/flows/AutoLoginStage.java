@@ -12,27 +12,34 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions copyright 2026 Wren Security
  */
 package org.forgerock.openam.selfservice.config.flows;
 
 import static org.forgerock.selfservice.stages.CommonStateFields.USER_FIELD;
 
+import com.sun.identity.authentication.AuthContext;
+import com.sun.identity.authentication.AuthContext.Status;
+import com.sun.identity.authentication.service.AuthUtils;
+import com.sun.identity.shared.encode.CookieUtils;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.util.Map;
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.NameCallback;
 import javax.security.auth.callback.PasswordCallback;
-
 import org.forgerock.json.JsonValue;
 import org.forgerock.json.resource.ResourceException;
 import org.forgerock.selfservice.core.ProcessContext;
 import org.forgerock.selfservice.core.ProgressStage;
 import org.forgerock.selfservice.core.StageResponse;
 import org.forgerock.selfservice.core.util.RequirementsBuilder;
+import org.forgerock.services.context.AttributesContext;
+import org.forgerock.services.context.Context;
 import org.forgerock.util.Reject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.sun.identity.authentication.AuthContext;
-import com.sun.identity.authentication.AuthContext.Status;
 
 
 /**
@@ -91,8 +98,30 @@ final class AutoLoginStage implements ProgressStage<AutoLoginStageConfig> {
         String ssoToken = authContext.getSSOToken().getTokenID().toString();
         String gotoUrl = authContext.getSuccessURL();
 
-        context.putSuccessAddition("tokenId", ssoToken);
+
+        if (!CookieUtils.isCookieHttpOnly()) {
+            context.putSuccessAddition("tokenId", ssoToken);
+        } else {
+            context.putSuccessAddition("tokenId", "");
+            addTokenCookies(context.getRequestContext(), ssoToken);
+        }
         context.putSuccessAddition("successUrl", gotoUrl);
+    }
+
+    private void addTokenCookies(Context context, String tokenId) {
+        Map<String, Object> attributes = context.asContext(AttributesContext.class).getAttributes();
+
+        HttpServletRequest servletRequest = (HttpServletRequest) attributes.get(HttpServletRequest.class.getName());
+        HttpServletResponse servletResponse = (HttpServletResponse) attributes.get(HttpServletResponse.class.getName());
+
+        String cookieName = CookieUtils.getAmCookieName();
+
+        if (cookieName != null) {
+            for (String domain : AuthUtils.getCookieDomainsForRequest(servletRequest)) {
+                Cookie cookie = CookieUtils.newCookie(cookieName, tokenId, -1, null, domain);
+                CookieUtils.addCookieToResponse(servletResponse, cookie);
+            }
+        }
     }
 
     private void handleCallbacks(Callback[] callbacks, JsonValue user) throws AutoLoginException {

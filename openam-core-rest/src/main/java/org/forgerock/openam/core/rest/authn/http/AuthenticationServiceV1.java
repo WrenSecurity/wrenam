@@ -12,18 +12,26 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions copyright 2026 Wren Security.
  */
 
 package org.forgerock.openam.core.rest.authn.http;
 
-import static org.forgerock.json.JsonValue.*;
+import static org.forgerock.json.JsonValue.json;
+import static org.forgerock.json.JsonValue.object;
 
 import com.iplanet.sso.SSOException;
 import com.iplanet.sso.SSOTokenManager;
 import com.sun.identity.authentication.client.AuthClientUtils;
 import com.sun.identity.shared.debug.Debug;
+import com.sun.identity.shared.encode.CookieUtils;
 import com.sun.identity.shared.locale.L10NMessage;
 import com.sun.identity.shared.locale.Locale;
+import jakarta.inject.Inject;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequestWrapper;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -31,10 +39,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import jakarta.inject.Inject;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletRequestWrapper;
-import jakarta.servlet.http.HttpServletResponse;
 import org.forgerock.http.header.AcceptLanguageHeader;
 import org.forgerock.http.header.ContentTypeHeader;
 import org.forgerock.http.header.MalformedHeaderException;
@@ -44,8 +48,10 @@ import org.forgerock.http.protocol.Request;
 import org.forgerock.http.protocol.Response;
 import org.forgerock.http.protocol.Status;
 import org.forgerock.json.JsonValue;
+import org.forgerock.openam.core.CoreWrapper;
 import org.forgerock.openam.core.realms.Realm;
 import org.forgerock.openam.core.realms.RealmLookupException;
+import org.forgerock.openam.core.rest.authn.RestAuthenticationConstants;
 import org.forgerock.openam.core.rest.authn.RestAuthenticationHandler;
 import org.forgerock.openam.core.rest.authn.exceptions.RestAuthException;
 import org.forgerock.openam.core.rest.authn.exceptions.RestAuthResponseException;
@@ -77,15 +83,19 @@ public class AuthenticationServiceV1 {
     private static final String REALM = "realm";
     private static final String JSONCONTENT = "jsonContent";
 
+    private final CoreWrapper coreWrapper;
+
     private final RestAuthenticationHandler restAuthenticationHandler;
 
     /**
      * Constructs an instance of the AuthenticationRestService.
      *
+     * @param coreWrapper an instance of CoreWrapper.
      * @param restAuthenticationHandler An instance of the RestAuthenticationHandler.
      */
     @Inject
-    public AuthenticationServiceV1(RestAuthenticationHandler restAuthenticationHandler) {
+    public AuthenticationServiceV1(CoreWrapper coreWrapper, RestAuthenticationHandler restAuthenticationHandler) {
+        this.coreWrapper = coreWrapper;
         this.restAuthenticationHandler = restAuthenticationHandler;
     }
 
@@ -112,7 +122,6 @@ public class AuthenticationServiceV1 {
      */
     @Post
     public Response authenticate(@Contextual Context context, @Contextual Request httpRequest) {
-
         if (!isSupportedMediaType(httpRequest)) {
             if (DEBUG.errorEnabled()) {
                 DEBUG.error("AuthenticationService :: Unable to handle media type request : " + ContentTypeHeader.valueOf(httpRequest).getType());
@@ -120,42 +129,41 @@ public class AuthenticationServiceV1 {
             return handleErrorResponse(httpRequest, Status.UNSUPPORTED_MEDIA_TYPE, null);
         }
 
-        final HttpServletResponse response = getHttpServletResponse(context);
-
-        Form urlQueryString = getUrlQueryString(httpRequest);
-        final String sessionUpgradeSSOTokenId = urlQueryString.getFirst("sessionUpgradeSSOTokenId");
+        JsonValue jsonContent;
+        try {
+            jsonContent = getJsonContent(httpRequest);
+        } catch (IOException e) {
+            DEBUG.message("AuthenticationService.authenticate() :: JSON parsing error", e);
+            return handleErrorResponse(httpRequest, Status.BAD_REQUEST, e);
+        }
 
         try {
+            Form urlQueryString = new Form().fromRequestQuery(httpRequest);
+            final HttpServletRequest servletRequest = getHttpServletRequest(context, jsonContent);
+            final HttpServletResponse servletResponse = getHttpServletResponse(context);
 
             // We check the session upgrade token first
+            String sessionUpgradeSSOTokenId = urlQueryString.getFirst("sessionUpgradeSSOTokenId");
             if (!StringUtils.isEmpty(sessionUpgradeSSOTokenId)) {
-                // Return Bad Request if not a valid upgrade token
                 SSOTokenManager.getInstance().createSSOToken(sessionUpgradeSSOTokenId);
+            } else {
+                sessionUpgradeSSOTokenId = getValidSsoTokenId(servletRequest);
             }
-            JsonValue jsonContent;
-            try {
-                jsonContent = getJsonContent(httpRequest);
-            } catch (IOException e) {
-                DEBUG.message("AuthenticationService.authenticate() :: JSON parsing error", e);
-                return handleErrorResponse(httpRequest, Status.BAD_REQUEST, e);
-            }
-            final HttpServletRequest request = getHttpServletRequest(context, jsonContent);
-            JsonValue jsonResponse;
 
+            JsonValue jsonResponse;
             if (jsonContent != null && jsonContent.size() > 0) {
                 // submit requirements
-                jsonResponse = restAuthenticationHandler.continueAuthentication(request, response, jsonContent,
-                        sessionUpgradeSSOTokenId);
+                jsonResponse = restAuthenticationHandler.continueAuthentication(servletRequest, servletResponse,
+                        jsonContent, sessionUpgradeSSOTokenId);
             } else {
                 // initiate
                 final String authIndexType = urlQueryString.getFirst("authIndexType");
                 final String authIndexValue = urlQueryString.getFirst("authIndexValue");
-                jsonResponse = restAuthenticationHandler.initiateAuthentication(request, response, authIndexType,
-                        authIndexValue, sessionUpgradeSSOTokenId);
+                jsonResponse = restAuthenticationHandler.initiateAuthentication(servletRequest, servletResponse,
+                        authIndexType, authIndexValue, sessionUpgradeSSOTokenId);
             }
 
-            return createResponse(jsonResponse);
-
+            return createResponse(context, jsonResponse);
         } catch (RestAuthResponseException e) {
             DEBUG.message("AuthenticationService.authenticate() :: Exception from CallbackHandler", e);
             return handleErrorResponse(httpRequest, Status.valueOf(e.getStatusCode()), e);
@@ -173,8 +181,25 @@ public class AuthenticationServiceV1 {
         }
     }
 
-    private Form getUrlQueryString(Request request) {
-        return new Form().fromRequestQuery(request);
+    /**
+     * Get valid SSO token ID from request cookies of the provided request.
+     *
+     * @param request HTTP request instance.
+     * @return valid SSO token ID string or null if no active SSO session detected
+     */
+    private String getValidSsoTokenId(HttpServletRequest request) {
+        String cookieName = CookieUtils.getAmCookieName();
+        if (cookieName == null) {
+            return null;
+        }
+
+        String tokenId = CookieUtils.getCookieValueFromReq(request, cookieName);
+        try {
+            SSOTokenManager.getInstance().createSSOToken(tokenId);
+        } catch (SSOException e) {
+            return null;
+        }
+        return tokenId;
     }
 
     private HttpServletResponse getHttpServletResponse(Context context) {
@@ -215,9 +240,8 @@ public class AuthenticationServiceV1 {
      * @param request The HttpServletRequest.
      * @return The wrapped HttpServletRequest.
      */
-    private HttpServletRequest wrapRequest(final HttpServletRequest request,
-                                           final Realm realm,
-                                           final JsonValue jsonValue) {
+    private HttpServletRequest wrapRequest(final HttpServletRequest request, final Realm realm,
+            final JsonValue jsonValue) {
 
         return new HttpServletRequestWrapper(request) {
 
@@ -235,28 +259,29 @@ public class AuthenticationServiceV1 {
             }
 
             @Override
-            public Map getParameterMap() {
-                Map params = super.getParameterMap();
-                Map p = new HashMap(params);
-                p.put(REALM, realm.asPath());
-                return p;
+            public Map<String, String[]> getParameterMap() {
+                Map<String, String[]> result = new HashMap<>(super.getParameterMap());
+                result.put(REALM, new String[] { realm.asPath() });
+                return result;
             }
 
             @Override
-            public Enumeration getParameterNames() {
-                Set<String> names = new HashSet<>();
+            public Enumeration<String> getParameterNames() {
+                Set<String> result = new HashSet<>();
+
                 Enumeration<String> paramNames = super.getParameterNames();
                 while (paramNames.hasMoreElements()) {
-                    names.add(paramNames.nextElement());
+                    result.add(paramNames.nextElement());
                 }
-                names.add(REALM);
-                return Collections.enumeration(names);
+
+                result.add(REALM);
+                return Collections.enumeration(result);
             }
 
             @Override
             public String[] getParameterValues(String name) {
                 if (REALM.equals(name)) {
-                    return new String[]{realm.asPath()};
+                    return new String[] { realm.asPath() };
                 }
                 return super.getParameterValues(name);
             }
@@ -284,17 +309,41 @@ public class AuthenticationServiceV1 {
     /**
      * Creates a response from the given JsonValue.
      *
+     * @param context request context.
      * @param jsonResponse The Json response body.
      * @return a response.
      * @throws IOException If there is a problem creating the response.
      */
-    private Response createResponse(final JsonValue jsonResponse) throws IOException {
+    private Response createResponse(final Context context, final JsonValue jsonResponse) throws IOException {
         Response response = new Response(Status.OK);
         setNoCacheHeaders(response);
+
+        JsonValue tokenId = jsonResponse.get(RestAuthenticationConstants.TOKEN_ID);
+        if (tokenId != null && tokenId.isNotNull()) {
+            if (CookieUtils.isCookieHttpOnly()) {
+                jsonResponse.put(RestAuthenticationConstants.TOKEN_ID, "");
+                addTokenCookies(context, tokenId.asString());
+            }
+        }
+
         response.setEntity(jsonResponse.getObject());
         return response;
     }
 
+    private void addTokenCookies(Context context, String tokenId) {
+        Map<String, Object> attributes = context.asContext(AttributesContext.class).getAttributes();
+
+        HttpServletRequest servletRequest = (HttpServletRequest) attributes.get(HttpServletRequest.class.getName());
+        HttpServletResponse servletResponse = (HttpServletResponse) attributes.get(HttpServletResponse.class.getName());
+
+        String cookieName = CookieUtils.getAmCookieName();
+        if (cookieName != null) {
+            for (String domain : coreWrapper.getCookieDomainsForRequest(servletRequest)) {
+                Cookie cookie = CookieUtils.newCookie(cookieName, tokenId, -1, null, domain);
+                CookieUtils.addCookieToResponse(servletResponse, cookie);
+            }
+        }
+    }
 
     /**
      * Modifies a response by adding cache control headers.

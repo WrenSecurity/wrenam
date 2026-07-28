@@ -12,7 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Portions copyright 2011-2017 ForgeRock AS.
- * Portions copyright 2024 Wren Security.
+ * Portions copyright 2024-2026 Wren Security.
  */
 
 define([
@@ -50,7 +50,7 @@ define([
                 if (result.hasOwnProperty("tokenId")) {
                     obj.getLoggedUser(function (user) {
                         Configuration.setProperty("loggedUser", user);
-                        self.setSuccessURL(result.tokenId, result.successUrl).then(function () {
+                        self.setSuccessURL(result.successUrl).then(function () {
                             successCallback(user);
                             AuthNService.resetProcess();
                         });
@@ -81,7 +81,6 @@ define([
     };
 
     obj.getLoggedUser = function (successCallback, errorCallback) {
-        const sessionToken = SessionToken.get();
         const noSessionHandler = (xhr) => {
             // Try to remove any cookie that is lingering, as it is apparently no longer valid
             SessionToken.remove();
@@ -108,13 +107,11 @@ define([
         // We do not want to trigger an unauthorized error when we are getting the logged user.
         const suppressError = { errorsHandlers : { "Unauthorized": { status: 401 } } };
 
-        if (sessionToken) {
-            return SessionService.updateSessionInfo(suppressError).then((data) => {
-                return UserModel.fetchById(data.username).then(successCallback);
-            }, noSessionHandler);
-        } else {
-            noSessionHandler();
-        }
+        // The session token may be stored in an HttpOnly cookie and is therefore not readable here, so we always
+        // ask the server for the current session and treat a missing/invalid session as "no logged in user".
+        return SessionService.updateSessionInfo(suppressError).then((data) => {
+            return UserModel.fetchById(data.username).then(successCallback);
+        }, noSessionHandler);
     };
 
     obj.getSuccessfulLoginUrlParams = function () {
@@ -125,7 +122,7 @@ define([
         return query.parseParameters(paramString);
     };
 
-    obj.setSuccessURL = function (tokenId, successUrl) {
+    obj.setSuccessURL = function (successUrl) {
         const promise = $.Deferred();
         let context = "";
 

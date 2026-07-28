@@ -12,7 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Portions copyright 2011-2016 ForgeRock AS.
- * Portions copyright 2024 Wren Security.
+ * Portions copyright 2024-2026 Wren Security.
  */
 define([
     "jquery",
@@ -122,7 +122,11 @@ define([
                 AuthenticationToken.set(requirements.authId);
             }
         } else if (isAuthenticated) {
-            SessionToken.set(requirements.tokenId);
+            // In HttpOnly cookie mode the server sets the SSO cookie itself and returns an empty tokenId, so only
+            // persist the token here when the server actually exposed it.
+            if (requirements.tokenId) {
+                SessionToken.set(requirements.tokenId);
+            }
             addRealmToStore(requirements.realm);
         }
     };

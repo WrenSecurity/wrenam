@@ -12,7 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Portions copyright 2011-2016 ForgeRock AS.
- * Portions copyright 2024 Wren Security.
+ * Portions copyright 2024-2026 Wren Security.
  */
 
 define([
@@ -201,8 +201,7 @@ define([
             "org/forgerock/openam/ui/admin/services/global/ServicesService",
             "org/forgerock/openam/ui/common/sessions/SessionValidator",
             "org/forgerock/openam/ui/common/sessions/strategies/MaxIdleTimeLeftStrategy",
-            "org/forgerock/openam/ui/common/util/NavigationHelper",
-            "org/forgerock/openam/ui/user/login/tokens/SessionToken"
+            "org/forgerock/openam/ui/common/util/NavigationHelper"
         ],
         processDescription (
                 event,
@@ -211,11 +210,9 @@ define([
                 ServicesService,
                 SessionValidator,
                 MaxIdleTimeLeftStrategy,
-                NavigationHelper,
-                SessionToken) {
+                NavigationHelper) {
             var queueName = "loginDialogAuthCallbacks",
-                authenticatedCallback,
-                sessionToken;
+                authenticatedCallback;
 
             if (Configuration.globalData[queueName]) {
                 authenticatedCallback = Configuration.globalData[queueName].remove();
@@ -230,8 +227,7 @@ define([
 
             if (Configuration.loggedUser && Configuration.globalData.xuiUserSessionValidationEnabled &&
                 !Configuration.loggedUser.hasRole(["ui-realm-admin", "ui-global-admin"])) {
-                sessionToken = SessionToken.get();
-                SessionValidator.start(sessionToken, MaxIdleTimeLeftStrategy);
+                SessionValidator.start(MaxIdleTimeLeftStrategy);
             }
 
             while (authenticatedCallback) {

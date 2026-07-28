@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions copyright 2026 Wren Security.
  */
 
 /**
@@ -31,16 +32,16 @@ define([
         delay = null;
     }
 
-    function validate (strategy, token, seconds) {
+    function validate (strategy, seconds) {
         delay = setTimeout(function () {
-            strategy(token).then(function (seconds) {
+            strategy().then(function (seconds) {
                 /**
                  * If we're within the window of 0 seconds left on the session but still monumentality valid,
                  * backoff the next schedule by a predetermined number of seconds. Avoids an immediate schedule.
                  */
                 var adjustedSeconds = seconds > 0 ? seconds : SESSION_ALMOST_EXPIRED_BACKOFF_SECONDS;
 
-                validate(strategy, token, adjustedSeconds);
+                validate(strategy, adjustedSeconds);
             }, () => {
                 stop();
 
@@ -55,14 +56,13 @@ define([
     return {
         /**
          * Starts the periodic session validation progress using the specified strategy.
-         * @param {string}   token SSO token to validate
          * @param {org/forgerock/openam/ui/common/sessions/SessionValidator~Strategy} strategy Strategy to use to
          * perform validation
          */
-        start (token, strategy) {
+        start (strategy) {
             if (delay) { throw new Error("Validator has already been started"); }
 
-            validate(strategy, token, 0);
+            validate(strategy, 0);
         },
         /**
          * Stops the periodic session validation progress.
@@ -75,6 +75,5 @@ define([
  * Interface that strategies must adhere to
  * @callback Strategy
  * @memberOf module:org/forgerock/openam/ui/common/sessions/SessionValidator
- * @param {string} token SSO token to validate
  * @returns {Promise} when resolved, promise must pass a single argument with the seconds until the next check
  */
