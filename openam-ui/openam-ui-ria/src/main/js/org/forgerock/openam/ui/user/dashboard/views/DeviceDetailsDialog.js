@@ -20,9 +20,10 @@ define([
     "org/forgerock/commons/ui/common/components/BootstrapDialog",
     "org/forgerock/commons/ui/common/util/UIUtils"
 ], ($, _, BootstrapDialog, UIUtils) => {
-    return function (uuid, device) {
+    return function (uuid, device, type) {
         const data = {
             deviceName: device.deviceName,
+            deviceType: type,
             recoveryCodes: device.recoveryCodes
         };
 

@@ -29,7 +29,7 @@ import org.forgerock.openam.core.rest.devices.services.oath.AuthenticatorOathSer
  *
  * @since 13.0.0
  */
-public class OathDevicesDao extends UserDevicesDao {
+public class OathDevicesDao extends UserDevicesDao<AuthenticatorOathService> {
 
     /**
      * Construct a new OathDevicesDao.
