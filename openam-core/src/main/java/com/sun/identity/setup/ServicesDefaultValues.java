@@ -25,6 +25,7 @@
  * $Id: ServicesDefaultValues.java,v 1.38 2009/01/28 05:35:02 ww203982 Exp $
  *
  * Portions Copyrighted 2013-2017 ForgeRock AS.
+ * Portions Copyrighted 2026 Wren Security.
  */
 
 package com.sun.identity.setup;
@@ -110,7 +111,6 @@ public class ServicesDefaultValues {
             SetupConstants.CONFIG_VAR_BASE_DIR);
         base = base.replace('\\', '/');
         map.put(SetupConstants.CONFIG_VAR_BASE_DIR, base);
-        map.put(SetupConstants.USER_HOME, System.getProperty("user.home", ""));
 
         if (!isEncryptionKeyValid()){
             throw new ConfiguratorException("configurator.encryptkey",
