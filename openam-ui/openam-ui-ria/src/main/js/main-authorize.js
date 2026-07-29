@@ -37,6 +37,7 @@ require.config({
         "jquery": "libs/jquery",
         "lodash": "libs/lodash",
         "redux": "libs/redux",
+        "redux-actions": "libs/redux-actions",
         "text": "libs/text",
         "underscore": "libs/underscore"
     },
