@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015 ForgeRock AS.
+ * Portions copyright 2026 Wren Security.
  */
 
 package org.forgerock.openam.core.rest.sms;
@@ -78,13 +79,6 @@ public class SmsJsonConverterTest {
         }
 
         @Override
-        protected HashMap<String, String> getAttributeNameToSection() {
-            final HashMap<String, String> sectionToAttribute = new HashMap<String, String>();
-            sectionToAttribute.put(SECTION_1_STRING_VALUE_NAME, SECTION_1_NAME);
-            return sectionToAttribute;
-        }
-
-        @Override
         protected List<String> getHiddenAttributeNames() {
             return new ArrayList<String>();
         }
@@ -94,6 +88,7 @@ public class SmsJsonConverterTest {
     public void setup() throws UnsupportedEncodingException {
         serviceSchema = mock(ServiceSchema.class);
 
+        given(serviceSchema.getName()).willReturn(SmsJsonConverterTest.class.getSimpleName());
         given(serviceSchema.getAttributeSchemaNames()).willReturn(getHashSet(STRING_VALUE_NAME, INT_VALUE_NAME,
                 BOOLEAN_VALUE_NAME, DECIMAL_VALUE_NAME, ARRAY_VALUE_NAME, MAP_VALUE_NAME, SECTION_1_STRING_VALUE_NAME,
                 SCRIPT_VALUE_NAME, PASSWORD_VALUE_NAME));

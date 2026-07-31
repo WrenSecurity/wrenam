@@ -12,7 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2017 ForgeRock AS.
- * Portions copyright 2022-2026 Wren Security
+ * Portions copyright 2022-2026 Wren Security.
  */
 
 package org.forgerock.openam.core.rest.sms;
@@ -36,16 +36,10 @@ import static org.forgerock.openam.rest.RestConstants.COLLECTION;
 import static org.forgerock.openam.rest.RestConstants.NAME;
 import static org.forgerock.util.i18n.LocalizableString.TRANSLATION_KEY_PREFIX;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -471,7 +465,8 @@ public abstract class SmsResourceProvider implements Describable<ApiDescription,
     }
 
     protected void addAttributeSchema(JsonValue result, String path, ServiceSchema schemas, Optional<Context> context) {
-        Map<String, String> attributeSectionMap = getAttributeNameToSection(schemas);
+        Map<String, String> attributeSectionMap =
+                SmsSectionReader.readSectionsByAttributeName(schemas, debug);
         String serviceType = schemas.getServiceType().getType();
         List<String> sections = getSections(attributeSectionMap, serviceType);
 
@@ -638,34 +633,6 @@ public abstract class SmsResourceProvider implements Describable<ApiDescription,
             type = STRING_TYPE;
         }
         return type;
-    }
-
-    protected Map<String, String> getAttributeNameToSection(ServiceSchema schema) {
-        Map<String, String> result = new LinkedHashMap<>();
-
-        String serviceSectionFilename = schema.getName() != null ? schema.getName() : schema.getServiceName();
-        serviceSectionFilename = serviceSectionFilename + ".section.properties";
-
-        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(serviceSectionFilename);
-
-        if (inputStream != null) {
-            String line;
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-            try {
-                while ((line = reader.readLine()) != null) {
-                    if (!(line.matches("^\\#.*") || line.isEmpty())) {
-                        String[] attributeValue = line.split("=");
-                        final String sectionName = attributeValue[0];
-                        result.put(attributeValue[1], sectionName);
-                    }
-                }
-            } catch (IOException e) {
-                if (debug.errorEnabled()) {
-                    debug.error("Error reading section properties file", e);
-                }
-            }
-        }
-        return result;
     }
 
     protected Locale getLocale(Context context) {
