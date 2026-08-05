@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014 ForgeRock AS.
+ * Portions copyright 2026 Wren Security.
  */
 package org.forgerock.openam.security.whitelist;
 
@@ -25,6 +26,7 @@ import com.sun.identity.sm.SMSException;
 import com.sun.identity.sm.ServiceConfig;
 import com.sun.identity.sm.ServiceConfigManager;
 import com.sun.identity.sm.ServiceListener;
+import com.sun.identity.sm.ServiceManager;
 import java.security.AccessController;
 import java.util.Collection;
 import java.util.Collections;
@@ -135,7 +137,11 @@ public class ValidGotoUrlExtractor implements ValidDomainExtractor<String> {
                         + "\nserviceComponent: " + serviceComponent
                         + "\ntype: " + type);
             }
-            CACHE.remove(normalizeRealm(orgName));
+            if (ServiceManager.getBaseDN().equals(orgName)) {
+                CACHE.clear(); // schema change
+            } else {
+                CACHE.remove(normalizeRealm(orgName));
+            }
         }
     }
 }
