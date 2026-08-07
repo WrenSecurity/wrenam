@@ -21,6 +21,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willThrow;
+import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -45,9 +46,12 @@ import org.forgerock.json.jose.jwt.JwtClaimsSet;
 import org.forgerock.oauth2.core.ClientRegistration;
 import org.forgerock.oauth2.core.ClientRegistrationStore;
 import org.forgerock.oauth2.core.CsrfProtection;
+import org.forgerock.oauth2.core.OAuth2ProviderSettings;
+import org.forgerock.oauth2.core.OAuth2ProviderSettingsFactory;
 import org.forgerock.oauth2.core.OAuth2Request;
 import org.forgerock.oauth2.core.exceptions.CsrfException;
 import org.forgerock.openam.oauth2.OAuth2Constants;
+import org.mockito.InOrder;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -64,6 +68,8 @@ public class EndSessionServiceTest {
     private SSOTokenManager ssoTokenManager;
     private ClientRegistrationStore clientRegistrationStore;
     private CsrfProtection csrfProtection;
+    private OAuth2ProviderSettingsFactory providerSettingsFactory;
+    private OAuth2ProviderSettings providerSettings;
     private OAuth2Request request;
     private EndSessionService service;
 
@@ -74,9 +80,11 @@ public class EndSessionServiceTest {
         ssoTokenManager = mock(SSOTokenManager.class);
         clientRegistrationStore = mock(ClientRegistrationStore.class);
         csrfProtection = mock(CsrfProtection.class);
+        providerSettingsFactory = mock(OAuth2ProviderSettingsFactory.class);
+        providerSettings = mock(OAuth2ProviderSettings.class);
         request = mock(OAuth2Request.class);
         service = new EndSessionService(parametersValidator, openIDConnectProvider, ssoTokenManager,
-                clientRegistrationStore, csrfProtection);
+                clientRegistrationStore, csrfProtection, providerSettingsFactory);
     }
 
     private EndSessionParameters endSessionParameters(String idTokenHint) {
@@ -172,14 +180,119 @@ public class EndSessionServiceTest {
         HttpServletRequest servletRequest = mock(HttpServletRequest.class);
         SSOToken ssoToken = mock(SSOToken.class);
         given(ssoTokenManager.createSSOToken(servletRequest)).willReturn(ssoToken);
-        assertThat(service.currentSession(servletRequest)).isEqualTo(Optional.of(ssoToken));
+        assertThat(service.getCurrentSession(servletRequest)).isEqualTo(Optional.of(ssoToken));
     }
 
     @Test
     public void currentSession_noSession_returnsEmpty() throws Exception {
         HttpServletRequest servletRequest = mock(HttpServletRequest.class);
         given(ssoTokenManager.createSSOToken(servletRequest)).willThrow(new SSOException("no session"));
-        assertThat(service.currentSession(servletRequest)).isEqualTo(Optional.empty());
+        assertThat(service.getCurrentSession(servletRequest)).isEqualTo(Optional.empty());
+    }
+
+    @Test
+    public void canSkipLogoutConfirmation_trustedCurrentSession_returnsTrue() throws Exception {
+        SSOToken session = sessionWithId("session-id");
+        ClientRegistration client = mock(ClientRegistration.class);
+        String idToken = buildHmacIdToken(CLIENT_SECRET, azpClaims()
+                .claim(OAuth2Constants.JWTTokenParams.OPS, "ops-id").build());
+        given(providerSettingsFactory.get(request)).willReturn(providerSettings);
+        given(clientRegistrationStore.get(CLIENT_ID, request)).willReturn(client);
+        given(openIDConnectProvider.isOpsTokenForSession("ops-id", session)).willReturn(true);
+
+        assertThat(service.canSkipLogoutConfirmation(request, endSessionParameters(idToken), session)).isTrue();
+    }
+
+    @Test
+    public void canSkipLogoutConfirmation_providerRequiresConfirmation_returnsFalse() throws Exception {
+        SSOToken session = sessionWithId("session-id");
+        ClientRegistration client = mock(ClientRegistration.class);
+        String idToken = buildHmacIdToken(CLIENT_SECRET, azpClaims()
+                .claim(OAuth2Constants.JWTTokenParams.OPS, "ops-id").build());
+        given(providerSettingsFactory.get(request)).willReturn(providerSettings);
+        given(providerSettings.isLogoutConfirmationRequired()).willReturn(true);
+        given(clientRegistrationStore.get(CLIENT_ID, request)).willReturn(client);
+
+        assertThat(service.canSkipLogoutConfirmation(request, endSessionParameters(idToken), session)).isFalse();
+
+        verify(openIDConnectProvider, never()).isOpsTokenForSession(any(String.class), any(SSOToken.class));
+    }
+
+    @Test
+    public void canSkipLogoutConfirmation_clientRequiresConfirmation_returnsFalse() throws Exception {
+        SSOToken session = sessionWithId("session-id");
+        ClientRegistration client = mock(ClientRegistration.class);
+        String idToken = buildHmacIdToken(CLIENT_SECRET, azpClaims()
+                .claim(OAuth2Constants.JWTTokenParams.OPS, "ops-id").build());
+        given(providerSettingsFactory.get(request)).willReturn(providerSettings);
+        given(clientRegistrationStore.get(CLIENT_ID, request)).willReturn(client);
+        given(client.isLogoutConfirmationRequired()).willReturn(true);
+
+        assertThat(service.canSkipLogoutConfirmation(request, endSessionParameters(idToken), session)).isFalse();
+
+        verify(openIDConnectProvider, never()).isOpsTokenForSession(any(String.class), any(SSOToken.class));
+    }
+
+    @Test
+    public void canSkipLogoutConfirmation_tokenForDifferentSession_returnsFalse() throws Exception {
+        SSOToken session = sessionWithId("session-id");
+        ClientRegistration client = mock(ClientRegistration.class);
+        String idToken = buildHmacIdToken(CLIENT_SECRET, azpClaims()
+                .claim(OAuth2Constants.JWTTokenParams.OPS, "ops-id").build());
+        given(providerSettingsFactory.get(request)).willReturn(providerSettings);
+        given(clientRegistrationStore.get(CLIENT_ID, request)).willReturn(client);
+
+        assertThat(service.canSkipLogoutConfirmation(request, endSessionParameters(idToken), session)).isFalse();
+    }
+
+    @Test
+    public void canSkipLogoutConfirmation_attachesClientRegistrationBeforeResolvingSettings() throws Exception {
+        SSOToken session = sessionWithId("session-id");
+        ClientRegistration client = mock(ClientRegistration.class);
+        String idToken = buildHmacIdToken(CLIENT_SECRET, azpClaims()
+                .claim(OAuth2Constants.JWTTokenParams.OPS, "ops-id").build());
+        given(providerSettingsFactory.get(request)).willReturn(providerSettings);
+        given(clientRegistrationStore.get(CLIENT_ID, request)).willReturn(client);
+
+        service.canSkipLogoutConfirmation(request, endSessionParameters(idToken), session);
+
+        // The provider settings depend on the kind of client, which the end session endpoint does not authenticate.
+        InOrder inOrder = inOrder(request, providerSettingsFactory);
+        inOrder.verify(request).setClientRegistration(client);
+        inOrder.verify(providerSettingsFactory).get(request);
+    }
+
+    @Test
+    public void canSkipLogoutConfirmation_idTokenWithoutOpsClaim_returnsFalse() throws Exception {
+        SSOToken session = sessionWithId("session-id");
+        String idToken = buildHmacIdToken(CLIENT_SECRET, azpClaims().build());
+
+        assertThat(service.canSkipLogoutConfirmation(request, endSessionParameters(idToken), session)).isFalse();
+
+        verify(clientRegistrationStore, never()).get(any(String.class), eq(request));
+    }
+
+    @Test
+    public void canSkipLogoutConfirmation_withoutHintOrSession_returnsFalse() throws Exception {
+        assertThat(service.canSkipLogoutConfirmation(request, endSessionParameters(null), sessionWithId("session-id")))
+                .isFalse();
+        assertThat(service.canSkipLogoutConfirmation(request,
+                endSessionParameters(buildHmacIdToken(CLIENT_SECRET, azpClaims().build())), null)).isFalse();
+
+        verify(providerSettingsFactory, never()).get(any(OAuth2Request.class));
+    }
+
+    @Test
+    public void canSkipLogoutConfirmation_legacyOpsClaim_isSupported() throws Exception {
+        SSOToken session = sessionWithId("session-id");
+        ClientRegistration client = mock(ClientRegistration.class);
+        String idToken = buildHmacIdToken(CLIENT_SECRET, azpClaims()
+                .claim(OAuth2Constants.JWTTokenParams.LEGACY_OPS, "legacy-ops-id").build());
+        given(providerSettingsFactory.get(request)).willReturn(providerSettings);
+        given(clientRegistrationStore.get(CLIENT_ID, request)).willReturn(client);
+        given(openIDConnectProvider.isOpsTokenForSession("legacy-ops-id", session)).willReturn(true);
+
+        assertThat(service.canSkipLogoutConfirmation(request, endSessionParameters(idToken), session)).isTrue();
     }
 
     @Test

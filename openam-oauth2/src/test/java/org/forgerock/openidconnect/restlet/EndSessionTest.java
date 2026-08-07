@@ -122,10 +122,10 @@ public class EndSessionTest {
     }
 
     @Test
-    public void showConfirmation_withoutIdTokenHint_rendersConfirmation() throws Exception {
-        given(endSessionService.currentSession(servletRequest)).willReturn(Optional.of(mock(SSOToken.class)));
+    public void endSessionGet_withoutIdTokenHint_rendersConfirmation() throws Exception {
+        given(endSessionService.getCurrentSession(servletRequest)).willReturn(Optional.of(mock(SSOToken.class)));
 
-        Map<String, Object> dataModel = dataModel(resource.showConfirmation());
+        Map<String, Object> dataModel = dataModel(resource.endSession());
 
         assertThat(dataModel.get("stage")).isEqualTo("confirmation");
         assertThat(dataModel.get("baseUrl")).isEqualTo("https://am.example.com/auth");
@@ -133,28 +133,56 @@ public class EndSessionTest {
     }
 
     @Test
-    public void showConfirmation_noSessionAndNoIdTokenHint_rendersDone() throws Exception {
-        given(endSessionService.currentSession(servletRequest)).willReturn(Optional.empty());
+    public void endSessionGet_logoutDecisionDoesNotConfirmLogout() throws Exception {
+        given(servletRequest.getParameter("decision")).willReturn("logout");
+        given(endSessionService.getCurrentSession(servletRequest)).willReturn(Optional.of(mock(SSOToken.class)));
 
-        Map<String, Object> dataModel = dataModel(resource.showConfirmation());
+        Map<String, Object> dataModel = dataModel(resource.endSession());
+
+        assertThat(dataModel.get("stage")).isEqualTo("confirmation");
+        verify(endSessionService, never()).verifyCsrf(any(), any());
+        verify(endSessionService, never()).endSession(any(), any());
+        verify(endSessionService, never()).logout(any());
+    }
+
+    @Test
+    public void endSessionGet_noSessionAndNoIdTokenHint_rendersDone() throws Exception {
+        given(endSessionService.getCurrentSession(servletRequest)).willReturn(Optional.empty());
+
+        Map<String, Object> dataModel = dataModel(resource.endSession());
 
         assertThat(dataModel.get("stage")).isEqualTo("done");
         verify(endSessionService, never()).resolveClientName(any(), any(), any());
     }
 
     @Test
-    public void showConfirmation_validRequest_validatesAndRenders() throws Exception {
+    public void endSessionGet_validRequest_validatesAndRenders() throws Exception {
         given(servletRequest.getParameter(OAuth2Constants.Params.END_SESSION_ID_TOKEN_HINT)).willReturn(ID_TOKEN);
         given(servletRequest.getParameter(OAuth2Constants.Params.CLIENT_ID)).willReturn(CLIENT_ID);
         given(servletRequest.getParameter(OAuth2Constants.Params.POST_LOGOUT_REDIRECT_URI)).willReturn(REDIRECT_URI);
 
-        assertThat(resource.showConfirmation()).isNotNull();
+        assertThat(resource.endSession()).isNotNull();
 
         verify(endSessionService).validate(eq(oAuth2Request), any(EndSessionParameters.class));
     }
 
     @Test
-    public void showConfirmation_populatesTemplateDataModel() throws Exception {
+    public void endSessionGet_trustedRequestSkipsConfirmationAndEndsSession() throws Exception {
+        SSOToken session = mock(SSOToken.class);
+        given(servletRequest.getParameter(OAuth2Constants.Params.END_SESSION_ID_TOKEN_HINT)).willReturn(ID_TOKEN);
+        given(endSessionService.getCurrentSession(servletRequest)).willReturn(Optional.of(session));
+        given(endSessionService.canSkipLogoutConfirmation(eq(oAuth2Request), any(EndSessionParameters.class),
+                eq(session))).willReturn(true);
+
+        resource.endSession();
+
+        verify(endSessionService).endSession(eq(oAuth2Request), any(EndSessionParameters.class));
+        verify(endSessionService, never()).verifyCsrf(any(), any());
+        verify(endSessionService, never()).resolveClientName(any(), any(), any());
+    }
+
+    @Test
+    public void endSessionGet_populatesTemplateDataModel() throws Exception {
         given(servletRequest.getParameter(OAuth2Constants.Params.END_SESSION_ID_TOKEN_HINT)).willReturn(ID_TOKEN);
         given(servletRequest.getParameter(OAuth2Constants.Params.CLIENT_ID)).willReturn(CLIENT_ID);
         given(servletRequest.getParameter(OAuth2Constants.Params.POST_LOGOUT_REDIRECT_URI)).willReturn(REDIRECT_URI);
@@ -165,7 +193,7 @@ public class EndSessionTest {
         given(endSessionService.resolveUserName(any(EndSessionParameters.class), any()))
                 .willReturn(Optional.of("demo"));
 
-        Map<String, Object> dataModel = dataModel(resource.showConfirmation());
+        Map<String, Object> dataModel = dataModel(resource.endSession());
 
         assertThat(dataModel.get("stage")).isEqualTo("confirmation");
         assertThat(dataModel.get("baseUrl")).isEqualTo("https://am.example.com/auth");
@@ -179,22 +207,22 @@ public class EndSessionTest {
     }
 
     @Test(expectedExceptions = OAuth2RestletException.class)
-    public void showConfirmation_invalidIdTokenHint_throwsException() throws Exception {
+    public void endSessionGet_invalidIdTokenHint_throwsException() throws Exception {
         given(servletRequest.getParameter(OAuth2Constants.Params.END_SESSION_ID_TOKEN_HINT)).willReturn(ID_TOKEN);
         willThrow(new BadRequestException("id_token_hint signature could not be verified"))
                 .given(endSessionService).validate(any(), any());
 
-        resource.showConfirmation();
+        resource.endSession();
     }
 
     @Test(expectedExceptions = OAuth2RestletException.class)
-    public void showConfirmation_unregisteredRedirectUri_throwsException() throws Exception {
+    public void endSessionGet_unregisteredRedirectUri_throwsException() throws Exception {
         given(servletRequest.getParameter(OAuth2Constants.Params.END_SESSION_ID_TOKEN_HINT)).willReturn(ID_TOKEN);
         given(servletRequest.getParameter(OAuth2Constants.Params.POST_LOGOUT_REDIRECT_URI)).willReturn(REDIRECT_URI);
         willThrow(new RedirectUriMismatchException())
                 .given(endSessionService).validate(any(), any());
 
-        resource.showConfirmation();
+        resource.endSession();
     }
 
     @Test
@@ -254,7 +282,7 @@ public class EndSessionTest {
     @Test
     public void endSession_unknownDecision_rendersConfirmation() throws Exception {
         given(servletRequest.getParameter("decision")).willReturn("ignore");
-        given(endSessionService.currentSession(servletRequest)).willReturn(Optional.of(mock(SSOToken.class)));
+        given(endSessionService.getCurrentSession(servletRequest)).willReturn(Optional.of(mock(SSOToken.class)));
 
         Map<String, Object> dataModel = dataModel(resource.endSession(null));
 
@@ -297,7 +325,7 @@ public class EndSessionTest {
     public void endSession_withoutIdTokenHint_logsOutBySession() throws Exception {
         given(servletRequest.getParameter("decision")).willReturn("logout");
         SSOToken ssoToken = mock(SSOToken.class);
-        given(endSessionService.currentSession(servletRequest)).willReturn(Optional.of(ssoToken));
+        given(endSessionService.getCurrentSession(servletRequest)).willReturn(Optional.of(ssoToken));
 
         assertThat(resource.endSession(null)).isNotNull();
 
@@ -320,7 +348,7 @@ public class EndSessionTest {
         given(servletRequest.getParameter("decision")).willReturn("logout");
         given(servletRequest.getParameter(OAuth2Constants.Params.POST_LOGOUT_REDIRECT_URI)).willReturn(REDIRECT_URI);
         SSOToken ssoToken = mock(SSOToken.class);
-        given(endSessionService.currentSession(servletRequest)).willReturn(Optional.of(ssoToken));
+        given(endSessionService.getCurrentSession(servletRequest)).willReturn(Optional.of(ssoToken));
 
         Map<String, Object> dataModel = dataModel(resource.endSession(null));
 
@@ -357,13 +385,13 @@ public class EndSessionTest {
     }
 
     @Test(expectedExceptions = OAuth2RestletException.class)
-    public void showConfirmation_unknownClient_throwsOAuth2RestletException() throws Exception {
+    public void endSessionGet_unknownClient_throwsOAuth2RestletException() throws Exception {
         given(servletRequest.getParameter(OAuth2Constants.Params.CLIENT_ID)).willReturn(CLIENT_ID);
-        given(endSessionService.currentSession(servletRequest)).willReturn(Optional.of(mock(SSOToken.class)));
+        given(endSessionService.getCurrentSession(servletRequest)).willReturn(Optional.of(mock(SSOToken.class)));
         given(endSessionService.resolveClientName(any(), any(), any()))
                 .willThrow(InvalidClientException.class);
 
-        resource.showConfirmation();
+        resource.endSession();
     }
 
     @Test
