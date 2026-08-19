@@ -12,7 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
- * Portions copyright 2022 Wren Security
+ * Portions copyright 2022-2026 Wren Security
  */
 package org.forgerock.openam.oauth2;
 
@@ -205,6 +205,17 @@ public class AgentClientRegistration implements OpenIdConnectClientRegistration 
     @Override
     public boolean isConsentImplied() {
         return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Confirmation is not required for agents' OpenId Connect client registration.
+     * </p>
+     */
+    @Override
+    public boolean isLogoutConfirmationRequired() {
+        return false;
     }
 
     /**

@@ -12,7 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
- * Portions copyright 2022 Wren Security
+ * Portions copyright 2022-2026 Wren Security
  */
 package org.forgerock.oauth2.core;
 
@@ -368,6 +368,11 @@ public class AgentOAuth2ProviderSettings implements OAuth2ProviderSettings {
     @Override
     public boolean clientsCanSkipConsent() throws ServerException {
         return true;
+    }
+
+    @Override
+    public boolean isLogoutConfirmationRequired() throws ServerException {
+        return false;
     }
 
     @Override

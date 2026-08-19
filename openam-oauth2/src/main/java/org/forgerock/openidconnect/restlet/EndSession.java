@@ -86,23 +86,11 @@ public class EndSession extends ServerResource {
     }
 
     /**
-     * Handles GET requests to display the OpenId Connect end session confirmation page.
+     * Handles GET requests to the OpenID Connect end session endpoint.
      */
     @Get
-    public Representation showConfirmation() throws OAuth2RestletException {
-        try {
-            EndSessionParameters params = EndSessionParameters.from(getServletRequest());
-            OAuth2Request request = requestFactory.create(getRequest());
-            validateRequest(request, params);
-            SSOToken session = endSessionService.currentSession(getServletRequest()).orElse(null);
-            if (params.getIdTokenHint().isEmpty() && session == null) {
-                // Nothing to log out
-                return getTemplate("done");
-            }
-            return getTemplate("confirmation", getConfirmationDataModel(params, session));
-        } catch (OAuth2Exception e) {
-            throw new OAuth2RestletException(e.getStatusCode(), e.getError(), e.getMessage(), null);
-        }
+    public Representation endSession() throws OAuth2RestletException {
+        return handleLogoutRequest();
     }
 
     /**
@@ -117,21 +105,50 @@ public class EndSession extends ServerResource {
         String decision = request.getParameter("decision");
 
         if ("logout".equals(decision)) {
-            EndSessionParameters params = EndSessionParameters.from(getServletRequest());
-            validateRequest(request, params);
-            return processLogout(request, params);
-        } else if ("cancel".equals(decision)) {
+            return handleConfirmedLogout();
+        }
+        if ("cancel".equals(decision)) {
             return getTemplate("canceled");
         }
 
-        return showConfirmation();
+        return handleLogoutRequest();
     }
 
-    private Representation processLogout(OAuth2Request request, EndSessionParameters params)
-            throws OAuth2RestletException {
-        SSOToken session = endSessionService.currentSession(getServletRequest()).orElse(null);
+    private Representation handleLogoutRequest() throws OAuth2RestletException {
+        try {
+            EndSessionParameters params = EndSessionParameters.from(getServletRequest());
+            OAuth2Request request = requestFactory.create(getRequest());
+            validateRequest(request, params);
+            SSOToken session = endSessionService.getCurrentSession(getServletRequest()).orElse(null);
+            if (params.getIdTokenHint().isEmpty() && session == null) {
+                // Nothing to log out
+                return getTemplate("done");
+            }
+            if (endSessionService.canSkipLogoutConfirmation(request, params, session)) {
+                return performLogout(request, params, session);
+            }
+            return getTemplate("confirmation", getConfirmationDataModel(params, session));
+        } catch (OAuth2Exception e) {
+            throw new OAuth2RestletException(e.getStatusCode(), e.getError(), e.getMessage(), null);
+        }
+    }
+
+    private Representation handleConfirmedLogout() throws OAuth2RestletException {
+        EndSessionParameters params = EndSessionParameters.from(getServletRequest());
+        OAuth2Request request = requestFactory.create(getRequest());
+        validateRequest(request, params);
+        SSOToken session = endSessionService.getCurrentSession(getServletRequest()).orElse(null);
         try {
             endSessionService.verifyCsrf(request, session);
+            return performLogout(request, params, session);
+        } catch (OAuth2Exception e) {
+            throw new OAuth2RestletException(e.getStatusCode(), e.getError(), e.getMessage(), null);
+        }
+    }
+
+    private Representation performLogout(OAuth2Request request, EndSessionParameters params, SSOToken session)
+            throws OAuth2RestletException {
+        try {
             if (params.getIdTokenHint().isPresent()) {
                 endSessionService.endSession(request, params);
                 if (params.getPostLogoutRedirectUri().isPresent()) {
@@ -172,21 +189,21 @@ public class EndSession extends ServerResource {
         return representation;
     }
 
-    private Map<String, Object> getConfirmationDataModel(EndSessionParameters request, SSOToken session)
+    private Map<String, Object> getConfirmationDataModel(EndSessionParameters params, SSOToken session)
             throws InvalidClientException, NotFoundException {
         Map<String, Object> dataModel = new HashMap<>();
 
-        endSessionService.resolveClientName(getRealm(), request, getLocale())
+        endSessionService.resolveClientName(getRealm(), params, getLocale())
                 .ifPresent(clientName -> dataModel.put("clientName", clientName));
-        endSessionService.resolveUserName(request, session)
+        endSessionService.resolveUserName(params, session)
                 .ifPresent(userName -> dataModel.put("userName", userName));
         endSessionService.resolveCsrfToken(session)
                 .ifPresent(csrf -> dataModel.put("csrf", csrf));
-        request.getIdTokenHint()
+        params.getIdTokenHint()
                 .ifPresent(idTokenHint -> dataModel.put("idTokenHint", idTokenHint));
-        request.getPostLogoutRedirectUri()
+        params.getPostLogoutRedirectUri()
                 .ifPresent(redirectUri -> dataModel.put("postLogoutRedirectUri", redirectUri));
-        request.getState()
+        params.getState()
                 .ifPresent(state -> dataModel.put("state", state));
 
         return dataModel;
@@ -202,9 +219,9 @@ public class EndSession extends ServerResource {
         exceptionHandler.handle(throwable, getResponse(), error -> getTemplate("error", new HashMap<>(error)));
     }
 
-    private Representation handleRedirect(EndSessionParameters request) {
-        String target = request.getPostLogoutRedirectUri().orElseThrow();
-        Optional<String> state = request.getState();
+    private Representation handleRedirect(EndSessionParameters params) {
+        String target = params.getPostLogoutRedirectUri().orElseThrow();
+        Optional<String> state = params.getState();
         if (state.isPresent()) {
             target = UriBuilder.fromUri(URI.create(target))
                     .queryParam("state", "{state}")

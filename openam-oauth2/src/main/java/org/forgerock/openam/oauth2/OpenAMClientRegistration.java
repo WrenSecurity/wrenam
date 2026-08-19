@@ -13,7 +13,7 @@
  *
  * Copyright 2014-2016 ForgeRock AS.
  * Portions Copyrighted 2015 Nomura Research Institute, Ltd.
- * Portions Copyrighted 2022 Wren Security
+ * Portions Copyrighted 2022-2026 Wren Security
  */
 
 package org.forgerock.openam.oauth2;
@@ -668,6 +668,11 @@ public class OpenAMClientRegistration implements OpenIdConnectClientRegistration
     @Override
     public boolean isConsentImplied() {
         return Boolean.parseBoolean(getAttribute(OAuth2Constants.OAuth2Client.IS_CONSENT_IMPLIED));
+    }
+
+    @Override
+    public boolean isLogoutConfirmationRequired() {
+        return Boolean.parseBoolean(getAttribute(OAuth2Constants.OAuth2Client.REQUIRE_LOGOUT_CONFIRMATION));
     }
 
     private boolean verifyJwtBySharedSecret(final OAuth2Jwt jwt) {

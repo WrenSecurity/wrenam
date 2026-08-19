@@ -28,6 +28,7 @@
 
    Portions Copyrighted 2011-2016 ForgeRock AS.
    Portions Copyrighted 2015 Nomura Research Institute, Ltd.
+   Portions Copyrighted 2026 Wren Security
 -->
 
 <!DOCTYPE ServicesConfiguration
@@ -438,6 +439,20 @@
                             syntax="boolean"
                             i18nKey="a758"
                             order="26200">
+                        <BooleanValues>
+                            <BooleanTrueValue i18nKey="i18nTrue">true</BooleanTrueValue>
+                            <BooleanFalseValue i18nKey="i18nFalse">false</BooleanFalseValue>
+                        </BooleanValues>
+                        <DefaultValues>
+                            <Value>false</Value>
+                        </DefaultValues>
+                    </AttributeSchema>
+                    <AttributeSchema
+                            name="requireLogoutConfirmation"
+                            type="single"
+                            syntax="boolean"
+                            i18nKey="a759"
+                            order="26300">
                         <BooleanValues>
                             <BooleanTrueValue i18nKey="i18nTrue">true</BooleanTrueValue>
                             <BooleanFalseValue i18nKey="i18nFalse">false</BooleanFalseValue>

@@ -30,6 +30,7 @@ import org.forgerock.json.jose.jwt.JwtClaimsSet;
 import org.forgerock.oauth2.core.ClientRegistration;
 import org.forgerock.oauth2.core.ClientRegistrationStore;
 import org.forgerock.oauth2.core.CsrfProtection;
+import org.forgerock.oauth2.core.OAuth2ProviderSettingsFactory;
 import org.forgerock.oauth2.core.OAuth2Request;
 import org.forgerock.oauth2.core.exceptions.BadRequestException;
 import org.forgerock.oauth2.core.exceptions.CsrfException;
@@ -54,6 +55,7 @@ public class EndSessionService {
     private final SSOTokenManager ssoTokenManager;
     private final ClientRegistrationStore clientRegistrationStore;
     private final CsrfProtection csrfProtection;
+    private final OAuth2ProviderSettingsFactory providerSettingsFactory;
 
     /**
      * Constructs a new EndSessionService.
@@ -63,16 +65,19 @@ public class EndSessionService {
      * @param ssoTokenManager An instance of the SSOTokenManager.
      * @param clientRegistrationStore An instance of the ClientRegistrationStore.
      * @param csrfProtection An instance of the CsrfProtection.
+     * @param providerSettingsFactory An instance of the OAuth2ProviderSettingsFactory.
      */
     @Inject
     public EndSessionService(EndSessionParametersValidator parametersValidator,
             OpenIDConnectProvider openIDConnectProvider, SSOTokenManager ssoTokenManager,
-            ClientRegistrationStore clientRegistrationStore, CsrfProtection csrfProtection) {
+            ClientRegistrationStore clientRegistrationStore, CsrfProtection csrfProtection,
+            OAuth2ProviderSettingsFactory providerSettingsFactory) {
         this.parametersValidator = parametersValidator;
         this.openIDConnectProvider = openIDConnectProvider;
         this.ssoTokenManager = ssoTokenManager;
         this.clientRegistrationStore = clientRegistrationStore;
         this.csrfProtection = csrfProtection;
+        this.providerSettingsFactory = providerSettingsFactory;
     }
 
     /**
@@ -103,10 +108,9 @@ public class EndSessionService {
             throws BadRequestException, ServerException {
         JwtClaimsSet claims = params.getClaims()
                 .orElseThrow(() -> new BadRequestException("The endSession endpoint requires a valid id_token_hint parameter"));
-        String opsId = (String) claims.getClaim(OAuth2Constants.JWTTokenParams.OPS);
-        if (opsId == null) {
-            opsId = (String) claims.getClaim(OAuth2Constants.JWTTokenParams.LEGACY_OPS);
-        }
+        // The proprietary "ops" claim is used instead of the standard "sid" because ID tokens do not issue "sid" yet.
+        String opsId = resolveOpsId(params)
+                .orElseThrow(() -> new BadRequestException("id_token_hint does not reference a session"));
         // Expose the ID Token on the OAuth2 request so the access audit filter can attribute the logout.
         request.setToken(OpenIdConnectToken.class, new OpenIdConnectToken(claims));
         openIDConnectProvider.destroySession(opsId);
@@ -118,13 +122,45 @@ public class EndSessionService {
      * @param request The servlet request carrying the SSO token.
      * @return The session, or {@link Optional#empty()} if there is no active session.
      */
-    public Optional<SSOToken> currentSession(HttpServletRequest request) {
+    public Optional<SSOToken> getCurrentSession(HttpServletRequest request) {
         try {
             return Optional.of(ssoTokenManager.createSSOToken(request));
         } catch (SSOException e) {
             logger.debug("No active session on the request", e);
             return Optional.empty();
         }
+    }
+
+    /**
+     * Determines whether user confirmation may be skipped for an RP-Initiated Logout request.
+     *
+     * @param request The OAuth2 request.
+     * @param params The end session parameters.
+     * @param session The user's current SSO session, or {@code null} if there is none.
+     * @return {@code true} if the confirmation page may be skipped.
+     * @throws OAuth2Exception If the client or provider settings cannot be resolved.
+     */
+    public boolean canSkipLogoutConfirmation(OAuth2Request request, EndSessionParameters params, SSOToken session)
+            throws OAuth2Exception {
+        if (session == null || params.getIdTokenHint().isEmpty()) {
+            return false;
+        }
+        Optional<String> clientId = params.getTokenClientId();
+        if (clientId.isEmpty()) {
+            return false;
+        }
+        // The proprietary "ops" claim is used instead of the standard "sid" because ID tokens do not issue "sid" yet.
+        Optional<String> opsId = resolveOpsId(params);
+        if (opsId.isEmpty()) {
+            return false;
+        }
+        ClientRegistration client = clientRegistrationStore.get(clientId.get(), request);
+        request.setClientRegistration(client);
+        if (providerSettingsFactory.get(request).isLogoutConfirmationRequired()
+                || client.isLogoutConfirmationRequired()) {
+            return false;
+        }
+        return openIDConnectProvider.isOpsTokenForSession(opsId.get(), session);
     }
 
     /**
@@ -198,6 +234,12 @@ public class EndSessionService {
         return request.getClaims()
                 .flatMap(claims -> claimAsString(claims, OAuth2Constants.JWTTokenParams.SUB))
                 .or(() -> Optional.ofNullable(session).flatMap(this::identityName));
+    }
+
+    private Optional<String> resolveOpsId(EndSessionParameters params) {
+        return params.getClaims()
+                .flatMap(claims -> claimAsString(claims, OAuth2Constants.JWTTokenParams.OPS)
+                        .or(() -> claimAsString(claims, OAuth2Constants.JWTTokenParams.LEGACY_OPS)));
     }
 
     private Optional<ClientRegistration> resolveClientRegistration(String realm, EndSessionParameters request)

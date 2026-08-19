@@ -13,7 +13,7 @@
  *
  * Copyright 2012-2016 ForgeRock AS.
  * Portions Copyrighted 2015 Nomura Research Institute, Ltd.
- * Portions Copyright 2023 Wren Security.
+ * Portions Copyright 2023-2026 Wren Security.
  */
 
 package org.forgerock.openam.oauth2;
@@ -826,6 +826,7 @@ public class OAuth2Constants {
         public static final String PHONE_MAPPING = "org-forgerock-oidc-phone-attribute-mapping";
         public static final String STORE_OPS_TOKENS = "storeOpsTokens";
         public static final String CLIENTS_CAN_SKIP_CONSENT = "clientsCanSkipConsent";
+        public static final String REQUIRE_LOGOUT_CONFIRMATION = "requireLogoutConfirmation";
         public static final String OIDC_SSOPROVIDER_ENABLED = "oidcSsoProviderEnabled";
 
         public static final String SUPPORTED_CLAIMS = "forgerock-oauth2-provider-supported-claims";
@@ -916,6 +917,7 @@ public class OAuth2Constants {
         public static final String CLIENT_SESSION_URI = "com.forgerock.openam.oauth2provider.clientSessionURI";
         public static final String CLIENT_NAME = "com.forgerock.openam.oauth2provider.clientName";
         public static final String IS_CONSENT_IMPLIED = "isConsentImplied";
+        public static final String REQUIRE_LOGOUT_CONFIRMATION = "requireLogoutConfirmation";
 
         public static final String JWKS_URI = "com.forgerock.openam.oauth2provider.jwksURI";
         public static final String JWKS = "com.forgerock.openam.oauth2provider.jwks";

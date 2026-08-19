@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions copyright 2026 Wren Security
  */
 package org.forgerock.oauth2.core;
 
@@ -539,6 +540,18 @@ public interface OAuth2ProviderSettings {
      * @throws ServerException If the setting could not be retrieved.
      */
     boolean clientsCanSkipConsent() throws ServerException;
+
+    /**
+     * Whether the end user must confirm every RP-Initiated Logout request, regardless of the client configuration.
+     * <p>
+     * When this is not required, a client may still opt in to confirmation of its own logout requests. Requests that
+     * carry no valid ID Token for the current user session are always confirmed.
+     * </p>
+     *
+     * @return {@code true} if logout confirmation is required for all clients of this provider.
+     * @throws ServerException If the setting could not be retrieved.
+     */
+    boolean isLogoutConfirmationRequired() throws ServerException;
 
     /**
      * Whether OpenID Connect ID Tokens are accepted as SSOTokens in this realm or not.
