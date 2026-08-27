@@ -12,7 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
- * Portions copyright 2024 Wren Security.
+ * Portions copyright 2024-2026 Wren Security.
  */
 
 /**
@@ -54,6 +54,16 @@ define([
      */
     function isObjectType (object) {
         return object.type === "object";
+    }
+
+    /**
+     * Determines whether the specified property is a schema in its own right, i.e. an object
+     * declaring nested properties.
+     * @param   {Object}  property Property to examine
+     * @returns {Boolean}          Whether the property is a nested schema
+     */
+    function isNestedSchema (property) {
+        return isObjectType(property) && _.has(property, "properties");
     }
 
     function groupTopLevelSimpleProperties (raw) {
@@ -98,9 +108,7 @@ define([
     * @returns {JSONSchema} JSONSchema new JSONSchema object
     */
     function ungroupCollectionProperties (raw, groupKey) {
-        const collectionProperties = _.pickBy(raw.properties[groupKey].properties, (value) => {
-            return value.type === "object" && _.has(value, "properties");
-        });
+        const collectionProperties = _.pickBy(raw.properties[groupKey].properties, isNestedSchema);
 
         if (_.isEmpty(collectionProperties)) {
             return raw;
@@ -218,10 +226,14 @@ define([
         /**
          * Whether this schema objects' properties are all schemas in their own right.
          * If true, this object is a simply a container for other schemas.
+         * <p>
+         * A property only counts as a schema in its own right when it declares nested
+         * <code>properties</code>.
+         * </p>
          * @returns {Boolean} Whether this object is a collection
          */
         isCollection () {
-            return _.every(this.raw.properties, (property) => property.type === "object");
+            return _.every(this.raw.properties, isNestedSchema);
         }
         isEmpty () {
             return _.isEmpty(this.raw.properties);

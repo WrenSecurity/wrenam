@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions copyright 2026 Wren Security.
  */
 
 define([
@@ -166,6 +167,102 @@ define([
                 });
 
                 expect(jsonSchema.hasInheritance()).to.be.false;
+            });
+        });
+
+        describe("#isCollection", () => {
+            it("returns true when all properties are nested schemas", () => {
+                const jsonSchema = new JSONSchema({
+                    type: "object",
+                    properties: {
+                        foo: {
+                            type: "object",
+                            properties: {
+                                value: {
+                                    type: "string"
+                                }
+                            }
+                        },
+                        bar: {
+                            type: "object",
+                            properties: {
+                                value: {
+                                    type: "string"
+                                }
+                            }
+                        }
+                    }
+                });
+
+                expect(jsonSchema.isCollection()).to.be.true;
+            });
+
+            it("returns true when there are no properties", () => {
+                const jsonSchema = new JSONSchema({
+                    type: "object"
+                });
+
+                expect(jsonSchema.isCollection()).to.be.true;
+            });
+
+            it("returns false when any property is not of type object", () => {
+                const jsonSchema = new JSONSchema({
+                    type: "object",
+                    properties: {
+                        foo: {
+                            type: "object",
+                            properties: {
+                                value: {
+                                    type: "string"
+                                }
+                            }
+                        },
+                        bar: {
+                            type: "string"
+                        }
+                    }
+                });
+
+                expect(jsonSchema.isCollection()).to.be.false;
+            });
+
+            it("returns false when any property declares no nested properties", () => {
+                const jsonSchema = new JSONSchema({
+                    type: "object",
+                    properties: {
+                        foo: {
+                            type: "object",
+                            properties: {
+                                value: {
+                                    type: "string"
+                                }
+                            }
+                        },
+                        bar: {
+                            type: "object"
+                        }
+                    }
+                });
+
+                expect(jsonSchema.isCollection()).to.be.false;
+            });
+
+            it("returns false when the only property is a map", () => {
+                const jsonSchema = new JSONSchema({
+                    type: "object",
+                    properties: {
+                        foo: {
+                            type: "object",
+                            patternProperties: {
+                                ".*": {
+                                    type: "string"
+                                }
+                            }
+                        }
+                    }
+                });
+
+                expect(jsonSchema.isCollection()).to.be.false;
             });
         });
 
