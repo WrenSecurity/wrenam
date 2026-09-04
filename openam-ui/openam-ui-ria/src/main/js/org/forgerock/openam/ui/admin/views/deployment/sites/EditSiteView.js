@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions copyright 2026 Wren Security
  */
 
 define([
@@ -67,11 +68,16 @@ define([
         },
 
         onSave () {
+            toggleSave(this.$el, false);
             SitesService.sites.update(this.data.id, this.jsonSchemaView.getData(), this.data.etag)
                 .then(
-                    () => EventManager.sendEvent(Constants.EVENT_DISPLAY_MESSAGE_REQUEST, "changesSaved"),
+                    (data) => {
+                        this.data.etag = data.etag;
+                        EventManager.sendEvent(Constants.EVENT_DISPLAY_MESSAGE_REQUEST, "changesSaved");
+                    },
                     (response) => Messages.addMessage({ response, type: Messages.TYPE_DANGER })
-                );
+                )
+                .always(() => toggleSave(this.$el, true));
         },
 
         onDelete (event) {

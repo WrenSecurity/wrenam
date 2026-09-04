@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions copyright 2026 Wren Security
  */
 
 /**
@@ -80,7 +81,11 @@ define([
                 url: fetchUrl.default(`/global-config/sites/${id}`, { realm: false }),
                 headers: { "Accept-API-Version": "protocol=1.0,resource=1.0", "If-Match": etag },
                 type: "PUT",
-                data: JSON.stringify(filterUnEditableProperties(data))
+                data: JSON.stringify(filterUnEditableProperties(data)),
+                success: (response, jqXHR) => {
+                    response.etag = jqXHR.getResponseHeader("ETag");
+                    return response;
+                }
             }),
         remove: (id, etag) => {
             const remove = (id, etag) => obj.serviceCall({
