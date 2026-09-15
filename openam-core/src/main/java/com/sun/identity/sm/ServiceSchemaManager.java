@@ -25,6 +25,7 @@
  * $Id: ServiceSchemaManager.java,v 1.12 2009/07/25 05:11:55 qcheng Exp $
  *
  * Portions Copyrighted 2012-2016 ForgeRock AS.
+ * Portions Copyright 2026 Wren Security
  */
 package com.sun.identity.sm;
 
@@ -458,7 +459,11 @@ public class ServiceSchemaManager {
      */
     public ServiceSchema getSchema(SchemaType type) throws SMSException {
         SMSEntry.validateToken(token);
-        validate();
+        try {
+            validateServiceSchemaManagerImpl();
+        } catch (SSOException e) {
+            throw new SMSException(e, "sms-INVALID_SSO_TOKEN");
+        }
         ServiceSchemaImpl ss = ssm.getSchema(type);
         if ((ss == null) && type.equals(SchemaType.USER)) {
             type = SchemaType.DYNAMIC;
@@ -901,7 +906,18 @@ public class ServiceSchemaManager {
             // Ignore the exception
         }
     }
-    
+
+    /**
+     * Validates the cached schema manager and gets a replacement if it is missing or invalid. The
+     * reference is replaced only if getting the new manager succeeds.
+     *
+     * <p>Unlike {@link #validate()}, this method propagates loading failures so callers can report
+     * them instead of continuing with an invalid manager.</p>
+     *
+     * @throws SMSException if the service does not exist, or its schema manager cannot be loaded or
+     *         validated.
+     * @throws SSOException if getting the replacement fails because the token is invalid.
+     */
     private void validateServiceSchemaManagerImpl()
         throws SMSException, SSOException {
         if (ssm == null || !ssm.isValid()) {
@@ -910,7 +926,7 @@ public class ServiceSchemaManager {
                 serviceName, version);
         }
     }
-    
+
     // -----------------------------------------------------------
     // Static method to create a new service schema
     // -----------------------------------------------------------
