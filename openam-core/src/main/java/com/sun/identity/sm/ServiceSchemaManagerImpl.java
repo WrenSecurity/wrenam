@@ -25,6 +25,7 @@
  * $Id: ServiceSchemaManagerImpl.java,v 1.8 2008/08/28 18:36:30 arviranga Exp $
  *
  * Portions Copyrighted 2012-2016 ForgeRock AS.
+ * Portions Copyright 2026 Wren Security
  */
 package com.sun.identity.sm;
 
@@ -87,7 +88,7 @@ public class ServiceSchemaManagerImpl implements SMSObjectListener, CachedSMSEnt
     private CachedSMSEntry smsEntry;
 
     // Pointer to schema changes listeners
-    private Map listenerObjects;
+    private Map<String, ServiceListener> listenerObjects;
     private String listenerId;
 
     // XML schema in String and Node formats (both can be null).
@@ -343,10 +344,9 @@ public class ServiceSchemaManagerImpl implements SMSObjectListener, CachedSMSEnt
         return addListener(null, listener);
     }
 
-    
     synchronized String addListener(String id, ServiceListener listener) {
         if (listenerObjects == null) {
-            listenerObjects = Collections.synchronizedMap(new HashMap());
+            listenerObjects = Collections.synchronizedMap(new HashMap<>());
         }
         // Check for empty since elememts could have been removed from
         // listenerObjects objects.
@@ -573,8 +573,8 @@ public class ServiceSchemaManagerImpl implements SMSObjectListener, CachedSMSEnt
     private void clear() {
     	clear(false);
     }
-    
-    private Map clear(boolean forceClear) {
+
+    private Map<String, ServiceListener> clear(boolean forceClear) {
         // Clear the local variable
         // and mark the entry to be invalid and to be GCed.
         // Remove itself from CachedSMSEntry listener list
@@ -611,25 +611,23 @@ public class ServiceSchemaManagerImpl implements SMSObjectListener, CachedSMSEnt
         return listenerObjects;
     }
     
-    // Static method to get an instance of this class
+    /**
+     * Gets a schema manager for the specified service and version. Reuses a valid cached instance
+     * or creates and caches a new instance as needed.
+     *
+     * @param t the token used to access the service schema.
+     * @param serviceName the service name.
+     * @param version the service version.
+     * @return the schema manager for the service and version.
+     * @throws SMSException if the schema manager cannot be loaded or validated.
+     * @throws SSOException if access fails because the token is invalid.
+     */
     static ServiceSchemaManagerImpl getInstance(SSOToken t, String serviceName,
             String version) throws SMSException, SSOException {
         String cacheName = ServiceManager.getCacheIndex(serviceName, version);
-        ServiceSchemaManagerImpl ssmi = null;
+        ServiceSchemaManagerImpl ssmi = schemaManagers.get(cacheName);
 
-        Map<String, ServiceListener> listeners = null;
-        while (true) {
-            ssmi = schemaManagers.get(cacheName);
-            if (ssmi != null && !ssmi.isValid()) {
-                if (schemaManagers.remove(cacheName, ssmi)) {
-                    listeners = ssmi.clear(true);
-                }
-            } else {
-                break;
-            }
-        }
-
-        if (ssmi != null) {
+        if (ssmi != null && ssmi.isValid()) {
             // Check if the entry needs to be updated
             if (!SMSEntry.cacheSMSEntries) {
                 // Read the entry, since it should not be cached
@@ -638,14 +636,16 @@ public class ServiceSchemaManagerImpl implements SMSObjectListener, CachedSMSEnt
             return ssmi;
         }
 
-        // Instantiate and add to cache
+        // Keep the old manager's listeners until the replacement is loaded successfully.
+        ServiceSchemaManagerImpl previous = ssmi;
         ssmi = new ServiceSchemaManagerImpl(t, serviceName, version);
 
         //Utilizing SSMI_LOCK here to ensure that listeners are only added to one new ssmi instance
         synchronized (SSMI_LOCK) {
             ServiceSchemaManagerImpl tmp = schemaManagers.get(cacheName);
-            if (tmp == null) {
-                //listeners that were registered to old ServiceSchemaManagerImpl 
+            if (tmp == previous) {
+                Map<String, ServiceListener> listeners = previous == null ? null : previous.clear(true);
+                //listeners that were registered to old ServiceSchemaManagerImpl
                 //should be added back
                 //sundidentityrepositoryservice will add back new instance of 
                 //SpecialRepo itself so not adding old ones here.
