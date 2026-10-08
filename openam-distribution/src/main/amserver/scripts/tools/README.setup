@@ -29,22 +29,24 @@ Portions  Copyrighted 2011 ForgeRock AS
 Portions Copyrighted 2026 Wren Security
 ------------------------------------------------------------------------------
                                                                                
-OpenAM: openam-ssoAdminTools.zip
-====================================================
+Wren:AM SSO Admin Tools
+=======================
 
-This file contains information on installing and using ssoAdminTools.zip.
-It is assumed that OpenAM Server is available.
+This file contains information on installing and using Wren:AM SSO Admin Tools.
+It is assumed that a Wren:AM server is available.
 
 Table of contents:
 -----------------
 1. Supported versions of Java Runtime
-2. Installing ssoAdminTools.zip
-3. What does this package contain?
+2. What does this package contain?
+3. Installing SSO Admin Tools
 4. Configuring JVM options
+
+The distribution archive is named SSOAdminTools-<version>.zip.
 
 1. Supported versions of Java Runtime
 -------------------------------------
-Java Runtime Environment 1.5 or higher.
+Java Runtime Environment 17 or higher.
 
 2. What does this package contain?
 ----------------------------------
@@ -70,17 +72,17 @@ Java Runtime Environment 1.5 or higher.
 |      |
 |      |----windows/bin/* (required windows specific libraries)
 
-3. Installing ssoAdminTools.zip
-------------------------------- 
+3. Installing SSO Admin Tools
+-----------------------------
 
-Before setting up ssoAdminTools.zip, JAVA_HOME environment variable needs to be
-initialized to a path of a compatible Java Runtime.
+Before setting up SSO Admin Tools, the JAVA_HOME environment variable needs to
+be initialized to a path of a compatible Java Runtime.
 
-Steps involved in installing ssoAdminTools.zip are:
+Steps involved in installing SSO Admin Tools are:
 
-Step 1: Unzip ssoAdminTools.zip to the desired directory.
+Step 1: Extract SSOAdminTools-<version>.zip into the desired directory.
 
-Step 2: Go to the directory which has the ssoAdminTools.zip unzipped.
+Step 2: Change to the directory where you extracted the ZIP archive.
         Run the setup command as follows:
         "./setup" or "setup"
         for Unix and Windows respectively.
@@ -94,7 +96,7 @@ Step 2: Go to the directory which has the ssoAdminTools.zip unzipped.
 Step 3: After step 2 is performed, the CLIs can be run under the following
         directory:
         <TOOLS_DIR>/<OPENAM_INSTANCE_NAME>/bin
-        where <TOOLS_DIR> is the directory which has ssoAdminTools.zip unzipped
+        where <TOOLS_DIR> is the directory where you extracted the ZIP archive
         (ie: current directory), and <OPENAM_INSTANCE_NAME> is the deployment
         URI of OpenAM.
 
