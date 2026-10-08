@@ -26,6 +26,7 @@ $Id: README.setup,v 1.15 2008/10/09 23:48:21 ww203982 Exp $
 
 ------------------------------------------------------------------------------
 Portions  Copyrighted 2011 ForgeRock AS
+Portions Copyrighted 2026 Wren Security
 ------------------------------------------------------------------------------
                                                                                
 OpenAM: openam-ssoAdminTools.zip
@@ -39,6 +40,7 @@ Table of contents:
 1. Supported versions of Java Runtime
 2. Installing ssoAdminTools.zip
 3. What does this package contain?
+4. Configuring JVM options
 
 1. Supported versions of Java Runtime
 -------------------------------------
@@ -95,3 +97,32 @@ Step 3: After step 2 is performed, the CLIs can be run under the following
         where <TOOLS_DIR> is the directory which has ssoAdminTools.zip unzipped
         (ie: current directory), and <OPENAM_INSTANCE_NAME> is the deployment
         URI of OpenAM.
+
+4. Configuring JVM options
+--------------------------
+
+Set the WRENAM_SSOADM_OPTS environment variable to pass additional JVM options
+to setup and ssoadm.
+
+Unix:
+    export WRENAM_SSOADM_OPTS='-Xmx1g -Djavax.net.ssl.trustStore=/etc/wrenam/truststore.jks'
+
+Windows (cmd.exe):
+    set "WRENAM_SSOADM_OPTS=-Xmx1g -Djavax.net.ssl.trustStore=C:/wrenam/truststore.jks"
+
+For complex settings or values containing spaces, use a Java argument file.
+
+Example argument file:
+    -Xmx1g
+    -Djavax.net.ssl.trustStore="/path with spaces/truststore.jks"
+
+Unix:
+    export WRENAM_SSOADM_OPTS='@/etc/wrenam/jvm.options'
+
+Windows (cmd.exe):
+    set "WRENAM_SSOADM_OPTS=@C:/wrenam/jvm.options"
+
+The Unix launch scripts expand WRENAM_SSOADM_OPTS without quotes, so the shell
+splits its value on whitespace. Quotes and backslashes within the value do not
+prevent this splitting. For values containing spaces, use a Java argument file
+whose path contains no spaces.

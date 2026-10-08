@@ -27,6 +27,7 @@
 :
 
 : Portions Copyrighted 2013-2016 ForgeRock AS.
+: Portions Copyrighted 2026 Wren Security.
 set TOOLS_HOME="."
 
 if not "%JAVA_HOME%" == "" goto checkJavaHome
@@ -84,7 +85,7 @@ set CLASSPATH="@CONFIG_DIR@"
 set CLASSPATH="%CLASSPATH%;${windows.setup.classpath}"
 set CLASSPATH="%CLASSPATH%;%TOOLS_HOME%\resources"
 
-"%JAVA_HOME%/bin/java.exe" -D"load.config=yes" -D"help.print=%help_print%" -D"path.AMConfig=%path_AMConfig%" -D"path.log=%path_log%" -D"path.debug=%path_debug%" -cp "%CLASSPATH%" com.sun.identity.tools.bundles.Main %accept_license%
+"%JAVA_HOME%/bin/java.exe" -D"load.config=yes" -D"help.print=%help_print%" -D"path.AMConfig=%path_AMConfig%" -D"path.log=%path_log%" -D"path.debug=%path_debug%" -cp "%CLASSPATH%" %WRENAM_SSOADM_OPTS% com.sun.identity.tools.bundles.Main %accept_license%
 
 ENDLOCAL
 
