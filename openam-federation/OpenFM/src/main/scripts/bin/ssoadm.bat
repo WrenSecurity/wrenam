@@ -27,7 +27,7 @@
 :
 
 : Portions Copyrighted 2010-2016 ForgeRock AS.
-: Portions Copyrighted 2023 Wren Security.
+: Portions Copyrighted 2023-2026 Wren Security.
 
 setlocal enabledelayedexpansion
 
@@ -62,6 +62,7 @@ IF DEFINED ORIG_CLASSPATH (
     -D"com.iplanet.am.sdk.package=com.iplanet.am.sdk.remote" ^
     -D"com.sun.identity.idm.remote.notification.enabled=false" ^
     -D"com.iplanet.am.sdk.remote.pollingTime=0" ^
+    %WRENAM_SSOADM_OPTS% ^
     com.sun.identity.cli.CommandManager %*
 
 endlocal
