@@ -13,6 +13,7 @@
  *
  * Copyright 2014-2016 ForgeRock AS.
  * Portions Copyrighted 2015 Nomura Research Institute, Ltd.
+ * Portions Copyright 2026 Wren Security.
  */
 
 package org.forgerock.openidconnect;
@@ -28,12 +29,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.identity.shared.validation.ValidationException;
 import org.forgerock.json.JsonException;
@@ -53,6 +56,7 @@ import org.forgerock.oauth2.core.exceptions.ServerException;
 import org.forgerock.oauth2.core.exceptions.UnauthorizedClientException;
 import org.forgerock.oauth2.core.exceptions.UnsupportedResponseTypeException;
 import org.forgerock.openam.oauth2.OAuth2Constants;
+import org.forgerock.openam.oauth2.OAuth2UrisFactory;
 import org.forgerock.openam.oauth2.validation.OpenIDConnectURLValidator;
 import org.forgerock.openam.utils.JsonValueBuilder;
 import org.forgerock.openidconnect.exceptions.InvalidClientMetadata;
@@ -69,7 +73,7 @@ import org.slf4j.LoggerFactory;
 @Singleton
 public class OpenIdConnectClientRegistrationService {
 
-    private static final String ID_TOKEN_SIGNED_RESPONSE_ALG_DEFAULT = "HS256";
+    private static final String ID_TOKEN_SIGNED_RESPONSE_ALG_DEFAULT = "RS256";
     private static final String DEFAULT_APPLICATION_TYPE = "web";
 
     private static final String REGISTRATION_CLIENT_URI = "registration_client_uri";
@@ -81,6 +85,7 @@ public class OpenIdConnectClientRegistrationService {
     private final AccessTokenVerifier tokenVerifier;
     private final TokenStore tokenStore;
     private final OpenIDConnectURLValidator urlValidator;
+    private final OAuth2UrisFactory urisFactory;
     private final ObjectMapper mapper = new ObjectMapper();
 
     /**
@@ -91,24 +96,25 @@ public class OpenIdConnectClientRegistrationService {
      * @param tokenVerifier An instance of the AccessTokenVerifier.
      * @param tokenStore An instance of the TokenStore.
      * @param urlValidator An instance of the URLValidator.
+     * @param urisFactory An instance of the OAuth2UrisFactory.
      */
     @Inject
     OpenIdConnectClientRegistrationService(ClientDAO clientDAO,
             OAuth2ProviderSettingsFactory providerSettingsFactory,
             AccessTokenVerifier tokenVerifier, TokenStore tokenStore,
-            OpenIDConnectURLValidator urlValidator) {
+            OpenIDConnectURLValidator urlValidator, OAuth2UrisFactory urisFactory) {
         this.clientDAO = clientDAO;
         this.providerSettingsFactory = providerSettingsFactory;
         this.tokenVerifier = tokenVerifier;
         this.tokenStore = tokenStore;
         this.urlValidator = urlValidator;
+        this.urisFactory = urisFactory;
     }
 
     /**
      * Creates an OpenId Connect client registration in the OAuth2 provider.
      *
      * @param accessToken The access token for making the registration call.
-     * @param deploymentUrl The deployment url of the OAuth2 provider.
      * @param request The OAuth2 request.
      * @return JsonValue representation of the client registration.
      * @throws InvalidRedirectUri If redirect urls are invalid.
@@ -118,7 +124,7 @@ public class OpenIdConnectClientRegistrationService {
      *          or the OAuth2 provider.
      * @throws NotFoundException If the realm does not have an OAuth 2.0 provider service.
      */
-    public JsonValue createRegistration(String accessToken, String deploymentUrl, OAuth2Request request)
+    public JsonValue createRegistration(String accessToken, OAuth2Request request)
             throws InvalidRedirectUri, InvalidClientMetadata, ServerException, UnsupportedResponseTypeException,
             AccessDeniedException, NotFoundException, InvalidPostLogoutRedirectUri {
 
@@ -147,16 +153,9 @@ public class OpenIdConnectClientRegistrationService {
 
             boolean jwks = false;
 
-            if (input.get(JWKS.getType()).asString() != null) {
+            if (input.get(JWKS.getType()).isNotNull()) {
                 jwks = true;
-
-                try {
-                    JsonValueBuilder.toJsonValue(input.get(JWKS.getType()).asString());
-                } catch (JsonException e) {
-                    throw new InvalidClientMetadata("jwks must be valid JSON.");
-                }
-
-                clientBuilder.setJwks(input.get(JWKS.getType()).asString());
+                clientBuilder.setJwks(serializeJwks(input.get(JWKS.getType())));
                 clientBuilder.setPublicKeySelector(Client.PublicKeySelector.JWKS.getType());
             }
 
@@ -449,14 +448,48 @@ public class OpenIdConnectClientRegistrationService {
         response = convertClientReadResponseFormat(response);
 
         response.put(REGISTRATION_CLIENT_URI,
-                deploymentUrl + "/oauth2/connect/register?client_id=" + client.getClientID());
+                urisFactory.get(request).getClientRegistrationEndpoint() + "?client_id=" + client.getClientID());
 
         response.put(EXPIRES_AT, 0);
 
         return new JsonValue(response);
     }
 
+    /**
+     * Validates the requested JWK set and serializes it to the string form in which it is stored. The JWK set is
+     * expected to be a JSON object (RFC 7591), but the legacy OpenAM form of a string containing JSON is still
+     * accepted for backwards compatibility.
+     */
+    private String serializeJwks(JsonValue jwks) throws InvalidClientMetadata {
+        JsonValue jwkSet = jwks;
+        if (jwks.isString()) {
+            try {
+                jwkSet = JsonValueBuilder.toJsonValue(jwks.asString());
+            } catch (JsonException e) {
+                throw new InvalidClientMetadata("jwks must be valid JSON.");
+            }
+        }
+        if (!jwkSet.isMap() || !jwkSet.get(OAuth2Constants.JWTTokenParams.KEYS).isList()) {
+            throw new InvalidClientMetadata("jwks must be a JSON object containing a keys array.");
+        }
+        try {
+            return mapper.writeValueAsString(jwkSet.getObject());
+        } catch (JsonProcessingException e) {
+            throw new InvalidClientMetadata("jwks must be valid JSON.");
+        }
+    }
+
     private Map<String, Object> convertClientReadResponseFormat(Map<String, Object> response) {
+        response = new LinkedHashMap<>(response);
+        Object jwks = response.get(JWKS.getType());
+        if (jwks instanceof String) {
+            try {
+                response.put(JWKS.getType(), JsonValueBuilder.toJsonValue((String) jwks).getObject());
+            } catch (JsonException e) {
+                logger.warn("Unable to parse stored jwks of client " + response.get(CLIENT_ID.getType()), e);
+            }
+        }
+
         ArrayList<String> clientNames = (ArrayList<String>) response.get(CLIENT_NAME.getType());
         response.remove(CLIENT_NAME.getType());
         if (clientNames != null && !clientNames.isEmpty()) {
