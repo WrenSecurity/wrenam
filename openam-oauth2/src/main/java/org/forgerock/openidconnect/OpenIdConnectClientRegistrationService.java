@@ -13,6 +13,7 @@
  *
  * Copyright 2014-2016 ForgeRock AS.
  * Portions Copyrighted 2015 Nomura Research Institute, Ltd.
+ * Portions Copyright 2026 Wren Security.
  */
 
 package org.forgerock.openidconnect;
@@ -28,12 +29,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.identity.shared.validation.ValidationException;
 import org.forgerock.json.JsonException;
@@ -147,16 +150,9 @@ public class OpenIdConnectClientRegistrationService {
 
             boolean jwks = false;
 
-            if (input.get(JWKS.getType()).asString() != null) {
+            if (input.get(JWKS.getType()).isNotNull()) {
                 jwks = true;
-
-                try {
-                    JsonValueBuilder.toJsonValue(input.get(JWKS.getType()).asString());
-                } catch (JsonException e) {
-                    throw new InvalidClientMetadata("jwks must be valid JSON.");
-                }
-
-                clientBuilder.setJwks(input.get(JWKS.getType()).asString());
+                clientBuilder.setJwks(serializeJwks(input.get(JWKS.getType())));
                 clientBuilder.setPublicKeySelector(Client.PublicKeySelector.JWKS.getType());
             }
 
@@ -456,7 +452,41 @@ public class OpenIdConnectClientRegistrationService {
         return new JsonValue(response);
     }
 
+    /**
+     * Validates the requested JWK set and serializes it to the string form in which it is stored. The JWK set is
+     * expected to be a JSON object (RFC 7591), but the legacy OpenAM form of a string containing JSON is still
+     * accepted for backwards compatibility.
+     */
+    private String serializeJwks(JsonValue jwks) throws InvalidClientMetadata {
+        JsonValue jwkSet = jwks;
+        if (jwks.isString()) {
+            try {
+                jwkSet = JsonValueBuilder.toJsonValue(jwks.asString());
+            } catch (JsonException e) {
+                throw new InvalidClientMetadata("jwks must be valid JSON.");
+            }
+        }
+        if (!jwkSet.isMap() || !jwkSet.get(OAuth2Constants.JWTTokenParams.KEYS).isList()) {
+            throw new InvalidClientMetadata("jwks must be a JSON object containing a keys array.");
+        }
+        try {
+            return mapper.writeValueAsString(jwkSet.getObject());
+        } catch (JsonProcessingException e) {
+            throw new InvalidClientMetadata("jwks must be valid JSON.");
+        }
+    }
+
     private Map<String, Object> convertClientReadResponseFormat(Map<String, Object> response) {
+        response = new LinkedHashMap<>(response);
+        Object jwks = response.get(JWKS.getType());
+        if (jwks instanceof String) {
+            try {
+                response.put(JWKS.getType(), JsonValueBuilder.toJsonValue((String) jwks).getObject());
+            } catch (JsonException e) {
+                logger.warn("Unable to parse stored jwks of client " + response.get(CLIENT_ID.getType()), e);
+            }
+        }
+
         ArrayList<String> clientNames = (ArrayList<String>) response.get(CLIENT_NAME.getType());
         response.remove(CLIENT_NAME.getType());
         if (clientNames != null && !clientNames.isEmpty()) {
