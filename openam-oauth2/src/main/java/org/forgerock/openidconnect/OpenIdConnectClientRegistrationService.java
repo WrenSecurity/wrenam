@@ -56,6 +56,7 @@ import org.forgerock.oauth2.core.exceptions.ServerException;
 import org.forgerock.oauth2.core.exceptions.UnauthorizedClientException;
 import org.forgerock.oauth2.core.exceptions.UnsupportedResponseTypeException;
 import org.forgerock.openam.oauth2.OAuth2Constants;
+import org.forgerock.openam.oauth2.OAuth2UrisFactory;
 import org.forgerock.openam.oauth2.validation.OpenIDConnectURLValidator;
 import org.forgerock.openam.utils.JsonValueBuilder;
 import org.forgerock.openidconnect.exceptions.InvalidClientMetadata;
@@ -84,6 +85,7 @@ public class OpenIdConnectClientRegistrationService {
     private final AccessTokenVerifier tokenVerifier;
     private final TokenStore tokenStore;
     private final OpenIDConnectURLValidator urlValidator;
+    private final OAuth2UrisFactory urisFactory;
     private final ObjectMapper mapper = new ObjectMapper();
 
     /**
@@ -94,24 +96,25 @@ public class OpenIdConnectClientRegistrationService {
      * @param tokenVerifier An instance of the AccessTokenVerifier.
      * @param tokenStore An instance of the TokenStore.
      * @param urlValidator An instance of the URLValidator.
+     * @param urisFactory An instance of the OAuth2UrisFactory.
      */
     @Inject
     OpenIdConnectClientRegistrationService(ClientDAO clientDAO,
             OAuth2ProviderSettingsFactory providerSettingsFactory,
             AccessTokenVerifier tokenVerifier, TokenStore tokenStore,
-            OpenIDConnectURLValidator urlValidator) {
+            OpenIDConnectURLValidator urlValidator, OAuth2UrisFactory urisFactory) {
         this.clientDAO = clientDAO;
         this.providerSettingsFactory = providerSettingsFactory;
         this.tokenVerifier = tokenVerifier;
         this.tokenStore = tokenStore;
         this.urlValidator = urlValidator;
+        this.urisFactory = urisFactory;
     }
 
     /**
      * Creates an OpenId Connect client registration in the OAuth2 provider.
      *
      * @param accessToken The access token for making the registration call.
-     * @param deploymentUrl The deployment url of the OAuth2 provider.
      * @param request The OAuth2 request.
      * @return JsonValue representation of the client registration.
      * @throws InvalidRedirectUri If redirect urls are invalid.
@@ -121,7 +124,7 @@ public class OpenIdConnectClientRegistrationService {
      *          or the OAuth2 provider.
      * @throws NotFoundException If the realm does not have an OAuth 2.0 provider service.
      */
-    public JsonValue createRegistration(String accessToken, String deploymentUrl, OAuth2Request request)
+    public JsonValue createRegistration(String accessToken, OAuth2Request request)
             throws InvalidRedirectUri, InvalidClientMetadata, ServerException, UnsupportedResponseTypeException,
             AccessDeniedException, NotFoundException, InvalidPostLogoutRedirectUri {
 
@@ -445,7 +448,7 @@ public class OpenIdConnectClientRegistrationService {
         response = convertClientReadResponseFormat(response);
 
         response.put(REGISTRATION_CLIENT_URI,
-                deploymentUrl + "/oauth2/connect/register?client_id=" + client.getClientID());
+                urisFactory.get(request).getClientRegistrationEndpoint() + "?client_id=" + client.getClientID());
 
         response.put(EXPIRES_AT, 0);
 

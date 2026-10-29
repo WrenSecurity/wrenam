@@ -14,6 +14,7 @@
  * Copyright 2012-2016 ForgeRock AS.
  *
  * Portions Copyrighted 2013 Nomura Research Institute, Ltd
+ * Portions Copyright 2026 Wren Security.
  */
 
 package org.forgerock.openidconnect.restlet;
@@ -88,10 +89,7 @@ public class ConnectClientRegistration extends ServerResource {
         final String accessToken = authHeader != null ? authHeader.getRawValue() : null;
 
         try {
-            final String deploymentUrl = getRequest().getHostRef().toString() + "/"
-                    + getRequest().getResourceRef().getSegments().get(0);
-            final JsonValue registration = clientRegistrationService.createRegistration(accessToken,
-                    deploymentUrl, request);
+            final JsonValue registration = clientRegistrationService.createRegistration(accessToken, request);
             setStatus(Status.SUCCESS_CREATED);
             return jacksonRepresentationFactory.create(registration.asMap());
         } catch (OAuth2Exception e) {

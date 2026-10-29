@@ -31,7 +31,9 @@ import org.forgerock.oauth2.core.AccessTokenVerifier;
 import org.forgerock.oauth2.core.OAuth2ProviderSettings;
 import org.forgerock.oauth2.core.OAuth2ProviderSettingsFactory;
 import org.forgerock.oauth2.core.OAuth2Request;
+import org.forgerock.oauth2.core.OAuth2Uris;
 import org.forgerock.oauth2.core.TokenStore;
+import org.forgerock.openam.oauth2.OAuth2UrisFactory;
 import org.forgerock.openam.oauth2.validation.OpenIDConnectURLValidator;
 import org.forgerock.openam.utils.JsonValueBuilder;
 import org.forgerock.openidconnect.exceptions.InvalidClientMetadata;
@@ -41,7 +43,8 @@ import org.testng.annotations.Test;
 
 public class OpenIdConnectClientRegistrationServiceTest {
 
-    private static final String DEPLOYMENT_URL = "https://am.example.com/am";
+    private static final String REGISTRATION_ENDPOINT = "https://am.example.com/am/oauth2/realms/root/realms/oidf"
+            + "/connect/register";
 
     private ClientDAO clientDAO;
     private OAuth2Request request;
@@ -55,8 +58,13 @@ public class OpenIdConnectClientRegistrationServiceTest {
         given(providerSettings.isOpenDynamicClientRegistrationAllowed()).willReturn(true);
         OAuth2ProviderSettingsFactory providerSettingsFactory = mock(OAuth2ProviderSettingsFactory.class);
         given(providerSettingsFactory.get(any(OAuth2Request.class))).willReturn(providerSettings);
+        OAuth2Uris uris = mock(OAuth2Uris.class);
+        given(uris.getClientRegistrationEndpoint()).willReturn(REGISTRATION_ENDPOINT);
+        OAuth2UrisFactory urisFactory = mock(OAuth2UrisFactory.class);
+        given(urisFactory.get(any(OAuth2Request.class))).willReturn(uris);
         service = new OpenIdConnectClientRegistrationService(clientDAO, providerSettingsFactory,
-                mock(AccessTokenVerifier.class), mock(TokenStore.class), mock(OpenIDConnectURLValidator.class));
+                mock(AccessTokenVerifier.class), mock(TokenStore.class), mock(OpenIDConnectURLValidator.class),
+                urisFactory);
     }
 
     private static JsonValue jwkSet() {
@@ -77,7 +85,7 @@ public class OpenIdConnectClientRegistrationServiceTest {
     public void shouldAcceptJwksAsJsonObject() throws Exception {
         given(request.getBody()).willReturn(json(object(field("jwks", jwkSet().getObject()))));
 
-        JsonValue response = service.createRegistration(null, DEPLOYMENT_URL, request);
+        JsonValue response = service.createRegistration(null, request);
 
         Client client = registeredClient();
         assertThat(client.getKeySelector()).isEqualTo(Client.PublicKeySelector.JWKS.getType());
@@ -89,10 +97,20 @@ public class OpenIdConnectClientRegistrationServiceTest {
     public void shouldDefaultIdTokenSigningAlgorithmToRs256() throws Exception {
         given(request.getBody()).willReturn(json(object()));
 
-        JsonValue response = service.createRegistration(null, DEPLOYMENT_URL, request);
+        JsonValue response = service.createRegistration(null, request);
 
         assertThat(registeredClient().getIdTokenSignedResponseAlgorithm()).isEqualTo("RS256");
         assertThat(response.get("id_token_signed_response_alg").asString()).isEqualTo("RS256");
+    }
+
+    @Test
+    public void shouldReturnRealmSpecificRegistrationClientUri() throws Exception {
+        given(request.getBody()).willReturn(json(object(field("client_id", "rp"))));
+
+        JsonValue response = service.createRegistration(null, request);
+
+        assertThat(response.get("registration_client_uri").asString())
+                .isEqualTo(REGISTRATION_ENDPOINT + "?client_id=rp");
     }
 
     @Test
@@ -100,7 +118,7 @@ public class OpenIdConnectClientRegistrationServiceTest {
         String jwks = JsonValueBuilder.getObjectMapper().writeValueAsString(jwkSet().getObject());
         given(request.getBody()).willReturn(json(object(field("jwks", jwks))));
 
-        JsonValue response = service.createRegistration(null, DEPLOYMENT_URL, request);
+        JsonValue response = service.createRegistration(null, request);
 
         assertThat(JsonValueBuilder.toJsonValue(registeredClient().getJwks()).getObject())
                 .isEqualTo(jwkSet().getObject());
@@ -111,7 +129,7 @@ public class OpenIdConnectClientRegistrationServiceTest {
     public void shouldRejectJwksWithoutKeys() {
         given(request.getBody()).willReturn(json(object(field("jwks", object(field("foo", "bar"))))));
 
-        assertThatThrownBy(() -> service.createRegistration(null, DEPLOYMENT_URL, request))
+        assertThatThrownBy(() -> service.createRegistration(null, request))
                 .isInstanceOf(InvalidClientMetadata.class);
     }
 
@@ -119,7 +137,7 @@ public class OpenIdConnectClientRegistrationServiceTest {
     public void shouldRejectJwksThatIsNotJson() {
         given(request.getBody()).willReturn(json(object(field("jwks", "not json"))));
 
-        assertThatThrownBy(() -> service.createRegistration(null, DEPLOYMENT_URL, request))
+        assertThatThrownBy(() -> service.createRegistration(null, request))
                 .isInstanceOf(InvalidClientMetadata.class);
     }
 
@@ -129,7 +147,7 @@ public class OpenIdConnectClientRegistrationServiceTest {
                 field("jwks", jwkSet().getObject()),
                 field("jwks_uri", "https://rp.example.com/jwks"))));
 
-        assertThatThrownBy(() -> service.createRegistration(null, DEPLOYMENT_URL, request))
+        assertThatThrownBy(() -> service.createRegistration(null, request))
                 .isInstanceOf(InvalidClientMetadata.class);
     }
 }
