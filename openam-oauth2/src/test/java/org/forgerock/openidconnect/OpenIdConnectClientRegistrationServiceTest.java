@@ -86,6 +86,16 @@ public class OpenIdConnectClientRegistrationServiceTest {
     }
 
     @Test
+    public void shouldDefaultIdTokenSigningAlgorithmToRs256() throws Exception {
+        given(request.getBody()).willReturn(json(object()));
+
+        JsonValue response = service.createRegistration(null, DEPLOYMENT_URL, request);
+
+        assertThat(registeredClient().getIdTokenSignedResponseAlgorithm()).isEqualTo("RS256");
+        assertThat(response.get("id_token_signed_response_alg").asString()).isEqualTo("RS256");
+    }
+
+    @Test
     public void shouldAcceptLegacyJwksAsJsonString() throws Exception {
         String jwks = JsonValueBuilder.getObjectMapper().writeValueAsString(jwkSet().getObject());
         given(request.getBody()).willReturn(json(object(field("jwks", jwks))));

@@ -72,7 +72,7 @@ import org.slf4j.LoggerFactory;
 @Singleton
 public class OpenIdConnectClientRegistrationService {
 
-    private static final String ID_TOKEN_SIGNED_RESPONSE_ALG_DEFAULT = "HS256";
+    private static final String ID_TOKEN_SIGNED_RESPONSE_ALG_DEFAULT = "RS256";
     private static final String DEFAULT_APPLICATION_TYPE = "web";
 
     private static final String REGISTRATION_CLIENT_URI = "registration_client_uri";
