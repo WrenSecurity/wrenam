@@ -13,6 +13,7 @@
 *
 * Copyright 2015-2016 ForgeRock AS.
 * Portions Copyrighted 2015 Nomura Research Institute, Ltd.
+* Portions Copyright 2026 Wren Security.
 */
 package org.forgerock.openam.oauth2;
 
@@ -132,7 +133,7 @@ public class ClientCredentialsReader {
             throw failureFactory.getException(request, "JWT has expired");
         }
 
-        if (!clientRegistration.verifyJwtIdentity(jwt)) {
+        if (!clientRegistration.verifyClientAssertion(jwt)) {
             throw failureFactory.getException(request, "JWT is not valid");
         }
 

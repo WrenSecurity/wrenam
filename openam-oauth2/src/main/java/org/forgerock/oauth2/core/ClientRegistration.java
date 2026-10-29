@@ -145,6 +145,12 @@ public interface ClientRegistration {
     boolean verifyJwtIdentity(OAuth2Jwt jwt);
 
     /**
+     * Verifies that the supplied client assertion (RFC 7523, {@code private_key_jwt} client authentication) is
+     * signed by one of this client's public keys.
+     */
+    boolean verifyClientAssertion(OAuth2Jwt jwt);
+
+    /**
      * Gets whether or not the client wants the OAuth2 implementation to skip asking the resource owner for consent.
      *
      * @return true if the client is configured to skip resource owner consent.

@@ -33,12 +33,16 @@ import static org.mockito.Mockito.when;
 import java.lang.annotation.Annotation;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
+import java.math.BigInteger;
 import java.security.Key;
+import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.MessageDigest;
 import java.security.PublicKey;
+import java.security.interfaces.RSAPublicKey;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -50,8 +54,14 @@ import javax.crypto.spec.SecretKeySpec;
 import org.forgerock.guice.core.GuiceModuleLoader;
 import org.forgerock.guice.core.InjectorConfiguration;
 import org.forgerock.jaspi.modules.openid.resolvers.service.OpenIdResolverService;
+import org.forgerock.json.jose.builders.JwtBuilderFactory;
 import org.forgerock.json.jose.jwe.JweAlgorithm;
+import org.forgerock.json.jose.jws.JwsAlgorithm;
+import org.forgerock.json.jose.jws.SigningManager;
+import org.forgerock.json.jose.jws.handlers.SigningHandler;
+import org.forgerock.oauth2.core.OAuth2Jwt;
 import org.forgerock.oauth2.core.OAuth2ProviderSettings;
+import org.forgerock.openidconnect.Client;
 import org.forgerock.oauth2.core.PEMDecoder;
 import org.forgerock.oauth2.core.exceptions.ClientAuthenticationFailureFactory;
 import org.mockito.Mock;
@@ -82,13 +92,20 @@ public class OpenAMClientRegistrationTest extends AbstractMockBasedTest {
     @Mock
     private OAuth2ProviderSettings providerSettings;
 
+    private static final String CLIENT_ID = "client";
+    private static final String CLIENT_SECRET = "client-secret-which-is-long-enough-for-hs256";
+    private static final String TOKEN_ENDPOINT = "https://am.example.com/oauth2/access_token";
+
     private PublicKey publicEncryptionKey;
+    private KeyPair clientKeyPair;
 
     @BeforeClass
     public void generateKeyPair() throws Exception {
         KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
         keyPairGenerator.initialize(1024);
         publicEncryptionKey = keyPairGenerator.generateKeyPair().getPublic();
+        keyPairGenerator.initialize(2048);
+        clientKeyPair = keyPairGenerator.generateKeyPair();
     }
 
     // Make sure Guice is not eagerly loading everything on class-path when InjectionHolder
@@ -324,6 +341,74 @@ public class OpenAMClientRegistrationTest extends AbstractMockBasedTest {
         when(amIdentity.getAttribute(OAuth2Constants.OAuth2Client.CLIENT_TYPE)).thenReturn(singleton("PUBLIC"));
 
         clientRegistration.getIDTokenEncryptionKey();
+    }
+
+    @Test
+    public void shouldVerifyClientAssertionByPublicKeyRegardlessOfIdTokenAlgorithm() throws Exception {
+        setUpPrivateKeyJwtClient("HS256");
+
+        OAuth2Jwt assertion = clientAssertion(JwsAlgorithm.RS256,
+                new SigningManager().newRsaSigningHandler(clientKeyPair.getPrivate()));
+
+        assertThat(clientRegistration.verifyClientAssertion(assertion)).isTrue();
+    }
+
+    @Test
+    public void shouldRejectClientAssertionSignedByAnotherKey() throws Exception {
+        setUpPrivateKeyJwtClient("RS256");
+        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+        keyPairGenerator.initialize(2048);
+
+        OAuth2Jwt assertion = clientAssertion(JwsAlgorithm.RS256,
+                new SigningManager().newRsaSigningHandler(keyPairGenerator.generateKeyPair().getPrivate()));
+
+        assertThat(clientRegistration.verifyClientAssertion(assertion)).isFalse();
+    }
+
+    @Test
+    public void shouldRejectClientAssertionSignedByClientSecret() throws Exception {
+        setUpPrivateKeyJwtClient("HS256");
+
+        OAuth2Jwt assertion = clientAssertion(JwsAlgorithm.HS256,
+                new SigningManager().newHmacSigningHandler(CLIENT_SECRET.getBytes(StandardCharsets.UTF_8)));
+
+        assertThat(clientRegistration.verifyClientAssertion(assertion)).isFalse();
+    }
+
+    private void setUpPrivateKeyJwtClient(String idTokenSigningAlgorithm) throws Exception {
+        RSAPublicKey publicKey = (RSAPublicKey) clientKeyPair.getPublic();
+        String jwks = "{\"keys\":[{\"kty\":\"RSA\",\"kid\":\"client-key\",\"n\":\""
+                + base64Url(publicKey.getModulus()) + "\",\"e\":\"" + base64Url(publicKey.getPublicExponent())
+                + "\"}]}";
+        given(amIdentity.getName()).willReturn(CLIENT_ID);
+        setUpAgentWithAttribute(OAuth2Constants.OAuth2Client.USERPASSWORD, CLIENT_SECRET);
+        setUpAgentWithAttribute(OAuth2Constants.OAuth2Client.IDTOKEN_SIGNED_RESPONSE_ALG, idTokenSigningAlgorithm);
+        setUpAgentWithAttribute(OAuth2Constants.OAuth2Client.PUBLIC_KEY_SELECTOR,
+                Client.PublicKeySelector.JWKS.getType());
+        setUpAgentWithAttribute(OAuth2Constants.OAuth2Client.JWKS, jwks);
+    }
+
+    private OAuth2Jwt clientAssertion(JwsAlgorithm algorithm, SigningHandler signingHandler) {
+        long now = System.currentTimeMillis();
+        String jwt = new JwtBuilderFactory().jws(signingHandler)
+                .headers().alg(algorithm).kid("client-key").done()
+                .claims(new JwtBuilderFactory().claims()
+                        .iss(CLIENT_ID)
+                        .sub(CLIENT_ID)
+                        .aud(Collections.singletonList(TOKEN_ENDPOINT))
+                        .iat(new Date(now))
+                        .exp(new Date(now + 60_000))
+                        .build())
+                .build();
+        return OAuth2Jwt.create(jwt);
+    }
+
+    private static String base64Url(BigInteger value) {
+        byte[] bytes = value.toByteArray();
+        if (bytes.length > 1 && bytes[0] == 0) {
+            bytes = Arrays.copyOfRange(bytes, 1, bytes.length);
+        }
+        return java.util.Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
     }
 
     private String pem(PublicKey pk) {
