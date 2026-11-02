@@ -12,6 +12,7 @@
  * information: "Portions Copyrighted [year] [name of copyright owner]".
  *
  * Copyright 2014 ForgeRock AS.
+ * Portions Copyright 2026 Wren Security.
  */
 
 package org.forgerock.openidconnect;
@@ -61,7 +62,7 @@ public class ClientDAO {
     private static final String ACTIVE = "Active";
     private static final String SUN_IDENTITY_SERVER_DEVICE_STATUS = "sunIdentityServerDeviceStatus";
 
-    private static final String ID_TOKEN_SIGNED_RESPONSE_ALG_DEFAULT = "HS256";
+    private static final String ID_TOKEN_SIGNED_RESPONSE_ALG_DEFAULT = "RS256";
     private static final String CLIENT_TYPE_DEFAULT = "Confidential";
     private static final String APPLICATION_TYPE_DEFAULT = "web";
 

@@ -147,6 +147,16 @@ public class AgentClientRegistration implements OpenIdConnectClientRegistration 
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Agents do not authenticate using client assertions.
+     */
+    @Override
+    public boolean verifyClientAssertion(OAuth2Jwt jwt) {
+        return false;
+    }
+
     @Override
     public String getIDTokenSignedResponseAlgorithm() {
         return "HS256";

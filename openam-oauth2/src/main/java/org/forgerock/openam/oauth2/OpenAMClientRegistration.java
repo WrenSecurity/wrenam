@@ -650,18 +650,32 @@ public class OpenAMClientRegistration implements OpenIdConnectClientRegistration
         if (signatureAlgorithm.getAlgorithmType() == JwsAlgorithmType.HMAC) {
             return verifyJwtBySharedSecret(jwt);
         } else {
-            try {
-                switch (getClientPublicKeySelector()) {
-                    case JWKS:
-                        return byJWKs(jwt);
-                    case JWKS_URI:
-                        return byJWKsURI(jwt);
-                    default:
-                        return byX509Key(jwt);
-                }
-            } catch (Exception e) {
-                throw Utils.createException("Client Bearer Jwt Public key", e, logger);
+            return verifyJwtByPublicKey(jwt);
+        }
+    }
+
+    @Override
+    public boolean verifyClientAssertion(final OAuth2Jwt jwt) {
+        final JwsAlgorithmType algorithmType = jwt.getSignedJwt().getHeader().getAlgorithm().getAlgorithmType();
+        if (algorithmType != JwsAlgorithmType.RSA && algorithmType != JwsAlgorithmType.ECDSA) {
+            logger.message("Client assertion of client " + getClientId() + " is not signed by an asymmetric algorithm");
+            return false;
+        }
+        return verifyJwtByPublicKey(jwt);
+    }
+
+    private boolean verifyJwtByPublicKey(final OAuth2Jwt jwt) {
+        try {
+            switch (getClientPublicKeySelector()) {
+                case JWKS:
+                    return byJWKs(jwt);
+                case JWKS_URI:
+                    return byJWKsURI(jwt);
+                default:
+                    return byX509Key(jwt);
             }
+        } catch (Exception e) {
+            throw Utils.createException("Client Bearer Jwt Public key", e, logger);
         }
     }
 
