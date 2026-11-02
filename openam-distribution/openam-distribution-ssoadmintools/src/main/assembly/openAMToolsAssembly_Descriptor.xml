@@ -110,7 +110,7 @@
         </fileSet>
         <fileSet>
             <outputDirectory>legal-notices</outputDirectory>
-            <directory>${project.basedir}/../../legal-notices</directory>
+            <directory>${project.basedir}/../../legal</directory>
             <includes>
                 <include>**/**</include>
             </includes>

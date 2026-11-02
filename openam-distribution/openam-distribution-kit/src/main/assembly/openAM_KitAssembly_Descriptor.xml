@@ -56,7 +56,7 @@
     <fileSets>
         <fileSet>
             <outputDirectory>legal-notices</outputDirectory>
-            <directory>../../legal-notices</directory>
+            <directory>../../legal</directory>
         </fileSet>
         <fileSet>
             <outputDirectory>ldif</outputDirectory>

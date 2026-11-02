@@ -277,7 +277,7 @@
                         </webResource>
 
                         <webResource>
-                            <directory>${project.basedir}/../legal-notices</directory>
+                            <directory>${project.basedir}/../legal</directory>
                             <includes>
                                 <include>**</include>
                             </includes>

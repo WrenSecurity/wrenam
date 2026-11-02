@@ -235,7 +235,7 @@
             <fileset dir="${server.resources}/config">
                 <include name="*.htm"/>
                 <include name="*.properties"/>
-                <include name="license.txt"/>
+                <include name="CDDLv1.1.txt"/>
                 <exclude name="serviceNames.properties"/>
             </fileset>
         </copy>

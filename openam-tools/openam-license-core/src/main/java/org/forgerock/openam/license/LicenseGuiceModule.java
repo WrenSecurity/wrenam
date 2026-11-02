@@ -29,7 +29,7 @@ public class LicenseGuiceModule extends AbstractModule {
     protected void configure() {
 
         bind(String[].class).annotatedWith(Names.named("LICENSE_FILEPATH"))
-                .toInstance(new String[]{"legal-notices/license.txt"});
+                .toInstance(new String[]{"legal-notices/CDDLv1.1.txt"});
 
     }
 
