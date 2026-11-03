@@ -71,9 +71,9 @@
     <fileSets>
         <fileSet>
             <outputDirectory>legal-notices</outputDirectory>
-            <directory>${project.basedir}/../../legal-notices</directory>
+            <directory>${project.basedir}/../../legal</directory>
             <includes>
-                <include>license.txt</include>
+                <include>CDDLv1.1.txt</include>
             </includes>
         </fileSet>
 
