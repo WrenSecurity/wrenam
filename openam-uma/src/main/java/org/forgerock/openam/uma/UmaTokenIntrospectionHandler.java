@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions copyright 2026 Wren Security
  */
 
 package org.forgerock.openam.uma;
@@ -20,11 +21,10 @@ import static org.forgerock.json.JsonValue.*;
 import static org.forgerock.openam.oauth2.OAuth2Constants.IntrospectionEndpoint.*;
 import static org.forgerock.openam.utils.CollectionUtils.newList;
 
-import java.util.ArrayList;
-
 import jakarta.inject.Inject;
 
 import org.forgerock.json.JsonValue;
+import org.forgerock.oauth2.core.ClientRegistration;
 import org.forgerock.openam.oauth2.OAuth2Constants;
 import org.forgerock.oauth2.core.OAuth2Request;
 import org.forgerock.oauth2.core.TokenIntrospectionHandler;
@@ -51,8 +51,9 @@ public class UmaTokenIntrospectionHandler implements TokenIntrospectionHandler {
     }
 
     @Override
-    public JsonValue introspect(OAuth2Request request, String clientId, String tokenType, String tokenId)
+    public JsonValue introspect(OAuth2Request request, ClientRegistration client, String tokenType, String tokenId)
             throws ServerException {
+        String clientId = client.getClientId();
         try {
             UmaProviderSettings providerSettings = providerSettingsFactory.get(request.<Request>getRequest());
             UmaUris umaUris = umaUrisFactory.get(request.<Request>getRequest());

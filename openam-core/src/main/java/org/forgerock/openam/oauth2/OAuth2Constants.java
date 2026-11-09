@@ -1091,6 +1091,15 @@ public class OAuth2Constants {
     }
 
     /**
+     * Scopes configured on clients to grant authorization server privileges.
+     */
+    public static class AuthorizationScopes {
+
+        /** Allows introspection of other clients' tokens in the same realm. */
+        public static final String AM_INTROSPECT_ALL_TOKENS = "am-introspect-all-tokens";
+    }
+
+    /**
      * Constants for proof of possession as described by RFC-7800.
      */
     public static class ProofOfPossession {

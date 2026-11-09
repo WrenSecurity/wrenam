@@ -239,6 +239,7 @@
                         name="forgerock-oauth2-provider-supported-scopes"
                         type="list"
                         syntax="string"
+                        validator="AuthorizationScopeValidator"
                         resourceName="supportedScopes"
                         i18nKey="a108"
                         order="130">
@@ -328,6 +329,7 @@
                         name="forgerock-oauth2-provider-default-scopes"
                         type="list"
                         syntax="string"
+                        validator="AuthorizationScopeValidator"
                         resourceName="defaultScopes"
                         i18nKey="a122"
                         order="200">
@@ -494,6 +496,14 @@
                     </DefaultValues>
                 </AttributeSchema>
 
+
+                <AttributeSchema name="AuthorizationScopeValidator"
+                                 type="validator"
+                                 syntax="string">
+                    <DefaultValues>
+                        <Value>org.forgerock.openam.oauth2.validation.AuthorizationScopeValidator</Value>
+                    </DefaultValues>
+                </AttributeSchema>
 
                 <AttributeSchema name="MapValueValidator"
                                  type="validator"

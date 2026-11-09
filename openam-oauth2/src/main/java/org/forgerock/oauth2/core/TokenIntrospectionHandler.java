@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015 ForgeRock AS.
+ * Portions copyright 2026 Wren Security.
  */
 
 package org.forgerock.oauth2.core;
@@ -31,10 +32,10 @@ public interface TokenIntrospectionHandler {
      *                  with that ID.
      * @param tokenId The ID of the token.
      * @param request The OAuth 2.0 request.
-     * @param clientId The OAuth 2.0 client making the request.
+     * @param client The OAuth 2.0 client making the request.
      * @return The introspected representation.
      */
-    JsonValue introspect(OAuth2Request request, String clientId, String tokenType, String tokenId)
+    JsonValue introspect(OAuth2Request request, ClientRegistration client, String tokenType, String tokenId)
             throws ServerException, NotFoundException;
 
     /**
