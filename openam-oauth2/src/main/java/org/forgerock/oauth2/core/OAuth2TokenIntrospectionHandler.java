@@ -12,7 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
- * Portions copyright 2022 Wren Security
+ * Portions copyright 2022-2026 Wren Security
  */
 
 package org.forgerock.oauth2.core;
@@ -20,6 +20,7 @@ package org.forgerock.oauth2.core;
 import static org.forgerock.json.JsonValue.field;
 import static org.forgerock.json.JsonValue.json;
 import static org.forgerock.json.JsonValue.object;
+import static org.forgerock.openam.oauth2.OAuth2Constants.AuthorizationScopes.AM_INTROSPECT_ALL_TOKENS;
 import static org.forgerock.openam.oauth2.OAuth2Constants.IntrospectionEndpoint.ACCESS_TOKEN_TYPE;
 import static org.forgerock.openam.oauth2.OAuth2Constants.IntrospectionEndpoint.ACTIVE;
 import static org.forgerock.openam.oauth2.OAuth2Constants.IntrospectionEndpoint.REFRESH_TOKEN_TYPE;
@@ -57,18 +58,28 @@ public class OAuth2TokenIntrospectionHandler implements TokenIntrospectionHandle
     }
 
     @Override
-    public JsonValue introspect(OAuth2Request request, String clientId, String tokenType, String tokenId) throws ServerException, NotFoundException {
+    public JsonValue introspect(OAuth2Request request, ClientRegistration client, String tokenType, String tokenId)
+            throws ServerException, NotFoundException {
         IntrospectableToken token = getIntrospectableToken(request, tokenType, tokenId);
 
         if (token != null && !token.isExpired()) {
-            if (token.getClientId().equals(clientId) &&
-                    token.getRealm().equals(request.<String>getParameter(OAuth2Constants.Params.REALM))) {
+            if (canIntrospectToken(request, client, token)) {
                 return renderOAuth2Token(request, token);
             } else {
-                logger.warn("Token {} didn't belong to client {}", request.getParameter(TOKEN), clientId);
+                logger.warn("Token {} didn't belong to client {}", request.getParameter(TOKEN), client.getClientId());
             }
         }
         return null;
+    }
+
+    private boolean canIntrospectToken(OAuth2Request request, ClientRegistration client, IntrospectableToken token) {
+        if (!token.getRealm().equals(request.<String>getParameter(OAuth2Constants.Params.REALM))) {
+            return false;
+        }
+        if (token.getClientId().equals(client.getClientId())) {
+            return true;
+        }
+        return client.isConfidential() && client.getAllowedScopes().contains(AM_INTROSPECT_ALL_TOKENS);
     }
 
     /**

@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015 ForgeRock AS.
+ * Portions copyright 2026 Wren Security.
  */
 
 package org.forgerock.oauth2.core;
@@ -59,9 +60,11 @@ public class TokenIntrospectionService {
      * Allows introspection of a (refresh or access) token according to the
      * <a href="http://tools.ietf.org/html/draft-ietf-oauth-introspection-04">OAuth 2.0 Token Introspection
      * standard</a>.
-     * <p>
-     * The request must must contain authorization as the OAuth 2.0 client that the token was issued for, using either
-     * credentials or a bearer token.
+     *
+     * <p>Confidential clients are authenticated before the introspection handlers are invoked. Public
+     * clients are identified by their client ID only. Each handler must check whether the client is
+     * authorized to introspect the token.</p>
+     *
      * @param request The OAuth 2.0 request
      * @return Details of the specified token.
      */
@@ -73,7 +76,7 @@ public class TokenIntrospectionService {
         String tokenId = request.getParameter(TOKEN);
 
         for (TokenIntrospectionHandler handler : handlers) {
-            JsonValue result = handler.introspect(request, clientRegistration.getClientId(), tokenType, tokenId);
+            JsonValue result = handler.introspect(request, clientRegistration, tokenType, tokenId);
             if (result != null) {
                 return result;
             }

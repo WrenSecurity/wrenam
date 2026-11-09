@@ -2,6 +2,7 @@
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
  * Copyright (c) 2011-2016 ForgeRock AS.
+ * Portions copyright 2026 Wren Security.
  *
  * The contents of this file are subject to the terms
  * of the Common Development and Distribution License
@@ -87,6 +88,24 @@ public abstract class AbstractUpgradeHelper implements UpgradeHelper {
         Node attributeNode = updateNode(doc, SMSUtils.ATTRIBUTE_OPTIONAL, attribute.getAttributeSchemaNode());
         attribute.update(attributeNode);
 
+        return attribute;
+    }
+
+    /**
+     * Updates the validators of an attribute schema.
+     *
+     * @param attribute The attribute schema.
+     * @param validators The space-separated validator names, or {@code null} to remove the validator attribute.
+     * @return The updated attribute schema.
+     */
+    protected AttributeSchemaImpl updateValidators(AttributeSchemaImpl attribute, String validators) {
+        Element node = (Element) attribute.getAttributeSchemaNode().cloneNode(true);
+        if (validators == null) {
+            node.removeAttribute(SMSUtils.ATTRIBUTE_VALIDATOR);
+        } else {
+            node.setAttribute(SMSUtils.ATTRIBUTE_VALIDATOR, validators);
+        }
+        attribute.update(node);
         return attribute;
     }
 

@@ -12,11 +12,14 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014-2016 ForgeRock AS.
+ * Portions copyright 2026 Wren Security.
  */
 
 package org.forgerock.openam.upgrade.helpers;
 
 import static org.forgerock.openam.oauth2.OAuth2Constants.OAuth2ProviderService.*;
+
+import java.util.Objects;
 
 import org.forgerock.openam.upgrade.UpgradeException;
 
@@ -39,6 +42,8 @@ public class OAuth2ProviderUpgradeHelper extends AbstractUpgradeHelper {
         attributes.add(SUPPORTED_CLAIMS);
         attributes.add(OIDC_CLAIMS_EXTENSION_SCRIPT);
         attributes.add(SCOPE_PLUGIN_CLASS);
+        attributes.add(SUPPORTED_SCOPES);
+        attributes.add(DEFAULT_SCOPES);
 
         attributes.add(AUTHZ_CODE_LIFETIME_NAME);
         attributes.add(REFRESH_TOKEN_LIFETIME_NAME);
@@ -55,6 +60,10 @@ public class OAuth2ProviderUpgradeHelper extends AbstractUpgradeHelper {
         boolean attributeNeedUpgrade = false;
 
         switch (attributeFromNewSchema.getName()) {
+            case SUPPORTED_SCOPES:
+            case DEFAULT_SCOPES:
+                attributeNeedUpgrade |= upgradeValidators(attributeToUpgrade, attributeFromNewSchema);
+                break;
             case JKWS_URI:
                 if (!attributeToUpgrade.getType().equals(attributeFromNewSchema.getType())) {
                     attributeNeedUpgrade = true;
@@ -82,5 +91,17 @@ public class OAuth2ProviderUpgradeHelper extends AbstractUpgradeHelper {
         } else {
             return null;
         }
+    }
+
+    private boolean upgradeValidators(AttributeSchemaImpl attrToUpgrade, AttributeSchemaImpl attrFromNewSchema) {
+        String newValidators = attrFromNewSchema.getValidator();
+        String existingValidators = attrToUpgrade.getValidator();
+
+        if (!Objects.equals(existingValidators, newValidators)) {
+            updateValidators(attrToUpgrade, newValidators);
+            return true;
+        }
+
+        return false;
     }
 }
