@@ -213,7 +213,7 @@
         <activemq.version>5.18.7</activemq.version>
         <amazon.sns.version>1.10.72</amazon.sns.version>
         <asciidoctorj.version>2.5.10</asciidoctorj.version>
-        <bouncycastle.version>1.81</bouncycastle.version>
+        <bouncycastle.version>1.86</bouncycastle.version>
         <geoip.version>2.0.0</geoip.version>
         <json.version>20231013</json.version>
         <mail.version>1.5.1</mail.version>
