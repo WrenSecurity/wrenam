@@ -209,7 +209,7 @@
         <activemq.version>6.2.4</activemq.version>
         <amazon.sns.version>1.10.72</amazon.sns.version>
         <asciidoctorj.version>2.5.10</asciidoctorj.version>
-        <bouncycastle.version>1.81</bouncycastle.version>
+        <bouncycastle.version>1.86</bouncycastle.version>
         <geoip.version>2.0.0</geoip.version>
         <json.version>20231013</json.version>
         <jodaTime.version>2.10.9</jodaTime.version>
