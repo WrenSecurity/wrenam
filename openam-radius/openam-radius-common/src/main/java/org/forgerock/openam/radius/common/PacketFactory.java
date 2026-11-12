@@ -29,6 +29,7 @@
 /*
  * Portions Copyrighted 2011 ForgeRock AS
  * Portions Copyrighted 2015 Intellectual Reserve, Inc (IRI)
+ * Portions Copyright 2026 Wren Security.
  */
 package org.forgerock.openam.radius.common;
 
@@ -156,6 +157,11 @@ public final class PacketFactory {
         // get the attribute's octet length, byte is signed so we need to convert to unsigned byte
         final byte len = bfr.get();
         final int length = (len) & 0xFF; // may have gotten sign extension so trim down to one byte
+
+        // a length below two would not advance the buffer and one beyond the packet would read unrelated octets
+        if (length < 2 || length - 2 > bfr.remaining()) {
+            throw new IllegalArgumentException("Malformed attribute with length " + length);
+        }
 
         // now reset the buffer and pull out the full set of octets including the prefixing type and length octets
         final byte[] attrData = new byte[length];
