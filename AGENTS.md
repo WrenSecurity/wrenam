@@ -73,8 +73,15 @@ under `src/test/java` in the same package. Checkstyle runs in the build
   `openam-server-only/src/main/resources/services/`) - with display names and help in the property file of the same name (e.g.
   `amAuth.properties` for `amAuth.xml`). New services are registered in
   `openam-server-only/src/main/resources/config/serviceNames.properties` and
-  `schemaNames.properties`. New attribute names use the `wrensec-am-` prefix (e.g.
-  `wrensec-am-auth-<module>-...`), not the inherited `iplanet-am-` or `forgerock-am-`.
+  `schemaNames.properties`. New attribute names follow the style of their service: in services
+  with prefixed names (`iplanet-am-...`, `openam-...`) use the `wrensec-am-` prefix (e.g.
+  `wrensec-am-auth-<module>-...`), not the inherited `iplanet-am-` or `forgerock-am-`; in
+  services with plain camelCase names (e.g. `OAuth2Provider`, `RadiusServerService`) use
+  camelCase without a prefix. The prefix is inherited from the time when service attributes
+  were stored as LDAP attributes; it matters for user store attributes (see below). Exception:
+  an authentication module's level attribute must be named as
+  `AMAuthConfigUtils.getAuthLevelAttribute` expects (`iplanet-am-auth-<module>-auth-level`,
+  `forgerock-am-auth-<module>-auth-level` or `sunAMAuth<Module>AuthLevel`).
   Configuration changes for existing installations need an upgrade step (`openam-upgrade`).
 * User store schema: new user attributes go to `idRepoService.xml` and to an LDIF for each
   supported directory under `openam-server-only/src/main/webapp/WEB-INF/template/ldif/`
