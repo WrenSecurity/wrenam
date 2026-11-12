@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyrighted 2015 Intellectual Reserve, Inc (IRI)
+ * Portions Copyright 2026 Wren Security.
  */
 package org.forgerock.openam.radius.server.config;
 
@@ -63,6 +64,11 @@ public class ClientConfig {
      * Indicates if packet contents for this client should be dumped to log for troubleshooting.
      */
     private boolean logPackets = false;
+
+    /**
+     * Indicates if Access-Request packets without a Message-Authenticator attribute are dropped.
+     */
+    private boolean requireMessageAuthenticator = false;
 
     /**
      * Get the name of the client. The name is used solely for associating configuration and log messages with a given
@@ -223,5 +229,26 @@ public class ClientConfig {
      */
     public void setLogPackets(boolean logPackets) {
         this.logPackets = logPackets;
+    }
+
+    /**
+     * Indicates if Access-Request packets from this client without a Message-Authenticator attribute (RFC 3579) are
+     * dropped.
+     *
+     * @return true if such packets are dropped, false if they are accepted.
+     */
+    public boolean isRequireMessageAuthenticator() {
+        return this.requireMessageAuthenticator;
+    }
+
+    /**
+     * Set a value to indicate if Access-Request packets from this client without a Message-Authenticator attribute
+     * are dropped.
+     *
+     * @param requireMessageAuthenticator
+     *            the requireMessageAuthenticator to set
+     */
+    public void setRequireMessageAuthenticator(boolean requireMessageAuthenticator) {
+        this.requireMessageAuthenticator = requireMessageAuthenticator;
     }
 }

@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyrighted 2015 Intellectual Reserve, Inc (IRI)
+ * Portions Copyright 2026 Wren Security.
  */
 package org.forgerock.openam.radius.server.config;
 
@@ -110,6 +111,12 @@ public final class RadiusServerConstants {
      * obfiscated with asterisks in place of characters.
      */
     public static final String CLIENT_ATT_LOG_PACKETS = "clientPacketsLogged";
+
+    /**
+     * In a configured radius client this is the name of the attribute whose value indicates if Access-Request packets
+     * without a Message-Authenticator attribute (RFC 3579) are dropped.
+     */
+    public static final String CLIENT_ATT_REQUIRE_MESSAGE_AUTHENTICATOR = "clientRequireMessageAuthenticator";
 
     /**
      * In a configured radius client this is the fully qualified name of a class that implements the
