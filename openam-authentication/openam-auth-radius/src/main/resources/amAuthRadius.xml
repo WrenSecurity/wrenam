@@ -29,6 +29,7 @@
 -->
 <!--
     Portions Copyrighted 2011-2015 ForgeRock AS.
+    Portions Copyright 2026 Wren Security.
 -->
 <!DOCTYPE ServicesConfiguration
     PUBLIC "=//iPlanet//Service Management Services (SMS) 1.0 DTD//EN"
@@ -113,6 +114,20 @@
                         <Value>5</Value>
 		    </DefaultValues>
 		</AttributeSchema>
+                <AttributeSchema name="wrensec-am-auth-radius-require-message-authenticator"
+                    type="single"
+                    syntax="boolean"
+                    i18nKey="a107"
+                    order="650"
+                    resourceName="requireMessageAuthenticator">
+                    <BooleanValues>
+                        <BooleanTrueValue i18nKey="i18nTrue">true</BooleanTrueValue>
+                        <BooleanFalseValue i18nKey="i18nFalse">false</BooleanFalseValue>
+                    </BooleanValues>
+                    <DefaultValues>
+                        <Value>false</Value>
+                    </DefaultValues>
+                </AttributeSchema>
 		<SubSchema name="serverconfig" inheritance="multiple" resourceName="USE-PARENT">
                     <AttributeSchema name="iplanet-am-auth-radius-server1"
                         type="list"
@@ -182,6 +197,20 @@
 	            <DefaultValues>
                         <Value>5</Value>
 		    </DefaultValues>
+                    </AttributeSchema>
+                    <AttributeSchema name="wrensec-am-auth-radius-require-message-authenticator"
+                        type="single"
+                        syntax="boolean"
+                        i18nKey="a107"
+                        order="650"
+                        resourceName="requireMessageAuthenticator">
+                        <BooleanValues>
+                            <BooleanTrueValue i18nKey="i18nTrue">true</BooleanTrueValue>
+                            <BooleanFalseValue i18nKey="i18nFalse">false</BooleanFalseValue>
+                        </BooleanValues>
+                        <DefaultValues>
+                            <Value>false</Value>
+                        </DefaultValues>
                     </AttributeSchema>
 		</SubSchema>
             </Organization>

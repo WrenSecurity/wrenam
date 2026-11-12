@@ -26,6 +26,7 @@
  *
  * Portions Copyrighted 2011-2016 ForgeRock AS.
  * Portions Copyrighted [2015] [Intellectual Reserve, Inc (IRI)]
+ * Portions Copyright 2026 Wren Security.
  */
 package com.sun.identity.authentication.modules.radius;
 
@@ -58,6 +59,8 @@ public class RADIUS extends AMLoginModule {
     private static final String DEFAULT_TIMEOUT = "5";
     private static final String DEFAULT_SERVER_PORT = "1645";
     private static final String DEFAULT_INTERVAL = "5";
+    private static final String REQUIRE_MESSAGE_AUTHENTICATOR =
+            "wrensec-am-auth-radius-require-message-authenticator";
     private static final String AM_AUTH_RADIUS = "amAuthRadius";
     // initial state
     private Map sharedState;
@@ -76,6 +79,7 @@ public class RADIUS extends AMLoginModule {
     private int iServerPort = 1645;
     private int iTimeOut = 5;
     private int healthCheckInterval = 5;
+    private boolean requireMessageAuthenticator = false;
     private RadiusConn radiusConn = null;
     private boolean getCredentialsFromSharedState;
     private ChallengeException cException = null;
@@ -150,6 +154,8 @@ public class RADIUS extends AMLoginModule {
                     String interval = CollectionHelper.getMapAttr(options, "openam-auth-radius-healthcheck-interval",
                             DEFAULT_INTERVAL);
                     healthCheckInterval = Integer.parseInt(interval);
+                    requireMessageAuthenticator = Boolean.parseBoolean(
+                            CollectionHelper.getMapAttr(options, REQUIRE_MESSAGE_AUTHENTICATOR, "false"));
 
                     if (authLevel != null) {
                         try {
@@ -215,8 +221,8 @@ public class RADIUS extends AMLoginModule {
         switch (state) {
         case ISAuthConstants.LOGIN_START:
             try {
-                radiusConn = new RadiusConn(primaryServers, secondaryServers, sharedSecret, iTimeOut,
-                        healthCheckInterval);
+                radiusConn = new RadiusConn(primaryServers, secondaryServers, sharedSecret, iTimeOut, null,
+                        healthCheckInterval, requireMessageAuthenticator);
             } catch (SocketException se) {
                 debug.error("RADIUS login failure; Socket Exception se == ", se);
                 shutdown();
