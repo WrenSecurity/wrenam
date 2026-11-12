@@ -13,7 +13,7 @@
  *
  * Copyrighted 2015 Intellectual Reserve, Inc (IRI)
  * Portions copyright 2015 ForgeRock AS
- * Portions copyright 2022 Wren Security
+ * Portions copyright 2022-2026 Wren Security
  */
 
 package org.forgerock.openam.radius.server;
@@ -159,5 +159,91 @@ public class RadiusRequestHandlerTest {
 
         // then
         verify(reqCtx, never()).send(isA(Packet.class));
+    }
+
+    /**
+     * The request of the other tests with a Message-Authenticator computed with the secret "xyzzy5461".
+     */
+    private static final String SIGNED_REQUEST = "01 00 00 4a 0f 40 3f 94 73 97 80 57 bd 83 d5 cb "
+            + "98 f4 22 7a 01 06 6e 65 6d 6f 02 12 0d be 70 8d 93 d4 13 ce 31 96 e4 3f 78 2a 0a ee 04 06 c0 a8 01 10 "
+            + "05 06 00 00 00 03 50 12 63 b7 8a 6b 9d 2f 14 99 89 fb f5 7e a2 1d 19 4c";
+
+    /**
+     * Test that a request with a correct Message-Authenticator is handled when the client requires one.
+     */
+    @Test
+    public void testRunAcceptsValidMessageAuthenticator() throws Exception {
+        final RadiusRequestContext reqCtx = mockContext("xyzzy5461", true);
+
+        runAcceptAll(reqCtx, SIGNED_REQUEST);
+
+        verify(reqCtx, times(1)).send(isA(AccessAccept.class));
+    }
+
+    /**
+     * Test that a request with a wrong Message-Authenticator is silently dropped even if the client does not require
+     * one.
+     */
+    @Test
+    public void testRunDropsInvalidMessageAuthenticator() throws Exception {
+        final RadiusRequestContext reqCtx = mockContext("other-secret", false);
+
+        runAcceptAll(reqCtx, SIGNED_REQUEST);
+
+        verify(reqCtx, never()).send(isA(Packet.class));
+    }
+
+    /**
+     * Test that a request without Message-Authenticator is silently dropped when the client requires one.
+     */
+    @Test
+    public void testRunDropsMissingMessageAuthenticatorWhenRequired() throws Exception {
+        final RadiusRequestContext reqCtx = mockContext("xyzzy5461", true);
+
+        runAcceptAll(reqCtx, res);
+
+        verify(reqCtx, never()).send(isA(Packet.class));
+    }
+
+    /**
+     * Test that a packet other than an Access-Request is silently dropped.
+     */
+    @Test
+    public void testRunDropsNonAccessRequest() throws Exception {
+        final RadiusRequestContext reqCtx = mockContext("xyzzy5461", false);
+
+        runAcceptAll(reqCtx, "02" + res.substring(2));
+
+        verify(reqCtx, never()).send(isA(Packet.class));
+    }
+
+    /**
+     * Test that a packet with a malformed attribute is silently dropped.
+     */
+    @Test
+    public void testRunDropsMalformedPacket() throws Exception {
+        final RadiusRequestContext reqCtx = mockContext("xyzzy5461", false);
+
+        runAcceptAll(reqCtx, "01 00 00 16 0f 40 3f 94 73 97 80 57 bd 83 d5 cb 98 f4 22 7a 01 00");
+
+        verify(reqCtx, never()).send(isA(Packet.class));
+    }
+
+    private RadiusRequestContext mockContext(String secret, boolean requireMessageAuthenticator)
+            throws UnknownHostException {
+        final RadiusRequestContext reqCtx = mock(RadiusRequestContext.class);
+        final ClientConfig clientConfig = mock(ClientConfig.class);
+        when(reqCtx.getClientConfig()).thenReturn(clientConfig);
+        when(reqCtx.getSource()).thenReturn(new InetSocketAddress(Inet4Address.getByName("example.org"), 6836));
+        when(clientConfig.getName()).thenReturn("TestConfig");
+        when(clientConfig.getSecret()).thenReturn(secret);
+        when(clientConfig.isRequireMessageAuthenticator()).thenReturn(requireMessageAuthenticator);
+        return reqCtx;
+    }
+
+    private void runAcceptAll(RadiusRequestContext reqCtx, String packet) throws Exception {
+        AccessRequestHandlerFactory accessRequestHandlerFactory = mock(AccessRequestHandlerFactory.class);
+        when(accessRequestHandlerFactory.getAccessRequestHandler(reqCtx)).thenReturn(new AcceptAllHandler());
+        new RadiusRequestHandler(accessRequestHandlerFactory, reqCtx, Utils.toBuffer(packet), new EventBus()).run();
     }
 }

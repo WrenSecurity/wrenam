@@ -12,18 +12,16 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyrighted 2015 Intellectual Reserve, Inc (IRI)
+ * Portions Copyright 2026 Wren Security.
  */
 package org.forgerock.openam.radius.server;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 import org.forgerock.openam.radius.common.AccessAccept;
 import org.forgerock.openam.radius.common.AccessChallenge;
@@ -33,7 +31,7 @@ import org.forgerock.openam.radius.common.Attribute;
 import org.forgerock.openam.radius.common.AttributeSet;
 import org.forgerock.openam.radius.common.Authenticator;
 import org.forgerock.openam.radius.common.Packet;
-import org.forgerock.openam.radius.common.ResponseAuthenticator;
+import org.forgerock.openam.radius.common.PacketIntegrity;
 import org.forgerock.openam.radius.server.config.ClientConfig;
 import org.forgerock.openam.radius.server.config.RadiusServerConstants;
 
@@ -181,35 +179,25 @@ public class RadiusRequestContext {
     }
 
     /**
-     * Crafts the response authenticator as per the Response Authenticator paragraph of section 3 of rfc 2865 and
-     * injects into the response packet thus defining the authenticity and integrity of this response relative to its
-     * originating request.
+     * Adds a Message-Authenticator attribute as the first attribute of the response (RFC 3579 and the CVE-2024-3596
+     * mitigation) and crafts the response authenticator as per the Response Authenticator paragraph of section 3 of
+     * rfc 2865, thus defining the authenticity and integrity of this response relative to its originating request.
      *
      * @param response
-     *            the response packet to be validated
+     *            the response packet to be signed
      * @throws RadiusProcessingException
-     *             if the response authentication can not be added to the response.
+     *             if the response can not be signed.
      */
     private void injectResponseAuthenticator(Packet response) throws RadiusProcessingException {
-        response.setAuthenticator(requestAuthenticator);
-        final byte[] onTheWireFormat = response.getOctets();
-
-        MessageDigest md5 = null;
+        if (requestAuthenticator == null) {
+            throw new RadiusProcessingException(RadiusProcessingExceptionNature.INVALID_RESPONSE,
+                    "No request authenticator to sign the RADIUS response with.");
+        }
         try {
-            md5 = MessageDigest.getInstance("MD5");
-            md5.update(onTheWireFormat);
-            md5.update(clientConfig.getSecret().getBytes("UTF-8"));
-            final byte[] hash = md5.digest();
-
-            final ResponseAuthenticator ra = new ResponseAuthenticator(hash);
-
-            // now replace the req authenticator fields used for generating the response authenticator fields
-            response.setAuthenticator(ra);
-        } catch (final NoSuchAlgorithmException | UnsupportedEncodingException e) {
-            final IOException ioException = new IOException(
-                    "Failed to add response authentication to RADIUS response.", e);
+            PacketIntegrity.signResponse(response, requestAuthenticator, clientConfig.getSecret());
+        } catch (final IllegalArgumentException | IllegalStateException e) {
             throw new RadiusProcessingException(RadiusProcessingExceptionNature.CATASTROPHIC,
-                    "Failed to send Radius Response.", ioException);
+                    "Failed to add response authentication to RADIUS response.", e);
         }
     }
 
