@@ -13,7 +13,7 @@
  *
  * Copyrighted 2015 Intellectual Reserve, Inc (IRI)
  * Portions copyright 2015 ForgeRock AS
- * Portions copyright 2022 Wren Security
+ * Portions copyright 2022-2026 Wren Security
  */
 package org.forgerock.openam.radius.server;
 
@@ -23,7 +23,10 @@ import org.forgerock.openam.radius.common.AccessReject;
 import org.forgerock.openam.radius.common.AccessRequest;
 import org.forgerock.openam.radius.common.Packet;
 import org.forgerock.openam.radius.common.PacketFactory;
+import org.forgerock.openam.radius.common.PacketIntegrity;
+import org.forgerock.openam.radius.common.PacketIntegrity.MessageAuthenticatorStatus;
 import org.forgerock.openam.radius.common.PacketType;
+import org.forgerock.openam.radius.server.config.ClientConfig;
 import org.forgerock.openam.radius.server.config.RadiusServerConstants;
 import org.forgerock.openam.radius.server.events.AuthRequestAcceptedEvent;
 import org.forgerock.openam.radius.server.events.AuthRequestChallengedEvent;
@@ -222,26 +225,57 @@ public class RadiusRequestHandler implements Runnable {
      */
     private Packet getValidPacket(ByteBuffer buffer2) {
         LOG.message("Entering RadiusRequestHandler.getValidPacket()");
-        // parse into a packet object
         Packet requestPacket = null;
 
         try {
-            requestPacket = PacketFactory.toPacket(buffer2);
-
-            // log packet if client handlerConfig indicates
-            if (requestContext.getClientConfig().isLogPackets()) {
-                requestContext.logPacketContent(requestPacket, "\nPacket from " + getClientName() + ":");
-            }
-
-            // verify packet type
-            if (requestPacket.getType() != PacketType.ACCESS_REQUEST) {
+            final byte[] received = new byte[buffer2.remaining()];
+            buffer2.duplicate().get(received);
+            final byte[] octets = PacketIntegrity.extractPacket(received, received.length);
+            if (octets == null) {
+                LOG.error("Received malformed packet from RADIUS client '" + getClientName() + "'. Dropping.");
+            } else if (PacketType.getPacketType(octets[0]) != PacketType.ACCESS_REQUEST) {
                 LOG.error("Received non Access-Request packet from RADIUS client '" + getClientName() + "'. Dropping.");
+            } else if (hasAcceptableMessageAuthenticator(octets)) {
+                requestPacket = PacketFactory.toPacket(octets);
+
+                // log packet if client handlerConfig indicates
+                if (requestContext.getClientConfig().isLogPackets()) {
+                    requestContext.logPacketContent(requestPacket, "\nPacket from " + getClientName() + ":");
+                }
             }
         } catch (final Exception e) {
             LOG.error("Unable to parse packet received from RADIUS client '" + getClientName() + "'. Dropping.", e);
+            requestPacket = null;
+        }
+        if (requestPacket == null) {
+            eventBus.post(new PacketDroppedSilentlyEvent());
         }
         LOG.message("Leaving RadiusRequestHandler.getValidPacket()");
         return requestPacket;
+    }
+
+    /**
+     * Checks the Message-Authenticator attribute (RFC 3579) of an Access-Request: a request carrying the attribute must
+     * have a correct value and a request without it is accepted only if the client configuration does not require it.
+     *
+     * @param octets the on-the-wire octets of the request.
+     * @return true if the request may be processed, false if it must be silently discarded.
+     */
+    private boolean hasAcceptableMessageAuthenticator(byte[] octets) {
+        final ClientConfig clientConfig = requestContext.getClientConfig();
+        final MessageAuthenticatorStatus status = PacketIntegrity.checkMessageAuthenticator(octets, null,
+                clientConfig.getSecret());
+        if (status == MessageAuthenticatorStatus.INVALID) {
+            LOG.error("Received Access-Request with invalid Message-Authenticator from RADIUS client '"
+                    + getClientName() + "'. Check the shared secret. Dropping.");
+            return false;
+        }
+        if (status == MessageAuthenticatorStatus.ABSENT && clientConfig.isRequireMessageAuthenticator()) {
+            LOG.error("Received Access-Request without Message-Authenticator from RADIUS client '" + getClientName()
+                    + "', whose configuration requires it. Dropping.");
+            return false;
+        }
+        return true;
     }
 
     /**

@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyrighted 2015 Intellectual Reserve, Inc (IRI)
+ * Portions Copyright 2026 Wren Security.
  */
 package org.forgerock.openam.radius.server;
 
@@ -35,6 +36,7 @@ import org.forgerock.openam.radius.common.Attribute;
 import org.forgerock.openam.radius.common.AttributeSet;
 import org.forgerock.openam.radius.common.Packet;
 import org.forgerock.openam.radius.common.PacketFactory;
+import org.forgerock.openam.radius.common.PacketIntegrity;
 import org.forgerock.openam.radius.common.ReplyMessageAttribute;
 import org.forgerock.openam.radius.common.RequestAuthenticator;
 import org.forgerock.openam.radius.common.StateAttribute;
@@ -192,6 +194,7 @@ public class ConsoleClient implements Runnable {
                 if (state != null) {
                     req.addAttribute(state);
                 }
+                PacketIntegrity.signRequest(req, this.secret);
                 final ByteBuffer reqBuf = ByteBuffer.wrap(req.getOctets());
 
                 if (logTraffic) {
@@ -203,8 +206,20 @@ public class ConsoleClient implements Runnable {
                 // now handle responses possibly sending additional requests
                 chan.receive(bufIn);
                 bufIn.flip(); // prepare buffer for reading out
-                final Packet res = PacketFactory.toPacket(bufIn);
+                final byte[] received = new byte[bufIn.remaining()];
+                bufIn.get(received);
                 bufIn.clear(); // prepare buffer for next response
+                final byte[] octets = PacketIntegrity.extractPacket(received, received.length);
+                final byte[] reqAuth = req.getAuthenticator().getOctets();
+                if (octets == null || (octets[1] & 0xFF) != (req.getIdentifier() & 0xFF)
+                        || !PacketIntegrity.verifyResponseAuthenticator(octets, reqAuth, this.secret)
+                        || PacketIntegrity.checkMessageAuthenticator(octets, reqAuth, this.secret)
+                                == PacketIntegrity.MessageAuthenticatorStatus.INVALID) {
+                    System.out.println("---> Invalid response received. Check the shared secret.");
+                    System.out.println();
+                    return;
+                }
+                final Packet res = PacketFactory.toPacket(octets);
 
                 if (logTraffic) {
                     System.out.println("Packet From " + host + ":" + port);

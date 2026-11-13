@@ -29,6 +29,7 @@
 /*
  * Portions Copyrighted 2011 ForgeRock AS
  * Portions Copyrighted 2015 Intellectual Reserve, Inc (IRI)
+ * Portions Copyright 2026 Wren Security.
  */
 package org.forgerock.openam.radius.common;
 
@@ -46,6 +47,13 @@ import java.security.NoSuchAlgorithmException;
  * and shared secret.
  */
 public class UserPasswordAttribute extends Attribute {
+
+    /**
+     * The maximum length of a password in octets: the encrypted password is padded to blocks of 16 octets and the
+     * value of an attribute holds at most 253 octets. Section 5.2 of RFC 2865 limits passwords to 128 octets, but
+     * servers such as FreeRADIUS accept the longer ones.
+     */
+    public static final int MAX_PASSWORD_LENGTH = (253 / 16) * 16;
     /**
      * Indicate in which direction we are processing since the algorithm is mostly the same save for building the md5
      * hash blocks after the initial one. For encrypting it pulls from the resultant cipher text. For decrypting, the
@@ -83,6 +91,8 @@ public class UserPasswordAttribute extends Attribute {
      *            the shared secret between the client and the server used for the creation of the cipher text.
      * @param password
      *            The plain text password.
+     * @throws IllegalArgumentException
+     *             if the password is longer than {@link #MAX_PASSWORD_LENGTH} octets in UTF-8.
      */
     public UserPasswordAttribute(Authenticator ra, String secret, String password) {
         super(UserPasswordAttribute.toOctets(ra, secret, password));
@@ -101,9 +111,15 @@ public class UserPasswordAttribute extends Attribute {
      * @return the cipher text of the encrypted password
      */
     private static final byte[] toOctets(Authenticator ra, String secret, String password) {
+        final byte[] clearText = password.getBytes(StandardCharsets.UTF_8);
+        if (clearText.length > MAX_PASSWORD_LENGTH) {
+            // longer passwords overflow the one-octet attribute length, which makes the packet malformed
+            throw new IllegalArgumentException("The RADIUS password must not be longer than " + MAX_PASSWORD_LENGTH
+                    + " octets in UTF-8");
+        }
         byte[] bytes;
         try {
-            bytes = convert(password.getBytes(StandardCharsets.UTF_8), Direction.ENCRYPT, secret, ra);
+            bytes = convert(clearText, Direction.ENCRYPT, secret, ra);
         } catch (final IOException e) {
             return new byte[] { (byte) AttributeType.USER_PASSWORD.getTypeCode(), 2 }; // empty string password
         }

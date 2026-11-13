@@ -29,6 +29,7 @@
 /*
  * Portions Copyrighted 2011 ForgeRock AS
  * Portions Copyrighted 2015 Intellectual Reserve, Inc (IRI)
+ * Portions Copyright 2026 Wren Security.
  */
 package org.forgerock.openam.radius.common;
 
@@ -60,6 +61,29 @@ public class AttributeSet {
      */
     public void addAttribute(Attribute attr) {
         attrs.addElement(attr);
+    }
+
+    /**
+     * Inserts an attribute instance at the indicated index location, shifting the attributes at and after that
+     * location.
+     *
+     * @param attr
+     *            an attribute instance to be inserted
+     * @param pos
+     *            the position at which the attribute instance is inserted
+     */
+    public void insertAttributeAt(Attribute attr, int pos) {
+        attrs.insertElementAt(attr, pos);
+    }
+
+    /**
+     * Removes all attribute instances of the specified type code.
+     *
+     * @param type
+     *            the attribute type code of the attribute instances to be removed
+     */
+    public void removeAttributesByType(AttributeType type) {
+        attrs.removeIf(attr -> ((Attribute) attr).getType() == type);
     }
 
     /**
