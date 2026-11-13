@@ -61,6 +61,7 @@ public class RADIUS extends AMLoginModule {
     private static final String DEFAULT_INTERVAL = "5";
     private static final String REQUIRE_MESSAGE_AUTHENTICATOR =
             "wrensec-am-auth-radius-require-message-authenticator";
+    private static final String HEALTH_CHECK_TYPE = "wrensec-am-auth-radius-healthcheck-type";
     private static final String AM_AUTH_RADIUS = "amAuthRadius";
     // initial state
     private Map sharedState;
@@ -80,6 +81,7 @@ public class RADIUS extends AMLoginModule {
     private int iTimeOut = 5;
     private int healthCheckInterval = 5;
     private boolean requireMessageAuthenticator = false;
+    private RadiusConn.HealthCheckType healthCheckType = RadiusConn.HealthCheckType.ACCESS_REQUEST;
     private RadiusConn radiusConn = null;
     private boolean getCredentialsFromSharedState;
     private ChallengeException cException = null;
@@ -156,6 +158,7 @@ public class RADIUS extends AMLoginModule {
                     healthCheckInterval = Integer.parseInt(interval);
                     requireMessageAuthenticator = Boolean.parseBoolean(
                             CollectionHelper.getMapAttr(options, REQUIRE_MESSAGE_AUTHENTICATOR, "false"));
+                    healthCheckType = parseHealthCheckType(CollectionHelper.getMapAttr(options, HEALTH_CHECK_TYPE));
 
                     if (authLevel != null) {
                         try {
@@ -182,6 +185,18 @@ public class RADIUS extends AMLoginModule {
 
         } catch (Exception e) {
             debug.error("RADIUS init Error....", e);
+        }
+    }
+
+    private static RadiusConn.HealthCheckType parseHealthCheckType(String value) {
+        if (value == null || value.isEmpty()) {
+            return RadiusConn.HealthCheckType.ACCESS_REQUEST;
+        }
+        try {
+            return RadiusConn.HealthCheckType.valueOf(value);
+        } catch (IllegalArgumentException e) {
+            debug.error("Unknown RADIUS health check type " + value + ", using ACCESS_REQUEST");
+            return RadiusConn.HealthCheckType.ACCESS_REQUEST;
         }
     }
 
@@ -223,6 +238,7 @@ public class RADIUS extends AMLoginModule {
             try {
                 radiusConn = new RadiusConn(primaryServers, secondaryServers, sharedSecret, iTimeOut, null,
                         healthCheckInterval, requireMessageAuthenticator);
+                radiusConn.setHealthCheckType(healthCheckType);
             } catch (SocketException se) {
                 debug.error("RADIUS login failure; Socket Exception se == ", se);
                 shutdown();

@@ -114,6 +114,21 @@
                         <Value>5</Value>
 		    </DefaultValues>
 		</AttributeSchema>
+                <AttributeSchema name="wrensec-am-auth-radius-healthcheck-type"
+                    type="single_choice"
+                    syntax="string"
+                    i18nKey="a108"
+                    order="610"
+                    resourceName="healthCheckType">
+                    <ChoiceValues>
+                        <ChoiceValue i18nKey="choiceAccessRequest">ACCESS_REQUEST</ChoiceValue>
+                        <ChoiceValue i18nKey="choiceStatusServer">STATUS_SERVER</ChoiceValue>
+                        <ChoiceValue i18nKey="choiceNone">NONE</ChoiceValue>
+                    </ChoiceValues>
+                    <DefaultValues>
+                        <Value>ACCESS_REQUEST</Value>
+                    </DefaultValues>
+                </AttributeSchema>
                 <AttributeSchema name="wrensec-am-auth-radius-require-message-authenticator"
                     type="single"
                     syntax="boolean"
@@ -197,6 +212,21 @@
 	            <DefaultValues>
                         <Value>5</Value>
 		    </DefaultValues>
+                    </AttributeSchema>
+                    <AttributeSchema name="wrensec-am-auth-radius-healthcheck-type"
+                        type="single_choice"
+                        syntax="string"
+                        i18nKey="a108"
+                        order="610"
+                        resourceName="healthCheckType">
+                        <ChoiceValues>
+                            <ChoiceValue i18nKey="choiceAccessRequest">ACCESS_REQUEST</ChoiceValue>
+                            <ChoiceValue i18nKey="choiceStatusServer">STATUS_SERVER</ChoiceValue>
+                            <ChoiceValue i18nKey="choiceNone">NONE</ChoiceValue>
+                        </ChoiceValues>
+                        <DefaultValues>
+                            <Value>ACCESS_REQUEST</Value>
+                        </DefaultValues>
                     </AttributeSchema>
                     <AttributeSchema name="wrensec-am-auth-radius-require-message-authenticator"
                         type="single"
