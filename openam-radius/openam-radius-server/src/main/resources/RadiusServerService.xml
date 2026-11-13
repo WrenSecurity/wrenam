@@ -29,6 +29,7 @@
 -->
 <!--
     Portions Copyrighted 2011 ForgeRock AS
+    Portions Copyright 2026 Wren Security.
 -->
 <!DOCTYPE ServicesConfiguration
         PUBLIC "=//iPlanet//Service Management Services (SMS) 1.0 DTD//EN"
@@ -162,6 +163,20 @@
                                      syntax="string"
                                      i18nKey="c-client-log-packets"
                                      order="500">
+                        <ChoiceValues>
+                            <ChoiceValue i18nKey="choiceYES">YES</ChoiceValue>
+                            <ChoiceValue i18nKey="choiceNO">NO</ChoiceValue>
+                        </ChoiceValues>
+                        <DefaultValues>
+                            <Value>NO</Value>
+                        </DefaultValues>
+                    </AttributeSchema>
+
+                    <AttributeSchema name="clientRequireMessageAuthenticator"
+                                     type="single_choice"
+                                     syntax="string"
+                                     i18nKey="c-client-require-message-authenticator"
+                                     order="600">
                         <ChoiceValues>
                             <ChoiceValue i18nKey="choiceYES">YES</ChoiceValue>
                             <ChoiceValue i18nKey="choiceNO">NO</ChoiceValue>

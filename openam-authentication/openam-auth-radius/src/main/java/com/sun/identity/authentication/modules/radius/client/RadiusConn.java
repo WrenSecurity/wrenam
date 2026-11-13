@@ -26,6 +26,7 @@
  *
  * Portions Copyrighted 2011-2016 ForgeRock AS.
  * Portions Copyrighted 2015 Intellectual Reserve, Inc (IRI)
+ * Portions Copyright 2026 Wren Security.
  */
 package com.sun.identity.authentication.modules.radius.client;
 
@@ -51,12 +52,16 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.forgerock.openam.radius.common.AccessAccept;
 import org.forgerock.openam.radius.common.AccessChallenge;
 import org.forgerock.openam.radius.common.AccessReject;
 import org.forgerock.openam.radius.common.AccessRequest;
 import org.forgerock.openam.radius.common.AttributeType;
 import org.forgerock.openam.radius.common.Packet;
 import org.forgerock.openam.radius.common.PacketFactory;
+import org.forgerock.openam.radius.common.PacketIntegrity;
+import org.forgerock.openam.radius.common.PacketIntegrity.MessageAuthenticatorStatus;
+import org.forgerock.openam.radius.common.PacketType;
 import org.forgerock.openam.radius.common.RequestAuthenticator;
 import org.forgerock.openam.radius.common.StateAttribute;
 import org.forgerock.openam.radius.common.UserNameAttribute;
@@ -100,6 +105,10 @@ public class RadiusConn {
      * The health check interval.
      */
     private int healthCheckInterval = 5;
+    /**
+     * Whether responses without a Message-Authenticator attribute are discarded.
+     */
+    private boolean requireMessageAuthenticator = false;
     /**
      * The status of the various servers.
      */
@@ -161,6 +170,29 @@ public class RadiusConn {
     public RadiusConn(Set<RADIUSServer> primaries, Set<RADIUSServer> secondaries,
                       String secret, int timeout, byte[] seed, int healthCheckInterval)
             throws SocketException {
+        this(primaries, secondaries, secret, timeout, seed, healthCheckInterval, false);
+    }
+
+    /**
+     * Construct a connection object primary and secondary servers, seed for generating a {@link
+     * java.security.SecureRandom} and the Message-Authenticator policy.
+     *
+     * @param primaries                   the primary servers to connect to.
+     * @param secondaries                 the secondary servers to connect to.
+     * @param secret                      the secret shared between this client and the remote servers.
+     * @param timeout                     the timeout value.
+     * @param seed                        the seed value to be used to create a {@link java.security.SecureRandom}
+     *                                    instance, or null.
+     * @param healthCheckInterval         the health check interval.
+     * @param requireMessageAuthenticator whether responses without a Message-Authenticator attribute (RFC 3579) are
+     *                                    discarded.
+     * @throws SocketException if a socket exception occurs.
+     */
+    public RadiusConn(Set<RADIUSServer> primaries, Set<RADIUSServer> secondaries,
+                      String secret, int timeout, byte[] seed, int healthCheckInterval,
+                      boolean requireMessageAuthenticator)
+            throws SocketException {
+        this.requireMessageAuthenticator = requireMessageAuthenticator;
         this.secret = secret;
         this.primaries = primaries;
         this.secondaries = secondaries;
@@ -259,12 +291,18 @@ public class RadiusConn {
                 debug.message("Using " + server + " for contact RADIUS");
             }
             try {
-                send(packet, server);
-                res = receive();
+                if (server == null) {
+                    throw new IOException("No RADIUS server is online.");
+                }
+                InetAddress address = InetAddress.getByName(server.getHost());
+                send(packet, address, server.getPort());
+                res = receive(packet, address, server.getPort());
                 if (res instanceof AccessReject) {
                     throw new RejectException((AccessReject) res);
                 } else if (res instanceof AccessChallenge) {
                     throw new ChallengeException((AccessChallenge) res);
+                } else if (!(res instanceof AccessAccept)) {
+                    throw new IOException("Unexpected RADIUS response " + res);
                 }
             } catch (IOException ioe) {
                 if (ioe instanceof ConnectException || ioe instanceof SocketTimeoutException) {
@@ -327,47 +365,111 @@ public class RadiusConn {
     }
 
     /**
-     * Sends the packet.
+     * Signs the packet with a Message-Authenticator attribute and sends it.
      *
-     * @param packet the packet.
-     * @param server the target server.
-     * @throws IOException
+     * @param packet  the packet.
+     * @param address the address of the target server.
+     * @param port    the port of the target server.
+     * @throws IOException if the packet can not be sent.
      */
-    private void send(Packet packet, RADIUSServer server)
+    private void send(Packet packet, InetAddress address, int port)
             throws IOException {
-        if (server == null) {
-            throw new IOException("No RADIUS server is online.");
-        }
-        byte[] buffer = new byte[4096];
-        DatagramPacket dp = new DatagramPacket(buffer, buffer.length);
-        dp.setPort(server.getPort());
-        dp.setAddress(InetAddress.getByName(server.getHost()));
+        PacketIntegrity.signRequest(packet, secret);
         byte[] data = packet.getOctets();
-        dp.setLength(data.length);
-        dp.setData(data);
-        socket.send(dp);
+        socket.send(new DatagramPacket(data, data.length, address, port));
         if (debug.messageEnabled()) {
             debug.message("Sent " + packet);
         }
     }
 
     /**
-     * Blocking call that waits until a response packet is received.
+     * Blocking call that waits until a valid response to the request is received from the server. Datagrams that are
+     * not a valid response (malformed, from another source, for another request or with a wrong authenticator) are
+     * discarded as required by section 3 of RFC 2865 and the wait continues until the socket timeout elapses.
      *
-     * @return the received packet.
-     * @throws IOException
+     * @param request the request packet.
+     * @param address the address of the server the request was sent to.
+     * @param port    the port of the server the request was sent to.
+     * @return the received response packet.
+     * @throws IOException if no valid response is received before the timeout or the socket fails.
      */
-    private Packet receive()
+    private Packet receive(Packet request, InetAddress address, int port)
             throws IOException {
-        byte[] buffer = new byte[4096];
-        DatagramPacket dp = new DatagramPacket(buffer, buffer.length);
-        socket.receive(dp);
-        byte[] data = dp.getData();
-        Packet p = PacketFactory.toPacket(data);
-        if (debug.messageEnabled()) {
-            debug.message("Received " + p + " size=" + p.getAttributeSet().size());
+        final int timeout = socket.getSoTimeout();
+        final long deadline = timeout == 0 ? Long.MAX_VALUE : currentTimeMillis() + timeout;
+        final byte[] buffer = new byte[PacketIntegrity.MAX_PACKET_LENGTH];
+        try {
+            while (true) {
+                if (timeout != 0) {
+                    long remaining = deadline - currentTimeMillis();
+                    if (remaining <= 0) {
+                        throw new SocketTimeoutException("No valid RADIUS response received from " + address);
+                    }
+                    socket.setSoTimeout((int) Math.min(remaining, Integer.MAX_VALUE));
+                }
+                DatagramPacket dp = new DatagramPacket(buffer, buffer.length);
+                socket.receive(dp);
+                Packet response = toValidResponse(dp, request, address, port);
+                if (response != null) {
+                    if (debug.messageEnabled()) {
+                        debug.message("Received " + response + " size=" + response.getAttributeSet().size());
+                    }
+                    return response;
+                }
+            }
+        } finally {
+            socket.setSoTimeout(timeout);
         }
-        return p;
+    }
+
+    /**
+     * Checks that a received datagram is a valid response to the request and parses it.
+     *
+     * @param dp      the received datagram.
+     * @param request the request packet.
+     * @param address the address of the server the request was sent to.
+     * @param port    the port of the server the request was sent to.
+     * @return the response packet, or null if the datagram must be discarded.
+     */
+    private Packet toValidResponse(DatagramPacket dp, Packet request, InetAddress address, int port) {
+        if (!address.equals(dp.getAddress()) || port != dp.getPort()) {
+            debug.warning("Discarding RADIUS packet from unexpected source {}:{}", dp.getAddress(), dp.getPort());
+            return null;
+        }
+        byte[] data = PacketIntegrity.extractPacket(dp.getData(), dp.getLength());
+        if (data == null) {
+            debug.warning("Discarding malformed RADIUS packet from {}", address);
+            return null;
+        }
+        if ((data[1] & 0xFF) != (request.getIdentifier() & 0xFF)) {
+            debug.warning("Discarding RADIUS packet with identifier {} not matching the request identifier {}",
+                    data[1] & 0xFF, request.getIdentifier() & 0xFF);
+            return null;
+        }
+        PacketType type = PacketType.getPacketType(data[0]);
+        if (type != PacketType.ACCESS_ACCEPT && type != PacketType.ACCESS_REJECT
+                && type != PacketType.ACCESS_CHALLENGE) {
+            debug.warning("Discarding RADIUS packet with unexpected code {} from {}", data[0] & 0xFF, address);
+            return null;
+        }
+        byte[] requestAuthenticator = request.getAuthenticator().getOctets();
+        if (!PacketIntegrity.verifyResponseAuthenticator(data, requestAuthenticator, secret)) {
+            debug.warning("Discarding RADIUS response from {} with invalid Response Authenticator; "
+                    + "check the shared secret", address);
+            return null;
+        }
+        MessageAuthenticatorStatus status = PacketIntegrity.checkMessageAuthenticator(data, requestAuthenticator,
+                secret);
+        if (status == MessageAuthenticatorStatus.INVALID) {
+            debug.warning("Discarding RADIUS response from {} with invalid Message-Authenticator", address);
+            return null;
+        }
+        if (status == MessageAuthenticatorStatus.ABSENT && requireMessageAuthenticator) {
+            debug.error("Discarding RADIUS response from {} without Message-Authenticator, which the module "
+                    + "configuration requires", address);
+            return null;
+        }
+        return PacketFactory.toPacket(data);
     }
 
     /**
@@ -456,6 +558,7 @@ public class RadiusConn {
                                 secret, "invalidpass"));
                         req.addAttribute(new NASIPAddressAttribute(InetAddress.getLocalHost()));
                         req.addAttribute(new NASPortAttribute(socket.getLocalPort()));
+                        PacketIntegrity.signRequest(req, secret);
                         byte[] buffer = new byte[4096];
                         DatagramPacket dp = new DatagramPacket(buffer, buffer.length);
                         dp.setPort(server.getPort());

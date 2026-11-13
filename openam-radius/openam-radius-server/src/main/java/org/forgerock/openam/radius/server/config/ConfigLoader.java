@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyrighted 2015 Intellectual Reserve, Inc (IRI)
+ * Portions Copyright 2026 Wren Security.
  */
 package org.forgerock.openam.radius.server.config;
 
@@ -118,6 +119,8 @@ public class ConfigLoader {
                         final Boolean setLogPackets = "YES".equals(CollectionHelper.getMapAttrThrows(map,
                                 RadiusServerConstants.CLIENT_ATT_LOG_PACKETS));
                         clientConfig.setLogPackets(setLogPackets);
+                        clientConfig.setRequireMessageAuthenticator("YES".equals(CollectionHelper.getMapAttr(map,
+                                RadiusServerConstants.CLIENT_ATT_REQUIRE_MESSAGE_AUTHENTICATOR, "NO")));
                         clientConfig.setAccessRequestHandlerClassname(CollectionHelper.getMapAttrThrows(map,
                                 RadiusServerConstants.CLIENT_ATT_CLASSNAME));
 
