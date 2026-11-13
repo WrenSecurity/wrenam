@@ -33,18 +33,23 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.forgerock.openam.radius.common.AccessAccept;
 import org.forgerock.openam.radius.common.AccessChallenge;
 import org.forgerock.openam.radius.common.AccessReject;
+import org.forgerock.openam.radius.common.AttributeType;
 import org.forgerock.openam.radius.common.Packet;
+import org.forgerock.openam.radius.common.PacketFactory;
+import org.forgerock.openam.radius.common.PacketType;
 import org.forgerock.openam.radius.common.PacketIntegrity;
 import org.forgerock.openam.radius.common.PacketIntegrity.MessageAuthenticatorStatus;
 import org.forgerock.openam.radius.common.RequestAuthenticator;
 import org.forgerock.openam.radius.common.ResponseAuthenticator;
 import org.forgerock.openam.radius.common.StateAttribute;
+import org.forgerock.openam.radius.common.UserNameAttribute;
 import org.forgerock.openam.radius.common.UserPasswordAttribute;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import com.sun.identity.authentication.modules.radius.RADIUSServer;
+import com.sun.identity.authentication.modules.radius.client.RadiusConn.HealthCheckType;
 
 /**
  * Tests that {@link RadiusConn} accepts only authentic responses from the server it sent the request to.
@@ -54,6 +59,8 @@ public class RadiusConnTest {
     private static final String SECRET = "s3cret";
 
     private static final int TIMEOUT_SECONDS = 1;
+
+    private static final int HEALTH_CHECK_INTERVAL_MINUTES = 5;
 
     private DatagramSocket server;
 
@@ -208,10 +215,75 @@ public class RadiusConnTest {
         assertThat(receivedRequest.get()).isNotNull();
     }
 
+    @Test
+    public void shouldFindServerAvailableOnValidStatusServerResponse() throws Exception {
+        respond((request, client) -> send(server, signed(new AccessAccept(), request), client));
+        RadiusConn connection = connection(false);
+        connection.setHealthCheckType(HealthCheckType.STATUS_SERVER);
+
+        assertThat(connection.isAvailable(radiusServer(), System.currentTimeMillis())).isTrue();
+        assertThat(PacketType.getPacketType(receivedRequest.get()[0])).isEqualTo(PacketType.STATUS_SERVER);
+        assertThat(PacketIntegrity.checkMessageAuthenticator(receivedRequest.get(), null, SECRET))
+                .isEqualTo(MessageAuthenticatorStatus.VALID);
+    }
+
+    @Test
+    public void shouldFindServerAvailableOnValidAccessReject() throws Exception {
+        respond((request, client) -> send(server, signed(new AccessReject(), request), client));
+        RadiusConn connection = connection(false);
+        connection.setHealthCheckType(HealthCheckType.ACCESS_REQUEST);
+
+        assertThat(connection.isAvailable(radiusServer(), System.currentTimeMillis())).isTrue();
+        UserNameAttribute user = (UserNameAttribute) PacketFactory.toPacket(receivedRequest.get())
+                .getAttributeSet().getAttributeByType(AttributeType.USER_NAME);
+        assertThat(user.getName()).isEqualTo("nonexistent");
+    }
+
+    @Test
+    public void shouldNotFindServerAvailableOnResponseWithWrongSecret() throws Exception {
+        respond((request, client) -> send(server, signed(new AccessAccept(), request, "wrong"), client));
+        RadiusConn connection = connection(false);
+        connection.setHealthCheckType(HealthCheckType.STATUS_SERVER);
+
+        assertThat(connection.isAvailable(radiusServer(), System.currentTimeMillis())).isFalse();
+    }
+
+    @Test
+    public void shouldNotFindServerAvailableOnResponseFromOtherSource() throws Exception {
+        respond((request, client) -> send(attacker, signed(new AccessAccept(), request), client));
+        RadiusConn connection = connection(false);
+        connection.setHealthCheckType(HealthCheckType.ACCESS_REQUEST);
+
+        assertThat(connection.isAvailable(radiusServer(), System.currentTimeMillis())).isFalse();
+    }
+
+    @Test
+    public void shouldNotFindServerAvailableWithoutResponse() throws Exception {
+        respond((request, client) -> { });
+        RadiusConn connection = connection(false);
+        connection.setHealthCheckType(HealthCheckType.STATUS_SERVER);
+
+        assertThat(connection.isAvailable(radiusServer(), System.currentTimeMillis())).isFalse();
+    }
+
+    @Test
+    public void shouldFindServerAvailableWithoutProbeOnceIntervalElapsed() throws Exception {
+        RadiusConn connection = connection(false);
+        connection.setHealthCheckType(HealthCheckType.NONE);
+        long now = System.currentTimeMillis();
+
+        assertThat(connection.isAvailable(radiusServer(), now)).isFalse();
+        assertThat(connection.isAvailable(radiusServer(), now - HEALTH_CHECK_INTERVAL_MINUTES * 60000L)).isTrue();
+    }
+
+    private RADIUSServer radiusServer() {
+        return new RADIUSServer(InetAddress.getLoopbackAddress().getHostAddress(), server.getLocalPort());
+    }
+
     private RadiusConn connection(boolean requireMessageAuthenticator) throws Exception {
-        Set<RADIUSServer> servers = Collections.singleton(
-                new RADIUSServer(InetAddress.getLoopbackAddress().getHostAddress(), server.getLocalPort()));
-        return new RadiusConn(servers, servers, SECRET, TIMEOUT_SECONDS, null, 5, requireMessageAuthenticator);
+        Set<RADIUSServer> servers = Collections.singleton(radiusServer());
+        return new RadiusConn(servers, servers, SECRET, TIMEOUT_SECONDS, null, HEALTH_CHECK_INTERVAL_MINUTES,
+                requireMessageAuthenticator);
     }
 
     /**
