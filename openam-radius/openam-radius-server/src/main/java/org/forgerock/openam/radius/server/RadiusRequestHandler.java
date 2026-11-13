@@ -137,6 +137,7 @@ public class RadiusRequestHandler implements Runnable {
                     .getAccessRequestHandler(requestContext);
             if (accessRequestHandler == null) {
                 LOG.message("Leaving RadiusRequestHandler.run(); Could not obtain Access Request Handler.");
+                eventBus.post(new PacketDroppedSilentlyEvent());
                 return;
             }
 
@@ -162,7 +163,7 @@ public class RadiusRequestHandler implements Runnable {
                     .append("'. Rejecting access.");
             LOG.error(sb.toString(), t);
 
-            this.sendAccessReject(requestContext);
+            postRejectOutcome(sendAccessReject(requestContext));
             return;
         }
     }
@@ -213,11 +214,7 @@ public class RadiusRequestHandler implements Runnable {
             final StringBuilder sb = new StringBuilder("Received packet of type ACCESS_REQUEST from RADIUS client '")
                     .append(getClientName()).append("' but unable to cast to AccessRequest. Rejecting access.");
             LOG.error(sb.toString(), c);
-            try {
-                requestContext.send(new AccessReject());
-            } catch (final RadiusProcessingException e) {
-                LOG.warning("Failed to send AccessReject() response to client.");
-            }
+            postRejectOutcome(sendAccessReject(requestContext));
         }
         return accessRequest;
     }
@@ -317,9 +314,6 @@ public class RadiusRequestHandler implements Runnable {
                 .append(reqCtx.getClientName()).append("'.");
         LOG.error(sb.toString());
 
-        if (rre.getNature() == RadiusProcessingExceptionNature.TEMPORARY_FAILURE) {
-            sendAccessReject(reqCtx);
-        }
         final RadiusProcessingExceptionNature nature = rre.getNature();
         switch (nature) {
         case CATASTROPHIC:
@@ -338,8 +332,10 @@ public class RadiusRequestHandler implements Runnable {
             final String errStr = "Failed to handle request. This request could be retried, but that is"
                     + " currently not implemented.";
             LOG.error(errStr, rre);
+            postRejectOutcome(sendAccessReject(reqCtx));
             break;
         default:
+            eventBus.post(new PacketDroppedSilentlyEvent());
             break;
         }
     }
@@ -349,13 +345,26 @@ public class RadiusRequestHandler implements Runnable {
      *
      * @param reqCtx
      *            - the RadiusRequestContext that will be used to send the AccessReject packet.
+     * @return true if the AccessReject was sent.
      */
-    private void sendAccessReject(RadiusRequestContext reqCtx) {
+    private boolean sendAccessReject(RadiusRequestContext reqCtx) {
         try {
             reqCtx.send(new AccessReject());
             LOG.message("Rejected access request.");
+            return true;
         } catch (final Exception e1) {
             LOG.warning("Failed to send AccessReject() response to client.");
+            return false;
         }
+    }
+
+    /**
+     * Reports a request that failed and was answered with an AccessReject as processed, or as dropped if the
+     * AccessReject could not be sent.
+     *
+     * @param rejectSent whether the AccessReject was sent.
+     */
+    private void postRejectOutcome(boolean rejectSent) {
+        eventBus.post(rejectSent ? new PacketProcessedEvent() : new PacketDroppedSilentlyEvent());
     }
 }
