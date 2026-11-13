@@ -31,6 +31,7 @@ import org.forgerock.openam.radius.common.AccessAccept;
 import org.forgerock.openam.radius.common.AttributeType;
 import org.forgerock.openam.radius.common.PacketIntegrity;
 import org.forgerock.openam.radius.common.PacketIntegrity.MessageAuthenticatorStatus;
+import org.forgerock.openam.radius.common.PacketType;
 import org.forgerock.openam.radius.common.ReplyMessageAttribute;
 import org.forgerock.openam.radius.common.RequestAuthenticator;
 import org.forgerock.openam.radius.server.config.ClientConfig;
@@ -92,5 +93,30 @@ public class RadiusRequestContextTest {
                         .isEqualTo(RadiusProcessingExceptionNature.INVALID_RESPONSE));
 
         verify(channel, never()).send(any(ByteBuffer.class), any());
+    }
+
+    @Test
+    public void shouldSendAccessRejectInsteadOfNullResponse() throws Exception {
+        final DatagramChannel channel = mock(DatagramChannel.class);
+        final InetSocketAddress source = new InetSocketAddress("127.0.0.1", 40000);
+        final ClientConfig clientConfig = new ClientConfig();
+        clientConfig.setName("test");
+        clientConfig.setSecret(SECRET);
+        final RadiusRequestContext context = new RadiusRequestContext(clientConfig, channel, source);
+        context.setRequestId((short) 42);
+        context.setRequestAuthenticator(new RequestAuthenticator(REQUEST_AUTHENTICATOR));
+
+        context.send(null);
+
+        final ArgumentCaptor<ByteBuffer> sent = ArgumentCaptor.forClass(ByteBuffer.class);
+        verify(channel).send(sent.capture(), eq(source));
+        final ByteBuffer buffer = sent.getValue();
+        final byte[] received = new byte[buffer.remaining()];
+        buffer.get(received);
+        final byte[] octets = PacketIntegrity.extractPacket(received, received.length);
+
+        assertThat(octets).isNotNull();
+        assertThat(PacketType.getPacketType(octets[0])).isEqualTo(PacketType.ACCESS_REJECT);
+        assertThat(PacketIntegrity.verifyResponseAuthenticator(octets, REQUEST_AUTHENTICATOR, SECRET)).isTrue();
     }
 }
