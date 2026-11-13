@@ -22,6 +22,9 @@ import org.wrensecurity.guava.common.eventbus.EventBus;
 import org.forgerock.openam.radius.common.AccessAccept;
 import org.forgerock.openam.radius.common.AccessReject;
 import org.forgerock.openam.radius.common.Packet;
+import org.forgerock.openam.radius.common.PacketIntegrity;
+import org.forgerock.openam.radius.common.RequestAuthenticator;
+import org.forgerock.openam.radius.common.StatusServer;
 import org.forgerock.openam.radius.common.Utils;
 import org.forgerock.openam.radius.server.config.ClientConfig;
 import org.forgerock.openam.radius.server.spi.handlers.AcceptAllHandler;
@@ -33,6 +36,7 @@ import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -229,6 +233,53 @@ public class RadiusRequestHandlerTest {
         verify(reqCtx, never()).send(isA(Packet.class));
     }
 
+    /**
+     * Test that a Status-Server request (RFC 5997) is answered with an Access-Accept without authenticating anyone.
+     */
+    @Test
+    public void testRunAnswersStatusServer() throws Exception {
+        final RadiusRequestContext reqCtx = mockContext("xyzzy5461", false);
+        final AccessRequestHandlerFactory factory = mock(AccessRequestHandlerFactory.class);
+
+        new RadiusRequestHandler(factory, reqCtx, statusServer("xyzzy5461", true), new EventBus()).run();
+
+        verify(reqCtx, times(1)).send(isA(AccessAccept.class));
+        verify(factory, never()).getAccessRequestHandler(any());
+    }
+
+    /**
+     * Test that a Status-Server request without Message-Authenticator is silently dropped even if the client does
+     * not require one for Access-Requests.
+     */
+    @Test
+    public void testRunDropsStatusServerWithoutMessageAuthenticator() throws Exception {
+        final RadiusRequestContext reqCtx = mockContext("xyzzy5461", false);
+
+        runAcceptAll(reqCtx, statusServer("xyzzy5461", false));
+
+        verify(reqCtx, never()).send(isA(Packet.class));
+    }
+
+    /**
+     * Test that a Status-Server request signed with another secret is silently dropped.
+     */
+    @Test
+    public void testRunDropsStatusServerWithInvalidMessageAuthenticator() throws Exception {
+        final RadiusRequestContext reqCtx = mockContext("xyzzy5461", false);
+
+        runAcceptAll(reqCtx, statusServer("other-secret", true));
+
+        verify(reqCtx, never()).send(isA(Packet.class));
+    }
+
+    private static ByteBuffer statusServer(String secret, boolean signed) {
+        final StatusServer request = new StatusServer((short) 7, new RequestAuthenticator(new byte[16]));
+        if (signed) {
+            PacketIntegrity.signRequest(request, secret);
+        }
+        return ByteBuffer.wrap(request.getOctets());
+    }
+
     private RadiusRequestContext mockContext(String secret, boolean requireMessageAuthenticator)
             throws UnknownHostException {
         final RadiusRequestContext reqCtx = mock(RadiusRequestContext.class);
@@ -242,8 +293,12 @@ public class RadiusRequestHandlerTest {
     }
 
     private void runAcceptAll(RadiusRequestContext reqCtx, String packet) throws Exception {
+        runAcceptAll(reqCtx, Utils.toBuffer(packet));
+    }
+
+    private void runAcceptAll(RadiusRequestContext reqCtx, ByteBuffer packet) throws Exception {
         AccessRequestHandlerFactory accessRequestHandlerFactory = mock(AccessRequestHandlerFactory.class);
         when(accessRequestHandlerFactory.getAccessRequestHandler(reqCtx)).thenReturn(new AcceptAllHandler());
-        new RadiusRequestHandler(accessRequestHandlerFactory, reqCtx, Utils.toBuffer(packet), new EventBus()).run();
+        new RadiusRequestHandler(accessRequestHandlerFactory, reqCtx, packet, new EventBus()).run();
     }
 }
