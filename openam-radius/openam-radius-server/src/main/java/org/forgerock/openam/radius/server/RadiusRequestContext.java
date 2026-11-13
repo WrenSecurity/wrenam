@@ -146,19 +146,16 @@ public class RadiusRequestContext {
      */
     public void send(Packet response) throws RadiusProcessingException {
         if (sendWasCalled) {
-            LOG.warning("Handler class '" + clientConfig.getAccessRequestHandlerClass().getSimpleName()
-                    + "' declared for client "
+            LOG.warning("Handler class '" + getHandlerClassName() + "' declared for client "
                     + clientConfig.getName() + " called send more than once.");
             return;
         }
         sendWasCalled = true;
 
         if (response == null) {
-            LOG.error("Handler class '" + clientConfig.getAccessRequestHandlerClass().getSimpleName()
-                    + "' declared for client "
+            LOG.error("Handler class '" + getHandlerClassName() + "' declared for client "
                     + clientConfig.getName() + " attempted to send a null response. Rejecting access.");
-            send(new AccessReject());
-            return;
+            response = new AccessReject();
         }
 
         // inject the id and authenticator
@@ -176,6 +173,11 @@ public class RadiusRequestContext {
         } catch (final IOException e) {
             LOG.error("Unable to send response to " + clientConfig.getName() + ".", e);
         }
+    }
+
+    private String getHandlerClassName() {
+        final Class<?> handlerClass = clientConfig.getAccessRequestHandlerClass();
+        return handlerClass == null ? "unknown" : handlerClass.getSimpleName();
     }
 
     /**
