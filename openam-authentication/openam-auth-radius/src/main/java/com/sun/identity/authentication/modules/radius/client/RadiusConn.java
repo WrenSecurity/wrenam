@@ -48,7 +48,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -64,6 +63,7 @@ import org.forgerock.openam.radius.common.PacketIntegrity.MessageAuthenticatorSt
 import org.forgerock.openam.radius.common.PacketType;
 import org.forgerock.openam.radius.common.RequestAuthenticator;
 import org.forgerock.openam.radius.common.StateAttribute;
+import org.forgerock.openam.radius.common.StatusServer;
 import org.forgerock.openam.radius.common.UserNameAttribute;
 import org.forgerock.openam.radius.common.UserPasswordAttribute;
 import org.forgerock.openam.radius.common.packet.NASIPAddressAttribute;
@@ -77,6 +77,27 @@ public class RadiusConn {
      * The default timeout.
      */
     public static final int DEFAULT_TIMEOUT = 5;
+    /**
+     * The user name of the Access-Request sent to check an offline server.
+     */
+    private static final String HEALTH_CHECK_USERNAME = "nonexistent";
+    /**
+     * The password of the Access-Request sent to check an offline server.
+     */
+    private static final String HEALTH_CHECK_PASSWORD = "invalidpass";
+
+    /**
+     * How the health check finds out that an offline server is available again.
+     */
+    public enum HealthCheckType {
+        /** Sends an Access-Request for a nonexistent user; any valid response will do. */
+        ACCESS_REQUEST,
+        /** Sends a Status-Server request (RFC 5997), which does not authenticate anyone. */
+        STATUS_SERVER,
+        /** Sends nothing; the server is used again once the health check interval has elapsed. */
+        NONE
+    }
+
     /**
      * The client secret.
      */
@@ -102,7 +123,7 @@ public class RadiusConn {
      */
     private Set<RADIUSServer> secondaries;
     /**
-     * The health check interval.
+     * The health check interval (in minutes).
      */
     private int healthCheckInterval = 5;
     /**
@@ -110,21 +131,22 @@ public class RadiusConn {
      */
     private boolean requireMessageAuthenticator = false;
     /**
-     * The status of the various servers.
+     * The timeout of a response in milliseconds.
      */
-    private static final Map<RADIUSServer, Boolean> SERVER_STATUS = new HashMap<RADIUSServer, Boolean>();
+    private final int timeoutMillis;
+    /**
+     * How offline servers are checked.
+     */
+    private HealthCheckType healthCheckType = HealthCheckType.ACCESS_REQUEST;
+    /**
+     * The offline servers, each with the scheduled check that brings it back online. Servers that are not in the map
+     * are online.
+     */
+    private static final Map<RADIUSServer, HealthCheck> OFFLINE_SERVERS = new HashMap<>();
     /**
      * The Debug logger instance for this class.
      */
     private static Debug debug = Debug.getInstance("amAuthRadius");
-    /**
-     * The runnable task monitor that verifies connectivity to servers.
-     */
-    private static RADIUSMonitor serverMonitor;
-    /**
-     * An object used as an access lock.
-     */
-    private static final Object SERVER_MONITOR_LOCK = new Object();
 
     /**
      * Construct a connection object with a set of primary and seconary servers.
@@ -201,13 +223,23 @@ public class RadiusConn {
             debug.message("Primary RADIUS servers: " + primaries);
             debug.message("Secondary RADIUS servers: " + secondaries);
         }
+        timeoutMillis = timeout * 1000;
         socket = new DatagramSocket();
-        socket.setSoTimeout(timeout * 1000);
+        socket.setSoTimeout(timeoutMillis);
         if (seed == null) {
             random = new SecureRandom();
         } else {
             random = new SecureRandom(seed);
         }
+    }
+
+    /**
+     * Sets how this connection checks the servers it finds offline.
+     *
+     * @param type the kind of check.
+     */
+    public void setHealthCheckType(HealthCheckType type) {
+        this.healthCheckType = type;
     }
 
     /**
@@ -295,8 +327,8 @@ public class RadiusConn {
                     throw new IOException("No RADIUS server is online.");
                 }
                 InetAddress address = InetAddress.getByName(server.getHost());
-                send(packet, address, server.getPort());
-                res = receive(packet, address, server.getPort());
+                send(socket, packet, address, server.getPort());
+                res = receive(socket, packet, address, server.getPort());
                 if (res instanceof AccessReject) {
                     throw new RejectException((AccessReject) res);
                 } else if (res instanceof AccessChallenge) {
@@ -306,19 +338,7 @@ public class RadiusConn {
                 }
             } catch (IOException ioe) {
                 if (ioe instanceof ConnectException || ioe instanceof SocketTimeoutException) {
-                    if (debug.messageEnabled()) {
-                        debug.message("Moving server to offline state - " + server);
-                    }
-                    synchronized (SERVER_STATUS) {
-                        SERVER_STATUS.put(server, Boolean.FALSE);
-                    }
-                    synchronized (SERVER_MONITOR_LOCK) {
-                        if (serverMonitor == null || serverMonitor.scheduledExecutionTime() == -1) {
-                            serverMonitor = new RADIUSMonitor();
-                            SystemTimer.getTimer().schedule(serverMonitor,
-                                    new Date(((currentTimeMillis()) / 1000) * 1000));
-                        }
-                    }
+                    markOffline(server);
                 } else {
                     throw ioe;
                 }
@@ -332,27 +352,94 @@ public class RadiusConn {
      * @return the server to connect to.
      */
     private RADIUSServer getOnlineServer() {
-        synchronized (SERVER_STATUS) {
+        synchronized (OFFLINE_SERVERS) {
             for (RADIUSServer server : primaries) {
-                Boolean state = SERVER_STATUS.get(server);
-                if (state == null) {
-                    SERVER_STATUS.put(server, Boolean.TRUE);
-                    return server;
-                } else if (state) {
+                if (!OFFLINE_SERVERS.containsKey(server)) {
                     return server;
                 }
             }
             for (RADIUSServer server : secondaries) {
-                Boolean state = SERVER_STATUS.get(server);
-                if (state == null) {
-                    SERVER_STATUS.put(server, Boolean.TRUE);
-                    return server;
-                } else if (state) {
+                if (!OFFLINE_SERVERS.containsKey(server)) {
                     return server;
                 }
             }
         }
         return null;
+    }
+
+    /**
+     * Marks a server offline and schedules its health check with the settings of this connection, unless it is
+     * offline already.
+     *
+     * @param server the server that did not respond.
+     */
+    private void markOffline(RADIUSServer server) {
+        HealthCheck check = new HealthCheck(this, server);
+        synchronized (OFFLINE_SERVERS) {
+            if (OFFLINE_SERVERS.putIfAbsent(server, check) != null) {
+                return;
+            }
+        }
+        if (debug.messageEnabled()) {
+            debug.message("Moving server to offline state - " + server);
+        }
+        SystemTimer.getTimer().schedule(check, new Date(currentTimeMillis() + check.getRunPeriod()));
+    }
+
+    /**
+     * Returns the time between the health checks of a server this connection found offline.
+     *
+     * @return the health check interval in milliseconds, at least one minute.
+     */
+    private long getHealthCheckPeriod() {
+        return Math.max(healthCheckInterval, 1) * 60000L;
+    }
+
+    /**
+     * Checks whether an offline server is available again, as configured by {@link #setHealthCheckType}. A probe counts
+     * only if the server answers it with a valid response, verified like the responses to authentication requests.
+     * Called once the health check interval has elapsed since the server was found offline or last checked.
+     *
+     * @param server the offline server.
+     * @return true if the server may be used again.
+     */
+    boolean isAvailable(RADIUSServer server) {
+        if (healthCheckType == HealthCheckType.NONE) {
+            return true;
+        }
+        try (DatagramSocket probeSocket = new DatagramSocket()) {
+            probeSocket.setSoTimeout(timeoutMillis);
+            Packet request = createHealthCheckRequest(probeSocket);
+            InetAddress address = InetAddress.getByName(server.getHost());
+            send(probeSocket, request, address, server.getPort());
+            receive(probeSocket, request, address, server.getPort());
+            return true;
+        } catch (IOException | NoSuchAlgorithmException | RuntimeException e) {
+            if (debug.messageEnabled()) {
+                debug.message("RADIUS server " + server + " is still unavailable: " + e.getMessage());
+            }
+            return false;
+        }
+    }
+
+    /**
+     * Creates the request that checks whether a server is available.
+     *
+     * @param probeSocket the socket the request is sent from.
+     * @return a Status-Server or Access-Request packet, as configured.
+     * @throws IOException              if the local address can not be determined.
+     * @throws NoSuchAlgorithmException if the request authenticator can not be generated.
+     */
+    private Packet createHealthCheckRequest(DatagramSocket probeSocket) throws IOException, NoSuchAlgorithmException {
+        if (healthCheckType == HealthCheckType.STATUS_SERVER) {
+            return new StatusServer(getIdentifier(), new RequestAuthenticator(random, secret));
+        }
+        AccessRequest req = createAccessRequest();
+        req.addAttribute(new UserNameAttribute(HEALTH_CHECK_USERNAME));
+        req.addAttribute(new UserPasswordAttribute(req.getAuthenticator(), secret, HEALTH_CHECK_PASSWORD));
+        req.addAttribute(new NASIPAddressAttribute(InetAddress.getLocalHost()));
+        req.addAttribute(new NASPortAttribute(probeSocket.getLocalPort()));
+        return req;
     }
 
     /**
@@ -367,16 +454,17 @@ public class RadiusConn {
     /**
      * Signs the packet with a Message-Authenticator attribute and sends it.
      *
+     * @param udpSocket the socket to send the packet from.
      * @param packet  the packet.
      * @param address the address of the target server.
      * @param port    the port of the target server.
      * @throws IOException if the packet can not be sent.
      */
-    private void send(Packet packet, InetAddress address, int port)
+    private void send(DatagramSocket udpSocket, Packet packet, InetAddress address, int port)
             throws IOException {
         PacketIntegrity.signRequest(packet, secret);
         byte[] data = packet.getOctets();
-        socket.send(new DatagramPacket(data, data.length, address, port));
+        udpSocket.send(new DatagramPacket(data, data.length, address, port));
         if (debug.messageEnabled()) {
             debug.message("Sent " + packet);
         }
@@ -387,15 +475,16 @@ public class RadiusConn {
      * not a valid response (malformed, from another source, for another request or with a wrong authenticator) are
      * discarded as required by section 3 of RFC 2865 and the wait continues until the socket timeout elapses.
      *
+     * @param udpSocket the socket the request was sent from.
      * @param request the request packet.
      * @param address the address of the server the request was sent to.
      * @param port    the port of the server the request was sent to.
      * @return the received response packet.
      * @throws IOException if no valid response is received before the timeout or the socket fails.
      */
-    private Packet receive(Packet request, InetAddress address, int port)
+    private Packet receive(DatagramSocket udpSocket, Packet request, InetAddress address, int port)
             throws IOException {
-        final int timeout = socket.getSoTimeout();
+        final int timeout = udpSocket.getSoTimeout();
         final long deadline = timeout == 0 ? Long.MAX_VALUE : currentTimeMillis() + timeout;
         final byte[] buffer = new byte[PacketIntegrity.MAX_PACKET_LENGTH];
         try {
@@ -405,10 +494,10 @@ public class RadiusConn {
                     if (remaining <= 0) {
                         throw new SocketTimeoutException("No valid RADIUS response received from " + address);
                     }
-                    socket.setSoTimeout((int) Math.min(remaining, Integer.MAX_VALUE));
+                    udpSocket.setSoTimeout((int) Math.min(remaining, Integer.MAX_VALUE));
                 }
                 DatagramPacket dp = new DatagramPacket(buffer, buffer.length);
-                socket.receive(dp);
+                udpSocket.receive(dp);
                 Packet response = toValidResponse(dp, request, address, port);
                 if (response != null) {
                     if (debug.messageEnabled()) {
@@ -418,7 +507,7 @@ public class RadiusConn {
                 }
             }
         } finally {
-            socket.setSoTimeout(timeout);
+            udpSocket.setSoTimeout(timeout);
         }
     }
 
@@ -486,16 +575,25 @@ public class RadiusConn {
     }
 
     /**
-     * A monitor that periodically checks for currently available remote servers to connect to.
+     * The scheduled health check of an offline server, run with the settings of the connection that found it offline.
+     * It runs once the health check interval has elapsed and then again after each interval until the server is
+     * available, which brings it back online.
      */
-    private class RADIUSMonitor extends GeneralTaskRunnable {
+    static final class HealthCheck extends GeneralTaskRunnable {
+        private final RadiusConn connection;
+        private final RADIUSServer server;
         /**
-         * Indicates if monitoring is cancelled.
+         * Whether the server is available again and the check is not to run any more.
          */
-        private boolean cancelled = false;
+        private volatile boolean done = false;
+
+        HealthCheck(RadiusConn connection, RADIUSServer server) {
+            this.connection = connection;
+            this.server = server;
+        }
 
         /**
-         * Not implemented in this monitor. Always returns false.
+         * Not implemented in this task. Always returns false.
          *
          * @param key unused parameter.
          * @return always returns false.
@@ -505,7 +603,7 @@ public class RadiusConn {
         }
 
         /**
-         * Not implemented in this monitor. Always returns false.
+         * Not implemented in this task. Always returns false.
          *
          * @param key unused parameter.
          * @return always returns false.
@@ -524,75 +622,28 @@ public class RadiusConn {
         }
 
         /**
-         * Returns the run period of this TaskRunnable.
+         * Returns the time until the next check.
          *
-         * @return A long value to indicate the run period.
+         * @return the health check interval of the connection in milliseconds, or -1 once the server is available.
          */
         public long getRunPeriod() {
-            return cancelled ? 0 : healthCheckInterval * 60000;
+            return done ? -1 : connection.getHealthCheckPeriod();
         }
 
         /**
-         * Scans through the set of servers testing connectivity and marking the servers accordingly.
+         * Checks the server and brings it back online if it is available.
          */
         public void run() {
-            Map<RADIUSServer, Boolean> tmp;
+            if (!connection.isAvailable(server)) {
+                return;
+            }
             if (debug.messageEnabled()) {
-                debug.message("Checking server statuses");
+                debug.message("Moving server to online state - " + server);
             }
-            synchronized (SERVER_STATUS) {
-                tmp = new LinkedHashMap<RADIUSServer, Boolean>(SERVER_STATUS);
+            synchronized (OFFLINE_SERVERS) {
+                OFFLINE_SERVERS.remove(server, this);
             }
-            DatagramSocket testSocket = null;
-            int offline = 0;
-            for (Map.Entry<RADIUSServer, Boolean> entry : tmp.entrySet()) {
-                RADIUSServer server = entry.getKey();
-                if (!entry.getValue()) {
-                    offline++;
-                    try {
-                        testSocket = new DatagramSocket();
-                        testSocket.setSoTimeout(socket.getSoTimeout());
-                        AccessRequest req = createAccessRequest();
-                        req.addAttribute(new UserNameAttribute("nonexistent"));
-                        req.addAttribute(new UserPasswordAttribute(req.getAuthenticator(),
-                                secret, "invalidpass"));
-                        req.addAttribute(new NASIPAddressAttribute(InetAddress.getLocalHost()));
-                        req.addAttribute(new NASPortAttribute(socket.getLocalPort()));
-                        PacketIntegrity.signRequest(req, secret);
-                        byte[] buffer = new byte[4096];
-                        DatagramPacket dp = new DatagramPacket(buffer, buffer.length);
-                        dp.setPort(server.getPort());
-                        dp.setAddress(InetAddress.getByName(server.getHost()));
-                        byte[] data = req.getOctets();
-                        dp.setLength(data.length);
-                        dp.setData(data);
-                        testSocket.send(dp);
-                        byte[] buffer2 = new byte[4096];
-                        dp = new DatagramPacket(buffer2, buffer2.length);
-                        testSocket.receive(dp);
-                        dp.getData();
-                        if (debug.messageEnabled()) {
-                            debug.message("Moving server to online state - " + server);
-                        }
-                        synchronized (SERVER_STATUS) {
-                            SERVER_STATUS.put(server, Boolean.TRUE);
-                        }
-                        offline--;
-                    } catch (Exception ex) {
-                        if (debug.messageEnabled()) {
-                            debug.message("Exception occured while checking RADIUS server status: " + ex.getMessage());
-                        }
-                        //server is still unavailable
-                    } finally {
-                        if (testSocket != null) {
-                            testSocket.disconnect();
-                        }
-                    }
-                }
-            }
-            if (offline == 0) {
-                cancelled = true;
-            }
+            done = true;
         }
     }
 }
