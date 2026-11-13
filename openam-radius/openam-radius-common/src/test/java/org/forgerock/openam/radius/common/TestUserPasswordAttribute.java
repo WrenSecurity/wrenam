@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyrighted 2015 Intellectual Reserve, Inc (IRI)
+ * Portions Copyright 2026 Wren Security.
  */
 package org.forgerock.openam.radius.common;
 
@@ -118,6 +119,29 @@ public class TestUserPasswordAttribute {
         final UserPasswordAttribute upa2 = new UserPasswordAttribute(bytes);
         final String pwd2 = upa2.extractPassword(ra, secret);
         Assert.assertEquals(pwd2, pwd, "multibyte character password should be the same after decoding.");
+    }
+
+    @Test
+    public void testMaxLengthPwd() throws NoSuchAlgorithmException, IOException {
+        final String pwd = "x".repeat(UserPasswordAttribute.MAX_PASSWORD_LENGTH);
+        final RequestAuthenticator ra = new RequestAuthenticator(rand, secret);
+        final byte[] bytes = new UserPasswordAttribute(ra, secret, pwd).getOctets();
+        Assert.assertEquals(bytes[1] & 0xFF, bytes.length, "attribute length should match the encoded length");
+        Assert.assertEquals(new UserPasswordAttribute(bytes).extractPassword(ra, secret), pwd,
+                "240 octet password should be the same after decoding.");
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testTooLongPwd() throws NoSuchAlgorithmException {
+        final RequestAuthenticator ra = new RequestAuthenticator(rand, secret);
+        new UserPasswordAttribute(ra, secret, "x".repeat(UserPasswordAttribute.MAX_PASSWORD_LENGTH + 1));
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testTooLongMultiByteCharPwd() throws NoSuchAlgorithmException {
+        // 81 characters of three octets each are 243 octets in UTF-8
+        final RequestAuthenticator ra = new RequestAuthenticator(rand, secret);
+        new UserPasswordAttribute(ra, secret, "建".repeat(81));
     }
 
 }

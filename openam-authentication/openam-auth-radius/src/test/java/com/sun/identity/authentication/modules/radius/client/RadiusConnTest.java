@@ -39,6 +39,7 @@ import org.forgerock.openam.radius.common.PacketIntegrity.MessageAuthenticatorSt
 import org.forgerock.openam.radius.common.RequestAuthenticator;
 import org.forgerock.openam.radius.common.ResponseAuthenticator;
 import org.forgerock.openam.radius.common.StateAttribute;
+import org.forgerock.openam.radius.common.UserPasswordAttribute;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -191,6 +192,20 @@ public class RadiusConnTest {
 
         assertThatThrownBy(() -> connection(false).authenticate("user", "password"))
                 .isInstanceOf(IOException.class);
+    }
+
+    @Test
+    public void shouldNotSendTooLongPasswordNorMarkServerOffline() throws Exception {
+        RadiusConn connection = connection(false);
+        String password = "x".repeat(UserPasswordAttribute.MAX_PASSWORD_LENGTH + 1);
+
+        assertThatThrownBy(() -> connection.authenticate("user", password))
+                .isInstanceOf(IllegalArgumentException.class);
+
+        // the server is still in use and receives the next request
+        respond((request, client) -> send(server, signed(new AccessAccept(), request), client));
+        connection.authenticate("user", "password");
+        assertThat(receivedRequest.get()).isNotNull();
     }
 
     private RadiusConn connection(boolean requireMessageAuthenticator) throws Exception {
