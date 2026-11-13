@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyrighted 2015 Intellectual Reserve, Inc (IRI)
+ * Portions Copyright 2026 Wren Security.
  */
 package org.forgerock.openam.radius.common;
 
@@ -53,6 +54,11 @@ public enum PacketType {
      * Enum representing the Access-Challenge packet type specified in section 4.4 of RFC 2865.
      */
     ACCESS_CHALLENGE(11),
+
+    /**
+     * Enum representing the Status-Server packet type specified in RFC 5997.
+     */
+    STATUS_SERVER(12),
 
     /**
      * Enum representing the reserved packet type specified in section 3 of RFC 2865.
