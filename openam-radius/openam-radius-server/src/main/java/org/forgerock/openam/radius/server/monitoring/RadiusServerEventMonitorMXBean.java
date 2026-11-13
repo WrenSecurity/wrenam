@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015 ForgeRock AS.
+ * Portions Copyright 2026 Wren Security.
  */
 
 package org.forgerock.openam.radius.server.monitoring;
@@ -58,4 +59,13 @@ public interface RadiusServerEventMonitorMXBean {
      * @return a <code>long</code> indicating the number of requests that resulted in rejection.
      */
     long getNumberOfAuthRequestsRejected();
+
+    /**
+     * Get the number of packets that were silently discarded without a response: packets from unknown clients,
+     * malformed packets, packets of unsupported types, packets failing the Message-Authenticator check and requests
+     * whose processing failed.
+     *
+     * @return a <code>long</code> indicating the number of packets dropped.
+     */
+    long getNumberOfPacketsDropped();
 }

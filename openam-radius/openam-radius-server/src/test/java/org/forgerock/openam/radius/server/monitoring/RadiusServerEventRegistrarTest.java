@@ -12,12 +12,13 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyrighted 2015 Intellectual Reserve, Inc (IRI)
- * Portions copyright 2022 Wren Security
+ * Portions copyright 2022-2026 Wren Security
  */
 package org.forgerock.openam.radius.server.monitoring;
 
 import static org.assertj.core.api.Assertions.*;
 
+import org.forgerock.openam.radius.server.events.PacketDroppedSilentlyEvent;
 import org.wrensecurity.guava.common.eventbus.EventBus;
 import org.testng.annotations.Test;
 
@@ -121,5 +122,22 @@ public class RadiusServerEventRegistrarTest {
         eventRegistrar.packetReceived();
         // Then
         assertThat(eventRegistrar.getNumberOfPacketsRecieved()).isEqualTo(1);
+    }
+
+    /**
+     * Test that dropped packets posted to the event bus are counted.
+     *
+     * @see org.forgerock.openam.radius.server.monitoring.RadiusServerEventRegistrar#packetDropped
+     */
+    @Test
+    public void packetDropped() {
+        // Given
+        EventBus eventBus = new EventBus();
+        final RadiusServerEventRegistrar eventRegistrar = new RadiusServerEventRegistrar(eventBus);
+        // When
+        eventBus.post(new PacketDroppedSilentlyEvent());
+        eventBus.post(new PacketDroppedSilentlyEvent());
+        // Then
+        assertThat(eventRegistrar.getNumberOfPacketsDropped()).isEqualTo(2);
     }
 }

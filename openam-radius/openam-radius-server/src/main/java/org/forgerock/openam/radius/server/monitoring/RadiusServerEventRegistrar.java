@@ -12,7 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015 ForgeRock AS.
- * Portions copyright 2022 Wren Security
+ * Portions copyright 2022-2026 Wren Security
  */
 /**
  *
@@ -33,6 +33,7 @@ import org.forgerock.openam.radius.server.config.RadiusServerConstants;
 import org.forgerock.openam.radius.server.events.AuthRequestAcceptedEvent;
 import org.forgerock.openam.radius.server.events.AuthRequestReceivedEvent;
 import org.forgerock.openam.radius.server.events.AuthRequestRejectedEvent;
+import org.forgerock.openam.radius.server.events.PacketDroppedSilentlyEvent;
 import org.forgerock.openam.radius.server.events.PacketProcessedEvent;
 import org.forgerock.openam.radius.server.events.PacketReceivedEvent;
 
@@ -51,6 +52,7 @@ public class RadiusServerEventRegistrar implements RadiusServerEventRegistrator,
     private final AtomicLong noOfPacketsProcessed = new AtomicLong();
     private final AtomicLong noOfAuthRequestsAccepted = new AtomicLong();
     private final AtomicLong noOfAuthRequestsRejected = new AtomicLong();
+    private final AtomicLong noOfPacketsDropped = new AtomicLong();
 
     /**
      * Constructor. Registers this class with the radius events bus, such that it will be a subscriber to radius events.
@@ -267,5 +269,30 @@ public class RadiusServerEventRegistrar implements RadiusServerEventRegistrator,
     @Override
     public long getNumberOfAuthRequestsRejected() {
         return noOfAuthRequestsRejected.get();
+    }
+
+    ///////////////////
+    // Packets dropped.
+
+    /**
+     * Once an object of this class has registered with the eventBus (passed into the constructor) the
+     * <code>EventBus</code> will call this method when any <code>PacketDroppedSilentlyEvent</code> objects are posted.
+     *
+     * @param droppedEvent - the event that was posted to the <code>EventBus</code>
+     */
+    @Subscribe
+    public void packetDropped(PacketDroppedSilentlyEvent droppedEvent) {
+        LOG.message("RadiusServerEventRegistrar.packetDropped() called by EventBus");
+        packetDropped();
+    }
+
+    @Override
+    public long packetDropped() {
+        return noOfPacketsDropped.incrementAndGet();
+    }
+
+    @Override
+    public long getNumberOfPacketsDropped() {
+        return noOfPacketsDropped.get();
     }
 }
