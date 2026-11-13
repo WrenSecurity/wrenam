@@ -116,6 +116,10 @@ public final class PacketFactory {
             pkt = new AccessRequest();
             pkt.setAuthenticator(new RequestAuthenticator(authData));
             break;
+        case STATUS_SERVER:
+            pkt = new StatusServer();
+            pkt.setAuthenticator(new RequestAuthenticator(authData));
+            break;
         case UNKNOWN:
         default:
             LOG.log(Level.WARNING, "Unsupported packet type code '" + code + "' received. Unable to handle packet.");

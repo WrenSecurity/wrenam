@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015 ForgeRock AS.
+ * Portions Copyright 2026 Wren Security.
  */
 /**
  *
@@ -61,4 +62,11 @@ public interface RadiusServerEventRegistrator {
      * @return the total number of authentication requests that have been rejected.
      */
     long authRequestRejected();
+
+    /**
+     * Notify the event Registrar that a packet has been silently discarded without a response.
+     *
+     * @return the total number of packets that have been dropped.
+     */
+    long packetDropped();
 }
