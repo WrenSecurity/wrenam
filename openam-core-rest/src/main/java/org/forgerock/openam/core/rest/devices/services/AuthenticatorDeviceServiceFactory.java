@@ -12,6 +12,7 @@
 * information: "Portions copyright [year] [name of copyright owner]".
 *
 * Copyright 2016 ForgeRock AS.
+* Portions copyright 2026 Wren Security.
 */
 package org.forgerock.openam.core.rest.devices.services;
 
@@ -115,6 +116,7 @@ public class AuthenticatorDeviceServiceFactory<T extends DeviceService> {
                     break;
                 case REMOVED:
                     serviceCache.remove(DNMapper.orgNameToRealmName(orgName));
+                    break;
                 default:
                     debug.error("Unknown function requested on to update preferences for organization {}", type);
             }
