@@ -73,6 +73,13 @@ public class RadiusClient {
     private static final String HEALTH_CHECK_PASSWORD = "invalidpass";
 
     /**
+     * How long an offline server stays offline without being used, in milliseconds. Once no client has used it for
+     * this time or its health check interval, whichever is longer, it is no longer checked and is online again: it may
+     * have been removed from the configuration, and if not, the next login finds out whether it is still offline.
+     */
+    private static final long OFFLINE_EXPIRY = 60 * 60000L;
+
+    /**
      * The offline servers, each with the scheduled check that brings it back online.
      */
     private static final Map<RadiusServer, HealthCheck> OFFLINE_SERVERS = new HashMap<>();
@@ -89,7 +96,7 @@ public class RadiusClient {
     private RadiusServer selectedServer;
 
     /**
-     * Creates a client.
+     * Creates a client. Its offline servers count as used, so that they keep being checked.
      *
      * @param primaries the servers to use.
      * @param secondaries the servers to use when all the primary servers are offline.
@@ -97,6 +104,8 @@ public class RadiusClient {
     public RadiusClient(Set<RadiusServer> primaries, Set<RadiusServer> secondaries) {
         this.primaries = primaries;
         this.secondaries = secondaries;
+        markUsed(primaries);
+        markUsed(secondaries);
         if (DEBUG.messageEnabled()) {
             DEBUG.message("Primary RADIUS servers: " + primaries);
             DEBUG.message("Secondary RADIUS servers: " + secondaries);
@@ -230,6 +239,26 @@ public class RadiusClient {
     }
 
     /**
+     * Marks the offline servers among the given ones as used, so that they keep being checked.
+     *
+     * @param servers the servers of a client, or null.
+     */
+    private static void markUsed(Set<RadiusServer> servers) {
+        if (servers == null) {
+            return;
+        }
+        long now = currentTimeMillis();
+        synchronized (OFFLINE_SERVERS) {
+            for (RadiusServer server : servers) {
+                HealthCheck check = OFFLINE_SERVERS.get(server);
+                if (check != null) {
+                    check.markUsed(now);
+                }
+            }
+        }
+    }
+
+    /**
      * Marks a server offline and schedules its health check, unless it is offline already.
      *
      * @param server the server that did not respond.
@@ -294,16 +323,22 @@ public class RadiusClient {
 
     /**
      * The scheduled health check of an offline server. It runs once the health check interval of the server has
-     * elapsed and then again after each interval until the server is available, which brings it back online.
+     * elapsed and then again after each interval until the server is available, which brings it back online. It stops
+     * when no client has used the server for a long time, e.g. because the server was removed from the configuration.
      */
     static final class HealthCheck extends GeneralTaskRunnable {
 
         private final RadiusServer server;
 
         /**
-         * Whether the server is available again and the check is not to run any more.
+         * Whether the server is available again or no longer used and the check is not to run any more.
          */
         private volatile boolean done = false;
+
+        /**
+         * When a client last wanted to use the server.
+         */
+        private volatile long lastUsed = currentTimeMillis();
 
         /**
          * Creates the health check of a server.
@@ -357,20 +392,35 @@ public class RadiusClient {
         }
 
         /**
-         * Checks the server and brings it back online if it is available.
+         * Checks the server and brings it back online if it is available. A server that no client has used for a long
+         * time is brought back online without a check.
          */
         @Override
         public void run() {
-            if (!isAvailable(server)) {
+            if (currentTimeMillis() - lastUsed >= Math.max(OFFLINE_EXPIRY, server.getHealthCheckPeriod())) {
+                if (DEBUG.messageEnabled()) {
+                    DEBUG.message("No longer checking unused offline server - " + server);
+                }
+            } else if (isAvailable(server)) {
+                if (DEBUG.messageEnabled()) {
+                    DEBUG.message("Moving server to online state - " + server);
+                }
+            } else {
                 return;
-            }
-            if (DEBUG.messageEnabled()) {
-                DEBUG.message("Moving server to online state - " + server);
             }
             synchronized (OFFLINE_SERVERS) {
                 OFFLINE_SERVERS.remove(server, this);
             }
             done = true;
+        }
+
+        /**
+         * Records that a client wanted to use the server.
+         *
+         * @param time when the client wanted to use the server.
+         */
+        void markUsed(long time) {
+            lastUsed = time;
         }
 
     }

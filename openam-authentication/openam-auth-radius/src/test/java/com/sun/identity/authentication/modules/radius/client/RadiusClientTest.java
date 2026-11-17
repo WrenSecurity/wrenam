@@ -315,6 +315,32 @@ public class RadiusClientTest {
     }
 
     @Test
+    public void shouldStopHealthCheckOfUnusedServerWithoutProbe() throws Exception {
+        respond((request, client) -> send(server, signed(new AccessAccept(), request), client));
+        RadiusClient.HealthCheck check = new RadiusClient.HealthCheck(radiusServer(HealthCheckType.STATUS_SERVER));
+        check.markUsed(System.currentTimeMillis() - 2 * 60 * 60000L);
+
+        check.run();
+
+        assertThat(check.getRunPeriod()).isEqualTo(-1);
+        assertThat(receivedRequest.get()).isNull();
+    }
+
+    @Test
+    public void shouldKeepCheckingServerUsedWithinHealthCheckInterval() throws Exception {
+        respond((request, client) -> { });
+        RadiusServer radiusServer = new RadiusServer(loopback(), server.getLocalPort(), SECRET, TIMEOUT_SECONDS, false,
+                HealthCheckType.STATUS_SERVER, 120);
+        RadiusClient.HealthCheck check = new RadiusClient.HealthCheck(radiusServer);
+        check.markUsed(System.currentTimeMillis() - 90 * 60000L);
+
+        check.run();
+
+        assertThat(check.getRunPeriod()).isEqualTo(120 * 60000L);
+        assertThat(receivedRequest.get()).isNotNull();
+    }
+
+    @Test
     public void shouldRunHealthCheckAtLeastEveryMinute() throws Exception {
         RadiusServer radiusServer = new RadiusServer(loopback(), server.getLocalPort(), SECRET, TIMEOUT_SECONDS, false,
                 HealthCheckType.STATUS_SERVER, 0);
