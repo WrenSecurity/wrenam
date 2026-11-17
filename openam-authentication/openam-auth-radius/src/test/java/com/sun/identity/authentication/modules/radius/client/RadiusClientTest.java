@@ -17,12 +17,14 @@ package com.sun.identity.authentication.modules.radius.client;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.catchThrowable;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketAddress;
+import java.net.SocketTimeoutException;
 import java.security.MessageDigest;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -48,13 +50,13 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import com.sun.identity.authentication.modules.radius.RADIUSServer;
-import com.sun.identity.authentication.modules.radius.client.RadiusConn.HealthCheckType;
+import com.sun.identity.authentication.modules.radius.client.RadiusServer.HealthCheckType;
 
 /**
- * Tests that {@link RadiusConn} accepts only authentic responses from the server it sent the request to.
+ * Tests that {@link RadiusClient} accepts only authentic responses from the server it sent the request to and
+ * checks offline servers with their own settings.
  */
-public class RadiusConnTest {
+public class RadiusClientTest {
 
     private static final String SECRET = "s3cret";
 
@@ -90,7 +92,7 @@ public class RadiusConnTest {
     public void shouldAcceptValidAccessAccept() throws Exception {
         respond((request, client) -> send(server, signed(new AccessAccept(), request), client));
 
-        connection(false).authenticate("user", "password");
+        client(false).authenticate("user", "password");
 
         assertThat(PacketIntegrity.checkMessageAuthenticator(receivedRequest.get(), null, SECRET))
                 .isEqualTo(MessageAuthenticatorStatus.VALID);
@@ -100,7 +102,7 @@ public class RadiusConnTest {
     public void shouldThrowRejectExceptionOnValidAccessReject() throws Exception {
         respond((request, client) -> send(server, signed(new AccessReject(), request), client));
 
-        assertThatThrownBy(() -> connection(false).authenticate("user", "password"))
+        assertThatThrownBy(() -> client(false).authenticate("user", "password"))
                 .isInstanceOf(RejectException.class);
     }
 
@@ -112,15 +114,49 @@ public class RadiusConnTest {
             send(server, signed(challenge, request), client);
         });
 
-        assertThatThrownBy(() -> connection(false).authenticate("user", "password"))
+        assertThatThrownBy(() -> client(false).authenticate("user", "password"))
                 .isInstanceOf(ChallengeException.class);
+    }
+
+    @Test
+    public void shouldReplyToChallengeWithItsState() throws Exception {
+        RadiusClient radiusClient = client(false);
+        respondWithChallenge();
+        ChallengeException challenge = challenge(radiusClient);
+        respond((request, client) -> send(server, signed(new AccessAccept(), request), client));
+
+        radiusClient.replyChallenge("user", "123456", challenge);
+
+        StateAttribute state = (StateAttribute) PacketFactory.toPacket(receivedRequest.get()).getAttributeSet()
+                .getAttributeByType(AttributeType.STATE);
+        assertThat(state.getState()).isEqualTo("state");
+    }
+
+    @Test
+    public void shouldNotFailOverWhenChallengingServerDoesNotRespond() throws Exception {
+        try (DatagramSocket secondary = new DatagramSocket(0, InetAddress.getLoopbackAddress())) {
+            RadiusClient radiusClient = new RadiusClient(
+                    Collections.singleton(radiusServer(HealthCheckType.ACCESS_REQUEST)),
+                    Collections.singleton(new RadiusServer(loopback(), secondary.getLocalPort(), SECRET,
+                            TIMEOUT_SECONDS, false, HealthCheckType.ACCESS_REQUEST, HEALTH_CHECK_INTERVAL_MINUTES)));
+            respondWithChallenge();
+            ChallengeException challenge = challenge(radiusClient);
+            respond((request, client) -> { });
+
+            assertThatThrownBy(() -> radiusClient.replyChallenge("user", "123456", challenge))
+                    .isInstanceOf(SocketTimeoutException.class);
+
+            secondary.setSoTimeout(100);
+            assertThatThrownBy(() -> secondary.receive(new DatagramPacket(new byte[4096], 4096)))
+                    .isInstanceOf(SocketTimeoutException.class);
+        }
     }
 
     @Test
     public void shouldDiscardAccessAcceptWithWrongSecret() throws Exception {
         respond((request, client) -> send(server, signed(new AccessAccept(), request, "wrong"), client));
 
-        assertThatThrownBy(() -> connection(false).authenticate("user", "password"))
+        assertThatThrownBy(() -> client(false).authenticate("user", "password"))
                 .isInstanceOf(IOException.class);
     }
 
@@ -133,7 +169,7 @@ public class RadiusConnTest {
             send(server, accept.getOctets(), client);
         });
 
-        assertThatThrownBy(() -> connection(false).authenticate("user", "password"))
+        assertThatThrownBy(() -> client(false).authenticate("user", "password"))
                 .isInstanceOf(IOException.class);
     }
 
@@ -144,7 +180,7 @@ public class RadiusConnTest {
             send(server, signed(new AccessReject(), request), client);
         });
 
-        assertThatThrownBy(() -> connection(false).authenticate("user", "password"))
+        assertThatThrownBy(() -> client(false).authenticate("user", "password"))
                 .isInstanceOf(RejectException.class);
     }
 
@@ -157,7 +193,7 @@ public class RadiusConnTest {
             send(server, signed(new AccessReject(), request), client);
         });
 
-        assertThatThrownBy(() -> connection(false).authenticate("user", "password"))
+        assertThatThrownBy(() -> client(false).authenticate("user", "password"))
                 .isInstanceOf(RejectException.class);
     }
 
@@ -169,7 +205,7 @@ public class RadiusConnTest {
             send(server, resign(response, request, SECRET), client);
         });
 
-        assertThatThrownBy(() -> connection(false).authenticate("user", "password"))
+        assertThatThrownBy(() -> client(false).authenticate("user", "password"))
                 .isInstanceOf(IOException.class);
     }
 
@@ -178,7 +214,7 @@ public class RadiusConnTest {
         respond((request, client) -> send(server, signedWithoutMessageAuthenticator(new AccessAccept(), request),
                 client));
 
-        connection(false).authenticate("user", "password");
+        client(false).authenticate("user", "password");
     }
 
     @Test
@@ -186,7 +222,7 @@ public class RadiusConnTest {
         respond((request, client) -> send(server, signedWithoutMessageAuthenticator(new AccessAccept(), request),
                 client));
 
-        assertThatThrownBy(() -> connection(true).authenticate("user", "password"))
+        assertThatThrownBy(() -> client(true).authenticate("user", "password"))
                 .isInstanceOf(IOException.class);
     }
 
@@ -198,31 +234,28 @@ public class RadiusConnTest {
             send(server, resign(response, request, SECRET), client);
         });
 
-        assertThatThrownBy(() -> connection(false).authenticate("user", "password"))
+        assertThatThrownBy(() -> client(false).authenticate("user", "password"))
                 .isInstanceOf(IOException.class);
     }
 
     @Test
     public void shouldNotSendTooLongPasswordNorMarkServerOffline() throws Exception {
-        RadiusConn connection = connection(false);
+        RadiusClient radiusClient = client(false);
         String password = "x".repeat(UserPasswordAttribute.MAX_PASSWORD_LENGTH + 1);
 
-        assertThatThrownBy(() -> connection.authenticate("user", password))
+        assertThatThrownBy(() -> radiusClient.authenticate("user", password))
                 .isInstanceOf(IllegalArgumentException.class);
 
         // the server is still in use and receives the next request
         respond((request, client) -> send(server, signed(new AccessAccept(), request), client));
-        connection.authenticate("user", "password");
+        radiusClient.authenticate("user", "password");
         assertThat(receivedRequest.get()).isNotNull();
     }
 
     @Test
     public void shouldFindServerAvailableOnValidStatusServerResponse() throws Exception {
         respond((request, client) -> send(server, signed(new AccessAccept(), request), client));
-        RadiusConn connection = connection(false);
-        connection.setHealthCheckType(HealthCheckType.STATUS_SERVER);
-
-        assertThat(connection.isAvailable(radiusServer())).isTrue();
+        assertThat(RadiusClient.isAvailable(radiusServer(HealthCheckType.STATUS_SERVER))).isTrue();
         assertThat(PacketType.getPacketType(receivedRequest.get()[0])).isEqualTo(PacketType.STATUS_SERVER);
         assertThat(PacketIntegrity.checkMessageAuthenticator(receivedRequest.get(), null, SECRET))
                 .isEqualTo(MessageAuthenticatorStatus.VALID);
@@ -231,10 +264,7 @@ public class RadiusConnTest {
     @Test
     public void shouldFindServerAvailableOnValidAccessReject() throws Exception {
         respond((request, client) -> send(server, signed(new AccessReject(), request), client));
-        RadiusConn connection = connection(false);
-        connection.setHealthCheckType(HealthCheckType.ACCESS_REQUEST);
-
-        assertThat(connection.isAvailable(radiusServer())).isTrue();
+        assertThat(RadiusClient.isAvailable(radiusServer(HealthCheckType.ACCESS_REQUEST))).isTrue();
         UserNameAttribute user = (UserNameAttribute) PacketFactory.toPacket(receivedRequest.get())
                 .getAttributeSet().getAttributeByType(AttributeType.USER_NAME);
         assertThat(user.getName()).isEqualTo("nonexistent");
@@ -243,45 +273,31 @@ public class RadiusConnTest {
     @Test
     public void shouldNotFindServerAvailableOnResponseWithWrongSecret() throws Exception {
         respond((request, client) -> send(server, signed(new AccessAccept(), request, "wrong"), client));
-        RadiusConn connection = connection(false);
-        connection.setHealthCheckType(HealthCheckType.STATUS_SERVER);
-
-        assertThat(connection.isAvailable(radiusServer())).isFalse();
+        assertThat(RadiusClient.isAvailable(radiusServer(HealthCheckType.STATUS_SERVER))).isFalse();
     }
 
     @Test
     public void shouldNotFindServerAvailableOnResponseFromOtherSource() throws Exception {
         respond((request, client) -> send(attacker, signed(new AccessAccept(), request), client));
-        RadiusConn connection = connection(false);
-        connection.setHealthCheckType(HealthCheckType.ACCESS_REQUEST);
-
-        assertThat(connection.isAvailable(radiusServer())).isFalse();
+        assertThat(RadiusClient.isAvailable(radiusServer(HealthCheckType.ACCESS_REQUEST))).isFalse();
     }
 
     @Test
     public void shouldNotFindServerAvailableWithoutResponse() throws Exception {
         respond((request, client) -> { });
-        RadiusConn connection = connection(false);
-        connection.setHealthCheckType(HealthCheckType.STATUS_SERVER);
-
-        assertThat(connection.isAvailable(radiusServer())).isFalse();
+        assertThat(RadiusClient.isAvailable(radiusServer(HealthCheckType.STATUS_SERVER))).isFalse();
     }
 
     @Test
     public void shouldFindServerAvailableWithoutProbe() throws Exception {
-        RadiusConn connection = connection(false);
-        connection.setHealthCheckType(HealthCheckType.NONE);
-
-        assertThat(connection.isAvailable(radiusServer())).isTrue();
+        assertThat(RadiusClient.isAvailable(radiusServer(HealthCheckType.NONE))).isTrue();
         assertThat(receivedRequest.get()).isNull();
     }
 
     @Test
     public void shouldRepeatHealthCheckAtIntervalOfItsConnectionWhileServerIsUnavailable() throws Exception {
         respond((request, client) -> { });
-        RadiusConn connection = connection(false);
-        connection.setHealthCheckType(HealthCheckType.STATUS_SERVER);
-        RadiusConn.HealthCheck check = new RadiusConn.HealthCheck(connection, radiusServer());
+        RadiusClient.HealthCheck check = new RadiusClient.HealthCheck(radiusServer(HealthCheckType.STATUS_SERVER));
 
         check.run();
 
@@ -291,9 +307,7 @@ public class RadiusConnTest {
     @Test
     public void shouldStopHealthCheckOnceServerIsAvailable() throws Exception {
         respond((request, client) -> send(server, signed(new AccessAccept(), request), client));
-        RadiusConn connection = connection(false);
-        connection.setHealthCheckType(HealthCheckType.STATUS_SERVER);
-        RadiusConn.HealthCheck check = new RadiusConn.HealthCheck(connection, radiusServer());
+        RadiusClient.HealthCheck check = new RadiusClient.HealthCheck(radiusServer(HealthCheckType.STATUS_SERVER));
 
         check.run();
 
@@ -302,20 +316,59 @@ public class RadiusConnTest {
 
     @Test
     public void shouldRunHealthCheckAtLeastEveryMinute() throws Exception {
-        Set<RADIUSServer> servers = Collections.singleton(radiusServer());
-        RadiusConn connection = new RadiusConn(servers, servers, SECRET, TIMEOUT_SECONDS, null, 0, false);
+        RadiusServer radiusServer = new RadiusServer(loopback(), server.getLocalPort(), SECRET, TIMEOUT_SECONDS, false,
+                HealthCheckType.STATUS_SERVER, 0);
 
-        assertThat(new RadiusConn.HealthCheck(connection, radiusServer()).getRunPeriod()).isEqualTo(60000L);
+        assertThat(new RadiusClient.HealthCheck(radiusServer).getRunPeriod()).isEqualTo(60000L);
     }
 
-    private RADIUSServer radiusServer() {
-        return new RADIUSServer(InetAddress.getLoopbackAddress().getHostAddress(), server.getLocalPort());
+    @Test
+    public void shouldKeepOfflineStateSeparateForOtherSettings() throws Exception {
+        assertThat(radiusServer(HealthCheckType.STATUS_SERVER))
+                .isEqualTo(radiusServer(HealthCheckType.STATUS_SERVER))
+                .hasSameHashCodeAs(radiusServer(HealthCheckType.STATUS_SERVER))
+                .isNotEqualTo(radiusServer(HealthCheckType.ACCESS_REQUEST))
+                .isNotEqualTo(new RadiusServer(loopback(), server.getLocalPort(), "other", TIMEOUT_SECONDS, false,
+                        HealthCheckType.STATUS_SERVER, HEALTH_CHECK_INTERVAL_MINUTES));
     }
 
-    private RadiusConn connection(boolean requireMessageAuthenticator) throws Exception {
-        Set<RADIUSServer> servers = Collections.singleton(radiusServer());
-        return new RadiusConn(servers, servers, SECRET, TIMEOUT_SECONDS, null, HEALTH_CHECK_INTERVAL_MINUTES,
-                requireMessageAuthenticator);
+    @Test
+    public void shouldNotDescribeServerWithSecret() throws Exception {
+        assertThat(radiusServer(HealthCheckType.STATUS_SERVER).toString()).doesNotContain(SECRET);
+    }
+
+    private void respondWithChallenge() {
+        respond((request, client) -> {
+            AccessChallenge challenge = new AccessChallenge();
+            challenge.addAttribute(new StateAttribute("state"));
+            send(server, signed(challenge, request), client);
+        });
+    }
+
+    private ChallengeException challenge(RadiusClient radiusClient) throws Exception {
+        Throwable thrown = catchThrowable(() -> radiusClient.authenticate("user", "password"));
+        assertThat(thrown).isInstanceOf(ChallengeException.class);
+        serverThread.join(5000);
+        return (ChallengeException) thrown;
+    }
+
+    private RadiusServer radiusServer(HealthCheckType type) {
+        return radiusServer(type, false);
+    }
+
+    private RadiusServer radiusServer(HealthCheckType type, boolean requireMessageAuthenticator) {
+        return new RadiusServer(loopback(), server.getLocalPort(), SECRET, TIMEOUT_SECONDS,
+                requireMessageAuthenticator, type, HEALTH_CHECK_INTERVAL_MINUTES);
+    }
+
+    private static String loopback() {
+        return InetAddress.getLoopbackAddress().getHostAddress();
+    }
+
+    private RadiusClient client(boolean requireMessageAuthenticator) {
+        Set<RadiusServer> servers = Collections.singleton(
+                radiusServer(HealthCheckType.ACCESS_REQUEST, requireMessageAuthenticator));
+        return new RadiusClient(servers, servers);
     }
 
     /**
