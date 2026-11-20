@@ -29,6 +29,7 @@
 /*
  * Portions Copyrighted 2011-2015 ForgeRock AS.
  * Portions Copyrighted 2015 Intellectual Reserve, Inc (IRI)
+ * Portions Copyright 2026 Wren Security.
  */
 package com.sun.identity.authentication.modules.radius.client;
 
@@ -41,6 +42,8 @@ import org.forgerock.openam.radius.common.ReplyMessageAttribute;
  * Exception used to pass a received AccessReject to calling code.
  */
 public class RejectException extends Exception {
+    private static final long serialVersionUID = 1L;
+
     /**
      * The AccessReject packet.
      */

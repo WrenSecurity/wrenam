@@ -29,6 +29,7 @@
 /*
  * Portions Copyrighted 2011-2015 ForgeRock AS.
  * Portions Copyrighted 2015 Intellectual Reserve, Inc (IRI)
+ * Portions Copyright 2026 Wren Security.
  */
 package com.sun.identity.authentication.modules.radius.client;
 
@@ -42,6 +43,8 @@ import org.forgerock.openam.radius.common.StateAttribute;
  * Used for handling received challenge responses from radius servers.
  */
 public class ChallengeException extends Exception {
+    private static final long serialVersionUID = 1L;
+
     /**
      * The received packet.
      */
