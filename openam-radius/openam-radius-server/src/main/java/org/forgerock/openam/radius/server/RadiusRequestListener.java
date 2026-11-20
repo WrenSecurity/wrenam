@@ -12,7 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyrighted 2015 Intellectual Reserve, Inc (IRI)
- * Portions copyright 2022 Wren Security
+ * Portions copyright 2022-2026 Wren Security
  */
 package org.forgerock.openam.radius.server;
 
@@ -40,6 +40,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.MessageFormat;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -309,7 +310,13 @@ public class RadiusRequestListener implements Runnable {
                 final RadiusRequestHandler requestHandler = new RadiusRequestHandler(accessRequestHandlerFactory,
                         reqCtx, bfr, eventBus);
 
-                executorService.execute(requestHandler);
+                try {
+                    executorService.execute(requestHandler);
+                } catch (final RejectedExecutionException e) {
+                    LOG.warning("RADIUS request from client '" + clientConfig.getName()
+                            + "' rejected by the thread pool. Dropping request.", e);
+                    eventBus.post(new PacketDroppedSilentlyEvent());
+                }
             } catch (final Exception t) {
                 LOG.error("Error receiving request.", t);
             }

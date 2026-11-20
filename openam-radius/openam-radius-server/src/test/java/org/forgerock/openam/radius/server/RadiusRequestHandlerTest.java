@@ -22,17 +22,30 @@ import org.wrensecurity.guava.common.eventbus.EventBus;
 import org.forgerock.openam.radius.common.AccessAccept;
 import org.forgerock.openam.radius.common.AccessReject;
 import org.forgerock.openam.radius.common.Packet;
+import org.forgerock.openam.radius.common.PacketIntegrity;
+import org.forgerock.openam.radius.common.RequestAuthenticator;
+import org.forgerock.openam.radius.common.StatusServer;
 import org.forgerock.openam.radius.common.Utils;
 import org.forgerock.openam.radius.server.config.ClientConfig;
+import org.forgerock.openam.radius.server.events.PacketDroppedSilentlyEvent;
+import org.forgerock.openam.radius.server.events.PacketProcessedEvent;
+import org.forgerock.openam.radius.server.events.RadiusEvent;
+import org.forgerock.openam.radius.server.spi.AccessRequestHandler;
 import org.forgerock.openam.radius.server.spi.handlers.AcceptAllHandler;
 import org.forgerock.openam.radius.server.spi.handlers.RejectAllHandler;
 import org.testng.annotations.Test;
+import org.wrensecurity.guava.common.eventbus.Subscribe;
 
 import java.net.Inet4Address;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -229,6 +242,151 @@ public class RadiusRequestHandlerTest {
         verify(reqCtx, never()).send(isA(Packet.class));
     }
 
+    /**
+     * Test that a Status-Server request (RFC 5997) is answered with an Access-Accept without authenticating anyone.
+     */
+    @Test
+    public void testRunAnswersStatusServer() throws Exception {
+        final RadiusRequestContext reqCtx = mockContext("xyzzy5461", false);
+        final AccessRequestHandlerFactory factory = mock(AccessRequestHandlerFactory.class);
+
+        new RadiusRequestHandler(factory, reqCtx, statusServer("xyzzy5461", true), new EventBus()).run();
+
+        verify(reqCtx, times(1)).send(isA(AccessAccept.class));
+        verify(factory, never()).getAccessRequestHandler(any());
+    }
+
+    /**
+     * Test that a Status-Server request without Message-Authenticator is silently dropped even if the client does
+     * not require one for Access-Requests.
+     */
+    @Test
+    public void testRunDropsStatusServerWithoutMessageAuthenticator() throws Exception {
+        final RadiusRequestContext reqCtx = mockContext("xyzzy5461", false);
+
+        runAcceptAll(reqCtx, statusServer("xyzzy5461", false));
+
+        verify(reqCtx, never()).send(isA(Packet.class));
+    }
+
+    /**
+     * Test that a Status-Server request signed with another secret is silently dropped.
+     */
+    @Test
+    public void testRunDropsStatusServerWithInvalidMessageAuthenticator() throws Exception {
+        final RadiusRequestContext reqCtx = mockContext("xyzzy5461", false);
+
+        runAcceptAll(reqCtx, statusServer("other-secret", true));
+
+        verify(reqCtx, never()).send(isA(Packet.class));
+    }
+
+    /**
+     * Test that a handled request is reported as processed.
+     */
+    @Test
+    public void testRunReportsHandledRequestAsProcessed() throws Exception {
+        final RadiusRequestContext reqCtx = mockContext("xyzzy5461", false);
+
+        assertThat(runAndRecord(reqCtx, Utils.toBuffer(res), new AcceptAllHandler()))
+                .containsExactly(PacketProcessedEvent.class);
+    }
+
+    /**
+     * Test that an answered Status-Server request is reported as processed.
+     */
+    @Test
+    public void testRunReportsStatusServerAsProcessed() throws Exception {
+        final RadiusRequestContext reqCtx = mockContext("xyzzy5461", false);
+
+        assertThat(runAndRecord(reqCtx, statusServer("xyzzy5461", true), new AcceptAllHandler()))
+                .containsExactly(PacketProcessedEvent.class);
+    }
+
+    /**
+     * Test that a malformed packet is reported as dropped.
+     */
+    @Test
+    public void testRunReportsMalformedPacketAsDropped() throws Exception {
+        final RadiusRequestContext reqCtx = mockContext("xyzzy5461", false);
+
+        assertThat(runAndRecord(reqCtx, Utils.toBuffer("01 00 00 16 0f 40 3f 94 73 97 80 57 bd 83 d5 cb 98 f4 22 7a "
+                + "01 00"), new AcceptAllHandler())).containsExactly(PacketDroppedSilentlyEvent.class);
+    }
+
+    /**
+     * Test that a request for which no access request handler is available is reported as dropped.
+     */
+    @Test
+    public void testRunReportsMissingHandlerAsDropped() throws Exception {
+        final RadiusRequestContext reqCtx = mockContext("xyzzy5461", false);
+
+        assertThat(runAndRecord(reqCtx, Utils.toBuffer(res), null))
+                .containsExactly(PacketDroppedSilentlyEvent.class);
+        verify(reqCtx, never()).send(isA(Packet.class));
+    }
+
+    /**
+     * Test that a request whose handler fails is rejected and reported as processed.
+     */
+    @Test
+    public void testRunReportsFailedHandlerAsProcessedWhenRejected() throws Exception {
+        final RadiusRequestContext reqCtx = mockContext("xyzzy5461", false);
+        final AccessRequestHandler failing = failingHandler();
+
+        assertThat(runAndRecord(reqCtx, Utils.toBuffer(res), failing)).containsExactly(PacketProcessedEvent.class);
+        verify(reqCtx, times(1)).send(isA(AccessReject.class));
+    }
+
+    /**
+     * Test that a request whose handler fails is reported as dropped when the reject can not be sent either.
+     */
+    @Test
+    public void testRunReportsFailedHandlerAsDroppedWhenRejectFails() throws Exception {
+        final RadiusRequestContext reqCtx = mockContext("xyzzy5461", false);
+        doThrow(new RadiusProcessingException(RadiusProcessingExceptionNature.CATASTROPHIC, "failure"))
+                .when(reqCtx).send(any());
+        final AccessRequestHandler failing = failingHandler();
+
+        assertThat(runAndRecord(reqCtx, Utils.toBuffer(res), failing))
+                .containsExactly(PacketDroppedSilentlyEvent.class);
+    }
+
+    private static AccessRequestHandler failingHandler() throws RadiusProcessingException {
+        final AccessRequestHandler handler = mock(AccessRequestHandler.class);
+        doThrow(new IllegalStateException("failure")).when(handler).handle(any(), any(), any());
+        return handler;
+    }
+
+    /**
+     * Runs the handler and returns the classes of the processed and dropped events it posted.
+     */
+    private List<Class<?>> runAndRecord(RadiusRequestContext reqCtx, ByteBuffer packet,
+            AccessRequestHandler accessRequestHandler) throws Exception {
+        final AccessRequestHandlerFactory factory = mock(AccessRequestHandlerFactory.class);
+        when(factory.getAccessRequestHandler(reqCtx)).thenReturn(accessRequestHandler);
+        final List<Class<?>> outcomes = new ArrayList<>();
+        final EventBus eventBus = new EventBus();
+        eventBus.register(new Object() {
+            @Subscribe
+            public void record(RadiusEvent event) {
+                if (event instanceof PacketProcessedEvent || event instanceof PacketDroppedSilentlyEvent) {
+                    outcomes.add(event.getClass());
+                }
+            }
+        });
+        new RadiusRequestHandler(factory, reqCtx, packet, eventBus).run();
+        return outcomes;
+    }
+
+    private static ByteBuffer statusServer(String secret, boolean signed) {
+        final StatusServer request = new StatusServer((short) 7, new RequestAuthenticator(new byte[16]));
+        if (signed) {
+            PacketIntegrity.signRequest(request, secret);
+        }
+        return ByteBuffer.wrap(request.getOctets());
+    }
+
     private RadiusRequestContext mockContext(String secret, boolean requireMessageAuthenticator)
             throws UnknownHostException {
         final RadiusRequestContext reqCtx = mock(RadiusRequestContext.class);
@@ -242,8 +400,12 @@ public class RadiusRequestHandlerTest {
     }
 
     private void runAcceptAll(RadiusRequestContext reqCtx, String packet) throws Exception {
+        runAcceptAll(reqCtx, Utils.toBuffer(packet));
+    }
+
+    private void runAcceptAll(RadiusRequestContext reqCtx, ByteBuffer packet) throws Exception {
         AccessRequestHandlerFactory accessRequestHandlerFactory = mock(AccessRequestHandlerFactory.class);
         when(accessRequestHandlerFactory.getAccessRequestHandler(reqCtx)).thenReturn(new AcceptAllHandler());
-        new RadiusRequestHandler(accessRequestHandlerFactory, reqCtx, Utils.toBuffer(packet), new EventBus()).run();
+        new RadiusRequestHandler(accessRequestHandlerFactory, reqCtx, packet, new EventBus()).run();
     }
 }
