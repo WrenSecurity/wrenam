@@ -140,8 +140,8 @@
         <project.build.outputTimestamp>2026-09-23T09:52:47Z</project.build.outputTimestamp>
 
         <!-- Wren Security Dependencies -->
-        <wrends.version>5.0.6</wrends.version>
-        <wrensec-commons.version>22.6.4</wrensec-commons.version>
+        <wrends.version>5.0.7</wrends.version>
+        <wrensec-commons.version>22.6.5</wrensec-commons.version>
         <wrensec-guava.version>18.0.5</wrensec-guava.version>
         <wrensec-ui.version>23.2.3</wrensec-ui.version>
 
@@ -155,20 +155,20 @@
         <commons-codec.version>1.16.0</commons-codec.version>
         <commons-collections.version>3.2.2</commons-collections.version>
         <commons-digester.version>2.1</commons-digester.version>
-        <commons-fileupload.version>1.5</commons-fileupload.version>
-        <commons-io.version>2.13.0</commons-io.version>
+        <commons-fileupload.version>1.6.0</commons-fileupload.version>
+        <commons-io.version>2.14.0</commons-io.version>
         <commons-lang.version>2.6</commons-lang.version>
+        <commons-lang3.version>3.18.0</commons-lang3.version>
         <commons-logging.version>1.2</commons-logging.version>
         <commons-logging-api.version>1.1</commons-logging-api.version>
         <freemarker.version>2.3.35</freemarker.version>
         <guice.version>3.0</guice.version>
-        <jackson.version>2.15.2</jackson.version>
         <jakarta.activation-api.version>1.2.2</jakarta.activation-api.version>
         <jakarta.annotation-api.version>1.3.5</jakarta.annotation-api.version>
         <jakarta.security.message-api.version>1.1.3</jakarta.security.message-api.version>
         <jakarta.inject-api.version>1.0.5</jakarta.inject-api.version>
-        <jakarta.mail-api.version>1.6.7</jakarta.mail-api.version>
-        <jakarta.mail-impl.version>1.6.7</jakarta.mail-impl.version>
+        <jakarta.mail-api.version>1.6.8</jakarta.mail-api.version>
+        <jakarta.mail-impl.version>1.6.8</jakarta.mail-impl.version>
         <jakarta.servlet-api.version>4.0.4</jakarta.servlet-api.version>
         <jakarta.servlet.jsp-api.version>2.3.6</jakarta.servlet.jsp-api.version>
         <jakarta.servlet.jstl-api.version>1.2.7</jakarta.servlet.jstl-api.version>
@@ -206,15 +206,15 @@
         <!-- Scripting Support Dependencies -->
         <groovy.version>2.4.21</groovy.version>
         <groovy-sandbox.version>1.6</groovy-sandbox.version>
-        <rhino.version>1.7.14</rhino.version>
+        <rhino.version>1.7.14.1</rhino.version>
 
         <!-- Other Specialized Dependencies -->
-        <activemq.version>5.18.7</activemq.version>
+        <activemq.version>5.19.12</activemq.version>
         <amazon.sns.version>1.10.72</amazon.sns.version>
         <asciidoctorj.version>2.5.10</asciidoctorj.version>
         <bouncycastle.version>1.86</bouncycastle.version>
         <geoip.version>2.0.0</geoip.version>
-        <json.version>20231013</json.version>
+        <json.version>20260719</json.version>
         <mail.version>1.5.1</mail.version>
 
         <!-- Deprecated Dependencies (TBD) -->
@@ -289,14 +289,6 @@
                 <groupId>org.wrensecurity.commons</groupId>
                 <artifactId>commons-bom</artifactId>
                 <version>${wrensec-commons.version}</version>
-                <scope>import</scope>
-                <type>pom</type>
-            </dependency>
-
-            <dependency>
-                <groupId>com.fasterxml.jackson</groupId>
-                <artifactId>jackson-bom</artifactId>
-                <version>${jackson.version}</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
@@ -813,6 +805,13 @@
                 <scope>test</scope>
             </dependency>
 
+            <!-- Override vulnerable transitive version from swagger-core -->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${commons-lang3.version}</version>
+            </dependency>
+
             <dependency>
                 <!-- License: legal/CC-Public-Domain.txt -->
                 <groupId>org.hdrhistogram</groupId>
@@ -927,6 +926,12 @@
                     <exclusion>
                         <groupId>javax.validation</groupId>
                         <artifactId>validation-api</artifactId>
+                    </exclusion>
+
+                    <!-- Replaced by Jakarta (pulled by jackson-module-jaxb-annotations 2.16+) -->
+                    <exclusion>
+                        <groupId>javax.xml.bind</groupId>
+                        <artifactId>jaxb-api</artifactId>
                     </exclusion>
 
                     <!-- TODO check exclusions -->
@@ -1454,6 +1459,13 @@
                     <groupId>org.mortbay.jetty</groupId>
                     <artifactId>jetty-maven-plugin</artifactId>
                     <version>8.1.12.v20130726</version>
+                </plugin>
+
+                <!-- Override parent version to support Java 21+ multi-release classes (e.g. in Jackson) -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-shade-plugin</artifactId>
+                    <version>3.6.2</version>
                 </plugin>
             </plugins>
         </pluginManagement>

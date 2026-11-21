@@ -231,7 +231,6 @@
                                 <include>**/**</include>
                             </includes>
                             <targetPath>XUI</targetPath>
-                            <filtering>true</filtering>
                         </webResource>
 
                         <webResource>
@@ -240,7 +239,6 @@
                                 <include>**/**</include>
                             </includes>
                             <targetPath>api</targetPath>
-                            <filtering>true</filtering>
                         </webResource>
 
                         <webResource>
