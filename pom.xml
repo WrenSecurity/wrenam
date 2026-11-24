@@ -205,7 +205,7 @@
         <rhino.version>1.7.14</rhino.version>
 
         <!-- Other Specialized Dependencies -->
-        <activemq.version>6.2.4</activemq.version>
+        <activemq.version>6.4.0</activemq.version>
         <amazon.sns.version>1.10.72</amazon.sns.version>
         <asciidoctorj.version>2.5.10</asciidoctorj.version>
         <bouncycastle.version>1.86</bouncycastle.version>
